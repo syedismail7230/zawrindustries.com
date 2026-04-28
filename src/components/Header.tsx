@@ -3,11 +3,13 @@
 import Link from 'next/link';
 import { Poppins } from 'next/font/google';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import ISO6391 from 'iso-639-1';
 
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '700'] });
 
 export default function Header() {
+  const router = useRouter();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [langQuery, setLangQuery] = useState('');
@@ -30,11 +32,58 @@ export default function Header() {
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      alert(`Search functionality will be integrated here for: ${searchQuery}`);
-      setIsSearchOpen(false);
-      setSearchQuery('');
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return;
+
+    // Smart navigation dictionary
+    const routes: Record<string, string> = {
+      'firm': 'https://www.firm.expert/',
+      'firm ai': 'https://www.firm.expert/',
+      'sketch': 'https://sketchstudio.dev/',
+      'sketch studio': 'https://sketchstudio.dev/',
+      'zawr ai': 'https://ai.zawrindustries.com/',
+      'ai': 'https://ai.zawrindustries.com/',
+      'quick dial': 'https://crm.zawrindustries.com/',
+      'crm': 'https://crm.zawrindustries.com/',
+      'velocity': 'https://velocityos.in/',
+      'velocityos': 'https://velocityos.in/',
+      'about': '/#about',
+      'contact': '/#contact',
+      'industries': '/#industries',
+      'platforms': '/#platforms',
+      'newsroom': '/#newsroom',
+      'news': '/#newsroom',
+      'investors': '/#investors',
+      'home': '/'
+    };
+
+    let matchedRoute = '';
+
+    // Find best match
+    if (routes[q]) {
+      matchedRoute = routes[q];
+    } else {
+      for (const [key, route] of Object.entries(routes)) {
+        if (key.includes(q) || q.includes(key)) {
+          matchedRoute = route;
+          break;
+        }
+      }
     }
+
+    if (matchedRoute) {
+      if (matchedRoute.startsWith('http')) {
+        window.open(matchedRoute, '_blank', 'noopener,noreferrer');
+      } else {
+        router.push(matchedRoute);
+      }
+    } else {
+      // Fallback if completely unknown
+      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+    }
+
+    setIsSearchOpen(false);
+    setSearchQuery('');
   };
 
   return (
