@@ -147,14 +147,14 @@ export default function Header() {
       </nav>
 
       <div className="header-actions">
-        <button className="icon-btn" aria-label="Search" onClick={() => setIsSearchOpen(!isSearchOpen)}>
+        <button className="icon-btn" aria-label="Search" onClick={() => setIsSearchOpen(!isSearchOpen)} suppressHydrationWarning>
           <svg viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
         <div className="nav-item" style={{ padding: 0 }}>
-          <button className="icon-btn" aria-label="Language" style={{ pointerEvents: 'none' }}>
+          <button className="icon-btn" aria-label="Language" style={{ pointerEvents: 'none' }} suppressHydrationWarning>
             <svg viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="2" y1="12" x2="22" y2="12"></line>
