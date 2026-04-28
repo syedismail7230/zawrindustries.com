@@ -13,6 +13,7 @@ export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [langQuery, setLangQuery] = useState('');
+  const [searchError, setSearchError] = useState('');
 
   const filteredLangs = ISO6391.getAllCodes().filter(code => 
     ISO6391.getNativeName(code).toLowerCase().includes(langQuery.toLowerCase()) || 
@@ -77,13 +78,13 @@ export default function Header() {
       } else {
         router.push(matchedRoute);
       }
+      setIsSearchOpen(false);
+      setSearchQuery('');
+      setSearchError('');
     } else {
-      // Fallback if completely unknown
-      router.push(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      // Show error directly in the overlay
+      setSearchError(`We could not find any exact matches for "${searchQuery.trim()}". As our platform is expanding, please try navigating via the header menu.`);
     }
-
-    setIsSearchOpen(false);
-    setSearchQuery('');
   };
 
   return (
@@ -198,16 +199,21 @@ export default function Header() {
       {/* Full Screen Search Overlay */}
       {isSearchOpen && (
         <div className="search-overlay">
-          <button className="search-close" onClick={() => setIsSearchOpen(false)}>×</button>
-          <form className="search-form" onSubmit={handleSearchSubmit}>
+          <button className="search-close" onClick={() => { setIsSearchOpen(false); setSearchError(''); }}>×</button>
+          <form className="search-form" onSubmit={handleSearchSubmit} style={{ position: 'relative' }}>
             <input 
               type="text" 
               placeholder="Search Zawr Industries..." 
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(e) => { setSearchQuery(e.target.value); setSearchError(''); }}
               autoFocus
             />
             <button type="submit">Search</button>
+            {searchError && (
+              <div style={{ position: 'absolute', top: 'calc(100% + 2rem)', left: 0, right: 0, textAlign: 'center', color: 'var(--bg-white)', opacity: 0.9, fontSize: '1rem', fontWeight: 300 }}>
+                {searchError}
+              </div>
+            )}
           </form>
         </div>
       )}
