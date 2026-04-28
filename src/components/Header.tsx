@@ -2,10 +2,23 @@
 
 import Link from 'next/link';
 import { Poppins } from 'next/font/google';
+import { useState } from 'react';
 
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '700'] });
 
 export default function Header() {
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      alert(`Search functionality will be integrated here for: ${searchQuery}`);
+      setIsSearchOpen(false);
+      setSearchQuery('');
+    }
+  };
+
   return (
     <header className="header">
       <div className={`logo-container ${poppins.className}`}>
@@ -66,22 +79,39 @@ export default function Header() {
       </nav>
 
       <div className="header-actions">
-        <button className="icon-btn" aria-label="Search">
+        <button className="icon-btn" aria-label="Search" onClick={() => setIsSearchOpen(!isSearchOpen)}>
           <svg viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
-        <button className="icon-btn" aria-label="Phone">
+        <a href="tel:+919880464078" className="icon-btn" aria-label="Phone">
           <svg viewBox="0 0 24 24">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
           </svg>
-        </button>
+        </a>
       </div>
 
       <button className="mobile-menu-btn" aria-label="Menu">
         ☰
       </button>
+
+      {/* Full Screen Search Overlay */}
+      {isSearchOpen && (
+        <div className="search-overlay">
+          <button className="search-close" onClick={() => setIsSearchOpen(false)}>×</button>
+          <form className="search-form" onSubmit={handleSearchSubmit}>
+            <input 
+              type="text" 
+              placeholder="Search Zawr Industries..." 
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              autoFocus
+            />
+            <button type="submit">Search</button>
+          </form>
+        </div>
+      )}
     </header>
   );
 }

@@ -9,6 +9,12 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Zawr Industries | Technology & Business Expansion',
   description: 'Your strategic partner in harnessing the power of technology for business expansion.',
+  icons: {
+    icon: [
+      { media: '(prefers-color-scheme: light)', url: '/favicon-light.png' },
+      { media: '(prefers-color-scheme: dark)', url: '/favicon-dark.png' }
+    ]
+  }
 };
 
 export default function RootLayout({
