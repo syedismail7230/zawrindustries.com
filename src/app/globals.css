@@ -1,7 +1,7 @@
 :root {
-  --primary-color: #000049;
+  --primary-color: #000000;
   --secondary-color: #ffffff;
-  --text-dark: #1a1a1a;
+  --text-dark: #111111;
   --text-light: #666666;
   --bg-light: #f9f9f9;
   --bg-white: #ffffff;
@@ -43,7 +43,7 @@ button, input {
 
 /* Header Styles */
 .header {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   width: 100%;
@@ -53,6 +53,34 @@ button, input {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: var(--bg-white);
+  transition: all 0.3s ease;
+}
+
+/* Base header links and icons */
+.header .nav-item, .header .dropdown a {
+  color: inherit;
+}
+.header .icon-btn svg {
+  stroke: currentColor;
+}
+
+/* Hover over Dark BG (Hero) -> Default: white text, transparent bg */
+.header:hover {
+  background-color: var(--bg-white);
+  color: var(--primary-color);
+}
+
+/* Scrolled state (Light BG) -> Default: black text, transparent bg */
+.header.scrolled {
+  color: var(--primary-color);
+  padding: 1rem 5%;
+  background-color: transparent; /* Wait, user said "put bg on hover", so default is transparent */
+}
+
+/* Hover over Light BG (Scrolled) -> Black bg, white text */
+.header.scrolled:hover {
+  background-color: var(--primary-color);
   color: var(--bg-white);
 }
 
@@ -84,17 +112,16 @@ button, input {
   font-size: 0.95rem;
   cursor: pointer;
   padding: 0.5rem 0;
-  color: var(--bg-white);
 }
 
 .nav-item:hover {
-  color: #ccc;
+  opacity: 0.7;
 }
 
 .dropdown {
   position: absolute;
   top: 100%;
-  left: 0;
+  left: -20px;
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
@@ -102,8 +129,19 @@ button, input {
   visibility: hidden;
   transform: translateY(10px);
   transition: var(--transition);
-  min-width: 200px;
-  padding-top: 1rem;
+  min-width: 220px;
+  padding: 1rem;
+  border-radius: 0 0 8px 8px;
+}
+
+.header:hover .dropdown {
+  background-color: var(--bg-white);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+}
+
+.header.scrolled:hover .dropdown {
+  background-color: var(--primary-color);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 }
 
 .nav-item:hover .dropdown {
@@ -114,15 +152,16 @@ button, input {
 
 .dropdown a {
   font-size: 0.9rem;
-  color: var(--bg-white);
   font-weight: 400;
   opacity: 0.8;
+  padding: 0.4rem 0.5rem;
+  border-radius: 4px;
 }
 
 .dropdown a:hover {
-  color: var(--bg-white);
   font-weight: 500;
   opacity: 1;
+  background-color: rgba(128,128,128,0.1);
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -498,22 +537,84 @@ button, input {
   padding-top: 2rem;
 }
 
-/* Responsive */
+/* Responsive Styles (Android & Apple Native Mobile Support) */
 @media (max-width: 1024px) {
   .footer-sitemap {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
+  /* Header Mobile Menu Overrides */
   .nav-links, .header-actions {
     display: none;
+    flex-direction: column;
+    width: 100%;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--primary-color);
+    padding: 2rem 5%;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
   }
   
-  .mobile-menu-btn {
-    display: block;
+  .nav-links.mobile-active, .header-actions.mobile-active {
+    display: flex;
+  }
+  
+  .header {
+    flex-wrap: wrap;
+  }
+  
+  .nav-item {
+    width: 100%;
+    margin-bottom: 1.5rem;
+    font-size: 1.2rem;
+  }
+  
+  .dropdown {
+    position: static;
+    display: none;
+    box-shadow: none;
+    background: rgba(255,255,255,0.05);
+    padding: 1rem;
+    margin-top: 0.5rem;
+    width: 100%;
   }
 
+  /* Allow clicking parent on mobile to show dropdown */
+  .nav-item:hover .dropdown, .nav-item:active .dropdown {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .mobile-menu-btn {
+    display: block;
+    color: var(--bg-white);
+  }
+
+  /* Global Typography Scaling for Mobile */
+  h1 {
+    font-size: 2.2rem !important;
+  }
+  h2 {
+    font-size: 1.8rem !important;
+  }
+  p {
+    font-size: 1rem !important;
+  }
+  
+  /* Global Layout Scaling for Mobile */
+  div[style*="padding: 8rem 5% 4rem"] {
+    padding: 6rem 5% 3rem !important;
+  }
+  section[style*="padding: 8rem 5%"] {
+    padding: 5rem 5% !important;
+  }
+}
+
+@media (max-width: 768px) {
   .footer-sitemap {
     grid-template-columns: 1fr 1fr;
   }
@@ -521,11 +622,26 @@ button, input {
   .footer-top-bar {
     flex-direction: column;
     align-items: flex-start;
+    gap: 2rem;
   }
 }
 
 @media (max-width: 480px) {
   .footer-sitemap {
     grid-template-columns: 1fr;
+  }
+  
+  .search-form {
+    width: 95%;
+  }
+  
+  .search-form input {
+    font-size: 1.5rem;
+  }
+  
+  .search-close {
+    top: 1rem;
+    right: 1rem;
+    font-size: 2.5rem;
   }
 }

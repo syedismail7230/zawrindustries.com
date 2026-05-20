@@ -11,9 +11,19 @@ const poppins = Poppins({ subsets: ['latin'], weight: ['400', '700'] });
 export default function Header() {
   const router = useRouter();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [langQuery, setLangQuery] = useState('');
   const [searchError, setSearchError] = useState('');
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > window.innerHeight - 80);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const filteredLangs = ISO6391.getAllCodes().filter(code => 
     ISO6391.getNativeName(code).toLowerCase().includes(langQuery.toLowerCase()) || 
@@ -88,7 +98,8 @@ export default function Header() {
   };
 
   return (
-    <header className="header">
+    <>
+    <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
       <div className={`logo-container ${poppins.className}`}>
         <Link href="/">
           <span className="logo-bold">ZAWR</span>
@@ -96,7 +107,7 @@ export default function Header() {
         </Link>
       </div>
 
-      <nav className="nav-links">
+      <nav className={`nav-links ${isMobileMenuOpen ? 'mobile-active' : ''}`}>
         <Link href="/" className="nav-item">Home</Link>
         <div className="nav-item">
           About
@@ -114,6 +125,7 @@ export default function Header() {
             <Link href="/industries/transport-and-logistics">Transport and Logistics</Link>
             <Link href="/industries/manufacturing">Manufacturing</Link>
             <Link href="/industries/estate">Estate</Link>
+            <Link href="/industries/healthcare">Healthcare</Link>
           </div>
         </div>
         <div className="nav-item">
@@ -135,18 +147,18 @@ export default function Header() {
             <Link href="/newsroom/media-kit">Media Kit</Link>
           </div>
         </div>
+        <Link href="/contact/investors" className="nav-item">Investors</Link>
+        <Link href="/contact/careers" className="nav-item">Careers</Link>
         <div className="nav-item">
           Contact
           <div className="dropdown">
-            <Link href="/contact/careers">Careers</Link>
-            <Link href="/contact/investors">Investors</Link>
             <Link href="/contact/client-relations">Client Relations</Link>
             <Link href="/contact/public-relations">Public Relations</Link>
           </div>
         </div>
       </nav>
 
-      <div className="header-actions">
+      <div className={`header-actions ${isMobileMenuOpen ? 'mobile-active' : ''}`}>
         <button className="icon-btn" aria-label="Search" onClick={() => setIsSearchOpen(!isSearchOpen)} suppressHydrationWarning>
           <svg viewBox="0 0 24 24">
             <circle cx="11" cy="11" r="8"></circle>
@@ -192,10 +204,11 @@ export default function Header() {
         </a>
       </div>
 
-      <button className="mobile-menu-btn" aria-label="Menu">
-        ☰
+      <button className="mobile-menu-btn" aria-label="Menu" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+        {isMobileMenuOpen ? '✕' : '☰'}
       </button>
 
+    </header>
       {/* Full Screen Search Overlay */}
       {isSearchOpen && (
         <div className="search-overlay">
@@ -217,6 +230,6 @@ export default function Header() {
           </form>
         </div>
       )}
-    </header>
+    </>
   );
 }

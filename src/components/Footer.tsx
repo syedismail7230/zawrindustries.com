@@ -5,13 +5,22 @@ import Link from 'next/link';
 export default function Footer() {
   return (
     <footer className="footer">
+      {/* Giant Footer Logo Banner */}
+      <div style={{ width: '100%', borderBottom: '1px solid var(--border-color)', paddingBottom: '3rem', marginBottom: '3rem', display: 'flex', justifyContent: 'center', alignItems: 'flex-start', overflow: 'hidden' }}>
+        <h2 style={{ fontSize: 'clamp(2.5rem, 8.5vw, 160px)', margin: 0, lineHeight: 0.85, letterSpacing: '-0.02em', color: 'var(--text-dark)', display: 'flex', whiteSpace: 'nowrap' }}>
+          <span style={{ fontWeight: 800 }}>ZAWR</span>
+          <span style={{ fontWeight: 400, marginLeft: '1.5vw' }}>INDUSTRIES</span>
+        </h2>
+        <span style={{ fontSize: 'clamp(1rem, 3vw, 50px)', fontWeight: 400, color: 'var(--text-dark)', marginTop: '0', marginLeft: '0.5rem' }}>®</span>
+      </div>
+
       {/* Top Section: Subscribe & Socials */}
       <div className="footer-top-bar">
         <div className="footer-subscribe">
           <h4>Subscribe for news Alerts</h4>
           <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
             <input type="email" placeholder="Enter your email address..." required suppressHydrationWarning />
-            <button type="submit">Subscribe</button>
+            <button type="submit" suppressHydrationWarning>Subscribe</button>
           </form>
         </div>
         <div className="footer-socials">
@@ -49,7 +58,7 @@ export default function Footer() {
             <li><Link href="/about/blog">BLOG</Link></li>
             <li><Link href="/about/values">Values</Link></li>
             <li><Link href="/about/vision">Vision</Link></li>
-            <li><Link href="/about/mission">Mision</Link></li>
+            <li><Link href="/about/mission">Mission</Link></li>
             <li><Link href="/about/csr">CSR</Link></li>
             <li><Link href="/about/innovation">Innovation</Link></li>
             <li><Link href="/about/code-of-conduct">Code of conduct</Link></li>
@@ -60,7 +69,7 @@ export default function Footer() {
         <div className="footer-col">
           <h4>Sustainability</h4>
           <ul className="footer-links">
-            <li><Link href="/sustainability/environment">Enviroment</Link></li>
+            <li><Link href="/sustainability/environment">Environment</Link></li>
             <li><Link href="/sustainability/empowerment">Empowerment</Link></li>
             <li><Link href="/sustainability/health">Health</Link></li>
             <li><Link href="/sustainability/education">Education</Link></li>
@@ -72,6 +81,7 @@ export default function Footer() {
             <li><Link href="/industries/transport-and-logistics">Transport and Logistics</Link></li>
             <li><Link href="/industries/manufacturing">Manufacturing</Link></li>
             <li><Link href="/industries/estate">Estate</Link></li>
+            <li><Link href="/industries/healthcare">Healthcare</Link></li>
           </ul>
         </div>
 
@@ -112,7 +122,7 @@ export default function Footer() {
             <li><Link href="/contact/client-relations">Client Relations</Link></li>
             <li><Link href="/contact/sponsorship">Sponsorship</Link></li>
             <li><Link href="/contact/public-relations">Public Relations</Link></li>
-            <li><Link href="/contact/gravience">Gravience</Link></li>
+            <li><Link href="/contact/grievance">Grievance</Link></li>
           </ul>
         </div>
 

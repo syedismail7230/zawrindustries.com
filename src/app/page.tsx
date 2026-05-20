@@ -1,4 +1,9 @@
-import Image from 'next/image';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Zawr Industries — Technology, Manufacturing & Logistics Conglomerate | Bangalore',
+  description: "Zawr Industries is India's multi-sector conglomerate delivering IT services, AI platforms, logistics, manufacturing, and real estate solutions across India, UAE, USA and UK.",
+};
 
 export default function Home() {
   return (
@@ -13,13 +18,11 @@ export default function Home() {
           />
           <div className="hero-overlay"></div>
         </div>
-
-
       </section>
 
       {/* Placeholder for Section 2 */}
-      <section style={{ height: '80vh', backgroundColor: '#f9f9f9' }}>
-        <h2 style={{ textAlign: 'center', paddingTop: '4rem', color: '#1a1a1a' }}>Section 2</h2>
+      <section style={{ height: '80vh', backgroundColor: 'var(--bg-light)' }}>
+        <h2 style={{ textAlign: 'center', paddingTop: '4rem', color: 'var(--primary-color)' }}>Section 2</h2>
       </section>
 
       {/* Placeholder for Section 3 */}
