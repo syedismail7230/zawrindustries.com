@@ -5,6 +5,7 @@ import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
+import CursorTrail from '@/components/CursorTrail';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -109,6 +110,7 @@ export default function RootLayout({
         </main>
         <Footer />
         <CookieBanner />
+        <CursorTrail />
       </body>
     </html>
   );
