@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Poppins } from 'next/font/google';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import ISO6391 from 'iso-639-1';
 
