@@ -99,7 +99,7 @@ export default function Header() {
 
   return (
     <>
-    <header className={`header ${isScrolled ? 'scrolled' : ''}`}>
+    <header className={`header ${isScrolled ? 'scrolled' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
       <div className={`logo-container ${poppins.className}`}>
         <Link href="/">
           <span className="logo-bold">ZAWR</span>
@@ -204,7 +204,7 @@ export default function Header() {
         </a>
       </div>
 
-      <button className="mobile-menu-btn" aria-label="Menu" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+      <button className="mobile-menu-btn" aria-label="Menu" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} suppressHydrationWarning>
         {isMobileMenuOpen ? '✕' : '☰'}
       </button>
 

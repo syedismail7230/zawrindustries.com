@@ -5,7 +5,8 @@ import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
-import CursorTrail from '@/components/CursorTrail';
+import SupportWidget from '@/components/SupportWidget';
+import Preloader from '@/components/Preloader';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -54,6 +55,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className} suppressHydrationWarning>
+        <Preloader />
         <script
           id="schema-org"
           type="application/ld+json"
@@ -110,7 +112,7 @@ export default function RootLayout({
         </main>
         <Footer />
         <CookieBanner />
-        <CursorTrail />
+        <SupportWidget />
       </body>
     </html>
   );
