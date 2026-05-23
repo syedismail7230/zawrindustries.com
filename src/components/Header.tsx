@@ -98,9 +98,36 @@ export default function Header() {
     }
   };
 
+  const isDarkPage = pathname.startsWith('/contact/careers') || pathname.startsWith('/contact/client-relations');
+
   return (
     <>
-    <header className={`header ${isScrolled || pathname.startsWith('/contact') ? 'scrolled' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
+    {isDarkPage && (
+      <style dangerouslySetInnerHTML={{__html: `
+        .header.dark-page-header {
+          color: #ffffff !important;
+          background-color: ${isScrolled ? '#000000' : 'transparent'} !important;
+        }
+        .header.dark-page-header .dropdown {
+          background-color: #111111 !important;
+          border: 1px solid #333333;
+          box-shadow: 0 10px 20px rgba(0,0,0,0.8) !important;
+        }
+        .header.dark-page-header .dropdown a {
+          color: #ffffff !important;
+        }
+        .header.dark-page-header .dropdown a:hover {
+          background-color: #222222 !important;
+        }
+        .header.dark-page-header:hover {
+          background-color: #000000 !important;
+        }
+        .header.dark-page-header svg {
+          stroke: #ffffff !important;
+        }
+      `}} />
+    )}
+    <header className={`header ${isScrolled || (pathname.startsWith('/contact') && !isDarkPage) ? 'scrolled' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''} ${isDarkPage ? 'dark-page-header' : ''}`}>
       <div className={`logo-container ${poppins.className}`}>
         <Link href="/">
           <span className="logo-bold">ZAWR</span>
