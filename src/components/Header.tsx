@@ -98,7 +98,7 @@ export default function Header() {
     }
   };
 
-  const isDarkPage = pathname.startsWith('/contact/careers') || pathname.startsWith('/contact/client-relations');
+  const isDarkPage = pathname.startsWith('/contact/careers') || pathname.startsWith('/contact/client-relations') || pathname.startsWith('/contact/sponsorship') || pathname.startsWith('/contact/investors');
 
   return (
     <>
