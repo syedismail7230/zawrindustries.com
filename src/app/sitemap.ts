@@ -45,7 +45,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/contact/client-relations',
     '/contact/sponsorship',
     '/contact/public-relations',
-    '/contact/grievance',
     '/legal/privacy-policy',
     '/legal/terms',
     '/legal/cookie-policy',

@@ -76,7 +76,7 @@ export default function CustomerRelationsPage() {
           </div>
 
           {/* Card 2 */}
-          <div className="bg-black rounded-[2.5rem] p-8 aspect-square flex flex-col justify-between group cursor-pointer hover:bg-[#111111] transition-colors shadow-xl">
+          <a href="mailto:Grievance@zawrindustries.com" className="bg-black rounded-[2.5rem] p-8 aspect-square flex flex-col justify-between group cursor-pointer hover:bg-[#111111] transition-colors shadow-xl no-underline">
             <div className="flex justify-end">
               <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
                 <line x1="7" y1="17" x2="17" y2="7"></line>
@@ -84,7 +84,7 @@ export default function CustomerRelationsPage() {
               </svg>
             </div>
             <h3 className="text-white text-xl font-bold tracking-tight">Grievance</h3>
-          </div>
+          </a>
 
           {/* Card 3 */}
           <div className="bg-black rounded-[2.5rem] p-8 aspect-square flex flex-col justify-between group cursor-pointer hover:bg-[#111111] transition-colors shadow-xl">

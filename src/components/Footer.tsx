@@ -122,7 +122,7 @@ export default function Footer() {
             <li><Link href="/contact/client-relations">Client Relations</Link></li>
             <li><Link href="/contact/sponsorship">Sponsorship</Link></li>
             <li><Link href="/contact/public-relations">Public Relations</Link></li>
-            <li><Link href="/contact/grievance">Grievance</Link></li>
+            <li><a href="mailto:Grievance@zawrindustries.com">Grievance</a></li>
           </ul>
         </div>
 
