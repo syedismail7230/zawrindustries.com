@@ -3,13 +3,14 @@
 import Link from 'next/link';
 import { Poppins } from 'next/font/google';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import ISO6391 from 'iso-639-1';
 
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '700'] });
 
 export default function Header() {
   const router = useRouter();
+  const pathname = usePathname();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -99,7 +100,7 @@ export default function Header() {
 
   return (
     <>
-    <header className={`header ${isScrolled ? 'scrolled' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
+    <header className={`header ${isScrolled || pathname.startsWith('/contact') ? 'scrolled' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''}`}>
       <div className={`logo-container ${poppins.className}`}>
         <Link href="/">
           <span className="logo-bold">ZAWR</span>
@@ -150,7 +151,7 @@ export default function Header() {
         <Link href="/contact/investors" className="nav-item">Investors</Link>
         <Link href="/contact/careers" className="nav-item">Careers</Link>
         <div className="nav-item">
-          Contact
+          <Link href="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>Contact</Link>
           <div className="dropdown">
             <Link href="/contact/client-relations">Client Relations</Link>
             <Link href="/contact/public-relations">Public Relations</Link>
