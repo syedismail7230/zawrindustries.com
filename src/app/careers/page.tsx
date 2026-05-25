@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { jobCategories } from '@/data/jobs';
+import { supabase } from '@/lib/supabase';
 
 export default function CareersPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -10,35 +10,42 @@ export default function CareersPage() {
   const [selectedTeam, setSelectedTeam] = useState("All");
   const [selectedLocation, setSelectedLocation] = useState("All");
   
+  const [dbJobs, setDbJobs] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
   const jobsPerPage = 20;
 
-  // Flatten all jobs with their category
-  const allFlattenedJobs = useMemo(() => {
-    return jobCategories.flatMap(cat => 
-      cat.jobs.map(job => ({ ...job, category: cat.category }))
-    );
+  useEffect(() => {
+    const fetchJobs = async () => {
+      // Only fetch active jobs for the public careers page
+      const { data, error } = await supabase.from('jobs').select('*').eq('status', 'Active');
+      if (data) {
+        setDbJobs(data);
+      }
+      setIsLoading(false);
+    };
+    fetchJobs();
   }, []);
 
   // Compute unique locations for the dropdown
   const uniqueLocations = useMemo(() => {
     const locations = new Set<string>();
-    allFlattenedJobs.forEach(j => locations.add(j.location));
+    dbJobs.forEach(j => locations.add(j.location));
     return Array.from(locations).sort();
-  }, [allFlattenedJobs]);
+  }, [dbJobs]);
 
-  const uniqueTeams = useMemo(() => {
-    return jobCategories.map(c => c.category).sort();
-  }, []);
+  // Compute unique categories (Assuming we might map 'type' or just use 'Department' if available, but for now we will just use generic team categories or omit if not in DB. Let's assume all jobs in DB are the team)
+  // For now, since 'category' was in the hardcoded data but not in DB, we will just use "All" for team.
+  const uniqueTeams = ["All"]; 
 
   // Filter jobs based on search and dropdowns
   const filteredJobs = useMemo(() => {
-    return allFlattenedJobs.filter(job => {
+    return dbJobs.filter(job => {
       const matchSearch = job.title.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchTeam = selectedTeam === "All" || job.category === selectedTeam;
       const matchLocation = selectedLocation === "All" || job.location === selectedLocation;
-      return matchSearch && matchTeam && matchLocation;
+      return matchSearch && matchLocation;
     });
-  }, [allFlattenedJobs, searchQuery, selectedTeam, selectedLocation]);
+  }, [dbJobs, searchQuery, selectedLocation]);
 
   // Reset to page 1 when filters change
   React.useEffect(() => {
@@ -52,22 +59,6 @@ export default function CareersPage() {
     const start = (currentPage - 1) * jobsPerPage;
     return filteredJobs.slice(start, start + jobsPerPage);
   }, [filteredJobs, currentPage]);
-
-  // Regroup current jobs by category
-  const paginatedCategories = useMemo(() => {
-    const grouped: Record<string, typeof currentJobs> = {};
-    currentJobs.forEach(job => {
-      if (!grouped[job.category]) {
-        grouped[job.category] = [];
-      }
-      grouped[job.category].push(job);
-    });
-
-    return Object.entries(grouped).map(([category, jobs]) => ({
-      category,
-      jobs
-    }));
-  }, [currentJobs]);
 
   const handleNextPage = () => {
     if (currentPage < totalPages) setCurrentPage(p => p + 1);
@@ -198,42 +189,44 @@ export default function CareersPage() {
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
-          {paginatedCategories.map((cat, i) => (
-            <div key={i}>
-              <div style={{ backgroundColor: '#0f0f0f', padding: '1.25rem 1.5rem', fontSize: '1.125rem', fontWeight: 600, borderBottom: '1px solid #1f2937' }}>
-                {cat.category}
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {cat.jobs.map((job, j) => (
-                  <Link 
-                    href={`/contact/careers/${job.id}`}
-                    key={j} 
-                    style={{ 
-                      display: 'flex', 
-                      justifyContent: 'space-between', 
-                      alignItems: 'center', 
-                      padding: '1.5rem', 
-                      borderBottom: '1px solid #1f2937', 
-                      cursor: 'pointer', 
-                      transition: 'background-color 0.2s',
-                      textDecoration: 'none',
-                      color: 'inherit'
-                    }} 
-                    onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#0a0a0a'} 
-                    onMouseOut={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                  >
-                    <span style={{ fontSize: '0.875rem', fontWeight: 500, flex: 1 }}>{job.title}</span>
-                    <span style={{ fontSize: '0.875rem', color: '#9ca3af', flex: 1, textAlign: 'center' }}>{job.location}</span>
-                    <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+        {isLoading ? (
+          <div style={{ textAlign: 'center', padding: '4rem 0', color: '#9ca3af' }}>Loading open positions...</div>
+        ) : (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {currentJobs.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '4rem 0', color: '#9ca3af' }}>No positions found matching your criteria.</div>
+            ) : currentJobs.map((job, j) => (
+              <Link 
+                href={`/careers/${job.id}`}
+                key={j} 
+                style={{ 
+                  display: 'flex', 
+                  justifyContent: 'space-between', 
+                  alignItems: 'center', 
+                  padding: '1.5rem', 
+                  border: '1px solid #1f2937', 
+                  backgroundColor: '#0f0f0f',
+                  borderRadius: '0.5rem',
+                  cursor: 'pointer', 
+                  transition: 'background-color 0.2s',
+                  textDecoration: 'none',
+                  color: 'inherit'
+                }} 
+                onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#1a1a1a'} 
+                onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#0f0f0f'}
+              >
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '0.25rem' }}>{job.title}</div>
+                  <div style={{ fontSize: '0.875rem', color: '#9ca3af' }}>{job.type}</div>
+                </div>
+                <span style={{ fontSize: '0.875rem', color: '#9ca3af', flex: 1, textAlign: 'center' }}>{job.location}</span>
+                <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
 
         {/* Pagination Controls */}
         {totalPages > 1 && (

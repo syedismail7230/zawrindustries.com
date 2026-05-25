@@ -98,7 +98,7 @@ export default function Header() {
     }
   };
 
-  const isDarkPage = pathname.startsWith('/contact/careers') || pathname.startsWith('/contact/client-relations') || pathname.startsWith('/contact/sponsorship') || pathname.startsWith('/contact/investors');
+  const isDarkPage = pathname.startsWith('/careers') || pathname.startsWith('/contact/client-relations') || pathname.startsWith('/contact/sponsorship') || pathname.startsWith('/investors');
 
   return (
     <>
@@ -175,8 +175,8 @@ export default function Header() {
             <Link href="/newsroom/media-kit">Media Kit</Link>
           </div>
         </div>
-        <Link href="/contact/investors" className="nav-item">Investors</Link>
-        <Link href="/contact/careers" className="nav-item">Careers</Link>
+        <Link href="/investors" className="nav-item">Investors</Link>
+        <Link href="/careers" className="nav-item">Careers</Link>
         <div className="nav-item">
           <Link href="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>Contact</Link>
           <div className="dropdown">

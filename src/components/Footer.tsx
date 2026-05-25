@@ -100,8 +100,8 @@ export default function Footer() {
           <ul className="footer-links">
             <li><Link href="/careers/working-at-zawr">Working at Zawr Industries</Link></li>
             <li><Link href="/careers/equal-opportunity">Equal Opportunity Policy</Link></li>
-            <li><Link href="/careers/search-and-apply">Search and Apply</Link></li>
-            <li><Link href="/careers/jobs">Jobs</Link></li>
+            <li><Link href="/careers">Search and Apply</Link></li>
+            <li><Link href="/careers">Jobs</Link></li>
           </ul>
         </div>
 
@@ -118,7 +118,7 @@ export default function Footer() {
 
           <h4 className="mt-8">Contact</h4>
           <ul className="footer-links">
-            <li><Link href="/contact/investors">Investors</Link></li>
+            <li><Link href="/investors">Investors</Link></li>
             <li><Link href="/contact/client-relations">Client Relations</Link></li>
             <li><Link href="/contact/sponsorship">Sponsorship</Link></li>
             <li><Link href="/contact/public-relations">Public Relations</Link></li>

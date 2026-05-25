@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { jobCategories } from '@/data/jobs';
+import { supabase } from '@/lib/supabase';
 
 export default function JobDetailPage() {
   const params = useParams();
@@ -21,18 +21,17 @@ export default function JobDetailPage() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
   useEffect(() => {
-    if (params.role) {
-      // Find the job from our data
-      let foundJob = null;
-      for (const cat of jobCategories) {
-        const match = cat.jobs.find(j => j.id === params.role);
-        if (match) {
-          foundJob = match;
-          break;
+    const fetchJob = async () => {
+      if (params.role) {
+        const { data, error } = await supabase.from('jobs').select('*').eq('id', params.role).single();
+        if (data) {
+          setJob(data);
+        } else {
+          setJob('not_found');
         }
       }
-      setJob(foundJob);
-    }
+    };
+    fetchJob();
   }, [params.role]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,6 +79,16 @@ export default function JobDetailPage() {
       setStatus('error');
     }
   };
+
+  if (job === 'not_found') {
+    return (
+      <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+        <h1 style={{ fontSize: '3rem', fontWeight: 700, marginBottom: '1rem' }}>Position Not Found</h1>
+        <p style={{ color: '#9ca3af', marginBottom: '2rem' }}>This position may have been closed or removed.</p>
+        <button onClick={() => router.push('/careers')} style={{ padding: '0.75rem 1.5rem', backgroundColor: '#ffffff', color: '#000000', border: 'none', borderRadius: '0.5rem', fontWeight: 600, cursor: 'pointer' }}>View Open Positions</button>
+      </div>
+    );
+  }
 
   if (!job) {
     return (
