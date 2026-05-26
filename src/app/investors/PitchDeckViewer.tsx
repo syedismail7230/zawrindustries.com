@@ -9,7 +9,7 @@ if (typeof window !== 'undefined') {
   pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
 }
 
-export default function PitchDeckViewer() {
+export default function PitchDeckViewer({ fileUrl = "/assets/pitch-deck.pdf" }: { fileUrl?: string }) {
   const [numPages, setNumPages] = useState<number | null>(null);
   const [windowHeight, setWindowHeight] = useState(0);
   const [windowWidth, setWindowWidth] = useState(0);
@@ -29,9 +29,9 @@ export default function PitchDeckViewer() {
 
   return (
     <Document 
-      file="/assets/pitch-deck.pdf" 
+      file={fileUrl} 
       onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-      loading={<div style={{ color: '#fff', fontSize: '1.25rem' }}>Loading Pitch Deck...</div>}
+      loading={<div style={{ color: '#fff', fontSize: '1.25rem' }}>Loading Report...</div>}
       className="pdf-document-container"
     >
       <div style={{ display: 'flex', overflowX: 'auto', gap: '4rem', padding: '0 10vw', width: '100vw', scrollSnapType: 'x mandatory', scrollBehavior: 'smooth', msOverflowStyle: 'none', scrollbarWidth: 'none' }} className="pitch-deck-scroll">

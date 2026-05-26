@@ -1,0 +1,32 @@
+[
+  {
+    "id": "1",
+    "title": "AGM",
+    "description": "Annual General Meeting covering Zawr Industries' strategic roadmap, global scaling updates, and technological milestones.",
+    "startDate": "2023-01-12",
+    "endDate": "2023-01-18",
+    "startTime": "09:00:00",
+    "endTime": "18:45:00",
+    "image": "/assets/event-speaker.png"
+  },
+  {
+    "id": "2",
+    "title": "IT Services Launch",
+    "description": "Global launch of our unified Next-Gen IT Automation suite and Enterprise AI consultancy division.",
+    "startDate": "2023-01-04",
+    "endDate": "2023-01-04",
+    "startTime": "10:00:00",
+    "endTime": "12:00:00",
+    "image": "/assets/event-chart.png"
+  },
+  {
+    "id": "3",
+    "title": "Investor Meetup",
+    "description": "Exclusively for stakeholders and venture partners to preview the upcoming FMCG supply chain integrations.",
+    "startDate": "2023-01-24",
+    "endDate": "2023-01-24",
+    "startTime": "14:00:00",
+    "endTime": "16:30:00",
+    "image": "/assets/event-chart.png"
+  }
+]

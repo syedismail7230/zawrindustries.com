@@ -32,6 +32,22 @@ export default function WebmasterDashboard() {
     title: '', location: '', type: 'Full-time', status: 'Active', role: '', responsibilities: [], reporting: '' 
   });
 
+  // Financial Reports States
+  const [reports, setReports] = useState<any[]>([]);
+  const [reportTitle, setReportTitle] = useState('');
+  const [editingReport, setEditingReport] = useState<any>(null);
+
+  // Events States
+  const [events, setEvents] = useState<any[]>([]);
+  const [eventTitle, setEventTitle] = useState('');
+  const [eventDesc, setEventDesc] = useState('');
+  const [eventStartDate, setEventStartDate] = useState('');
+  const [eventEndDate, setEventEndDate] = useState('');
+  const [eventStartTime, setEventStartTime] = useState('');
+  const [eventEndTime, setEventEndTime] = useState('');
+  const [eventImage, setEventImage] = useState('/assets/event-chart.png');
+  const [editingEvent, setEditingEvent] = useState<any>(null);
+
   // Login handler
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,6 +92,20 @@ export default function WebmasterDashboard() {
         else if (activeTab === 'email-routing') {
           const { data, error } = await supabase.from('email_routing').select('*').order('id');
           if (data && data.length > 0) setRoutes(data);
+        }
+        else if (activeTab === 'financial-reports') {
+          const res = await fetch('/api/financial-reports');
+          if (res.ok) {
+            const data = await res.json();
+            setReports(data || []);
+          }
+        }
+        else if (activeTab === 'events') {
+          const res = await fetch('/api/events');
+          if (res.ok) {
+            const data = await res.json();
+            setEvents(data || []);
+          }
         }
       } catch (error: any) {
         console.error('Supabase error:', error.message);
@@ -371,6 +401,399 @@ export default function WebmasterDashboard() {
           </div>
         );
       
+      case 'financial-reports':
+        return (
+          <div>
+            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '2rem', letterSpacing: '-0.02em' }}>Financial Reports</h2>
+            
+            {/* Add / Edit Form */}
+            <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg, marginBottom: '3rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>{editingReport ? 'Edit Report' : 'Add New Report'}</h3>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: '500px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Report Title (e.g. FY 2026)</label>
+                  <input 
+                    type="text" 
+                    value={reportTitle} 
+                    onChange={(e) => setReportTitle(e.target.value)} 
+                    style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                    placeholder="Enter report title"
+                  />
+                </div>
+                
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>PDF File</label>
+                  <input 
+                    type="file" 
+                    accept="application/pdf"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) {
+                        (window as any)._selectedReportFile = file;
+                      }
+                    }}
+                    style={{ color: theme.fg }}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                  <button 
+                    onClick={async () => {
+                      if (!reportTitle.trim()) {
+                        alert('Please enter a title');
+                        return;
+                      }
+                      setLoading(true);
+                      const formData = new FormData();
+                      formData.append('action', editingReport ? 'update' : 'add');
+                      formData.append('title', reportTitle);
+                      if (editingReport) {
+                        formData.append('id', editingReport.id);
+                        formData.append('pdfUrl', editingReport.pdfUrl);
+                      }
+                      const file = (window as any)._selectedReportFile;
+                      if (file) {
+                        formData.append('file', file);
+                      }
+
+                      try {
+                        const res = await fetch('/api/financial-reports', {
+                          method: 'POST',
+                          body: formData
+                        });
+                        if (res.ok) {
+                          const data = await res.json();
+                          setReports(data.reports || []);
+                          setReportTitle('');
+                          setEditingReport(null);
+                          (window as any)._selectedReportFile = null;
+                          alert(editingReport ? 'Report updated successfully!' : 'Report added successfully!');
+                        } else {
+                          alert('Failed to save report.');
+                        }
+                      } catch (err) {
+                        alert('Error saving report.');
+                      }
+                      setLoading(false);
+                    }}
+                    disabled={loading}
+                    style={{ padding: '0.75rem 1.5rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, borderRadius: '4px', cursor: 'pointer' }}
+                  >
+                    {loading ? 'Saving...' : editingReport ? 'Update Report' : 'Add Report'}
+                  </button>
+                  
+                  {editingReport && (
+                    <button 
+                      onClick={() => {
+                        setEditingReport(null);
+                        setReportTitle('');
+                        (window as any)._selectedReportFile = null;
+                      }}
+                      style={{ padding: '0.75rem 1.5rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer' }}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* List of Reports */}
+            <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>Current Reports</h3>
+              
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                <thead>
+                  <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>PDF URL</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reports.length === 0 ? (
+                    <tr><td colSpan={3} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No reports found.</td></tr>
+                  ) : reports.map((rep) => (
+                    <tr key={rep.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                      <td style={{ padding: '1rem', fontWeight: 500 }}>{rep.title}</td>
+                      <td style={{ padding: '1rem', color: theme.muted, fontSize: '0.875rem' }}>{rep.pdfUrl || 'No file uploaded yet'}</td>
+                      <td style={{ padding: '1rem', textAlign: 'right' }}>
+                        <button 
+                          onClick={() => {
+                            setEditingReport(rep);
+                            setReportTitle(rep.title);
+                          }}
+                          style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          onClick={async () => {
+                            if (!confirm(`Are you sure you want to delete ${rep.title}?`)) return;
+                            setLoading(true);
+                            const formData = new FormData();
+                            formData.append('action', 'delete');
+                            formData.append('id', rep.id);
+                            try {
+                              const res = await fetch('/api/financial-reports', { method: 'POST', body: formData });
+                              if (res.ok) {
+                                const data = await res.json();
+                                setReports(data.reports || []);
+                              } else {
+                                alert('Failed to delete report.');
+                              }
+                            } catch (e) {
+                              alert('Error deleting report.');
+                            }
+                            setLoading(false);
+                          }}
+                          style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        );
+
+      case 'events':
+        return (
+          <div>
+            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '2rem', letterSpacing: '-0.02em' }}>Manage Events</h2>
+            
+            {/* Add / Edit Form */}
+            <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg, marginBottom: '3rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>{editingEvent ? 'Edit Event' : 'Add New Event'}</h3>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: '600px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Event Title</label>
+                  <input 
+                    type="text" 
+                    value={eventTitle} 
+                    onChange={(e) => setEventTitle(e.target.value)} 
+                    style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                    placeholder="e.g. AGM, IT Services Launch"
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Description</label>
+                  <textarea 
+                    value={eventDesc} 
+                    onChange={(e) => setEventDesc(e.target.value)} 
+                    style={{ width: '100%', height: '100px', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', resize: 'vertical' }} 
+                    placeholder="Enter event details"
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Card Thumbnail Image</label>
+                  <select 
+                    value={eventImage} 
+                    onChange={(e) => setEventImage(e.target.value)} 
+                    style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }}
+                  >
+                    <option value="/assets/event-chart.png">Stock Chart Gradient</option>
+                    <option value="/assets/event-speaker.png">Keynote Stage Presenter</option>
+                  </select>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Start Date</label>
+                    <input 
+                      type="date" 
+                      value={eventStartDate} 
+                      onChange={(e) => setEventStartDate(e.target.value)} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>End Date (Leave blank for single date)</label>
+                    <input 
+                      type="date" 
+                      value={eventEndDate} 
+                      onChange={(e) => setEventEndDate(e.target.value)} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Start Time</label>
+                    <input 
+                      type="time" 
+                      value={eventStartTime} 
+                      onChange={(e) => setEventStartTime(e.target.value)} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>End Time</label>
+                    <input 
+                      type="time" 
+                      value={eventEndTime} 
+                      onChange={(e) => setEventEndTime(e.target.value)} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                    />
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                  <button 
+                    onClick={async () => {
+                      if (!eventTitle.trim() || !eventStartDate) {
+                        alert('Title and Start Date are required');
+                        return;
+                      }
+                      setLoading(true);
+                      const formData = new FormData();
+                      formData.append('action', editingEvent ? 'update' : 'add');
+                      formData.append('title', eventTitle);
+                      formData.append('description', eventDesc);
+                      formData.append('startDate', eventStartDate);
+                      formData.append('endDate', eventEndDate || eventStartDate);
+                      formData.append('startTime', eventStartTime || '00:00:00');
+                      formData.append('endTime', eventEndTime || '00:00:00');
+                      formData.append('image', eventImage);
+                      if (editingEvent) {
+                        formData.append('id', editingEvent.id);
+                      }
+
+                      try {
+                        const res = await fetch('/api/events', {
+                          method: 'POST',
+                          body: formData
+                        });
+                        if (res.ok) {
+                          const data = await res.json();
+                          setEvents(data.events || []);
+                          // Clear states
+                          setEventTitle('');
+                          setEventDesc('');
+                          setEventStartDate('');
+                          setEventEndDate('');
+                          setEventStartTime('');
+                          setEventEndTime('');
+                          setEventImage('/assets/event-chart.png');
+                          setEditingEvent(null);
+                          alert(editingEvent ? 'Event updated successfully!' : 'Event added successfully!');
+                        } else {
+                          alert('Failed to save event.');
+                        }
+                      } catch (err) {
+                        alert('Error saving event.');
+                      }
+                      setLoading(false);
+                    }}
+                    disabled={loading}
+                    style={{ padding: '0.75rem 1.5rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, borderRadius: '4px', cursor: 'pointer' }}
+                  >
+                    {loading ? 'Saving...' : editingEvent ? 'Update Event' : 'Add Event'}
+                  </button>
+                  
+                  {editingEvent && (
+                    <button 
+                      onClick={() => {
+                        setEditingEvent(null);
+                        setEventTitle('');
+                        setEventDesc('');
+                        setEventStartDate('');
+                        setEventEndDate('');
+                        setEventStartTime('');
+                        setEventEndTime('');
+                        setEventImage('/assets/event-chart.png');
+                      }}
+                      style={{ padding: '0.75rem 1.5rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer' }}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* List of Events */}
+            <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>Current Events</h3>
+              
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                <thead>
+                  <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Event Title</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Dates</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Timing</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {events.length === 0 ? (
+                    <tr><td colSpan={4} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No events found.</td></tr>
+                  ) : events.map((ev) => (
+                    <tr key={ev.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                      <td style={{ padding: '1rem', fontWeight: 500 }}>{ev.title}</td>
+                      <td style={{ padding: '1rem', color: theme.muted }}>
+                        {ev.startDate === ev.endDate ? ev.startDate : `${ev.startDate} to ${ev.endDate}`}
+                      </td>
+                      <td style={{ padding: '1rem', color: theme.muted }}>
+                        {ev.startTime} - {ev.endTime}
+                      </td>
+                      <td style={{ padding: '1rem', textAlign: 'right' }}>
+                        <button 
+                          onClick={() => {
+                            setEditingEvent(ev);
+                            setEventTitle(ev.title);
+                            setEventDesc(ev.description || '');
+                            setEventStartDate(ev.startDate);
+                            setEventEndDate(ev.endDate === ev.startDate ? '' : ev.endDate);
+                            setEventStartTime(ev.startTime);
+                            setEventEndTime(ev.endTime);
+                            setEventImage(ev.image || '/assets/event-chart.png');
+                          }}
+                          style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          onClick={async () => {
+                            if (!confirm(`Are you sure you want to delete "${ev.title}"?`)) return;
+                            setLoading(true);
+                            const formData = new FormData();
+                            formData.append('action', 'delete');
+                            formData.append('id', ev.id);
+                            try {
+                              const res = await fetch('/api/events', { method: 'POST', body: formData });
+                              if (res.ok) {
+                                const data = await res.json();
+                                setEvents(data.events || []);
+                              } else {
+                                alert('Failed to delete event.');
+                              }
+                            } catch (e) {
+                              alert('Error deleting event.');
+                            }
+                            setLoading(false);
+                          }}
+                          style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        );
+      
       default:
         return null;
     }
@@ -383,6 +806,8 @@ export default function WebmasterDashboard() {
     { id: 'jobs', label: 'Manage Jobs' },
     { id: 'newsletters', label: 'Newsletters' },
     { id: 'pitch-deck', label: 'Pitch Deck' },
+    { id: 'financial-reports', label: 'Financial Reports' },
+    { id: 'events', label: 'Manage Events' },
   ];
 
   return (

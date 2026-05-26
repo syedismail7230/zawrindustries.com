@@ -130,9 +130,9 @@ export default function Footer() {
         <div className="footer-col">
           <h4>Investors</h4>
           <ul className="footer-links">
-            <li><Link href="/investors/financial-reporting">Financial Reporting</Link></li>
+            <li><Link href="/investors#financial-reports">Financial Reporting</Link></li>
             <li><Link href="/investors/shares">Shares</Link></li>
-            <li><Link href="/investors/events">Events & Presentations</Link></li>
+            <li><Link href="/investors#events-presentations">Events & Presentations</Link></li>
             <li><Link href="/investors/subsidiaries">Subsidiaries & Associates</Link></li>
             <li><Link href="/investors/shareholders-info">Shareholders' Information</Link></li>
             <li><Link href="/investors/resource-centre">Resource Centre</Link></li>
