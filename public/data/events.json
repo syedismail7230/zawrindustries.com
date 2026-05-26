@@ -28,5 +28,15 @@
     "startTime": "14:00:00",
     "endTime": "16:30:00",
     "image": "/assets/event-speaker.png"
+  },
+  {
+    "id": "1779817002246",
+    "title": "Product Launch",
+    "description": "Website of Zawr Industries",
+    "startDate": "2026-06-01",
+    "endDate": "2026-06-01",
+    "startTime": "00:00:00",
+    "endTime": "00:00:00",
+    "image": "https://brnsnmodoiipkmshnrlx.supabase.co/storage/v1/object/public/zawr-media/events/event-1779816998299-event-chart.png"
   }
 ]

@@ -45,16 +45,25 @@ export default function InvestorsPage() {
 
     const fetchEvents = async () => {
       try {
-        const res = await fetch('/api/events');
+        const res = await fetch(`/api/events?t=${Date.now()}`);
         if (res.ok) {
           const data = await res.json();
           setEvents(data || []);
           
-          // If events are loaded, set initial calendar view to match the first event's month
+          // Set initial calendar view and active card to match the latest chronological event
           if (data && data.length > 0) {
-            const firstEventDate = new Date(data[0].startDate + 'T00:00:00');
-            if (!isNaN(firstEventDate.getTime())) {
-              setCurrentCalendarDate(new Date(firstEventDate.getFullYear(), firstEventDate.getMonth(), 1));
+            let latestEvent = data[0];
+            let latestIdx = 0;
+            for (let i = 1; i < data.length; i++) {
+              if (data[i].startDate > latestEvent.startDate) {
+                latestEvent = data[i];
+                latestIdx = i;
+              }
+            }
+            const latestEventDate = new Date(latestEvent.startDate + 'T00:00:00');
+            if (!isNaN(latestEventDate.getTime())) {
+              setCurrentCalendarDate(new Date(latestEventDate.getFullYear(), latestEventDate.getMonth(), 1));
+              setActiveEventIndex(latestIdx);
             }
           }
         }
@@ -518,35 +527,6 @@ export default function InvestorsPage() {
                   border: '1px solid #222225',
                   boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)'
                 }}>
-                  {/* Date / Time Fields linked to active event */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-                    <div>
-                      <div style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.25rem', paddingLeft: '0.25rem' }}>Start</div>
-                      <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#1e1e21', border: '1px solid #2a2a2e', borderRadius: '0.5rem', padding: '0.5rem 0.75rem', color: '#ffffff', fontSize: '0.85rem' }}>
-                        <span style={{ marginRight: '0.5rem' }}>📅</span>
-                        {activeEvent.startDate.split('-').reverse().join('-')}
-                      </div>
-                    </div>
-                    <div>
-                      <div style={{ fontSize: '0.75rem', color: '#6b7280', marginBottom: '0.25rem', paddingLeft: '0.25rem' }}>Due</div>
-                      <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#1e1e21', border: '1px solid #2a2a2e', borderRadius: '0.5rem', padding: '0.5rem 0.75rem', color: '#ffffff', fontSize: '0.85rem' }}>
-                        <span style={{ marginRight: '0.5rem' }}>📅</span>
-                        {activeEvent.endDate.split('-').reverse().join('-')}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#1e1e21', border: '1px solid #2a2a2e', borderRadius: '0.5rem', padding: '0.5rem 0.75rem', color: '#ffffff', fontSize: '0.85rem' }}>
-                      <span style={{ marginRight: '0.5rem' }}>🕒</span>
-                      {activeEvent.startTime}
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#1e1e21', border: '1px solid #2a2a2e', borderRadius: '0.5rem', padding: '0.5rem 0.75rem', color: '#ffffff', fontSize: '0.85rem' }}>
-                      <span style={{ marginRight: '0.5rem' }}>🕒</span>
-                      {activeEvent.endTime}
-                    </div>
-                  </div>
-
                   {/* Calendar Month Header */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', padding: '0 0.5rem' }}>
                     <button onClick={handlePrevMonth} style={{ width: '28px', height: '28px', borderRadius: '50%', backgroundColor: '#2a2a2e', border: 'none', color: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>&lt;</button>
@@ -807,7 +787,7 @@ export default function InvestorsPage() {
         .events-container {
           display: flex;
           flex-wrap: wrap;
-          gap: 4rem;
+          gap: 8rem;
           justify-content: center;
           align-items: center;
           width: 100%;

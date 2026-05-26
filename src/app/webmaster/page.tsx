@@ -654,7 +654,7 @@ export default function WebmasterDashboard() {
                       type="date" 
                       value={eventStartDate} 
                       onChange={(e) => setEventStartDate(e.target.value)} 
-                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', colorScheme: 'dark' }} 
                     />
                   </div>
                   <div>
@@ -663,7 +663,7 @@ export default function WebmasterDashboard() {
                       type="date" 
                       value={eventEndDate} 
                       onChange={(e) => setEventEndDate(e.target.value)} 
-                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', colorScheme: 'dark' }} 
                     />
                   </div>
                 </div>
@@ -675,7 +675,7 @@ export default function WebmasterDashboard() {
                       type="time" 
                       value={eventStartTime} 
                       onChange={(e) => setEventStartTime(e.target.value)} 
-                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', colorScheme: 'dark' }} 
                     />
                   </div>
                   <div>
@@ -684,7 +684,7 @@ export default function WebmasterDashboard() {
                       type="time" 
                       value={eventEndTime} 
                       onChange={(e) => setEventEndTime(e.target.value)} 
-                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', colorScheme: 'dark' }} 
                     />
                   </div>
                 </div>
@@ -726,8 +726,8 @@ export default function WebmasterDashboard() {
                       formData.append('description', eventDesc);
                       formData.append('startDate', eventStartDate);
                       formData.append('endDate', eventEndDate || eventStartDate);
-                      formData.append('startTime', eventStartTime || '00:00:00');
-                      formData.append('endTime', eventEndTime || '00:00:00');
+                      formData.append('startTime', eventStartTime ? (eventStartTime.length === 5 ? `${eventStartTime}:00` : eventStartTime) : '00:00:00');
+                      formData.append('endTime', eventEndTime ? (eventEndTime.length === 5 ? `${eventEndTime}:00` : eventEndTime) : '00:00:00');
                       formData.append('image', finalImageUrl);
                       if (editingEvent) {
                         formData.append('id', editingEvent.id);
@@ -821,8 +821,8 @@ export default function WebmasterDashboard() {
                             setEventDesc(ev.description || '');
                             setEventStartDate(ev.startDate);
                             setEventEndDate(ev.endDate === ev.startDate ? '' : ev.endDate);
-                            setEventStartTime(ev.startTime);
-                            setEventEndTime(ev.endTime);
+                            setEventStartTime(ev.startTime ? ev.startTime.substring(0, 5) : '');
+                            setEventEndTime(ev.endTime ? ev.endTime.substring(0, 5) : '');
                             setEventImage(ev.image || '/assets/event-chart.png');
                           }}
                           style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
