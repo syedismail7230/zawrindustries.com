@@ -53,6 +53,22 @@ export default function WebmasterDashboard() {
   const [editingEvent, setEditingEvent] = useState<any>(null);
   const [customImageFile, setCustomImageFile] = useState<File | null>(null);
 
+  // Notices States
+  const [notices, setNotices] = useState<any[]>([]);
+  const [noticeTitle, setNoticeTitle] = useState('');
+  const [noticeCategory, setNoticeCategory] = useState('General');
+  const [noticeDate, setNoticeDate] = useState('');
+  const [noticeSummary, setNoticeSummary] = useState('');
+  const [noticeBody, setNoticeBody] = useState('');
+  const [noticeIsArchived, setNoticeIsArchived] = useState(false);
+  const [editingNotice, setEditingNotice] = useState<any>(null);
+  
+  // Notice dynamic attachments/links input fields
+  const [noticeLinkName, setNoticeLinkName] = useState('');
+  const [noticeLinkUrl, setNoticeLinkUrl] = useState('');
+  const [noticeAttachmentName, setNoticeAttachmentName] = useState('');
+  const [customNoticeFile, setCustomNoticeFile] = useState<File | null>(null);
+
   // Login handler
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -110,6 +126,13 @@ export default function WebmasterDashboard() {
           if (res.ok) {
             const data = await res.json();
             setEvents(data || []);
+          }
+        }
+        else if (activeTab === 'notices') {
+          const res = await fetch('/api/notices');
+          if (res.ok) {
+            const data = await res.json();
+            setNotices(data || []);
           }
         }
       } catch (error: any) {
@@ -1154,6 +1177,353 @@ export default function WebmasterDashboard() {
           </div>
         );
       
+      case 'notices':
+        return (
+          <div>
+            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '2rem', letterSpacing: '-0.02em' }}>Manage Notices</h2>
+            
+            {/* Add / Edit Form */}
+            <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg, marginBottom: '3rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>{editingNotice ? 'Edit Notice' : 'Add New Notice'}</h3>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: '600px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Notice Title *</label>
+                  <input 
+                    type="text" 
+                    value={noticeTitle} 
+                    onChange={(e) => setNoticeTitle(e.target.value)} 
+                    style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                    placeholder="e.g. Notice Inviting Offer — Sale of CBM"
+                  />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Category *</label>
+                    <select 
+                      value={noticeCategory}
+                      onChange={(e) => setNoticeCategory(e.target.value)}
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }}
+                    >
+                      <option value="General">General</option>
+                      <option value="Corporate">Corporate</option>
+                      <option value="Procurement">Procurement</option>
+                      <option value="Legal">Legal</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Publish Date * (e.g. January 16, 2026)</label>
+                    <input 
+                      type="text" 
+                      value={noticeDate} 
+                      onChange={(e) => setNoticeDate(e.target.value)} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }}
+                      placeholder="e.g. January 16, 2026"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>One-line Summary * (Shown on notices list)</label>
+                  <input 
+                    type="text" 
+                    value={noticeSummary} 
+                    onChange={(e) => setNoticeSummary(e.target.value)} 
+                    style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                    placeholder="Short summary of this notice..."
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Notice Body Content (Detail page paragraph)</label>
+                  <textarea 
+                    value={noticeBody} 
+                    onChange={(e) => setNoticeBody(e.target.value)} 
+                    style={{ width: '100%', height: '120px', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', resize: 'vertical' }} 
+                    placeholder="Write detailed notice information here..."
+                  />
+                </div>
+
+                {/* File Attachment Upload */}
+                <div style={{ padding: '1rem', border: `1px solid ${theme.border}`, borderRadius: '6px', backgroundColor: theme.bg }}>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.75rem' }}>Upload Notice PDF Attachment (Optional)</label>
+                  
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Attachment Label</label>
+                        <input 
+                          type="text" 
+                          value={noticeAttachmentName} 
+                          onChange={(e) => setNoticeAttachmentName(e.target.value)} 
+                          style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} 
+                          placeholder="e.g. Notice Inviting Offer"
+                        />
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Choose PDF File</label>
+                        <input 
+                          type="file" 
+                          accept="application/pdf"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0] || null;
+                            setCustomNoticeFile(file);
+                          }}
+                          style={{ color: theme.fg, fontSize: '0.8rem', paddingTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    {editingNotice && editingNotice.attachments && editingNotice.attachments.length > 0 && (
+                      <div style={{ fontSize: '0.75rem', color: theme.muted, marginTop: '0.25rem' }}>
+                        Current attachment: <strong>{editingNotice.attachments[0].label}</strong> ({editingNotice.attachments[0].url})
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* External Portal Links */}
+                <div style={{ padding: '1rem', border: `1px solid ${theme.border}`, borderRadius: '6px', backgroundColor: theme.bg }}>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.75rem' }}>Manage External Portals / Links (Optional)</label>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '0.5rem' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Portal / Link Label</label>
+                      <input 
+                        type="text" 
+                        value={noticeLinkName} 
+                        onChange={(e) => setNoticeLinkName(e.target.value)} 
+                        style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} 
+                        placeholder="e.g. e-Bidding Portal"
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Portal URL</label>
+                      <input 
+                        type="text" 
+                        value={noticeLinkUrl} 
+                        onChange={(e) => setNoticeLinkUrl(e.target.value)} 
+                        style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} 
+                        placeholder="https://..."
+                      />
+                    </div>
+                  </div>
+                  {editingNotice && editingNotice.links && editingNotice.links.length > 0 && (
+                    <div style={{ fontSize: '0.75rem', color: theme.muted, marginTop: '0.25rem' }}>
+                      Current Link: <strong>{editingNotice.links[0].label}</strong> ({editingNotice.links[0].url})
+                    </div>
+                  )}
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', userSelect: 'none' }}>
+                    <input 
+                      type="checkbox"
+                      checked={noticeIsArchived}
+                      onChange={(e) => setNoticeIsArchived(e.target.checked)}
+                      style={{ width: '16px', height: '16px', accentColor: theme.fg }}
+                    />
+                    <span style={{ fontSize: '0.875rem', color: theme.fg }}>Mark as Archived (Move to archive tab)</span>
+                  </label>
+                </div>
+
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                  <button 
+                    onClick={async () => {
+                      if (!noticeTitle.trim() || !noticeDate.trim() || !noticeSummary.trim()) {
+                        alert('Title, date, and summary are required');
+                        return;
+                      }
+                      setLoading(true);
+
+                      const formData = new FormData();
+                      formData.append('action', editingNotice ? 'update' : 'add');
+                      formData.append('title', noticeTitle);
+                      formData.append('category', noticeCategory);
+                      formData.append('date', noticeDate);
+                      formData.append('summary', noticeSummary);
+                      formData.append('body', noticeBody);
+                      formData.append('archived', String(noticeIsArchived));
+
+                      if (editingNotice) {
+                        formData.append('id', editingNotice.id);
+                      }
+
+                      // Dynamic Links list
+                      let linkList = [];
+                      if (noticeLinkName.trim() && noticeLinkUrl.trim()) {
+                        linkList.push({ label: noticeLinkName, url: noticeLinkUrl });
+                      } else if (editingNotice && editingNotice.links) {
+                        linkList = editingNotice.links;
+                      }
+                      formData.append('links', JSON.stringify(linkList));
+
+                      // Dynamic Attachments list
+                      let attachmentList = [];
+                      if (editingNotice && editingNotice.attachments) {
+                        attachmentList = editingNotice.attachments;
+                      }
+                      formData.append('attachments', JSON.stringify(attachmentList));
+
+                      // Custom PDF file upload
+                      if (customNoticeFile) {
+                        formData.append('file', customNoticeFile);
+                        formData.append('fileLabel', noticeAttachmentName || 'Notice Document');
+                      }
+
+                      try {
+                        const res = await fetch('/api/notices', {
+                          method: 'POST',
+                          body: formData
+                        });
+                        if (res.ok) {
+                          const data = await res.json();
+                          setNotices(data.notices || []);
+                          
+                          // Clear states
+                          setNoticeTitle('');
+                          setNoticeCategory('General');
+                          setNoticeDate('');
+                          setNoticeSummary('');
+                          setNoticeBody('');
+                          setNoticeIsArchived(false);
+                          setNoticeLinkName('');
+                          setNoticeLinkUrl('');
+                          setNoticeAttachmentName('');
+                          setCustomNoticeFile(null);
+                          setEditingNotice(null);
+                          alert(editingNotice ? 'Notice updated successfully!' : 'Notice added successfully!');
+                        } else {
+                          alert('Failed to save notice.');
+                        }
+                      } catch (err) {
+                        alert('Error saving notice.');
+                      }
+                      setLoading(false);
+                    }}
+                    disabled={loading}
+                    style={{ padding: '0.75rem 1.5rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, borderRadius: '4px', cursor: 'pointer' }}
+                  >
+                    {loading ? 'Saving...' : editingNotice ? 'Update Notice' : 'Add Notice'}
+                  </button>
+                  
+                  {editingNotice && (
+                    <button 
+                      onClick={() => {
+                        setEditingNotice(null);
+                        setNoticeTitle('');
+                        setNoticeCategory('General');
+                        setNoticeDate('');
+                        setNoticeSummary('');
+                        setNoticeBody('');
+                        setNoticeIsArchived(false);
+                        setNoticeLinkName('');
+                        setNoticeLinkUrl('');
+                        setNoticeAttachmentName('');
+                        setCustomNoticeFile(null);
+                      }}
+                      style={{ padding: '0.75rem 1.5rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer' }}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* List of Notices */}
+            <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>Current Notices</h3>
+              
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                <thead>
+                  <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Status</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {notices.length === 0 ? (
+                    <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No notices found.</td></tr>
+                  ) : notices.map((nt) => (
+                    <tr key={nt.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                      <td style={{ padding: '1rem', fontWeight: 500 }}>{nt.title}</td>
+                      <td style={{ padding: '1rem', color: theme.muted }}>{nt.date}</td>
+                      <td style={{ padding: '1rem', color: theme.muted }}>{nt.category}</td>
+                      <td style={{ padding: '1rem', color: theme.muted }}>
+                        {nt.archived ? (
+                          <span style={{ color: '#f97316', backgroundColor: '#431407', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Archived</span>
+                        ) : (
+                          <span style={{ color: '#10b981', backgroundColor: '#064e3b', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Active</span>
+                        )}
+                      </td>
+                      <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                        <button 
+                          onClick={() => {
+                            setEditingNotice(nt);
+                            setNoticeTitle(nt.title);
+                            setNoticeCategory(nt.category || 'General');
+                            setNoticeDate(nt.date);
+                            setNoticeSummary(nt.summary || '');
+                            setNoticeBody(nt.body || '');
+                            setNoticeIsArchived(!!nt.archived);
+                            
+                            // Load existing link/attachment fields if populated
+                            if (nt.links && nt.links.length > 0) {
+                              setNoticeLinkName(nt.links[0].label);
+                              setNoticeLinkUrl(nt.links[0].url);
+                            } else {
+                              setNoticeLinkName('');
+                              setNoticeLinkUrl('');
+                            }
+                            if (nt.attachments && nt.attachments.length > 0) {
+                              setNoticeAttachmentName(nt.attachments[0].label);
+                            } else {
+                              setNoticeAttachmentName('');
+                            }
+
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          onClick={async () => {
+                            if (!confirm(`Are you sure you want to delete "${nt.title}"?`)) return;
+                            setLoading(true);
+                            const formData = new FormData();
+                            formData.append('action', 'delete');
+                            formData.append('id', nt.id);
+                            try {
+                              const res = await fetch('/api/notices', { method: 'POST', body: formData });
+                              if (res.ok) {
+                                const data = await res.json();
+                                setNotices(data.notices || []);
+                              } else {
+                                alert('Failed to delete notice.');
+                              }
+                            } catch (e) {
+                              alert('Error deleting notice.');
+                            }
+                            setLoading(false);
+                          }}
+                          style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        );
+      
       default:
         return null;
     }
@@ -1168,6 +1538,7 @@ export default function WebmasterDashboard() {
     { id: 'pitch-deck', label: 'Pitch Deck' },
     { id: 'financial-reports', label: 'Financial Reports' },
     { id: 'events', label: 'Manage Events' },
+    { id: 'notices', label: 'Manage Notices' },
   ];
 
   return (

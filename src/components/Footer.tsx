@@ -156,13 +156,12 @@ export default function Footer() {
       {/* Footer Bottom Meta Links */}
       <div className="footer-meta">
         <div className="meta-left">
-          <Link href="/careers/equal-opportunity">Equal Opportunity</Link>
           <Link href="/privacy-policy">Privacy Policy</Link>
           <Link href="/legal-disclaimer">Legal Disclaimer</Link>
           <Link href="/notices">Notices</Link>
         </div>
         <div className="meta-right">
-          <Link href="/contact">Contact US</Link>
+          <Link href="/contact">Contact Us</Link>
           <Link href="/fraud-alert">Fraud Alert</Link>
         </div>
       </div>
