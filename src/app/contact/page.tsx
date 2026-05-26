@@ -4,36 +4,19 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 const faqs = [
-  {
-    question: "Is there a free trial available?",
-    answer: "Yes, you can try us for free for 30 days. If you want, we'll provide you with a free 30-minute onboarding call to get you up and running.",
-    icon: <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM12 8v4l3 3" />
-  },
+
   {
     question: "Can I change my plan later?",
     answer: "Of course. Our pricing scales with your company. Chat to our friendly team to find a solution that works for you as you grow.",
     icon: <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zM4 10h16" />
   },
-  {
-    question: "What is your cancellation policy?",
-    answer: "We understand that things change. You can cancel your plan at any time and we'll refund you the difference already paid.",
-    icon: <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
-  },
+
   {
     question: "Can other info be added to an invoice?",
     answer: "At the moment, the only way to add additional information to invoices is to add the information to the workspace's name manually.",
     icon: <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8" />
   },
-  {
-    question: "How does billing work?",
-    answer: "Plans are per workspace, not per account. You can upgrade one workspace, and still have any number of free workspaces.",
-    icon: <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
-  },
-  {
-    question: "How do I change my account email?",
-    answer: "You can change the email address associated with your account by going to untitled.com/account from a laptop or desktop.",
-    icon: <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zM22 6l-10 7L2 6" />
-  },
+
   {
     question: "What industries do you operate in?",
     answer: "We operate across 5 core sectors: IT Services, Transport & Logistics, Manufacturing, Real Estate, and Healthcare, providing end-to-end enterprise solutions.",
@@ -53,6 +36,26 @@ const faqs = [
     question: "Do you provide custom IT solutions?",
     answer: "Yes, our Technology division specializes in building custom SaaS platforms, AI integrations, and digital infrastructures tailored to your needs.",
     icon: <path d="M16 18l6-6-6-6M8 6l-6 6 6 6" />
+  },
+  {
+    question: "Does Zawr Industries work with startups, SMEs, and large enterprises?",
+    answer: "Yes. Zawr Industries is structured to support businesses at every stage of growth — from early-stage startups to enterprise-scale organizations. Our engagement model is designed to provide scalable solutions, dedicated technical teams, strategic consultation, product engineering, operational support, and long-term technology partnerships aligned with organizational objectives and market expansion goals.",
+    icon: <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+  },
+  {
+    question: "How does Zawr Industries manage projects and ensure delivery quality?",
+    answer: "Zawr Industries follows a structured delivery framework that combines requirement analysis, strategic planning, agile execution, quality assurance, deployment governance, and post-launch support. Every engagement is managed through defined milestones, periodic reporting, transparent communication, and continuous monitoring to ensure performance, scalability, security, and business alignment.",
+    icon: <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+  },
+  {
+    question: "Does Zawr Industries work only with IT clients?",
+    answer: "No. As a conglomerate, Zawr Industries supports multiple industries and business segments beyond technology. We collaborate with startups, SMEs, enterprises, and organizations across sectors by delivering technology enablement, business solutions, operational support, and scalable growth initiatives tailored to each industry's requirements.",
+    icon: <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10zM12 8v4l3 3" />
+  },
+  {
+    question: "What makes Zawr Industries different from other IT companies?",
+    answer: "Zawr Industries combines the agility of a modern technology company with the strategic vision of a multi-sector conglomerate. Rather than offering isolated development services, the company focuses on building integrated ecosystems that align technology, operations, scalability, automation, and business growth under a unified framework. Our approach emphasizes innovation, execution capability, intellectual property development, and sustainable long-term value creation.",
+    icon: <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
   }
 ];
 

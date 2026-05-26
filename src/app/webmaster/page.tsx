@@ -326,6 +326,50 @@ export default function WebmasterDashboard() {
             )}
           </div>
         );
+      case 'pitch-deck':
+        return (
+          <div>
+            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '2rem', letterSpacing: '-0.02em' }}>Upload Pitch Deck</h2>
+            <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
+              <p style={{ color: theme.muted, marginBottom: '1.5rem' }}>Upload a PDF of your Pitch Deck. It will instantly replace the placeholder slides on the Investors page.</p>
+              
+              <input 
+                type="file" 
+                accept="application/pdf"
+                id="pitchDeckUpload"
+                style={{ display: 'none' }}
+                onChange={async (e) => {
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+                  setLoading(true);
+                  const formData = new FormData();
+                  formData.append('file', file);
+                  
+                  try {
+                    const res = await fetch('/api/upload-pitch-deck', { method: 'POST', body: formData });
+                    if (res.ok) {
+                      localStorage.setItem('zawr_pitch_deck_uploaded', 'true');
+                      alert('Pitch Deck uploaded successfully!');
+                    } else {
+                      alert('Failed to upload. Ensure server allows file writing.');
+                    }
+                  } catch (err) {
+                    alert('Error uploading pitch deck.');
+                  }
+                  setLoading(false);
+                }}
+              />
+              
+              <button 
+                onClick={() => document.getElementById('pitchDeckUpload')?.click()}
+                disabled={loading}
+                style={{ padding: '0.75rem 1.5rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, borderRadius: '4px', cursor: 'pointer' }}
+              >
+                {loading ? 'Uploading...' : 'Select PDF File'}
+              </button>
+            </div>
+          </div>
+        );
       
       default:
         return null;
@@ -338,6 +382,7 @@ export default function WebmasterDashboard() {
     { id: 'email-routing', label: 'Email Routing' },
     { id: 'jobs', label: 'Manage Jobs' },
     { id: 'newsletters', label: 'Newsletters' },
+    { id: 'pitch-deck', label: 'Pitch Deck' },
   ];
 
   return (
