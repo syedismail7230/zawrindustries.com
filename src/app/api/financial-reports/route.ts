@@ -60,12 +60,16 @@ export async function POST(request: Request) {
         pdfUrl = `/assets/reports/${fileName}`;
       }
 
+      const category = formData.get('category') as string || 'Annual Reports';
+      const year = formData.get('year') as string || '2025-2026';
+      const isArchived = formData.get('isArchived') === 'true';
+
       if (action === 'add') {
-        reports.push({ id, title, pdfUrl });
+        reports.push({ id, title, pdfUrl, category, year, isArchived });
       } else {
         const index = reports.findIndex((r: any) => r.id === id);
         if (index > -1) {
-          reports[index] = { ...reports[index], title, pdfUrl };
+          reports[index] = { ...reports[index], title, pdfUrl, category, year, isArchived };
         }
       }
 

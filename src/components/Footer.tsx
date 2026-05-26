@@ -130,7 +130,7 @@ export default function Footer() {
         <div className="footer-col">
           <h4>Investors</h4>
           <ul className="footer-links">
-            <li><Link href="/investors#financial-reports">Financial Reporting</Link></li>
+            <li><Link href="/investors/financial-report">Financial Reporting</Link></li>
             <li><Link href="/investors/shares">Shares</Link></li>
             <li><Link href="/investors#events-presentations">Events & Presentations</Link></li>
             <li><Link href="/investors/subsidiaries">Subsidiaries & Associates</Link></li>
@@ -156,7 +156,7 @@ export default function Footer() {
       {/* Footer Bottom Meta Links */}
       <div className="footer-meta">
         <div className="meta-left">
-          <Link href="/equal-opportunity">Equal Opportunity</Link>
+          <Link href="/careers/equal-opportunity">Equal Opportunity</Link>
           <Link href="/privacy-policy">Privacy Policy</Link>
           <Link href="/legal-disclaimer">Legal Disclaimer</Link>
           <Link href="/notices">Notices</Link>

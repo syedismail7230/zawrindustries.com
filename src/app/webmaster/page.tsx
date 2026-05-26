@@ -36,6 +36,10 @@ export default function WebmasterDashboard() {
   const [reports, setReports] = useState<any[]>([]);
   const [reportTitle, setReportTitle] = useState('');
   const [editingReport, setEditingReport] = useState<any>(null);
+  const [reportCategory, setReportCategory] = useState('Annual Reports');
+  const [reportYear, setReportYear] = useState('2025-2026');
+  const [reportIsArchived, setReportIsArchived] = useState(false);
+  const [selectedTableCategory, setSelectedTableCategory] = useState('Annual Reports');
 
   // Events States
   const [events, setEvents] = useState<any[]>([]);
@@ -130,6 +134,106 @@ export default function WebmasterDashboard() {
       supabase.removeChannel(channel);
     };
   }, [activeTab, isAuthenticated]);
+
+  // Helper to map and merge dynamic database reports with mock placeholders for all years
+  const getMappedReportsForWebmaster = () => {
+    const reportYears = [
+      '2026-2027', '2025-2026', '2024-2025', '2023-2024', '2022-2023',
+      '2021-2022', '2020-2021', '2019-2020', '2018-2019', '2017-2018',
+      '2016-2017', '2015-2016'
+    ];
+
+    // 1. Group actual database reports by selectedTableCategory
+    const categorizedDbReports = reports.filter(rep => {
+      if (rep.category) {
+        return rep.category === selectedTableCategory;
+      }
+      
+      // Fallback title parsing for legacy items
+      const titleUpper = rep.title.toUpperCase();
+      if (selectedTableCategory === 'Quarterly Results') {
+        return titleUpper.includes('QUARTER') || titleUpper.includes('Q1') || titleUpper.includes('Q2') || titleUpper.includes('Q3') || titleUpper.includes('Q4') || titleUpper.includes('RESULTS');
+      }
+      if (selectedTableCategory === 'Financial Presentations') {
+        return (titleUpper.includes('PRESENTATION') || titleUpper.includes('ROADMAP') || titleUpper.includes('PITCH')) && !titleUpper.includes('OTHER');
+      }
+      if (selectedTableCategory === 'CSR Reports') {
+        return titleUpper.includes('CSR') || titleUpper.includes('SOCIAL') || titleUpper.includes('COMMUNITY');
+      }
+      if (selectedTableCategory === '10 Year Financial Highlights') {
+        return titleUpper.includes('10 YEAR') || titleUpper.includes('HIGHLIGHTS') || titleUpper.includes('HIGHLIGHT');
+      }
+      if (selectedTableCategory === 'Other Investor Presentations') {
+        return titleUpper.includes('OTHER') || titleUpper.includes('PORTFOLIO');
+      }
+      return !titleUpper.includes('QUARTER') && !titleUpper.includes('Q1') && !titleUpper.includes('Q2') && !titleUpper.includes('Q3') && !titleUpper.includes('Q4') && !titleUpper.includes('CSR') && !titleUpper.includes('10 YEAR');
+    });
+
+    const activeList: any[] = [];
+
+    // First, process any actual webmaster uploads that match selected years
+    categorizedDbReports.forEach(rep => {
+      // Use explicit year field, with chronological title fallback for legacy
+      let matchedYear = rep.year;
+      if (!matchedYear) {
+        const titleUpper = rep.title.toUpperCase();
+        matchedYear = reportYears.find(y => {
+          const [startYr, endYr] = y.split('-');
+          if (y === '2025-2026' && (titleUpper.includes('2026') || titleUpper.includes('FY 2026') || titleUpper.includes('25-26'))) return true;
+          if (y === '2024-2025' && (titleUpper.includes('2025') || titleUpper.includes('FY 2025') || titleUpper.includes('24-25'))) return true;
+          if (y === '2023-2024' && (titleUpper.includes('2024') || titleUpper.includes('FY 2024') || titleUpper.includes('23-24'))) return true;
+          if (y === '2022-2023' && (titleUpper.includes('2023') || titleUpper.includes('FY 2023') || titleUpper.includes('22-23'))) return true;
+          return titleUpper.includes(startYr) || titleUpper.includes(endYr);
+        });
+      }
+
+      if (matchedYear) {
+        activeList.push({
+          id: rep.id,
+          title: rep.title,
+          pdfUrl: rep.pdfUrl,
+          category: selectedTableCategory,
+          year: matchedYear,
+          isArchived: !!rep.isArchived,
+          isUserUploaded: true
+        });
+      }
+    });
+
+    // 2. Add placeholders for years without an upload
+    reportYears.forEach(year => {
+      const alreadyHasUpload = activeList.some(item => item.year === year);
+      if (!alreadyHasUpload) {
+        let title = '';
+        if (selectedTableCategory === 'Annual Reports') {
+          title = `Annual Report for the year ${year}`;
+        } else if (selectedTableCategory === 'Quarterly Results') {
+          title = `Quarterly Results for Q3 FY ${year}`;
+        } else if (selectedTableCategory === 'Financial Presentations') {
+          title = `Investor Presentation - FY ${year}`;
+        } else if (selectedTableCategory === 'CSR Reports') {
+          title = `Corporate Social Responsibility Report ${year}`;
+        } else if (selectedTableCategory === '10 Year Financial Highlights') {
+          title = `10 Year Financial and Operational Highlights (${year})`;
+        } else {
+          title = `Investor Presentation Portfolio - ${year}`;
+        }
+
+        activeList.push({
+          id: `mock-${year}`,
+          title,
+          pdfUrl: '',
+          category: selectedTableCategory,
+          year,
+          isArchived: true, // Default to archived offline
+          isUserUploaded: false
+        });
+      }
+    });
+
+    // Sort chronologically (latest year first)
+    return activeList.sort((a, b) => b.year.localeCompare(a.year));
+  };
 
   // Actions
   const handleAddJob = async (e: React.FormEvent) => {
@@ -422,6 +526,44 @@ export default function WebmasterDashboard() {
                     placeholder="Enter report title"
                   />
                 </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Category</label>
+                  <select 
+                    value={reportCategory}
+                    onChange={(e) => setReportCategory(e.target.value)}
+                    style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }}
+                  >
+                    <option value="Annual Reports">Annual Reports</option>
+                    <option value="Quarterly Results">Quarterly Results</option>
+                    <option value="Financial Presentations">Financial Presentations</option>
+                    <option value="CSR Reports">CSR Reports</option>
+                    <option value="10 Year Financial Highlights">10 Year Financial Highlights</option>
+                    <option value="Other Investor Presentations">Other Investor Presentations</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Fiscal Year</label>
+                  <select 
+                    value={reportYear}
+                    onChange={(e) => setReportYear(e.target.value)}
+                    style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }}
+                  >
+                    <option value="2026-2027">2026-2027</option>
+                    <option value="2025-2026">2025-2026</option>
+                    <option value="2024-2025">2024-2025</option>
+                    <option value="2023-2024">2023-2024</option>
+                    <option value="2022-2023">2022-2023</option>
+                    <option value="2021-2022">2021-2022</option>
+                    <option value="2020-2021">2020-2021</option>
+                    <option value="2019-2020">2019-2020</option>
+                    <option value="2018-2019">2018-2019</option>
+                    <option value="2017-2018">2017-2018</option>
+                    <option value="2016-2017">2016-2017</option>
+                    <option value="2015-2016">2015-2016</option>
+                  </select>
+                </div>
                 
                 <div>
                   <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>PDF File</label>
@@ -436,6 +578,18 @@ export default function WebmasterDashboard() {
                     }}
                     style={{ color: theme.fg }}
                   />
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '0.5rem' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', userSelect: 'none' }}>
+                    <input 
+                      type="checkbox"
+                      checked={reportIsArchived}
+                      onChange={(e) => setReportIsArchived(e.target.checked)}
+                      style={{ width: '16px', height: '16px', accentColor: theme.fg }}
+                    />
+                    <span style={{ fontSize: '0.875rem', color: theme.fg }}>Mark as Archived (Offline Database Alert)</span>
+                  </label>
                 </div>
 
                 <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
@@ -475,6 +629,9 @@ export default function WebmasterDashboard() {
                       formData.append('action', editingReport ? 'update' : 'add');
                       formData.append('title', reportTitle);
                       formData.append('pdfUrl', pdfUrl);
+                      formData.append('category', reportCategory);
+                      formData.append('year', reportYear);
+                      formData.append('isArchived', String(reportIsArchived));
                       if (editingReport) {
                         formData.append('id', editingReport.id);
                       }
@@ -488,6 +645,9 @@ export default function WebmasterDashboard() {
                           const data = await res.json();
                           setReports(data.reports || []);
                           setReportTitle('');
+                          setReportCategory('Annual Reports');
+                          setReportYear('2025-2026');
+                          setReportIsArchived(false);
                           setEditingReport(null);
                           (window as any)._selectedReportFile = null;
                           alert(editingReport ? 'Report updated successfully!' : 'Report added successfully!');
@@ -510,6 +670,9 @@ export default function WebmasterDashboard() {
                       onClick={() => {
                         setEditingReport(null);
                         setReportTitle('');
+                        setReportCategory('Annual Reports');
+                        setReportYear('2025-2026');
+                        setReportIsArchived(false);
                         (window as any)._selectedReportFile = null;
                       }}
                       style={{ padding: '0.75rem 1.5rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer' }}
@@ -523,57 +686,186 @@ export default function WebmasterDashboard() {
 
             {/* List of Reports */}
             <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>Current Reports</h3>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 600, margin: 0 }}>Financial Reports Database Explorer</h3>
+                <span style={{ fontSize: '0.85rem', color: theme.muted }}>Viewing all managed report slots and placeholders</span>
+              </div>
+              
+              {/* Category Filter Tabs inside Webmaster Panel */}
+              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '2rem', overflowX: 'auto', paddingBottom: '0.5rem', borderBottom: `1px solid ${theme.border}` }}>
+                {[
+                  'Annual Reports',
+                  'Quarterly Results',
+                  'Financial Presentations',
+                  'CSR Reports',
+                  '10 Year Financial Highlights',
+                  'Other Investor Presentations'
+                ].map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => setSelectedTableCategory(cat)}
+                    style={{
+                      padding: '0.6rem 1.2rem',
+                      borderRadius: '4px',
+                      backgroundColor: selectedTableCategory === cat ? theme.fg : 'transparent',
+                      color: selectedTableCategory === cat ? theme.bg : theme.muted,
+                      border: `1px solid ${selectedTableCategory === cat ? theme.fg : theme.border}`,
+                      cursor: 'pointer',
+                      fontSize: '0.85rem',
+                      fontWeight: 600,
+                      transition: 'all 0.2s',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
               
               <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
                 <thead>
                   <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
                     <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>PDF URL</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Year</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>PDF URL Status</th>
                     <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {reports.length === 0 ? (
-                    <tr><td colSpan={3} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No reports found.</td></tr>
-                  ) : reports.map((rep) => (
-                    <tr key={rep.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                  {getMappedReportsForWebmaster().map((rep) => (
+                    <tr key={rep.id} style={{ borderBottom: `1px solid ${theme.border}`, opacity: rep.isUserUploaded ? 1 : 0.65 }}>
                       <td style={{ padding: '1rem', fontWeight: 500 }}>{rep.title}</td>
-                      <td style={{ padding: '1rem', color: theme.muted, fontSize: '0.875rem' }}>{rep.pdfUrl || 'No file uploaded yet'}</td>
+                      <td style={{ padding: '1rem', color: '#fff' }}>{rep.category}</td>
+                      <td style={{ padding: '1rem', color: '#fff' }}>{rep.year}</td>
+                      <td style={{ padding: '1rem', color: theme.muted, fontSize: '0.875rem' }}>
+                        {rep.isUserUploaded ? (
+                          rep.isArchived ? (
+                            <span style={{ color: '#ffaaaa', backgroundColor: '#3a0c0c', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Archived Offline</span>
+                          ) : (
+                            <a href={rep.pdfUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#aaaaff', textDecoration: 'underline' }}>
+                              {rep.pdfUrl.length > 50 ? `${rep.pdfUrl.substring(0, 50)}...` : rep.pdfUrl}
+                            </a>
+                          )
+                        ) : (
+                          <span style={{ color: theme.muted, fontStyle: 'italic' }}>Default Archived Placeholder (Offline)</span>
+                        )}
+                      </td>
                       <td style={{ padding: '1rem', textAlign: 'right' }}>
-                        <button 
-                          onClick={() => {
-                            setEditingReport(rep);
-                            setReportTitle(rep.title);
-                          }}
-                          style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
-                        >
-                          Edit
-                        </button>
-                        <button 
-                          onClick={async () => {
-                            if (!confirm(`Are you sure you want to delete ${rep.title}?`)) return;
-                            setLoading(true);
-                            const formData = new FormData();
-                            formData.append('action', 'delete');
-                            formData.append('id', rep.id);
-                            try {
-                              const res = await fetch('/api/financial-reports', { method: 'POST', body: formData });
-                              if (res.ok) {
-                                const data = await res.json();
-                                setReports(data.reports || []);
-                              } else {
-                                alert('Failed to delete report.');
-                              }
-                            } catch (e) {
-                              alert('Error deleting report.');
-                            }
-                            setLoading(false);
-                          }}
-                          style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
-                        >
-                          Delete
-                        </button>
+                        {rep.isUserUploaded ? (
+                          <>
+                            <button 
+                              onClick={() => {
+                                setEditingReport(rep);
+                                setReportTitle(rep.title);
+                                setReportCategory(rep.category);
+                                setReportYear(rep.year);
+                                setReportIsArchived(!!rep.isArchived);
+                                // Scroll smoothly to form
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                              }}
+                              style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
+                            >
+                              Edit
+                            </button>
+                            <button 
+                              onClick={async () => {
+                                setLoading(true);
+                                const formData = new FormData();
+                                formData.append('action', 'update');
+                                formData.append('id', rep.id);
+                                formData.append('title', rep.title);
+                                formData.append('pdfUrl', rep.pdfUrl || '');
+                                formData.append('category', rep.category);
+                                formData.append('year', rep.year);
+                                formData.append('isArchived', String(!rep.isArchived));
+
+                                try {
+                                  const res = await fetch('/api/financial-reports', { method: 'POST', body: formData });
+                                  if (res.ok) {
+                                    const data = await res.json();
+                                    setReports(data.reports || []);
+                                  } else {
+                                    alert('Failed to toggle archive status.');
+                                  }
+                                } catch (e) {
+                                  alert('Error toggling archive status.');
+                                }
+                                setLoading(false);
+                              }}
+                              style={{ 
+                                padding: '0.5rem 1rem', 
+                                backgroundColor: rep.isArchived ? '#0c3a0c' : '#222225', 
+                                color: rep.isArchived ? '#aaffaa' : '#ffffff', 
+                                border: rep.isArchived ? 'none' : `1px solid ${theme.border}`, 
+                                borderRadius: '4px', 
+                                cursor: 'pointer', 
+                                marginRight: '0.5rem', 
+                                fontSize: '0.875rem',
+                                fontWeight: 600,
+                                transition: 'all 0.2s'
+                              }}
+                              onMouseEnter={(e) => {
+                                if (!rep.isArchived) {
+                                  e.currentTarget.style.backgroundColor = '#3a0c0c';
+                                  e.currentTarget.style.color = '#ffaaaa';
+                                  e.currentTarget.style.borderColor = '#ffaaaa';
+                                }
+                              }}
+                              onMouseLeave={(e) => {
+                                if (!rep.isArchived) {
+                                  e.currentTarget.style.backgroundColor = '#222225';
+                                  e.currentTarget.style.color = '#ffffff';
+                                  e.currentTarget.style.borderColor = theme.border;
+                                }
+                              }}
+                            >
+                              {rep.isArchived ? 'Activate' : 'Archive'}
+                            </button>
+                            <button 
+                              onClick={async () => {
+                                if (!confirm(`Are you sure you want to delete ${rep.title}?`)) return;
+                                setLoading(true);
+                                const formData = new FormData();
+                                formData.append('action', 'delete');
+                                formData.append('id', rep.id);
+                                try {
+                                  const res = await fetch('/api/financial-reports', { method: 'POST', body: formData });
+                                  if (res.ok) {
+                                    const data = await res.json();
+                                    setReports(data.reports || []);
+                                  } else {
+                                    alert('Failed to delete report.');
+                                  }
+                                } catch (e) {
+                                  alert('Error deleting report.');
+                                }
+                                setLoading(false);
+                              }}
+                              style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
+                            >
+                              Delete
+                            </button>
+                          </>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setEditingReport(null);
+                              setReportTitle(rep.title);
+                              setReportCategory(rep.category);
+                              setReportYear(rep.year);
+                              setReportIsArchived(false);
+                              // Scroll smoothly to form and alert
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                              setTimeout(() => {
+                                alert(`Ready to upload! Choose a PDF file above for "${rep.title}" (${rep.year}) and click "Add Report".`);
+                              }, 300);
+                            }}
+                            style={{ padding: '0.5rem 1rem', backgroundColor: '#ffffff', color: '#000000', border: 'none', borderRadius: '4px', fontWeight: 600, cursor: 'pointer', fontSize: '0.875rem' }}
+                          >
+                            Upload PDF File
+                          </button>
+                        )}
                       </td>
                     </tr>
                   ))}

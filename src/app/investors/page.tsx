@@ -23,6 +23,7 @@ export default function InvestorsPage() {
   // Calendar Navigation month/year state
   const [currentCalendarDate, setCurrentCalendarDate] = React.useState<Date>(new Date(2023, 0, 1)); // Default to January 2023 for theme consistency
   const [selectedDayStr, setSelectedDayStr] = React.useState<string | null>(null);
+  const [hoveredOrbit, setHoveredOrbit] = React.useState<number | null>(null);
 
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -364,7 +365,7 @@ export default function InvestorsPage() {
         {/* Events and presentation */}
         <section id="events-presentations" style={{ marginBottom: '8rem' }}>
           <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: 500, color: '#ffffff' }}>Events and presentation</h2>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: 500, color: '#ffffff' }}>Events and Presentation</h2>
           </div>
 
           {events.length === 0 ? (
@@ -739,40 +740,137 @@ export default function InvestorsPage() {
           })()}
         </section>
 
-        {/* Why Invest */}
-        <section style={{ marginBottom: '8rem', display: 'flex', flexWrap: 'wrap', gap: '4rem', alignItems: 'center' }}>
-          <div style={{ flex: '1 1 400px' }}>
-            <h2 style={{ fontSize: '2.5rem', fontWeight: 700, marginBottom: '1.5rem' }}>Why Invest in Zawr?</h2>
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              {[
-                { title: 'Diversified Portfolio', desc: 'Our investments span AI, Logistics, Healthcare, and Real Estate, ensuring risk mitigation and stable returns.' },
-                { title: 'Visionary Leadership', desc: 'Led by a team of serial entrepreneurs and industry veterans with a proven track record of scaling global businesses.' },
-                { title: 'Innovation First', desc: 'We heavily reinvest in R&D to maintain a technological edge and disrupt traditional market models.' }
-              ].map((item, i) => (
-                <li key={i} style={{ display: 'flex', gap: '1rem' }}>
-                  <div style={{ color: '#ffffff', marginTop: '0.25rem' }}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                  </div>
-                  <div>
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.25rem' }}>{item.title}</h3>
-                    <p style={{ color: '#9ca3af', lineHeight: 1.5 }}>{item.desc}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
+        {/* Subsidiaries & Associates Section */}
+        <section id="subsidiaries-associates" style={{ marginBottom: '8rem', borderTop: '1px solid #1f2937', paddingTop: '6rem' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <h2 style={{ fontSize: '2.5rem', fontWeight: 500, color: '#ffffff', marginBottom: '1rem' }}>Associations</h2>
+            <p style={{ fontSize: '1.05rem', color: '#9ca3af', maxWidth: '38rem', margin: '0 auto', lineHeight: 1.6 }}>
+              Driving industrial transformation and digital value creation through our core operating subsidiaries, joint ventures, and platform ecosystem.
+            </p>
           </div>
-          <div style={{ flex: '1 1 400px', backgroundColor: '#111111', borderRadius: '1.5rem', padding: '3rem', border: '1px solid #1f2937' }}>
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem' }}>Corporate Governance</h3>
-            <p style={{ color: '#9ca3af', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-              We adhere to the highest standards of corporate governance, ensuring transparency, accountability, and ethical business practices across all our subsidiaries and global operations.
-            </p>
-            <p style={{ color: '#9ca3af', lineHeight: 1.6 }}>
-              Our board of directors brings together decades of diverse experience to oversee our strategic direction and safeguard shareholder value.
-            </p>
+
+          {/* Core Orbital Constellation Container */}
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%', marginBottom: '4rem', padding: '0 1rem' }}>
+            <svg 
+              viewBox="0 0 800 800" 
+              style={{ 
+                width: '100%', 
+                maxWidth: '650px', 
+                height: 'auto', 
+                aspectRatio: '1/1', 
+                overflow: 'visible' 
+              }}
+            >
+              <defs>
+                {/* Glow Filters */}
+                <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="8" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+                <filter id="subtle-glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="4" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+
+              <style>{`
+                .orbit-line-path {
+                  fill: none;
+                  stroke: rgba(255, 255, 255, 0.45);
+                  stroke-width: 1.5;
+                  transition: stroke 0.4s cubic-bezier(0.16, 1, 0.3, 1), stroke-width 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s;
+                }
+                .orbit-line-path.active {
+                  stroke: rgba(255, 255, 255, 0.95);
+                  stroke-width: 2.5;
+                  filter: url(#subtle-glow);
+                }
+                .constellation-node {
+                  cursor: pointer;
+                  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                  transform-origin: center;
+                }
+                .constellation-node:hover {
+                  transform: scale(1.08);
+                }
+              `}</style>
+
+              {/* Concentric Orbits merging at tangent bottom center (400, 680) */}
+              {/* Outer Orbit (Orbit 3): Center (400, 340), Radius 340 */}
+              <circle 
+                cx="400" 
+                cy="340" 
+                r="340" 
+                className={`orbit-line-path ${hoveredOrbit === 3 ? 'active' : ''}`}
+              />
+
+              {/* Middle Orbit (Orbit 2): Center (400, 410), Radius 270 */}
+              <circle 
+                cx="400" 
+                cy="410" 
+                r="270" 
+                className={`orbit-line-path ${hoveredOrbit === 2 ? 'active' : ''}`}
+              />
+
+              {/* Inner Orbit (Orbit 1): Center (400, 480), Radius 200 */}
+              <circle 
+                cx="400" 
+                cy="480" 
+                r="200" 
+                className={`orbit-line-path ${hoveredOrbit === 1 ? 'active' : ''}`}
+              />
+
+              {/* Node 1: Firm AI (Inner Orbit, Left at 160 degrees) */}
+              <a 
+                href="https://www.firm.expert/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                onMouseEnter={() => setHoveredOrbit(1)}
+                onMouseLeave={() => setHoveredOrbit(null)}
+              >
+                <g className="constellation-node" style={{ transformOrigin: '212px 412px' }}>
+                  <circle cx="212" cy="412" r="54" fill="#ffffff" />
+                  <image href="/assets/firmai-logo-blue.png" x="164" y="364" width="96" height="96" />
+                </g>
+              </a>
+
+              {/* Node 2: Sketch Studio (Middle Orbit, Top Right at 55 degrees) */}
+              <a 
+                href="https://sketchstudio.dev/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                onMouseEnter={() => setHoveredOrbit(2)}
+                onMouseLeave={() => setHoveredOrbit(null)}
+              >
+                <g className="constellation-node" style={{ transformOrigin: '555px 189px' }}>
+                  <circle cx="555" cy="189" r="54" fill="#ffffff" />
+                  <image href="/assets/sketch-logo.png" x="507" y="141" width="96" height="96" />
+                </g>
+              </a>
+
+              {/* Node 3: VelocityOS (Outer Orbit, Right at 28 degrees) */}
+              <a 
+                href="https://velocityos.in/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                onMouseEnter={() => setHoveredOrbit(3)}
+                onMouseLeave={() => setHoveredOrbit(null)}
+              >
+                <g className="constellation-node" style={{ transformOrigin: '700px 180px' }}>
+                  <circle cx="700" cy="180" r="54" fill="#ffffff" />
+                  <image href="/assets/velocity-logo.png" x="652" y="132" width="96" height="96" />
+                </g>
+              </a>
+
+              {/* Node Center: ZAWR INDUSTRIES (Bottom Circle, Center of gravity) */}
+              <g style={{ cursor: 'default' }}>
+                <circle cx="400" cy="540" r="115" fill="#ffffff" />
+                <image href="/assets/zawr-logo.png" x="300" y="440" width="200" height="200" />
+              </g>
+
+            </svg>
           </div>
         </section>
-
-
 
       </div>
       
