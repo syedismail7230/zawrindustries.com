@@ -55,7 +55,7 @@ export async function POST(req: Request) {
 
     // Email to Marketing Team
     const marketingMailOptions = {
-      from: process.env.GMAIL_USER,
+      from: `"Zawr Sponsorship" <noreply@zawrindustries.com>`,
       to: 'marketing@zawrindustries.com', 
       subject: `New Sponsorship Request from ${fields.companyName} - ${fields.sponsorshipType}`,
       text: `

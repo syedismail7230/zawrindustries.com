@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
     // Construct the email
     const mailOptions = {
-      from: `"Zawr Website Bot" <${process.env.GMAIL_USER}>`, 
+      from: `"Zawr PR" <noreply@zawrindustries.com>`, 
       to: 'public-relations@zawrindustries.com', 
       subject: `🚨 New PR Inquiry from ${firstName} ${lastName}`,
       text: `You have received a new Public Relations inquiry.\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nPhone: ${phone}\n\nMessage:\n${message}`,

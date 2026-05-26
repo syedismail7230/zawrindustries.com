@@ -47,6 +47,7 @@ export default function WebmasterDashboard() {
   const [eventEndTime, setEventEndTime] = useState('');
   const [eventImage, setEventImage] = useState('/assets/event-chart.png');
   const [editingEvent, setEditingEvent] = useState<any>(null);
+  const [customImageFile, setCustomImageFile] = useState<File | null>(null);
 
   // Login handler
   const handleLogin = (e: React.FormEvent) => {
@@ -206,7 +207,7 @@ export default function WebmasterDashboard() {
               </div>
               <div>
                 <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>System Email User (.env)</label>
-                <input type="email" defaultValue="zawrindustries@gmail.com" disabled style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.muted, borderRadius: '4px' }} />
+                <input type="email" defaultValue="noreply@zawrindustries.com" disabled style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.muted, borderRadius: '4px' }} />
               </div>
               <div>
                 <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>App Password (.env)</label>
@@ -445,16 +446,37 @@ export default function WebmasterDashboard() {
                         return;
                       }
                       setLoading(true);
+
+                      let pdfUrl = editingReport ? editingReport.pdfUrl : '';
+                      const file = (window as any)._selectedReportFile;
+                      
+                      if (file) {
+                        try {
+                          const fileName = `reports/report-${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+                          const { data, error } = await supabase.storage
+                            .from('zawr-media')
+                            .upload(fileName, file, { cacheControl: '3600', upsert: true });
+                          
+                          if (error) {
+                            alert('Supabase Storage Upload Error: ' + error.message);
+                            setLoading(false);
+                            return;
+                          }
+                          const { data: { publicUrl } } = supabase.storage.from('zawr-media').getPublicUrl(fileName);
+                          pdfUrl = publicUrl;
+                        } catch (err: any) {
+                          alert('Error uploading to Supabase Storage: ' + err.message);
+                          setLoading(false);
+                          return;
+                        }
+                      }
+
                       const formData = new FormData();
                       formData.append('action', editingReport ? 'update' : 'add');
                       formData.append('title', reportTitle);
+                      formData.append('pdfUrl', pdfUrl);
                       if (editingReport) {
                         formData.append('id', editingReport.id);
-                        formData.append('pdfUrl', editingReport.pdfUrl);
-                      }
-                      const file = (window as any)._selectedReportFile;
-                      if (file) {
-                        formData.append('file', file);
                       }
 
                       try {
@@ -593,15 +615,36 @@ export default function WebmasterDashboard() {
                 </div>
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Card Thumbnail Image</label>
-                  <select 
-                    value={eventImage} 
-                    onChange={(e) => setEventImage(e.target.value)} 
-                    style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }}
-                  >
-                    <option value="/assets/event-chart.png">Stock Chart Gradient</option>
-                    <option value="/assets/event-speaker.png">Keynote Stage Presenter</option>
-                  </select>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Card Thumbnail Image / Banner</label>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0] || null;
+                        setCustomImageFile(file);
+                      }}
+                      style={{ color: theme.fg }}
+                    />
+                    {customImageFile && (
+                      <div style={{ fontSize: '0.75rem', color: '#10b981' }}>
+                        Selected Custom Photo: <strong>{customImageFile.name}</strong> (Will upload to Supabase CDN)
+                      </div>
+                    )}
+                    {!customImageFile && (
+                      <div>
+                        <span style={{ fontSize: '0.75rem', color: theme.muted, display: 'block', marginBottom: '0.25rem' }}>Or use standard preset:</span>
+                        <select 
+                          value={eventImage} 
+                          onChange={(e) => setEventImage(e.target.value)} 
+                          style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }}
+                        >
+                          <option value="/assets/event-chart.png">Stock Chart Gradient</option>
+                          <option value="/assets/event-speaker.png">Keynote Stage Presenter</option>
+                        </select>
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
@@ -654,6 +697,29 @@ export default function WebmasterDashboard() {
                         return;
                       }
                       setLoading(true);
+
+                      let finalImageUrl = eventImage;
+                      if (customImageFile) {
+                        try {
+                          const fileName = `events/event-${Date.now()}-${customImageFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
+                          const { data, error } = await supabase.storage
+                            .from('zawr-media')
+                            .upload(fileName, customImageFile, { cacheControl: '3600', upsert: true });
+                          
+                          if (error) {
+                            alert('Supabase Storage Upload Error: ' + error.message);
+                            setLoading(false);
+                            return;
+                          }
+                          const { data: { publicUrl } } = supabase.storage.from('zawr-media').getPublicUrl(fileName);
+                          finalImageUrl = publicUrl;
+                        } catch (err: any) {
+                          alert('Error uploading event image: ' + err.message);
+                          setLoading(false);
+                          return;
+                        }
+                      }
+
                       const formData = new FormData();
                       formData.append('action', editingEvent ? 'update' : 'add');
                       formData.append('title', eventTitle);
@@ -662,7 +728,7 @@ export default function WebmasterDashboard() {
                       formData.append('endDate', eventEndDate || eventStartDate);
                       formData.append('startTime', eventStartTime || '00:00:00');
                       formData.append('endTime', eventEndTime || '00:00:00');
-                      formData.append('image', eventImage);
+                      formData.append('image', finalImageUrl);
                       if (editingEvent) {
                         formData.append('id', editingEvent.id);
                       }
@@ -683,6 +749,7 @@ export default function WebmasterDashboard() {
                           setEventStartTime('');
                           setEventEndTime('');
                           setEventImage('/assets/event-chart.png');
+                          setCustomImageFile(null);
                           setEditingEvent(null);
                           alert(editingEvent ? 'Event updated successfully!' : 'Event added successfully!');
                         } else {
@@ -710,6 +777,7 @@ export default function WebmasterDashboard() {
                         setEventStartTime('');
                         setEventEndTime('');
                         setEventImage('/assets/event-chart.png');
+                        setCustomImageFile(null);
                       }}
                       style={{ padding: '0.75rem 1.5rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer' }}
                     >

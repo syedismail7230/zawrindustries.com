@@ -34,7 +34,7 @@ export async function POST(req: Request) {
 
     // Email to HR Team
     const hrMailOptions = {
-      from: process.env.GMAIL_USER,
+      from: `"Zawr Careers" <noreply@zawrindustries.com>`,
       to: 'hr@zawrindustries.com', // As requested by user
       subject: `New Job Application: ${firstName} ${lastName || ''} for ${jobTitle}`,
       text: `

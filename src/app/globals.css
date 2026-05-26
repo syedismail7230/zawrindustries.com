@@ -61,6 +61,20 @@ button, input {
   color: var(--bg-white);
 }
 
+/* Event card text reset — prevents dark-page color inheritance */
+.event-card-white {
+  color: #000000 !important;
+  background-color: #ffffff;
+}
+.event-card-white h3,
+.event-card-white p,
+.event-card-white span {
+  color: #000000 !important;
+}
+.event-card-white p {
+  color: #374151 !important;
+}
+
 /* Global Thin Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

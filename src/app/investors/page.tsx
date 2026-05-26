@@ -22,6 +22,7 @@ export default function InvestorsPage() {
 
   // Calendar Navigation month/year state
   const [currentCalendarDate, setCurrentCalendarDate] = React.useState<Date>(new Date(2023, 0, 1)); // Default to January 2023 for theme consistency
+  const [selectedDayStr, setSelectedDayStr] = React.useState<string | null>(null);
 
   React.useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -427,6 +428,10 @@ export default function InvestorsPage() {
 
             // Swipe events stack
             const triggerSwipe = () => {
+              if (selectedDayStr) {
+                setSelectedDayStr(null);
+                return;
+              }
               if (events.length <= 1 || swipeState === 'swiping') return;
               setSwipeState('swiping');
               setTimeout(() => {
@@ -446,6 +451,17 @@ export default function InvestorsPage() {
             // Dynamic date styling
             const getDayHighlightStyle = (dateStr: string) => {
               const dayDate = new Date(dateStr + 'T00:00:00');
+
+              // Clicked/selected day highlight (dashed white outline)
+              if (selectedDayStr === dateStr) {
+                return {
+                  border: '1.5px dashed #ffffff',
+                  borderRadius: '0.25rem',
+                  fontWeight: 'bold' as const,
+                  backgroundColor: 'rgba(255, 255, 255, 0.15)'
+                };
+              }
+
               const start = new Date(activeEvent.startDate + 'T00:00:00');
               const end = new Date(activeEvent.endDate + 'T00:00:00');
               
@@ -479,6 +495,15 @@ export default function InvestorsPage() {
 
               return {};
             };
+
+            const selectedEventIdx = selectedDayStr 
+              ? events.findIndex(ev => {
+                  const start = ev.startDate;
+                  const end = ev.endDate;
+                  return selectedDayStr >= start && selectedDayStr <= end;
+                })
+              : -1;
+            const showNoEventCard = selectedDayStr !== null && selectedEventIdx === -1;
 
             return (
               <div className="events-container">
@@ -541,7 +566,21 @@ export default function InvestorsPage() {
                       const isCurrentMonth = dayObj.isCurrentMonth;
                       
                       return (
-                        <div key={i} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '32px' }}>
+                        <div 
+                          key={i} 
+                          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '32px', cursor: 'pointer' }}
+                          onClick={() => {
+                            setSelectedDayStr(dayObj.dateStr);
+                            const foundIdx = events.findIndex(ev => {
+                              const start = ev.startDate;
+                              const end = ev.endDate;
+                              return dayObj.dateStr >= start && dayObj.dateStr <= end;
+                            });
+                            if (foundIdx !== -1) {
+                              setActiveEventIndex(foundIdx);
+                            }
+                          }}
+                        >
                           <div style={{ 
                             width: '28px', 
                             height: '28px', 
@@ -561,97 +600,158 @@ export default function InvestorsPage() {
 
                 {/* Right Column: Dynamic Swipeable 3D Card Stack */}
                 <div 
-                  style={{ position: 'relative', width: '340px', height: '440px', cursor: 'pointer' }} 
+                  style={{ position: 'relative', width: '320px', height: '500px', cursor: 'pointer' }} 
                   onClick={triggerSwipe}
                   className="events-3d-stack-group"
                 >
-                  {[4, 3, 2, 1, 0].map((depth) => {
-                    // depth 0 = front active card (no offset)
-                    // depth 4 = furthest back card (most offset to right)
-                    if (depth >= events.length) return null;
-                    const evIdx = (activeEventIndex + depth) % events.length;
-                    const ev = events[evIdx];
-                    if (!ev) return null;
-
-                    const isFront = depth === 0;
-                    // ALL background cards shift RIGHT and DOWN only
-                    const xPx    = depth * 18;   // 0, 18, 36, 54, 72
-                    const yPx    = depth * 4;    // 0,  4,  8, 12, 16
-                    const deg    = depth * 2.5;  // 0,2.5, 5,7.5, 10
-                    const sc     = 1 - depth * 0.02; // 1.00, 0.98, 0.96, 0.94, 0.92
-                    const zi     = 10 - depth;   // front=10, back=6
-
-                    const idleT  = `translate(${xPx}px, ${yPx}px) rotate(${deg}deg) scale(${sc})`;
-                    const swipeT = isFront
-                      ? 'translate(280px, -30px) rotate(20deg) scale(0.85)'
-                      : idleT; // background cards stay put during swipe
-
-                    return (
-                      <div
-                        key={`card-${depth}`}
-                        style={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          width: '100%',
-                          height: '100%',
-                          backgroundColor: '#ffffff',
-                          borderRadius: '1.5rem',
-                          padding: '1.5rem',
-                          boxShadow: isFront
-                            ? '0 24px 48px rgba(0,0,0,0.20)'
-                            : `0 ${4 + depth * 2}px ${12 + depth * 4}px rgba(0,0,0,0.08)`,
-                          transition: 'transform 0.4s cubic-bezier(0.165,0.84,0.44,1), opacity 0.4s',
-                          transform: swipeState === 'swiping' ? swipeT : idleT,
-                          opacity: isFront && swipeState === 'swiping' ? 0 : 1,
-                          zIndex: zi,
-                          display: 'flex',
-                          flexDirection: 'column',
-                          color: '#000',
-                          pointerEvents: isFront ? 'auto' : 'none',
-                        }}
-                      >
-                        {/* Thumbnail */}
-                        <div style={{ width: '100%', height: '200px', borderRadius: '1rem', overflow: 'hidden', marginBottom: '1.25rem', flexShrink: 0 }}>
-                          <img
-                            src={ev.image || '/assets/event-chart.png'}
-                            alt={ev.title}
-                            style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                          />
-                        </div>
-
-                        {/* Title */}
-                        <h3 style={{ fontSize: '2rem', fontWeight: 800, margin: '0 0 0.5rem 0', color: '#000', fontFamily: 'sans-serif', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
-                          {ev.title}
-                        </h3>
-
-                        {/* Description + Arrow */}
-                        <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.75rem', marginTop: 'auto' }}>
-                          <p style={{
-                            flex: 1,
-                            fontSize: '0.82rem',
-                            color: '#4b5563',
-                            lineHeight: 1.55,
-                            margin: 0,
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 4,
-                            WebkitBoxOrient: 'vertical',
-                            fontFamily: 'sans-serif',
-                          }}>
-                            {ev.description}
-                          </p>
-                          <div style={{ flexShrink: 0 }}>
-                            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                              <line x1="7" y1="17" x2="17" y2="7" />
-                              <polyline points="7 7 17 7 17 17" />
-                            </svg>
-                          </div>
+                  {showNoEventCard ? (
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedDayStr(null);
+                      }}
+                      style={{
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: '#ffffff',
+                        borderRadius: '1.5rem',
+                        padding: '1.5rem',
+                        boxShadow: '0 24px 48px rgba(0,0,0,0.20)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        color: '#000',
+                        cursor: 'pointer',
+                        zIndex: 10,
+                      }}
+                    >
+                      {/* Thumbnail Placeholder */}
+                      <div style={{ width: '100%', height: '300px', borderRadius: '1rem', overflow: 'hidden', marginBottom: '1.25rem', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f3f4f6', border: '1px dashed #d1d5db' }}>
+                        <div style={{ textAlign: 'center', color: '#9ca3af' }}>
+                          <span style={{ fontSize: '4.5rem', display: 'block', marginBottom: '1rem' }}>📅</span>
+                          <span style={{ fontSize: '0.85rem', fontWeight: 500 }}>No Corporate Event</span>
                         </div>
                       </div>
-                    );
-                  })}
+
+                      {/* Title */}
+                      <h3 style={{ fontSize: '2.2rem', fontWeight: 400, margin: '0 0 0.5rem 0', color: '#000000', fontFamily: 'sans-serif', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+                        No Event
+                      </h3>
+
+                      {/* Description */}
+                      <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.75rem', marginTop: 'auto' }}>
+                        <p style={{
+                          flex: 1,
+                          fontSize: '0.82rem',
+                          color: '#4b5563',
+                          lineHeight: 1.55,
+                          margin: 0,
+                          fontFamily: 'sans-serif',
+                        }}>
+                          There are no corporate events or presentations scheduled on <strong>{selectedDayStr!.split('-').reverse().join('-')}</strong>. Click this card to browse all events.
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    [-2, -1, 0, 1, 2].map((pos) => {
+                      if (events.length === 0) return null;
+                      // pos  0 = front active card (center)
+                      // pos -1,-2 = cards fanning LEFT
+                      // pos +1,+2 = cards fanning RIGHT
+                      const evIdx = (activeEventIndex + pos + events.length * 10) % events.length;
+                      const ev = events[evIdx];
+                      if (!ev) return null;
+
+                      const isFront = pos === 0;
+                      const absPos  = Math.abs(pos);
+
+                      // Perfectly centered vertical alignment with symmetric horizontal offset and scaling:
+                      // This makes the top step down and the bottom step up perfectly symmetrically.
+                      const scales = [1.00, 0.92, 0.84];
+                      const xOffsets = [0, 42, 84];
+
+                      const sc  = scales[absPos];
+                      const xPx = pos < 0 ? -xOffsets[absPos] : xOffsets[absPos];
+                      const yPx = 0; // Vertically centered
+                      const deg = 0; // Perfectly upright cards
+                      const zi  = 10 - absPos;
+
+                      const idleT  = `translate(${xPx}px, ${yPx}px) scale(${sc})`;
+                      const swipeT = isFront
+                        ? 'translate(320px, -20px) rotate(10deg) scale(0.85)'
+                        : idleT;
+
+                      return (
+                        <div
+                          key={`card-${pos}`}
+                          className="event-card-white"
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            backgroundColor: '#ffffff',
+                            borderRadius: '1.5rem',
+                            padding: '1.5rem',
+                            boxShadow: isFront
+                              ? '0 24px 48px rgba(0,0,0,0.20)'
+                              : `0 ${6 + absPos * 2}px ${16 + absPos * 4}px rgba(0,0,0,0.10)`,
+                            transition: 'transform 0.4s cubic-bezier(0.165,0.84,0.44,1), opacity 0.4s',
+                            transform: swipeState === 'swiping' ? swipeT : idleT,
+                            opacity: isFront && swipeState === 'swiping' ? 0 : 1,
+                            zIndex: zi,
+                            display: 'flex',
+                            flexDirection: 'column',
+                            color: '#000',
+                            pointerEvents: isFront ? 'auto' : 'none',
+                          }}
+                        >
+                          {/* Thumbnail */}
+                          <div style={{ width: '100%', height: '300px', borderRadius: '1rem', overflow: 'hidden', marginBottom: '1.25rem', flexShrink: 0, backgroundColor: '#ffffff' }}>
+                            <img
+                              src={ev.image || '/assets/event-speaker.png'}
+                              alt={ev.title}
+                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                            />
+                          </div>
+
+                          {/* Title */}
+                          <h3 style={{ fontSize: '2.2rem', fontWeight: 400, margin: '0 0 0.5rem 0', color: '#000000', fontFamily: 'sans-serif', letterSpacing: '-0.02em', lineHeight: 1.1 }}>
+                            {ev.title}
+                          </h3>
+
+                          {/* Description + Arrow */}
+                          <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0.75rem', marginTop: 'auto' }}>
+                            <p style={{
+                              flex: 1,
+                              fontSize: '0.82rem',
+                              color: '#374151',
+                              lineHeight: 1.55,
+                              margin: 0,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              display: '-webkit-box',
+                              WebkitLineClamp: 4,
+                              WebkitBoxOrient: 'vertical',
+                              fontFamily: 'sans-serif',
+                              textDecoration: 'none',
+                            }}>
+                              {ev.description}
+                            </p>
+                            <div style={{ flexShrink: 0 }}>
+                              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <line x1="7" y1="17" x2="17" y2="7" />
+                                <polyline points="7 7 17 7 17 17" />
+                              </svg>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
                 </div>
 
               </div>

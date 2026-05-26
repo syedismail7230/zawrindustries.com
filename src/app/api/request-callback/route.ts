@@ -23,7 +23,7 @@ export async function POST(request: Request) {
 
     // Construct the email
     const mailOptions = {
-      from: `"Zawr Website Bot" <${process.env.GMAIL_USER}>`, // Sender address
+      from: `"Zawr Client Relations" <noreply@zawrindustries.com>`, // Sender address
       to: 'client-relations@zawrindustries.com', // Where you want to receive the notifications
       subject: `🚨 New Call Back Request: Priority [${priority.toUpperCase()}]`,
       text: `You have received a new callback request.\n\nClient ID: ${clientId}\nPriority: ${priority}\n\nPlease reach out to this client as soon as possible.`,

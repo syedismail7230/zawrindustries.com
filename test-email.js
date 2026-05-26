@@ -1,4 +1,4 @@
-
+require('dotenv').config({ path: '.env.local' });
 const nodemailer = require('nodemailer');
 
 async function testEmail() {
@@ -16,7 +16,7 @@ async function testEmail() {
 
   try {
     const info = await transporter.sendMail({
-      from: `"Zawr Website Bot" <${process.env.GMAIL_USER}>`,
+      from: `"Zawr Website Bot" <noreply@zawrindustries.com>`,
       to: 'business@zawrindustries.com',
       subject: 'Test Email from Node',
       text: 'If you receive this, Nodemailer is working perfectly!',
