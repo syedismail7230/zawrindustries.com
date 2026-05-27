@@ -69,6 +69,39 @@ export default function WebmasterDashboard() {
   const [noticeAttachmentName, setNoticeAttachmentName] = useState('');
   const [customNoticeFile, setCustomNoticeFile] = useState<File | null>(null);
 
+  // Notifications States
+  const [notifications, setNotifications] = useState<any[]>([]);
+  const [notifTitle, setNotifTitle] = useState('');
+  const [notifCategory, setNotifCategory] = useState('General');
+  const [notifDate, setNotifDate] = useState('');
+  const [notifSummary, setNotifSummary] = useState('');
+  const [notifBody, setNotifBody] = useState('');
+  const [notifIsArchived, setNotifIsArchived] = useState(false);
+  const [editingNotif, setEditingNotif] = useState<any>(null);
+  
+  // Notification dynamic attachments/links input fields
+  const [notifLinkName, setNotifLinkName] = useState('');
+  const [notifLinkUrl, setNotifLinkUrl] = useState('');
+  const [notifAttachmentName, setNotifAttachmentName] = useState('');
+  const [customNotifFile, setCustomNotifFile] = useState<File | null>(null);
+
+  // Press Releases States
+  const [pressReleases, setPressReleases] = useState<any[]>([]);
+  const [pressTitle, setPressTitle] = useState('');
+  const [pressCategory, setPressCategory] = useState('Corporate');
+  const [pressDate, setPressDate] = useState('');
+  const [pressSummary, setPressSummary] = useState('');
+  const [pressBody, setPressBody] = useState('');
+  const [pressIsArchived, setPressIsArchived] = useState(false);
+  const [editingPress, setEditingPress] = useState<any>(null);
+  
+  // Press Release attachments/links fields
+  const [pressLinkName, setPressLinkName] = useState('');
+  const [pressLinkUrl, setPressLinkUrl] = useState('');
+  const [pressAttachmentName, setPressAttachmentName] = useState('');
+  const [customPressFile, setCustomPressFile] = useState<File | null>(null);
+  const [customPressBannerFile, setCustomPressBannerFile] = useState<File | null>(null);
+
   // Login handler
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -133,6 +166,20 @@ export default function WebmasterDashboard() {
           if (res.ok) {
             const data = await res.json();
             setNotices(data || []);
+          }
+        }
+        else if (activeTab === 'notifications') {
+          const res = await fetch('/api/notifications');
+          if (res.ok) {
+            const data = await res.json();
+            setNotifications(data || []);
+          }
+        }
+        else if (activeTab === 'press-releases') {
+          const res = await fetch('/api/press-releases');
+          if (res.ok) {
+            const data = await res.json();
+            setPressReleases(data || []);
           }
         }
       } catch (error: any) {
@@ -1493,6 +1540,46 @@ export default function WebmasterDashboard() {
                         </button>
                         <button 
                           onClick={async () => {
+                            setLoading(true);
+                            const formData = new FormData();
+                            formData.append('action', 'update');
+                            formData.append('id', nt.id);
+                            formData.append('title', nt.title);
+                            formData.append('category', nt.category);
+                            formData.append('date', nt.date);
+                            formData.append('summary', nt.summary || '');
+                            formData.append('body', nt.body || '');
+                            formData.append('archived', String(!nt.archived));
+                            formData.append('links', JSON.stringify(nt.links || []));
+                            formData.append('attachments', JSON.stringify(nt.attachments || []));
+                            try {
+                              const res = await fetch('/api/notices', { method: 'POST', body: formData });
+                              if (res.ok) {
+                                const data = await res.json();
+                                setNotices(data.notices || []);
+                              } else {
+                                alert('Failed to update status.');
+                              }
+                            } catch (e) {
+                              alert('Error updating status.');
+                            }
+                            setLoading(false);
+                          }}
+                          style={{ 
+                            padding: '0.5rem 1rem', 
+                            backgroundColor: 'transparent', 
+                            color: nt.archived ? '#10b981' : '#f59e0b', 
+                            border: nt.archived ? '1px solid #059669' : '1px solid #d97706', 
+                            borderRadius: '4px', 
+                            cursor: 'pointer', 
+                            marginRight: '0.5rem', 
+                            fontSize: '0.875rem' 
+                          }}
+                        >
+                          {nt.archived ? 'Unarchive' : 'Archive'}
+                        </button>
+                        <button 
+                          onClick={async () => {
                             if (!confirm(`Are you sure you want to delete "${nt.title}"?`)) return;
                             setLoading(true);
                             const formData = new FormData();
@@ -1508,6 +1595,817 @@ export default function WebmasterDashboard() {
                               }
                             } catch (e) {
                               alert('Error deleting notice.');
+                            }
+                            setLoading(false);
+                          }}
+                          style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        );
+
+      case 'press-releases':
+        return (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', height: '100%', overflowY: 'auto', paddingRight: '1rem' }}>
+            
+            {/* Create/Edit Form */}
+            <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
+              <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>
+                {editingPress ? `Edit Press Release: ${editingPress.title}` : 'Publish New Press Release'}
+              </h2>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Title</label>
+                    <input 
+                      type="text" 
+                      value={pressTitle} 
+                      onChange={(e) => setPressTitle(e.target.value)} 
+                      style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} 
+                      placeholder="e.g. Zawr Industries Announces Expansion..."
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Category</label>
+                    <select 
+                      value={pressCategory} 
+                      onChange={(e) => setPressCategory(e.target.value)} 
+                      style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }}
+                    >
+                      <option value="Corporate">Corporate</option>
+                      <option value="Product">Product</option>
+                      <option value="Sustainability">Sustainability</option>
+                      <option value="Partnership">Partnership</option>
+                      <option value="General">General</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Date</label>
+                    <input 
+                      type="text" 
+                      value={pressDate} 
+                      onChange={(e) => setPressDate(e.target.value)} 
+                      style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} 
+                      placeholder="e.g. May 18, 2026"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Summary (Short teaser shown in list)</label>
+                  <textarea 
+                    value={pressSummary} 
+                    onChange={(e) => setPressSummary(e.target.value)} 
+                    style={{ width: '100%', height: '60px', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', resize: 'vertical' }} 
+                    placeholder="Short summary of the corporate release..."
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Full Editorial Body</label>
+                  <textarea 
+                    value={pressBody} 
+                    onChange={(e) => setPressBody(e.target.value)} 
+                    style={{ width: '100%', height: '200px', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', resize: 'vertical' }} 
+                    placeholder="Full press release text body..."
+                  />
+                </div>
+
+                {/* Upload Attachment */}
+                <div style={{ border: `1px solid ${theme.border}`, padding: '1rem', borderRadius: '6px' }}>
+                  <h4 style={{ fontSize: '0.875rem', fontWeight: 600, margin: '0 0 0.75rem 0' }}>Attach PDF Document</h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Document Label</label>
+                      <input 
+                        type="text" 
+                        value={pressAttachmentName} 
+                        onChange={(e) => setPressAttachmentName(e.target.value)} 
+                        style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} 
+                        placeholder="e.g. Official Statement PDF"
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>PDF File</label>
+                      <input 
+                        type="file" 
+                        accept="application/pdf"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) setCustomPressFile(file);
+                        }} 
+                        style={{ color: theme.fg, fontSize: '0.85rem', paddingTop: '0.25rem' }} 
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Upload Banner Image */}
+                <div style={{ border: `1px solid ${theme.border}`, padding: '1rem', borderRadius: '6px' }}>
+                  <h4 style={{ fontSize: '0.875rem', fontWeight: 600, margin: '0 0 0.75rem 0' }}>Upload Press Release Card Banner Image</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) setCustomPressBannerFile(file);
+                      }} 
+                      style={{ color: theme.fg, fontSize: '0.85rem' }} 
+                    />
+                    {editingPress && editingPress.banner && (
+                      <span style={{ fontSize: '0.75rem', color: theme.muted }}>
+                        Current banner: <strong style={{ color: theme.fg }}>{editingPress.banner}</strong>
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* External Links */}
+                <div style={{ border: `1px solid ${theme.border}`, padding: '1rem', borderRadius: '6px' }}>
+                  <h4 style={{ fontSize: '0.875rem', fontWeight: 600, margin: '0 0 0.75rem 0' }}>Related External Link</h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Link Label</label>
+                      <input 
+                        type="text" 
+                        value={pressLinkName} 
+                        onChange={(e) => setPressLinkName(e.target.value)} 
+                        style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} 
+                        placeholder="e.g. Platform Live Workspace"
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Link URL</label>
+                      <input 
+                        type="text" 
+                        value={pressLinkUrl} 
+                        onChange={(e) => setPressLinkUrl(e.target.value)} 
+                        style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} 
+                        placeholder="https://..."
+                      />
+                    </div>
+                  </div>
+                  {editingPress && editingPress.links && editingPress.links.length > 0 && (
+                    <div style={{ fontSize: '0.75rem', color: theme.muted, marginTop: '0.25rem' }}>
+                      Current Link: <strong>{editingPress.links[0].label}</strong> ({editingPress.links[0].url})
+                    </div>
+                  )}
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', userSelect: 'none' }}>
+                    <input 
+                      type="checkbox"
+                      checked={pressIsArchived}
+                      onChange={(e) => setPressIsArchived(e.target.checked)}
+                      style={{ width: '16px', height: '16px', accentColor: theme.fg }}
+                    />
+                    <span style={{ fontSize: '0.875rem', color: theme.fg }}>Mark as Archived (Move to archive tab)</span>
+                  </label>
+                </div>
+
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                  <button 
+                    onClick={async () => {
+                      if (!pressTitle.trim() || !pressDate.trim() || !pressSummary.trim()) {
+                        alert('Title, date, and summary are required');
+                        return;
+                      }
+                      setLoading(true);
+
+                      const formData = new FormData();
+                      formData.append('action', editingPress ? 'update' : 'add');
+                      formData.append('title', pressTitle);
+                      formData.append('category', pressCategory);
+                      formData.append('date', pressDate);
+                      formData.append('summary', pressSummary);
+                      formData.append('body', pressBody);
+                      formData.append('archived', String(pressIsArchived));
+
+                      if (editingPress) {
+                        formData.append('id', editingPress.id);
+                      }
+
+                      // Dynamic Links list
+                      let linkList = [];
+                      if (pressLinkName.trim() && pressLinkUrl.trim()) {
+                        linkList.push({ label: pressLinkName, url: pressLinkUrl });
+                      } else if (editingPress && editingPress.links) {
+                        linkList = editingPress.links;
+                      }
+                      formData.append('links', JSON.stringify(linkList));
+
+                      // Dynamic Attachments list
+                      let attachmentList = [];
+                      if (editingPress && editingPress.attachments) {
+                        attachmentList = editingPress.attachments;
+                      }
+                      formData.append('attachments', JSON.stringify(attachmentList));
+
+                      // Custom PDF file upload
+                      if (customPressFile) {
+                        formData.append('file', customPressFile);
+                        formData.append('fileLabel', pressAttachmentName || 'Official PDF Attachment');
+                      }
+
+                      // Custom Banner Image file upload
+                      if (customPressBannerFile) {
+                        formData.append('bannerFile', customPressBannerFile);
+                      }
+                      if (editingPress && editingPress.banner) {
+                        formData.append('existingBanner', editingPress.banner);
+                      }
+
+                      try {
+                        const res = await fetch('/api/press-releases', {
+                          method: 'POST',
+                          body: formData
+                        });
+                        if (res.ok) {
+                          const data = await res.json();
+                          setPressReleases(data.releases || []);
+                          
+                          // Clear states
+                          setPressTitle('');
+                          setPressCategory('Corporate');
+                          setPressDate('');
+                          setPressSummary('');
+                          setPressBody('');
+                          setPressIsArchived(false);
+                          setPressLinkName('');
+                          setPressLinkUrl('');
+                          setPressAttachmentName('');
+                          setCustomPressFile(null);
+                          setCustomPressBannerFile(null);
+                          setEditingPress(null);
+                          alert(editingPress ? 'Press release updated successfully!' : 'Press release added successfully!');
+                          // Trigger reload of active tab to fetch updated data
+                          const updatedRes = await fetch('/api/press-releases');
+                          if (updatedRes.ok) {
+                            const updatedData = await updatedRes.json();
+                            setPressReleases(updatedData);
+                          }
+                        } else {
+                          alert('Failed to save press release.');
+                        }
+                      } catch (err) {
+                        alert('Error saving press release.');
+                      }
+                      setLoading(false);
+                    }}
+                    disabled={loading}
+                    style={{ padding: '0.75rem 1.5rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, borderRadius: '4px', cursor: 'pointer' }}
+                  >
+                    {loading ? 'Saving...' : editingPress ? 'Update Release' : 'Add Release'}
+                  </button>
+                  
+                  {editingPress && (
+                    <button 
+                      onClick={() => {
+                        setEditingPress(null);
+                        setPressTitle('');
+                        setPressCategory('Corporate');
+                        setPressDate('');
+                        setPressSummary('');
+                        setPressBody('');
+                        setPressIsArchived(false);
+                        setPressLinkName('');
+                        setPressLinkUrl('');
+                        setPressAttachmentName('');
+                        setCustomPressFile(null);
+                        setCustomPressBannerFile(null);
+                      }}
+                      style={{ padding: '0.75rem 1.5rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer' }}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* List of Releases */}
+            <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>Current Press Releases</h3>
+              
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                <thead>
+                  <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Status</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pressReleases.length === 0 ? (
+                    <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No press releases found.</td></tr>
+                  ) : pressReleases.map((pr) => (
+                    <tr key={pr.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                      <td style={{ padding: '1rem', fontWeight: 500 }}>{pr.title}</td>
+                      <td style={{ padding: '1rem', color: theme.muted }}>{pr.date}</td>
+                      <td style={{ padding: '1rem', color: theme.muted }}>{pr.category}</td>
+                      <td style={{ padding: '1rem', color: theme.muted }}>
+                        {pr.archived ? (
+                          <span style={{ color: '#f97316', backgroundColor: '#431407', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Archived</span>
+                        ) : (
+                          <span style={{ color: '#10b981', backgroundColor: '#064e3b', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Active</span>
+                        )}
+                      </td>
+                      <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                        <button 
+                          onClick={() => {
+                            setEditingPress(pr);
+                            setPressTitle(pr.title);
+                            setPressCategory(pr.category || 'Corporate');
+                            setPressDate(pr.date);
+                            setPressSummary(pr.summary || '');
+                            setPressBody(pr.body || '');
+                            setPressIsArchived(!!pr.archived);
+                            
+                            if (pr.links && pr.links.length > 0) {
+                              setPressLinkName(pr.links[0].label);
+                              setPressLinkUrl(pr.links[0].url);
+                            } else {
+                              setPressLinkName('');
+                              setPressLinkUrl('');
+                            }
+                            if (pr.attachments && pr.attachments.length > 0) {
+                              setPressAttachmentName(pr.attachments[0].label);
+                            } else {
+                              setPressAttachmentName('');
+                            }
+
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          onClick={async () => {
+                            setLoading(true);
+                            const formData = new FormData();
+                            formData.append('action', 'update');
+                            formData.append('id', pr.id);
+                            formData.append('title', pr.title);
+                            formData.append('category', pr.category);
+                            formData.append('date', pr.date);
+                            formData.append('summary', pr.summary || '');
+                            formData.append('body', pr.body || '');
+                            formData.append('archived', String(!pr.archived));
+                            formData.append('links', JSON.stringify(pr.links || []));
+                            formData.append('attachments', JSON.stringify(pr.attachments || []));
+                            try {
+                              const res = await fetch('/api/press-releases', { method: 'POST', body: formData });
+                              if (res.ok) {
+                                const data = await res.json();
+                                setPressReleases(data.releases || []);
+                                const updatedRes = await fetch('/api/press-releases');
+                                if (updatedRes.ok) {
+                                  const updatedData = await updatedRes.json();
+                                  setPressReleases(updatedData);
+                                }
+                              } else {
+                                alert('Failed to update status.');
+                              }
+                            } catch (e) {
+                              alert('Error updating status.');
+                            }
+                            setLoading(false);
+                          }}
+                          style={{ 
+                            padding: '0.5rem 1rem', 
+                            backgroundColor: 'transparent', 
+                            color: pr.archived ? '#10b981' : '#f59e0b', 
+                            border: pr.archived ? '1px solid #059669' : '1px solid #d97706', 
+                            borderRadius: '4px', 
+                            cursor: 'pointer', 
+                            marginRight: '0.5rem', 
+                            fontSize: '0.875rem' 
+                          }}
+                        >
+                          {pr.archived ? 'Unarchive' : 'Archive'}
+                        </button>
+                        <button 
+                          onClick={async () => {
+                            if (!confirm(`Are you sure you want to delete "${pr.title}"?`)) return;
+                            setLoading(true);
+                            const formData = new FormData();
+                            formData.append('action', 'delete');
+                            formData.append('id', pr.id);
+                            try {
+                              const res = await fetch('/api/press-releases', { method: 'POST', body: formData });
+                              if (res.ok) {
+                                const data = await res.json();
+                                setPressReleases(data.releases || []);
+                                // Trigger reload of active tab to fetch updated data
+                                const updatedRes = await fetch('/api/press-releases');
+                                if (updatedRes.ok) {
+                                  const updatedData = await updatedRes.json();
+                                  setPressReleases(updatedData);
+                                }
+                              } else {
+                                alert('Failed to delete press release.');
+                              }
+                            } catch (e) {
+                              alert('Error deleting press release.');
+                            }
+                            setLoading(false);
+                          }}
+                          style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        );
+      
+      case 'notifications':
+        return (
+          <div>
+            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '2rem', letterSpacing: '-0.02em' }}>Manage Notifications</h2>
+            
+            {/* Add / Edit Form */}
+            <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg, marginBottom: '3rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>{editingNotif ? 'Edit Notification' : 'Add New Notification'}</h3>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem', maxWidth: '600px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Notification Title *</label>
+                  <input 
+                    type="text" 
+                    value={notifTitle} 
+                    onChange={(e) => setNotifTitle(e.target.value)} 
+                    style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                    placeholder="e.g. Q2 2026 Earnings Call Notice"
+                  />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Category *</label>
+                    <select 
+                      value={notifCategory}
+                      onChange={(e) => setNotifCategory(e.target.value)}
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }}
+                    >
+                      <option value="General">General</option>
+                      <option value="Investor">Investor</option>
+                      <option value="Operations">Operations</option>
+                      <option value="Corporate">Corporate</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Publish Date * (e.g. 27th May 2026)</label>
+                    <input 
+                      type="text" 
+                      value={notifDate} 
+                      onChange={(e) => setNotifDate(e.target.value)} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }}
+                      placeholder="e.g. 27th May 2026"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>One-line Summary * (Shown on list)</label>
+                  <input 
+                    type="text" 
+                    value={notifSummary} 
+                    onChange={(e) => setNotifSummary(e.target.value)} 
+                    style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                    placeholder="Short summary of this notification..."
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Notification Body Content (Paragraph on detail page)</label>
+                  <textarea 
+                    value={notifBody} 
+                    onChange={(e) => setNotifBody(e.target.value)} 
+                    style={{ width: '100%', height: '120px', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', resize: 'vertical' }} 
+                    placeholder="Write detailed notification information here..."
+                  />
+                </div>
+
+                {/* File Attachment Upload */}
+                <div style={{ padding: '1rem', border: `1px solid ${theme.border}`, borderRadius: '6px', backgroundColor: theme.bg }}>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.75rem' }}>Upload Notification PDF Attachment (Optional)</label>
+                  
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Attachment Label</label>
+                        <input 
+                          type="text" 
+                          value={notifAttachmentName} 
+                          onChange={(e) => setNotifAttachmentName(e.target.value)} 
+                          style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} 
+                          placeholder="e.g. AGM Invitation PDF"
+                        />
+                      </div>
+                      <div>
+                        <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Choose PDF File</label>
+                        <input 
+                          type="file" 
+                          accept="application/pdf"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0] || null;
+                            setCustomNotifFile(file);
+                          }}
+                          style={{ color: theme.fg, fontSize: '0.8rem', paddingTop: '0.25rem' }}
+                        />
+                      </div>
+                    </div>
+                    {editingNotif && editingNotif.attachments && editingNotif.attachments.length > 0 && (
+                      <div style={{ fontSize: '0.75rem', color: theme.muted, marginTop: '0.25rem' }}>
+                        Current attachment: <strong>{editingNotif.attachments[0].label}</strong> ({editingNotif.attachments[0].url})
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* External Portal Links */}
+                <div style={{ padding: '1rem', border: `1px solid ${theme.border}`, borderRadius: '6px', backgroundColor: theme.bg }}>
+                  <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.75rem' }}>Manage External Portals / Links (Optional)</label>
+                  
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '0.5rem' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Portal / Link Label</label>
+                      <input 
+                        type="text" 
+                        value={notifLinkName} 
+                        onChange={(e) => setNotifLinkName(e.target.value)} 
+                        style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} 
+                        placeholder="e.g. Registration Link"
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Portal URL</label>
+                      <input 
+                        type="text" 
+                        value={notifLinkUrl} 
+                        onChange={(e) => setNotifLinkUrl(e.target.value)} 
+                        style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} 
+                        placeholder="https://..."
+                      />
+                    </div>
+                  </div>
+                  {editingNotif && editingNotif.links && editingNotif.links.length > 0 && (
+                    <div style={{ fontSize: '0.75rem', color: theme.muted, marginTop: '0.25rem' }}>
+                      Current Link: <strong>{editingNotif.links[0].label}</strong> ({editingNotif.links[0].url})
+                    </div>
+                  )}
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', userSelect: 'none' }}>
+                    <input 
+                      type="checkbox"
+                      checked={notifIsArchived}
+                      onChange={(e) => setNotifIsArchived(e.target.checked)}
+                      style={{ width: '16px', height: '16px', accentColor: theme.fg }}
+                    />
+                    <span style={{ fontSize: '0.875rem', color: theme.fg }}>Mark as Archived (Move to archive tab)</span>
+                  </label>
+                </div>
+
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                  <button 
+                    onClick={async () => {
+                      if (!notifTitle.trim() || !notifDate.trim() || !notifSummary.trim()) {
+                        alert('Title, date, and summary are required');
+                        return;
+                      }
+                      setLoading(true);
+
+                      const formData = new FormData();
+                      formData.append('action', editingNotif ? 'update' : 'add');
+                      formData.append('title', notifTitle);
+                      formData.append('category', notifCategory);
+                      formData.append('date', notifDate);
+                      formData.append('summary', notifSummary);
+                      formData.append('body', notifBody);
+                      formData.append('archived', String(notifIsArchived));
+
+                      if (editingNotif) {
+                        formData.append('id', editingNotif.id);
+                      }
+
+                      // Dynamic Links list
+                      let linkList = [];
+                      if (notifLinkName.trim() && notifLinkUrl.trim()) {
+                        linkList.push({ label: notifLinkName, url: notifLinkUrl });
+                      } else if (editingNotif && editingNotif.links) {
+                        linkList = editingNotif.links;
+                      }
+                      formData.append('links', JSON.stringify(linkList));
+
+                      // Dynamic Attachments list
+                      let attachmentList = [];
+                      if (editingNotif && editingNotif.attachments) {
+                        attachmentList = editingNotif.attachments;
+                      }
+                      formData.append('attachments', JSON.stringify(attachmentList));
+
+                      // Custom PDF file upload
+                      if (customNotifFile) {
+                        formData.append('file', customNotifFile);
+                        formData.append('fileLabel', notifAttachmentName || 'Notification Document');
+                      }
+
+                      try {
+                        const res = await fetch('/api/notifications', {
+                          method: 'POST',
+                          body: formData
+                        });
+                        if (res.ok) {
+                          const data = await res.json();
+                          setNotifications(data.notifications || []);
+                          
+                          // Clear states
+                          setNotifTitle('');
+                          setNotifCategory('General');
+                          setNotifDate('');
+                          setNotifSummary('');
+                          setNotifBody('');
+                          setNotifIsArchived(false);
+                          setNotifLinkName('');
+                          setNotifLinkUrl('');
+                          setNotifAttachmentName('');
+                          setCustomNotifFile(null);
+                          setEditingNotif(null);
+                          alert(editingNotif ? 'Notification updated successfully!' : 'Notification added successfully!');
+                        } else {
+                          alert('Failed to save notification.');
+                        }
+                      } catch (err) {
+                        alert('Error saving notification.');
+                      }
+                      setLoading(false);
+                    }}
+                    disabled={loading}
+                    style={{ padding: '0.75rem 1.5rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, borderRadius: '4px', cursor: 'pointer' }}
+                  >
+                    {loading ? 'Saving...' : editingNotif ? 'Update Notification' : 'Add Notification'}
+                  </button>
+                  
+                  {editingNotif && (
+                    <button 
+                      onClick={() => {
+                        setEditingNotif(null);
+                        setNotifTitle('');
+                        setNotifCategory('General');
+                        setNotifDate('');
+                        setNotifSummary('');
+                        setNotifBody('');
+                        setNotifIsArchived(false);
+                        setNotifLinkName('');
+                        setNotifLinkUrl('');
+                        setNotifAttachmentName('');
+                        setCustomNotifFile(null);
+                      }}
+                      style={{ padding: '0.75rem 1.5rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer' }}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* List of Notifications */}
+            <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>Current Notifications</h3>
+              
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                <thead>
+                  <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Status</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {notifications.length === 0 ? (
+                    <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No notifications found.</td></tr>
+                  ) : notifications.map((nt) => (
+                    <tr key={nt.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                      <td style={{ padding: '1rem', fontWeight: 500 }}>{nt.title}</td>
+                      <td style={{ padding: '1rem', color: theme.muted }}>{nt.date}</td>
+                      <td style={{ padding: '1rem', color: theme.muted }}>{nt.category}</td>
+                      <td style={{ padding: '1rem', color: theme.muted }}>
+                        {nt.archived ? (
+                          <span style={{ color: '#f97316', backgroundColor: '#431407', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Archived</span>
+                        ) : (
+                          <span style={{ color: '#10b981', backgroundColor: '#064e3b', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Active</span>
+                        )}
+                      </td>
+                      <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                        <button 
+                          onClick={() => {
+                            setEditingNotif(nt);
+                            setNotifTitle(nt.title);
+                            setNotifCategory(nt.category || 'General');
+                            setNotifDate(nt.date);
+                            setNotifSummary(nt.summary || '');
+                            setNotifBody(nt.body || '');
+                            setNotifIsArchived(!!nt.archived);
+                            
+                            if (nt.links && nt.links.length > 0) {
+                              setNotifLinkName(nt.links[0].label);
+                              setNotifLinkUrl(nt.links[0].url);
+                            } else {
+                              setNotifLinkName('');
+                              setNotifLinkUrl('');
+                            }
+                            if (nt.attachments && nt.attachments.length > 0) {
+                              setNotifAttachmentName(nt.attachments[0].label);
+                            } else {
+                              setNotifAttachmentName('');
+                            }
+
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          onClick={async () => {
+                            setLoading(true);
+                            const formData = new FormData();
+                            formData.append('action', 'update');
+                            formData.append('id', nt.id);
+                            formData.append('title', nt.title);
+                            formData.append('category', nt.category);
+                            formData.append('date', nt.date);
+                            formData.append('summary', nt.summary || '');
+                            formData.append('body', nt.body || '');
+                            formData.append('archived', String(!nt.archived));
+                            formData.append('links', JSON.stringify(nt.links || []));
+                            formData.append('attachments', JSON.stringify(nt.attachments || []));
+                            try {
+                              const res = await fetch('/api/notifications', { method: 'POST', body: formData });
+                              if (res.ok) {
+                                const data = await res.json();
+                                setNotifications(data.notifications || []);
+                              } else {
+                                alert('Failed to update status.');
+                              }
+                            } catch (e) {
+                              alert('Error updating status.');
+                            }
+                            setLoading(false);
+                          }}
+                          style={{ 
+                            padding: '0.5rem 1rem', 
+                            backgroundColor: 'transparent', 
+                            color: nt.archived ? '#10b981' : '#f59e0b', 
+                            border: nt.archived ? '1px solid #059669' : '1px solid #d97706', 
+                            borderRadius: '4px', 
+                            cursor: 'pointer', 
+                            marginRight: '0.5rem', 
+                            fontSize: '0.875rem' 
+                          }}
+                        >
+                          {nt.archived ? 'Unarchive' : 'Archive'}
+                        </button>
+                        <button 
+                          onClick={async () => {
+                            if (!confirm(`Are you sure you want to delete "${nt.title}"?`)) return;
+                            setLoading(true);
+                            const formData = new FormData();
+                            formData.append('action', 'delete');
+                            formData.append('id', nt.id);
+                            try {
+                              const res = await fetch('/api/notifications', { method: 'POST', body: formData });
+                              if (res.ok) {
+                                const data = await res.json();
+                                setNotifications(data.notifications || []);
+                              } else {
+                                alert('Failed to delete notification.');
+                              }
+                            } catch (e) {
+                              alert('Error deleting notification.');
                             }
                             setLoading(false);
                           }}
@@ -1539,6 +2437,8 @@ export default function WebmasterDashboard() {
     { id: 'financial-reports', label: 'Financial Reports' },
     { id: 'events', label: 'Manage Events' },
     { id: 'notices', label: 'Manage Notices' },
+    { id: 'notifications', label: 'Manage Notifications' },
+    { id: 'press-releases', label: 'Manage Press Releases' },
   ];
 
   return (

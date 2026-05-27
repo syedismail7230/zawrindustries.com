@@ -1,0 +1,272 @@
+[
+  {
+    "id": "PR-018",
+    "slug": "zawr-industries-announces-it-expansion-southeast-asia",
+    "title": "Official announcements, company updates, and strategic developments from Zawr.",
+    "date": "27th May 2026",
+    "category": "Corporate",
+    "summary": "Zawr Industries LLP unveils plans to launch regional technology hubs in Singapore and Jakarta to support expanding enterprise IT operations.",
+    "body": "Zawr Industries LLP, a leading player in diversified technology, logistics, and industrial operations, today officially announced its strategic expansion into the Southeast Asian market, with the planned launch of two new regional technology hubs in Singapore and Jakarta.\n\nThe expansion comes in response to growing demand for enterprise cloud management, bespoke AI systems, and cross-border digital logistics pipelines in the ASEAN region. The Singapore office will serve as the commercial headquarters for international IT partnerships, while the Jakarta facility will focus on software engineering, custom localized LLM training, and operational support for regional enterprise clients.\n\n\"Southeast Asia represents one of the most vibrant, fast-growing digital economies in the world,\" said Syed Ismail, Managing Partner at Zawr Industries. \"By establishing a direct, physical footprint in Singapore and Jakarta, we are positioning our teams to collaborate closely with localized businesses to deliver top-tier, high-performance IT solutions.\"\n\nThe hubs are expected to create over 150 highly-skilled engineering, marketing, and corporate administration jobs across both locations by the end of 2026. Recruitment operations are scheduled to commence in Q3 2026 under the direct leadership of the Zawr HR division.",
+    "attachments": [],
+    "links": [
+      { "label": "Enterprise IT Platform", "url": "https://zawrindustries.com/industries/it-service" }
+    ],
+    "archived": false,
+    "banner": "/assets/public-relations-hero.png"
+  },
+  {
+    "id": "PR-017",
+    "slug": "sketch-studio-launch-next-gen-ui-editor",
+    "title": "The latest stories, milestones, launches, and corporate communications.",
+    "date": "27th May 2026",
+    "category": "Product",
+    "summary": "Zawr Industries successfully rolls out Sketch Studio, an advanced collaborative web layout editor designed to streamline product designs.",
+    "body": "Zawr Industries LLP is thrilled to announce the official public release of Sketch Studio (sketchstudio.dev), our next-generation web design and prototype engineering environment built specifically for product teams.\n\nSketch Studio represents a significant milestone in software prototyping. It integrates code-generation engines with a fluid, multi-layered visual canvas, allowing web designers to export fully production-ready HTML, CSS, and React configurations directly. By bridging the gap between visual composition and visual development, the product dramatically increases front-end throughput for engineering cycles.\n\n\"For years, design and code have lived in separate silos,\" said the Chief Technical Lead at Zawr's Platform Operations. \"Sketch Studio unites these processes, offering a workspace that is as comfortable for visual artists as it is for frontend engineers.\"\n\nSketch Studio features a comprehensive collaborative architecture, real-time multiplayer cursor interactions, and native integration with the Zawr AI assistant core, allowing automated mockup edits via plain English prompts. The platform is now live and offering free introductory workspaces.",
+    "attachments": [],
+    "links": [
+      { "label": "Visit Sketch Studio", "url": "https://sketchstudio.dev" }
+    ],
+    "archived": false,
+    "banner": "/assets/life-at-zawr.png"
+  },
+  {
+    "id": "PR-016",
+    "slug": "zawr-industries-achieves-carbon-neutrality-milestones-2025",
+    "title": "Official announcements, company updates, and strategic developments from Zawr.",
+    "date": "27th May 2026",
+    "category": "Sustainability",
+    "summary": "Zawr Industries LLP announces a 35% reduction in overall operating emissions across logistics and manufacturing plants.",
+    "body": "In alignment with the global transition toward zero-carbon operations, Zawr Industries LLP today released its annual Sustainability Audit Report, detailing a record 35% reduction in net carbon emissions across all regional manufacturing plants, storage depots, and logistics lines for the 2025 fiscal year.\n\nThe accomplishments reflect the successful execution of Zawr's Green Transition Initiative launched in early 2024. Key emissions-mitigation measures include:\n\n1. Fleet Electrification: Transitioned 42% of our short-range transport and shipping fleet to commercial electric vehicles (EVs).\n2. Solar Micro-generation: Installed localized solar panels across manufacturing rooftops, generating over 1.2 megawatts of auxiliary clean power.\n3. Supply Chain Optimizations: Redesigned freight routing protocols via Firm AI systems, shaving 18% off overall transit miles.\n\n\"Sustainable enterprise is not just an ethical obligation; it is a competitive advantage,\" stated the Director of CSR at Zawr Industries. \"Our capability to achieve this 35% reduction ahead of schedule demonstrates that clean energy investments lead directly to more resilient and efficient operations.\"\n\nThe Company remains fully committed to achieving net-zero carbon operations across all domestic and international branches by 2030.",
+    "attachments": [],
+    "links": [
+      { "label": "Sustainability Page", "url": "https://zawrindustries.com/sustainability/environment" }
+    ],
+    "archived": false,
+    "banner": "/assets/this-is-zawr.png"
+  },
+  {
+    "id": "PR-015",
+    "slug": "zawr-logistics-launches-automated-supply-chain-mumbai",
+    "title": "Zawr Logistics Launches Next-Generation Automated Supply Chain Hub in Mumbai",
+    "date": "14th May 2026",
+    "category": "Logistics",
+    "summary": "Unveiling a 250,000 sq.ft state-of-the-art automated sorting facility equipped with autonomous robotic inventory systems.",
+    "body": "Zawr Logistics, the shipping and industrial supply chain division of Zawr Industries LLP, today officially inaugurated its newly constructed Automated Supply Chain Center in the industrial corridor of Mumbai.\n\nThe high-capacity facility spans over 250,000 square feet and features fully automated high-density storage systems, localized routing algorithms, and drone-assisted freight scanning systems. Operating at full throughput, the Mumbai hub will process up to 85,000 individual freight shipments daily, cutting regional processing latency by an estimated 40%.\n\n\"This automated center represents the future of physical infrastructure integration,\" said Syed Ismail, Managing Partner. \"By merging machine-learning algorithms with advanced storage automation, we are building a hyper-responsive freight distribution network.\"",
+    "attachments": [],
+    "links": [
+      { "label": "Logistics Platform", "url": "https://zawrindustries.com/industries/transport-and-logistics" }
+    ],
+    "archived": false,
+    "banner": "/assets/careers-1.png"
+  },
+  {
+    "id": "PR-014",
+    "slug": "firm-ai-introduces-realtime-predictive-risk-intelligence",
+    "title": "Firm AI Introduces Real-Time Predictive Risk Intelligence Suite for Enterprise",
+    "date": "2nd May 2026",
+    "category": "Technology",
+    "summary": "Expanding the Firm AI ecosystem with advanced multi-vector forecasting tools for global financial compliance.",
+    "body": "Zawr Technology Hub's flag product, Firm AI (firm.expert), today launched its Predictive Risk Intelligence Suite. The application equips compliance directors and enterprise CFOs with real-time financial tracking, supply chain friction forecasting, and multi-vector regulatory threat detection.\n\nBuilt on a proprietary micro-fine LLM model, the Risk Intelligence Suite analyzes over 50,000 daily global market indices to construct actionable mitigation strategies. The module is fully integrated with major global enterprise resource planners (ERPs) and will roll out as a standard upgrade to active enterprise accounts.",
+    "attachments": [],
+    "links": [
+      { "label": "Explore Firm AI", "url": "https://www.firm.expert" }
+    ],
+    "archived": false,
+    "banner": "/assets/firmai-dashboard.png"
+  },
+  {
+    "id": "PR-013",
+    "slug": "zawr-industries-declares-q1-2026-financial-growth",
+    "title": "Zawr Industries LLP Reports Double-Digit Revenue and Profit Growth in Q1 2026 Financials",
+    "date": "20th April 2026",
+    "category": "Finance",
+    "summary": "Consolidated Q1 earnings report shows a 22% year-on-year revenue surge led by robust technology platform performance.",
+    "body": "Zawr Industries LLP today presented its audited Q1 2026 consolidated financial statements. The report details ₹412 Cr in gross revenue, marking a 22% surge over the previous year's performance. The tech sector integration, led by Firm AI and Sketch Studio subscriptions, represented the fastest-growing revenue segment, expanding by 45%.\n\n\"Our diversified approach across physical logistics and high-value digital platforms is yielding outstanding compounding results,\" stated the Managing Partner. \"We enter Q2 with a highly resilient capital reserve and strong momentum for our upcoming strategic product cycles.\"",
+    "attachments": [],
+    "links": [
+      { "label": "Financial Reports Portal", "url": "https://zawrindustries.com/investors/financial-report" }
+    ],
+    "archived": false,
+    "banner": "/assets/financial-chart.png"
+  },
+  {
+    "id": "PR-012",
+    "slug": "zawr-partners-with-global-green-energy-syndicate",
+    "title": "Zawr Industries Partners with Global Green Energy Syndicate for Commercial Solar Integration",
+    "date": "5th April 2026",
+    "category": "Partnership",
+    "summary": "Strategic alliance to deploy 5.2 Megawatts of commercial rooftop solar infrastructure across all factories by 2027.",
+    "body": "In a decisive stride toward sustainable industrial production, Zawr Industries LLP today signed a formal partnership agreement with the Global Green Energy Syndicate. Under the scope of this alliance, the syndicate will install 5.2 Megawatts of advanced photovoltaic panels across our manufacturing facilities.\n\nUpon complete rollout in Q1 2027, the clean solar micro-grid will offset over 65% of the manufacturing division's baseline electricity draw, reducing overall dependency on high-carbon utility pools. This effort represents a significant acceleration of our Carbon Neutrality Initiative.",
+    "attachments": [],
+    "links": [
+      { "label": "Sustainability Page", "url": "https://zawrindustries.com/sustainability/environment" }
+    ],
+    "archived": false,
+    "banner": "/assets/careers-2.png"
+  },
+  {
+    "id": "PR-011",
+    "slug": "sketch-studio-reaches-active-designers-milestone",
+    "title": "Sketch Studio Reaches Milestone of 500,000 Active Collaborative Web Designers",
+    "date": "22nd March 2026",
+    "category": "Product",
+    "summary": "Fast-growing visual developer canvas celebrates remarkable milestone within four months of initial public beta launch.",
+    "body": "Sketch Studio (sketchstudio.dev) has officially crossed the milestone of half a million active monthly users. Launched under the Zawr brand, the intuitive browser-based UI builder has emerged as a favorite among product designers seeking rapid frontend generation.\n\nUser analytics suggest high adoption from software agencies in North America and Western Europe. Future plans for Sketch Studio include offline editor modes, native integrations with Figma libraries, and advanced micro-component exports.",
+    "attachments": [],
+    "links": [
+      { "label": "Launch Sketch Studio", "url": "https://sketchstudio.dev" }
+    ],
+    "archived": false,
+    "banner": "/assets/careers-3.png"
+  },
+  {
+    "id": "PR-010",
+    "slug": "zawr-venture-partners-announces-incubation-fund",
+    "title": "Zawr Venture Partners Announces ₹200 Cr Strategic Technology Incubation Fund",
+    "date": "10th March 2026",
+    "category": "Corporate",
+    "summary": "New capital fund to back early-stage founders building custom B2B enterprise software and next-gen hardware tools.",
+    "body": "Zawr Venture Partners, the proprietary investment arm of Zawr Industries LLP, today announced a dedicated ₹200 Crore Technology Incubation Fund. The capital will target early-stage software and hardware startups specializing in B2B enterprise automation, supply chain robotics, and developer tools.\n\nStartups joining the incubation program will receive direct technical mentorship from Zawr platform architects and access to beta testing pipelines across our manufacturing and logistics fleets.",
+    "attachments": [],
+    "links": [
+      { "label": "Investors Portal", "url": "https://zawrindustries.com/investors" }
+    ],
+    "archived": false,
+    "banner": "/assets/careers-4.png"
+  },
+  {
+    "id": "PR-009",
+    "slug": "zawr-honored-with-industrial-innovation-leadership-award",
+    "title": "Zawr Industries LLP Honored with National Industrial Innovation Leadership Award",
+    "date": "28th February 2026",
+    "category": "Corporate",
+    "summary": "Award recognizes the company's excellence in digitizing legacy heavy industries and freight shipping pipelines.",
+    "body": "Zawr Industries LLP is proud to announce that it has been awarded the prestigious National Industrial Innovation Leadership Award for 2026. The committee recognized Zawr's notable success in applying high-performance machine learning models to legacy manufacturing, distribution, and warehouse tracking.\n\n\"We are incredibly honored by this recognition,\" stated Syed Ismail. \"It is a testament to our engineering and operations teams who work tireless hours to bridge the physical-digital industrial divide.\"",
+    "attachments": [],
+    "links": [
+      { "label": "About the Company", "url": "https://zawrindustries.com/about" }
+    ],
+    "archived": false,
+    "banner": "/assets/careers-5.png"
+  },
+  {
+    "id": "PR-008",
+    "slug": "velocityos-rolls-out-security-update-enterprise",
+    "title": "VelocityOS Rolls Out Critical Core Security Update for Enterprise Orchestration Containers",
+    "date": "15th February 2026",
+    "category": "Product",
+    "summary": "Version 3.4.1 delivers advanced sandboxed memory environments to secure cloud infrastructure workloads.",
+    "body": "VelocityOS, the advanced server containerization platform operating under Zawr Industries LLP, today rolled out its 3.4.1 core upgrade. The release integrates hardware-level sandboxed memory protocols to shield mission-critical container operations from host vulnerability vectors.\n\nVelocityOS 3.4.1 is currently accessible via our global package mirrors, and cloud operators are strongly encouraged to patch container runtimes to optimize cluster protection profiles.",
+    "attachments": [],
+    "links": [
+      { "label": "VelocityOS Platform", "url": "https://velocityos.in" }
+    ],
+    "archived": false,
+    "banner": "/assets/careers-6.png"
+  },
+  {
+    "id": "PR-007",
+    "slug": "zawr-hosts-tech-sustainability-summit",
+    "title": "Zawr Industries LLP Welcomes Delegates to the Tech and Sustainability Summit 2026",
+    "date": "2nd February 2026",
+    "category": "Corporate",
+    "summary": "Keynote panels focus on AI integration, automated logistics hubs, and zero-carbon shipping fleets.",
+    "body": "Zawr Industries LLP today opened doors to the annual Tech and Sustainability Summit 2026. Over 1,200 international tech leaders, sustainability experts, and regional policy makers gathered to address high-performance carbon mitigation and industrial automation integrations.\n\nThe panels will cover fleet electrification solutions, custom machine-learning routing modules, and global compliance tracking.",
+    "attachments": [],
+    "links": [
+      { "label": "Newsroom Hub", "url": "https://zawrindustries.com/newsroom" }
+    ],
+    "archived": false,
+    "banner": "/assets/event-speaker.png"
+  },
+  {
+    "id": "PR-006",
+    "slug": "zawr-logistics-expansion-crossborder-freight-central-asia",
+    "title": "Zawr Logistics Expands Cross-Border Freight Distribution Channels into Central Asia",
+    "date": "18th January 2026",
+    "category": "Logistics",
+    "summary": "New strategic dry-ports and shipping channels established in Tashkent and Almaty to secure trans-continental trade.",
+    "body": "Zawr Logistics today announced the activation of two new strategic trans-continental dry-port hubs in Almaty and Tashkent. The trade routes will act as primary transit gateways linking Southeast Asian cargo lines with Eastern European trade loops.\n\nThe integration will feature automated border customs manifest generation, real-time cold-chain cargo tracking, and dynamic pricing structures.",
+    "attachments": [],
+    "links": [
+      { "label": "Logistics Network", "url": "https://zawrindustries.com/industries/transport-and-logistics" }
+    ],
+    "archived": false,
+    "banner": "/assets/careers-7.png"
+  },
+  {
+    "id": "PR-005",
+    "slug": "zawr-ai-platform-integrates-multimodal-orchestration",
+    "title": "Zawr AI Platform Integrates Multi-Modal Enterprise Orchestration Models",
+    "date": "5th January 2026",
+    "category": "Technology",
+    "summary": "Next-generation model training allows multi-vector analysis of factory layouts and real-time transit telemetry.",
+    "body": "Zawr AI (ai.zawrindustries.com) successfully completed testing of its Multi-Modal Enterprise Orchestration model. The model seamlessly merges visual floorplan data, real-time assembly line sensory feeds, and freight telemetry to coordinate peak factory production efficiency.\n\nStarting next month, the model will run standard operational optimizations across our heavy logistics division, with plans to lease model licenses to external corporate entities in late 2026.",
+    "attachments": [],
+    "links": [
+      { "label": "Explore Zawr AI", "url": "https://ai.zawrindustries.com" }
+    ],
+    "archived": false,
+    "banner": "/assets/careers-8.png"
+  },
+  {
+    "id": "PR-004",
+    "slug": "zawr-real-estate-launch-smart-sustainable-parks",
+    "title": "Zawr Real Estate Division to Launch Smart Sustainable Logistics Parks",
+    "date": "18th December 2025",
+    "category": "Logistics",
+    "summary": "Acquiring 120 acres of industrial real estate for high-density, low-carbon smart warehouse parks.",
+    "body": "Zawr Industrial Real Estate division today detailed plans to acquire 120 acres of commercial land across primary transit corridors. The lands will be transformed into high-density, low-carbon smart logistics parks featuring integrated graywater systems, solar microgrids, and electric shipping fleet chargers.\n\nDevelopment is scheduled to break ground in Q3 2026, aligned with the Green Transition Initiative.",
+    "attachments": [],
+    "links": [
+      { "label": "Real Estate Division", "url": "https://zawrindustries.com/industries/estate" }
+    ],
+    "archived": false,
+    "banner": "/assets/careers-9.png"
+  },
+  {
+    "id": "PR-003-ARC",
+    "slug": "zawr-industries-unveils-equal-opportunity-policy-upgrades",
+    "title": "Zawr Industries LLP Unveils Equal Opportunity and Diversity Policy Upgrades",
+    "date": "15th November 2025",
+    "category": "Corporate",
+    "summary": "Adopting localized mentorship pipelines and global compliance transparency reports.",
+    "body": "Demonstrating our commitment to a fair, diverse, and high-performance workforce, Zawr Industries LLP today officially published its 2025 Equal Opportunity Policy Upgrades. The policy lays out structural changes to career progression ladders, recruitment transparency guidelines, and pay-equity auditing.\n\n\"True corporate excellence is built upon diverse talent platforms,\" remarked the Managing Partner. \"We are proud to integrate these rigorous diversity standards into all operations.\"",
+    "attachments": [],
+    "links": [
+      { "label": "Equal Opportunity Policy", "url": "https://zawrindustries.com/careers/equal-opportunity" }
+    ],
+    "archived": true,
+    "banner": "/assets/equal-growth.png"
+  },
+  {
+    "id": "PR-002-ARC",
+    "slug": "zawr-industries-completes-debt-refinancing",
+    "title": "Zawr Industries LLP Completes Major Strategic Refinancing of Capital Debt",
+    "date": "28th October 2025",
+    "category": "Finance",
+    "summary": "Restructuring outstanding credit facilities into 2032 fixed long-term low-interest corporate bonds.",
+    "body": "Zawr Industries LLP today finalized details to refinance its outstanding bank credits into low-interest, fixed-rate 2032 corporate bonds. The refinancing strategy was led by a global financial syndicate, optimizing capital reserves and reducing annual debt servicing fees by 15%.\n\nThe restructuring will provide the company with superior treasury flexibility to fund technology and logistics infrastructure investments over the next five years.",
+    "attachments": [],
+    "links": [
+      { "label": "Investors Center", "url": "https://zawrindustries.com/investors" }
+    ],
+    "archived": true,
+    "banner": "/assets/careers-10.png"
+  },
+  {
+    "id": "PR-001-ARC",
+    "slug": "zawr-partner-with-global-shipping-consortium",
+    "title": "Zawr Logistics Enters Strategic Partnership with Global Maritime Shipping Consortium",
+    "date": "10th October 2025",
+    "category": "Partnership",
+    "summary": "Alliance guarantees high-capacity shipping container spots along prime trans-pacific ocean lanes.",
+    "body": "Zawr Logistics has entered into a multi-year trans-pacific maritime carriage agreement with the Global Maritime Shipping Consortium. The deal secures dedicated, high-capacity slot allocations for Zawr shipping units, insulating trans-pacific commercial logistics loops from volatile carrier pricing.\n\nThe contract will commence next month, providing secure freight operations.",
+    "attachments": [],
+    "links": [
+      { "label": "Logistics Page", "url": "https://zawrindustries.com/industries/transport-and-logistics" }
+    ],
+    "archived": true,
+    "banner": "/assets/careers-11.png"
+  }
+]

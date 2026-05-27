@@ -169,7 +169,6 @@ export default function Header() {
         <div className="nav-item">
           Newsroom
           <div className="dropdown">
-            <Link href="/newsroom/news-media">News & Media</Link>
             <Link href="/newsroom/press-release">Press Release</Link>
             <Link href="/newsroom/notifications">Notifications</Link>
             <Link href="/newsroom/media-kit">Media Kit</Link>

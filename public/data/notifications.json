@@ -1,0 +1,42 @@
+[
+  {
+    "id": "NOTIF-001",
+    "slug": "q2-2026-financial-earnings-call-schedule",
+    "title": "Scheduled Q2 2026 Financial Earnings Call and Webcast for Shareholders",
+    "date": "27th May 2026",
+    "category": "Investor",
+    "summary": "Zawr Industries LLP announces the date and webcast access protocols for the upcoming second-quarter executive financial presentation.",
+    "body": "Zawr Industries LLP will host its official Q2 2026 executive financial presentation on June 18, 2026, at 14:00 IST.\n\nDuring the webcast conference, the Managing Partners will present consolidated financial audits, outline operational margins across high-technology platforms (Firm AI and Sketch Studio), and outline strategic expansion pipelines for the Southeast Asian hubs.\n\nAll registered shareholders, financial partners, and media stakeholders are invited to join. The session will conclude with a live Q&A panel. Technical instructions and dial-in credentials are included in the official statement attachments below.",
+    "attachments": [],
+    "links": [
+      { "label": "Investor Relations Hub", "url": "https://zawrindustries.com/investors" }
+    ],
+    "archived": false
+  },
+  {
+    "id": "NOTIF-002",
+    "slug": "enterprise-cloud-migration-scheduled-maintenance",
+    "title": "Scheduled Enterprise Cloud Platform Maintenance and Security Patch Cycle",
+    "date": "18th May 2026",
+    "category": "Operations",
+    "summary": "Notice of scheduled database optimization and cloud cluster migration to enhance VelocityOS container security.",
+    "body": "As part of our commitment to platform reliability, the Zawr Cloud Operations team will conduct database optimizations and security cluster migration on Sunday, June 7, 2026, between 01:00 and 04:00 IST.\n\nDuring this three-hour window, corporate portals, Firm AI APIs, and Sketch Studio designer workspaces may experience intermittent service latencies lasting up to 10 minutes. No data loss is expected. Developers utilizing our integration endpoints are advised to configure automatic retry buffers.",
+    "attachments": [],
+    "links": [
+      { "label": "VelocityOS Status", "url": "https://velocityos.in" }
+    ],
+    "archived": false
+  },
+  {
+    "id": "NOTIF-003",
+    "slug": "annual-board-directors-general-meeting-2026",
+    "title": "Convocation of the Annual General Meeting of the Board of Directors",
+    "date": "2nd May 2026",
+    "category": "Corporate",
+    "summary": "Official notification regarding the convocation, agenda points, and vote proxy guidelines for the 2026 AGM.",
+    "body": "In accordance with legal statutes, notice is hereby given that the Annual General Meeting (AGM) of the Board of Directors of Zawr Industries LLP will take place on June 25, 2026, at our Corporate Headquarters.\n\nThe agenda will consist of:\n1. Approval of the Consolidated Audited Accounts for Fiscal Year 2025.\n2. Strategic appointments to the Risk Governance Committee.\n3. Allocations of research grants for Green Supply Chain developments.\n\nShareholders entitled to participate and vote are requested to submit proxy forms at least 48 hours prior to the meeting.",
+    "attachments": [],
+    "links": [],
+    "archived": false
+  }
+]

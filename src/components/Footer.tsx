@@ -1,8 +1,53 @@
 'use client';
 
 import Link from 'next/link';
+import { useState } from 'react';
+import { supabase } from '@/lib/supabase';
 
 export default function Footer() {
+  const [email, setEmail] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [status, setStatus] = useState<'idle' | 'success' | 'error' | 'already'>('idle');
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setSubmitting(true);
+    setStatus('idle');
+
+    try {
+      // Check if email already exists
+      const { data: existing, error: checkError } = await supabase
+        .from('newsletters')
+        .select('id')
+        .eq('email', email.trim().toLowerCase())
+        .maybeSingle();
+
+      if (checkError) throw checkError;
+
+      if (existing) {
+        setStatus('already');
+        setSubmitting(false);
+        return;
+      }
+
+      // Insert new subscriber
+      const { error: insertError } = await supabase
+        .from('newsletters')
+        .insert([{ email: email.trim().toLowerCase(), status: 'Active' }]);
+
+      if (insertError) throw insertError;
+
+      setStatus('success');
+      setEmail('');
+    } catch (err) {
+      console.error('Subscription error:', err);
+      setStatus('error');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <footer className="footer">
       {/* Giant Footer Logo Banner */}
@@ -18,10 +63,37 @@ export default function Footer() {
       <div className="footer-top-bar">
         <div className="footer-subscribe">
           <h4>Subscribe for news Alerts</h4>
-          <form className="newsletter-form" onSubmit={(e) => e.preventDefault()}>
-            <input type="email" placeholder="Enter your email address..." required suppressHydrationWarning />
-            <button type="submit" suppressHydrationWarning>Subscribe</button>
+          <form className="newsletter-form" onSubmit={handleSubscribe}>
+            <input 
+              type="email" 
+              placeholder={submitting ? "Subscribing..." : "Enter your email address..."} 
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required 
+              disabled={submitting}
+              suppressHydrationWarning 
+            />
+            <button type="submit" disabled={submitting} suppressHydrationWarning style={{ opacity: submitting ? 0.7 : 1 }}>
+              {submitting ? 'Subscribing...' : 'Subscribe'}
+            </button>
           </form>
+          
+          {/* Visual Feedback Messages */}
+          {status === 'success' && (
+            <p style={{ color: '#16a34a', fontSize: '0.8rem', marginTop: '0.75rem', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+              ✓ Thank you! You have successfully subscribed to our newsletter alerts.
+            </p>
+          )}
+          {status === 'already' && (
+            <p style={{ color: '#4b5563', fontSize: '0.8rem', marginTop: '0.75rem', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+              ✓ You are already subscribed to our newsletter alerts!
+            </p>
+          )}
+          {status === 'error' && (
+            <p style={{ color: '#dc2626', fontSize: '0.8rem', marginTop: '0.75rem', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+              ✕ Something went wrong. Please try again later.
+            </p>
+          )}
         </div>
         <div className="footer-socials">
           <h4>Social links</h4>
@@ -109,7 +181,6 @@ export default function Footer() {
         <div className="footer-col">
           <h4>Newsroom</h4>
           <ul className="footer-links">
-            <li><Link href="/newsroom/news-media">News & Media</Link></li>
             <li><Link href="/newsroom/press-release">Press Release</Link></li>
             <li><Link href="/newsroom/notifications">Notifications</Link></li>
             <li><Link href="/newsroom/media-kit">Media Kit</Link></li>
