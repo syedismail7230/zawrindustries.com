@@ -2,9 +2,11 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
 export default function Footer() {
+  const pathname = usePathname();
   const [email, setEmail] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error' | 'already'>('idle');
@@ -50,6 +52,22 @@ export default function Footer() {
 
   return (
     <footer className="footer">
+      {/* Panda Peek — only on /sustainability/environment */}
+      {pathname === '/sustainability/environment' && (
+        <div style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)', marginTop: '-6rem', marginBottom: '-1px', lineHeight: 0, overflow: 'hidden' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/panda.png"
+            alt="Panda peeking over Zawr Industries"
+            style={{
+              width: '100%',
+              height: 'auto',
+              display: 'block',
+            }}
+          />
+        </div>
+      )}
+
       {/* Giant Footer Logo Banner */}
       <div style={{ width: '100%', borderBottom: '1px solid var(--border-color)', paddingBottom: '3rem', marginBottom: '3rem', display: 'flex', justifyContent: 'center', alignItems: 'flex-start', overflow: 'hidden' }}>
         <h2 style={{ fontSize: 'clamp(2.5rem, 8.5vw, 160px)', margin: 0, lineHeight: 0.85, letterSpacing: '-0.02em', color: 'var(--text-dark)', display: 'flex', whiteSpace: 'nowrap' }}>

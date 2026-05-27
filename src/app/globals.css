@@ -441,9 +441,9 @@ button, input {
 /* Footer Styles */
 .footer {
   background-color: var(--bg-white);
-  border-top: 1px solid var(--border-color);
   padding: 4rem 5% 2rem;
   font-size: 0.9rem;
+  overflow-x: hidden;
 }
 
 .footer-top-bar {
