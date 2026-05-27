@@ -42,7 +42,7 @@ export default function MediaKitPage() {
       category: 'Corporate',
       color: '#000000',
       borderColor: '#e5e7eb',
-      logoUrl: '/logos/zawr-industries.png',
+      logoUrl: '/assets/zawr-industries.png',
       svgIcon: (
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '50%', height: '50%' }}>
           <path d="M15 20H85L30 80H85" stroke="#000000" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"/>
@@ -57,7 +57,7 @@ export default function MediaKitPage() {
       category: 'Platform',
       color: '#10b981',
       borderColor: '#a7f3d0',
-      logoUrl: '/logos/velocityos.png',
+      logoUrl: '/assets/velocityos.png',
       svgIcon: (
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '50%', height: '50%' }}>
           <rect x="15" y="15" width="70" height="70" rx="12" stroke="#10b981" strokeWidth="8"/>
@@ -73,7 +73,7 @@ export default function MediaKitPage() {
       category: 'Creative Suite',
       color: '#ec4899',
       borderColor: '#fbcfe8',
-      logoUrl: '/logos/sketchstudio.png',
+      logoUrl: '/assets/sketchstudio.png',
       svgIcon: (
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '50%', height: '50%' }}>
           <path d="M30 20L70 20L85 45L50 85L15 45L30 20Z" stroke="#ec4899" strokeWidth="8" strokeLinejoin="round"/>
@@ -89,7 +89,7 @@ export default function MediaKitPage() {
       category: 'Analytics',
       color: '#3b82f6',
       borderColor: '#bfdbfe',
-      logoUrl: '/logos/firm-ai.png',
+      logoUrl: '/assets/firm-ai.png',
       svgIcon: (
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '50%', height: '50%' }}>
           <rect x="20" y="55" width="12" height="25" rx="2" fill="#3b82f6"/>
@@ -106,7 +106,7 @@ export default function MediaKitPage() {
       category: 'Intelligence',
       color: '#8b5cf6',
       borderColor: '#ddd6fe',
-      logoUrl: '/logos/zawr-ai.png',
+      logoUrl: '/assets/zawr-ai.png',
       svgIcon: (
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '50%', height: '50%' }}>
           <path d="M50 15L80 32.5V67.5L50 85L20 67.5V32.5L50 15Z" stroke="#8b5cf6" strokeWidth="8" strokeLinejoin="round"/>
@@ -122,7 +122,7 @@ export default function MediaKitPage() {
       category: 'Enterprise CRM',
       color: '#f59e0b',
       borderColor: '#fde68a',
-      logoUrl: '/logos/quick-dial.png',
+      logoUrl: '/assets/quick-dial.png',
       svgIcon: (
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '50%', height: '50%' }}>
           <circle cx="50" cy="50" r="35" stroke="#f59e0b" strokeWidth="8"/>
@@ -217,22 +217,19 @@ export default function MediaKitPage() {
     'Zawr Subsidiary Facts & Annual Performance Summary Brochure'
   ];
 
+  const currentAvailableResources = useMemo(() => {
+    if (selectedBrand && ['Publication', 'Factsheet', 'ESG Statement'].includes(selectedBrand.category)) {
+      return [
+        `High-Resolution Certified PDF: ${selectedBrand.name}`,
+        `Raw Print-Ready Assets & Media Pack for ${selectedBrand.name}`,
+        `Official Summary & Key Highlights Briefing Sheet`
+      ];
+    }
+    return availableResources;
+  }, [selectedBrand]);
+
   return (
     <div style={{ backgroundColor: '#ffffff', minHeight: '100vh', color: '#111111', fontFamily: 'Inter, sans-serif' }}>
-      
-      {/* Top Banner Navigation */}
-      <div style={{ borderBottom: '1px solid #eaeaea', padding: '1.5rem 5%' }}>
-        <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#666666' }}>
-            <a href="/" style={{ color: '#666666', textDecoration: 'none' }}>Home</a>
-            <span>/</span>
-            <a href="/newsroom" style={{ color: '#666666', textDecoration: 'none' }}>Newsroom</a>
-            <span>/</span>
-            <span style={{ color: '#111111', fontWeight: 600 }}>Media Kit</span>
-          </div>
-          <a href="/newsroom" style={{ fontSize: '0.875rem', color: '#000', fontWeight: 600, textDecoration: 'none', borderBottom: '1px solid #000' }}>← Back to Newsroom</a>
-        </div>
-      </div>
 
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '4rem 5% 6rem' }}>
         
@@ -385,7 +382,7 @@ export default function MediaKitPage() {
                     }}
                     className="brand-card-hover"
                   >
-                    {/* SVG Logo display panel */}
+                    {/* SVG/Image Logo display panel */}
                     <div style={{ 
                       height: '220px', 
                       backgroundColor: '#f9fafb', 
@@ -393,9 +390,34 @@ export default function MediaKitPage() {
                       display: 'flex', 
                       alignItems: 'center', 
                       justifyContent: 'center',
-                      position: 'relative'
+                      position: 'relative',
+                      padding: '1.5rem'
                     }}>
-                      {b.svgIcon}
+                      {b.logoUrl && (
+                        <img 
+                          id={`img-logo-${b.id}`}
+                          src={b.logoUrl} 
+                          alt={`${b.name} Logo`} 
+                          style={{ maxWidth: '80%', maxHeight: '70%', objectFit: 'contain', display: 'block', transform: 'scale(1.45)', transition: 'transform 0.3s ease' }}
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                            const fallback = document.getElementById(`fallback-svg-${b.id}`);
+                            if (fallback) fallback.style.display = 'flex';
+                          }}
+                        />
+                      )}
+                      <div 
+                        id={`fallback-svg-${b.id}`} 
+                        style={{ 
+                          display: b.logoUrl ? 'none' : 'flex', 
+                          width: '100%', 
+                          height: '100%', 
+                          alignItems: 'center', 
+                          justifyContent: 'center' 
+                        }}
+                      >
+                        {b.svgIcon}
+                      </div>
                       <span style={{ 
                         position: 'absolute', 
                         top: '1rem', 
@@ -488,16 +510,96 @@ export default function MediaKitPage() {
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: '2rem', maxWidth: '1000px', margin: '0 auto' }}>
               {[
-                { title: 'Zawr Corporate Brochure 2026', pages: '32 Pages', file: 'PDF (4.8MB)' },
-                { title: 'Zawr Technologies AI Capability Factsheet', pages: '8 Pages', file: 'PDF (1.2MB)' },
-                { title: 'Zawr Annual ESG Statement 2025', pages: '45 Pages', file: 'PDF (6.5MB)' }
+                { 
+                  id: 'zawr-brochure', 
+                  title: 'Zawr Corporate Brochure 2026', 
+                  pages: '32 Pages', 
+                  file: 'PDF (4.8MB)',
+                  category: 'Publication',
+                  color: '#000000',
+                  borderColor: '#e5e7eb',
+                  svgIcon: (
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '50%', height: '50%' }}>
+                      <path d="M15 20H85L30 80H85" stroke="#000000" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"/>
+                      <circle cx="50" cy="50" r="10" fill="#b45309"/>
+                    </svg>
+                  )
+                },
+                { 
+                  id: 'zawr-tech-factsheet', 
+                  title: 'Zawr Technologies AI Capability Factsheet', 
+                  pages: '8 Pages', 
+                  file: 'PDF (1.2MB)',
+                  category: 'Factsheet',
+                  color: '#8b5cf6',
+                  borderColor: '#ddd6fe',
+                  svgIcon: (
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '50%', height: '50%' }}>
+                      <path d="M50 15L80 32.5V67.5L50 85L20 67.5V32.5L50 15Z" stroke="#8b5cf6" strokeWidth="8" strokeLinejoin="round"/>
+                      <circle cx="50" cy="50" r="14" stroke="#6d28d9" strokeWidth="6"/>
+                      <circle cx="50" cy="50" r="4" fill="#6d28d9"/>
+                    </svg>
+                  )
+                },
+                { 
+                  id: 'zawr-esg-statement', 
+                  title: 'Zawr Annual ESG Statement 2025', 
+                  pages: '45 Pages', 
+                  file: 'PDF (6.5MB)',
+                  category: 'ESG Statement',
+                  color: '#10b981',
+                  borderColor: '#a7f3d0',
+                  svgIcon: (
+                    <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '50%', height: '50%' }}>
+                      <rect x="15" y="15" width="70" height="70" rx="12" stroke="#10b981" strokeWidth="8"/>
+                      <path d="M35 60L50 35L65 60" stroke="#10b981" strokeWidth="8" strokeLinecap="round" strokeLinejoin="round"/>
+                      <circle cx="50" cy="35" r="4" fill="#047857"/>
+                    </svg>
+                  )
+                }
               ].map((p, i) => (
                 <div key={i} style={{ border: '1px solid #e5e7eb', borderRadius: '8px', padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#fff', textAlign: 'left' }}>
                   <div>
                     <h4 style={{ fontSize: '0.95rem', fontWeight: 700, margin: '0 0 0.25rem' }}>{p.title}</h4>
                     <span style={{ fontSize: '0.8rem', color: '#6b7280' }}>{p.pages} • {p.file}</span>
                   </div>
-                  <button style={{ padding: '0.4rem 1rem', border: '1px solid #111', borderRadius: '4px', backgroundColor: 'transparent', cursor: 'pointer', fontSize: '0.8rem', fontWeight: 600 }}>Download</button>
+                  <button 
+                    onClick={() => {
+                      setSelectedBrand({
+                        id: p.id,
+                        name: p.title,
+                        description: `Access request to the high-resolution, certified document: ${p.title} (${p.pages}).`,
+                        category: p.category,
+                        color: p.color,
+                        borderColor: p.borderColor,
+                        svgIcon: p.svgIcon
+                      });
+                      setRequestSubmitted(false);
+                      setFormData({ name: '', email: '', organization: '', purpose: '' });
+                      setSelectedResources([`High-Resolution Certified PDF: ${p.title}`]);
+                    }}
+                    style={{ 
+                      padding: '0.5rem 1.25rem', 
+                      border: '1px solid #111', 
+                      borderRadius: '9999px', 
+                      backgroundColor: 'transparent', 
+                      cursor: 'pointer', 
+                      fontSize: '0.8rem', 
+                      fontWeight: 600,
+                      transition: 'all 0.2s',
+                      whiteSpace: 'nowrap'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#111';
+                      e.currentTarget.style.color = '#fff';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '#111';
+                    }}
+                  >
+                    Request Access
+                  </button>
                 </div>
               ))}
             </div>
@@ -583,7 +685,7 @@ export default function MediaKitPage() {
                   <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 700, color: '#111111', marginBottom: '1rem' }}>Requested Resources *</label>
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                    {availableResources.map((res) => (
+                    {currentAvailableResources.map((res) => (
                       <label 
                         key={res} 
                         style={{ 

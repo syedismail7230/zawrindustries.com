@@ -44,11 +44,16 @@ export default function WebmasterDashboard() {
   // Events States
   const [events, setEvents] = useState<any[]>([]);
   const [eventTitle, setEventTitle] = useState('');
+  const [eventSubtitle, setEventSubtitle] = useState('');
   const [eventDesc, setEventDesc] = useState('');
   const [eventStartDate, setEventStartDate] = useState('');
   const [eventEndDate, setEventEndDate] = useState('');
   const [eventStartTime, setEventStartTime] = useState('');
   const [eventEndTime, setEventEndTime] = useState('');
+  const [eventTicketsBooked, setEventTicketsBooked] = useState('0');
+  const [eventTicketsCapacity, setEventTicketsCapacity] = useState('100');
+  const [eventVenue, setEventVenue] = useState('Online');
+  const [eventSpecialNote, setEventSpecialNote] = useState('');
   const [eventImage, setEventImage] = useState('/assets/event-chart.png');
   const [editingEvent, setEditingEvent] = useState<any>(null);
   const [customImageFile, setCustomImageFile] = useState<File | null>(null);
@@ -155,7 +160,7 @@ export default function WebmasterDashboard() {
           }
         }
         else if (activeTab === 'events') {
-          const res = await fetch('/api/events');
+          const res = await fetch(`/api/events?t=${Date.now()}`, { cache: 'no-store' });
           if (res.ok) {
             const data = await res.json();
             setEvents(data || []);
@@ -967,12 +972,67 @@ export default function WebmasterDashboard() {
                 </div>
 
                 <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Event Subtitle</label>
+                  <input 
+                    type="text" 
+                    value={eventSubtitle} 
+                    onChange={(e) => setEventSubtitle(e.target.value)} 
+                    style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                    placeholder="e.g. Zawr Industries website launch event"
+                  />
+                </div>
+
+                <div>
                   <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Description</label>
                   <textarea 
                     value={eventDesc} 
                     onChange={(e) => setEventDesc(e.target.value)} 
                     style={{ width: '100%', height: '100px', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', resize: 'vertical' }} 
                     placeholder="Enter event details"
+                  />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Tickets Booked</label>
+                    <input 
+                      type="text" 
+                      value={eventTicketsBooked} 
+                      onChange={(e) => setEventTicketsBooked(e.target.value)} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                      placeholder="e.g. 150"
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Total Tickets Capacity</label>
+                    <input 
+                      type="text" 
+                      value={eventTicketsCapacity} 
+                      onChange={(e) => setEventTicketsCapacity(e.target.value)} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                      placeholder="e.g. 200"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Venue / Location</label>
+                  <input 
+                    type="text" 
+                    value={eventVenue} 
+                    onChange={(e) => setEventVenue(e.target.value)} 
+                    style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                    placeholder="e.g. Online • Bangalore"
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Special Note</label>
+                  <textarea 
+                    value={eventSpecialNote} 
+                    onChange={(e) => setEventSpecialNote(e.target.value)} 
+                    style={{ width: '100%', height: '80px', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', resize: 'vertical' }} 
+                    placeholder="Detailed terms, ticketing rules, or special attendee instructions..."
                   />
                 </div>
 
@@ -1065,8 +1125,8 @@ export default function WebmasterDashboard() {
                         try {
                           const fileName = `events/event-${Date.now()}-${customImageFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
                           const { data, error } = await supabase.storage
-                            .from('zawr-media')
-                            .upload(fileName, customImageFile, { cacheControl: '3600', upsert: true });
+                              .from('zawr-media')
+                              .upload(fileName, customImageFile, { cacheControl: '3600', upsert: true });
                           
                           if (error) {
                             alert('Supabase Storage Upload Error: ' + error.message);
@@ -1085,11 +1145,16 @@ export default function WebmasterDashboard() {
                       const formData = new FormData();
                       formData.append('action', editingEvent ? 'update' : 'add');
                       formData.append('title', eventTitle);
+                      formData.append('subtitle', eventSubtitle);
                       formData.append('description', eventDesc);
                       formData.append('startDate', eventStartDate);
                       formData.append('endDate', eventEndDate || eventStartDate);
                       formData.append('startTime', eventStartTime ? (eventStartTime.length === 5 ? `${eventStartTime}:00` : eventStartTime) : '00:00:00');
                       formData.append('endTime', eventEndTime ? (eventEndTime.length === 5 ? `${eventEndTime}:00` : eventEndTime) : '00:00:00');
+                      formData.append('ticketsBooked', eventTicketsBooked);
+                      formData.append('ticketsCapacity', eventTicketsCapacity);
+                      formData.append('venue', eventVenue);
+                      formData.append('specialNote', eventSpecialNote);
                       formData.append('image', finalImageUrl);
                       if (editingEvent) {
                         formData.append('id', editingEvent.id);
@@ -1105,11 +1170,16 @@ export default function WebmasterDashboard() {
                           setEvents(data.events || []);
                           // Clear states
                           setEventTitle('');
+                          setEventSubtitle('');
                           setEventDesc('');
                           setEventStartDate('');
                           setEventEndDate('');
                           setEventStartTime('');
                           setEventEndTime('');
+                          setEventTicketsBooked('0');
+                          setEventTicketsCapacity('100');
+                          setEventVenue('Online');
+                          setEventSpecialNote('');
                           setEventImage('/assets/event-chart.png');
                           setCustomImageFile(null);
                           setEditingEvent(null);
@@ -1133,11 +1203,16 @@ export default function WebmasterDashboard() {
                       onClick={() => {
                         setEditingEvent(null);
                         setEventTitle('');
+                        setEventSubtitle('');
                         setEventDesc('');
                         setEventStartDate('');
                         setEventEndDate('');
                         setEventStartTime('');
                         setEventEndTime('');
+                        setEventTicketsBooked('0');
+                        setEventTicketsCapacity('100');
+                        setEventVenue('Online');
+                        setEventSpecialNote('');
                         setEventImage('/assets/event-chart.png');
                         setCustomImageFile(null);
                       }}
@@ -1159,7 +1234,7 @@ export default function WebmasterDashboard() {
                   <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
                     <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Event Title</th>
                     <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Dates</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Timing</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Venue & Tickets</th>
                     <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
                   </tr>
                 </thead>
@@ -1168,23 +1243,32 @@ export default function WebmasterDashboard() {
                     <tr><td colSpan={4} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No events found.</td></tr>
                   ) : events.map((ev) => (
                     <tr key={ev.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
-                      <td style={{ padding: '1rem', fontWeight: 500 }}>{ev.title}</td>
+                      <td style={{ padding: '1rem', fontWeight: 500 }}>
+                        <div>{ev.title}</div>
+                        <div style={{ fontSize: '0.75rem', color: theme.muted }}>{ev.subtitle}</div>
+                      </td>
                       <td style={{ padding: '1rem', color: theme.muted }}>
                         {ev.startDate === ev.endDate ? ev.startDate : `${ev.startDate} to ${ev.endDate}`}
                       </td>
                       <td style={{ padding: '1rem', color: theme.muted }}>
-                        {ev.startTime} - {ev.endTime}
+                        <div>{ev.venue}</div>
+                        <div style={{ fontSize: '0.75rem' }}>Booked: {ev.ticketsBooked || '0'} / {ev.ticketsCapacity || '100'}</div>
                       </td>
                       <td style={{ padding: '1rem', textAlign: 'right' }}>
                         <button 
                           onClick={() => {
                             setEditingEvent(ev);
                             setEventTitle(ev.title);
+                            setEventSubtitle(ev.subtitle || '');
                             setEventDesc(ev.description || '');
                             setEventStartDate(ev.startDate);
                             setEventEndDate(ev.endDate === ev.startDate ? '' : ev.endDate);
                             setEventStartTime(ev.startTime ? ev.startTime.substring(0, 5) : '');
                             setEventEndTime(ev.endTime ? ev.endTime.substring(0, 5) : '');
+                            setEventTicketsBooked(ev.ticketsBooked || '0');
+                            setEventTicketsCapacity(ev.ticketsCapacity || '100');
+                            setEventVenue(ev.venue || 'Online');
+                            setEventSpecialNote(ev.specialNote || '');
                             setEventImage(ev.image || '/assets/event-chart.png');
                           }}
                           style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
