@@ -99,6 +99,7 @@ export default function Header() {
   };
 
   const isDarkPage = pathname.startsWith('/careers') || pathname.startsWith('/contact/client-relations') || pathname.startsWith('/contact/sponsorship') || pathname.startsWith('/investors') || pathname.startsWith('/newsroom/events');
+  const isLightPage = pathname === '/sustainability/empowerment' || pathname === '/sustainability/health' || pathname === '/sustainability/education';
 
   return (
     <>
@@ -127,7 +128,29 @@ export default function Header() {
         }
       `}} />
     )}
-    <header className={`header ${isScrolled || (pathname.startsWith('/contact') && !isDarkPage) ? 'scrolled' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''} ${isDarkPage ? 'dark-page-header' : ''}`}>
+    {isLightPage && (
+      <style dangerouslySetInnerHTML={{__html: `
+        .header.light-page-header {
+          color: #111111 !important;
+          background-color: transparent !important;
+        }
+        .header.light-page-header:hover {
+          background-color: #ffffff !important;
+          color: #111111 !important;
+        }
+        .header.light-page-header svg {
+          stroke: #111111 !important;
+        }
+        .header.light-page-header .dropdown {
+          background-color: #ffffff !important;
+          box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
+        }
+        .header.light-page-header .dropdown a {
+          color: #111111 !important;
+        }
+      `}} />
+    )}
+    <header className={`header ${isScrolled || (pathname.startsWith('/contact') && !isDarkPage) ? 'scrolled' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''} ${isDarkPage ? 'dark-page-header' : ''} ${isLightPage ? 'light-page-header' : ''}`}>
       <div className={`logo-container ${poppins.className}`}>
         <Link href="/">
           <span className="logo-bold">ZAWR</span>

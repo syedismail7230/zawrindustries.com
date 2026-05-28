@@ -806,3 +806,18 @@ button, input {
     100% { transform: translateY(-6rem); }
   }
 }
+
+/* Responsive Panda Peek Image Styling */
+.panda-img {
+  width: 100%;
+  height: auto;
+  transition: width 0.3s ease, margin-left 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  .panda-img {
+    width: 220% !important;
+    margin-left: -60% !important;
+  }
+}
+

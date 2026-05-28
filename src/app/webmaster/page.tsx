@@ -346,7 +346,7 @@ export default function WebmasterDashboard() {
           <h1 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '2rem', textAlign: 'center', letterSpacing: '-0.02em' }}>Webmaster Dashboard</h1>
           <div style={{ marginBottom: '1.5rem' }}>
             <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Access Key</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} placeholder="Enter admin password" autoFocus />
+            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} placeholder="Enter admin password" autoFocus autoComplete="new-password" suppressHydrationWarning />
           </div>
           <button type="submit" style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, cursor: 'pointer', borderRadius: '4px' }}>Authorize</button>
         </form>

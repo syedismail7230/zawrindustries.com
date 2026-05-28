@@ -54,14 +54,21 @@ export default function Footer() {
     <footer className="footer">
       {/* Panda Peek — only on /sustainability/environment */}
       {pathname === '/sustainability/environment' && (
-        <div style={{ width: '100vw', marginLeft: 'calc(-50vw + 50%)', marginTop: '-6rem', marginBottom: '-1px', lineHeight: 0, overflow: 'hidden' }}>
+        <div style={{
+          width: '100vw',
+          marginLeft: 'calc(-50vw + 50%)',
+          marginTop: '-6rem',
+          marginBottom: '-1px',
+          lineHeight: 0,
+          overflow: 'hidden',
+          backgroundColor: '#000000',
+        }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/assets/panda.png"
             alt="Panda peeking over Zawr Industries"
+            className="panda-img"
             style={{
-              width: '100%',
-              height: 'auto',
               display: 'block',
             }}
           />

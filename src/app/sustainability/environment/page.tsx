@@ -228,6 +228,9 @@ export default function SustainabilityEnvironmentPage() {
           padding: '8rem 2rem',
           backgroundColor: '#000000',
           borderTop: '1px solid rgba(255,255,255,0.06)',
+          marginTop: '-15px',
+          position: 'relative',
+          zIndex: 2,
         }}
       >
         <span
