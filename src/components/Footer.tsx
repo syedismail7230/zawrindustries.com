@@ -6,10 +6,46 @@ import { usePathname } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
 export default function Footer() {
-  const pathname = usePathname();
+  const pathname = usePathname() || '';
   const [email, setEmail] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState<'idle' | 'success' | 'error' | 'already'>('idle');
+
+  const getFooterBrand = () => {
+    if (pathname.startsWith('/industries/it-service')) {
+      return { main: 'ZAWR', sub: 'TECHNOLOGIES' };
+    }
+    if (pathname.startsWith('/industries/transport-and-logistics')) {
+      return { main: 'ZAWR', sub: 'LOGISTICS' };
+    }
+    if (pathname.startsWith('/industries/manufacturing')) {
+      return { main: 'ZAWR', sub: 'MANUFACTURING' };
+    }
+    if (pathname.startsWith('/industries/estate')) {
+      return { main: 'ZAWR', sub: 'ESTATE' };
+    }
+    if (pathname.startsWith('/industries/healthcare')) {
+      return { main: 'ZAWR', sub: 'HEALTH CARE' };
+    }
+    return { main: 'ZAWR', sub: 'INDUSTRIES' };
+  };
+
+  const brand = getFooterBrand();
+
+  // Dynamic clamp sizing to prevent horizontal overflow for longer industry names (like MANUFACTURING)
+  const subLength = brand.sub.length;
+  let fontSizeClamp = 'clamp(2.5rem, 8.5vw, 160px)';
+  let registeredClamp = 'clamp(1rem, 3vw, 50px)';
+  
+  if (subLength >= 13) {
+    // For e.g. MANUFACTURING
+    fontSizeClamp = 'clamp(1.8rem, 6.2vw, 115px)';
+    registeredClamp = 'clamp(0.7rem, 2.2vw, 36px)';
+  } else if (subLength >= 11) {
+    // For e.g. TECHNOLOGIES, HEALTH CARE
+    fontSizeClamp = 'clamp(2rem, 6.8vw, 130px)';
+    registeredClamp = 'clamp(0.8rem, 2.4vw, 42px)';
+  }
 
   const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,12 +112,12 @@ export default function Footer() {
       )}
 
       {/* Giant Footer Logo Banner */}
-      <div style={{ width: '100%', borderBottom: '1px solid var(--border-color)', paddingBottom: '3rem', marginBottom: '3rem', display: 'flex', justifyContent: 'center', alignItems: 'flex-start', overflow: 'hidden' }}>
-        <h2 style={{ fontSize: 'clamp(2.5rem, 8.5vw, 160px)', margin: 0, lineHeight: 0.85, letterSpacing: '-0.02em', color: 'var(--text-dark)', display: 'flex', whiteSpace: 'nowrap' }}>
-          <span style={{ fontWeight: 800 }}>ZAWR</span>
-          <span style={{ fontWeight: 400, marginLeft: '1.5vw' }}>INDUSTRIES</span>
+      <div style={{ width: '100%', borderBottom: '1px solid var(--border-color)', paddingBottom: '3rem', marginBottom: '3rem', display: 'flex', justifyContent: 'center', alignItems: 'flex-start', overflow: 'hidden', paddingLeft: '1.5rem', paddingRight: '1.5rem', boxSizing: 'border-box' }}>
+        <h2 style={{ fontSize: fontSizeClamp, margin: 0, lineHeight: 0.85, letterSpacing: '-0.02em', color: 'var(--text-dark)', display: 'flex', whiteSpace: 'nowrap' }}>
+          <span style={{ fontWeight: 800 }}>{brand.main}</span>
+          <span style={{ fontWeight: 400, marginLeft: '1.5vw' }}>{brand.sub}</span>
         </h2>
-        <span style={{ fontSize: 'clamp(1rem, 3vw, 50px)', fontWeight: 400, color: 'var(--text-dark)', marginTop: '0', marginLeft: '0.5rem' }}>®</span>
+        <span style={{ fontSize: registeredClamp, fontWeight: 400, color: 'var(--text-dark)', marginTop: '0', marginLeft: '0.5rem' }}>®</span>
       </div>
 
       {/* Top Section: Subscribe & Socials */}
