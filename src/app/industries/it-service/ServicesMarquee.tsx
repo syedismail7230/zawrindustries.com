@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import Link from 'next/link';
 
 // High-fidelity Client Component that interpolates mouse movements with inertia (elastic liquid easing)
 function ServicePill({ children }: { children: React.ReactNode }) {
@@ -98,6 +99,19 @@ function ServicePill({ children }: { children: React.ReactNode }) {
 }
 
 export default function ServicesMarquee() {
+  // Helper to dynamically render a pill and wrap it in a prefetching Next Link if it's the "Cloud" service
+  const renderPill = (item: string, key: string | number) => {
+    const pill = <ServicePill>{item}</ServicePill>;
+    if (item === 'Cloud') {
+      return (
+        <Link key={key} href="/industries/it-service/cloud" style={{ textDecoration: 'none', display: 'inline-block' }}>
+          {pill}
+        </Link>
+      );
+    }
+    return <React.Fragment key={key}>{pill}</React.Fragment>;
+  };
+
   return (
     <div style={{
       backgroundColor: '#000000',
@@ -250,9 +264,7 @@ export default function ServicesMarquee() {
                 "Cybersecurity",
                 "Network Solutions",
                 "Industrial Autonomy and Engineering"
-              ].map((item, idx) => (
-                <ServicePill key={idx}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, idx))}
             </div>
             <div className="marquee-group" aria-hidden="true">
               {[
@@ -262,9 +274,7 @@ export default function ServicesMarquee() {
                 "Cybersecurity",
                 "Network Solutions",
                 "Industrial Autonomy and Engineering"
-              ].map((item, idx) => (
-                <ServicePill key={`dup1-1-${idx}`}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, `dup1-1-${idx}`))}
             </div>
             <div className="marquee-group" aria-hidden="true">
               {[
@@ -274,9 +284,7 @@ export default function ServicesMarquee() {
                 "Cybersecurity",
                 "Network Solutions",
                 "Industrial Autonomy and Engineering"
-              ].map((item, idx) => (
-                <ServicePill key={`dup1-2-${idx}`}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, `dup1-2-${idx}`))}
             </div>
             <div className="marquee-group" aria-hidden="true">
               {[
@@ -286,9 +294,7 @@ export default function ServicesMarquee() {
                 "Cybersecurity",
                 "Network Solutions",
                 "Industrial Autonomy and Engineering"
-              ].map((item, idx) => (
-                <ServicePill key={`dup1-3-${idx}`}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, `dup1-3-${idx}`))}
             </div>
           </div>
         </div>
@@ -304,9 +310,7 @@ export default function ServicesMarquee() {
                 "Web Development",
                 "Application Development",
                 "Startup MVP"
-              ].map((item, idx) => (
-                <ServicePill key={idx}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, idx))}
             </div>
             <div className="marquee-group" aria-hidden="true">
               {[
@@ -316,9 +320,7 @@ export default function ServicesMarquee() {
                 "Web Development",
                 "Application Development",
                 "Startup MVP"
-              ].map((item, idx) => (
-                <ServicePill key={`dup2-1-${idx}`}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, `dup2-1-${idx}`))}
             </div>
             <div className="marquee-group" aria-hidden="true">
               {[
@@ -328,9 +330,7 @@ export default function ServicesMarquee() {
                 "Web Development",
                 "Application Development",
                 "Startup MVP"
-              ].map((item, idx) => (
-                <ServicePill key={`dup2-2-${idx}`}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, `dup2-2-${idx}`))}
             </div>
             <div className="marquee-group" aria-hidden="true">
               {[
@@ -340,9 +340,7 @@ export default function ServicesMarquee() {
                 "Web Development",
                 "Application Development",
                 "Startup MVP"
-              ].map((item, idx) => (
-                <ServicePill key={`dup2-3-${idx}`}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, `dup2-3-${idx}`))}
             </div>
           </div>
         </div>
@@ -358,9 +356,7 @@ export default function ServicesMarquee() {
                 "Blockchain",
                 "IoT",
                 "DevOps"
-              ].map((item, idx) => (
-                <ServicePill key={idx}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, idx))}
             </div>
             <div className="marquee-group" aria-hidden="true">
               {[
@@ -370,9 +366,7 @@ export default function ServicesMarquee() {
                 "Blockchain",
                 "IoT",
                 "DevOps"
-              ].map((item, idx) => (
-                <ServicePill key={`dup3-1-${idx}`}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, `dup3-1-${idx}`))}
             </div>
             <div className="marquee-group" aria-hidden="true">
               {[
@@ -382,9 +376,7 @@ export default function ServicesMarquee() {
                 "Blockchain",
                 "IoT",
                 "DevOps"
-              ].map((item, idx) => (
-                <ServicePill key={`dup3-2-${idx}`}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, `dup3-2-${idx}`))}
             </div>
             <div className="marquee-group" aria-hidden="true">
               {[
@@ -394,9 +386,7 @@ export default function ServicesMarquee() {
                 "Blockchain",
                 "IoT",
                 "DevOps"
-              ].map((item, idx) => (
-                <ServicePill key={`dup3-3-${idx}`}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, `dup3-3-${idx}`))}
             </div>
           </div>
         </div>
@@ -411,9 +401,7 @@ export default function ServicesMarquee() {
                 "Workplace Transformation",
                 "Process Automation",
                 "Business Process Management"
-              ].map((item, idx) => (
-                <ServicePill key={idx}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, idx))}
             </div>
             <div className="marquee-group" aria-hidden="true">
               {[
@@ -422,9 +410,7 @@ export default function ServicesMarquee() {
                 "Workplace Transformation",
                 "Process Automation",
                 "Business Process Management"
-              ].map((item, idx) => (
-                <ServicePill key={`dup4-1-${idx}`}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, `dup4-1-${idx}`))}
             </div>
             <div className="marquee-group" aria-hidden="true">
               {[
@@ -433,9 +419,7 @@ export default function ServicesMarquee() {
                 "Workplace Transformation",
                 "Process Automation",
                 "Business Process Management"
-              ].map((item, idx) => (
-                <ServicePill key={`dup4-2-${idx}`}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, `dup4-2-${idx}`))}
             </div>
             <div className="marquee-group" aria-hidden="true">
               {[
@@ -444,9 +428,7 @@ export default function ServicesMarquee() {
                 "Workplace Transformation",
                 "Process Automation",
                 "Business Process Management"
-              ].map((item, idx) => (
-                <ServicePill key={`dup4-3-${idx}`}>{item}</ServicePill>
-              ))}
+              ].map((item, idx) => renderPill(item, `dup4-3-${idx}`))}
             </div>
           </div>
         </div>
