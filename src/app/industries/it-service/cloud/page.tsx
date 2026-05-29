@@ -394,7 +394,7 @@ function OfferingsSection() {
         }
         .flip-card-container {
           perspective: 1200px;
-          height: 380px;
+          height: 440px;
           width: 100%;
         }
         .flip-card {
@@ -430,7 +430,7 @@ function OfferingsSection() {
           background: #ffffff;
           border: 1px solid rgba(0, 0, 0, 0.06);
           color: #000000;
-          padding: 2.5rem 2.2rem;
+          padding: 2.2rem 2rem;
           transform: rotateY(180deg);
           justify-content: flex-start;
           box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
@@ -462,13 +462,13 @@ function OfferingsSection() {
           line-height: 1.55;
           color: #222222;
           font-weight: 400;
-          margin: 0 0 1.25rem 0;
+          margin: 0 0 1rem 0;
         }
         .back-subtitle {
           font-size: 1.02rem;
           font-weight: 700;
           color: #000000;
-          margin: 0 0 0.85rem 0;
+          margin: 0 0 0.65rem 0;
         }
         .back-list {
           list-style-type: none;
@@ -476,7 +476,7 @@ function OfferingsSection() {
           margin: 0;
           display: flex;
           flex-direction: column;
-          gap: 0.55rem;
+          gap: 0.45rem;
         }
         .back-list-item {
           font-size: 0.9rem;
