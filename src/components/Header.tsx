@@ -98,7 +98,7 @@ export default function Header() {
     }
   };
 
-  const isDarkPage = pathname.startsWith('/careers') || pathname.startsWith('/contact/client-relations') || pathname.startsWith('/contact/sponsorship') || pathname.startsWith('/investors') || pathname.startsWith('/newsroom/events');
+  const isDarkPage = pathname.startsWith('/careers') || pathname.startsWith('/contact/client-relations') || pathname.startsWith('/contact/sponsorship') || pathname.startsWith('/investors') || pathname.startsWith('/newsroom/events') || pathname.startsWith('/industries/it-service');
   const isLightPage = pathname === '/sustainability/empowerment' || pathname === '/sustainability/health' || pathname === '/sustainability/education';
 
   return (
@@ -107,7 +107,10 @@ export default function Header() {
       <style dangerouslySetInnerHTML={{__html: `
         .header.dark-page-header {
           color: #ffffff !important;
-          background-color: ${isScrolled ? '#000000' : 'transparent'} !important;
+          background-color: ${isScrolled ? 'rgba(0, 0, 0, 0.85)' : 'transparent'} !important;
+          backdrop-filter: ${isScrolled ? 'blur(12px)' : 'none'};
+          -webkit-backdrop-filter: ${isScrolled ? 'blur(12px)' : 'none'};
+          border-bottom: ${isScrolled ? '1px solid rgba(255, 255, 255, 0.08)' : 'none'};
         }
         .header.dark-page-header .dropdown {
           background-color: #111111 !important;
@@ -132,7 +135,10 @@ export default function Header() {
       <style dangerouslySetInnerHTML={{__html: `
         .header.light-page-header {
           color: #111111 !important;
-          background-color: transparent !important;
+          background-color: ${isScrolled ? 'rgba(255, 255, 255, 0.85)' : 'transparent'} !important;
+          backdrop-filter: ${isScrolled ? 'blur(12px)' : 'none'};
+          -webkit-backdrop-filter: ${isScrolled ? 'blur(12px)' : 'none'};
+          border-bottom: ${isScrolled ? '1px solid rgba(0, 0, 0, 0.05)' : 'none'};
         }
         .header.light-page-header:hover {
           background-color: #ffffff !important;

@@ -16,7 +16,7 @@ export default function SustainabilityEducationPage() {
       <div style={{
         maxWidth: '1200px',
         margin: '0 auto',
-        padding: '8rem 5% 5rem',
+        padding: 'clamp(9.5rem, 12vw, 11rem) 5% 5rem',
         display: 'flex',
         flexWrap: 'wrap',
         alignItems: 'center',

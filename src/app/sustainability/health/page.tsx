@@ -14,7 +14,7 @@ export default function SustainabilityHealthPage() {
     <div style={{ backgroundColor: '#ffffff', color: '#111111', fontFamily: 'Inter, sans-serif' }}>
 
       {/* ── HERO IMAGE — curved corners, below header ─────────────────── */}
-      <div style={{ padding: '6rem 1.5rem 0', backgroundColor: '#ffffff' }}>
+      <div style={{ padding: 'clamp(8rem, 11vw, 9.5rem) 1.5rem 0', backgroundColor: '#ffffff' }}>
         <div style={{ borderRadius: '20px', overflow: 'hidden', lineHeight: 0, maxHeight: '85vh' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
