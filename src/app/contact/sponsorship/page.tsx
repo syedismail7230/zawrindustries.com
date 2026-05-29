@@ -150,7 +150,7 @@ export default function SponsorshipPage() {
     return (
       <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', display: 'flex', justifyContent: 'center', alignItems: 'center', fontFamily: 'sans-serif' }}>
         <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <h1 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem', color: '#10b981' }}>Application Received</h1>
+          <h1 style={{ fontSize: '3rem', fontWeight: 600, marginBottom: '1rem', color: '#10b981' }}>Application Received</h1>
           <p style={{ fontSize: '1.125rem', color: '#9ca3af', maxWidth: '40rem', margin: '0 auto' }}>
             Thank you for your interest in sponsoring Zawr Industries. Our Marketing team will review your application and contact you shortly.
           </p>
@@ -179,7 +179,7 @@ export default function SponsorshipPage() {
 
         {/* Overlay Content */}
         <div style={{ position: 'relative', zIndex: 10, padding: '0 1.5rem', maxWidth: '64rem' }}>
-          <h1 style={{ fontSize: 'clamp(3rem, 8vw, 6rem)', fontWeight: 800, marginBottom: '1.5rem', letterSpacing: '-0.02em', textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>Partner with Zawr</h1>
+          <h1 style={{ fontSize: 'clamp(3rem, 8vw, 6rem)', fontWeight: 600, marginBottom: '1.5rem', letterSpacing: '-0.02em', textShadow: '0 4px 12px rgba(0,0,0,0.5)' }}>Partner with Zawr</h1>
           <p style={{ fontSize: '1.25rem', color: '#f3f4f6', maxWidth: '48rem', margin: '0 auto', lineHeight: 1.6, textShadow: '0 2px 4px rgba(0,0,0,0.5)' }}>
             Accelerate your brand's growth by partnering with the fastest-growing technology ecosystem. Explore extensive sponsorship opportunities.
           </p>

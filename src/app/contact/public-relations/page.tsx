@@ -60,7 +60,7 @@ export default function PublicRelationsPage() {
             </span>
           </div>
 
-          <h1 style={{ fontSize: '3rem', fontWeight: 800, color: '#000000', letterSpacing: '-0.025em', margin: 0, lineHeight: 1.1 }}>
+          <h1 style={{ fontSize: '3rem', fontWeight: 600, color: '#000000', letterSpacing: '-0.025em', margin: 0, lineHeight: 1.1 }}>
             Let's Have a Chat
           </h1>
           <p style={{ color: '#6b7280', fontSize: '1.125rem', maxWidth: '36rem', margin: '0 auto', lineHeight: 1.6 }}>

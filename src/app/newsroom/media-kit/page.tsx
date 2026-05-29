@@ -235,7 +235,7 @@ export default function MediaKitPage() {
         
         {/* Header Block */}
         <div style={{ marginBottom: '4rem' }}>
-          <h1 style={{ fontSize: '3rem', fontWeight: 800, letterSpacing: '-0.03em', marginBottom: '1.25rem', color: '#000000' }}>Media & Brand Assets</h1>
+          <h1 style={{ fontSize: '3rem', fontWeight: 600, letterSpacing: '-0.03em', marginBottom: '1.25rem', color: '#000000' }}>Media & Brand Assets</h1>
           <p style={{ fontSize: '1.125rem', color: '#4b5563', lineHeight: 1.7, maxWidth: '800px' }}>
             Access certified corporate logos, brand guidelines, color palettes, and official media statements across Zawr Industries' corporate holding and operational subsidiaries.
           </p>
@@ -668,7 +668,7 @@ export default function MediaKitPage() {
               </div>
               <div>
                 <span style={{ fontSize: '0.75rem', fontWeight: 700, color: selectedBrand.color, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Asset Request Portal</span>
-                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#111111', margin: '0.25rem 0 0' }}>{selectedBrand.name}</h2>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#111111', margin: '0.25rem 0 0' }}>{selectedBrand.name}</h2>
               </div>
             </div>
 
@@ -851,7 +851,7 @@ export default function MediaKitPage() {
                   </svg>
                 </div>
                 
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '0.75rem', color: '#111111' }}>Asset Request Submitted</h3>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.75rem', color: '#111111' }}>Asset Request Submitted</h3>
                 <p style={{ fontSize: '0.95rem', color: '#6b7280', lineHeight: 1.6, maxWidth: '440px', margin: '0 auto 2.5rem' }}>
                   Thank you! Your authorized assets request has been logged successfully. The Zawr Corporate Public Relations team will process your verification and reach out to you from <strong style={{ color: '#111' }}>media@zawrindustries.com</strong>.
                 </p>

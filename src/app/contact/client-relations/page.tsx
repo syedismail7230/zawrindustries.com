@@ -38,7 +38,7 @@ export default function ClientRelationsPage() {
       <div style={{ maxWidth: '68rem', margin: '0 auto' }}>
         
         {/* Title */}
-        <h1 style={{ fontSize: '2.25rem', fontWeight: 800, textAlign: 'center', color: '#000000', marginBottom: '2.5rem', letterSpacing: '-0.025em' }}>
+        <h1 style={{ fontSize: '2.25rem', fontWeight: 600, textAlign: 'center', color: '#000000', marginBottom: '2.5rem', letterSpacing: '-0.025em' }}>
           Welcome back, mate!!!
         </h1>
 

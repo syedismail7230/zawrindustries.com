@@ -210,6 +210,7 @@ export default function Header() {
           <div className="dropdown">
             <Link href="/contact/client-relations">Client Relations</Link>
             <Link href="/contact/public-relations">Public Relations</Link>
+            <Link href="/contact/partner">Partner</Link>
           </div>
         </div>
       </nav>

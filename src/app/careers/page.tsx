@@ -81,7 +81,7 @@ export default function CareersPage() {
       
       {/* Top Header Section */}
       <div style={{ textAlign: 'center', padding: '0 1.5rem', marginBottom: '4rem', zIndex: 10, position: 'relative' }}>
-        <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 800, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
+        <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 600, marginBottom: '1rem', letterSpacing: '-0.02em' }}>
           Careers at Zawr industries
         </h1>
         <p style={{ fontSize: '1.125rem', color: '#d1d5db', maxWidth: '40rem', margin: '0 auto 2rem auto', lineHeight: 1.5, fontWeight: 500 }}>

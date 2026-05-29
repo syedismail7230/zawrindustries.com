@@ -115,7 +115,7 @@ export default function JobDetailPage() {
           
           {/* Job Details Section */}
           <div style={{ flex: 1 }}>
-            <h1 style={{ fontSize: '3rem', fontWeight: 800, marginBottom: '1rem' }}>{job.title}</h1>
+            <h1 style={{ fontSize: '3rem', fontWeight: 600, marginBottom: '1rem' }}>{job.title}</h1>
             <div style={{ display: 'flex', gap: '1rem', marginBottom: '3rem', flexWrap: 'wrap' }}>
               <span style={{ backgroundColor: '#1f2937', color: '#e5e7eb', padding: '0.5rem 1rem', borderRadius: '9999px', fontSize: '0.875rem', fontWeight: 500 }}>{job.location}</span>
               <span style={{ backgroundColor: '#1f2937', color: '#e5e7eb', padding: '0.5rem 1rem', borderRadius: '9999px', fontSize: '0.875rem', fontWeight: 500 }}>Full-Time</span>
