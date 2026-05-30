@@ -18,6 +18,8 @@ interface Offering {
 interface Industry {
   name: string;
   image: string;
+  projectName?: string;
+  projectDescription?: string;
 }
 
 interface ServiceDetail {
