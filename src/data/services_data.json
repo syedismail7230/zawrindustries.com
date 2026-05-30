@@ -190,6 +190,40 @@
         ],
         "outputs": []
       }
+    ],
+    "industries": [
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Banking",
+        "image": "/assets/industry/banking-industry.png"
+      },
+      {
+        "name": "Smart Mobility",
+        "image": "/assets/industry/smart-city-industry.png"
+      }
     ]
   },
   "cloud": {
@@ -401,6 +435,40 @@
         ],
         "outputs": []
       }
+    ],
+    "industries": [
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Financial Services",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Government",
+        "image": "/assets/industry/government-industry.png"
+      }
     ]
   },
   "cybersecurity": {
@@ -583,6 +651,40 @@
           "Framework improvements"
         ],
         "outputs": []
+      }
+    ],
+    "industries": [
+      {
+        "name": "Financial Services",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Government",
+        "image": "/assets/industry/government-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
       }
     ]
   },
@@ -782,6 +884,40 @@
           "Updated Configurations",
           "Support Documentation"
         ]
+      }
+    ],
+    "industries": [
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Financial Services",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Government",
+        "image": "/assets/industry/government-industry.png"
       }
     ]
   },
@@ -991,6 +1127,40 @@
           "Performance Improvements"
         ]
       }
+    ],
+    "industries": [
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Warehousing",
+        "image": "/assets/industry/supplychain-industry.png"
+      },
+      {
+        "name": "Agriculture",
+        "image": "/assets/industry/agricultue-industry.png"
+      },
+      {
+        "name": "Energy",
+        "image": "/assets/industry/energy-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Mining",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Smart Infrastructure",
+        "image": "/assets/industry/smart-city-industry.png"
+      }
     ]
   },
   "enterprise-solutions": {
@@ -1198,6 +1368,40 @@
           "Improvement Plans"
         ]
       }
+    ],
+    "industries": [
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Financial Services",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Government",
+        "image": "/assets/industry/government-industry.png"
+      }
     ]
   },
   "consulting": {
@@ -1389,6 +1593,40 @@
           "Improvement Recommendations",
           "Value Tracking Models"
         ]
+      }
+    ],
+    "industries": [
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Financial Services",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Startups",
+        "image": "/assets/industry/startups-industry.png"
       }
     ]
   },
@@ -1596,6 +1834,40 @@
           "Improvement Roadmaps"
         ]
       }
+    ],
+    "industries": [
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Finance",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Startups",
+        "image": "/assets/industry/startups-industry.png"
+      }
     ]
   },
   "cognitive-business-operations": {
@@ -1786,6 +2058,40 @@
           "Updated Workflows",
           "Optimization Reports"
         ]
+      }
+    ],
+    "industries": [
+      {
+        "name": "Banking",
+        "image": "/assets/industry/banking-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Telecom",
+        "image": "/assets/industry/telecom-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
       }
     ]
   },
@@ -2013,6 +2319,40 @@
           "Improvement recommendations"
         ]
       }
+    ],
+    "industries": [
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Financial Services",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Startups",
+        "image": "/assets/industry/startups-industry.png"
+      }
     ]
   },
   "application-development": {
@@ -2216,6 +2556,40 @@
           "Improvement Plans",
           "Updated Releases"
         ]
+      }
+    ],
+    "industries": [
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Financial Services",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Startups",
+        "image": "/assets/industry/startups-industry.png"
       }
     ]
   },
@@ -2421,6 +2795,40 @@
           "Growth Strategies"
         ]
       }
+    ],
+    "industries": [
+      {
+        "name": "FinTech",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Mobility",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "SaaS",
+        "image": "/assets/industry/saas-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Consumer Products",
+        "image": "/assets/industry/retail-industry.png"
+      }
     ]
   },
   "crm-solution": {
@@ -2622,6 +3030,40 @@
           "Performance Dashboards"
         ]
       }
+    ],
+    "industries": [
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Financial Services",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Professional Services",
+        "image": "/assets/industry/professional-industry.png"
+      }
     ]
   },
   "cxm-solution": {
@@ -2819,6 +3261,40 @@
           "Performance Dashboards"
         ]
       }
+    ],
+    "industries": [
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Financial Services",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Hospitality",
+        "image": "/assets/industry/hospitality-industry.png"
+      },
+      {
+        "name": "E-Commerce",
+        "image": "/assets/industry/e-commerce-industry.png"
+      }
     ]
   },
   "digital-marketing": {
@@ -3013,6 +3489,40 @@
           "Optimized Campaigns",
           "Growth Recommendations"
         ]
+      }
+    ],
+    "industries": [
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Real Estate",
+        "image": "/assets/industry/professional-industry.png"
+      },
+      {
+        "name": "Hospitality",
+        "image": "/assets/industry/hospitality-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Technology",
+        "image": "/assets/industry/technology-industry.png"
       }
     ]
   },
@@ -3213,6 +3723,40 @@
           "Updated Configurations"
         ]
       }
+    ],
+    "industries": [
+      {
+        "name": "Financial Services",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Supply Chain",
+        "image": "/assets/industry/supplychain-industry.png"
+      },
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Government",
+        "image": "/assets/industry/government-industry.png"
+      }
     ]
   },
   "iot": {
@@ -3411,6 +3955,40 @@
           "Optimization Plans",
           "Updated Configurations"
         ]
+      }
+    ],
+    "industries": [
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Agriculture",
+        "image": "/assets/industry/agricultue-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Energy",
+        "image": "/assets/industry/energy-industry.png"
+      },
+      {
+        "name": "Smart Cities",
+        "image": "/assets/industry/smart-city-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
       }
     ]
   },
@@ -3611,6 +4189,40 @@
           "Improvement Recommendations"
         ]
       }
+    ],
+    "industries": [
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Financial Services",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "SaaS",
+        "image": "/assets/industry/saas-industry.png"
+      },
+      {
+        "name": "Technology",
+        "image": "/assets/industry/technology-industry.png"
+      }
     ]
   },
   "unit-test": {
@@ -3798,6 +4410,40 @@
           "Updated Validation Frameworks",
           "Optimization Reports"
         ]
+      }
+    ],
+    "industries": [
+      {
+        "name": "SaaS",
+        "image": "/assets/industry/saas-industry.png"
+      },
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Financial Services",
+        "image": "/assets/industry/financial-services-industry.png"
       }
     ]
   },
@@ -4001,6 +4647,40 @@
           "Improvement Plans"
         ]
       }
+    ],
+    "industries": [
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Finance",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "SaaS",
+        "image": "/assets/industry/saas-industry.png"
+      }
     ]
   },
   "workplace-transformation": {
@@ -4182,6 +4862,40 @@
           "Optimization Reports",
           "Updated Workflows"
         ]
+      }
+    ],
+    "industries": [
+      {
+        "name": "Technology",
+        "image": "/assets/industry/technology-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Financial Services",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
       }
     ]
   },
@@ -4380,6 +5094,40 @@
           "Updated Workflows"
         ]
       }
+    ],
+    "industries": [
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Financial Services",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Professional Services",
+        "image": "/assets/industry/professional-industry.png"
+      }
     ]
   },
   "business-process-management": {
@@ -4569,6 +5317,40 @@
           "Audit Documentation",
           "Updated Standards"
         ]
+      }
+    ],
+    "industries": [
+      {
+        "name": "Manufacturing",
+        "image": "/assets/industry/manufacturing-industry.png"
+      },
+      {
+        "name": "Automotive",
+        "image": "/assets/industry/automotive-industry.png"
+      },
+      {
+        "name": "Retail",
+        "image": "/assets/industry/retail-industry.png"
+      },
+      {
+        "name": "Healthcare",
+        "image": "/assets/industry/healthcare-industry.png"
+      },
+      {
+        "name": "Logistics",
+        "image": "/assets/industry/logistics-industry.png"
+      },
+      {
+        "name": "Financial Services",
+        "image": "/assets/industry/financial-services-industry.png"
+      },
+      {
+        "name": "Education",
+        "image": "/assets/industry/education-industry.png"
+      },
+      {
+        "name": "Professional Services",
+        "image": "/assets/industry/professional-industry.png"
       }
     ]
   }

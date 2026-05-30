@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import servicesData from '@/data/services_data.json';
 import { MethodologySection, PhaseDetail } from '@/components/MethodologySection';
+import { IndustriesSection } from '@/components/IndustriesSection';
 
 interface Offering {
   title: string;
@@ -14,6 +15,11 @@ interface Offering {
 
 
 
+interface Industry {
+  name: string;
+  image: string;
+}
+
 interface ServiceDetail {
   name: string;
   slug: string;
@@ -22,6 +28,7 @@ interface ServiceDetail {
   challenges: string[];
   offerings: Offering[];
   methodology: PhaseDetail[];
+  industries: Industry[];
 }
 
 const typedServicesData = servicesData as Record<string, ServiceDetail>;
@@ -603,7 +610,7 @@ export default function DynamicServicePage() {
           </h1>
           <div style={{ marginTop: '2rem' }}>
             <Link href="/contact" style={{ textDecoration: 'none' }}>
-              <button className="neon-btn">
+              <button className="neon-btn" suppressHydrationWarning>
                 Talk to Expert
               </button>
             </Link>
@@ -661,6 +668,11 @@ export default function DynamicServicePage() {
       {/* ── METHODOLOGY TIMELINE WAVE SECTION ── */}
       {service.methodology && service.methodology.length > 0 && (
         <MethodologySection methodology={service.methodology} />
+      )}
+
+      {/* ── INDUSTRIES WE SERVE ── */}
+      {service.industries && service.industries.length > 0 && (
+        <IndustriesSection industries={service.industries} />
       )}
 
     </div>

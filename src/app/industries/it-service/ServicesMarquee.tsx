@@ -224,6 +224,32 @@ export default function ServicesMarquee() {
         .service-pill:hover::after {
           opacity: 1;
         }
+
+        /* Section-level hover hint */
+        .marquee-click-hint {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 0.5rem 0;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.3s ease;
+          z-index: 30;
+        }
+        .marquee-click-hint span {
+          font-size: 0.75rem;
+          font-weight: 500;
+          letter-spacing: 0.06em;
+          color: rgba(255,255,255,0.75);
+          text-transform: uppercase;
+        }
+        .marquee-pill-section:has(.service-pill:hover) .marquee-click-hint {
+          opacity: 1;
+        }
       `}} />
 
       <div style={{ maxWidth: '1200px', width: '100%', padding: '0 8%', textAlign: 'center', marginBottom: '4rem', zIndex: 10 }}>
@@ -248,7 +274,7 @@ export default function ServicesMarquee() {
       </div>
 
       {/* Edge-to-edge Horizontal Marquee Container */}
-      <div style={{
+      <div className="marquee-pill-section" style={{
         position: 'relative',
         width: '100vw',
         overflow: 'hidden',
@@ -256,9 +282,12 @@ export default function ServicesMarquee() {
         flexDirection: 'column',
         gap: '1.75rem',
         zIndex: 8,
-        padding: '1.5rem 0',
+        padding: '2.2rem 0 1.5rem 0',
       }}>
-        {/* Left and Right Fade Vignettes to blend scrolling edges perfectly */}
+        {/* Hover hint */}
+        <div className="marquee-click-hint">
+          <span>Click to know more</span>
+        </div>
         <div style={{
           position: 'absolute',
           top: 0,
