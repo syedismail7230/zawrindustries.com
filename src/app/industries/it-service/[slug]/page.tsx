@@ -521,9 +521,10 @@ function MethodologySection({ methodology }: { methodology: PhaseDetail[] }) {
   // ── Layout helper ──────────────────────────────────────────────────────────
   const getLayout = (ww: number, n: number) => {
     const isMob = ww < 768;
-    const pad     = isMob ? 32 : 80;
-    const S       = Math.max(isMob ? 280 : 420, Math.min(isMob ? 400 : 640, Math.floor(ww / 2)));
-    const colW    = S - (isMob ? 48 : 80);
+    const pad   = isMob ? 16 : 24;
+    // Desktop: 4 phases per screen (ww/4). Mobile: 2 phases (ww/2)
+    const S     = isMob ? Math.floor(ww / 2) : Math.floor(ww / 4);
+    const colW  = S - (isMob ? 24 : 32);
     const tailLen = Math.floor(S * 0.55); // straight tail on last segment
     // Track must contain all columns + trailing pad + straight tail space
     const trackW     = (n - 1) * S + pad + colW + pad + tailLen;
@@ -634,7 +635,8 @@ function MethodologySection({ methodology }: { methodology: PhaseDetail[] }) {
 
   // 8 strands: k = ±1,±2,±3,±4 (no flat center k=0)
   // baseAmp halved vs old 5-strand design so maxK=4 gives same total spread as old maxK=2
-  const baseAmp = isMobile ? 12 : 21;
+  // Scale baseAmp with S so eye aspect ratio stays constant regardless of segment width
+  const baseAmp = Math.max(6, Math.round(S * 0.041));
   const maxAmp  = baseAmp * (1 + (N - 3) * 0.05);
   // maxExcursion = how far k=4 strands swing from CY
   const maxExcursion = Math.ceil(4 * maxAmp * 1.35) + 8;
@@ -661,8 +663,8 @@ function MethodologySection({ methodology }: { methodology: PhaseDetail[] }) {
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'flex-start',
-        paddingTop: isMobile ? '3rem' : '4.5rem',
+        justifyContent: 'center',
+        paddingTop: 0,
         borderTop: '1px solid rgba(255,255,255,0.04)',
       }}
     >
@@ -683,14 +685,14 @@ function MethodologySection({ methodology }: { methodology: PhaseDetail[] }) {
         }
         /* Gradient text — MUST be in raw CSS for -webkit-background-clip to work */
         .meth-title {
-          margin: 0 0 1rem 0;
+          margin: 0 0 0.3rem 0;
           font-weight: 600;
-          line-height: 1.1;
+          line-height: 1.15;
           letter-spacing: -0.02em;
           font-family: var(--font-plus-jakarta), Inter, sans-serif;
         }
         .meth-title-active {
-          background: linear-gradient(135deg, #06b6d4 0%, #a855f7 100%);
+          background: linear-gradient(135deg, #60a5fa 0%, #f472b6 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -705,7 +707,7 @@ function MethodologySection({ methodology }: { methodology: PhaseDetail[] }) {
           letter-spacing: -0.02em;
           font-family: var(--font-plus-jakarta), Inter, sans-serif;
           transition: color 0.5s ease;
-          margin-bottom: 0.6rem;
+          margin-bottom: 0.2rem;
         }
         .meth-phase-label-active  { color: #ffffff; }
         .meth-phase-label-inactive { color: rgba(255,255,255,0.28); }
@@ -730,7 +732,7 @@ function MethodologySection({ methodology }: { methodology: PhaseDetail[] }) {
         <div
           ref={trackRef}
           className="meth-track"
-          style={{ width: `${trackWidth}px`, height: isMobile ? `${svgHeight + 32 + 320}px` : `${svgHeight + 56 + 400}px` }}
+          style={{ width: `${trackWidth}px`, height: isMobile ? `${svgHeight + 12 + 320}px` : `${svgHeight + 20 + 400}px` }}
         >
           {/* ── SVG Wave Threads ── */}
           <svg
@@ -739,26 +741,17 @@ function MethodologySection({ methodology }: { methodology: PhaseDetail[] }) {
             style={{ display: 'block', overflow: 'hidden' }}
           >
             <defs>
-              {/* No shared wg gradient — colors applied per-strand below */}
+              {/* Pink → Blue across full SVG width — userSpaceOnUse ensures all paths
+                  sample the SAME gradient so colors match at every pinch point */}
+              <linearGradient id="wg" x1="0" y1="0" x2={trackWidth} y2="0" gradientUnits="userSpaceOnUse">
+                <stop offset="0%"   stopColor="#60a5fa" />
+                <stop offset="100%" stopColor="#f472b6" />
+              </linearGradient>
               <linearGradient id="ag" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%"   stopColor="rgba(255,255,255,0.18)" />
                 <stop offset="100%" stopColor="rgba(255,255,255,0.04)" />
               </linearGradient>
-              {/* Soft body glow */}
-              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
-                <feGaussianBlur stdDeviation="3.5" result="b" />
-                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-              </filter>
-              {/* Strong bloom for the drawing tip */}
-              <filter id="tipglow" x="-80%" y="-80%" width="260%" height="260%">
-                <feGaussianBlur stdDeviation="7" result="b1" />
-                <feGaussianBlur stdDeviation="14" result="b2" />
-                <feMerge>
-                  <feMergeNode in="b2"/>
-                  <feMergeNode in="b1"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
+              {/* Soft body glow removed — clean sharp lines */}
             </defs>
 
             {Array.from({ length: N - 1 }).map((_, si) => {
@@ -787,35 +780,18 @@ function MethodologySection({ methodology }: { methodology: PhaseDetail[] }) {
                       : `M ${nx} ${CY} C ${nx+S*0.38} ${CY+ka*1.35}, ${nx+S*0.62} ${CY+ka*1.35}, ${nnx} ${CY}`;
                     const ak = Math.abs(k);
                     const sw = ak === 1 ? 2.5 : ak === 2 ? 1.8 : ak === 3 ? 1.3 : 1.0;
-                    // Per-strand color: inner (|k|=1) → blue, outer (|k|=4) → pink/magenta
-                    const strandColor =
-                      ak === 1 ? '#3b82f6' :
-                      ak === 2 ? '#7c69f5' :
-                      ak === 3 ? '#b94de8' :
-                                 '#ec4899';
+                    // Use shared pink→blue gradient for all strands
                     return (
                       <g key={k}>
                         {/* Ghost track */}
                         <path d={d} fill="none" stroke="url(#ag)" strokeWidth={sw * 0.65} opacity={0.22} />
-                        {/* Drawn portion */}
+                        {/* Drawn portion — no glow */}
                         <path
-                          d={d} fill="none" stroke={strandColor} strokeWidth={sw}
+                          d={d} fill="none" stroke="url(#wg)" strokeWidth={sw}
                           strokeDasharray={`${PATH_LEN_SEG}`}
                           strokeDashoffset={PATH_LEN_SEG * (1 - dp)}
                           opacity={dp > 0 ? 0.92 : 0}
-                          filter="url(#glow)"
                         />
-                        {/* Leading-edge tip glow */}
-                        {drawing && (
-                          <path
-                            d={d} fill="none" stroke={strandColor}
-                            strokeWidth={sw * 2.2}
-                            strokeDasharray={`${TIP_LEN} ${PATH_LEN_SEG * 2}`}
-                            strokeDashoffset={TIP_LEN - dp * PATH_LEN_SEG}
-                            opacity={0.95}
-                            filter="url(#tipglow)"
-                          />
-                        )}
                       </g>
                     );
                   })}
@@ -824,8 +800,8 @@ function MethodologySection({ methodology }: { methodology: PhaseDetail[] }) {
             })}
           </svg>
 
-          {/* ── Content Columns — separated from SVG wave area ── */}
-          <div style={{ position: 'relative', width: '100%', height: isMobile ? '320px' : '400px', marginTop: isMobile ? '32px' : '56px' }}>
+          {/* ── Content Columns — close to SVG wave ── */}
+          <div style={{ position: 'relative', width: '100%', height: isMobile ? '320px' : '400px', marginTop: isMobile ? '12px' : '20px' }}>
             {methodology.map((phase, idx) => {
               const nodeX    = idx * S + startX;
               const isActive = idx === activeIdx;
@@ -852,7 +828,7 @@ function MethodologySection({ methodology }: { methodology: PhaseDetail[] }) {
                     {/* "Phase N" heading */}
                     <div
                       className={`meth-phase-label ${isActive ? 'meth-phase-label-active' : 'meth-phase-label-inactive'}`}
-                      style={{ fontSize: isMobile ? '1.6rem' : 'clamp(1.8rem, 2.5vw, 2.6rem)' }}
+                      style={{ fontSize: isMobile ? '0.78rem' : '0.88rem' }}
                     >
                       Phase {phase.phase}
                     </div>
@@ -860,18 +836,18 @@ function MethodologySection({ methodology }: { methodology: PhaseDetail[] }) {
                     {/* Phase title */}
                     <h3
                       className={`meth-title ${isActive ? 'meth-title-active' : 'meth-title-inactive'}`}
-                      style={{ fontSize: isMobile ? '1.6rem' : 'clamp(1.8rem, 2.5vw, 2.8rem)' }}
+                      style={{ fontSize: isMobile ? '1.1rem' : 'clamp(1.1rem, 1.6vw, 1.45rem)' }}
                     >
                       {phase.title}
                     </h3>
 
                     {/* Activities list */}
-                    <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: isMobile ? '0.4rem' : '0.55rem' }}>
+                    <ul style={{ listStyle: 'none', padding: 0, margin: '0.4rem 0 0 0', display: 'flex', flexDirection: 'column', gap: isMobile ? '0.2rem' : '0.28rem' }}>
                       {items.slice(0, 6).map((item, i) => (
                         <li
                           key={i}
                           className={`meth-list-item ${isActive ? 'meth-list-item-active' : 'meth-list-item-inactive'}`}
-                          style={{ fontSize: isMobile ? '0.82rem' : '0.95rem' }}
+                          style={{ fontSize: isMobile ? '0.72rem' : '0.78rem' }}
                         >
                           {i + 1}.&nbsp;{item}
                         </li>
