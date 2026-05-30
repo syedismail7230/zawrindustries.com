@@ -435,6 +435,7 @@ function OfferingsSection() {
           justify-content: flex-start;
           box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
           cursor: pointer;
+          overflow-y: auto;
         }
         .offering-title {
           font-size: clamp(1.6rem, 2.1vw, 1.95rem);

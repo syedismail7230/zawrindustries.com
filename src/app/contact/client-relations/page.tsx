@@ -108,49 +108,73 @@ export default function ClientRelationsPage() {
           {/* Card 1 */}
           <a 
             href="mailto:business@zawrindustries.com"
-            style={{ backgroundColor: '#000000', borderRadius: '2.5rem', padding: '2rem', minHeight: '240px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', cursor: 'pointer', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', transition: 'background-color 0.2s', textDecoration: 'none' }}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#111111'}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#000000'}
+            style={{ backgroundColor: '#000000', borderRadius: '2.5rem', padding: '2.2rem 2rem', minHeight: '260px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', cursor: 'pointer', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)', textDecoration: 'none', border: '1px solid rgba(255, 255, 255, 0.08)' }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.backgroundColor = '#111111';
+              const svg = e.currentTarget.querySelector('.arrow-svg') as HTMLElement;
+              if (svg) svg.style.transform = 'translate(6px, -6px)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.backgroundColor = '#000000';
+              const svg = e.currentTarget.querySelector('.arrow-svg') as HTMLElement;
+              if (svg) svg.style.transform = 'translate(0, 0)';
+            }}
           >
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform 0.2s' }} onMouseOver={(e) => e.currentTarget.style.transform = 'translate(4px, -4px)'} onMouseOut={(e) => e.currentTarget.style.transform = 'translate(0, 0)'}>
+              <svg className="arrow-svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
                 <line x1="7" y1="17" x2="17" y2="7"></line>
                 <polyline points="7 7 17 7 17 17"></polyline>
               </svg>
             </div>
-            <h3 style={{ color: '#ffffff', fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.025em', margin: 0 }}>New Request</h3>
+            <h3 style={{ color: '#ffffff', fontSize: '1.35rem', fontWeight: 500, letterSpacing: '-0.02em', margin: 0 }}>New Request</h3>
           </a>
 
           {/* Card 2 */}
           <a 
             href="mailto:Grievance@zawrindustries.com"
-            style={{ backgroundColor: '#000000', borderRadius: '2.5rem', padding: '2rem', minHeight: '240px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', cursor: 'pointer', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', transition: 'background-color 0.2s', textDecoration: 'none' }}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#111111'}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#000000'}
+            style={{ backgroundColor: '#000000', borderRadius: '2.5rem', padding: '2.2rem 2rem', minHeight: '260px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', cursor: 'pointer', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)', textDecoration: 'none', border: '1px solid rgba(255, 255, 255, 0.08)' }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.backgroundColor = '#111111';
+              const svg = e.currentTarget.querySelector('.arrow-svg') as HTMLElement;
+              if (svg) svg.style.transform = 'translate(6px, -6px)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.backgroundColor = '#000000';
+              const svg = e.currentTarget.querySelector('.arrow-svg') as HTMLElement;
+              if (svg) svg.style.transform = 'translate(0, 0)';
+            }}
           >
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform 0.2s' }} onMouseOver={(e) => e.currentTarget.style.transform = 'translate(4px, -4px)'} onMouseOut={(e) => e.currentTarget.style.transform = 'translate(0, 0)'}>
+              <svg className="arrow-svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
                 <line x1="7" y1="17" x2="17" y2="7"></line>
                 <polyline points="7 7 17 7 17 17"></polyline>
               </svg>
             </div>
-            <h3 style={{ color: '#ffffff', fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.025em', margin: 0 }}>Grievance</h3>
+            <h3 style={{ color: '#ffffff', fontSize: '1.35rem', fontWeight: 500, letterSpacing: '-0.02em', margin: 0 }}>Grievance</h3>
           </a>
 
           {/* Card 3 */}
           <a 
             href="mailto:alert@zawrindustries.com"
-            style={{ backgroundColor: '#000000', borderRadius: '2.5rem', padding: '2rem', minHeight: '240px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', cursor: 'pointer', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', transition: 'background-color 0.2s', textDecoration: 'none' }}
-            onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#111111'}
-            onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#000000'}
+            style={{ backgroundColor: '#000000', borderRadius: '2.5rem', padding: '2.2rem 2rem', minHeight: '260px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', cursor: 'pointer', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)', textDecoration: 'none', border: '1px solid rgba(255, 255, 255, 0.08)' }}
+            onMouseOver={(e) => {
+              e.currentTarget.style.backgroundColor = '#111111';
+              const svg = e.currentTarget.querySelector('.arrow-svg') as HTMLElement;
+              if (svg) svg.style.transform = 'translate(6px, -6px)';
+            }}
+            onMouseOut={(e) => {
+              e.currentTarget.style.backgroundColor = '#000000';
+              const svg = e.currentTarget.querySelector('.arrow-svg') as HTMLElement;
+              if (svg) svg.style.transform = 'translate(0, 0)';
+            }}
           >
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform 0.2s' }} onMouseOver={(e) => e.currentTarget.style.transform = 'translate(4px, -4px)'} onMouseOut={(e) => e.currentTarget.style.transform = 'translate(0, 0)'}>
+              <svg className="arrow-svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" style={{ transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
                 <line x1="7" y1="17" x2="17" y2="7"></line>
                 <polyline points="7 7 17 7 17 17"></polyline>
               </svg>
             </div>
-            <h3 style={{ color: '#ffffff', fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.025em', margin: 0 }}>Report Fraud</h3>
+            <h3 style={{ color: '#ffffff', fontSize: '1.35rem', fontWeight: 500, letterSpacing: '-0.02em', margin: 0 }}>Report Fraud</h3>
           </a>
 
         </div>

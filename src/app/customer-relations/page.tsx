@@ -65,36 +65,36 @@ export default function CustomerRelationsPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
           {/* Card 1 */}
-          <div className="bg-black rounded-[2.5rem] p-8 aspect-square flex flex-col justify-between group cursor-pointer hover:bg-[#111111] transition-colors shadow-xl">
+          <div className="bg-black rounded-[2.5rem] p-8 aspect-square flex flex-col justify-between group cursor-pointer hover:bg-[#111111] transition-colors shadow-xl border border-white/5">
             <div className="flex justify-end">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
                 <line x1="7" y1="17" x2="17" y2="7"></line>
                 <polyline points="7 7 17 7 17 17"></polyline>
               </svg>
             </div>
-            <h3 className="text-white text-xl font-bold tracking-tight">New Request</h3>
+            <h3 className="text-white text-xl font-medium tracking-tight">New Request</h3>
           </div>
 
           {/* Card 2 */}
-          <a href="mailto:Grievance@zawrindustries.com" className="bg-black rounded-[2.5rem] p-8 aspect-square flex flex-col justify-between group cursor-pointer hover:bg-[#111111] transition-colors shadow-xl no-underline">
+          <a href="mailto:Grievance@zawrindustries.com" className="bg-black rounded-[2.5rem] p-8 aspect-square flex flex-col justify-between group cursor-pointer hover:bg-[#111111] transition-colors shadow-xl no-underline border border-white/5">
             <div className="flex justify-end">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
                 <line x1="7" y1="17" x2="17" y2="7"></line>
                 <polyline points="7 7 17 7 17 17"></polyline>
               </svg>
             </div>
-            <h3 className="text-white text-xl font-bold tracking-tight">Grievance</h3>
+            <h3 className="text-white text-xl font-medium tracking-tight">Grievance</h3>
           </a>
 
           {/* Card 3 */}
-          <div className="bg-black rounded-[2.5rem] p-8 aspect-square flex flex-col justify-between group cursor-pointer hover:bg-[#111111] transition-colors shadow-xl">
+          <div className="bg-black rounded-[2.5rem] p-8 aspect-square flex flex-col justify-between group cursor-pointer hover:bg-[#111111] transition-colors shadow-xl border border-white/5">
             <div className="flex justify-end">
-              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="transform group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">
                 <line x1="7" y1="17" x2="17" y2="7"></line>
                 <polyline points="7 7 17 7 17 17"></polyline>
               </svg>
             </div>
-            <h3 className="text-white text-xl font-bold tracking-tight">Report Fraud</h3>
+            <h3 className="text-white text-xl font-medium tracking-tight">Report Fraud</h3>
           </div>
 
         </div>

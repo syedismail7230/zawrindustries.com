@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import React from 'react';
+import Link from 'next/link';
 import ServicesMarquee from './ServicesMarquee';
 
 export const metadata: Metadata = {
@@ -118,69 +119,97 @@ export default function ITServicesPage() {
             </p>
           </div>
 
-          {/* Grid layout */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
-            gap: '2.5rem',
-            marginTop: '4rem',
-          }}>
-            
-            {/* Card 1 */}
-            <div style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.03)',
-              border: '1px solid rgba(255, 255, 255, 0.06)',
-              borderRadius: '16px',
-              padding: '3rem 2.5rem',
-              backdropFilter: 'blur(10px)',
-              transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease',
-            }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>💻</div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 600, color: '#ffffff', marginBottom: '1rem' }}>
-                Custom Software & Apps
-              </h3>
-              <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, fontWeight: 300 }}>
-                End-to-end full stack development for complex web, desktop, and mobile architectures. Built using bleeding-edge technologies optimized for raw performance and scalability.
-              </p>
-            </div>
+      <style dangerouslySetInnerHTML={{__html: `
+        .capability-card {
+          background-color: #000000 !important;
+          border: 1px solid rgba(255, 255, 255, 0.08) !important;
+          border-radius: 2.5rem !important;
+          padding: 3rem 2.5rem !important;
+          min-height: 380px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          text-decoration: none;
+          transition: background-color 0.3s, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .capability-card:hover {
+          background-color: #111111 !important;
+          transform: translateY(-5px);
+        }
+        .capability-card .arrow-svg {
+          transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .capability-card:hover .arrow-svg {
+          transform: translate(6px, -6px);
+        }
+      `}} />
 
-            {/* Card 2 */}
-            <div style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.03)',
-              border: '1px solid rgba(255, 255, 255, 0.06)',
-              borderRadius: '16px',
-              padding: '3rem 2.5rem',
-              backdropFilter: 'blur(10px)',
-              transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease',
-            }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>✨</div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 600, color: '#ffffff', marginBottom: '1rem' }}>
-                Firm AI Integrations
-              </h3>
-              <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, fontWeight: 300 }}>
-                Integrate intelligent predictive workflows and large language models (LLMs) into core operational pipelines to reduce latency, automate tasks, and synthesize decision logic.
-              </p>
-            </div>
-
-            {/* Card 3 */}
-            <div style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.03)',
-              border: '1px solid rgba(255, 255, 255, 0.06)',
-              borderRadius: '16px',
-              padding: '3rem 2.5rem',
-              backdropFilter: 'blur(10px)',
-              transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease',
-            }}>
-              <div style={{ fontSize: '2.5rem', marginBottom: '1.5rem' }}>🛡️</div>
-              <h3 style={{ fontSize: '1.4rem', fontWeight: 600, color: '#ffffff', marginBottom: '1rem' }}>
-                Cloud & Cybersecurity
-              </h3>
-              <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, fontWeight: 300 }}>
-                Enterprise-grade cloud migrations, system orchestration, and robust threat mitigation. We shield mission-critical data with multi-layered Zero-Trust network protocols.
-              </p>
-            </div>
-
+      {/* Grid layout */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
+        gap: '2.5rem',
+        marginTop: '4rem',
+      }}>
+        
+        {/* Card 1 */}
+        <Link href="/industries/it-service/software-development" className="capability-card">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '2.5rem' }}>💻</span>
+            <svg className="arrow-svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
           </div>
+          <div>
+            <h3 style={{ fontSize: '1.4rem', fontWeight: 500, color: '#ffffff', marginBottom: '1rem', marginTop: '1.5rem', letterSpacing: '-0.01em' }}>
+              Custom Software & Apps
+            </h3>
+            <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, fontWeight: 300, margin: 0 }}>
+              End-to-end full stack development for complex web, desktop, and mobile architectures. Built using bleeding-edge technologies optimized for raw performance and scalability.
+            </p>
+          </div>
+        </Link>
+
+        {/* Card 2 */}
+        <Link href="/industries/it-service/ai-data-analytics" className="capability-card">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '2.5rem' }}>✨</span>
+            <svg className="arrow-svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </div>
+          <div>
+            <h3 style={{ fontSize: '1.4rem', fontWeight: 500, color: '#ffffff', marginBottom: '1rem', marginTop: '1.5rem', letterSpacing: '-0.01em' }}>
+              Firm AI Integrations
+            </h3>
+            <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, fontWeight: 300, margin: 0 }}>
+              Integrate intelligent predictive workflows and large language models (LLMs) into core operational pipelines to reduce latency, automate tasks, and synthesize decision logic.
+            </p>
+          </div>
+        </Link>
+
+        {/* Card 3 */}
+        <Link href="/industries/it-service/cloud" className="capability-card">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span style={{ fontSize: '2.5rem' }}>🛡️</span>
+            <svg className="arrow-svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="7" y1="17" x2="17" y2="7"></line>
+              <polyline points="7 7 17 7 17 17"></polyline>
+            </svg>
+          </div>
+          <div>
+            <h3 style={{ fontSize: '1.4rem', fontWeight: 500, color: '#ffffff', marginBottom: '1rem', marginTop: '1.5rem', letterSpacing: '-0.01em' }}>
+              Cloud & Cybersecurity
+            </h3>
+            <p style={{ fontSize: '0.95rem', color: 'rgba(255,255,255,0.6)', lineHeight: 1.7, fontWeight: 300, margin: 0 }}>
+              Enterprise-grade cloud migrations, system orchestration, and robust threat mitigation. We shield mission-critical data with multi-layered Zero-Trust network protocols.
+            </p>
+          </div>
+        </Link>
+
+      </div>
 
           {/* Partner logos / network banner */}
           <div style={{

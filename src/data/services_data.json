@@ -1,0 +1,4575 @@
+{
+  "ai-data-analytics": {
+    "name": "AI & Data Analytics",
+    "slug": "ai-data-analytics",
+    "tagline": "Transform Data Into Intelligent Business Decisions",
+    "description": "Organizations generate large volumes of structured and unstructured data every day. However, without proper intelligence frameworks, data remains underutilized. Our AI & Data Analytics services enable organizations to convert information into measurable business outcomes through machine learning, predictive analytics, intelligent automation, and advanced visualization frameworks. We build scalable AI ecosystems that support operational optimization, decision intelligence, customer personalization, risk mitigation, and revenue growth.",
+    "challenges": [
+      "Large volumes of disconnected data",
+      "Slow business decision-making",
+      "Manual operational processes",
+      "Limited forecasting capabilities",
+      "Poor customer personalization",
+      "High operational costs",
+      "Inability to derive actionable insights",
+      "Data silos across departments"
+    ],
+    "offerings": [
+      {
+        "title": "Artificial Intelligence Development",
+        "description": "Develop intelligent systems capable of learning, adapting, and automating business processes.",
+        "deliverables": [
+          "Machine Learning Models",
+          "Deep Learning Systems",
+          "Recommendation Engines",
+          "Classification Models",
+          "Decision Systems",
+          "Intelligent Automation"
+        ]
+      },
+      {
+        "title": "Business Intelligence & Reporting",
+        "description": "Transform data into visual dashboards and insights.",
+        "deliverables": [
+          "Executive Dashboards",
+          "KPI Monitoring",
+          "Performance Reporting",
+          "Department Analytics",
+          "Financial Insights",
+          "Operational Dashboards"
+        ]
+      },
+      {
+        "title": "Predictive Analytics",
+        "description": "Leverage historical datasets to predict future outcomes.",
+        "deliverables": [
+          "Demand Forecasting",
+          "Sales Predictions",
+          "Customer Churn Analysis",
+          "Risk Assessment",
+          "Maintenance Prediction"
+        ]
+      },
+      {
+        "title": "Data Engineering",
+        "description": "Build reliable infrastructure for large-scale data management.",
+        "deliverables": [
+          "ETL Pipelines",
+          "Data Lakes",
+          "Data Warehouses",
+          "Data Governance",
+          "Data Quality Systems"
+        ]
+      },
+      {
+        "title": "Natural Language Processing",
+        "description": "Build language-driven AI systems.",
+        "deliverables": [
+          "Chatbots",
+          "Document Analysis",
+          "Sentiment Analysis",
+          "Speech Systems",
+          "Text Classification"
+        ]
+      },
+      {
+        "title": "Computer Vision",
+        "description": "Enable systems to understand images and video.",
+        "deliverables": [
+          "Defect Detection",
+          "Surveillance Systems",
+          "OCR Solutions",
+          "Facial Recognition",
+          "Vehicle Analytics"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Discovery & Business Understanding",
+        "activities": [
+          "Stakeholder workshops",
+          "Requirement gathering",
+          "Process understanding",
+          "KPI definition",
+          "Risk assessment",
+          "Existing system analysis"
+        ],
+        "outputs": [
+          "Requirement Documentation",
+          "Business Objectives Matrix",
+          "Scope Definition",
+          "Success Metrics"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Data Assessment & Collection",
+        "activities": [
+          "Data source mapping",
+          "Data profiling",
+          "Data quality assessment",
+          "Gap analysis",
+          "Collection strategy"
+        ],
+        "outputs": [
+          "Data Inventory",
+          "Data Quality Report",
+          "Collection Framework"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Data Preparation",
+        "activities": [
+          "Cleaning datasets",
+          "Missing value treatment",
+          "Feature engineering",
+          "Transformation",
+          "Data normalization"
+        ],
+        "outputs": [
+          "Processed datasets",
+          "Feature libraries",
+          "Data pipelines"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Model Development",
+        "activities": [
+          "Algorithm selection",
+          "Training models",
+          "Hyperparameter tuning",
+          "Performance optimization",
+          "TensorFlow",
+          "PyTorch",
+          "Python",
+          "Scikit-Learn",
+          "OpenCV"
+        ],
+        "outputs": []
+      },
+      {
+        "phase": 5,
+        "title": "Validation & Testing",
+        "activities": [
+          "Accuracy testing",
+          "Performance testing",
+          "Bias analysis",
+          "Security testing"
+        ],
+        "outputs": [
+          "Model Evaluation Reports",
+          "Validation Documentation"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Deployment",
+        "activities": [
+          "API development",
+          "Cloud deployment",
+          "Infrastructure setup",
+          "CI/CD integration"
+        ],
+        "outputs": [
+          "Production Systems",
+          "Monitoring Systems"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Monitoring & Optimization",
+        "activities": [
+          "Model monitoring",
+          "Drift detection",
+          "Retraining",
+          "Performance optimization"
+        ],
+        "outputs": []
+      }
+    ]
+  },
+  "cloud": {
+    "name": "Cloud",
+    "slug": "cloud",
+    "tagline": "Build Scalable, Secure, and Future-Ready Digital Infrastructure",
+    "description": "Modern organizations require infrastructure that can scale rapidly, remain secure, optimize costs, and support digital transformation initiatives. Our Cloud Services enable businesses to modernize legacy systems, improve operational agility, increase reliability, and accelerate innovation through secure cloud ecosystems. We design, implement, migrate, optimize, and manage cloud environments that support mission-critical business operations while maintaining security, compliance, and performance.",
+    "challenges": [
+      "High infrastructure costs",
+      "Legacy systems limiting growth",
+      "Poor scalability",
+      "Downtime and reliability issues",
+      "Security vulnerabilities",
+      "Slow deployment cycles",
+      "Limited disaster recovery capabilities",
+      "Complex infrastructure management"
+    ],
+    "offerings": [
+      {
+        "title": "Cloud Strategy & Consulting",
+        "description": "Develop structured cloud adoption roadmaps aligned with business objectives.",
+        "deliverables": [
+          "Cloud readiness assessments",
+          "Transformation roadmap",
+          "Cost-benefit analysis",
+          "Migration strategy",
+          "Governance framework",
+          "Risk assessments"
+        ]
+      },
+      {
+        "title": "Cloud Migration Services",
+        "description": "Move workloads securely from on-premise or legacy systems into cloud environments.",
+        "deliverables": [
+          "Lift and Shift",
+          "Replatforming",
+          "Refactoring",
+          "Hybrid Migration",
+          "Multi-cloud Migration",
+          "Migration Planning",
+          "Dependency Mapping",
+          "Data Migration",
+          "Workload Migration",
+          "Validation Reports"
+        ]
+      },
+      {
+        "title": "Cloud Infrastructure Design",
+        "description": "Build resilient and scalable infrastructure architectures.",
+        "deliverables": [
+          "Network Architecture",
+          "Virtual Machines",
+          "Storage Systems",
+          "Load Balancers",
+          "Auto Scaling Systems",
+          "High Availability Architecture"
+        ]
+      },
+      {
+        "title": "Cloud Native Development",
+        "description": "Develop applications specifically designed for cloud ecosystems.",
+        "deliverables": [
+          "Microservices Architecture",
+          "Serverless Applications",
+          "API Infrastructure",
+          "Containerized Applications"
+        ]
+      },
+      {
+        "title": "Multi-Cloud Management",
+        "description": "Manage workloads across multiple cloud providers.",
+        "deliverables": [
+          "Reduced dependency risk",
+          "Better reliability",
+          "Improved geographic coverage",
+          "Cost optimization"
+        ]
+      },
+      {
+        "title": "Cloud Security Services",
+        "description": "Protect cloud workloads and infrastructure.",
+        "deliverables": [
+          "IAM Configuration",
+          "Security Monitoring",
+          "Encryption Setup",
+          "Threat Detection",
+          "Compliance Controls"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Assessment & Discovery",
+        "activities": [
+          "Infrastructure analysis",
+          "Application dependency mapping",
+          "Stakeholder workshops",
+          "Security assessment",
+          "Cost analysis",
+          "Performance review"
+        ],
+        "outputs": [
+          "Current State Assessment",
+          "Migration Readiness Report",
+          "Infrastructure Audit"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Cloud Strategy & Architecture Design",
+        "activities": [
+          "Select deployment model",
+          "Capacity planning",
+          "Network architecture design",
+          "Security planning",
+          "Compliance planning"
+        ],
+        "outputs": [
+          "Architecture Diagrams",
+          "Cloud Strategy Document",
+          "Resource Planning"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Environment Setup",
+        "activities": [
+          "Configure networking",
+          "Create cloud accounts",
+          "Set IAM policies",
+          "Deploy storage systems",
+          "Configure monitoring"
+        ],
+        "outputs": [
+          "Landing Zone Setup",
+          "Identity Framework",
+          "Monitoring Infrastructure"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Migration Planning",
+        "activities": [
+          "Workload prioritization",
+          "Downtime planning",
+          "Risk mitigation planning",
+          "Backup preparation"
+        ],
+        "outputs": [
+          "Migration Runbook",
+          "Rollback Strategy",
+          "Migration Schedule"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Migration Execution",
+        "activities": [
+          "Data transfer",
+          "Application migration",
+          "Infrastructure deployment",
+          "Configuration updates"
+        ],
+        "outputs": [
+          "Migrated Systems",
+          "Performance Reports"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Validation & Testing",
+        "activities": [
+          "Security testing",
+          "Performance testing",
+          "Recovery testing",
+          "User acceptance testing"
+        ],
+        "outputs": [
+          "Validation Reports",
+          "Issue Logs",
+          "Sign-off Documentation"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Optimization",
+        "activities": [
+          "Resource rightsizing",
+          "Cost tuning",
+          "Auto scaling optimization",
+          "Monitoring enhancement"
+        ],
+        "outputs": [
+          "Optimized Infrastructure",
+          "Reduced Costs",
+          "Improved Performance"
+        ]
+      },
+      {
+        "phase": 8,
+        "title": "Managed Services & Continuous Improvement",
+        "activities": [
+          "Monitoring",
+          "Incident management",
+          "Patch management",
+          "Security updates",
+          "Capacity planning"
+        ],
+        "outputs": []
+      }
+    ]
+  },
+  "cybersecurity": {
+    "name": "Cybersecurity",
+    "slug": "cybersecurity",
+    "tagline": "Protect Critical Digital Assets, Infrastructure, and Business Operations",
+    "description": "Cybersecurity is no longer limited to perimeter defense. Modern enterprises require multi-layered protection strategies capable of defending infrastructure, applications, networks, users, and data against increasingly sophisticated cyber threats. Our Cybersecurity Services focus on establishing resilient security frameworks that reduce risk exposure, strengthen organizational defenses, ensure regulatory compliance, and maintain business continuity.",
+    "challenges": [
+      "Increasing cyber threats",
+      "Unauthorized access risks",
+      "Weak identity controls",
+      "Data breaches",
+      "Regulatory non-compliance",
+      "Poor security visibility",
+      "Insider threats",
+      "Unsecured applications"
+    ],
+    "offerings": [
+      {
+        "title": "Security Assessment & Gap Analysis",
+        "description": "Evaluate existing infrastructure, systems, and processes to identify weaknesses.",
+        "deliverables": [
+          "Security posture assessment",
+          "Vulnerability mapping",
+          "Risk scoring",
+          "Asset inventory analysis",
+          "Security maturity evaluation"
+        ]
+      },
+      {
+        "title": "Security Operations Center (SOC) Enablement",
+        "description": "Develop centralized monitoring and incident response capabilities.",
+        "deliverables": [
+          "Security monitoring setup",
+          "Alert management",
+          "Incident workflows",
+          "Security dashboards"
+        ]
+      },
+      {
+        "title": "Identity & Access Management",
+        "description": "Control user authentication and authorization.",
+        "deliverables": [
+          "Role-based access control",
+          "Identity lifecycle management",
+          "MFA implementation",
+          "Access governance"
+        ]
+      },
+      {
+        "title": "Endpoint Security",
+        "description": "Protect user devices and enterprise assets.",
+        "deliverables": [
+          "Endpoint protection deployment",
+          "Device hardening",
+          "Security policies",
+          "Device monitoring"
+        ]
+      },
+      {
+        "title": "Network Security",
+        "description": "Secure communication channels and infrastructure.",
+        "deliverables": [
+          "Firewall configuration",
+          "Network segmentation",
+          "VPN implementation",
+          "Intrusion prevention"
+        ]
+      },
+      {
+        "title": "Cloud Security",
+        "description": "Protect cloud workloads and services.",
+        "deliverables": [
+          "Cloud security policies",
+          "Access governance",
+          "Encryption controls",
+          "Workload monitoring"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Security Discovery",
+        "activities": [
+          "Asset identification",
+          "Stakeholder interviews",
+          "Existing control analysis",
+          "Architecture review",
+          "Security posture review"
+        ],
+        "outputs": [
+          "Asset Inventory",
+          "Risk Baseline",
+          "Security Assessment Report"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Threat & Risk Analysis",
+        "activities": [
+          "Threat modeling",
+          "Attack surface analysis",
+          "Risk scoring",
+          "Impact analysis"
+        ],
+        "outputs": [
+          "Risk Register",
+          "Threat Matrix",
+          "Priority Classification"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Security Architecture Design",
+        "activities": [
+          "Control selection",
+          "Security zoning",
+          "Access model design",
+          "Security policy creation"
+        ],
+        "outputs": [
+          "Security Architecture",
+          "Control Framework",
+          "Security Policies"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Security Implementation",
+        "activities": [
+          "Security tool deployment",
+          "Configuration hardening",
+          "Monitoring setup",
+          "Access controls implementation"
+        ],
+        "outputs": [
+          "Configured Controls",
+          "Monitoring Systems",
+          "Protection Policies"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Validation & Testing",
+        "activities": [
+          "Vulnerability validation",
+          "Control effectiveness testing",
+          "Security configuration review",
+          "Incident simulations"
+        ],
+        "outputs": [
+          "Test Reports",
+          "Security Findings",
+          "Corrective Actions"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Monitoring & Incident Management",
+        "activities": [
+          "Event monitoring",
+          "Log management",
+          "Alert investigation",
+          "Threat hunting"
+        ],
+        "outputs": [
+          "Security dashboards",
+          "Incident reports",
+          "Threat intelligence"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Continuous Improvement",
+        "activities": [
+          "Security reviews",
+          "Patch management",
+          "Threat updates",
+          "Framework improvements"
+        ],
+        "outputs": []
+      }
+    ]
+  },
+  "network-solutions": {
+    "name": "Network Solutions",
+    "slug": "network-solutions",
+    "tagline": "Network Solutions.",
+    "description": "Build Reliable, Secure, and High-Performance Network Infrastructure Modern enterprises require networking environments capable of supporting growing workloads, distributed teams, digital applications, connected devices, and mission- critical operations. Our Network Solutions services focus on designing, implementing, optimizing, and managing enterprise-grade network ecosystems that deliver reliability, scalability, security, and operational efficiency. We help organizations build communication infrastructure that supports business growth while maintaining performance, availability, and resilience.",
+    "challenges": [
+      "Unstable network performance",
+      "Frequent downtime",
+      "Slow communication systems",
+      "Poor scalability",
+      "Security vulnerabilities",
+      "Inefficient bandwidth utilization",
+      "Limited remote access capabilities",
+      "Infrastructure complexity"
+    ],
+    "offerings": [
+      {
+        "title": "Network Architecture Design",
+        "description": "Design structured networking environments aligned with business objectives and operational requirements.",
+        "deliverables": [
+          "Network topology design",
+          "Architecture documentation",
+          "Segmentation planning",
+          "Capacity planning",
+          "High availability architecture",
+          "Redundancy planning"
+        ]
+      },
+      {
+        "title": "Enterprise LAN Solutions",
+        "description": "Develop secure and high-performance local networking environments.",
+        "deliverables": [
+          "Wired network infrastructure",
+          "Switch configuration",
+          "VLAN implementation",
+          "Traffic optimization",
+          "User segmentation"
+        ]
+      },
+      {
+        "title": "Wide Area Networking (WAN)",
+        "description": "Establish communication between multiple sites and business locations.",
+        "deliverables": [
+          "Multi-location connectivity",
+          "WAN architecture",
+          "Routing optimization",
+          "Traffic management"
+        ]
+      },
+      {
+        "title": "Wireless Networking Solutions",
+        "description": "Deploy wireless infrastructure for enterprise mobility.",
+        "deliverables": [
+          "WiFi architecture",
+          "Coverage optimization",
+          "Access point deployment",
+          "Roaming optimization"
+        ]
+      },
+      {
+        "title": "Software Defined Networking (SDN)",
+        "description": "Modernize networks through centralized control and automation.",
+        "deliverables": [
+          "SDN architecture",
+          "Policy management",
+          "Traffic orchestration",
+          "Automated provisioning"
+        ]
+      },
+      {
+        "title": "Network Monitoring & Management",
+        "description": "Enable visibility into network health and performance.",
+        "deliverables": [
+          "Monitoring dashboards",
+          "Alerting systems",
+          "Performance tracking",
+          "Network analytics"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Requirement Assessment",
+        "activities": [
+          "Stakeholder discussions",
+          "Existing network assessment",
+          "Traffic analysis",
+          "Infrastructure review",
+          "Requirement documentation"
+        ],
+        "outputs": [
+          "Requirement Specification",
+          "Network Assessment Report",
+          "Infrastructure Baseline"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Network Planning & Design",
+        "activities": [
+          "Topology creation",
+          "Device planning",
+          "Capacity planning",
+          "Redundancy design",
+          "Segmentation strategy"
+        ],
+        "outputs": [
+          "Architecture Diagrams",
+          "Capacity Plans",
+          "Design Documentation"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Infrastructure Preparation",
+        "activities": [
+          "Hardware planning",
+          "Configuration preparation",
+          "Address allocation",
+          "Environment readiness"
+        ],
+        "outputs": [
+          "Deployment Plan",
+          "Configuration Standards",
+          "Infrastructure Checklist"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Network Deployment",
+        "activities": [
+          "Device configuration",
+          "Connectivity establishment",
+          "Segmentation setup",
+          "Routing implementation",
+          "Traffic configuration"
+        ],
+        "outputs": [
+          "Configured Infrastructure",
+          "Connectivity Validation",
+          "Deployment Documentation"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Testing & Validation",
+        "activities": [
+          "Performance testing",
+          "Connectivity testing",
+          "Throughput testing",
+          "Failover testing",
+          "Availability testing"
+        ],
+        "outputs": [
+          "Validation Reports",
+          "Performance Reports",
+          "Testing Documentation"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Monitoring Enablement",
+        "activities": [
+          "Monitoring configuration",
+          "Alert implementation",
+          "Visibility setup",
+          "Dashboard development"
+        ],
+        "outputs": [
+          "Monitoring Platform",
+          "Alert Framework",
+          "Visibility Reports"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Optimization & Support",
+        "activities": [
+          "Bottleneck identification",
+          "Traffic tuning",
+          "Capacity optimization",
+          "Ongoing maintenance",
+          "High availability",
+          "Low latency",
+          "Increased throughput",
+          "Scalability",
+          "Fault tolerance",
+          "Reliability",
+          "Efficient resource utilization"
+        ],
+        "outputs": [
+          "Optimization Reports",
+          "Updated Configurations",
+          "Support Documentation"
+        ]
+      }
+    ]
+  },
+  "industrial-autonomy-and-engineering": {
+    "name": "Industrial Autonomy & Engineering",
+    "slug": "industrial-autonomy-and-engineering",
+    "tagline": "Accelerate Industrial Transformation Through Intelligent Automation and",
+    "description": "Engineering Systems Industrial environments are rapidly evolving toward connected, autonomous, and highly efficient ecosystems. Organizations require advanced engineering systems capable of improving operational efficiency, reducing manual intervention, increasing productivity, and enabling real-time decision-making. Our Industrial Autonomy & Engineering services focus on designing, developing, integrating, and optimizing intelligent industrial systems that combine automation, control engineering, industrial connectivity, robotics, embedded systems, and operational intelligence. We build solutions that help industries move toward smart manufacturing, connected operations, autonomous workflows, and highly optimized production environments.",
+    "challenges": [
+      "Manual and repetitive operations",
+      "Production inefficiencies",
+      "High operational costs",
+      "Equipment downtime",
+      "Limited operational visibility",
+      "Slow decision-making processes",
+      "Poor machine connectivity",
+      "Safety concerns"
+    ],
+    "offerings": [
+      {
+        "title": "Industrial Automation Systems",
+        "description": "Develop automation frameworks for industrial operations and manufacturing environments.",
+        "deliverables": [
+          "Automation architecture",
+          "Process automation systems",
+          "Control logic development",
+          "Operational optimization frameworks",
+          "Automated workflows"
+        ]
+      },
+      {
+        "title": "Robotics Engineering",
+        "description": "Design and integrate robotic systems for industrial operations.",
+        "deliverables": [
+          "Robotic workflow design",
+          "Motion system engineering",
+          "Robotic integration",
+          "Process automation systems",
+          "Production robotics solutions"
+        ]
+      },
+      {
+        "title": "Embedded Systems Engineering",
+        "description": "Develop embedded systems powering industrial equipment and connected machines.",
+        "deliverables": [
+          "Embedded software development",
+          "Hardware integration",
+          "Firmware development",
+          "Device communication systems",
+          "Real-time system engineering"
+        ]
+      },
+      {
+        "title": "Industrial IoT Integration",
+        "description": "Enable machine connectivity and intelligent operations.",
+        "deliverables": [
+          "Sensor integration",
+          "Device communication architecture",
+          "Connected asset frameworks",
+          "Data acquisition systems"
+        ]
+      },
+      {
+        "title": "Control Systems Engineering",
+        "description": "Develop systems for machine control and operational management.",
+        "deliverables": [
+          "Control architecture",
+          "System configuration",
+          "Process control frameworks",
+          "Industrial control integration"
+        ]
+      },
+      {
+        "title": "Autonomous Systems Development",
+        "description": "Build systems capable of operating with minimal human intervention.",
+        "deliverables": [
+          "Decision logic frameworks",
+          "Sensor fusion systems",
+          "Autonomous operation workflows",
+          "Operational intelligence systems"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Industrial Assessment & Requirement Analysis",
+        "activities": [
+          "Site assessments",
+          "Workflow analysis",
+          "Equipment assessment",
+          "Process mapping",
+          "Production evaluation",
+          "Stakeholder discussions"
+        ],
+        "outputs": [
+          "Requirement Documentation",
+          "Process Assessment Report",
+          "System Scope Definition"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Engineering Design & Architecture",
+        "activities": [
+          "Architecture development",
+          "Workflow design",
+          "System modeling",
+          "Equipment planning",
+          "Integration mapping"
+        ],
+        "outputs": [
+          "System Architecture",
+          "Engineering Documentation",
+          "Operational Models"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Prototype Development",
+        "activities": [
+          "Prototype creation",
+          "Initial testing",
+          "Simulation exercises",
+          "Design refinement"
+        ],
+        "outputs": [
+          "Prototype Systems",
+          "Validation Reports",
+          "Performance Analysis"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Engineering Development",
+        "activities": [
+          "System engineering",
+          "Hardware integration",
+          "Software development",
+          "Logic implementation",
+          "System assembly"
+        ],
+        "outputs": [
+          "Integrated Systems",
+          "Operational Modules",
+          "Engineering Documentation"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "System Integration",
+        "activities": [
+          "Equipment connectivity",
+          "Workflow integration",
+          "Data flow setup",
+          "Process synchronization"
+        ],
+        "outputs": [
+          "Integrated Environment",
+          "Connectivity Framework",
+          "Validation Documentation"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Testing & Validation",
+        "activities": [
+          "Performance testing",
+          "Reliability testing",
+          "Stress testing",
+          "Operational testing",
+          "Safety validation"
+        ],
+        "outputs": [
+          "Testing Reports",
+          "Validation Reports",
+          "Performance Benchmarks"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Deployment & Commissioning",
+        "activities": [
+          "Production rollout",
+          "Environment setup",
+          "Operational enablement",
+          "Final verification"
+        ],
+        "outputs": [
+          "Operational Systems",
+          "Deployment Reports",
+          "Commissioning Documentation"
+        ]
+      },
+      {
+        "phase": 8,
+        "title": "Continuous Optimization",
+        "activities": [
+          "Performance monitoring",
+          "Operational tuning",
+          "Efficiency improvements",
+          "System updates"
+        ],
+        "outputs": [
+          "Optimization Reports",
+          "Updated Configurations",
+          "Performance Improvements"
+        ]
+      }
+    ]
+  },
+  "enterprise-solutions": {
+    "name": "Enterprise Solutions",
+    "slug": "enterprise-solutions",
+    "tagline": "Enterprise Solutions.",
+    "description": "Enable Enterprise-Wide Digital Transformation Through Integrated Business Systems Modern enterprises require unified technology ecosystems capable of supporting operations, improving decision-making, enhancing collaboration, and enabling scalable growth. Our Enterprise Solutions services focus on designing, implementing, integrating, and optimizing enterprise-grade systems that streamline workflows, centralize operations, and improve business performance. We build enterprise environments that eliminate fragmented processes and create connected digital ecosystems across departments, business units, and operational functions.",
+    "challenges": [
+      "Disconnected systems across departments",
+      "Manual business operations",
+      "Lack of process visibility",
+      "Operational inefficiencies",
+      "Data silos",
+      "Poor collaboration between teams",
+      "Limited scalability",
+      "Inconsistent workflows"
+    ],
+    "offerings": [
+      {
+        "title": "Enterprise Resource Planning Solutions",
+        "description": "Implement centralized systems to streamline operational management.",
+        "deliverables": [
+          "Business workflow mapping",
+          "Enterprise system implementation",
+          "Process standardization",
+          "Department integration",
+          "Operational visibility frameworks"
+        ]
+      },
+      {
+        "title": "Business Process Integration",
+        "description": "Integrate multiple business systems into unified operational environments.",
+        "deliverables": [
+          "Workflow integration",
+          "Data synchronization",
+          "System connectivity",
+          "Process orchestration",
+          "Cross-functional integration"
+        ]
+      },
+      {
+        "title": "Enterprise Application Development",
+        "description": "Develop enterprise-grade applications supporting business operations.",
+        "deliverables": [
+          "Business applications",
+          "Operational platforms",
+          "Management systems",
+          "Workflow applications",
+          "Enterprise portals"
+        ]
+      },
+      {
+        "title": "Enterprise Data Management",
+        "description": "Establish structured enterprise data ecosystems.",
+        "deliverables": [
+          "Data governance frameworks",
+          "Centralized repositories",
+          "Data management policies",
+          "Information lifecycle management"
+        ]
+      },
+      {
+        "title": "Workflow Management Systems",
+        "description": "Create structured operational workflows.",
+        "deliverables": [
+          "Workflow automation",
+          "Approval systems",
+          "Escalation mechanisms",
+          "Operational dashboards"
+        ]
+      },
+      {
+        "title": "Document Management Solutions",
+        "description": "Centralize business documentation and records.",
+        "deliverables": [
+          "Digital document systems",
+          "Access controls",
+          "Version management",
+          "Workflow approvals"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Business Discovery & Assessment",
+        "activities": [
+          "Stakeholder workshops",
+          "Department analysis",
+          "Process mapping",
+          "Existing system assessment",
+          "Operational reviews"
+        ],
+        "outputs": [
+          "Requirement Documentation",
+          "Current State Assessment",
+          "Operational Gap Analysis"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Enterprise Architecture Design",
+        "activities": [
+          "Workflow design",
+          "Data architecture planning",
+          "Integration mapping",
+          "Role definition",
+          "Security planning"
+        ],
+        "outputs": [
+          "Enterprise Architecture",
+          "System Design Documents",
+          "Integration Framework"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Solution Planning",
+        "activities": [
+          "Implementation roadmap creation",
+          "Resource planning",
+          "Dependency mapping",
+          "Risk assessment"
+        ],
+        "outputs": [
+          "Implementation Plan",
+          "Delivery Roadmap",
+          "Project Structure"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Solution Development & Configuration",
+        "activities": [
+          "System configuration",
+          "Workflow setup",
+          "Business rule implementation",
+          "User management setup",
+          "Data structure creation"
+        ],
+        "outputs": [
+          "Configured Systems",
+          "Workflow Frameworks",
+          "Operational Modules"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Integration & Data Alignment",
+        "activities": [
+          "Data mapping",
+          "System connectivity",
+          "Workflow synchronization",
+          "Interface setup"
+        ],
+        "outputs": [
+          "Integrated Environment",
+          "Connected Systems",
+          "Synchronization Reports"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Testing & Validation",
+        "activities": [
+          "Functional testing",
+          "Workflow validation",
+          "Performance testing",
+          "Security validation",
+          "User testing"
+        ],
+        "outputs": [
+          "Testing Documentation",
+          "Validation Reports",
+          "User Acceptance Reports"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Deployment & Rollout",
+        "activities": [
+          "Environment setup",
+          "User onboarding",
+          "Production deployment",
+          "Operational handover"
+        ],
+        "outputs": [
+          "Live Systems",
+          "Deployment Documentation",
+          "User Guides"
+        ]
+      },
+      {
+        "phase": 8,
+        "title": "Optimization & Support",
+        "activities": [
+          "Performance monitoring",
+          "Workflow refinement",
+          "User support",
+          "System improvements"
+        ],
+        "outputs": [
+          "Optimization Reports",
+          "Updated Configurations",
+          "Improvement Plans"
+        ]
+      }
+    ]
+  },
+  "consulting": {
+    "name": "Consulting",
+    "slug": "consulting",
+    "tagline": "Drive Business Transformation Through Strategic Technology and Operational",
+    "description": "Advisory Organizations operating in rapidly changing markets require structured decision- making, technology alignment, operational efficiency, and scalable transformation strategies. Our Consulting Services help businesses identify challenges, define opportunities, optimize operations, and execute transformation initiatives with measurable business outcomes. We provide consulting frameworks that align technology, operations, processes, and business goals to enable sustainable growth, risk reduction, and improved organizational performance.",
+    "challenges": [
+      "Unclear technology direction",
+      "Inefficient business processes",
+      "Poor digital adoption",
+      "Slow decision-making",
+      "Operational inefficiencies",
+      "Scaling challenges",
+      "High operational costs",
+      "Weak governance structures"
+    ],
+    "offerings": [
+      {
+        "title": "Business Strategy Consulting",
+        "description": "Develop business strategies aligned with long-term objectives and growth plans.",
+        "deliverables": [
+          "Strategic assessments",
+          "Growth roadmaps",
+          "Business model evaluation",
+          "Market positioning analysis",
+          "Opportunity mapping",
+          "Operational strategies"
+        ]
+      },
+      {
+        "title": "Technology Consulting",
+        "description": "Align technology investments with business objectives.",
+        "deliverables": [
+          "Technology assessments",
+          "Architecture recommendations",
+          "Platform selection guidance",
+          "Digital strategy frameworks",
+          "Technology roadmaps"
+        ]
+      },
+      {
+        "title": "Digital Transformation Consulting",
+        "description": "Support organizations through modernization initiatives.",
+        "deliverables": [
+          "Transformation strategies",
+          "Change frameworks",
+          "Digital operating models",
+          "Transformation roadmaps",
+          "Adoption strategies"
+        ]
+      },
+      {
+        "title": "Process Improvement Consulting",
+        "description": "Improve efficiency through structured optimization.",
+        "deliverables": [
+          "Process assessments",
+          "Bottleneck identification",
+          "Workflow redesign",
+          "Optimization frameworks",
+          "Efficiency models"
+        ]
+      },
+      {
+        "title": "Operational Consulting",
+        "description": "Improve organizational performance through operational enhancements.",
+        "deliverables": [
+          "Operating model design",
+          "Performance assessments",
+          "Resource optimization",
+          "Productivity frameworks"
+        ]
+      },
+      {
+        "title": "Organizational Consulting",
+        "description": "Strengthen organizational structures and governance.",
+        "deliverables": [
+          "Organizational assessments",
+          "Role definitions",
+          "Governance structures",
+          "Reporting frameworks"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Discovery & Business Understanding",
+        "activities": [
+          "Stakeholder interviews",
+          "Leadership workshops",
+          "Operational reviews",
+          "Data collection",
+          "Current state analysis"
+        ],
+        "outputs": [
+          "Discovery Reports",
+          "Business Assessment Documents",
+          "Opportunity Areas"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Current State Assessment",
+        "activities": [
+          "Process reviews",
+          "Technology analysis",
+          "Organizational evaluation",
+          "Financial analysis",
+          "Performance assessments"
+        ],
+        "outputs": [
+          "Gap Analysis Reports",
+          "Operational Assessments",
+          "Maturity Evaluations"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Problem Definition & Prioritization",
+        "activities": [
+          "Root cause analysis",
+          "Risk identification",
+          "Dependency mapping",
+          "Prioritization exercises"
+        ],
+        "outputs": [
+          "Prioritized Challenges",
+          "Risk Register",
+          "Strategic Focus Areas"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Strategy Development",
+        "activities": [
+          "Strategy workshops",
+          "Framework creation",
+          "Initiative planning",
+          "Goal setting"
+        ],
+        "outputs": [
+          "Strategic Roadmaps",
+          "Transformation Plans",
+          "Business Cases"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Roadmap Creation",
+        "activities": [
+          "Timeline creation",
+          "Resource planning",
+          "Milestone mapping",
+          "Initiative sequencing"
+        ],
+        "outputs": [
+          "Execution Roadmaps",
+          "Resource Models",
+          "Delivery Plans"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Implementation Support",
+        "activities": [
+          "Governance support",
+          "Execution monitoring",
+          "Stakeholder coordination",
+          "Change management support"
+        ],
+        "outputs": [
+          "Progress Reports",
+          "Governance Structures",
+          "Implementation Documentation"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Performance Measurement",
+        "activities": [
+          "KPI monitoring",
+          "Business reviews",
+          "Outcome tracking",
+          "Optimization recommendations"
+        ],
+        "outputs": [
+          "Performance Reports",
+          "Improvement Recommendations",
+          "Value Tracking Models"
+        ]
+      }
+    ]
+  },
+  "software-development": {
+    "name": "Software Development",
+    "slug": "software-development",
+    "tagline": "Build Scalable, Secure, and High-Performance Software Solutions for Modern",
+    "description": "Businesses Organizations require software systems that improve efficiency, accelerate growth, streamline operations, and create competitive advantages. Our Software Development Services focus on designing, engineering, deploying, and maintaining software products that solve business challenges while ensuring scalability, reliability, and long-term sustainability. We develop software solutions ranging from enterprise systems and SaaS platforms to business applications and large-scale digital ecosystems.",
+    "challenges": [
+      "Inefficient manual processes",
+      "Legacy systems limiting growth",
+      "Poor system scalability",
+      "Fragmented operational workflows",
+      "Long development cycles",
+      "Poor user experiences",
+      "Difficulty integrating systems",
+      "Security concerns"
+    ],
+    "offerings": [
+      {
+        "title": "Custom Software Development",
+        "description": "Develop tailored software solutions aligned with business objectives.",
+        "deliverables": [
+          "Custom business applications",
+          "Enterprise software systems",
+          "Operational platforms",
+          "Internal management systems",
+          "Customer-facing applications"
+        ]
+      },
+      {
+        "title": "SaaS Product Development",
+        "description": "Build cloud-based software products for subscription-driven business models.",
+        "deliverables": [
+          "SaaS architecture",
+          "Multi-tenant systems",
+          "Subscription systems",
+          "User management systems",
+          "Platform administration modules"
+        ]
+      },
+      {
+        "title": "Enterprise Application Development",
+        "description": "Create applications supporting organizational operations.",
+        "deliverables": [
+          "Workflow systems",
+          "Management platforms",
+          "Operational dashboards",
+          "Business process applications"
+        ]
+      },
+      {
+        "title": "Backend Development",
+        "description": "Build scalable server-side systems supporting applications and platforms.",
+        "deliverables": [
+          "API development",
+          "Business logic implementation",
+          "Database architecture",
+          "Service integration"
+        ]
+      },
+      {
+        "title": "API Development & Integration",
+        "description": "Enable communication between software systems.",
+        "deliverables": [
+          "REST APIs",
+          "Integration services",
+          "Data exchange systems",
+          "Service orchestration layers"
+        ]
+      },
+      {
+        "title": "Database Engineering",
+        "description": "Build structured and optimized data systems.",
+        "deliverables": [
+          "Database architecture",
+          "Data models",
+          "Optimization frameworks",
+          "Backup systems"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Discovery & Requirement Engineering",
+        "activities": [
+          "Requirement workshops",
+          "Stakeholder discussions",
+          "Workflow analysis",
+          "User research",
+          "Existing system assessment"
+        ],
+        "outputs": [
+          "Requirement Documentation",
+          "Functional Specifications",
+          "Scope Definition"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Solution Architecture & Planning",
+        "activities": [
+          "Architecture design",
+          "Technology selection",
+          "Database planning",
+          "Security planning",
+          "Infrastructure planning"
+        ],
+        "outputs": [
+          "Architecture Documentation",
+          "Technical Specifications",
+          "Development Roadmap"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "UI/UX Planning",
+        "activities": [
+          "User journey mapping",
+          "Wireframe creation",
+          "User interface design",
+          "Interaction planning"
+        ],
+        "outputs": [
+          "Wireframes",
+          "Design Systems",
+          "User Flows"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Software Development",
+        "activities": [
+          "Feature implementation",
+          "Module development",
+          "Database development",
+          "Integration development",
+          "Internal reviews"
+        ],
+        "outputs": [
+          "Software Modules",
+          "APIs",
+          "Configured Systems"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Integration & Build Management",
+        "activities": [
+          "System integration",
+          "Dependency management",
+          "Build generation",
+          "Environment preparation"
+        ],
+        "outputs": [
+          "Integrated Systems",
+          "Deployment Packages",
+          "Build Reports"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Testing & Validation",
+        "activities": [
+          "Functional testing",
+          "Performance testing",
+          "Security testing",
+          "Regression testing",
+          "User acceptance testing"
+        ],
+        "outputs": [
+          "Test Reports",
+          "Defect Logs",
+          "Validation Documents"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Deployment & Release",
+        "activities": [
+          "Environment setup",
+          "Release planning",
+          "Production deployment",
+          "Rollout execution"
+        ],
+        "outputs": [
+          "Production Systems",
+          "Release Documentation",
+          "Deployment Reports"
+        ]
+      },
+      {
+        "phase": 8,
+        "title": "Support & Continuous Improvement",
+        "activities": [
+          "Monitoring",
+          "Bug resolution",
+          "Performance optimization",
+          "Feature enhancements"
+        ],
+        "outputs": [
+          "Support Reports",
+          "Updated Releases",
+          "Improvement Roadmaps"
+        ]
+      }
+    ]
+  },
+  "cognitive-business-operations": {
+    "name": "Cognitive Business Operations",
+    "slug": "cognitive-business-operations",
+    "tagline": "Transform Operations Through Intelligent, Data-Driven, and Automated Business",
+    "description": "Processes Modern enterprises require operational ecosystems that are agile, intelligent, scalable, and capable of adapting to changing business environments. Cognitive Business Operations focuses on redesigning operational processes using automation, analytics, intelligence frameworks, workflow optimization, and operational visibility to improve efficiency and decision-making. Our Cognitive Business Operations services help organizations optimize processes, reduce operational complexity, improve service delivery, and enable intelligent business operations through structured transformation initiatives.",
+    "challenges": [
+      "Manual and repetitive workflows",
+      "Operational inefficiencies",
+      "Slow decision-making cycles",
+      "High process costs",
+      "Limited visibility into operations",
+      "Fragmented operational workflows",
+      "Human dependency in repetitive tasks",
+      "Delayed service delivery"
+    ],
+    "offerings": [
+      {
+        "title": "Intelligent Process Transformation",
+        "description": "Redesign business processes for higher efficiency and better operational outcomes.",
+        "deliverables": [
+          "Process redesign frameworks",
+          "Operational assessments",
+          "Workflow optimization plans",
+          "Process standardization models",
+          "Operational transformation roadmaps"
+        ]
+      },
+      {
+        "title": "Workflow Intelligence Solutions",
+        "description": "Create operational environments with better process visibility and control.",
+        "deliverables": [
+          "Workflow monitoring systems",
+          "Process visibility dashboards",
+          "Escalation frameworks",
+          "Performance tracking mechanisms",
+          "Operational analytics systems"
+        ]
+      },
+      {
+        "title": "Operational Automation Services",
+        "description": "Reduce manual intervention across business operations.",
+        "deliverables": [
+          "Task automation frameworks",
+          "Workflow automation",
+          "Rule-based operational systems",
+          "Process execution frameworks",
+          "Automated operational controls"
+        ]
+      },
+      {
+        "title": "Business Process Intelligence",
+        "description": "Improve operational decision-making through data-driven insights.",
+        "deliverables": [
+          "Process analytics",
+          "KPI monitoring systems",
+          "Operational reporting frameworks",
+          "Productivity measurement systems",
+          "Performance benchmarking"
+        ]
+      },
+      {
+        "title": "Shared Service Optimization",
+        "description": "Improve operational efficiency within centralized business functions.",
+        "deliverables": [
+          "Shared service models",
+          "Centralized operational workflows",
+          "Service optimization frameworks",
+          "Resource allocation models"
+        ]
+      },
+      {
+        "title": "Workforce Productivity Optimization",
+        "description": "Improve workforce efficiency and operational productivity.",
+        "deliverables": [
+          "Productivity frameworks",
+          "Work allocation models",
+          "Capacity analysis",
+          "Performance tracking systems"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Operational Discovery & Assessment",
+        "activities": [
+          "Stakeholder interviews",
+          "Process reviews",
+          "Operational analysis",
+          "Workflow mapping",
+          "Current state documentation"
+        ],
+        "outputs": [
+          "Operational Assessment Report",
+          "Current Workflow Documentation",
+          "Improvement Opportunity Matrix"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Process Mapping & Analysis",
+        "activities": [
+          "Process mapping",
+          "Bottleneck analysis",
+          "Dependency analysis",
+          "Cycle time analysis",
+          "Workflow reviews"
+        ],
+        "outputs": [
+          "Process Maps",
+          "Gap Analysis Reports",
+          "Bottleneck Reports"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Operational Design",
+        "activities": [
+          "Workflow redesign",
+          "Role mapping",
+          "Governance planning",
+          "Performance framework creation"
+        ],
+        "outputs": [
+          "Future State Design",
+          "Operational Models",
+          "Governance Structures"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Automation & Optimization Planning",
+        "activities": [
+          "Automation identification",
+          "Workflow optimization planning",
+          "Resource allocation design",
+          "Prioritization exercises"
+        ],
+        "outputs": [
+          "Optimization Plans",
+          "Automation Roadmaps",
+          "Resource Models"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Implementation & Integration",
+        "activities": [
+          "Workflow implementation",
+          "Process deployment",
+          "Operational integration",
+          "User enablement"
+        ],
+        "outputs": [
+          "Operational Frameworks",
+          "Updated Workflows",
+          "Integrated Processes"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Monitoring & Measurement",
+        "activities": [
+          "KPI monitoring",
+          "Operational tracking",
+          "Process audits",
+          "Productivity measurement"
+        ],
+        "outputs": [
+          "Performance Reports",
+          "KPI Dashboards",
+          "Operational Reviews"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Continuous Improvement",
+        "activities": [
+          "Optimization reviews",
+          "Process refinement",
+          "Performance tuning",
+          "Operational updates"
+        ],
+        "outputs": [
+          "Improvement Plans",
+          "Updated Workflows",
+          "Optimization Reports"
+        ]
+      }
+    ]
+  },
+  "web-development": {
+    "name": "Web Development",
+    "slug": "web-development",
+    "tagline": "Build High-Performance, Scalable, and User-Centric Web Experiences",
+    "description": "Modern businesses require websites and web platforms that are more than digital brochures. Organizations need web ecosystems capable of driving customer engagement, supporting operations, enabling transactions, and scaling with business growth. Our Web Development Services focus on designing, engineering, deploying, and optimizing modern web solutions that combine performance, usability, security, and scalability. We develop web solutions ranging from enterprise websites and business portals to large-scale web applications and platform ecosystems.",
+    "challenges": [
+      "Outdated digital presence",
+      "Slow website performance",
+      "Poor mobile responsiveness",
+      "Low customer engagement",
+      "Difficult content management",
+      "Security vulnerabilities",
+      "Poor scalability",
+      "Limited integrations"
+    ],
+    "offerings": [
+      {
+        "title": "Corporate Website Development",
+        "description": "Develop professional digital experiences that strengthen brand presence and improve customer engagement.",
+        "deliverables": [
+          "Corporate websites",
+          "Business websites",
+          "Company profile websites",
+          "Service websites",
+          "Landing pages",
+          "Multi-page websites"
+        ]
+      },
+      {
+        "title": "Custom Website Development",
+        "description": "Develop customized websites designed around specific business requirements.",
+        "deliverables": [
+          "Custom functionality development",
+          "Dynamic content systems",
+          "Business-specific workflows",
+          "Interactive features",
+          "Personalized interfaces"
+        ]
+      },
+      {
+        "title": "Web Application Development",
+        "description": "Build browser-based systems supporting business operations and customer services.",
+        "deliverables": [
+          "Web applications",
+          "Dashboard systems",
+          "Operational platforms",
+          "Customer systems",
+          "Management portals"
+        ]
+      },
+      {
+        "title": "E-Commerce Website Development",
+        "description": "Develop digital commerce platforms supporting transactions and online sales.",
+        "deliverables": [
+          "Product catalogs",
+          "Checkout systems",
+          "Order management systems",
+          "Customer accounts",
+          "Product management panels"
+        ]
+      },
+      {
+        "title": "Portal Development",
+        "description": "Create centralized access platforms for users, customers, vendors, or employees.",
+        "deliverables": [
+          "Vendor portals",
+          "Customer portals",
+          "Employee portals",
+          "Multi-user systems",
+          "Dashboard interfaces"
+        ]
+      },
+      {
+        "title": "Content Management System Development",
+        "description": "Build platforms allowing businesses to manage digital content efficiently.",
+        "deliverables": [
+          "Content management systems",
+          "Publishing workflows",
+          "Content administration panels",
+          "User permissions systems"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Discovery & Requirement Gathering",
+        "activities": [
+          "Stakeholder workshops",
+          "Business requirement gathering",
+          "Competitor analysis",
+          "User research",
+          "Existing website evaluation"
+        ],
+        "outputs": [
+          "Requirement Documentation",
+          "Scope Definition",
+          "User Personas",
+          "Project Roadmap"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Information Architecture Planning",
+        "activities": [
+          "Sitemap development",
+          "User journey mapping",
+          "Navigation planning",
+          "Content hierarchy planning"
+        ],
+        "outputs": [
+          "Sitemap",
+          "Navigation Framework",
+          "User Flows"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "UI/UX Design",
+        "activities": [
+          "Wireframing",
+          "Interface design",
+          "Prototyping",
+          "Responsive layout design",
+          "Accessibility planning"
+        ],
+        "outputs": [
+          "Wireframes",
+          "High-fidelity designs",
+          "Interactive prototypes",
+          "Design systems"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Frontend Development",
+        "activities": [
+          "User interface implementation",
+          "Responsive development",
+          "Component development",
+          "Accessibility implementation",
+          "Browser compatibility optimization"
+        ],
+        "outputs": [
+          "Frontend components",
+          "Interactive interfaces",
+          "Responsive pages"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Backend Development",
+        "activities": [
+          "Server-side development",
+          "Database creation",
+          "Authentication implementation",
+          "Business logic development",
+          "API integration"
+        ],
+        "outputs": [
+          "Backend systems",
+          "APIs",
+          "Database architecture",
+          "Authentication systems"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Integration & Feature Implementation",
+        "activities": [
+          "Third-party integrations",
+          "Payment integrations",
+          "Content integration",
+          "Analytics integration",
+          "Notification system setup"
+        ],
+        "outputs": [
+          "Connected systems",
+          "Configured integrations",
+          "Integrated workflows"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Testing & Quality Validation",
+        "activities": [],
+        "outputs": [
+          "Testing Reports",
+          "Bug Reports",
+          "Validation Documents"
+        ]
+      },
+      {
+        "phase": 8,
+        "title": "Deployment & Go Live",
+        "activities": [
+          "Hosting setup",
+          "Production deployment",
+          "Environment configuration",
+          "Domain setup",
+          "SSL configuration"
+        ],
+        "outputs": [
+          "Live platform",
+          "Deployment reports",
+          "Production documentation"
+        ]
+      },
+      {
+        "phase": 9,
+        "title": "Monitoring & Continuous Improvement",
+        "activities": [
+          "Performance monitoring",
+          "Security monitoring",
+          "Feature enhancements",
+          "Bug resolution",
+          "Content updates"
+        ],
+        "outputs": [
+          "Maintenance reports",
+          "Performance reports",
+          "Improvement recommendations"
+        ]
+      }
+    ]
+  },
+  "application-development": {
+    "name": "Application Development",
+    "slug": "application-development",
+    "tagline": "Build Intelligent, Scalable, and User-Centric Applications for Modern Businesses",
+    "description": "Organizations require applications that improve customer experiences, optimize operations, support business growth, and enable digital transformation. Our Application Development Services focus on designing, engineering, deploying, and maintaining applications that are scalable, secure, reliable, and aligned with business objectives. We build applications ranging from consumer-facing mobile apps and enterprise applications to business productivity platforms and large-scale multi-user ecosystems.",
+    "challenges": [
+      "Poor customer experiences",
+      "Legacy applications limiting growth",
+      "Slow operational workflows",
+      "Low application scalability",
+      "Security concerns",
+      "Limited cross-platform accessibility",
+      "High maintenance costs",
+      "Poor performance under scale"
+    ],
+    "offerings": [
+      {
+        "title": "Mobile Application Development",
+        "description": "Develop applications for mobile users across multiple device ecosystems.",
+        "deliverables": [
+          "Native mobile applications",
+          "Hybrid applications",
+          "Cross-platform applications",
+          "Consumer-facing apps",
+          "Enterprise mobility solutions"
+        ]
+      },
+      {
+        "title": "Enterprise Application Development",
+        "description": "Develop business applications supporting enterprise operations.",
+        "deliverables": [
+          "Internal applications",
+          "Operational platforms",
+          "Workflow systems",
+          "Employee productivity applications",
+          "Management applications"
+        ]
+      },
+      {
+        "title": "Cross-Platform Application Development",
+        "description": "Develop applications capable of operating across multiple environments.",
+        "deliverables": [
+          "Shared codebase applications",
+          "Multi-device experiences",
+          "Unified application ecosystems"
+        ]
+      },
+      {
+        "title": "Business Application Development",
+        "description": "Develop applications supporting business operations and workflows.",
+        "deliverables": [
+          "Management applications",
+          "Tracking systems",
+          "Workflow applications",
+          "Business productivity systems"
+        ]
+      },
+      {
+        "title": "Consumer Application Development",
+        "description": "Create applications designed for customer engagement.",
+        "deliverables": [
+          "Consumer apps",
+          "Self-service platforms",
+          "Customer engagement applications",
+          "Service applications"
+        ]
+      },
+      {
+        "title": "Application Modernization",
+        "description": "Upgrade existing applications to support growth and improved performance.",
+        "deliverables": [
+          "Application refactoring",
+          "Technology upgrades",
+          "User experience improvements",
+          "Performance enhancements"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Requirement Discovery & Analysis",
+        "activities": [
+          "Requirement workshops",
+          "Stakeholder interviews",
+          "User research",
+          "Workflow analysis",
+          "Existing system reviews"
+        ],
+        "outputs": [
+          "Requirement Documentation",
+          "User Personas",
+          "Functional Specifications",
+          "Scope Definition"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Product Planning & Architecture",
+        "activities": [
+          "Architecture planning",
+          "Data modeling",
+          "Technology selection",
+          "Security planning",
+          "Infrastructure planning"
+        ],
+        "outputs": [
+          "Technical Architecture",
+          "System Designs",
+          "Development Roadmaps"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "User Experience Design",
+        "activities": [
+          "User flow mapping",
+          "Wireframing",
+          "Prototyping",
+          "Interface design",
+          "Interaction planning"
+        ],
+        "outputs": [
+          "User Flows",
+          "Wireframes",
+          "UI Systems",
+          "Prototypes"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Application Development",
+        "activities": [
+          "Feature development",
+          "Module implementation",
+          "Backend engineering",
+          "Frontend engineering",
+          "Data integration"
+        ],
+        "outputs": [
+          "Application Modules",
+          "Integrated Features",
+          "Functional Components"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Integration & Configuration",
+        "activities": [
+          "External integrations",
+          "Authentication implementation",
+          "Notification systems setup",
+          "API integration",
+          "Service connectivity"
+        ],
+        "outputs": [
+          "Connected Systems",
+          "Configured Services",
+          "Integrated Components"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Testing & Validation",
+        "activities": [],
+        "outputs": [
+          "Testing Reports",
+          "Defect Reports",
+          "Validation Documents"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Deployment & Release Management",
+        "activities": [
+          "Environment preparation",
+          "Production deployment",
+          "Configuration management",
+          "Rollout planning"
+        ],
+        "outputs": [
+          "Production Applications",
+          "Release Documentation",
+          "Deployment Reports"
+        ]
+      },
+      {
+        "phase": 8,
+        "title": "Support & Optimization",
+        "activities": [
+          "Monitoring",
+          "Performance optimization",
+          "Feature improvements",
+          "Bug management",
+          "User support"
+        ],
+        "outputs": [
+          "Support Reports",
+          "Improvement Plans",
+          "Updated Releases"
+        ]
+      }
+    ]
+  },
+  "startup-mvp": {
+    "name": "Startup MVP",
+    "slug": "startup-mvp",
+    "tagline": "Transform Early-Stage Ideas Into Market-Ready Products Through Rapid MVP",
+    "description": "Development Startups operate in environments where speed, validation, cost efficiency, and adaptability determine success. Building a full-scale product before validating market demand often increases risk, development costs, and time-to-market. Our Startup MVP Services focus on helping founders rapidly validate ideas, launch products faster, reduce development risks, and create scalable foundations for future growth. We help startups move from concept to launch through structured product validation, lean development methodologies, rapid prototyping, and iterative product improvements.",
+    "challenges": [
+      "Unvalidated business ideas",
+      "Limited budgets",
+      "Long product development cycles",
+      "Difficulty prioritizing features",
+      "High product failure risks",
+      "Lack of technical expertise",
+      "Slow market entry",
+      "Product scalability concerns"
+    ],
+    "offerings": [
+      {
+        "title": "Product Discovery & Validation",
+        "description": "Validate ideas before investing significant resources.",
+        "deliverables": [
+          "Idea validation frameworks",
+          "Market research analysis",
+          "Customer problem identification",
+          "Product opportunity assessment",
+          "Validation reports"
+        ]
+      },
+      {
+        "title": "MVP Strategy Development",
+        "description": "Create structured plans for building minimal yet valuable products.",
+        "deliverables": [
+          "MVP strategy documents",
+          "Feature prioritization frameworks",
+          "Product scope definition",
+          "Go-to-market recommendations"
+        ]
+      },
+      {
+        "title": "Product Roadmap Creation",
+        "description": "Develop phased growth strategies.",
+        "deliverables": [
+          "Feature roadmaps",
+          "Milestone planning",
+          "Growth phases",
+          "Scaling strategies"
+        ]
+      },
+      {
+        "title": "Rapid Prototype Development",
+        "description": "Build prototypes for testing assumptions.",
+        "deliverables": [
+          "Clickable prototypes",
+          "User flows",
+          "Wireframes",
+          "Functional demonstrations"
+        ]
+      },
+      {
+        "title": "MVP Development",
+        "description": "Build functional minimum viable products.",
+        "deliverables": [
+          "Core product modules",
+          "Authentication systems",
+          "User management systems",
+          "Administrative panels",
+          "Product dashboards"
+        ]
+      },
+      {
+        "title": "Product Testing & Validation",
+        "description": "Evaluate product assumptions using real users.",
+        "deliverables": [
+          "Feedback systems",
+          "User testing reports",
+          "Validation metrics",
+          "Improvement recommendations"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Idea Discovery & Market Research",
+        "activities": [
+          "Founder workshops",
+          "Competitor research",
+          "Market assessment",
+          "Customer segmentation",
+          "Problem analysis"
+        ],
+        "outputs": [
+          "Opportunity Assessment",
+          "Research Reports",
+          "Problem Statements"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Validation & Prioritization",
+        "activities": [
+          "Feature prioritization",
+          "Customer interviews",
+          "Assumption testing",
+          "Scope definition"
+        ],
+        "outputs": [
+          "Prioritized Feature List",
+          "MVP Scope Document",
+          "Validation Reports"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Product Planning",
+        "activities": [
+          "Roadmap planning",
+          "Architecture planning",
+          "Resource planning",
+          "Milestone planning"
+        ],
+        "outputs": [
+          "Product Roadmap",
+          "Technical Plans",
+          "Delivery Schedule"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Prototype Design",
+        "activities": [
+          "User flow creation",
+          "Wireframing",
+          "Clickable prototypes",
+          "User experience planning"
+        ],
+        "outputs": [
+          "Prototype Systems",
+          "Design Assets",
+          "Validation Flows"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "MVP Development",
+        "activities": [
+          "Core feature development",
+          "Database implementation",
+          "Authentication setup",
+          "Feature integration",
+          "Dashboard creation"
+        ],
+        "outputs": [
+          "Functional MVP",
+          "Core Product Features",
+          "Working Systems"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Testing & Feedback Collection",
+        "activities": [
+          "User testing",
+          "Product validation",
+          "Feedback gathering",
+          "Issue identification"
+        ],
+        "outputs": [
+          "Testing Reports",
+          "User Feedback Reports",
+          "Improvement Plans"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Launch Preparation",
+        "activities": [
+          "Production setup",
+          "Launch planning",
+          "User onboarding preparation",
+          "Monitoring setup"
+        ],
+        "outputs": [
+          "Launch Plan",
+          "Production Environment",
+          "Release Documentation"
+        ]
+      },
+      {
+        "phase": 8,
+        "title": "Iteration & Growth Planning",
+        "activities": [
+          "Feedback implementation",
+          "Feature prioritization",
+          "Product optimization",
+          "Growth planning"
+        ],
+        "outputs": [
+          "Product Improvements",
+          "Updated Roadmaps",
+          "Growth Strategies"
+        ]
+      }
+    ]
+  },
+  "crm-solution": {
+    "name": "CRM Solution",
+    "slug": "crm-solution",
+    "tagline": "CRM Solution.",
+    "description": "CRM Solutions Build Stronger Customer Relationships Through Centralized Customer Management Systems Customer relationships are critical assets for modern organizations. Businesses require structured systems that help manage customer interactions, sales pipelines, communication channels, service delivery, and customer intelligence from a single platform. Our CRM Solutions focus on building centralized customer ecosystems that improve customer engagement, increase operational efficiency, strengthen sales processes, and improve business visibility. We design CRM environments that support sales teams, customer support teams, marketing operations, leadership teams, and customer-facing departments through unified customer management systems.",
+    "challenges": [
+      "Fragmented customer information",
+      "Poor lead tracking",
+      "Inconsistent customer communication",
+      "Limited sales visibility",
+      "Manual customer management processes",
+      "Poor customer retention",
+      "Inefficient follow-ups",
+      "Limited customer insights"
+    ],
+    "offerings": [
+      {
+        "title": "Customer Data Management Systems",
+        "description": "Centralize customer information into structured systems.",
+        "deliverables": [
+          "Customer databases",
+          "Contact management systems",
+          "Customer profiles",
+          "Relationship mapping",
+          "Data organization frameworks"
+        ]
+      },
+      {
+        "title": "Lead Management Systems",
+        "description": "Track prospects throughout the sales lifecycle.",
+        "deliverables": [
+          "Lead capture workflows",
+          "Lead qualification systems",
+          "Lead assignment models",
+          "Lead tracking dashboards",
+          "Opportunity pipelines"
+        ]
+      },
+      {
+        "title": "Sales Pipeline Management",
+        "description": "Improve visibility into sales activities and opportunities.",
+        "deliverables": [
+          "Pipeline stages",
+          "Opportunity tracking",
+          "Sales dashboards",
+          "Forecasting systems",
+          "Activity tracking"
+        ]
+      },
+      {
+        "title": "Customer Interaction Management",
+        "description": "Manage communications across customer touchpoints.",
+        "deliverables": [
+          "Communication logs",
+          "Activity history systems",
+          "Interaction tracking",
+          "Follow-up systems"
+        ]
+      },
+      {
+        "title": "Customer Support Management",
+        "description": "Centralize support operations.",
+        "deliverables": [
+          "Support workflows",
+          "Ticketing systems",
+          "Escalation structures",
+          "Service monitoring dashboards"
+        ]
+      },
+      {
+        "title": "Workflow Automation for CRM",
+        "description": "Automate repetitive customer management activities.",
+        "deliverables": [
+          "Workflow automation",
+          "Notification systems",
+          "Follow-up automation",
+          "Task assignment systems"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Customer Operations Assessment",
+        "activities": [
+          "Stakeholder interviews",
+          "Sales process analysis",
+          "Customer journey reviews",
+          "Existing system assessment",
+          "Workflow mapping"
+        ],
+        "outputs": [
+          "Assessment Reports",
+          "Requirement Documents",
+          "Workflow Analysis"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "CRM Strategy & Planning",
+        "activities": [
+          "Process mapping",
+          "Role identification",
+          "Data planning",
+          "Workflow planning",
+          "Customer lifecycle mapping"
+        ],
+        "outputs": [
+          "CRM Strategy Documents",
+          "Customer Journey Maps",
+          "Workflow Structures"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "CRM Architecture Design",
+        "activities": [
+          "Database planning",
+          "Role planning",
+          "Pipeline design",
+          "Access management planning"
+        ],
+        "outputs": [
+          "CRM Architecture",
+          "Database Structures",
+          "Workflow Diagrams"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "CRM Development & Configuration",
+        "activities": [
+          "Module configuration",
+          "Workflow creation",
+          "User role configuration",
+          "Dashboard setup",
+          "Process implementation"
+        ],
+        "outputs": [
+          "Configured CRM Systems",
+          "Workflow Engines",
+          "Operational Dashboards"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Integration & Data Migration",
+        "activities": [
+          "Data migration",
+          "External integrations",
+          "Customer data validation",
+          "Connectivity testing"
+        ],
+        "outputs": [
+          "Integrated Systems",
+          "Migrated Data",
+          "Validation Reports"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Testing & Validation",
+        "activities": [],
+        "outputs": [
+          "Test Reports",
+          "Validation Documents",
+          "Defect Reports"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Deployment & User Enablement",
+        "activities": [
+          "Production deployment",
+          "User onboarding",
+          "Role assignments",
+          "Training sessions"
+        ],
+        "outputs": [
+          "Live CRM Systems",
+          "User Documentation",
+          "Deployment Reports"
+        ]
+      },
+      {
+        "phase": 8,
+        "title": "Monitoring & Optimization",
+        "activities": [
+          "Performance monitoring",
+          "Workflow optimization",
+          "Reporting improvements",
+          "Process enhancements"
+        ],
+        "outputs": [
+          "Optimization Reports",
+          "Updated Workflows",
+          "Performance Dashboards"
+        ]
+      }
+    ]
+  },
+  "cxm-solution": {
+    "name": "CXM Solution",
+    "slug": "cxm-solution",
+    "tagline": "CXM Solution.",
+    "description": "Customer Experience Management (CXM) Solutions Deliver Seamless, Personalized, and Connected Customer Experiences Across Every Touchpoint Customer expectations continue to evolve rapidly, requiring organizations to deliver consistent, personalized, and frictionless experiences across digital and physical channels. Our Customer Experience Management (CXM) Solutions focus on designing, optimizing, and managing customer journeys that improve engagement, retention, loyalty, and long-term business growth. We build customer-centric ecosystems that enable organizations to understand customer behavior, optimize interactions, and create connected experiences throughout the customer lifecycle.",
+    "challenges": [
+      "Fragmented customer journeys",
+      "Poor customer engagement",
+      "Inconsistent service experiences",
+      "Low customer retention",
+      "Lack of customer visibility",
+      "Disconnected communication channels",
+      "Poor customer feedback mechanisms",
+      "High churn rates"
+    ],
+    "offerings": [
+      {
+        "title": "Customer Journey Mapping",
+        "description": "Understand customer interactions across multiple touchpoints.",
+        "deliverables": [
+          "Customer journey maps",
+          "Touchpoint analysis",
+          "Customer lifecycle models",
+          "Journey optimization frameworks",
+          "Experience gap analysis"
+        ]
+      },
+      {
+        "title": "Omnichannel Experience Management",
+        "description": "Create connected experiences across channels.",
+        "deliverables": [
+          "Channel integration frameworks",
+          "Customer interaction workflows",
+          "Unified communication structures",
+          "Cross-channel engagement models"
+        ]
+      },
+      {
+        "title": "Customer Engagement Platforms",
+        "description": "Build systems that improve customer interactions.",
+        "deliverables": [
+          "Customer portals",
+          "Engagement workflows",
+          "Communication systems",
+          "Self-service environments"
+        ]
+      },
+      {
+        "title": "Personalization Frameworks",
+        "description": "Create tailored customer experiences.",
+        "deliverables": [
+          "Segmentation models",
+          "Personalization workflows",
+          "Customer preference systems",
+          "Experience customization models"
+        ]
+      },
+      {
+        "title": "Customer Feedback Management",
+        "description": "Capture and analyze customer feedback.",
+        "deliverables": [
+          "Feedback systems",
+          "Survey frameworks",
+          "Customer review mechanisms",
+          "Feedback analytics dashboards"
+        ]
+      },
+      {
+        "title": "Customer Support Experience Optimization",
+        "description": "Improve customer support journeys.",
+        "deliverables": [
+          "Support workflows",
+          "Service processes",
+          "Escalation systems",
+          "Customer communication frameworks"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Customer Experience Discovery",
+        "activities": [
+          "Customer interviews",
+          "Journey reviews",
+          "Customer behavior analysis",
+          "Stakeholder workshops",
+          "Service assessments"
+        ],
+        "outputs": [
+          "Customer Research Reports",
+          "Journey Assessments",
+          "Experience Gap Analysis"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Customer Journey Analysis",
+        "activities": [
+          "Journey mapping",
+          "Touchpoint analysis",
+          "Interaction reviews",
+          "Service assessments"
+        ],
+        "outputs": [
+          "Journey Maps",
+          "Touchpoint Reports",
+          "Customer Journey Documentation"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Experience Design",
+        "activities": [
+          "Experience planning",
+          "Service blueprinting",
+          "Personalization planning",
+          "Customer flow optimization"
+        ],
+        "outputs": [
+          "Experience Models",
+          "Service Designs",
+          "Engagement Frameworks"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Platform & Workflow Development",
+        "activities": [
+          "Customer workflow development",
+          "Platform configuration",
+          "Communication framework setup",
+          "Interaction design"
+        ],
+        "outputs": [
+          "Customer Platforms",
+          "Configured Workflows",
+          "Operational Systems"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Integration & Enablement",
+        "activities": [
+          "Channel integration",
+          "System connectivity",
+          "Data synchronization",
+          "Customer profile alignment"
+        ],
+        "outputs": [
+          "Integrated Systems",
+          "Unified Customer Profiles",
+          "Connected Experiences"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Testing & Validation",
+        "activities": [],
+        "outputs": [
+          "Testing Reports",
+          "Customer Validation Reports",
+          "Improvement Recommendations"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Deployment & Rollout",
+        "activities": [
+          "Platform launch",
+          "Customer onboarding",
+          "Workflow activation",
+          "Communication enablement"
+        ],
+        "outputs": [
+          "Production Systems",
+          "Deployment Reports",
+          "Customer Enablement Plans"
+        ]
+      },
+      {
+        "phase": 8,
+        "title": "Monitoring & Optimization",
+        "activities": [
+          "Customer satisfaction tracking",
+          "Journey optimization",
+          "Performance monitoring",
+          "Feedback analysis"
+        ],
+        "outputs": [
+          "Customer Experience Reports",
+          "Optimization Plans",
+          "Performance Dashboards"
+        ]
+      }
+    ]
+  },
+  "digital-marketing": {
+    "name": "Digital Marketing",
+    "slug": "digital-marketing",
+    "tagline": "Accelerate Brand Growth, Customer Acquisition, and Market Visibility Through",
+    "description": "Data-Driven Digital Strategies Modern businesses require strong digital presence, measurable marketing performance, and scalable customer acquisition strategies to remain competitive. Our Digital Marketing Services focus on building integrated marketing ecosystems that improve visibility, generate qualified leads, increase customer engagement, strengthen brand positioning, and drive sustainable business growth. We design and execute marketing strategies across multiple digital channels using analytics, audience intelligence, performance optimization, and strategic content distribution.",
+    "challenges": [
+      "Low online visibility",
+      "Weak lead generation",
+      "Poor digital engagement",
+      "High customer acquisition costs",
+      "Low conversion rates",
+      "Ineffective marketing campaigns",
+      "Poor audience targeting",
+      "Weak brand positioning"
+    ],
+    "offerings": [
+      {
+        "title": "Search Engine Optimization (SEO)",
+        "description": "Improve search visibility and organic website traffic.",
+        "deliverables": [
+          "SEO audits",
+          "Keyword strategy",
+          "Technical SEO optimization",
+          "On-page optimization",
+          "Content optimization",
+          "Link-building strategies"
+        ]
+      },
+      {
+        "title": "Search Engine Marketing (SEM)",
+        "description": "Drive targeted traffic through paid search campaigns.",
+        "deliverables": [
+          "Campaign setup",
+          "Ad group structuring",
+          "Keyword targeting",
+          "Bid optimization",
+          "Conversion tracking"
+        ]
+      },
+      {
+        "title": "Social Media Marketing",
+        "description": "Build brand engagement across social platforms.",
+        "deliverables": [
+          "Social media strategy",
+          "Campaign management",
+          "Content publishing",
+          "Audience engagement",
+          "Performance reporting"
+        ]
+      },
+      {
+        "title": "Performance Marketing",
+        "description": "Execute data-driven campaigns focused on measurable outcomes.",
+        "deliverables": [
+          "Paid advertising campaigns",
+          "Conversion optimization",
+          "Audience targeting",
+          "Funnel optimization",
+          "Performance tracking"
+        ]
+      },
+      {
+        "title": "Content Marketing",
+        "description": "Create valuable digital content supporting engagement and authority.",
+        "deliverables": [
+          "Blog content",
+          "Website content",
+          "Campaign content",
+          "Marketing copy",
+          "Educational content"
+        ]
+      },
+      {
+        "title": "Brand Marketing",
+        "description": "Strengthen digital brand positioning and visibility.",
+        "deliverables": [
+          "Brand messaging",
+          "Positioning strategies",
+          "Visual consistency frameworks",
+          "Campaign branding"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Market Research & Discovery",
+        "activities": [
+          "Competitor analysis",
+          "Audience research",
+          "Market assessments",
+          "Digital presence analysis",
+          "Campaign reviews"
+        ],
+        "outputs": [
+          "Research Reports",
+          "Audience Profiles",
+          "Competitive Analysis"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Strategy Development",
+        "activities": [
+          "Channel planning",
+          "Audience targeting",
+          "Campaign planning",
+          "KPI definition",
+          "Budget allocation planning"
+        ],
+        "outputs": [
+          "Marketing Strategies",
+          "Campaign Roadmaps",
+          "Channel Plans"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Campaign Planning & Content Preparation",
+        "activities": [
+          "Content planning",
+          "Campaign structuring",
+          "Messaging development",
+          "Creative planning"
+        ],
+        "outputs": [
+          "Campaign Structures",
+          "Marketing Content",
+          "Creative Assets"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Campaign Execution",
+        "activities": [
+          "Campaign deployment",
+          "Advertisement publishing",
+          "Audience targeting",
+          "Social engagement",
+          "Content distribution"
+        ],
+        "outputs": [
+          "Active Campaigns",
+          "Published Content",
+          "Advertising Systems"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Monitoring & Optimization",
+        "activities": [
+          "Performance tracking",
+          "Audience analysis",
+          "Conversion monitoring",
+          "Campaign optimization",
+          "Budget optimization"
+        ],
+        "outputs": [
+          "Performance Reports",
+          "Optimization Recommendations",
+          "Conversion Analysis"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Analytics & Reporting",
+        "activities": [
+          "KPI reporting",
+          "ROI analysis",
+          "Engagement tracking",
+          "Trend analysis"
+        ],
+        "outputs": [
+          "Marketing Dashboards",
+          "Campaign Reports",
+          "Performance Insights"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Continuous Improvement",
+        "activities": [
+          "Strategy refinement",
+          "Campaign iteration",
+          "Audience expansion",
+          "Content improvements"
+        ],
+        "outputs": [
+          "Updated Strategies",
+          "Optimized Campaigns",
+          "Growth Recommendations"
+        ]
+      }
+    ]
+  },
+  "blockchain": {
+    "name": "Blockchain",
+    "slug": "blockchain",
+    "tagline": "Build Secure, Transparent, and Decentralized Digital Ecosystems",
+    "description": "Organizations increasingly require systems that provide transparency, trust, security, traceability, and decentralized control across business processes. Our Blockchain Services focus on designing, developing, implementing, and optimizing blockchain- powered solutions that improve trust, streamline transactions, enhance data integrity, and create secure digital ecosystems. We develop blockchain solutions for business operations, digital assets, transaction systems, decentralized platforms, and enterprise ecosystems.",
+    "challenges": [
+      "Lack of transaction transparency",
+      "Data tampering risks",
+      "Limited trust between stakeholders",
+      "Slow verification processes",
+      "High intermediary costs",
+      "Poor traceability",
+      "Fragmented record keeping",
+      "Manual validation processes"
+    ],
+    "offerings": [
+      {
+        "title": "Blockchain Strategy & Consulting",
+        "description": "Develop blockchain adoption strategies aligned with business objectives.",
+        "deliverables": [
+          "Blockchain feasibility studies",
+          "Use case assessments",
+          "Adoption roadmaps",
+          "Business impact analysis",
+          "Architecture recommendations"
+        ]
+      },
+      {
+        "title": "Private Blockchain Development",
+        "description": "Develop permissioned blockchain environments for enterprise operations.",
+        "deliverables": [
+          "Enterprise blockchain networks",
+          "Permission frameworks",
+          "Access management systems",
+          "Governance models"
+        ]
+      },
+      {
+        "title": "Public Blockchain Development",
+        "description": "Develop decentralized applications and open ecosystems.",
+        "deliverables": [
+          "Public network integrations",
+          "Decentralized applications",
+          "Transaction frameworks",
+          "Asset management systems"
+        ]
+      },
+      {
+        "title": "Smart Contract Development",
+        "description": "Create automated execution mechanisms for business rules and agreements.",
+        "deliverables": [
+          "Contract logic development",
+          "Transaction automation",
+          "Rule implementation",
+          "Contract validation systems"
+        ]
+      },
+      {
+        "title": "Decentralized Application Development",
+        "description": "Develop applications powered by decentralized architectures.",
+        "deliverables": [
+          "Decentralized applications",
+          "Wallet integrations",
+          "User management systems",
+          "Transaction frameworks"
+        ]
+      },
+      {
+        "title": "Asset Tokenization Solutions",
+        "description": "Convert physical or digital assets into digital representations.",
+        "deliverables": [
+          "Asset digitization frameworks",
+          "Ownership management systems",
+          "Asset tracking systems",
+          "Digital ownership structures"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Discovery & Feasibility Assessment",
+        "activities": [
+          "Stakeholder workshops",
+          "Use case analysis",
+          "Feasibility assessments",
+          "Requirement gathering",
+          "Cost-benefit evaluations"
+        ],
+        "outputs": [
+          "Feasibility Reports",
+          "Use Case Documents",
+          "Opportunity Assessments"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Solution Architecture Design",
+        "activities": [
+          "Network planning",
+          "Consensus planning",
+          "Governance design",
+          "Security planning",
+          "Data architecture design"
+        ],
+        "outputs": [
+          "Architecture Documentation",
+          "Network Designs",
+          "Governance Structures"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Platform Selection & Planning",
+        "activities": [
+          "Platform evaluation",
+          "Infrastructure planning",
+          "Integration planning",
+          "Role definitions"
+        ],
+        "outputs": [
+          "Platform Recommendations",
+          "Deployment Plans",
+          "Infrastructure Plans"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Development & Configuration",
+        "activities": [
+          "Network configuration",
+          "Contract development",
+          "Logic implementation",
+          "User management setup",
+          "Integration development"
+        ],
+        "outputs": [
+          "Configured Networks",
+          "Operational Modules",
+          "Business Logic Systems"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Integration & Connectivity",
+        "activities": [
+          "System integration",
+          "API configuration",
+          "Workflow synchronization",
+          "Data mapping"
+        ],
+        "outputs": [
+          "Connected Systems",
+          "Integrated Workflows",
+          "Validation Documentation"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Testing & Validation",
+        "activities": [],
+        "outputs": [
+          "Testing Reports",
+          "Security Reviews",
+          "Validation Reports"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Deployment & Launch",
+        "activities": [
+          "Production deployment",
+          "Environment setup",
+          "User onboarding",
+          "Governance activation"
+        ],
+        "outputs": [
+          "Operational Networks",
+          "Deployment Documentation",
+          "Production Systems"
+        ]
+      },
+      {
+        "phase": 8,
+        "title": "Monitoring & Continuous Improvement",
+        "activities": [
+          "Performance monitoring",
+          "Security reviews",
+          "Network optimization",
+          "Governance refinement"
+        ],
+        "outputs": [
+          "Monitoring Reports",
+          "Optimization Plans",
+          "Updated Configurations"
+        ]
+      }
+    ]
+  },
+  "iot": {
+    "name": "IoT",
+    "slug": "iot",
+    "tagline": "Connect Devices, Systems, and Operations Through Intelligent Connected",
+    "description": "Ecosystems Organizations are increasingly adopting connected technologies to improve operational efficiency, increase visibility, automate processes, and enable real-time decision- making. Our Internet of Things (IoT) Services focus on designing, developing, deploying, and managing connected ecosystems that enable communication between devices, infrastructure, sensors, systems, and business applications. We build IoT ecosystems that transform physical operations into connected, data- driven environments capable of delivering actionable intelligence and operational efficiency.",
+    "challenges": [
+      "Limited operational visibility",
+      "Disconnected devices and systems",
+      "Manual monitoring processes",
+      "Delayed decision-making",
+      "Inefficient asset utilization",
+      "Lack of real-time insights",
+      "Poor device management",
+      "Data collection challenges"
+    ],
+    "offerings": [
+      {
+        "title": "IoT Strategy & Consulting",
+        "description": "Develop IoT adoption strategies aligned with operational and business goals.",
+        "deliverables": [
+          "IoT feasibility studies",
+          "Use case analysis",
+          "Technology roadmaps",
+          "Adoption strategies",
+          "Infrastructure planning"
+        ]
+      },
+      {
+        "title": "Device Connectivity Solutions",
+        "description": "Enable communication between devices and systems.",
+        "deliverables": [
+          "Device onboarding frameworks",
+          "Connectivity architectures",
+          "Communication protocols implementation",
+          "Device registration systems"
+        ]
+      },
+      {
+        "title": "Sensor Integration Services",
+        "description": "Integrate sensors for data collection and monitoring.",
+        "deliverables": [
+          "Sensor integration",
+          "Data acquisition systems",
+          "Sensor management frameworks",
+          "Monitoring systems"
+        ]
+      },
+      {
+        "title": "IoT Platform Development",
+        "description": "Develop centralized environments for connected ecosystems.",
+        "deliverables": [
+          "Device management platforms",
+          "Monitoring dashboards",
+          "Data processing systems",
+          "Management consoles"
+        ]
+      },
+      {
+        "title": "Industrial IoT Solutions",
+        "description": "Develop connected industrial ecosystems.",
+        "deliverables": [
+          "Equipment monitoring systems",
+          "Production visibility platforms",
+          "Connected asset systems",
+          "Operational monitoring frameworks"
+        ]
+      },
+      {
+        "title": "Edge Computing Solutions",
+        "description": "Enable processing closer to devices and operational environments.",
+        "deliverables": [
+          "Edge processing systems",
+          "Local analytics environments",
+          "Distributed computing frameworks",
+          "Low latency architectures"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Discovery & Requirement Analysis",
+        "activities": [
+          "Requirement workshops",
+          "Operational analysis",
+          "Device inventory assessments",
+          "Use case identification",
+          "Infrastructure evaluation"
+        ],
+        "outputs": [
+          "Requirement Documentation",
+          "Use Case Reports",
+          "Ecosystem Assessment"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Solution Architecture Design",
+        "activities": [
+          "Device architecture planning",
+          "Communication framework design",
+          "Security planning",
+          "Infrastructure design",
+          "Data flow mapping"
+        ],
+        "outputs": [
+          "IoT Architecture Documents",
+          "Connectivity Models",
+          "Infrastructure Plans"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Hardware & Connectivity Planning",
+        "activities": [
+          "Sensor selection",
+          "Device planning",
+          "Gateway planning",
+          "Communication mapping"
+        ],
+        "outputs": [
+          "Device Plans",
+          "Connectivity Frameworks",
+          "Hardware Recommendations"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Platform Development & Integration",
+        "activities": [
+          "Platform development",
+          "Device integration",
+          "Data ingestion setup",
+          "Connectivity implementation"
+        ],
+        "outputs": [
+          "IoT Platforms",
+          "Connected Devices",
+          "Integration Frameworks"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Data Management & Processing",
+        "activities": [
+          "Data collection setup",
+          "Processing framework creation",
+          "Storage configuration",
+          "Event processing setup"
+        ],
+        "outputs": [
+          "Data Pipelines",
+          "Storage Systems",
+          "Processing Frameworks"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Testing & Validation",
+        "activities": [],
+        "outputs": [
+          "Testing Reports",
+          "Validation Documents",
+          "Performance Reports"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Deployment & Commissioning",
+        "activities": [
+          "Device deployment",
+          "Production rollout",
+          "Monitoring activation",
+          "Operational enablement"
+        ],
+        "outputs": [
+          "Live IoT Systems",
+          "Deployment Documentation",
+          "Operational Reports"
+        ]
+      },
+      {
+        "phase": 8,
+        "title": "Monitoring & Optimization",
+        "activities": [
+          "Device monitoring",
+          "Data analysis",
+          "Performance optimization",
+          "Firmware management",
+          "Ecosystem improvements"
+        ],
+        "outputs": [
+          "Monitoring Reports",
+          "Optimization Plans",
+          "Updated Configurations"
+        ]
+      }
+    ]
+  },
+  "devops": {
+    "name": "DevOps",
+    "slug": "devops",
+    "tagline": "Accelerate Software Delivery Through Automation, Reliability, and Continuous",
+    "description": "Operations Organizations require faster release cycles, reliable infrastructure, improved collaboration, and scalable deployment mechanisms to remain competitive. Our DevOps Services focus on integrating development and operational practices to improve delivery speed, increase system reliability, reduce operational overhead, and create highly automated engineering environments. We build DevOps ecosystems that streamline software delivery pipelines, automate infrastructure management, improve deployment consistency, and enable continuous improvement.",
+    "challenges": [
+      "Slow software delivery cycles",
+      "Manual deployment processes",
+      "Frequent production failures",
+      "Infrastructure inconsistencies",
+      "Limited collaboration between teams",
+      "High operational overhead",
+      "Poor release visibility",
+      "Difficult scaling processes"
+    ],
+    "offerings": [
+      {
+        "title": "DevOps Assessment & Strategy",
+        "description": "Evaluate organizational readiness and build transformation strategies.",
+        "deliverables": [
+          "DevOps maturity assessments",
+          "Current state analysis",
+          "Transformation roadmaps",
+          "Gap assessments",
+          "Process recommendations"
+        ]
+      },
+      {
+        "title": "CI/CD Pipeline Implementation",
+        "description": "Develop automated software delivery pipelines.",
+        "deliverables": [
+          "Continuous integration pipelines",
+          "Continuous delivery workflows",
+          "Automated build systems",
+          "Deployment automation",
+          "Release workflows"
+        ]
+      },
+      {
+        "title": "Infrastructure Automation",
+        "description": "Automate infrastructure provisioning and configuration.",
+        "deliverables": [
+          "Infrastructure templates",
+          "Automated provisioning workflows",
+          "Configuration management systems",
+          "Environment automation"
+        ]
+      },
+      {
+        "title": "Containerization Services",
+        "description": "Package applications into portable environments.",
+        "deliverables": [
+          "Container environments",
+          "Container workflows",
+          "Application packaging systems",
+          "Deployment configurations"
+        ]
+      },
+      {
+        "title": "Container Orchestration",
+        "description": "Manage large-scale container environments.",
+        "deliverables": [
+          "Cluster configurations",
+          "Scaling mechanisms",
+          "Orchestration frameworks",
+          "Workload scheduling systems"
+        ]
+      },
+      {
+        "title": "Monitoring & Observability",
+        "description": "Improve operational visibility.",
+        "deliverables": [
+          "Monitoring dashboards",
+          "Logging frameworks",
+          "Alert systems",
+          "Performance tracking environments"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Assessment & Discovery",
+        "activities": [
+          "Stakeholder interviews",
+          "Process assessments",
+          "Infrastructure reviews",
+          "Workflow analysis",
+          "Toolchain evaluation"
+        ],
+        "outputs": [
+          "Assessment Reports",
+          "Gap Analysis",
+          "Current State Documentation"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "DevOps Architecture Design",
+        "activities": [
+          "Pipeline planning",
+          "Infrastructure architecture design",
+          "Workflow mapping",
+          "Security planning",
+          "Environment strategy creation"
+        ],
+        "outputs": [
+          "Architecture Documents",
+          "Workflow Designs",
+          "Toolchain Recommendations"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Environment Preparation",
+        "activities": [
+          "Infrastructure setup",
+          "Access configuration",
+          "Repository preparation",
+          "Environment provisioning"
+        ],
+        "outputs": [
+          "Prepared Environments",
+          "Access Structures",
+          "Environment Documentation"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Pipeline Development & Automation",
+        "activities": [
+          "Pipeline creation",
+          "Automation workflows",
+          "Build process creation",
+          "Configuration management implementation"
+        ],
+        "outputs": [
+          "Automated Pipelines",
+          "Build Systems",
+          "Workflow Engines"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Infrastructure Implementation",
+        "activities": [
+          "Infrastructure provisioning",
+          "Environment setup",
+          "Configuration management",
+          "Environment validation"
+        ],
+        "outputs": [
+          "Infrastructure Environments",
+          "Configured Systems",
+          "Deployment Platforms"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Monitoring & Validation",
+        "activities": [],
+        "outputs": [
+          "Monitoring Dashboards",
+          "Validation Reports",
+          "Operational Documentation"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Deployment & Operationalization",
+        "activities": [
+          "Production rollout",
+          "User enablement",
+          "Operational handover",
+          "Deployment validation"
+        ],
+        "outputs": [
+          "Operational Platforms",
+          "Deployment Reports",
+          "Operational Procedures"
+        ]
+      },
+      {
+        "phase": 8,
+        "title": "Continuous Improvement",
+        "activities": [
+          "Pipeline optimization",
+          "Monitoring reviews",
+          "Infrastructure tuning",
+          "Performance improvements"
+        ],
+        "outputs": [
+          "Optimization Reports",
+          "Updated Workflows",
+          "Improvement Recommendations"
+        ]
+      }
+    ]
+  },
+  "unit-test": {
+    "name": "Unit Testing",
+    "slug": "unit-test",
+    "tagline": "Ensure Software Reliability Through Structured Component-Level Testing and",
+    "description": "Validation Modern software systems require reliable, maintainable, and stable codebases to support business-critical operations. Unit Testing focuses on validating individual software components, functions, modules, and logical units before they move into larger environments. Our Unit Testing Services help organizations reduce defects early, improve code quality, accelerate releases, and improve software maintainability. We implement structured testing frameworks that validate software behavior at the smallest functional level to ensure system reliability and engineering quality.",
+    "challenges": [
+      "High defect rates during development",
+      "Poor code reliability",
+      "Difficult debugging processes",
+      "Unstable releases",
+      "High regression risks",
+      "Increased maintenance effort",
+      "Poor code quality visibility",
+      "Slow issue identification"
+    ],
+    "offerings": [
+      {
+        "title": "Unit Test Strategy Development",
+        "description": "Create structured testing approaches aligned with application architecture.",
+        "deliverables": [
+          "Testing strategies",
+          "Test coverage plans",
+          "Validation frameworks",
+          "Testing standards",
+          "Quality objectives"
+        ]
+      },
+      {
+        "title": "Test Case Development",
+        "description": "Develop test cases validating software behavior.",
+        "deliverables": [
+          "Test scenarios",
+          "Positive test cases",
+          "Negative test cases",
+          "Boundary condition tests",
+          "Edge case validations"
+        ]
+      },
+      {
+        "title": "Automated Unit Testing",
+        "description": "Develop automated testing mechanisms.",
+        "deliverables": [
+          "Automated test suites",
+          "Test scripts",
+          "Execution workflows",
+          "Reusable test libraries"
+        ]
+      },
+      {
+        "title": "Code Coverage Analysis",
+        "description": "Measure testing effectiveness.",
+        "deliverables": [
+          "Coverage reports",
+          "Uncovered code analysis",
+          "Risk identification",
+          "Coverage optimization plans"
+        ]
+      },
+      {
+        "title": "Mocking & Dependency Isolation",
+        "description": "Validate components independently.",
+        "deliverables": [
+          "Mock services",
+          "Dependency isolation frameworks",
+          "Stub implementations",
+          "Controlled test environments"
+        ]
+      },
+      {
+        "title": "Regression Unit Testing",
+        "description": "Ensure changes do not impact existing functionality.",
+        "deliverables": [
+          "Regression suites",
+          "Validation workflows",
+          "Reusable testing libraries",
+          "Stability checks"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Requirement & Codebase Assessment",
+        "activities": [
+          "Architecture reviews",
+          "Requirement analysis",
+          "Module identification",
+          "Dependency mapping",
+          "Existing test analysis"
+        ],
+        "outputs": [
+          "Testing Assessment Reports",
+          "Module Mapping Documents",
+          "Coverage Baselines"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Test Planning",
+        "activities": [
+          "Test scope definition",
+          "Scenario planning",
+          "Coverage planning",
+          "Dependency planning"
+        ],
+        "outputs": [
+          "Test Plans",
+          "Coverage Strategy",
+          "Validation Frameworks"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Test Design",
+        "activities": [
+          "Scenario creation",
+          "Assertion planning",
+          "Input-output mapping",
+          "Boundary testing design"
+        ],
+        "outputs": [
+          "Test Cases",
+          "Validation Logic",
+          "Scenario Libraries"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Test Development",
+        "activities": [
+          "Script development",
+          "Test automation creation",
+          "Mock implementation",
+          "Framework configuration"
+        ],
+        "outputs": [
+          "Automated Tests",
+          "Testing Libraries",
+          "Validation Scripts"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Execution & Validation",
+        "activities": [
+          "Test execution",
+          "Error analysis",
+          "Failure identification",
+          "Defect tracking"
+        ],
+        "outputs": [
+          "Execution Reports",
+          "Defect Reports",
+          "Validation Results"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Coverage Analysis",
+        "activities": [
+          "Coverage measurement",
+          "Risk identification",
+          "Missing test analysis",
+          "Optimization reviews"
+        ],
+        "outputs": [
+          "Coverage Reports",
+          "Gap Analysis",
+          "Recommendations"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Continuous Improvement",
+        "activities": [
+          "Test optimization",
+          "Framework updates",
+          "Test maintenance",
+          "Performance improvements"
+        ],
+        "outputs": [
+          "Improved Test Suites",
+          "Updated Validation Frameworks",
+          "Optimization Reports"
+        ]
+      }
+    ]
+  },
+  "quality-assurance": {
+    "name": "Quality Assurance",
+    "slug": "quality-assurance",
+    "tagline": "Quality Assurance Services focus on building quality-driven engineering",
+    "description": "ecosystems through structured testing processes, validation frameworks, quality governance, and continuous improvement mechanisms.",
+    "challenges": [
+      "High production defects",
+      "Unstable software releases",
+      "Poor user experiences",
+      "Frequent system failures",
+      "Long defect resolution cycles",
+      "Low testing coverage",
+      "Release delays",
+      "Performance bottlenecks"
+    ],
+    "offerings": [
+      {
+        "title": "QA Strategy & Quality Planning",
+        "description": "Create structured quality frameworks aligned with business objectives.",
+        "deliverables": [
+          "QA strategies",
+          "Testing roadmaps",
+          "Quality standards",
+          "Governance frameworks",
+          "Release quality criteria"
+        ]
+      },
+      {
+        "title": "Functional Testing",
+        "description": "Validate software behavior against business requirements.",
+        "deliverables": [
+          "Test scenarios",
+          "Test execution plans",
+          "Functional validation reports",
+          "Requirement traceability documents"
+        ]
+      },
+      {
+        "title": "Manual Testing Services",
+        "description": "Perform human-driven validation of application behavior.",
+        "deliverables": [
+          "Manual test cases",
+          "Exploratory testing reports",
+          "Defect reports",
+          "Validation documents"
+        ]
+      },
+      {
+        "title": "Test Automation Services",
+        "description": "Automate repetitive testing processes.",
+        "deliverables": [
+          "Automation frameworks",
+          "Automated test scripts",
+          "Test suites",
+          "Execution pipelines"
+        ]
+      },
+      {
+        "title": "Regression Testing",
+        "description": "Validate application stability after modifications.",
+        "deliverables": [
+          "Regression suites",
+          "Impact analysis reports",
+          "Validation documents"
+        ]
+      },
+      {
+        "title": "Integration Testing",
+        "description": "Validate communication between systems and modules.",
+        "deliverables": [
+          "Integration test plans",
+          "Dependency validation",
+          "Interface testing reports"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Quality Discovery & Assessment",
+        "activities": [
+          "Requirement analysis",
+          "Stakeholder discussions",
+          "Risk identification",
+          "Architecture review",
+          "Existing testing evaluation"
+        ],
+        "outputs": [
+          "Quality Assessment Reports",
+          "Requirement Mapping",
+          "Risk Registers"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Test Planning & Strategy Development",
+        "activities": [
+          "Scope definition",
+          "Testing strategy creation",
+          "Resource planning",
+          "Environment planning",
+          "Coverage planning"
+        ],
+        "outputs": [
+          "QA Strategy Documents",
+          "Test Plans",
+          "Resource Models"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Test Design",
+        "activities": [
+          "Test scenario creation",
+          "Test case design",
+          "Data preparation",
+          "Requirement mapping"
+        ],
+        "outputs": [
+          "Test Cases",
+          "Validation Matrices",
+          "Testing Frameworks"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Environment Setup & Preparation",
+        "activities": [
+          "Test environment creation",
+          "Data setup",
+          "Configuration validation",
+          "Tool preparation"
+        ],
+        "outputs": [
+          "Test Environments",
+          "Prepared Data Sets",
+          "Environment Documentation"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Test Execution",
+        "activities": [
+          "Functional validation",
+          "Defect reporting",
+          "Regression testing",
+          "Exploratory testing",
+          "Scenario validation"
+        ],
+        "outputs": [
+          "Execution Reports",
+          "Defect Reports",
+          "Validation Reports"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Defect Management & Retesting",
+        "activities": [
+          "Defect triage",
+          "Issue prioritization",
+          "Verification testing",
+          "Revalidation activities"
+        ],
+        "outputs": [
+          "Defect Logs",
+          "Retesting Reports",
+          "Closure Reports"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Reporting & Quality Governance",
+        "activities": [
+          "KPI tracking",
+          "Quality measurement",
+          "Stakeholder reporting",
+          "Trend analysis"
+        ],
+        "outputs": [
+          "Quality Dashboards",
+          "Release Readiness Reports",
+          "Quality Metrics"
+        ]
+      },
+      {
+        "phase": 8,
+        "title": "Continuous Improvement",
+        "activities": [
+          "Process reviews",
+          "Automation improvements",
+          "Testing optimization",
+          "Framework enhancements"
+        ],
+        "outputs": [
+          "Optimization Reports",
+          "Updated Processes",
+          "Improvement Plans"
+        ]
+      }
+    ]
+  },
+  "workplace-transformation": {
+    "name": "Workplace Transformation",
+    "slug": "workplace-transformation",
+    "tagline": "Modernize Workforce Experiences, Improve Collaboration, and Build Future-Ready",
+    "description": "Work Environments Organizations are evolving rapidly with hybrid work models, distributed teams, digital operations, and changing workforce expectations. Workplace Transformation focuses on redesigning work environments, improving employee experiences, optimizing collaboration, and enabling digital-first operational models. Our Workplace Transformation Services help organizations improve productivity, strengthen collaboration, modernize workforce operations, and create scalable work environments that support future growth.",
+    "challenges": [
+      "Fragmented workplace systems",
+      "Poor employee collaboration",
+      "Low workforce productivity",
+      "Inefficient communication channels",
+      "Difficulty supporting remote work",
+      "Slow decision-making",
+      "Poor employee experiences",
+      "Operational silos"
+    ],
+    "offerings": [
+      {
+        "title": "Digital Workplace Strategy",
+        "description": "Develop workplace transformation strategies aligned with business goals.",
+        "deliverables": [
+          "Workplace assessments",
+          "Transformation roadmaps",
+          "Workforce strategies",
+          "Technology recommendations",
+          "Adoption frameworks"
+        ]
+      },
+      {
+        "title": "Employee Experience Transformation",
+        "description": "Improve employee interactions with systems, processes, and workplace environments.",
+        "deliverables": [
+          "Employee journey mapping",
+          "Experience frameworks",
+          "Feedback systems",
+          "Productivity assessments"
+        ]
+      },
+      {
+        "title": "Hybrid Work Enablement",
+        "description": "Support distributed and flexible work environments.",
+        "deliverables": [
+          "Remote work frameworks",
+          "Collaboration models",
+          "Access strategies",
+          "Workforce connectivity systems"
+        ]
+      },
+      {
+        "title": "Collaboration Ecosystem Development",
+        "description": "Improve communication and teamwork.",
+        "deliverables": [
+          "Collaboration frameworks",
+          "Communication workflows",
+          "Knowledge sharing systems",
+          "Team coordination structures"
+        ]
+      },
+      {
+        "title": "Workplace Process Modernization",
+        "description": "Improve internal operational workflows.",
+        "deliverables": [
+          "Workflow redesign",
+          "Operational improvements",
+          "Process standardization",
+          "Productivity frameworks"
+        ]
+      },
+      {
+        "title": "Workforce Productivity Optimization",
+        "description": "Improve operational efficiency across teams.",
+        "deliverables": [
+          "Productivity metrics",
+          "Performance tracking frameworks",
+          "Workforce analytics",
+          "Resource optimization models"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Workplace Assessment & Discovery",
+        "activities": [
+          "Employee interviews",
+          "Stakeholder workshops",
+          "Current state analysis",
+          "Productivity assessments",
+          "Workplace evaluations"
+        ],
+        "outputs": [
+          "Workplace Assessment Reports",
+          "Workforce Analysis",
+          "Transformation Opportunities"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Workforce Analysis & Planning",
+        "activities": [
+          "Process reviews",
+          "Collaboration assessments",
+          "Workforce mapping",
+          "Productivity analysis"
+        ],
+        "outputs": [
+          "Gap Analysis Reports",
+          "Workforce Models",
+          "Improvement Recommendations"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Workplace Design",
+        "activities": [
+          "Process redesign",
+          "Collaboration planning",
+          "Experience design",
+          "Governance planning"
+        ],
+        "outputs": [
+          "Future State Models",
+          "Workplace Designs",
+          "Governance Frameworks"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Technology & Workflow Implementation",
+        "activities": [
+          "Workflow configuration",
+          "Collaboration setup",
+          "Platform deployment",
+          "Integration activities"
+        ],
+        "outputs": [
+          "Operational Workflows",
+          "Collaboration Systems",
+          "Workplace Platforms"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Employee Enablement",
+        "activities": [
+          "Workforce onboarding",
+          "Training programs",
+          "Documentation creation",
+          "Adoption support"
+        ],
+        "outputs": [
+          "Training Materials",
+          "User Guides",
+          "Adoption Plans"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Validation & Performance Measurement",
+        "activities": [],
+        "outputs": [
+          "Validation Reports",
+          "Performance Reports",
+          "Adoption Metrics"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Continuous Optimization",
+        "activities": [
+          "Process improvements",
+          "Workforce feedback analysis",
+          "Productivity optimization",
+          "Operational refinements"
+        ],
+        "outputs": [
+          "Improvement Plans",
+          "Optimization Reports",
+          "Updated Workflows"
+        ]
+      }
+    ]
+  },
+  "process-automation": {
+    "name": "Process Automation",
+    "slug": "process-automation",
+    "tagline": "Streamline Operations, Reduce Manual Effort, and Improve Efficiency Through",
+    "description": "Intelligent Process Automation Organizations face increasing pressure to improve operational efficiency, reduce costs, minimize errors, and accelerate business processes. Process Automation focuses on replacing repetitive, manual, and rule-based activities with automated workflows that improve speed, consistency, scalability, and operational performance. Our Process Automation Services help businesses automate workflows, improve productivity, reduce operational risks, and enable faster execution across business functions.",
+    "challenges": [
+      "Repetitive manual activities",
+      "High operational costs",
+      "Slow business processes",
+      "Human errors in workflows",
+      "Inconsistent process execution",
+      "Poor operational visibility",
+      "Delayed approvals",
+      "Resource inefficiencies"
+    ],
+    "offerings": [
+      {
+        "title": "Workflow Automation",
+        "description": "Automate business workflows and operational sequences.",
+        "deliverables": [
+          "Workflow designs",
+          "Automated task routing",
+          "Approval workflows",
+          "Escalation systems",
+          "Workflow monitoring systems"
+        ]
+      },
+      {
+        "title": "Business Rule Automation",
+        "description": "Automate rule-based operational activities.",
+        "deliverables": [
+          "Rule engines",
+          "Decision workflows",
+          "Validation frameworks",
+          "Operational logic systems"
+        ]
+      },
+      {
+        "title": "Approval Process Automation",
+        "description": "Improve approval workflows across departments.",
+        "deliverables": [
+          "Approval workflows",
+          "Multi-level approval systems",
+          "Notification systems",
+          "Approval dashboards"
+        ]
+      },
+      {
+        "title": "Task Automation",
+        "description": "Reduce repetitive operational activities.",
+        "deliverables": [
+          "Automated tasks",
+          "Scheduled workflows",
+          "Trigger-based execution systems",
+          "Process orchestration workflows"
+        ]
+      },
+      {
+        "title": "Document Process Automation",
+        "description": "Automate document handling and processing activities.",
+        "deliverables": [
+          "Document routing systems",
+          "Document validation workflows",
+          "Information extraction systems",
+          "Processing frameworks"
+        ]
+      },
+      {
+        "title": "Operational Workflow Orchestration",
+        "description": "Coordinate activities across multiple systems and teams.",
+        "deliverables": [
+          "Workflow orchestration systems",
+          "Cross-functional workflows",
+          "Event-driven processes",
+          "Dependency management systems"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Process Discovery & Assessment",
+        "activities": [
+          "Stakeholder interviews",
+          "Process mapping",
+          "Workflow analysis",
+          "Bottleneck identification",
+          "Operational assessments"
+        ],
+        "outputs": [
+          "Process Documentation",
+          "Gap Analysis Reports",
+          "Improvement Opportunities"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Process Analysis & Prioritization",
+        "activities": [
+          "Automation feasibility analysis",
+          "Process prioritization",
+          "Complexity analysis",
+          "Dependency mapping"
+        ],
+        "outputs": [
+          "Automation Candidates List",
+          "Prioritization Reports",
+          "Feasibility Assessments"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Automation Design",
+        "activities": [
+          "Workflow redesign",
+          "Rule definition",
+          "Trigger identification",
+          "Exception planning"
+        ],
+        "outputs": [
+          "Workflow Designs",
+          "Automation Frameworks",
+          "Process Logic Documents"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Development & Configuration",
+        "activities": [
+          "Workflow configuration",
+          "Logic implementation",
+          "Integration setup",
+          "Rule configuration"
+        ],
+        "outputs": [
+          "Configured Workflows",
+          "Automation Engines",
+          "Operational Systems"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Integration & Connectivity",
+        "activities": [
+          "System integrations",
+          "Data mapping",
+          "Workflow synchronization",
+          "Process connectivity"
+        ],
+        "outputs": [
+          "Integrated Systems",
+          "Connected Workflows",
+          "Integration Reports"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Testing & Validation",
+        "activities": [],
+        "outputs": [
+          "Validation Reports",
+          "Test Results",
+          "Defect Logs"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Deployment & Enablement",
+        "activities": [
+          "Production rollout",
+          "User onboarding",
+          "Monitoring setup",
+          "Workflow activation"
+        ],
+        "outputs": [
+          "Live Automation Systems",
+          "User Documentation",
+          "Deployment Reports"
+        ]
+      },
+      {
+        "phase": 8,
+        "title": "Monitoring & Continuous Improvement",
+        "activities": [
+          "Performance tracking",
+          "Workflow optimization",
+          "Exception management",
+          "Continuous refinement"
+        ],
+        "outputs": [
+          "Monitoring Dashboards",
+          "Optimization Reports",
+          "Updated Workflows"
+        ]
+      }
+    ]
+  },
+  "business-process-management": {
+    "name": "Business Process Management",
+    "slug": "business-process-management",
+    "tagline": "Business Process Management Services help organizations standardize workflows,",
+    "description": "improve operational visibility, reduce inefficiencies, strengthen governance, and create sustainable process ecosystems that continuously improve over time.",
+    "challenges": [
+      "Unstructured workflows",
+      "Process inconsistencies",
+      "Lack of operational visibility",
+      "Departmental silos",
+      "Process duplication",
+      "High operational costs",
+      "Poor governance structures",
+      "Difficult process tracking"
+    ],
+    "offerings": [
+      {
+        "title": "Process Discovery & Documentation",
+        "description": "Identify, capture, and document business processes across operational functions.",
+        "deliverables": [
+          "Process documentation",
+          "Workflow mapping",
+          "Process inventories",
+          "Role mapping",
+          "Operational flow diagrams"
+        ]
+      },
+      {
+        "title": "Business Process Design",
+        "description": "Design structured processes aligned with business objectives.",
+        "deliverables": [
+          "Process architectures",
+          "Workflow structures",
+          "Role definitions",
+          "Process models",
+          "Governance frameworks"
+        ]
+      },
+      {
+        "title": "Process Modeling & Mapping",
+        "description": "Create visual representations of operational workflows.",
+        "deliverables": [
+          "Process maps",
+          "Workflow diagrams",
+          "Activity models",
+          "Process relationships",
+          "Operational models"
+        ]
+      },
+      {
+        "title": "Process Standardization",
+        "description": "Create repeatable operational practices.",
+        "deliverables": [
+          "Standard operating procedures",
+          "Process templates",
+          "Governance guidelines",
+          "Process policies"
+        ]
+      },
+      {
+        "title": "Process Governance Frameworks",
+        "description": "Develop mechanisms for managing and controlling processes.",
+        "deliverables": [
+          "Governance structures",
+          "Ownership models",
+          "Escalation procedures",
+          "Control mechanisms"
+        ]
+      },
+      {
+        "title": "Process Monitoring & Performance Management",
+        "description": "Measure process effectiveness.",
+        "deliverables": [
+          "KPI frameworks",
+          "Monitoring dashboards",
+          "Performance reports",
+          "Operational metrics"
+        ]
+      }
+    ],
+    "methodology": [
+      {
+        "phase": 1,
+        "title": "Process Discovery & Assessment",
+        "activities": [
+          "Stakeholder interviews",
+          "Workflow reviews",
+          "Operational assessments",
+          "Department analysis",
+          "Process identification"
+        ],
+        "outputs": [
+          "Process Assessment Reports",
+          "Workflow Documentation",
+          "Current State Analysis"
+        ]
+      },
+      {
+        "phase": 2,
+        "title": "Process Mapping & Analysis",
+        "activities": [
+          "Process mapping",
+          "Dependency analysis",
+          "Bottleneck identification",
+          "Role analysis",
+          "Process reviews"
+        ],
+        "outputs": [
+          "Process Maps",
+          "Gap Analysis Reports",
+          "Bottleneck Reports"
+        ]
+      },
+      {
+        "phase": 3,
+        "title": "Process Design & Modeling",
+        "activities": [
+          "Workflow redesign",
+          "Role definition",
+          "Governance planning",
+          "Standardization planning"
+        ],
+        "outputs": [
+          "Future State Models",
+          "Workflow Designs",
+          "Governance Structures"
+        ]
+      },
+      {
+        "phase": 4,
+        "title": "Process Implementation",
+        "activities": [
+          "Workflow deployment",
+          "Process documentation",
+          "Governance implementation",
+          "User enablement"
+        ],
+        "outputs": [
+          "Operational Processes",
+          "Process Documentation",
+          "Governance Frameworks"
+        ]
+      },
+      {
+        "phase": 5,
+        "title": "Monitoring & Measurement",
+        "activities": [
+          "KPI tracking",
+          "Workflow monitoring",
+          "Operational reporting",
+          "Performance reviews"
+        ],
+        "outputs": [
+          "KPI Dashboards",
+          "Monitoring Reports",
+          "Process Metrics"
+        ]
+      },
+      {
+        "phase": 6,
+        "title": "Optimization & Improvement",
+        "activities": [
+          "Process reviews",
+          "Efficiency analysis",
+          "Improvement initiatives",
+          "Governance updates"
+        ],
+        "outputs": [
+          "Optimization Reports",
+          "Updated Workflows",
+          "Improvement Plans"
+        ]
+      },
+      {
+        "phase": 7,
+        "title": "Continuous Governance",
+        "activities": [
+          "Compliance reviews",
+          "Ownership management",
+          "Process audits",
+          "Framework updates"
+        ],
+        "outputs": [
+          "Governance Reports",
+          "Audit Documentation",
+          "Updated Standards"
+        ]
+      }
+    ]
+  }
+}

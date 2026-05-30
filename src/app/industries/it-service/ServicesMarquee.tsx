@@ -98,19 +98,46 @@ function ServicePill({ children }: { children: React.ReactNode }) {
   );
 }
 
+const slugMap: Record<string, string> = {
+  "AI & Data Analytics": "ai-data-analytics",
+  "Cloud": "cloud",
+  "Cognitive Business Operations": "cognitive-business-operations",
+  "Cybersecurity": "cybersecurity",
+  "Network Solutions": "network-solutions",
+  "Industrial Autonomy and Engineering": "industrial-autonomy-and-engineering",
+  "Enterprise Solutions": "enterprise-solutions",
+  "Consulting": "consulting",
+  "Software Development": "software-development",
+  "Web Development": "web-development",
+  "Application Development": "application-development",
+  "Startup MVP": "startup-mvp",
+  "CRM Solution": "crm-solution",
+  "CXM Solution": "cxm-solution",
+  "Digital Marketing": "digital-marketing",
+  "Blockchain": "blockchain",
+  "IoT": "iot",
+  "DevOps": "devops",
+  "Unit test": "unit-test",
+  "Quality Assurance": "quality-assurance",
+  "Workplace Transformation": "workplace-transformation",
+  "Process Automation": "process-automation",
+  "Business Process Management": "business-process-management"
+};
+
 export default function ServicesMarquee() {
-  // Helper to dynamically render a pill and wrap it in a prefetching Next Link if it's the "Cloud" service
   const renderPill = (item: string, key: string | number) => {
     const pill = <ServicePill>{item}</ServicePill>;
-    if (item === 'Cloud') {
+    const slug = slugMap[item];
+    if (slug) {
       return (
-        <Link key={key} href="/industries/it-service/cloud" style={{ textDecoration: 'none', display: 'inline-block' }}>
+        <Link key={key} href={`/industries/it-service/${slug}`} style={{ textDecoration: 'none', display: 'inline-block' }}>
           {pill}
         </Link>
       );
     }
     return <React.Fragment key={key}>{pill}</React.Fragment>;
   };
+
 
   return (
     <div style={{
