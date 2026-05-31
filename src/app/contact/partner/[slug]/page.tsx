@@ -278,11 +278,22 @@ export default function PartnershipFormPage() {
   const totalSteps = isCreator ? 4 : 3;
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', color: '#000000', paddingTop: '9rem', paddingBottom: '8rem', fontFamily: '"Plus Jakarta Sans", system-ui, -apple-system, sans-serif' }}>
+    <div 
+      className={isCreator ? "creator-dark-theme" : ""}
+      style={{ 
+        minHeight: '100vh', 
+        backgroundColor: isCreator ? '#050505' : '#ffffff', 
+        color: isCreator ? '#ffffff' : '#000000', 
+        paddingTop: '9rem', 
+        paddingBottom: '8rem', 
+        fontFamily: '"Plus Jakarta Sans", system-ui, -apple-system, sans-serif',
+        transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)'
+      }}
+    >
       
       {/* Dynamic Style Injection */}
       <style dangerouslySetInnerHTML={{__html: `
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
         
         .form-page-container {
           max-width: 1200px;
@@ -562,64 +573,116 @@ export default function PartnershipFormPage() {
           margin: 0 auto 1.5rem auto;
         }
 
-        /* Content Creator Section */
-        .creator-section {
-          background: linear-gradient(135deg, #090909 0%, #121212 100%);
+        .creator-dark-theme .creator-section {
+          background: transparent !important;
           color: #ffffff;
-          border-radius: 24px;
-          padding: clamp(3rem, 6vw, 5rem);
+          border-radius: 0 !important;
+          padding: 0 !important;
           max-width: 1200px;
           margin: 0 auto;
-          border: 1px solid rgba(255,255,255,0.06);
+          border: none !important;
           position: relative;
-          overflow: hidden;
+          overflow: visible;
+          backdrop-filter: none !important;
+          box-shadow: none !important;
         }
 
-        .creator-header-grid {
-          display: grid;
-          grid-template-columns: 1.25fr 0.75fr;
-          gap: clamp(2rem, 4vw, 5rem);
+        .creator-dark-theme .creator-section::before {
+          content: '';
+          position: absolute;
+          display: none !important;
+        }
+
+        .creator-dark-theme .creator-section::after {
+          content: '';
+          position: absolute;
+          display: none !important;
+        }
+
+        .creator-header-centered {
+          display: flex;
+          flex-direction: column;
           align-items: center;
+          text-align: center;
           margin-bottom: 4rem;
+          position: relative;
+          z-index: 1;
+          width: 100%;
         }
 
-        .creator-title-area {
-          text-align: left;
-        }
-
-        .creator-title {
-          font-size: clamp(2rem, 3.8vw, 2.8rem);
-          font-weight: 300;
-          letter-spacing: -0.02em;
-          margin-bottom: 1.2rem;
-          line-height: 1.15;
-        }
-
-        .creator-desc {
-          color: #9ca3af;
-          font-size: clamp(0.95rem, 1.1vw, 1.05rem);
-          line-height: 1.75;
-          font-weight: 300;
-          margin: 0;
-        }
-
-        .creator-header-visual {
+        .creator-header-centered .creator-header-visual {
           width: 100%;
           display: flex;
           justify-content: center;
-          align-items: center;
+          margin-bottom: 3.5rem;
         }
 
-        .creator-visual-wrap {
+        .creator-header-centered .creator-visual-wrap {
           width: 100%;
-          max-width: 380px;
-          aspect-ratio: 16/10;
-          border-radius: 16px;
+          max-width: 760px;
+          aspect-ratio: 16/10.5;
+          border-radius: 48px;
           overflow: hidden;
           position: relative;
-          border: 1px solid rgba(255,255,255,0.08);
-          box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+          border: none;
+          box-shadow: 
+            0 30px 60px rgba(0, 0, 0, 0.8), 
+            0 0 50px rgba(255, 255, 255, 0.05),
+            inset 0 0 25px rgba(255, 255, 255, 0.05);
           background: #0d0d0d;
+          transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .creator-header-centered .creator-visual-wrap:hover {
+          transform: translateY(-4px) scale(1.02);
+          box-shadow: 
+            0 40px 80px rgba(0, 0, 0, 0.9), 
+            0 0 60px rgba(255, 255, 255, 0.1),
+            inset 0 0 35px rgba(255, 255, 255, 0.1);
+        }
+
+        .creator-header-centered .creator-title-area {
+          max-width: 850px;
+          margin: 0 auto;
+          text-align: center;
+        }
+
+        .creator-header-centered .creator-title {
+          font-size: clamp(2rem, 3.8vw, 3rem);
+          font-weight: 300;
+          letter-spacing: -0.02em;
+          margin-bottom: 1.5rem;
+          line-height: 1.25;
+          color: #ffffff;
+        }
+
+        .creator-title-script {
+          font-family: 'Pinyon Script', cursive;
+          font-weight: 400;
+          text-transform: none;
+          font-style: italic;
+          font-size: clamp(3rem, 5.5vw, 4.5rem);
+          display: inline-block;
+          padding: 0 0.4rem;
+          vertical-align: middle;
+          color: #ffffff;
+        }
+
+        .creator-title-block {
+          display: block;
+          font-size: clamp(2.2rem, 4vw, 3.2rem);
+          font-weight: 300;
+          margin-top: 0.5rem;
+          letter-spacing: -0.03em;
+        }
+
+        .creator-header-centered .creator-desc {
+          color: rgba(255, 255, 255, 0.85);
+          font-size: clamp(0.95rem, 1.1vw, 1.15rem);
+          line-height: 1.65;
+          font-weight: 400;
+          max-width: 680px;
+          margin: 0 auto;
         }
 
         .creator-visual-img {
@@ -630,13 +693,13 @@ export default function PartnershipFormPage() {
         }
 
         .creator-visual-wrap:hover .creator-visual-img {
-          transform: scale(1.04);
+          transform: scale(1.05);
         }
 
         .creator-visual-glow {
           position: absolute;
           inset: 0;
-          background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.55) 100%);
+          background: none !important;
           pointer-events: none;
         }
 
@@ -644,63 +707,298 @@ export default function PartnershipFormPage() {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 4rem;
+          position: relative;
+          z-index: 1;
         }
 
         .creator-block-title {
           font-size: 0.85rem;
-          font-weight: 600;
-          letter-spacing: 0.15em;
+          font-weight: 700;
+          letter-spacing: 0.2em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.45);
-          margin-bottom: 1.5rem;
-          border-left: 2.5px solid #ec4899;
+          background: linear-gradient(90deg, #ec4899, #3b82f6);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 1.8rem;
+          border-left: 3px solid #ec4899;
           padding-left: 0.75rem;
         }
 
-        .creator-badges {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.8rem;
-          margin-bottom: 3rem;
-        }
-
-        .creator-badge {
-          background: rgba(255,255,255,0.04);
-          border: 1px solid rgba(255,255,255,0.08);
-          padding: 0.5rem 1.1rem;
-          border-radius: 100px;
-          font-size: 0.88rem;
-          font-weight: 400;
-          color: rgba(255,255,255,0.8);
-          transition: all 0.3s ease;
-        }
-
-        .creator-sub-grid {
+        .creator-ideal-grid {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 1.5rem;
+          gap: 4rem;
+          align-items: center;
+          margin-top: 4rem;
+          margin-bottom: 4rem;
         }
 
-        .creator-model-card {
-          background: rgba(255,255,255,0.02);
-          border: 1px solid rgba(255,255,255,0.05);
-          padding: 1.25rem;
-          border-radius: 12px;
+        @media (max-width: 768px) {
+          .creator-ideal-grid {
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+          }
+          .creator-ideal-img-wrap {
+            margin: 0 auto !important;
+          }
         }
 
-        .creator-model-card h5 {
-          font-size: 0.95rem;
-          font-weight: 600;
-          margin: 0 0 0.4rem 0;
-          color: #ffffff;
+        .creator-ideal-title {
+          font-size: clamp(2rem, 3.5vw, 3rem) !important;
+          font-weight: 400 !important;
+          color: #ffffff !important;
+          margin-bottom: 2rem !important;
+          letter-spacing: -0.02em !important;
+          text-transform: none !important;
+          border: none !important;
+          padding: 0 !important;
         }
 
-        .creator-model-card p {
-          font-size: 0.85rem;
-          color: #9ca3af;
+        .creator-ideal-list {
+          list-style-type: none !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          display: flex;
+          flex-direction: column;
+          gap: 0.9rem;
+        }
+
+        .creator-ideal-list li {
+          font-size: clamp(0.95rem, 1.1vw, 1.15rem) !important;
+          color: rgba(255, 255, 255, 0.85) !important;
+          position: relative !important;
+          padding-left: 1.5rem !important;
+          font-weight: 400 !important;
+          line-height: 1.4 !important;
+        }
+
+        .creator-ideal-list li::before {
+          content: '•' !important;
+          position: absolute !important;
+          left: 0 !important;
+          color: #ffffff !important;
+          font-size: 1.2rem !important;
+          line-height: 1 !important;
+          top: 0px !important;
+        }
+
+        .creator-ideal-img-wrap {
+          width: 100%;
+          max-width: 440px;
+          margin-left: auto;
+          border-radius: 32px;
+          overflow: hidden;
+          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+          background: #0d0d0d;
+        }
+
+        .creator-ideal-img {
+          width: 100%;
+          height: auto;
+          display: block;
+          object-fit: cover;
+          transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .creator-ideal-img-wrap:hover .creator-ideal-img {
+          transform: scale(1.03);
+        }
+
+        .creator-models-section {
+          margin-top: 6rem;
+          margin-bottom: 6rem;
+          text-align: center;
+        }
+
+        .creator-models-title {
+          font-size: clamp(2rem, 3.5vw, 3rem) !important;
+          font-weight: 400 !important;
+          color: #ffffff !important;
+          margin-bottom: 4rem !important;
+          letter-spacing: -0.02em !important;
+        }
+
+        .creator-models-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          position: relative;
+          max-width: 1000px;
+          margin: 0 auto;
+        }
+
+        /* Middle grid borders */
+        .creator-models-grid::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 50%;
+          width: 1px;
+          background: rgba(255, 255, 255, 0.15);
+          transform: translateX(-50%);
+        }
+
+        .creator-models-grid::after {
+          content: '';
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 50%;
+          height: 1px;
+          background: rgba(255, 255, 255, 0.15);
+          transform: translateY(-50%);
+        }
+
+        .creator-model-quadrant {
+          padding: 3rem 2rem;
+          text-align: center;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .creator-model-quadrant-title {
+          font-family: 'Pinyon Script', cursive !important;
+          font-weight: 400 !important;
+          text-transform: none !important;
+          font-style: italic !important;
+          font-size: clamp(2.5rem, 4.5vw, 3.8rem) !important;
+          color: #ffffff !important;
+          margin-bottom: 1rem !important;
+          letter-spacing: 0.02em !important;
+        }
+
+        .creator-model-quadrant-desc {
+          font-size: clamp(0.9rem, 1vw, 1.1rem);
+          color: rgba(255, 255, 255, 0.7);
+          font-weight: 300;
           margin: 0;
           line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+          .creator-models-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+          .creator-models-grid::before,
+          .creator-models-grid::after {
+            display: none !important;
+          }
+          .creator-model-quadrant {
+            padding: 1.5rem 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          }
+          .creator-model-quadrant:last-child {
+            border-bottom: none;
+          }
+        }
+
+        .creator-details-section {
+          margin-top: 8rem;
+          margin-bottom: 8rem;
+        }
+
+        .creator-details-grid {
+          display: grid;
+          grid-template-columns: 1.15fr 0.85fr;
+          gap: 6rem;
+          max-width: 1000px;
+          margin: 0 auto;
+        }
+
+        @media (max-width: 968px) {
+          .creator-details-grid {
+            grid-template-columns: 1fr;
+            gap: 5rem;
+          }
+        }
+
+        .creator-details-col {
+          display: flex;
+          flex-direction: column;
+        }
+
+        .creator-details-title {
+          font-size: clamp(2rem, 3.5vw, 2.6rem) !important;
+          font-weight: 400 !important;
+          color: #ffffff !important;
+          margin-bottom: 1.5rem !important;
+          letter-spacing: -0.02em !important;
+          text-transform: none !important;
+          border: none !important;
+          padding: 0 !important;
+        }
+
+        .creator-details-subtitle {
+          font-size: clamp(0.95rem, 1.1vw, 1.15rem);
+          color: rgba(255, 255, 255, 0.5);
           font-weight: 300;
+          margin-bottom: 2.5rem;
+          line-height: 1.5;
+        }
+        /* Clean Bullet List Grid for Left Column */
+        .creator-clean-bullet-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1.2rem 2rem;
+        }
+
+        @media (max-width: 580px) {
+          .creator-clean-bullet-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        .creator-bullet-item {
+          display: flex;
+          align-items: center;
+          gap: 0.8rem;
+        }
+
+        .creator-bullet-dot {
+          width: 5px;
+          height: 5px;
+          border-radius: 50%;
+          background-color: #ffffff;
+          opacity: 0.6;
+          flex-shrink: 0;
+        }
+
+        .creator-bullet-text {
+          font-size: clamp(0.95rem, 1vw, 1.1rem);
+          color: rgba(255, 255, 255, 0.85);
+          font-weight: 400;
+        }
+
+        /* Clean Numbered List Stack for Right Column */
+        .creator-clean-num-stack {
+          display: flex;
+          flex-direction: column;
+          gap: 1.4rem;
+        }
+
+        .creator-num-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 1.2rem;
+        }
+
+        .creator-num-prefix {
+          font-size: 0.95rem;
+          font-weight: 500;
+          color: rgba(255, 255, 255, 0.4);
+          letter-spacing: 0.05em;
+          padding-top: 0.15rem;
+          flex-shrink: 0;
+        }
+
+        .creator-num-text {
+          font-size: clamp(0.95rem, 1vw, 1.1rem);
+          color: rgba(255, 255, 255, 0.85);
+          font-weight: 400;
+          line-height: 1.4;
         }
 
         .model-meta-list {
@@ -711,25 +1009,43 @@ export default function PartnershipFormPage() {
 
         .model-meta-list li {
           font-size: 0.95rem;
-          line-height: 1.5;
+          line-height: 1.6;
+          color: rgba(255, 255, 255, 0.75) !important;
           position: relative;
-          padding-left: 1.2rem;
+          padding-left: 1.8rem;
+          margin-bottom: 0.8rem;
+          transition: color 0.3s ease;
+        }
+
+        .model-meta-list li:hover {
+          color: #ffffff !important;
         }
 
         .model-meta-list li::before {
-          content: "•";
-          color: #ec4899;
+          content: "";
           position: absolute;
           left: 0.2rem;
-          font-weight: bold;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #ec4899, #3b82f6);
+          box-shadow: 0 0 8px rgba(236, 72, 153, 0.6);
         }
 
         @media (max-width: 968px) {
-          .creator-header-grid {
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            text-align: center;
+          .creator-header-centered {
             margin-bottom: 3rem;
+          }
+
+          .creator-header-centered .creator-header-visual {
+            margin-bottom: 2.5rem;
+          }
+
+          .creator-header-centered .creator-visual-wrap {
+            max-width: 100%;
+            border-radius: 32px;
           }
 
           .creator-title-area {
@@ -747,25 +1063,221 @@ export default function PartnershipFormPage() {
             grid-template-columns: 1fr;
           }
         }
+
+        /* ────────────────── SLEEK DARK THEME FOR CREATOR PAGE ────────────────── */
+        .creator-dark-theme {
+          background-color: #050505 !important;
+          color: #ffffff !important;
+        }
+
+        .creator-dark-theme .back-btn {
+          color: rgba(255, 255, 255, 0.6);
+        }
+
+        .creator-dark-theme .back-btn:hover {
+          color: #ffffff;
+        }
+
+        .creator-dark-theme .form-card {
+          background: #0a0a0a !important;
+          border: none !important;
+          border-radius: 0 !important;
+          padding: 0 !important;
+          box-shadow: none !important;
+        }
+
+        .creator-dark-theme .modal-form-title {
+          font-weight: 400 !important;
+          font-size: clamp(2rem, 3.5vw, 2.8rem) !important;
+          letter-spacing: -0.03em !important;
+          color: #ffffff !important;
+          background: none !important;
+          -webkit-text-fill-color: initial !important;
+          margin-bottom: 0.8rem !important;
+        }
+
+        .creator-dark-theme .modal-form-subtitle {
+          color: rgba(255, 255, 255, 0.4) !important;
+          font-size: 0.95rem !important;
+          line-height: 1.5 !important;
+          font-weight: 300 !important;
+          margin-bottom: 2.5rem !important;
+        }
+
+        /* Steps indicators in Dark mode */
+        .creator-dark-theme .step-node {
+          background: #0d0d0d !important;
+          border: 1px solid rgba(255, 255, 255, 0.15) !important;
+          color: rgba(255, 255, 255, 0.4) !important;
+          font-size: 0.9rem !important;
+          font-weight: 600 !important;
+          width: 36px !important;
+          height: 36px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          border-radius: 50% !important;
+          z-index: 2 !important;
+        }
+
+        .creator-dark-theme .step-node-active {
+          border: 2px solid #ffffff !important;
+          color: #ffffff !important;
+          background: #0d0d0d !important;
+          box-shadow: none !important;
+        }
+
+        .creator-dark-theme .step-node-complete {
+          border: 2px solid rgba(255, 255, 255, 0.5) !important;
+          background: rgba(255, 255, 255, 0.15) !important;
+          color: #ffffff !important;
+        }
+
+        .creator-dark-theme .step-line {
+          height: 1px !important;
+          background: rgba(255, 255, 255, 0.12) !important;
+        }
+
+        .creator-dark-theme .step-line-active {
+          background: rgba(255, 255, 255, 0.6) !important;
+        }
+
+        .creator-dark-theme .step-label {
+          color: rgba(255, 255, 255, 0.4) !important;
+          font-size: 0.85rem !important;
+        }
+
+        .creator-dark-theme .step-label-active {
+          color: #ffffff !important;
+          font-weight: 600 !important;
+        }
+
+        /* Dark form controls */
+        .creator-dark-theme .form-label {
+          color: rgba(255, 255, 255, 0.6) !important;
+          font-weight: 400 !important;
+          font-size: 0.85rem !important;
+          letter-spacing: 0.02em !important;
+          text-transform: uppercase !important;
+          margin-bottom: 0.7rem !important;
+        }
+
+        .creator-dark-theme .form-input {
+          background: transparent !important;
+          border: none !important;
+          border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+          border-radius: 0 !important;
+          padding: 0.8rem 0 !important;
+          color: #ffffff !important;
+          font-size: 1rem !important;
+          font-weight: 300 !important;
+          transition: border-color 0.3s ease !important;
+          height: auto !important;
+        }
+
+        .creator-dark-theme .form-input::placeholder {
+          color: rgba(255, 255, 255, 0.2) !important;
+        }
+
+        .creator-dark-theme .form-input:focus {
+          border-bottom-color: rgba(255, 255, 255, 0.7) !important;
+          background: transparent !important;
+          box-shadow: none !important;
+          outline: none !important;
+        }
+
+        /* Select option elements styling */
+        .creator-dark-theme select.form-input {
+          background-color: #121212;
+        }
+        
+        .creator-dark-theme select.form-input option {
+          background-color: #121212;
+          color: #ffffff;
+        }
+
+        .creator-dark-theme .form-multi-checkbox-grid {
+          background: rgba(255, 255, 255, 0.02);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .creator-dark-theme .checkbox-label-wrap {
+          color: rgba(255, 255, 255, 0.8);
+        }
+
+        .creator-dark-theme .form-checkbox-native {
+          accent-color: #ffffff;
+        }
+
+        .creator-dark-theme .file-upload-block {
+          border-color: rgba(255, 255, 255, 0.12);
+          background: transparent;
+          border-radius: 8px;
+        }
+
+        .creator-dark-theme .file-upload-block:hover {
+          border-color: rgba(255, 255, 255, 0.4);
+          background: rgba(255, 255, 255, 0.02);
+        }
+
+        .creator-dark-theme .file-upload-block p {
+          color: rgba(255, 255, 255, 0.5) !important;
+        }
+
+        .creator-dark-theme label[for="creator-auth"],
+        .creator-dark-theme label[for="creator-consent"] {
+          color: rgba(255, 255, 255, 0.8) !important;
+        }
+
+        /* Buttons in Creator Dark mode */
+        .creator-dark-theme .step-btn-prev {
+          background: transparent;
+          border: 1px solid rgba(255, 255, 255, 0.15);
+          color: rgba(255, 255, 255, 0.8);
+        }
+
+        .creator-dark-theme .step-btn-prev:hover {
+          border-color: #ffffff;
+          color: #ffffff;
+        }
+
+        .creator-dark-theme .step-btn-next {
+          background: #ffffff !important;
+          color: #000000 !important;
+          font-weight: 500 !important;
+          letter-spacing: 0.01em !important;
+          box-shadow: none !important;
+          border: none !important;
+          border-radius: 8px !important;
+        }
+
+        .creator-dark-theme .step-btn-next:hover {
+          transform: translateY(-2px);
+          background: rgba(255, 255, 255, 0.88) !important;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5) !important;
+        }
+
+        /* Success & Error frames */
+        .creator-dark-theme .status-frame h3 {
+          color: #ffffff;
+        }
+        .creator-dark-theme .status-frame p {
+          color: rgba(255, 255, 255, 0.7) !important;
+        }
       `}} />
 
       <div className="form-page-container">
         
-        <button className="back-btn" onClick={() => router.push('/contact/partner')}>
-          &larr; Back to Partnerships
-        </button>
+        {!isCreator && (
+          <button className="back-btn" onClick={() => router.push('/contact/partner')}>
+            &larr; Back to Partnerships
+          </button>
+        )}
 
         {isCreator && (
           <div className="creator-section" style={{ marginBottom: '3rem' }}>
             
-            <div className="creator-header-grid">
-              <div className="creator-title-area">
-                <h2 className="creator-title">Content Creator &amp; Influencer Partnerships</h2>
-                <p className="creator-desc">
-                  Join our creator ecosystem to access new tech programs, collaborate on products, and bring cutting-edge software and mobility insights to your audience.
-                </p>
-              </div>
-              
+            <div className="creator-header-centered">
               <div className="creator-header-visual">
                 <div className="creator-visual-wrap">
                   <img 
@@ -776,73 +1288,160 @@ export default function PartnershipFormPage() {
                   <div className="creator-visual-glow" />
                 </div>
               </div>
+
+              <div className="creator-title-area">
+                <h2 className="creator-title">
+                  Content <span className="creator-title-script">Creators</span> &amp; <span className="creator-title-script">Influencers</span>
+                  <span className="creator-title-block">Partnership</span>
+                </h2>
+                <p className="creator-desc">
+                  Join our creator ecosystem to access new tech programs, collaborate on products, and bring cutting-edge software and mobility insights to your audience.
+                </p>
+              </div>
             </div>
 
-            <div className="creator-grid">
-              
-              {/* Left Block */}
+            <div className="creator-ideal-grid">
+              {/* Left Column */}
               <div>
-                <h4 className="creator-block-title">Ideal Partners</h4>
-                <div className="creator-badges">
-                  <span className="creator-badge">Technology Content Creators</span>
-                  <span className="creator-badge">Business Influencers</span>
-                  <span className="creator-badge">Industry Experts</span>
-                  <span className="creator-badge">Educational Creators</span>
-                  <span className="creator-badge">Startup Influencers</span>
-                  <span className="creator-badge">Automotive Creators</span>
-                  <span className="creator-badge">Tech Reviewers</span>
-                  <span className="creator-badge">Community Builders</span>
-                  <span className="creator-badge">YouTubers</span>
-                  <span className="creator-badge">Bloggers</span>
-                  <span className="creator-badge">Podcast Hosts</span>
-                  <span className="creator-badge">Social Media Creators</span>
-                </div>
-
-                <h4 className="creator-block-title">Partnership Opportunities</h4>
-                <ul className="model-meta-list" style={{ color: '#9ca3af' }}>
-                  <li style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '0.6rem' }}>Brand Collaborations</li>
-                  <li style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '0.6rem' }}>Sponsored Content Campaigns</li>
-                  <li style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '0.6rem' }}>Product Reviews &amp; Demonstrations</li>
-                  <li style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '0.6rem' }}>Educational Content Creation</li>
-                  <li style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '0.6rem' }}>Event Collaborations</li>
-                  <li style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '0.6rem' }}>Webinar Partnerships</li>
-                  <li style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '0.6rem' }}>Industry Discussions</li>
+                <h3 className="creator-ideal-title">Ideal Partners</h3>
+                <ul className="creator-ideal-list">
+                  <li>Technology Content Creators</li>
+                  <li>Business Influencers</li>
+                  <li>Industry Experts</li>
+                  <li>Educational Creators</li>
+                  <li>Startup Influencers</li>
+                  <li>Automotive Creators</li>
+                  <li>Tech Reviewers</li>
+                  <li>Community Builders</li>
+                  <li>YouTubers</li>
+                  <li>Bloggers</li>
+                  <li>Podcast Hosts</li>
+                  <li>Social Media Creators</li>
                 </ul>
               </div>
 
-              {/* Right Block */}
+              {/* Right Column */}
               <div>
-                <h4 className="creator-block-title">Collaboration Models</h4>
-                <div className="creator-sub-grid">
-                  <div className="creator-model-card">
-                    <h5>Affiliate Partnerships</h5>
-                    <p>Performance-based growth collaborations.</p>
-                  </div>
-                  <div className="creator-model-card">
-                    <h5>Brand Ambassador</h5>
-                    <p>Long-term creator relationships.</p>
-                  </div>
-                  <div className="creator-model-card">
-                    <h5>Campaign Partnerships</h5>
-                    <p>Short-term promotional initiatives.</p>
-                  </div>
-                  <div className="creator-model-card">
-                    <h5>Educational Partnerships</h5>
-                    <p>Knowledge-sharing collaborations.</p>
+                <div className="creator-ideal-img-wrap">
+                  <img 
+                    src="/assets/creator-partner-model.png" 
+                    alt="Zawr Ideal Partner Model" 
+                    className="creator-ideal-img" 
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="creator-models-section">
+              <h3 className="creator-models-title">Collaboration Models</h3>
+              <div className="creator-models-grid">
+                
+                <div className="creator-model-quadrant">
+                  <span className="creator-model-quadrant-title">Affiliate Partners</span>
+                  <p className="creator-model-quadrant-desc">Performance-based growth collaborations.</p>
+                </div>
+
+                <div className="creator-model-quadrant">
+                  <span className="creator-model-quadrant-title">Brand Ambassador</span>
+                  <p className="creator-model-quadrant-desc">Long-term creator relationships.</p>
+                </div>
+
+                <div className="creator-model-quadrant">
+                  <span className="creator-model-quadrant-title">Campaign Partners</span>
+                  <p className="creator-model-quadrant-desc">Short-term promotional initiatives.</p>
+                </div>
+
+                <div className="creator-model-quadrant">
+                  <span className="creator-model-quadrant-title">Ed Partners</span>
+                  <p className="creator-model-quadrant-desc">Knowledge-sharing collaborations.</p>
+                </div>
+
+              </div>
+            </div>
+
+            <div className="creator-details-section">
+              <div className="creator-details-grid">
+                
+                {/* Left Column: Who We Want To Work With */}
+                <div className="creator-details-col">
+                  <h3 className="creator-details-title">Who We Want To Work With</h3>
+                  <p className="creator-details-subtitle">We welcome creators and influencers passionate about:</p>
+                  <div className="creator-clean-bullet-grid">
+                    <div className="creator-bullet-item">
+                      <span className="creator-bullet-dot" />
+                      <span className="creator-bullet-text">Technology</span>
+                    </div>
+                    <div className="creator-bullet-item">
+                      <span className="creator-bullet-dot" />
+                      <span className="creator-bullet-text">Entrepreneurship</span>
+                    </div>
+                    <div className="creator-bullet-item">
+                      <span className="creator-bullet-dot" />
+                      <span className="creator-bullet-text">Innovation</span>
+                    </div>
+                    <div className="creator-bullet-item">
+                      <span className="creator-bullet-dot" />
+                      <span className="creator-bullet-text">Automotive &amp; Mobility</span>
+                    </div>
+                    <div className="creator-bullet-item">
+                      <span className="creator-bullet-dot" />
+                      <span className="creator-bullet-text">Artificial Intelligence</span>
+                    </div>
+                    <div className="creator-bullet-item">
+                      <span className="creator-bullet-dot" />
+                      <span className="creator-bullet-text">Startups</span>
+                    </div>
+                    <div className="creator-bullet-item">
+                      <span className="creator-bullet-dot" />
+                      <span className="creator-bullet-text">Engineering</span>
+                    </div>
+                    <div className="creator-bullet-item">
+                      <span className="creator-bullet-dot" />
+                      <span className="creator-bullet-text">Business Growth</span>
+                    </div>
+                    <div className="creator-bullet-item">
+                      <span className="creator-bullet-dot" />
+                      <span className="creator-bullet-text">Digital Transformation</span>
+                    </div>
                   </div>
                 </div>
 
-                <h4 className="creator-block-title" style={{ marginTop: '2.5rem' }}>Benefits for Creators</h4>
-                <ul className="model-meta-list" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem 2rem', color: '#9ca3af' }}>
-                  <li style={{ color: 'rgba(255,255,255,0.7)' }}>Access to tech ecosystems</li>
-                  <li style={{ color: 'rgba(255,255,255,0.7)' }}>Early product access</li>
-                  <li style={{ color: 'rgba(255,255,255,0.7)' }}>Co-branding options</li>
-                  <li style={{ color: 'rgba(255,255,255,0.7)' }}>Revenue-sharing models</li>
-                  <li style={{ color: 'rgba(255,255,255,0.7)' }}>Audience growth pathways</li>
-                  <li style={{ color: 'rgba(255,255,255,0.7)' }}>Exclusive network access</li>
-                </ul>
-              </div>
+                {/* Right Column: Benefits for Creators */}
+                <div className="creator-details-col">
+                  <h3 className="creator-details-title" style={{ marginBottom: '2.5rem' }}>Benefits for Creators</h3>
+                  <div className="creator-clean-num-stack">
+                    <div className="creator-num-item">
+                      <span className="creator-num-prefix">01</span>
+                      <span className="creator-num-text">Access to technology ecosystems</span>
+                    </div>
+                    <div className="creator-num-item">
+                      <span className="creator-num-prefix">02</span>
+                      <span className="creator-num-text">Early access opportunities</span>
+                    </div>
+                    <div className="creator-num-item">
+                      <span className="creator-num-prefix">03</span>
+                      <span className="creator-num-text">Co-branding opportunities</span>
+                    </div>
+                    <div className="creator-num-item">
+                      <span className="creator-num-prefix">04</span>
+                      <span className="creator-num-text">Revenue-sharing models</span>
+                    </div>
+                    <div className="creator-num-item">
+                      <span className="creator-num-prefix">05</span>
+                      <span className="creator-num-text">Long-term collaborations</span>
+                    </div>
+                    <div className="creator-num-item">
+                      <span className="creator-num-prefix">06</span>
+                      <span className="creator-num-text">Audience growth opportunities</span>
+                    </div>
+                    <div className="creator-num-item">
+                      <span className="creator-num-prefix">07</span>
+                      <span className="creator-num-text">Networking access</span>
+                    </div>
+                  </div>
+                </div>
 
+              </div>
             </div>
 
           </div>

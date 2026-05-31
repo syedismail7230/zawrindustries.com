@@ -98,7 +98,7 @@ export default function Header() {
     }
   };
 
-  const isDarkPage = pathname.startsWith('/careers') || pathname.startsWith('/contact/client-relations') || pathname.startsWith('/contact/sponsorship') || pathname.startsWith('/investors') || pathname.startsWith('/newsroom/events') || pathname.startsWith('/industries/it-service');
+  const isDarkPage = pathname.startsWith('/careers') || pathname.startsWith('/contact/client-relations') || pathname.startsWith('/contact/sponsorship') || pathname.startsWith('/investors') || pathname.startsWith('/newsroom/events') || pathname.startsWith('/industries/it-service') || pathname === '/contact/partner/creator-partner';
   const isLightPage = pathname === '/sustainability/empowerment' || pathname === '/sustainability/health' || pathname === '/sustainability/education';
 
   return (
