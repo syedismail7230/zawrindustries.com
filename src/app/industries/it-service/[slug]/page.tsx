@@ -1,20 +1,14 @@
-'use client';
-
-import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import React from 'react';
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import servicesData from '@/data/services_data.json';
-import { MethodologySection, PhaseDetail } from '@/components/MethodologySection';
-import { IndustriesSection } from '@/components/IndustriesSection';
-import { FAQSection } from '@/components/FAQSection';
+import ServicePageClient from './ServicePageClient';
 
 interface Offering {
   title: string;
   description: string;
   deliverables: string[];
 }
-
-
 
 interface FAQ {
   q: string;
@@ -35,665 +29,274 @@ interface ServiceDetail {
   description: string;
   challenges: string[];
   offerings: Offering[];
-  methodology: PhaseDetail[];
+  methodology: any[];
   industries: Industry[];
   faqs: FAQ[];
 }
 
 const typedServicesData = servicesData as Record<string, ServiceDetail>;
 
-function ChallengesSection({ challenges }: { challenges: string[] }) {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const barrelRef = useRef<HTMLDivElement>(null);
-  const viewportRef = useRef<HTMLDivElement>(null);
-  const isHovered = useRef(false);
+// Pre-define metadata maps to create premium rich keyword titles & decs
+const seoKeywords: Record<string, { title: string; keywords: string }> = {
+  'ai-data-analytics': {
+    title: 'Enterprise AI & Predictive Data Analytics Services',
+    keywords: 'enterprise ai solutions, predictive analytics, custom artificial intelligence, data warehouse, business analytics, Bangalore AI firm'
+  },
+  'cloud': {
+    title: 'Hybrid Cloud Migration & Scalable Cloud Infrastructure',
+    keywords: 'hybrid cloud solutions, AWS consulting, GCP solutions, cloud automation, high performance compute, cloud setup Bangalore'
+  },
+  'cognitive-business-operations': {
+    title: 'Cognitive Workflows & Business Process Automation',
+    keywords: 'cognitive automation, business workflows, backend operation automation, smart workflow analytics, AI-led administrative tools'
+  },
+  'cybersecurity': {
+    title: 'Zero-Trust Cybersecurity & Corporate threat Protection',
+    keywords: 'corporate security solutions, threat analytics, network firewalls, zero trust consulting, penetration testing, compliance audits'
+  },
+  'network-solutions': {
+    title: 'High-Performance Enterprise Routing & Network Solutions',
+    keywords: 'network load balancing, smart routing configurations, local area configurations, datacenter networking solutions'
+  },
+  'industrial-autonomy-and-engineering': {
+    title: 'Industrial Automation & Hardware Autonomy Engineering',
+    keywords: 'robotics automation, manufacturing controller programming, hardware monitoring systems, custom industrial pipelines'
+  },
+  'enterprise-solutions': {
+    title: 'Custom ERP Architectures & Enterprise software Engines',
+    keywords: 'custom ERP systems, enterprise database management, workforce automation software, custom business tools'
+  },
+  'consulting': {
+    title: 'Advanced Technology Stack Consulting & R&D Audits',
+    keywords: 'tech stack consulting, corporate R&D audits, engineering architecture blueprints, tech consulting firm Bangalore'
+  },
+  'software-development': {
+    title: 'Native Custom Software Engineering & Scaling Backend Systems',
+    keywords: 'high performance custom backend, custom software development company, scalable server engineering, dynamic native platforms'
+  },
+  'web-development': {
+    title: 'Ultra-Modern Visual Web Development & Responsive Interfaces',
+    keywords: 'premium web applications, custom frontend engineering, visual design development, React NextJS development Bangalore'
+  },
+  'application-development': {
+    title: 'Cross-Platform Mobile & Desktop Product Development',
+    keywords: 'mobile application developers, cross platform development, iOS Android enterprise applications, custom application build'
+  },
+  'startup-mvp': {
+    title: 'Rapid Startup MVP Prototyping & Product Release Pipelines',
+    keywords: 'MVP development Bangalore, rapid prototyping, startup product builder, agile MVP build, software proof of concept'
+  },
+  'crm-solution': {
+    title: 'Next-Gen Sales CRM Workflow & Dynamic Lead Management',
+    keywords: 'custom CRM builders, pipeline automation platforms, lead capture tools, sales workflow integration'
+  },
+  'cxm-solution': {
+    title: 'Enterprise Customer Experience (CXM) Portals & Feedback Systems',
+    keywords: 'custom CXM software, feedback systems, client portal design, interaction tracking dashboards'
+  },
+  'digital-marketing': {
+    title: 'Advanced Search Engine Optimization (SEO) & Marketing Campaigns',
+    keywords: 'advanced SEO services, search optimization Bangalore, performance marketing, content indexing strategies'
+  },
+  'blockchain': {
+    title: 'Decentralized Blockchain Systems & Custom Smart Contracts',
+    keywords: 'custom smart contract audit, hyperledger applications, custom blockchain solution, corporate ledger systems'
+  },
+  'iot': {
+    title: 'Embedded IoT Device Networks & Real-Time Telemetry Systems',
+    keywords: 'embedded devices engineering, IoT telemetry platforms, hardware telemetry dashboard, real-time diagnostic systems'
+  },
+  'devops': {
+    title: 'Continuous Integration & Continuous Deployment (CI/CD) Automation',
+    keywords: 'automated deployment pipelines, server health diagnostics, Kubernetes configurations, CI CD setup'
+  },
+  'unit-test': {
+    title: 'Rigorous Code Unit Testing & Automated Coverage Audits',
+    keywords: 'code unit testing, dynamic automated test coverage, regression checks, software quality testing'
+  },
+  'quality-assurance': {
+    title: 'Full-Stack Software Quality Assurance & Usability Audits',
+    keywords: 'software QA audits, load testing services, performance validation, user flow verification'
+  },
+  'workplace-transformation': {
+    title: 'Workspace Digital Transformation & Collaboration Tools Setup',
+    keywords: 'digital transformation, hybrid workplace tools, smart office configurations, tool optimization'
+  },
+  'process-automation': {
+    title: 'Robotic Process Automation (RPA) & Workflow Optimizers',
+    keywords: 'robotic process automation, custom RPA pipelines, business routine automation, data scraping workflows'
+  },
+  'business-process-management': {
+    title: 'Strategic Business Process Management & Efficiency Audits',
+    keywords: 'business process analytics, operational bottleneck removal, corporate efficiency strategy, resource orchestration'
+  }
+};
 
-  // Target and current active indexes (0 to 4)
-  const targetIndex = useRef(0);
-  const currentIndex = useRef(0);
-
-  const activeIndexRef = useRef(0);
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  // Cylinder geometry constants
-  const itemSpacing = 35; // degrees between items
-  const radius = 180; // cylinder radius in pixels
-  const centerIdx = 2; // middle challenge index to anchor the math
-
-  useEffect(() => {
-    let animationFrameId: number;
-
-    const tick = () => {
-      // 1. Smoothly interpolate current active index
-      const easing = 0.08;
-      currentIndex.current += (targetIndex.current - currentIndex.current) * easing;
-
-      // 2. Map current index directly to 3D rotation of the entire cylinder
-      const currentRotation = (currentIndex.current - centerIdx) * itemSpacing;
-
-      if (barrelRef.current) {
-        // Rotate the entire cylinder vertically around X axis, pushed back by -radius
-        barrelRef.current.style.transform = `translateZ(-${radius}px) rotateX(${-currentRotation}deg)`;
-
-        // Calculate and apply perspective styling, opacity, and active states for each item
-        const items = barrelRef.current.querySelectorAll('.barrel-item');
-        let closestIndex = 0;
-        let minDistance = Infinity;
-
-        items.forEach((item, index) => {
-          // Angle offset from the front facing plane (0deg is facing screen)
-          const itemAngle = (index - centerIdx) * itemSpacing;
-          const diff = itemAngle - currentRotation;
-
-          // Safe cosine-based opacity decay to prevent NaN
-          const cosVal = Math.max(0, Math.cos((diff * Math.PI) / 180));
-          const opacity = Math.max(0.18, Math.pow(cosVal, 2.8));
-          
-          const element = item as HTMLElement;
-          element.style.opacity = `${opacity}`;
-
-          // Smoothly dim color for non-active items
-          const activeFraction = Math.max(0, 1 - Math.abs(diff / itemSpacing));
-          element.style.color = `rgba(255, 255, 255, ${0.18 + activeFraction * 0.82})`;
-
-          // Highlight the active item facing closest to Z=0
-          const dist = Math.abs(diff);
-          if (dist < minDistance) {
-            minDistance = dist;
-            closestIndex = index;
-          }
-
-          if (dist < itemSpacing / 2) {
-            element.classList.add('active-item');
-          } else {
-            element.classList.remove('active-item');
-          }
-        });
-
-        if (closestIndex !== activeIndexRef.current) {
-          activeIndexRef.current = closestIndex;
-          setActiveIndex(closestIndex);
-        }
-      }
-
-      animationFrameId = requestAnimationFrame(tick);
-    };
-
-    animationFrameId = requestAnimationFrame(tick);
-
-    const handleScroll = () => {
-      // If the user is hovering and rolling manually, ignore page scroll triggers
-      if (isHovered.current) return;
-
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const viewportHeight = window.innerHeight;
-
-      // Calculate progress of section through the viewport center
-      const elementHeight = rect.height;
-      const elementTop = rect.top;
-      const elementCenter = elementTop + elementHeight / 2;
-
-      // Map progress to active index (from 0 to 4)
-      const startPoint = viewportHeight * 0.82;
-      const endPoint = viewportHeight * 0.18;
-      const progress = (elementCenter - startPoint) / (endPoint - startPoint);
-      const boundedProgress = Math.max(0, Math.min(1, progress));
-
-      targetIndex.current = boundedProgress * (challenges.length - 1);
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-
-    // Native wheel listener on the viewport to roll challenges vertically
-    const viewport = viewportRef.current;
-    const handleNativeWheel = (e: WheelEvent) => {
-      // Prevent browser default page scroll when scrolling inside challenges
-      e.preventDefault();
-
-      // Scroll index smoothly
-      targetIndex.current += e.deltaY * 0.0035;
-      targetIndex.current = Math.min(challenges.length - 1, Math.max(0, targetIndex.current));
-    };
-
-    if (viewport) {
-      viewport.addEventListener('wheel', handleNativeWheel, { passive: false });
-    }
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener('scroll', handleScroll);
-      if (viewport) {
-        viewport.removeEventListener('wheel', handleNativeWheel);
-      }
-    };
-  }, [challenges.length]);
-
-  return (
-    <div 
-      ref={containerRef}
-      style={{ 
-        maxWidth: '1200px', 
-        margin: '0 auto', 
-        padding: '11rem 6%', 
-        display: 'flex', 
-        flexWrap: 'wrap', 
-        gap: '4rem',
-        alignItems: 'center',
-        position: 'relative',
-        borderTop: '1px solid rgba(255, 255, 255, 0.04)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.04)'
-      }}
-    >
-      {/* 3D Barrel Roll CSS styles */}
-      <style dangerouslySetInnerHTML={{__html: `
-        .barrel-viewport {
-          position: relative;
-          perspective: 1200px;
-          height: 380px;
-          width: 100%;
-          overflow: visible;
-          display: flex;
-          align-items: center;
-        }
-        .barrel-cylinder {
-          transform-style: preserve-3d;
-          position: relative;
-          width: 100%;
-          height: 60px;
-          will-change: transform;
-        }
-        .barrel-item {
-          position: absolute;
-          left: 0;
-          right: 0;
-          top: 0;
-          bottom: 0;
-          height: 100%;
-          display: flex;
-          align-items: center;
-          font-size: clamp(1.4rem, 2.8vw, 2.2rem);
-          color: rgba(255, 255, 255, 0.18);
-          font-weight: 400;
-          transform-style: preserve-3d;
-          backface-visibility: hidden;
-          cursor: pointer;
-          user-select: none;
-          transition: font-weight 0.4s ease, text-shadow 0.4s ease;
-        }
-        .barrel-item.active-item {
-          font-weight: 600;
-          color: #ffffff;
-          text-shadow: 0 0 25px rgba(255, 255, 255, 0.4), 0 0 10px rgba(59, 130, 246, 0.3);
-        }
-      `}} />
-
-      {/* Left Column: Sticky Title Stack */}
-      <div style={{ 
-        flex: '1 1 350px', 
-        position: 'sticky', 
-        top: '35vh', 
-        height: 'fit-content',
-        zIndex: 5
-      }}>
-        <h2 style={{
-          fontSize: 'clamp(2.5rem, 5vw, 4.2rem)',
-          fontWeight: 400,
-          lineHeight: 1.15,
-          letterSpacing: '-0.02em',
-          margin: 0,
-          background: 'linear-gradient(135deg, #3b82f6 0%, #ec4899 100%)',
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-        }}>
-          Business<br />
-          Challenges<br />
-          We Solve
-        </h2>
-      </div>
-
-      {/* Right Column: 3D Cylindrical Barrel Roll list */}
-      <div style={{ flex: '1 1 500px', display: 'flex', alignItems: 'center', position: 'relative' }}>
-        <div 
-          ref={viewportRef}
-          className="barrel-viewport"
-          onMouseEnter={() => { isHovered.current = true; }}
-          onMouseLeave={() => { isHovered.current = false; }}
-        >
-          {/* Top linear-gradient overlay fade */}
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '25%',
-            background: 'linear-gradient(to bottom, #000000 0%, transparent 100%)',
-            pointerEvents: 'none',
-            zIndex: 10
-          }} />
-
-          {/* Bottom linear-gradient overlay fade */}
-          <div style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: '25%',
-            background: 'linear-gradient(to top, #000000 0%, transparent 100%)',
-            pointerEvents: 'none',
-            zIndex: 10
-          }} />
-
-          <div ref={barrelRef} className="barrel-cylinder">
-            {challenges.map((challenge, idx) => {
-              const itemAngle = (idx - centerIdx) * itemSpacing;
-              return (
-                <div 
-                  key={idx}
-                  className="barrel-item"
-                  style={{
-                    transform: `rotateX(${itemAngle}deg) translateZ(${radius}px)`,
-                  }}
-                  onClick={() => {
-                    targetIndex.current = idx;
-                  }}
-                >
-                  {challenge}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function OfferingsSection({ serviceName, offerings }: { serviceName: string; offerings: Offering[] }) {
-  const [flippedCards, setFlippedCards] = useState<boolean[]>([]);
-
-  useEffect(() => {
-    if (offerings) {
-      setFlippedCards(new Array(offerings.length).fill(false));
-    }
-  }, [offerings]);
-
-  const toggleFlip = (idx: number) => {
-    setFlippedCards(prev => {
-      const copy = [...prev];
-      copy[idx] = !copy[idx];
-      return copy;
-    });
-  };
-
-  return (
-    <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '6rem 6% 8rem 6%' }}>
-      <style dangerouslySetInnerHTML={{__html: `
-        .offerings-section-title {
-          font-size: clamp(2rem, 4.5vw, 3.2rem);
-          font-weight: 400;
-          text-align: center;
-          color: #ffffff;
-          margin-bottom: 4.5rem;
-          letter-spacing: -0.02em;
-        }
-        .offerings-grid {
-          display: grid;
-          grid-template-columns: repeat(1, 1fr);
-          gap: 2rem;
-          width: 100%;
-        }
-        @media (min-width: 640px) {
-          .offerings-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-        @media (min-width: 1024px) {
-          .offerings-grid {
-            grid-template-columns: repeat(3, 1fr);
-          }
-        }
-        .flip-card-container {
-          perspective: 1200px;
-          height: 440px;
-          width: 100%;
-        }
-        .flip-card {
-          position: relative;
-          width: 100%;
-          height: 100%;
-          transform-style: preserve-3d;
-          transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .flip-card.flipped {
-          transform: rotateY(180deg);
-        }
-        .flip-card-front, .flip-card-back {
-          position: absolute;
-          inset: 0;
-          width: 100%;
-          height: 100%;
-          backface-visibility: hidden;
-          border-radius: 16px;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-          display: flex;
-          flex-direction: column;
-          box-sizing: border-box;
-        }
-        .flip-card-front {
-          background: linear-gradient(135deg, #072a6b 0%, #211c4f 45%, #5a1161 100%);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          padding: 2.8rem 2.4rem;
-          justify-content: space-between;
-          cursor: pointer;
-        }
-        .flip-card-back {
-          background: #ffffff;
-          border: 1px solid rgba(0, 0, 0, 0.06);
-          color: #000000;
-          padding: 2.2rem 2rem;
-          transform: rotateY(180deg);
-          justify-content: flex-start;
-          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-          cursor: pointer;
-          overflow-y: auto; /* Fixes text going out of card */
-        }
-        .offering-title {
-          font-size: clamp(1.5rem, 2vw, 1.85rem);
-          font-weight: 300;
-          color: #ffffff;
-          line-height: 1.25;
-          letter-spacing: -0.015em;
-          font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-        }
-        .offering-arrow {
-          align-self: flex-end;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #ffffff;
-          opacity: 0.95;
-          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
-        }
-        .flip-card-container:hover .offering-arrow {
-          transform: translate(6px, -6px);
-          opacity: 1;
-        }
-        .back-desc {
-          font-size: 0.95rem;
-          line-height: 1.55;
-          color: #222222;
-          font-weight: 400;
-          margin: 0 0 1rem 0;
-        }
-        .back-subtitle {
-          font-size: 1.02rem;
-          font-weight: 700;
-          color: #000000;
-          margin: 0 0 0.65rem 0;
-        }
-        .back-list {
-          list-style-type: none;
-          padding: 0;
-          margin: 0;
-          display: flex;
-          flex-direction: column;
-          gap: 0.45rem;
-        }
-        .back-list-item {
-          font-size: 0.9rem;
-          line-height: 1.45;
-          color: #333333;
-          position: relative;
-          padding-left: 1.25rem;
-        }
-        .back-list-item::before {
-          content: "•";
-          position: absolute;
-          left: 0;
-          top: 0;
-          color: #000000;
-          font-size: 1rem;
-        }
-      `}} />
-
-      <h2 className="offerings-section-title">
-        {serviceName} Offerings
-      </h2>
-
-      <div className="offerings-grid">
-        {offerings.map((offering, idx) => (
-          <div key={idx} className="flip-card-container" onClick={() => toggleFlip(idx)}>
-            <div className={`flip-card ${flippedCards[idx] ? 'flipped' : ''}`}>
-              
-              {/* Front Side */}
-              <div className="flip-card-front">
-                <div className="offering-title">
-                  {offering.title}
-                </div>
-                <div className="offering-arrow">
-                  <svg 
-                    width="60" 
-                    height="60" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeWidth="1" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
-                  >
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                  </svg>
-                </div>
-              </div>
-
-              {/* Back Side */}
-              <div className="flip-card-back">
-                <p className="back-desc">
-                  {offering.description}
-                </p>
-                {offering.deliverables && offering.deliverables.length > 0 && (
-                  <>
-                    <div className="back-subtitle">
-                      Deliverables
-                    </div>
-                    <ul className="back-list">
-                      {offering.deliverables.map((item, itemIdx) => (
-                        <li key={itemIdx} className="back-list-item">
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-              </div>
-
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-
-export default function DynamicServicePage() {
-  const params = useParams();
-  const router = useRouter();
-  const slug = params.slug as string;
-
+// Next.js dynamic metadata generator
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
   const service = typedServicesData[slug];
-
-  const [heroSrc, setHeroSrc] = useState(`/assets/${slug}-hero.png`);
-
-  useEffect(() => {
-    if (slug) {
-      setHeroSrc(`/assets/${slug}-hero.png`);
-    }
-  }, [slug]);
-
+  
   if (!service) {
-    return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-        <h1 style={{ fontSize: '3rem', fontWeight: 600, marginBottom: '1rem' }}>Service Not Found</h1>
-        <p style={{ color: '#9ca3af', marginBottom: '2rem' }}>The requested service page could not be located.</p>
-        <Link href="/industries/it-service" style={{ padding: '0.75rem 1.5rem', backgroundColor: '#ffffff', color: '#000000', border: 'none', borderRadius: '0.5rem', fontWeight: 600, textDecoration: 'none' }}>
-          Back to IT Services
-        </Link>
-      </div>
-    );
+    return {
+      title: 'Service Not Found | Zawr Industries',
+    };
   }
 
+  const seo = seoKeywords[slug] || {
+    title: `${service.name} Services`,
+    keywords: `${service.name}, custom solutions, software engineering, Bangalore, Zawr Industries`
+  };
+
+  const pageTitle = `${seo.title} | Zawr Industries`;
+  const pageDescription = `Get premium, enterprise-grade ${service.name} services from Zawr Industries. ${service.description.substring(0, 160)}...`;
+
+  return {
+    title: pageTitle,
+    description: pageDescription,
+    keywords: seo.keywords,
+    alternates: {
+      canonical: `https://zawrindustries.com/industries/it-service/${slug}`,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+        'max-video-preview': -1,
+        'max-image-preview': 'large',
+        'max-snippet': -1,
+      },
+    },
+    openGraph: {
+      title: pageTitle,
+      description: pageDescription,
+      url: `https://zawrindustries.com/industries/it-service/${slug}`,
+      siteName: 'Zawr Industries',
+      locale: 'en_IN',
+      type: 'website',
+      images: [
+        {
+          url: `https://zawrindustries.com/assets/${slug}-hero.png`,
+          width: 1200,
+          height: 630,
+          alt: service.name,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: pageTitle,
+      description: pageDescription,
+      images: [`https://zawrindustries.com/assets/${slug}-hero.png`],
+    },
+  };
+}
+
+// Generate static routes for all 23 services at build time
+export async function generateStaticParams() {
+  return [
+    { slug: 'ai-data-analytics' },
+    { slug: 'cloud' },
+    { slug: 'cognitive-business-operations' },
+    { slug: 'cybersecurity' },
+    { slug: 'network-solutions' },
+    { slug: 'industrial-autonomy-and-engineering' },
+    { slug: 'enterprise-solutions' },
+    { slug: 'consulting' },
+    { slug: 'software-development' },
+    { slug: 'web-development' },
+    { slug: 'application-development' },
+    { slug: 'startup-mvp' },
+    { slug: 'crm-solution' },
+    { slug: 'cxm-solution' },
+    { slug: 'digital-marketing' },
+    { slug: 'blockchain' },
+    { slug: 'iot' },
+    { slug: 'devops' },
+    { slug: 'unit-test' },
+    { slug: 'quality-assurance' },
+    { slug: 'workplace-transformation' },
+    { slug: 'process-automation' },
+    { slug: 'business-process-management' }
+  ];
+}
+
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const service = typedServicesData[slug];
+
+  if (!service) {
+    notFound();
+  }
+
+  // Create Schema.org JSON-LD Service Data
+  const jsonLdServiceSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    'name': service.name,
+    'description': service.description,
+    'serviceType': service.name,
+    'areaServed': [
+      {
+        '@type': 'Country',
+        'name': 'India'
+      },
+      {
+        '@type': 'Country',
+        'name': 'Global'
+      }
+    ],
+    'provider': {
+      '@type': 'Organization',
+      'name': 'Zawr Industries',
+      'url': 'https://zawrindustries.com',
+      'logo': 'https://zawrindustries.com/logo.png',
+      'address': {
+        '@type': 'PostalAddress',
+        'addressLocality': 'Bangalore',
+        'addressRegion': 'Karnataka',
+        'addressCountry': 'IN'
+      }
+    },
+    'offers': {
+      '@type': 'Offer',
+      'priceCurrency': 'INR',
+      'price': 'Contact for pricing'
+    }
+  };
+
+  // Create Schema.org FAQPage Schema if FAQs are present
+  const jsonLdFaqSchema = service.faqs && service.faqs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': service.faqs.map(faq => ({
+      '@type': 'Question',
+      'name': faq.q,
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': faq.a
+      }
+    }))
+  } : null;
+
   return (
-    <div style={{ backgroundColor: '#000000', color: '#ffffff', fontFamily: 'Inter, sans-serif', minHeight: '100vh', overflowX: 'hidden' }}>
-
-      {/* Hidden image element to detect fallback error automatically */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img 
-        src={heroSrc} 
-        alt="hidden-fallback-detector" 
-        style={{ display: 'none' }}
-        onError={() => setHeroSrc('/assets/cloud-services-hero.png')}
+    <>
+      {/* Dynamic structural schemas */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdServiceSchema) }}
       />
-
-      {/* ── STYLE INJECTIONS for interactive highlights and premium hover states ── */}
-      <style dangerouslySetInnerHTML={{__html: `
-        .neon-btn {
-          background: #000000;
-          color: #ffffff;
-          border: 2px solid transparent;
-          background-image: linear-gradient(#000000, #000000), linear-gradient(135deg, #3b82f6, #ec4899);
-          background-origin: border-box;
-          background-clip: padding-box, border-box;
-          border-radius: 100px;
-          padding: 0.85rem 2.2rem;
-          font-size: 0.95rem;
-          font-weight: 500;
-          cursor: pointer;
-          transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-          display: inline-block;
-          text-align: center;
-        }
-        .neon-btn:hover {
-          transform: translateY(-3px) scale(1.03);
-          box-shadow: 0 0 15px rgba(59, 130, 246, 0.5), 0 0 25px rgba(236, 72, 153, 0.4);
-          background-image: linear-gradient(#111111, #111111), linear-gradient(135deg, #ec4899, #3b82f6);
-        }
-      `}} />
-
-      {/* ── IMMERSIVE BANNER HERO — fit to screen perfectly ── */}
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        height: '100vh',
-        backgroundImage: `url("${heroSrc}")`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        display: 'flex',
-        alignItems: 'flex-end',
-        justifyContent: 'flex-start',
-        padding: '0 clamp(1rem, 6vw, 8%) 8vh clamp(1rem, 6vw, 8%)',
-      }}>
-        {/* Sleek bottom dark vignette overlay for legibility */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0) 100%)',
-          pointerEvents: 'none',
-        }} />
-
-        <div style={{ position: 'relative', zIndex: 10, maxWidth: '800px' }}>
-          <h1 style={{
-            fontSize: 'clamp(2.3rem, 5.5vw, 5rem)',
-            fontWeight: 300,
-            color: '#ffffff',
-            margin: 0,
-            lineHeight: 1.05,
-            letterSpacing: '-0.03em',
-            textShadow: '0 4px 20px rgba(0,0,0,0.6)',
-          }}>
-            {service.name}
-          </h1>
-          <div style={{ marginTop: '2rem' }}>
-            <a
-              href={`https://wa.me/919880464078?text=${encodeURIComponent(`Hi, I would like to know more about your ${service.name} services.`)}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ textDecoration: 'none' }}
-            >
-              <button className="neon-btn" suppressHydrationWarning>
-                Talk to Expert
-              </button>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* ── CORE DESCRIPTION SECTION ── */}
-      <div style={{ maxWidth: '850px', margin: '0 auto', padding: '7rem 6% 3rem 6%', textAlign: 'center', position: 'relative' }}>
-        {/* Subtle decorative glow blob */}
-        <div style={{
-          position: 'absolute',
-          top: '-10%',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          width: '300px',
-          height: '300px',
-          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, rgba(0,0,0,0) 70%)',
-          pointerEvents: 'none',
-          zIndex: 1
-        }} />
-
-        <h2 style={{
-          fontSize: 'clamp(1.6rem, 3vw, 2.5rem)',
-          fontWeight: 400,
-          lineHeight: 1.25,
-          letterSpacing: '-0.02em',
-          marginTop: '0.5rem',
-          marginBottom: '2.5rem',
-          color: '#ffffff',
-        }}>
-          {service.tagline}
-        </h2>
-        <p style={{
-          fontSize: '1rem',
-          lineHeight: 1.75,
-          color: 'rgba(255, 255, 255, 0.8)',
-          fontWeight: 300,
-          marginBottom: '1.5rem',
-        }}>
-          {service.description}
-        </p>
-      </div>
-
-      {/* ── BUSINESS CHALLENGES WE SOLVE — Scroll-linked highlights ── */}
-      {service.challenges && service.challenges.length > 0 && (
-        <ChallengesSection challenges={service.challenges} />
+      
+      {jsonLdFaqSchema && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdFaqSchema) }}
+        />
       )}
 
-      {/* ── SERVICE SUITE GRID ── */}
-      {service.offerings && service.offerings.length > 0 && (
-        <OfferingsSection serviceName={service.name} offerings={service.offerings} />
-      )}
-
-      {/* ── METHODOLOGY TIMELINE WAVE SECTION ── */}
-      {service.methodology && service.methodology.length > 0 && (
-        <MethodologySection methodology={service.methodology} />
-      )}
-
-      {/* ── INDUSTRIES WE SERVE ── */}
-      {service.industries && service.industries.length > 0 && (
-        <IndustriesSection industries={service.industries} />
-      )}
-
-      {/* ── FAQ ── */}
-      {service.faqs && service.faqs.length > 0 && (
-        <FAQSection faqs={service.faqs} serviceName={service.name} />
-      )}
-
-    </div>
+      <ServicePageClient service={service} slug={slug} />
+    </>
   );
 }
