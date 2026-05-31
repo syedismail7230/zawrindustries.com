@@ -20,11 +20,20 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
+      // Don't update scroll state while mobile menu is open
+      if (isMobileMenuOpen) return;
       setIsScrolled(window.scrollY > window.innerHeight - 80);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isMobileMenuOpen]);
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  const closeMobileMenu = () => setIsMobileMenuOpen(false);
 
   const filteredLangs = ISO6391.getAllCodes().filter(code => 
     ISO6391.getNativeName(code).toLowerCase().includes(langQuery.toLowerCase()) || 
@@ -156,7 +165,33 @@ export default function Header() {
         }
       `}} />
     )}
-    <header className={`header ${isScrolled || (pathname.startsWith('/contact') && !isDarkPage) ? 'scrolled' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''} ${isDarkPage ? 'dark-page-header' : ''} ${isLightPage ? 'light-page-header' : ''}`}>
+    {/* Always-on override: lock text white when mobile menu is open */}
+    <style dangerouslySetInnerHTML={{__html: `
+      @media (max-width: 900px) {
+        .header.mobile-open,
+        .header.mobile-open:hover,
+        .header.mobile-open.scrolled,
+        .header.mobile-open.scrolled:hover,
+        .header.mobile-open.dark-page-header,
+        .header.mobile-open.dark-page-header:hover,
+        .header.mobile-open.light-page-header,
+        .header.mobile-open.light-page-header:hover {
+          color: #ffffff !important;
+          background-color: #000000 !important;
+        }
+        .header.mobile-open .nav-item,
+        .header.mobile-open .dropdown a,
+        .header.mobile-open .mobile-menu-btn {
+          color: #ffffff !important;
+        }
+        .header.mobile-open .icon-btn svg,
+        .header.mobile-open svg {
+          stroke: #ffffff !important;
+        }
+      }
+    `}} />
+
+    <header className={`header ${!isMobileMenuOpen && (isScrolled || (pathname.startsWith('/contact') && !isDarkPage)) ? 'scrolled' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''} ${isDarkPage ? 'dark-page-header' : ''} ${isLightPage ? 'light-page-header' : ''}`}>
       <div className={`logo-container ${poppins.className}`}>
         <Link href="/">
           <span className="logo-bold">ZAWR</span>
@@ -165,52 +200,52 @@ export default function Header() {
       </div>
 
       <nav className={`nav-links ${isMobileMenuOpen ? 'mobile-active' : ''}`}>
-        <Link href="/" className="nav-item">Home</Link>
+        <Link href="/" className="nav-item" onClick={closeMobileMenu}>Home</Link>
         <div className="nav-item">
           About
           <div className="dropdown">
-            <Link href="/about/blog">Blog</Link>
-            <Link href="/about/values">Values</Link>
-            <Link href="/about/vision">Vision</Link>
-            <Link href="/about/mission">Mission</Link>
+            <Link href="/about/blog" onClick={closeMobileMenu}>Blog</Link>
+            <Link href="/about/values" onClick={closeMobileMenu}>Values</Link>
+            <Link href="/about/vision" onClick={closeMobileMenu}>Vision</Link>
+            <Link href="/about/mission" onClick={closeMobileMenu}>Mission</Link>
           </div>
         </div>
         <div className="nav-item">
           Industries
           <div className="dropdown">
-            <Link href="/industries/it-service">IT Service</Link>
-            <Link href="/industries/transport-and-logistics">Transport and Logistics</Link>
-            <Link href="/industries/manufacturing">Manufacturing</Link>
-            <Link href="/industries/estate">Estate</Link>
-            <Link href="/industries/healthcare">Healthcare</Link>
+            <Link href="/industries/it-service" onClick={closeMobileMenu}>IT Service</Link>
+            <Link href="/industries/transport-and-logistics" onClick={closeMobileMenu}>Transport and Logistics</Link>
+            <Link href="/industries/manufacturing" onClick={closeMobileMenu}>Manufacturing</Link>
+            <Link href="/industries/estate" onClick={closeMobileMenu}>Estate</Link>
+            <Link href="/industries/healthcare" onClick={closeMobileMenu}>Healthcare</Link>
           </div>
         </div>
         <div className="nav-item">
           Platforms
           <div className="dropdown">
-            <a href="https://www.firm.expert/" target="_blank" rel="noopener noreferrer">Firm AI</a>
-            <a href="https://sketchstudio.dev/" target="_blank" rel="noopener noreferrer">Sketch Studio</a>
-            <a href="https://ai.zawrindustries.com/" target="_blank" rel="noopener noreferrer">Zawr AI</a>
-            <a href="https://crm.zawrindustries.com/" target="_blank" rel="noopener noreferrer">Quick Dial</a>
-            <a href="https://velocityos.in/" target="_blank" rel="noopener noreferrer">VelocityOS</a>
+            <a href="https://www.firm.expert/" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>Firm AI</a>
+            <a href="https://sketchstudio.dev/" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>Sketch Studio</a>
+            <a href="https://ai.zawrindustries.com/" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>Zawr AI</a>
+            <a href="https://crm.zawrindustries.com/" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>Quick Dial</a>
+            <a href="https://velocityos.in/" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>VelocityOS</a>
           </div>
         </div>
         <div className="nav-item">
           Newsroom
           <div className="dropdown">
-            <Link href="/newsroom/press-release">Press Release</Link>
-            <Link href="/newsroom/notifications">Notifications</Link>
-            <Link href="/newsroom/media-kit">Media Kit</Link>
+            <Link href="/newsroom/press-release" onClick={closeMobileMenu}>Press Release</Link>
+            <Link href="/newsroom/notifications" onClick={closeMobileMenu}>Notifications</Link>
+            <Link href="/newsroom/media-kit" onClick={closeMobileMenu}>Media Kit</Link>
           </div>
         </div>
-        <Link href="/investors" className="nav-item">Investors</Link>
-        <Link href="/careers" className="nav-item">Careers</Link>
+        <Link href="/investors" className="nav-item" onClick={closeMobileMenu}>Investors</Link>
+        <Link href="/careers" className="nav-item" onClick={closeMobileMenu}>Careers</Link>
         <div className="nav-item">
-          <Link href="/contact" style={{ color: 'inherit', textDecoration: 'none' }}>Contact</Link>
+          <Link href="/contact" style={{ color: 'inherit', textDecoration: 'none' }} onClick={closeMobileMenu}>Contact</Link>
           <div className="dropdown">
-            <Link href="/contact/client-relations">Client Relations</Link>
-            <Link href="/contact/public-relations">Public Relations</Link>
-            <Link href="/contact/partner">Partner</Link>
+            <Link href="/contact/client-relations" onClick={closeMobileMenu}>Client Relations</Link>
+            <Link href="/contact/public-relations" onClick={closeMobileMenu}>Public Relations</Link>
+            <Link href="/contact/partner" onClick={closeMobileMenu}>Partner</Link>
           </div>
         </div>
       </nav>
@@ -266,6 +301,8 @@ export default function Header() {
       </button>
 
     </header>
+
+
       {/* Full Screen Search Overlay */}
       {isSearchOpen && (
         <div className="search-overlay">

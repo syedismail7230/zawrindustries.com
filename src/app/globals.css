@@ -603,9 +603,33 @@ button, input {
   .header.mobile-open {
     height: 100vh;
     background-color: var(--primary-color) !important;
+    color: var(--bg-white) !important;
     align-items: flex-start;
     align-content: flex-start;
     overflow-y: auto;
+  }
+
+  /* Keep text white in all states when mobile menu is open */
+  .header.mobile-open:hover,
+  .header.mobile-open.scrolled,
+  .header.mobile-open.scrolled:hover,
+  .header.mobile-open.dark-page-header,
+  .header.mobile-open.light-page-header,
+  .header.mobile-open.light-page-header:hover {
+    color: var(--bg-white) !important;
+    background-color: var(--primary-color) !important;
+  }
+
+  .header.mobile-open .nav-links,
+  .header.mobile-open .header-actions,
+  .header.mobile-open .nav-item,
+  .header.mobile-open .dropdown a,
+  .header.mobile-open .mobile-menu-btn {
+    color: var(--bg-white) !important;
+  }
+
+  .header.mobile-open .icon-btn svg {
+    stroke: var(--bg-white) !important;
   }
   
   .logo-container {
