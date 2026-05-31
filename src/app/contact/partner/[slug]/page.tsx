@@ -285,7 +285,7 @@ export default function PartnershipFormPage() {
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
         
         .form-page-container {
-          max-width: 800px;
+          max-width: 1200px;
           margin: 0 auto;
           padding: 0 1.5rem;
         }
@@ -316,6 +316,8 @@ export default function PartnershipFormPage() {
           border-radius: 24px;
           padding: clamp(2rem, 5vw, 3.5rem);
           box-shadow: 0 15px 35px rgba(0,0,0,0.03);
+          max-width: 800px;
+          margin: 0 auto;
         }
 
         .modal-form-title {
@@ -559,6 +561,192 @@ export default function PartnershipFormPage() {
           justify-content: center;
           margin: 0 auto 1.5rem auto;
         }
+
+        /* Content Creator Section */
+        .creator-section {
+          background: linear-gradient(135deg, #090909 0%, #121212 100%);
+          color: #ffffff;
+          border-radius: 24px;
+          padding: clamp(3rem, 6vw, 5rem);
+          max-width: 1200px;
+          margin: 0 auto;
+          border: 1px solid rgba(255,255,255,0.06);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .creator-header-grid {
+          display: grid;
+          grid-template-columns: 1.25fr 0.75fr;
+          gap: clamp(2rem, 4vw, 5rem);
+          align-items: center;
+          margin-bottom: 4rem;
+        }
+
+        .creator-title-area {
+          text-align: left;
+        }
+
+        .creator-title {
+          font-size: clamp(2rem, 3.8vw, 2.8rem);
+          font-weight: 300;
+          letter-spacing: -0.02em;
+          margin-bottom: 1.2rem;
+          line-height: 1.15;
+        }
+
+        .creator-desc {
+          color: #9ca3af;
+          font-size: clamp(0.95rem, 1.1vw, 1.05rem);
+          line-height: 1.75;
+          font-weight: 300;
+          margin: 0;
+        }
+
+        .creator-header-visual {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+
+        .creator-visual-wrap {
+          width: 100%;
+          max-width: 380px;
+          aspect-ratio: 16/10;
+          border-radius: 16px;
+          overflow: hidden;
+          position: relative;
+          border: 1px solid rgba(255,255,255,0.08);
+          box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+          background: #0d0d0d;
+        }
+
+        .creator-visual-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .creator-visual-wrap:hover .creator-visual-img {
+          transform: scale(1.04);
+        }
+
+        .creator-visual-glow {
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(180deg, transparent 40%, rgba(0,0,0,0.55) 100%);
+          pointer-events: none;
+        }
+
+        .creator-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 4rem;
+        }
+
+        .creator-block-title {
+          font-size: 0.85rem;
+          font-weight: 600;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.45);
+          margin-bottom: 1.5rem;
+          border-left: 2.5px solid #ec4899;
+          padding-left: 0.75rem;
+        }
+
+        .creator-badges {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.8rem;
+          margin-bottom: 3rem;
+        }
+
+        .creator-badge {
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.08);
+          padding: 0.5rem 1.1rem;
+          border-radius: 100px;
+          font-size: 0.88rem;
+          font-weight: 400;
+          color: rgba(255,255,255,0.8);
+          transition: all 0.3s ease;
+        }
+
+        .creator-sub-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 1.5rem;
+        }
+
+        .creator-model-card {
+          background: rgba(255,255,255,0.02);
+          border: 1px solid rgba(255,255,255,0.05);
+          padding: 1.25rem;
+          border-radius: 12px;
+        }
+
+        .creator-model-card h5 {
+          font-size: 0.95rem;
+          font-weight: 600;
+          margin: 0 0 0.4rem 0;
+          color: #ffffff;
+        }
+
+        .creator-model-card p {
+          font-size: 0.85rem;
+          color: #9ca3af;
+          margin: 0;
+          line-height: 1.5;
+          font-weight: 300;
+        }
+
+        .model-meta-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+        }
+
+        .model-meta-list li {
+          font-size: 0.95rem;
+          line-height: 1.5;
+          position: relative;
+          padding-left: 1.2rem;
+        }
+
+        .model-meta-list li::before {
+          content: "•";
+          color: #ec4899;
+          position: absolute;
+          left: 0.2rem;
+          font-weight: bold;
+        }
+
+        @media (max-width: 968px) {
+          .creator-header-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            text-align: center;
+            margin-bottom: 3rem;
+          }
+
+          .creator-title-area {
+            text-align: center;
+          }
+
+          .creator-grid {
+            grid-template-columns: 1fr;
+            gap: 3rem;
+          }
+        }
+
+        @media (max-width: 580px) {
+          .creator-sub-grid {
+            grid-template-columns: 1fr;
+          }
+        }
       `}} />
 
       <div className="form-page-container">
@@ -566,6 +754,99 @@ export default function PartnershipFormPage() {
         <button className="back-btn" onClick={() => router.push('/contact/partner')}>
           &larr; Back to Partnerships
         </button>
+
+        {isCreator && (
+          <div className="creator-section" style={{ marginBottom: '3rem' }}>
+            
+            <div className="creator-header-grid">
+              <div className="creator-title-area">
+                <h2 className="creator-title">Content Creator &amp; Influencer Partnerships</h2>
+                <p className="creator-desc">
+                  Join our creator ecosystem to access new tech programs, collaborate on products, and bring cutting-edge software and mobility insights to your audience.
+                </p>
+              </div>
+              
+              <div className="creator-header-visual">
+                <div className="creator-visual-wrap">
+                  <img 
+                    src="/assets/creator-hub-hero.png" 
+                    alt="Zawr Creator Hub Hero" 
+                    className="creator-visual-img" 
+                  />
+                  <div className="creator-visual-glow" />
+                </div>
+              </div>
+            </div>
+
+            <div className="creator-grid">
+              
+              {/* Left Block */}
+              <div>
+                <h4 className="creator-block-title">Ideal Partners</h4>
+                <div className="creator-badges">
+                  <span className="creator-badge">Technology Content Creators</span>
+                  <span className="creator-badge">Business Influencers</span>
+                  <span className="creator-badge">Industry Experts</span>
+                  <span className="creator-badge">Educational Creators</span>
+                  <span className="creator-badge">Startup Influencers</span>
+                  <span className="creator-badge">Automotive Creators</span>
+                  <span className="creator-badge">Tech Reviewers</span>
+                  <span className="creator-badge">Community Builders</span>
+                  <span className="creator-badge">YouTubers</span>
+                  <span className="creator-badge">Bloggers</span>
+                  <span className="creator-badge">Podcast Hosts</span>
+                  <span className="creator-badge">Social Media Creators</span>
+                </div>
+
+                <h4 className="creator-block-title">Partnership Opportunities</h4>
+                <ul className="model-meta-list" style={{ color: '#9ca3af' }}>
+                  <li style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '0.6rem' }}>Brand Collaborations</li>
+                  <li style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '0.6rem' }}>Sponsored Content Campaigns</li>
+                  <li style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '0.6rem' }}>Product Reviews &amp; Demonstrations</li>
+                  <li style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '0.6rem' }}>Educational Content Creation</li>
+                  <li style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '0.6rem' }}>Event Collaborations</li>
+                  <li style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '0.6rem' }}>Webinar Partnerships</li>
+                  <li style={{ color: 'rgba(255,255,255,0.7)', marginBottom: '0.6rem' }}>Industry Discussions</li>
+                </ul>
+              </div>
+
+              {/* Right Block */}
+              <div>
+                <h4 className="creator-block-title">Collaboration Models</h4>
+                <div className="creator-sub-grid">
+                  <div className="creator-model-card">
+                    <h5>Affiliate Partnerships</h5>
+                    <p>Performance-based growth collaborations.</p>
+                  </div>
+                  <div className="creator-model-card">
+                    <h5>Brand Ambassador</h5>
+                    <p>Long-term creator relationships.</p>
+                  </div>
+                  <div className="creator-model-card">
+                    <h5>Campaign Partnerships</h5>
+                    <p>Short-term promotional initiatives.</p>
+                  </div>
+                  <div className="creator-model-card">
+                    <h5>Educational Partnerships</h5>
+                    <p>Knowledge-sharing collaborations.</p>
+                  </div>
+                </div>
+
+                <h4 className="creator-block-title" style={{ marginTop: '2.5rem' }}>Benefits for Creators</h4>
+                <ul className="model-meta-list" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem 2rem', color: '#9ca3af' }}>
+                  <li style={{ color: 'rgba(255,255,255,0.7)' }}>Access to tech ecosystems</li>
+                  <li style={{ color: 'rgba(255,255,255,0.7)' }}>Early product access</li>
+                  <li style={{ color: 'rgba(255,255,255,0.7)' }}>Co-branding options</li>
+                  <li style={{ color: 'rgba(255,255,255,0.7)' }}>Revenue-sharing models</li>
+                  <li style={{ color: 'rgba(255,255,255,0.7)' }}>Audience growth pathways</li>
+                  <li style={{ color: 'rgba(255,255,255,0.7)' }}>Exclusive network access</li>
+                </ul>
+              </div>
+
+            </div>
+
+          </div>
+        )}
 
         <div className="form-card">
           

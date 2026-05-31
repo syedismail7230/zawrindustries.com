@@ -1155,112 +1155,34 @@ export default function PartnerPage() {
             </div>
           </div>
 
-        </div>
-      </section>
-
-      {/* ── 4. CONTENT CREATOR & INFLUENCER HUB SECTION ── */}
-      <section className="part-section">
-        <div className="creator-section">
-          
-          <div className="creator-header-grid">
-            <div className="creator-title-area">
-              <h2 className="creator-title">Content Creator &amp; Influencer Partnerships</h2>
+          {/* Row 7: Content Creator & Influencer Partnerships */}
+          <div className="model-row-interactive" onClick={() => router.push('/contact/partner/creator-partner')}>
+            <div className="model-left-int">
+              <h3>Content Creator &amp; Influencer Partnerships</h3>
+              <p>Partner with us as a creator to review products, run campaigns, and share tech insights.</p>
             </div>
-            
-            <div className="creator-header-visual">
-              <div className="creator-visual-wrap">
-                <img 
-                  src="/assets/creator-hub-hero.png" 
-                  alt="Zawr Creator Hub Hero" 
-                  className="creator-visual-img" 
-                />
-                <div className="creator-visual-glow" />
-              </div>
-            </div>
-          </div>
-
-          <div className="creator-grid">
-            
-            {/* Left Block */}
-            <div>
-              <h4 className="creator-block-title">Ideal Partners</h4>
-              <div className="creator-badges">
-                <span className="creator-badge">Technology Content Creators</span>
-                <span className="creator-badge">Business Influencers</span>
-                <span className="creator-badge">Industry Experts</span>
-                <span className="creator-badge">Educational Creators</span>
-                <span className="creator-badge">Startup Influencers</span>
-                <span className="creator-badge">Automotive Creators</span>
-                <span className="creator-badge">Tech Reviewers</span>
-                <span className="creator-badge">Community Builders</span>
-                <span className="creator-badge">YouTubers</span>
-                <span className="creator-badge">Bloggers</span>
-                <span className="creator-badge">Podcast Hosts</span>
-                <span className="creator-badge">Social Media Creators</span>
-              </div>
-
-              <h4 className="creator-block-title">Partnership Opportunities</h4>
-              <ul className="model-meta-list" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '0.6rem', color: '#9ca3af' }}>
-                <li style={{ color: 'rgba(255,255,255,0.7)' }}>Brand Collaborations</li>
-                <li style={{ color: 'rgba(255,255,255,0.7)' }}>Sponsored Content Campaigns</li>
-                <li style={{ color: 'rgba(255,255,255,0.7)' }}>Product Reviews &amp; Demonstrations</li>
-                <li style={{ color: 'rgba(255,255,255,0.7)' }}>Educational Content Creation</li>
-                <li style={{ color: 'rgba(255,255,255,0.7)' }}>Event Collaborations</li>
-                <li style={{ color: 'rgba(255,255,255,0.7)' }}>Webinar Partnerships</li>
-                <li style={{ color: 'rgba(255,255,255,0.7)' }}>Industry Discussions</li>
+            <div className="model-meta-box-int" style={{ gridColumn: 'span 2' }}>
+              <h4>Areas of Collaboration</h4>
+              <ul className="model-meta-list-int" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem' }}>
+                <li>Brand Ambassador Programs</li>
+                <li>Affiliate Partnerships</li>
+                <li>Campaign Partnerships</li>
+                <li>Educational Partnerships</li>
+                <li>Co-creation Programs</li>
               </ul>
             </div>
-
-            {/* Right Block */}
-            <div>
-              <h4 className="creator-block-title">Collaboration Models</h4>
-              <div className="creator-sub-grid">
-                <div className="creator-model-card">
-                  <h5>Affiliate Partnerships</h5>
-                  <p>Performance-based growth collaborations.</p>
-                </div>
-                <div className="creator-model-card">
-                  <h5>Brand Ambassador</h5>
-                  <p>Long-term creator relationships.</p>
-                </div>
-                <div className="creator-model-card">
-                  <h5>Campaign Partnerships</h5>
-                  <p>Short-term promotional initiatives.</p>
-                </div>
-                <div className="creator-model-card">
-                  <h5>Educational Partnerships</h5>
-                  <p>Knowledge-sharing collaborations.</p>
-                </div>
-              </div>
-
-              <h4 className="creator-block-title" style={{ marginTop: '2.5rem' }}>Benefits for Creators</h4>
-              <ul className="model-meta-list" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem', color: '#9ca3af' }}>
-                <li style={{ color: 'rgba(255,255,255,0.7)' }}>Access to tech ecosystems</li>
-                <li style={{ color: 'rgba(255,255,255,0.7)' }}>Early product access</li>
-                <li style={{ color: 'rgba(255,255,255,0.7)' }}>Co-branding options</li>
-                <li style={{ color: 'rgba(255,255,255,0.7)' }}>Revenue-sharing models</li>
-                <li style={{ color: 'rgba(255,255,255,0.7)' }}>Audience growth pathways</li>
-                <li style={{ color: 'rgba(255,255,255,0.7)' }}>Exclusive network access</li>
-              </ul>
+            <div className="arrow-circle-btn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
             </div>
-
-          </div>
-
-          <div className="creator-action-box">
-            <div className="creator-action-text">
-              <h4>Ready to join our creator ecosystem?</h4>
-              <p>Apply now as a Creator Partner and help co-create the digital future.</p>
-            </div>
-            <button 
-              className="creator-neon-btn"
-              onClick={() => router.push('/contact/partner/creator-partner')}
-            >
-              Apply as Creator &rarr;
-            </button>
           </div>
 
         </div>
       </section>
+
+
 
       {/* ── 5. PARTNERSHIP PROCESS TIMELINE SECTION ── */}
       <section className="part-section" style={{ backgroundColor: '#fafafa' }}>
