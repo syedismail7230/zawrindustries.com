@@ -1079,7 +1079,7 @@ export default function PartnershipFormPage() {
         }
 
         .creator-dark-theme .form-card {
-          background: #0a0a0a !important;
+          background: transparent !important;
           border: none !important;
           border-radius: 0 !important;
           padding: 0 !important;
