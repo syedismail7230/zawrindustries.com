@@ -492,26 +492,9 @@ function OfferingsSection({ serviceName, offerings }: { serviceName: string; off
   );
 }
 
-export default function ServicePageClient({ service, slug }: { service: ServiceDetail; slug: string }) {
-  const [heroSrc, setHeroSrc] = useState(`/assets/${slug}-hero.png`);
-
-  useEffect(() => {
-    if (slug) {
-      setHeroSrc(`/assets/${slug}-hero.png`);
-    }
-  }, [slug]);
-
+export default function ServicePageClient({ service, slug, heroSrc }: { service: ServiceDetail; slug: string; heroSrc: string }) {
   return (
     <div style={{ backgroundColor: '#000000', color: '#ffffff', fontFamily: 'Inter, sans-serif', minHeight: '100vh', overflowX: 'hidden' }}>
-
-      {/* Hidden image element to detect fallback error automatically */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img 
-        src={heroSrc} 
-        alt="hidden-fallback-detector" 
-        style={{ display: 'none' }}
-        onError={() => setHeroSrc('/assets/cloud-services-hero.png')}
-      />
 
       <style dangerouslySetInnerHTML={{__html: `
         .neon-btn {
@@ -543,19 +526,39 @@ export default function ServicePageClient({ service, slug }: { service: ServiceD
         position: 'relative',
         width: '100%',
         height: '100vh',
-        backgroundImage: `url("${heroSrc}")`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        overflow: 'hidden',
         display: 'flex',
         alignItems: 'flex-end',
         justifyContent: 'flex-start',
         padding: '0 clamp(1rem, 6vw, 8%) 8vh clamp(1rem, 6vw, 8%)',
       }}>
+        {/* High priority preloaded LCP image element */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img 
+          src={heroSrc} 
+          alt={service.name} 
+          fetchPriority="high"
+          decoding="async"
+          onError={(e) => {
+            e.currentTarget.src = '/assets/cloud-services-hero.png';
+          }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            objectPosition: 'center',
+            zIndex: 1
+          }}
+        />
+
         <div style={{
           position: 'absolute',
           inset: 0,
           background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0) 100%)',
           pointerEvents: 'none',
+          zIndex: 2
         }} />
 
         <div style={{ position: 'relative', zIndex: 10, maxWidth: '800px' }}>

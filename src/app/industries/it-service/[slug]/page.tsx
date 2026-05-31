@@ -281,8 +281,13 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     }))
   } : null;
 
+  const heroSrc = `/assets/${slug}-hero.png`;
+
   return (
     <>
+      {/* HTML Link Preload to fetch high LCP image immediately in parallel with HTML */}
+      <link rel="preload" href={heroSrc} as="image" fetchPriority="high" />
+
       {/* Dynamic structural schemas */}
       <script
         type="application/ld+json"
@@ -296,7 +301,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
         />
       )}
 
-      <ServicePageClient service={service} slug={slug} />
+      <ServicePageClient service={service} slug={slug} heroSrc={heroSrc} />
     </>
   );
 }
