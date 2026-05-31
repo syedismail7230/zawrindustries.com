@@ -21,7 +21,7 @@ export default function SupportWidget() {
   return (
     <iframe
       id="support-widget-iframe"
-      src="http://crm.zawrindustries.com/widget/support"
+      src="https://crm.zawrindustries.com/widget/support"
       style={{
         border: 'none',
         overflow: 'hidden',
