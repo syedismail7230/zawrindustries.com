@@ -9,12 +9,22 @@ interface Industry {
   projectDescription?: string;
 }
 
-export function IndustriesSection({ industries }: { industries: Industry[] }) {
+export function IndustriesSection({ 
+  industries, 
+  theme = 'dark', 
+  title = "Industries We Serve", 
+  projectLabel = "Featured Project" 
+}: { 
+  industries: Industry[]; 
+  theme?: 'light' | 'dark'; 
+  title?: string;
+  projectLabel?: string;
+}) {
   const [hovered, setHovered] = useState<number>(0);
   const active = industries[hovered];
 
   return (
-    <div style={{ background: '#000', borderTop: '1px solid rgba(255,255,255,0.04)', overflow: 'hidden', padding: 'clamp(4rem,8vh,7rem) clamp(1rem,5vw,5%)' }}>
+    <div className={`ind-container theme-${theme}`} style={{ background: theme === 'light' ? '#ffffff' : '#000000', borderTop: theme === 'light' ? '1px solid rgba(0,0,0,0.06)' : '1px solid rgba(255,255,255,0.04)', overflow: 'hidden', padding: 'clamp(4rem,8vh,7rem) clamp(1rem,5vw,5%)' }}>
       <style dangerouslySetInnerHTML={{ __html: `
         .ind-title {
           text-align: center;
@@ -191,6 +201,25 @@ export function IndustriesSection({ industries }: { industries: Industry[] }) {
           color: rgba(255,255,255,0.5);
           font-family: var(--font-plus-jakarta), Inter, sans-serif;
         }
+
+        /* Light Theme Overrides */
+        .theme-light .ind-title {
+          color: #111111;
+        }
+        .theme-light .ind-project-label {
+          color: rgba(0,0,0,0.45);
+        }
+        .theme-light .ind-project-name {
+          color: #111111;
+        }
+        .theme-light .ind-desc {
+          color: rgba(0,0,0,0.7);
+        }
+        .theme-light .ind-industry-badge {
+          border: 1px solid rgba(0,0,0,0.1);
+          color: rgba(0,0,0,0.6);
+        }
+
         @media (max-width: 768px) {
           .ind-layout { grid-template-columns: 1fr; }
           .ind-left, .ind-right { min-height: auto; }
@@ -198,12 +227,12 @@ export function IndustriesSection({ industries }: { industries: Industry[] }) {
         }
       ` }} />
 
-      <h2 className="ind-title">Industries We Serve</h2>
+      <h2 className="ind-title">{title}</h2>
 
       <div className="ind-layout">
         {/* LEFT — project name */}
         <div className="ind-left">
-          <div className="ind-project-label">Featured Project</div>
+          <div className="ind-project-label">{projectLabel}</div>
           <h3 className="ind-project-name">{active?.projectName ?? active?.name}</h3>
           <div className="ind-project-divider" />
         </div>
