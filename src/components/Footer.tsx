@@ -282,6 +282,7 @@ export default function Footer() {
             <li><a href="https://ai.zawrindustries.com/" target="_blank" rel="noopener noreferrer">Zawr AI</a></li>
             <li><a href="https://crm.zawrindustries.com/" target="_blank" rel="noopener noreferrer">Quick Dial</a></li>
             <li><a href="https://velocityos.in/" target="_blank" rel="noopener noreferrer">VelocityOS</a></li>
+            <li><Link href="/sitemap">Sitemap</Link></li>
           </ul>
         </div>
       </div>
