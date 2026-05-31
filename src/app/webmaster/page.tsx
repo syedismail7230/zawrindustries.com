@@ -1,13 +1,90 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams, notFound } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
-export default function WebmasterDashboard() {
+export default function WebmasterDashboardPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', backgroundColor: '#000000' }} />}>
+      <WebmasterDashboard />
+    </Suspense>
+  );
+}
+
+function WebmasterDashboard() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const token = searchParams.get('token');
+
+  const GATE_TOKEN = process.env.NEXT_PUBLIC_WEBMASTER_GATE_TOKEN || 'zawr-admin-gate';
+
+  const [authorized, setAuthorized] = useState(false);
+  const [stageChecked, setStageChecked] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [password, setPassword] = useState('');
+
+  const [loginStep, setLoginStep] = useState<'key' | 'question'>('key');
+  const [accessKey, setAccessKey] = useState('');
+  const [challengeQuestion, setChallengeQuestion] = useState('');
+  const [challengeId, setChallengeId] = useState<number | null>(null);
+  const [userAnswer, setUserAnswer] = useState('');
+  const [isVerifying, setIsVerifying] = useState(false);
+
+  const fetchChallengeQuestion = async (keyInput: string) => {
+    setIsVerifying(true);
+    try {
+      const res = await fetch('/api/webmaster', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'get-challenge', accessKey: keyInput })
+      });
+      const data = await res.json();
+      if (data.success) {
+        setChallengeQuestion(data.question);
+        setChallengeId(data.questionId);
+        setLoginStep('question');
+      } else {
+        alert(data.error || 'Incorrect Access Key Password');
+      }
+    } catch (err) {
+      alert('Error fetching security challenge.');
+    }
+    setIsVerifying(false);
+  };
+
+  useEffect(() => {
+    try {
+      if (sessionStorage.getItem('webmaster_logged_in') === 'true') {
+        setAuthorized(true);
+        setIsAuthenticated(true);
+        setStageChecked(true);
+        return;
+      }
+      
+      if (token === GATE_TOKEN) {
+        sessionStorage.setItem('webmaster_authorized', 'true');
+        setAuthorized(true);
+      } else if (sessionStorage.getItem('webmaster_authorized') === 'true') {
+        setAuthorized(true);
+      }
+    } catch (e) {
+      // Safeguard for private tabs sandboxes
+    }
+    setStageChecked(true);
+  }, [token, GATE_TOKEN]);
+
+  // Read immediately on client load to prevent layout layout shifts
+  const isSessionAuth = typeof window !== 'undefined' && (
+    sessionStorage.getItem('webmaster_authorized') === 'true' || 
+    sessionStorage.getItem('webmaster_logged_in') === 'true' || 
+    token === GATE_TOKEN
+  );
+
+  // Instantly throw 404 if token or session is missing
+  if (stageChecked && !authorized && !isSessionAuth) {
+    notFound();
+  }
+
   const [activeTab, setActiveTab] = useState('analytics');
 
   // Supabase States
@@ -107,15 +184,6 @@ export default function WebmasterDashboard() {
   const [customPressFile, setCustomPressFile] = useState<File | null>(null);
   const [customPressBannerFile, setCustomPressBannerFile] = useState<File | null>(null);
 
-  // Login handler
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (password === 'admin123' || password === 'Zawr2026!') {
-      setIsAuthenticated(true);
-    } else {
-      alert('Incorrect password');
-    }
-  };
 
   // Fetch Data from Supabase
   useEffect(() => {
@@ -346,17 +414,115 @@ export default function WebmasterDashboard() {
   const theme = { bg: '#000000', fg: '#ffffff', border: '#222222', hover: '#111111', inputBg: '#0a0a0a', muted: '#888888' };
 
   if (!isAuthenticated) {
+    const handleAccessKeySubmit = (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!accessKey.trim()) return;
+      fetchChallengeQuestion(accessKey);
+    };
+
+    const handleChallengeSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!challengeId) {
+        alert('Challenge not loaded yet. Please wait.');
+        return;
+      }
+      setIsVerifying(true);
+      try {
+        const res = await fetch('/api/webmaster', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'verify',
+            accessKey: accessKey,
+            questionId: challengeId,
+            answer: userAnswer
+          })
+        });
+        const data = await res.json();
+        if (data.success) {
+          try {
+            sessionStorage.setItem('webmaster_logged_in', 'true');
+          } catch (err) {}
+          setIsAuthenticated(true);
+        } else {
+          alert(data.error || 'Incorrect answer');
+        }
+      } catch (err) {
+        alert('Verification failed.');
+      }
+      setIsVerifying(false);
+    };
+
     return (
       <div style={{ height: '100vh', backgroundColor: theme.bg, color: theme.fg, display: 'flex', justifyContent: 'center', alignItems: 'center', fontFamily: 'sans-serif' }}>
         <style dangerouslySetInnerHTML={{__html: `header, footer, .support-widget, .cookie-banner { display: none !important; } body { overflow: hidden !important; margin: 0; }`}} />
-        <form onSubmit={handleLogin} style={{ width: '100%', maxWidth: '400px', padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px' }}>
-          <h1 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '2rem', textAlign: 'center', letterSpacing: '-0.02em' }}>Webmaster Dashboard</h1>
-          <div style={{ marginBottom: '1.5rem' }}>
-            <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Access Key</label>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} placeholder="Enter admin password" autoFocus autoComplete="new-password" suppressHydrationWarning />
-          </div>
-          <button type="submit" style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, cursor: 'pointer', borderRadius: '4px' }}>Authorize</button>
-        </form>
+        
+        {loginStep === 'key' ? (
+          <form onSubmit={handleAccessKeySubmit} style={{ width: '100%', maxWidth: '400px', padding: '2.5rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.5rem', textAlign: 'center', letterSpacing: '-0.02em' }}>Webmaster Login</h1>
+            <p style={{ fontSize: '0.85rem', color: theme.muted, textAlign: 'center', marginBottom: '2rem' }}>Please enter the Webmaster Access Key password to continue.</p>
+            
+            <div style={{ marginBottom: '2rem' }}>
+              <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted, fontWeight: 500 }}>Access Key Password</label>
+              <input 
+                type="password" 
+                value={accessKey} 
+                onChange={(e) => setAccessKey(e.target.value)} 
+                style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                placeholder="Enter password key" 
+                autoFocus 
+                required
+                disabled={isVerifying}
+                autoComplete="new-password"
+              />
+            </div>
+            <button 
+              type="submit" 
+              disabled={isVerifying || !accessKey.trim()}
+              style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, cursor: 'pointer', borderRadius: '4px', opacity: isVerifying || !accessKey.trim() ? 0.6 : 1 }}
+            >
+              {isVerifying ? 'Checking Access Key...' : 'Next Step →'}
+            </button>
+          </form>
+        ) : (
+          <form onSubmit={handleChallengeSubmit} style={{ width: '100%', maxWidth: '450px', padding: '2.5rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.5rem', textAlign: 'center', letterSpacing: '-0.02em' }}>Security Verification</h1>
+            <p style={{ fontSize: '0.85rem', color: theme.muted, textAlign: 'center', marginBottom: '2rem' }}>Answer your offline security challenge question to unlock the Webmaster portal.</p>
+            
+            <div style={{ marginBottom: '2rem' }}>
+              <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.75rem', color: theme.muted, fontWeight: 500 }}>
+                {challengeQuestion || 'Loading security challenge...'}
+              </label>
+              <input 
+                type="text" 
+                value={userAnswer} 
+                onChange={(e) => setUserAnswer(e.target.value)} 
+                style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
+                placeholder="Enter your private offline answer" 
+                autoFocus 
+                required
+                disabled={isVerifying || !challengeQuestion}
+                autoComplete="off"
+              />
+            </div>
+            <div style={{ display: 'flex', gap: '1rem' }}>
+              <button 
+                type="button"
+                onClick={() => setLoginStep('key')}
+                style={{ width: '35%', padding: '0.75rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer' }}
+              >
+                ← Back
+              </button>
+              <button 
+                type="submit" 
+                disabled={isVerifying || !challengeQuestion}
+                style={{ width: '65%', padding: '0.75rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, cursor: 'pointer', borderRadius: '4px', opacity: isVerifying || !challengeQuestion ? 0.6 : 1 }}
+              >
+                {isVerifying ? 'Verifying...' : 'Unlock Portal'}
+              </button>
+            </div>
+          </form>
+        )}
       </div>
     );
   }
