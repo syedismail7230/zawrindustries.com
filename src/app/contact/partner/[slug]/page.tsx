@@ -619,9 +619,9 @@ export default function PartnershipFormPage() {
 
         .creator-header-centered .creator-visual-wrap {
           width: 100%;
-          max-width: 760px;
-          aspect-ratio: 16/10.5;
-          border-radius: 48px;
+          max-width: 980px;
+          aspect-ratio: 16/11;
+          border-radius: 36px;
           overflow: hidden;
           position: relative;
           border: none;
@@ -784,7 +784,7 @@ export default function PartnershipFormPage() {
 
         .creator-ideal-img-wrap {
           width: 100%;
-          max-width: 440px;
+          max-width: 320px;
           margin-left: auto;
           border-radius: 32px;
           overflow: hidden;
