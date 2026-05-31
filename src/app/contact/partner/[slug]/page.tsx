@@ -1064,6 +1064,141 @@ export default function PartnershipFormPage() {
           }
         }
 
+        /* ────────────────── CREATOR ALLIANCE SECTION ────────────────── */
+        .creator-alliance-section {
+          margin: 8rem 0 6rem;
+          position: relative;
+          z-index: 1;
+        }
+
+        .creator-alliance-eyebrow {
+          text-align: center;
+          font-size: 0.9rem;
+          font-weight: 400;
+          color: rgba(255, 255, 255, 0.4);
+          letter-spacing: 0.04em;
+          margin-bottom: 3.5rem;
+          line-height: 1.5;
+        }
+
+        .creator-alliance-grid {
+          display: grid;
+          grid-template-columns: 1fr 1.3fr;
+          gap: 5rem;
+          align-items: center;
+          max-width: 1000px;
+          margin: 0 auto;
+        }
+
+        @media (max-width: 860px) {
+          .creator-alliance-grid {
+            grid-template-columns: 1fr;
+            gap: 3rem;
+            text-align: center;
+          }
+          .creator-alliance-img-wrap {
+            max-width: 300px !important;
+            margin: 0 auto !important;
+          }
+        }
+
+        .creator-alliance-img-wrap {
+          width: 100%;
+          max-width: 360px;
+          border-radius: 28px;
+          overflow: hidden;
+          background: #111;
+        }
+
+        .creator-alliance-img {
+          width: 100%;
+          height: auto;
+          display: block;
+          object-fit: cover;
+        }
+
+        .creator-alliance-body {}
+
+        .creator-alliance-text {
+          font-size: clamp(1.5rem, 2.5vw, 2rem);
+          font-weight: 300;
+          color: #ffffff;
+          line-height: 1.45;
+          letter-spacing: -0.02em;
+          margin-bottom: 2.5rem;
+        }
+
+        .creator-alliance-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.6rem;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          padding: 0.75rem 2rem;
+          border-radius: 100px;
+          font-size: 0.95rem;
+          font-weight: 400;
+          color: #ffffff;
+          background: transparent;
+          cursor: pointer;
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          text-decoration: none;
+          letter-spacing: 0.01em;
+        }
+
+        .creator-alliance-btn:hover {
+          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* ────────────────── WHATSAPP COMMUNITY BANNER ────────────────── */
+        .wa-banner {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 2rem;
+          border: 1px solid rgba(255, 255, 255, 0.12);
+          border-radius: 100px;
+          padding: 0.6rem 0.6rem 0.6rem 2rem;
+          margin: 0 auto 5rem;
+          max-width: 680px;
+          width: 100%;
+          transition: border-color 0.35s ease;
+        }
+
+        .wa-banner:hover {
+          border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .wa-banner-btn {
+          display: inline-block;
+          white-space: nowrap;
+          flex-shrink: 0;
+          border: 1px solid rgba(255, 255, 255, 0.35);
+          padding: 0.65rem 1.8rem;
+          border-radius: 100px;
+          font-size: 0.9rem;
+          font-weight: 400;
+          color: #ffffff;
+          background: transparent;
+          text-decoration: none;
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .wa-banner-btn:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: rgba(255, 255, 255, 0.7);
+        }
+
+        .wa-banner-text {
+          font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+          font-weight: 300;
+          color: rgba(255, 255, 255, 0.85);
+          line-height: 1.35;
+          text-align: right;
+          margin: 0;
+          flex: 1;
+        }
+
         /* ────────────────── SLEEK DARK THEME FOR CREATOR PAGE ────────────────── */
         .creator-dark-theme {
           background-color: #050505 !important;
@@ -1446,6 +1581,47 @@ export default function PartnershipFormPage() {
 
           </div>
         )}
+
+        {isCreator && (<>
+          {/* ── Creator Alliance Platform Section ── */}
+          <div className="creator-alliance-section">
+            <p className="creator-alliance-eyebrow">
+              Join us on<br />Creator Alliance platform
+            </p>
+            <div className="creator-alliance-grid">
+              <div className="creator-alliance-img-wrap">
+                <img
+                  src="/assets/creator-alliance-group.png"
+                  alt="Creator Alliance community"
+                  className="creator-alliance-img"
+                />
+              </div>
+              <div className="creator-alliance-body">
+                <p className="creator-alliance-text">
+                  Access a centralized platform to monitor earnings, analyze partnership performance, track campaign metrics, and manage collaborations efficiently.
+                </p>
+                <a href="https://creator-alliance.zawrindustries.com" target="_blank" rel="noopener noreferrer" className="creator-alliance-btn">
+                  Join us
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* ── WhatsApp Community Banner ── */}
+          <div className="wa-banner">
+            <a
+              href="https://chat.whatsapp.com/HdCOOBKncZ616idjkOfSnj"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="wa-banner-btn"
+            >
+              Count me in
+            </a>
+            <p className="wa-banner-text">
+              Join the WhatsApp community of creators and influencers
+            </p>
+          </div>
+        </>)}
 
         <div className="form-card">
           
