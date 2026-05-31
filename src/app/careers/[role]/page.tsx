@@ -4,6 +4,73 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
+// Maps DB employment type → Google Jobs schema enum
+function toGoogleEmploymentType(type: string): string {
+  const t = (type || '').toLowerCase();
+  if (t.includes('full')) return 'FULL_TIME';
+  if (t.includes('part')) return 'PART_TIME';
+  if (t.includes('contract')) return 'CONTRACTOR';
+  if (t.includes('intern')) return 'INTERN';
+  if (t.includes('temp')) return 'TEMPORARY';
+  return 'FULL_TIME';
+}
+
+// Build the JobPosting JSON-LD object from a job record
+function buildJobPostingSchema(job: any): object {
+  const datePosted = job.created_at
+    ? new Date(job.created_at).toISOString().split('T')[0]
+    : new Date().toISOString().split('T')[0];
+
+  const validThrough = new Date(
+    new Date(datePosted).getTime() + 90 * 24 * 60 * 60 * 1000
+  ).toISOString().split('T')[0];
+
+  const isRemote = /remote/i.test(job.location || '');
+
+  const description = [
+    job.role,
+    job.responsibilities?.length
+      ? `Key Responsibilities:\n${(job.responsibilities as string[]).map(r => `• ${r}`).join('\n')}`
+      : '',
+    job.reporting ? `Reporting to: ${job.reporting}` : ''
+  ].filter(Boolean).join('\n\n');
+
+  const schema: any = {
+    '@context': 'https://schema.org/',
+    '@type': 'JobPosting',
+    title: job.title,
+    description,
+    datePosted,
+    validThrough,
+    employmentType: toGoogleEmploymentType(job.type),
+    hiringOrganization: {
+      '@type': 'Organization',
+      name: 'Zawr Industries',
+      sameAs: 'https://zawrindustries.com',
+      logo: 'https://zawrindustries.com/assets/zawr-logo.png',
+    },
+    jobLocation: {
+      '@type': 'Place',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: job.location,
+        addressCountry: 'IN',
+      },
+    },
+    directApply: true,
+  };
+
+  if (isRemote) {
+    schema.jobLocationType = 'TELECOMMUTE';
+    schema.applicantLocationRequirements = {
+      '@type': 'Country',
+      name: 'India',
+    };
+  }
+
+  return schema;
+}
+
 export default function JobDetailPage() {
   const params = useParams();
   const router = useRouter();
@@ -100,6 +167,11 @@ export default function JobDetailPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', paddingTop: '8rem', paddingBottom: '6rem', fontFamily: 'sans-serif' }}>
+      {/* Google Jobs Structured Data — JobPosting schema */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(buildJobPostingSchema(job)) }}
+      />
       <div style={{ maxWidth: '64rem', margin: '0 auto', padding: '0 1.5rem' }}>
         
         {/* Back Button */}

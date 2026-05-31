@@ -313,7 +313,14 @@ export default function WebmasterDashboard() {
   // Actions
   const handleAddJob = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { data, error } = await supabase.from('jobs').insert([newJob]).select();
+    const now = new Date();
+    const validThrough = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+    const payload = {
+      ...newJob,
+      date_posted: now.toISOString().split('T')[0],
+      valid_through: validThrough,
+    };
+    const { data, error } = await supabase.from('jobs').insert([payload]).select();
     if (error) {
       alert(`Error adding job: Make sure the 'jobs' table exists with columns: title, location, type, status.\nSupabase msg: ${error.message}`);
     } else if (data) {
