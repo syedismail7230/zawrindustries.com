@@ -6,6 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import servicesData from '@/data/services_data.json';
 import { MethodologySection, PhaseDetail } from '@/components/MethodologySection';
 import { IndustriesSection } from '@/components/IndustriesSection';
+import { FAQSection } from '@/components/FAQSection';
 
 interface Offering {
   title: string;
@@ -14,6 +15,11 @@ interface Offering {
 }
 
 
+
+interface FAQ {
+  q: string;
+  a: string;
+}
 
 interface Industry {
   name: string;
@@ -31,6 +37,7 @@ interface ServiceDetail {
   offerings: Offering[];
   methodology: PhaseDetail[];
   industries: Industry[];
+  faqs: FAQ[];
 }
 
 const typedServicesData = servicesData as Record<string, ServiceDetail>;
@@ -611,11 +618,16 @@ export default function DynamicServicePage() {
             {service.name}
           </h1>
           <div style={{ marginTop: '2rem' }}>
-            <Link href="/contact" style={{ textDecoration: 'none' }}>
+            <a
+              href={`https://wa.me/919880464078?text=${encodeURIComponent(`Hi, I would like to know more about your ${service.name} services.`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: 'none' }}
+            >
               <button className="neon-btn" suppressHydrationWarning>
                 Talk to Expert
               </button>
-            </Link>
+            </a>
           </div>
         </div>
       </div>
@@ -675,6 +687,11 @@ export default function DynamicServicePage() {
       {/* ── INDUSTRIES WE SERVE ── */}
       {service.industries && service.industries.length > 0 && (
         <IndustriesSection industries={service.industries} />
+      )}
+
+      {/* ── FAQ ── */}
+      {service.faqs && service.faqs.length > 0 && (
+        <FAQSection faqs={service.faqs} serviceName={service.name} />
       )}
 
     </div>

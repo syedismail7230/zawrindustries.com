@@ -1,0 +1,200 @@
+import json
+
+FAQS = {
+  "ai-data-analytics": [
+    {"q": "What types of AI models do you build?", "a": "We build supervised, unsupervised, and reinforcement learning models including regression, classification, clustering, NLP, and computer vision systems tailored to your data environment."},
+    {"q": "How long does an AI project typically take?", "a": "Discovery and data assessment take 2–4 weeks. Model development and validation typically run 6–12 weeks depending on data complexity and business requirements."},
+    {"q": "Do we need to have clean data before starting?", "a": "No. Our data engineering team handles data collection, cleansing, normalisation, and pipeline construction as part of the engagement."},
+    {"q": "Can AI models integrate with our existing systems?", "a": "Yes. We build REST APIs, SDK wrappers, and middleware connectors so AI outputs integrate seamlessly with ERP, CRM, cloud, and on-premise systems."},
+    {"q": "How do you ensure model accuracy over time?", "a": "We implement MLOps pipelines with automated drift detection, scheduled retraining, and performance dashboards so models stay accurate as data evolves."},
+    {"q": "Is my data kept secure during the engagement?", "a": "All data is processed under strict NDA, with encryption at rest and in transit, isolated cloud environments, and role-based access controls throughout."},
+  ],
+  "cloud": [
+    {"q": "Which cloud platforms do you work with?", "a": "We are experienced across AWS, Microsoft Azure, and Google Cloud Platform, and can architect multi-cloud or hybrid solutions based on your requirements."},
+    {"q": "How do you minimise downtime during cloud migration?", "a": "We use phased migration strategies with blue-green deployments, rollback plans, and off-peak cutover windows to keep production systems running throughout."},
+    {"q": "Can you migrate legacy on-premise systems?", "a": "Yes. We assess legacy workloads using the 6R framework (rehost, replatform, refactor, repurchase, retire, retain) and produce a prioritised migration roadmap."},
+    {"q": "What does cloud cost optimisation involve?", "a": "We analyse your usage patterns, right-size instances, implement reserved capacity planning, and set up automated scaling to eliminate wasted spend."},
+    {"q": "Do you offer managed cloud services post-migration?", "a": "Yes. We provide 24/7 managed cloud operations including monitoring, patching, incident response, and monthly cost/performance reporting."},
+    {"q": "How do you handle cloud security and compliance?", "a": "We implement IAM policies, network segmentation, encryption, audit logging, and compliance guardrails aligned to ISO 27001, SOC 2, HIPAA, and GDPR as required."},
+  ],
+  "cognitive-business-operations": [
+    {"q": "What is cognitive business operations?", "a": "It combines AI, RPA, and intelligent process automation to handle complex, judgement-based business tasks that traditional automation cannot manage."},
+    {"q": "Which processes are best suited for cognitive automation?", "a": "Document processing, claims handling, customer query routing, compliance monitoring, and supply chain exception management are high-impact starting points."},
+    {"q": "How quickly can we see ROI?", "a": "Most clients see measurable ROI within 90 days of deployment—typically through reduced processing time, error rates, and headcount requirements."},
+    {"q": "Does cognitive automation replace our workforce?", "a": "No. It handles repetitive high-volume tasks so your team can focus on higher-value work. Most clients redeploy staff rather than reduce headcount."},
+    {"q": "What AI technologies underpin your solutions?", "a": "We use NLP, computer vision, machine learning, knowledge graphs, and decision intelligence engines depending on the process requirements."},
+    {"q": "Can solutions integrate with our existing software?", "a": "Yes. We connect to ERP, CRM, HRMS, and document management systems via APIs, RPA bots, or custom middleware."},
+  ],
+  "cybersecurity": [
+    {"q": "What cybersecurity frameworks do you follow?", "a": "We align to NIST CSF, ISO 27001, CIS Controls, and sector-specific standards such as HIPAA, PCI-DSS, and DORA depending on your regulatory environment."},
+    {"q": "How do you conduct a security assessment?", "a": "We combine automated vulnerability scanning, manual penetration testing, threat modelling, and architecture review to produce a prioritised risk register."},
+    {"q": "What is zero-trust and do we need it?", "a": "Zero-trust assumes no user or device is inherently trusted. It is recommended for organisations with remote workforces, cloud environments, or sensitive data assets."},
+    {"q": "How quickly can you respond to a security incident?", "a": "Our SOC provides 24/7 monitoring with a 15-minute alert-to-response SLA. Incident containment typically begins within 1 hour of detection."},
+    {"q": "Do you offer security awareness training?", "a": "Yes. We deliver role-based training programmes, phishing simulations, and executive briefings to reduce human-factor risk across your organisation."},
+    {"q": "Can you help us achieve compliance certification?", "a": "Yes. We provide gap assessments, remediation support, evidence collection, and liaison with certification bodies for ISO 27001, SOC 2, and PCI-DSS audits."},
+  ],
+  "network-solutions": [
+    {"q": "What is SD-WAN and when should we use it?", "a": "SD-WAN centralises network management and routes traffic intelligently across broadband, MPLS, and LTE links—ideal for multi-site organisations seeking lower costs and higher reliability."},
+    {"q": "Can you support our existing network hardware?", "a": "Yes. We work with Cisco, Juniper, Aruba, Fortinet, and Palo Alto infrastructure and can extend or overlay new capabilities on existing investments."},
+    {"q": "How do you design networks for high availability?", "a": "We implement redundant links, failover routing, and active-active architectures with documented RPO/RTO targets validated through regular failover testing."},
+    {"q": "What network security services do you include?", "a": "All network designs incorporate segmentation, firewall policy management, intrusion detection, and encrypted traffic inspection as standard."},
+    {"q": "How long does a multi-site network rollout take?", "a": "Scope, design, and lab testing take 4–6 weeks. Site deployments are typically 1–3 days per location depending on complexity."},
+    {"q": "Do you provide ongoing network monitoring?", "a": "Yes. Our NOC offers 24/7 network monitoring, performance baselining, capacity planning, and monthly reporting as part of managed network services."},
+  ],
+  "industrial-autonomy-and-engineering": [
+    {"q": "What types of autonomous systems do you deploy?", "a": "We deploy autonomous mobile robots (AMRs), collaborative robots (cobots), autonomous vehicles, drone systems, and AI-guided industrial machinery."},
+    {"q": "Is our existing factory infrastructure compatible?", "a": "We begin with a site survey and OT/IT integration assessment to identify compatibility requirements and design non-disruptive implementation plans."},
+    {"q": "How do you address worker safety with autonomous systems?", "a": "All deployments include safety risk assessments, CE/ISO 10218 compliance validation, physical safety interlocks, and operator training programmes."},
+    {"q": "What is the typical ROI timeline for automation projects?", "a": "Most industrial automation projects achieve payback within 18–36 months through throughput gains, reduced rework, and lower operational costs."},
+    {"q": "Can systems be maintained and updated remotely?", "a": "Yes. We provide secure OTA update capabilities, remote diagnostics, and predictive maintenance dashboards for all deployed autonomous systems."},
+    {"q": "Do you handle regulatory approvals for autonomous systems?", "a": "We support clients through CE marking, UL certification, and sector-specific approvals, providing technical documentation and liaising with regulatory bodies."},
+  ],
+  "enterprise-solutions": [
+    {"q": "Which ERP platforms do you implement?", "a": "We implement SAP S/4HANA, Oracle Fusion, Microsoft Dynamics 365, and Infor CloudSuite, as well as bespoke enterprise platforms built on modern cloud architectures."},
+    {"q": "How do you handle data migration from legacy systems?", "a": "We use ETL pipelines with data quality validation, phased cutover strategies, and parallel-run periods to ensure data integrity during transition."},
+    {"q": "What change management support do you provide?", "a": "We deliver role-specific training, super-user programmes, communication plans, and go-live support to drive adoption and minimise disruption."},
+    {"q": "How long does an enterprise implementation take?", "a": "Scope varies by complexity: single-module implementations run 3–6 months; full enterprise rollouts typically take 9–18 months with phased go-lives."},
+    {"q": "Can you customise standard ERP functionality?", "a": "Yes. We build custom extensions, workflow automations, and integrations while following upgrade-safe development practices to protect your investment."},
+    {"q": "What post-go-live support do you offer?", "a": "We provide hypercare support for 4–8 weeks post go-live, followed by ongoing application management services covering incidents, enhancements, and upgrades."},
+  ],
+  "consulting": [
+    {"q": "What does a typical consulting engagement look like?", "a": "Engagements begin with a discovery workshop to define scope, followed by assessment, strategy development, roadmap creation, and executive presentation—typically 4–8 weeks."},
+    {"q": "Do you only advise or do you also implement?", "a": "We offer both. Many clients engage us for strategy and then transition to implementation. Others use us for advisory support alongside their internal or third-party delivery teams."},
+    {"q": "How do you measure consulting outcomes?", "a": "We define success metrics and KPIs at engagement start and track them through a benefits realisation framework delivered as part of the final report."},
+    {"q": "Can you benchmark our performance against industry peers?", "a": "Yes. We use proprietary benchmarking databases and industry research to contextualise your performance and identify priority improvement areas."},
+    {"q": "What industries do your consultants specialise in?", "a": "Our consulting team has deep expertise across automotive, manufacturing, financial services, healthcare, logistics, retail, and the public sector."},
+    {"q": "How do you protect confidential business information?", "a": "All engagements are governed by mutual NDAs, restricted data access controls, and secure document management protocols throughout the project lifecycle."},
+  ],
+  "software-development": [
+    {"q": "What technology stacks do you work with?", "a": "We build across React, Next.js, Node.js, Python, Java, .NET, Go, and Rust for backend, with iOS (Swift), Android (Kotlin), and Flutter for mobile."},
+    {"q": "How do you manage project scope and prevent overruns?", "a": "We use agile sprints with two-week delivery cycles, backlog grooming, and sprint reviews so scope changes are managed transparently with cost implications agreed upfront."},
+    {"q": "Do you provide source code and IP ownership?", "a": "Yes. All custom-developed code, IP, and documentation is assigned to the client upon final payment under our standard engagement terms."},
+    {"q": "Can you extend or maintain software built by another team?", "a": "Yes. We conduct a code audit to understand architecture, technical debt, and test coverage before proposing a structured handover and maintenance plan."},
+    {"q": "How do you ensure software quality?", "a": "We implement TDD, automated unit and integration testing, code reviews, SAST scanning, and staging environment validation before every production release."},
+    {"q": "What does your post-launch support include?", "a": "We offer SLA-backed support plans covering bug fixes, security patches, performance monitoring, and minor enhancements for 12–36 months post-launch."},
+  ],
+  "web-development": [
+    {"q": "What CMS and e-commerce platforms do you build on?", "a": "We work with headless CMS platforms (Contentful, Sanity, Strapi), Shopify Plus, Commercetools, and custom-built composable commerce architectures."},
+    {"q": "How do you approach web performance optimisation?", "a": "We target Core Web Vitals compliance through server-side rendering, image optimisation, CDN configuration, lazy loading, and bundle size reduction."},
+    {"q": "Do you handle SEO as part of web development?", "a": "Yes. Technical SEO—including semantic HTML, metadata, structured data, sitemap generation, and crawlability—is built into every project by default."},
+    {"q": "Can you redesign an existing website without losing traffic?", "a": "Yes. We implement 301 redirect mapping, staged rollouts, and post-launch SEO monitoring to protect organic rankings during redesign transitions."},
+    {"q": "How do you ensure accessibility compliance?", "a": "We build to WCAG 2.1 AA standards with keyboard navigation, screen reader compatibility, sufficient colour contrast, and automated accessibility audits in our CI pipeline."},
+    {"q": "What analytics and tracking do you set up?", "a": "We configure GA4, GTM, conversion tracking, heatmaps, and custom event tracking, providing a 30-day post-launch data validation period."},
+  ],
+  "application-development": [
+    {"q": "Do you build native or cross-platform apps?", "a": "Both. We build native iOS (Swift) and Android (Kotlin) for performance-critical applications, and Flutter or React Native for cross-platform delivery."},
+    {"q": "How do you handle app store submission and approval?", "a": "We manage the full submission process for Apple App Store and Google Play including metadata, screenshots, compliance review, and expedited rejection resolution."},
+    {"q": "Can you integrate with third-party APIs and services?", "a": "Yes. We have integration experience with payment gateways, mapping services, ERP systems, healthcare APIs, IoT platforms, and social authentication providers."},
+    {"q": "How do you approach mobile security?", "a": "We implement certificate pinning, encrypted local storage, biometric authentication, jailbreak detection, and OWASP Mobile Top 10 mitigations as standard."},
+    {"q": "What happens if users lose connectivity?", "a": "We build offline-first architectures with local data caching and background sync so critical app functions remain available without network access."},
+    {"q": "How do you scale the app as user numbers grow?", "a": "We design backend services as horizontally scalable microservices or serverless functions, with load testing conducted before each major release."},
+  ],
+  "startup-mvp": [
+    {"q": "What is included in an MVP engagement?", "a": "MVP engagements include product scoping, UX design, frontend and backend development, QA, deployment, and a 30-day post-launch support period."},
+    {"q": "How long does it take to build an MVP?", "a": "Most MVPs are delivered in 8–12 weeks depending on feature complexity. We use a fixed-scope sprint model to maintain pace and predictability."},
+    {"q": "How do you help prioritise features for the MVP?", "a": "We facilitate a product scoping workshop using the MoSCoW method to identify must-have features that validate core assumptions with minimum investment."},
+    {"q": "Can you help us prepare for investor demos?", "a": "Yes. We can produce pitch-ready builds with polished UI, demo data, and walkthrough documentation tailored for investor or accelerator presentations."},
+    {"q": "What if we need to change direction after launch?", "a": "Our modular architecture approach is designed for pivots. We document all design decisions and maintain clean codebases so redirection is fast and cost-effective."},
+    {"q": "Do you help with technical due diligence for fundraising?", "a": "Yes. We support technical due diligence processes by providing architecture documentation, code quality reports, and senior engineer availability for investor Q&A."},
+  ],
+  "crm-solution": [
+    {"q": "Which CRM platforms do you implement?", "a": "We implement Salesforce Sales Cloud, HubSpot, Microsoft Dynamics 365 CRM, Zoho CRM, and custom CRM platforms built on modern cloud infrastructure."},
+    {"q": "How do you migrate data from our existing CRM?", "a": "We extract, transform, and load data using validated ETL pipelines with deduplication, field mapping, and a parallel-run period to confirm accuracy."},
+    {"q": "Can the CRM integrate with our other business systems?", "a": "Yes. We build integrations with ERP, marketing automation, support platforms, telephony, and e-commerce systems using native connectors or custom APIs."},
+    {"q": "How long does a CRM implementation take?", "a": "Standard implementations run 6–12 weeks. Complex multi-team or multi-region rollouts with heavy customisation typically take 3–6 months."},
+    {"q": "What training do you provide for our sales team?", "a": "We deliver role-based training for end users, administrators, and managers, plus recorded sessions, user guides, and a 60-day hypercare period post go-live."},
+    {"q": "How do you measure CRM adoption success?", "a": "We track login rates, data completeness scores, pipeline velocity, and activity logging rates to identify adoption gaps and drive corrective actions."},
+  ],
+  "cxm-solution": [
+    {"q": "What is the difference between CRM and CXM?", "a": "CRM manages customer data and transactions; CXM orchestrates every experience touchpoint to deliver consistent, personalised journeys across all channels."},
+    {"q": "How do you map customer journeys?", "a": "We conduct qualitative research, session analysis, and NPS/CSAT data review to produce journey maps highlighting friction points and improvement opportunities."},
+    {"q": "Which CXM platforms do you work with?", "a": "We implement Salesforce Experience Cloud, Adobe Experience Manager, Medallia, Qualtrics, and custom-built CXM platforms depending on requirements."},
+    {"q": "How do you personalise experiences at scale?", "a": "We integrate CDPs, AI recommendation engines, and dynamic content platforms to deliver real-time personalisation based on behavioural and transactional signals."},
+    {"q": "How long before we see improvement in customer satisfaction scores?", "a": "Quick-win journey optimisations typically show CSAT improvement within 30–60 days. Deeper platform implementations yield measurable uplift within 3–6 months."},
+    {"q": "Can you help us reduce customer churn?", "a": "Yes. We build churn prediction models, proactive outreach workflows, and loyalty programme integrations specifically designed to improve retention metrics."},
+  ],
+  "digital-marketing": [
+    {"q": "What digital marketing services do you offer?", "a": "We provide SEO, paid search (PPC), paid social, programmatic display, content marketing, email automation, influencer marketing, and conversion rate optimisation."},
+    {"q": "How do you measure campaign performance?", "a": "We use blended attribution modelling across GA4, ad platform APIs, and CRM data to report on ROAS, CAC, LTV, and revenue contribution by channel."},
+    {"q": "Do you manage ad budgets directly?", "a": "Yes. We manage media budgets as your agency, optimising daily bids, audience segments, and creative rotation to maximise returns against agreed KPIs."},
+    {"q": "How long before SEO efforts show results?", "a": "Technical SEO improvements often show results in 4–8 weeks. Sustained organic growth from content and link-building typically builds over 3–6 months."},
+    {"q": "Can you handle multi-market and multilingual campaigns?", "a": "Yes. We have experience running campaigns across APAC, EMEA, and North America with market-specific creative, localisation, and audience targeting."},
+    {"q": "How do you approach creative strategy and content?", "a": "We base creative strategy on audience research, competitor analysis, and performance data—iterating continuously using A/B testing and creative fatigue monitoring."},
+  ],
+  "blockchain": [
+    {"q": "Which blockchain platforms do you develop on?", "a": "We build on Ethereum, Polygon, Hyperledger Fabric, Solana, and Avalanche, selecting the appropriate chain based on throughput, cost, and privacy requirements."},
+    {"q": "Do you build private or public blockchain solutions?", "a": "Both. Public chains suit tokenisation and DeFi use cases; private or consortium chains are preferred for enterprise supply chain, identity, and document verification."},
+    {"q": "How do you ensure smart contract security?", "a": "All smart contracts undergo formal verification, automated static analysis (Slither, MythX), and third-party audit before mainnet deployment."},
+    {"q": "Can blockchain integrate with our existing IT systems?", "a": "Yes. We build oracle layers and API gateways that connect on-chain data with ERP, CRM, IoT, and logistics platforms without replacing existing infrastructure."},
+    {"q": "What are realistic throughput limits for blockchain?", "a": "Layer-2 solutions and private chains can process thousands of transactions per second. We conduct throughput analysis during scoping to ensure the architecture fits your volumes."},
+    {"q": "How do you handle blockchain data privacy requirements?", "a": "We use zero-knowledge proofs, private transaction channels (Fabric), and off-chain storage with on-chain hash anchoring to meet GDPR and data minimisation requirements."},
+  ],
+  "iot": [
+    {"q": "What IoT hardware and connectivity protocols do you support?", "a": "We work with MQTT, CoAP, OPC-UA, BLE, Zigbee, LoRaWAN, NB-IoT, and cellular (4G/5G) across industrial sensors, gateways, and edge devices."},
+    {"q": "How do you handle IoT data at scale?", "a": "We architect time-series data pipelines on AWS IoT, Azure IoT Hub, or GCP IoT Core with stream processing (Kafka, Kinesis) and data lake storage for analytics."},
+    {"q": "How is IoT device security managed?", "a": "We implement device identity (X.509 certificates), encrypted communications, OTA firmware signing, and anomaly detection to protect the device fleet."},
+    {"q": "Can IoT data integrate with our existing business systems?", "a": "Yes. We build connectors between IoT platforms and ERP, MES, CRM, and BI tools so operational data flows directly into your decision-making systems."},
+    {"q": "What is edge computing and when is it needed?", "a": "Edge computing processes data on-device or locally rather than in the cloud—essential for low-latency responses, bandwidth reduction, and offline resilience in industrial settings."},
+    {"q": "How do you manage a large fleet of deployed IoT devices?", "a": "We implement device management platforms with remote configuration, health monitoring, OTA updates, and automated alerts for device failures or anomalies."},
+  ],
+  "devops": [
+    {"q": "What CI/CD tools do you use?", "a": "We work with GitHub Actions, GitLab CI, Jenkins, Azure DevOps, CircleCI, and ArgoCD for GitOps-based Kubernetes deployments, selecting tools that fit your existing stack."},
+    {"q": "How do you implement DevSecOps?", "a": "We embed SAST, DAST, SCA, container scanning, and secrets detection into every pipeline stage, with policy-as-code gates that prevent insecure builds from reaching production."},
+    {"q": "Can you migrate us from a manual deployment process?", "a": "Yes. We assess your current release process, identify automation opportunities, and implement CI/CD incrementally without disrupting ongoing deliveries."},
+    {"q": "What Kubernetes services do you support?", "a": "We work with EKS, AKS, GKE, and self-managed clusters, providing Helm chart development, autoscaling configuration, network policy, and cluster security hardening."},
+    {"q": "How do you approach infrastructure as code?", "a": "We use Terraform and Pulumi for cloud infrastructure, with Ansible or Chef for configuration management, all versioned in Git with PR-based review workflows."},
+    {"q": "What SRE practices do you implement?", "a": "We establish SLIs, SLOs, and error budgets, implement distributed tracing (Jaeger/OpenTelemetry), and run game days and chaos engineering exercises to validate resilience."},
+  ],
+  "unit-test": [
+    {"q": "What testing frameworks do you use?", "a": "We use Jest, Vitest, pytest, JUnit, NUnit, and xUnit for unit testing, combined with coverage tools like Istanbul, Coverage.py, and JaCoCo."},
+    {"q": "What is a good unit test coverage target?", "a": "We target 80% coverage as a baseline for production code, with 90%+ for critical business logic, payment processing, and safety-critical components."},
+    {"q": "How do you write tests for legacy codebases with no tests?", "a": "We start with characterisation tests to document existing behaviour, then refactor incrementally to improve testability while building coverage progressively."},
+    {"q": "Do you use TDD (Test-Driven Development)?", "a": "Yes. We advocate TDD for new feature development and can train your team on red-green-refactor cycles as part of the engagement."},
+    {"q": "How do you handle testing for third-party dependencies?", "a": "We use mocking and stubbing (Mockito, unittest.mock, Sinon) to isolate units from external dependencies, ensuring tests are fast and deterministic."},
+    {"q": "Can unit tests be integrated into our CI/CD pipeline?", "a": "Yes. We configure your pipeline to run the full unit test suite on every commit, with coverage gates that block merges below the agreed threshold."},
+  ],
+  "quality-assurance": [
+    {"q": "What QA services do you provide?", "a": "We provide manual testing, automated regression testing, performance testing, security testing, accessibility testing, and API testing across web, mobile, and desktop platforms."},
+    {"q": "How do you approach test automation strategy?", "a": "We apply the automation pyramid: maximise unit tests, balance integration tests, and use selective UI automation for high-value user journeys only."},
+    {"q": "What performance testing tools do you use?", "a": "We use k6, JMeter, Gatling, and Locust for load and stress testing, providing detailed throughput, latency, and error rate analysis under various traffic profiles."},
+    {"q": "How do you integrate QA into agile development sprints?", "a": "QA is embedded from sprint planning—test cases are created alongside user stories, automated in the same sprint, and executed in a dedicated staging environment."},
+    {"q": "Can you test mobile apps on real devices?", "a": "Yes. We use device farms (BrowserStack, AWS Device Farm) covering 100+ iOS and Android device/OS combinations for comprehensive compatibility testing."},
+    {"q": "What deliverables do we receive at the end of a QA engagement?", "a": "You receive test plans, test case libraries, automation scripts with documentation, defect reports, performance benchmarks, and a final quality sign-off report."},
+  ],
+  "workplace-transformation": [
+    {"q": "What does a workplace transformation engagement involve?", "a": "We assess your current tools, collaboration patterns, and workforce needs, then design and implement a modern digital workplace strategy covering technology, process, and people."},
+    {"q": "Which Microsoft 365 services do you implement?", "a": "We implement Teams, SharePoint Online, OneDrive, Viva Engage, Viva Insights, Power Platform, and Copilot for Microsoft 365 tailored to your organisational structure."},
+    {"q": "How do you drive employee adoption of new tools?", "a": "We combine targeted training, champion networks, usage analytics, and a 90-day adoption programme to drive sustained tool engagement across all user segments."},
+    {"q": "Can you help design physical and hybrid workspaces?", "a": "Yes. We advise on AV/meeting room technology, desk booking systems, digital signage, and workspace experience platforms that complement your digital tooling."},
+    {"q": "How do you measure the success of a transformation?", "a": "We track collaboration metrics, tool adoption rates, employee satisfaction scores, meeting efficiency, and productivity indicators at 30, 60, and 90 days post-implementation."},
+    {"q": "Do you address information security in the new workplace?", "a": "Yes. All workplace implementations include DLP policies, conditional access, Intune device management, and sensitivity label governance as standard."},
+  ],
+  "process-automation": [
+    {"q": "What is the difference between RPA and intelligent automation?", "a": "RPA automates rule-based, structured tasks; intelligent automation adds AI capabilities like document understanding, NLP, and decision intelligence to handle unstructured data."},
+    {"q": "Which RPA platforms do you work with?", "a": "We develop on UiPath, Automation Anywhere, Microsoft Power Automate, and Blue Prism, selecting the platform that best fits your licensing, infrastructure, and IT governance requirements."},
+    {"q": "How do you identify the best processes to automate?", "a": "We conduct a process discovery workshop using task mining, interview sessions, and volume/complexity analysis to produce a prioritised automation opportunity pipeline."},
+    {"q": "How long does it take to automate a process?", "a": "Simple, well-documented processes can be automated in 2–4 weeks. Complex multi-system processes with exception handling typically take 6–10 weeks."},
+    {"q": "What happens when an automated process encounters an exception?", "a": "We design exception frameworks that route unhandled cases to human queues with full context, ensuring no transaction is lost and audit trails are maintained."},
+    {"q": "Do you provide ongoing bot maintenance?", "a": "Yes. Our managed automation services include bot monitoring, application change remediation, performance reporting, and continuous improvement recommendations."},
+  ],
+  "business-process-management": [
+    {"q": "What BPM platforms do you implement?", "a": "We implement Pega, Appian, IBM BPM, SAP Signavio, and Camunda, as well as building custom BPM solutions on modern workflow engines where appropriate."},
+    {"q": "How do you model and document our current processes?", "a": "We use BPMN 2.0 notation in tools such as Signavio or Lucidchart, facilitated through process discovery workshops with process owners and subject matter experts."},
+    {"q": "What is process mining and do we need it?", "a": "Process mining uses system event logs to discover the actual execution paths of your processes, revealing deviations, bottlenecks, and rework loops invisible to manual analysis."},
+    {"q": "How long does a BPM implementation take?", "a": "Single process automation implementations run 6–10 weeks. Enterprise-wide BPM programmes with multiple processes and integrations typically take 6–18 months."},
+    {"q": "Can BPM solutions integrate with our existing ERP?", "a": "Yes. We build native integrations with SAP, Oracle, Microsoft Dynamics, and other enterprise platforms so BPM orchestrates workflows across your full technology landscape."},
+    {"q": "How do you ensure process governance after go-live?", "a": "We implement process ownership frameworks, KPI dashboards, SLA monitoring, and regular process review cadences to ensure continuous improvement post-deployment."},
+  ],
+}
+
+with open("src/data/services_data.json", "r", encoding="utf-8") as f:
+    data = json.load(f)
+
+for slug, faqs in FAQS.items():
+    if slug in data:
+        data[slug]["faqs"] = faqs
+
+with open("src/data/services_data.json", "w", encoding="utf-8") as f:
+    json.dump(data, f, indent=2, ensure_ascii=False)
+
+print(f"Done — FAQs injected for {len(FAQS)} services.")
