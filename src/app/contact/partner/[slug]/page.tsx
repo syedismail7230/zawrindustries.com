@@ -641,6 +641,35 @@ export default function PartnershipFormPage() {
             inset 0 0 35px rgba(255, 255, 255, 0.1);
         }
 
+        .hero-join-btn {
+          position: absolute;
+          bottom: 2rem;
+          left: 50%;
+          transform: translateX(-50%);
+          display: inline-flex;
+          align-items: center;
+          white-space: nowrap;
+          border: 1px solid rgba(255, 255, 255, 0.45);
+          padding: 0.65rem 2rem;
+          border-radius: 100px;
+          font-size: 0.95rem;
+          font-weight: 400;
+          color: #ffffff;
+          background: rgba(0, 0, 0, 0.35);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          text-decoration: none;
+          z-index: 10;
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          letter-spacing: 0.01em;
+        }
+
+        .hero-join-btn:hover {
+          background: rgba(255, 255, 255, 0.12);
+          border-color: rgba(255, 255, 255, 0.8);
+          transform: translateX(-50%) translateY(-2px);
+        }
+
         .creator-header-centered .creator-title-area {
           max-width: 850px;
           margin: 0 auto;
@@ -726,8 +755,8 @@ export default function PartnershipFormPage() {
 
         .creator-ideal-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 4rem;
+          grid-template-columns: 1fr auto;
+          gap: 0.5rem;
           align-items: center;
           margin-top: 4rem;
           margin-bottom: 4rem;
@@ -938,38 +967,43 @@ export default function PartnershipFormPage() {
           margin-bottom: 2.5rem;
           line-height: 1.5;
         }
-        /* Clean Bullet List Grid for Left Column */
+        /* Clean Bullet Chip Grid for Left Column */
         .creator-clean-bullet-grid {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 1.2rem 2rem;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
         }
 
         @media (max-width: 580px) {
           .creator-clean-bullet-grid {
-            grid-template-columns: 1fr;
+            gap: 0.6rem;
           }
         }
 
         .creator-bullet-item {
-          display: flex;
+          display: inline-flex;
           align-items: center;
-          gap: 0.8rem;
+          border: 1px solid rgba(255, 255, 255, 0.3);
+          border-radius: 100px;
+          padding: 0.5rem 1.2rem;
+          font-size: clamp(0.85rem, 1vw, 0.95rem);
+          font-weight: 400;
+          color: rgba(255, 255, 255, 0.85);
+          background: transparent;
+          transition: border-color 0.3s ease, color 0.3s ease;
         }
 
-        .creator-bullet-dot {
-          width: 5px;
-          height: 5px;
-          border-radius: 50%;
-          background-color: #ffffff;
-          opacity: 0.6;
-          flex-shrink: 0;
+        .creator-bullet-item:hover {
+          border-color: rgba(255, 255, 255, 0.7);
+          color: #ffffff;
         }
+
+        .creator-bullet-dot { display: none; }
 
         .creator-bullet-text {
-          font-size: clamp(0.95rem, 1vw, 1.1rem);
-          color: rgba(255, 255, 255, 0.85);
-          font-weight: 400;
+          font-size: inherit;
+          color: inherit;
+          font-weight: inherit;
         }
 
         /* Clean Numbered List Stack for Right Column */
@@ -1073,12 +1107,12 @@ export default function PartnershipFormPage() {
 
         .creator-alliance-eyebrow {
           text-align: center;
-          font-size: 0.9rem;
+          font-size: clamp(2rem, 3.5vw, 2.6rem);
           font-weight: 400;
-          color: rgba(255, 255, 255, 0.4);
-          letter-spacing: 0.04em;
+          color: #ffffff;
+          letter-spacing: -0.02em;
           margin-bottom: 3.5rem;
-          line-height: 1.5;
+          line-height: 1.3;
         }
 
         .creator-alliance-grid {
@@ -1156,18 +1190,14 @@ export default function PartnershipFormPage() {
           align-items: center;
           justify-content: space-between;
           gap: 2rem;
-          border: 1px solid rgba(255, 255, 255, 0.12);
-          border-radius: 100px;
-          padding: 0.6rem 0.6rem 0.6rem 2rem;
+          border: none;
+          padding: 0.6rem 0;
           margin: 0 auto 5rem;
           max-width: 680px;
           width: 100%;
-          transition: border-color 0.35s ease;
         }
 
-        .wa-banner:hover {
-          border-color: rgba(255, 255, 255, 0.3);
-        }
+        .wa-banner:hover {}
 
         .wa-banner-btn {
           display: inline-block;
@@ -1421,6 +1451,14 @@ export default function PartnershipFormPage() {
                     className="creator-visual-img" 
                   />
                   <div className="creator-visual-glow" />
+                  <a
+                    href="https://creator-alliance.zawrindustries.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hero-join-btn"
+                  >
+                    Join us
+                  </a>
                 </div>
               </div>
 
