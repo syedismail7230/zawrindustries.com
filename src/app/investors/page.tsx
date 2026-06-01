@@ -12,7 +12,7 @@ const PitchDeckViewer = dynamic(() => import('./PitchDeckViewer'), {
 // Main Page Component
 export default function InvestorsPage() {
   const [isPitchDeckOpen, setIsPitchDeckOpen] = React.useState(false);
-  const [hasPitchDeck, setHasPitchDeck] = React.useState(false);
+  const [hasPitchDeck, setHasPitchDeck] = React.useState(true);
   const [reports, setReports] = React.useState<any[]>([]);
   
   // Dynamic Events States
