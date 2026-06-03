@@ -73,13 +73,14 @@ export default function SupportWidget() {
         src="https://crm.zawrindustries.com/widget/support"
         style={{
           position: 'absolute',
-          bottom: 0,
-          right: 0,
+          bottom: isExpanded ? '0px' : '-16px',
+          right: isExpanded ? '0px' : '-16px',
           width: '380px',
           height: '540px',
           border: 'none',
           background: 'transparent',
           colorScheme: 'dark',
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
         onLoad={sendPageContext}
         title="Support Widget"
