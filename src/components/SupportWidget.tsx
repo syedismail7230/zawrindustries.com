@@ -30,12 +30,12 @@ export default function SupportWidget() {
         position: 'fixed',
         bottom: '20px',
         right: '20px',
-        // When expanded: match user's custom dimensions (380x550)
-        // When collapsed: make it wide enough to display the text bubble prompt next to the icon without clipping
-        width: isExpanded ? '380px' : '280px',
+        // Keep width at 380px consistently so the widget does not trigger its compact inline mode
+        // (which was rendering the "Awaiting transmission..." text pill instead of the circle icon)
+        width: '380px',
         height: isExpanded ? '550px' : '100px',
         zIndex: 99999,
-        transition: 'width 0.2s ease, height 0.2s ease',
+        transition: 'height 0.2s ease',
       }}
       title="Support Widget"
     />
