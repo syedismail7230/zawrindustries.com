@@ -72,8 +72,11 @@ export default function SupportWidget() {
         ref={iframeRef}
         src="https://crm.zawrindustries.com/widget/support"
         style={{
-          width: '100%',
-          height: '100%',
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          width: '380px',
+          height: '540px',
           border: 'none',
           background: 'transparent',
           colorScheme: 'dark',
