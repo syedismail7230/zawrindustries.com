@@ -73,8 +73,8 @@ export default function SupportWidget() {
         src="https://crm.zawrindustries.com/widget/support"
         style={{
           position: 'absolute',
-          bottom: isExpanded ? '0px' : '-16px',
-          right: isExpanded ? '0px' : '-16px',
+          bottom: isExpanded ? '0px' : '-20px',
+          right: isExpanded ? '0px' : '-20px',
           width: '380px',
           height: '540px',
           border: 'none',

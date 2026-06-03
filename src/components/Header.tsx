@@ -231,7 +231,7 @@ export default function Header() {
           </div>
         </div>
         <div className="nav-item">
-          Newsroom
+          <Link href="/newsroom/press-release" style={{ color: 'inherit', textDecoration: 'none' }} onClick={closeMobileMenu}>Newsroom</Link>
           <div className="dropdown">
             <Link href="/newsroom/press-release" onClick={closeMobileMenu}>Press Release</Link>
             <Link href="/newsroom/notifications" onClick={closeMobileMenu}>Notifications</Link>
