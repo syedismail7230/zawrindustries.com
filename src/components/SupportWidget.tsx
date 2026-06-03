@@ -31,8 +31,8 @@ export default function SupportWidget() {
         bottom: '20px',
         right: '20px',
         // When expanded: match user's custom dimensions (380x550)
-        // When collapsed: shrink to small box so it doesn't block homepage clicks
-        width: isExpanded ? '380px' : '100px',
+        // When collapsed: make it wide enough to display the text bubble prompt next to the icon without clipping
+        width: isExpanded ? '380px' : '280px',
         height: isExpanded ? '550px' : '100px',
         zIndex: 99999,
         transition: 'width 0.2s ease, height 0.2s ease',
