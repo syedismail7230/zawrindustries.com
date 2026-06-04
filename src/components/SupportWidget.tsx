@@ -92,11 +92,7 @@ export default function SupportWidget() {
       {/* Bubble button overlay — only visible when collapsed */}
       {!isExpanded && (
         <button
-          onClick={() => {
-            // Tell the iframe to open itself first, then expand container
-            iframeRef.current?.contentWindow?.postMessage('trigger-open', '*');
-            setIsExpanded(true);
-          }}
+          onClick={() => setIsExpanded(true)}
           aria-label="Open support chat"
           style={{
             position: 'absolute',
