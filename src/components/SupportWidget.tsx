@@ -72,15 +72,11 @@ export default function SupportWidget() {
         ref={iframeRef}
         src="https://crm.zawrindustries.com/widget/support"
         style={{
-          position: 'absolute',
-          bottom: isExpanded ? '0px' : '-20px',
-          right: isExpanded ? '0px' : '-20px',
-          width: '380px',
-          height: '540px',
+          width: '100%',
+          height: '100%',
           border: 'none',
           background: 'transparent',
           colorScheme: 'dark',
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         }}
         onLoad={sendPageContext}
         title="Support Widget"
