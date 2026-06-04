@@ -66,6 +66,7 @@ export default function SupportWidget() {
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         borderRadius: isExpanded ? '16px' : '50%',
         overflow: 'hidden',
+        background: '#121214',
         boxShadow: isExpanded
           ? '0 8px 32px rgba(0,0,0,0.4)'
           : '0 4px 16px rgba(0,0,0,0.25)',
