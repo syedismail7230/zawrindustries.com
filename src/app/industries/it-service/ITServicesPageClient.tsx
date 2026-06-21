@@ -468,6 +468,37 @@ export default function ITServicesPageClient() {
                 border-color: rgba(168, 85, 247, 0.55);
                 background-color: rgba(168, 85, 247, 0.12);
               }
+
+              .partners-grid {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                justify-items: center;
+                align-items: center;
+                gap: 3rem 4rem;
+                padding: 0 2rem;
+                max-width: 1200px;
+                margin: 0 auto;
+                width: 100%;
+                box-sizing: border-box;
+              }
+              @media (max-width: 1024px) {
+                .partners-grid {
+                  grid-template-columns: repeat(3, 1fr);
+                  gap: 3rem 4rem;
+                }
+              }
+              @media (max-width: 768px) {
+                .partners-grid {
+                  grid-template-columns: repeat(2, 1fr);
+                  gap: 2.5rem 3rem;
+                }
+              }
+              @media (max-width: 480px) {
+                .partners-grid {
+                  grid-template-columns: 1fr;
+                  gap: 2rem;
+                }
+              }
             `}} />
 
             <div className="projects-grid">
@@ -494,6 +525,68 @@ export default function ITServicesPageClient() {
 
             <div className="more-projects-label">
               500+ more
+            </div>
+          </div>
+
+          {/* ── OUR PARTNERS SECTION ── */}
+          <div style={{ maxWidth: '1200px', margin: '0 auto 8rem auto', textAlign: 'center' }}>
+            <h2 style={{
+              fontSize: 'clamp(2rem, 4.5vw, 3rem)',
+              fontWeight: 300,
+              color: '#ffffff',
+              marginBottom: '4rem',
+              letterSpacing: '-0.02em',
+              fontFamily: 'Inter, sans-serif',
+              opacity: 0.85
+            }}>
+              Our Partners
+            </h2>
+            <div className="partners-grid">
+              {[
+                { name: 'Salesforce', src: '/assets/partner/salesforce-removebg-preview.png' },
+                { name: 'Razorpay', src: '/assets/partner/razorpay-removebg-preview.png' },
+                { name: 'Nvidia', src: '/assets/partner/nvidia-removebg-preview.png' },
+                { name: 'Google', src: '/assets/partner/google-removebg-preview.png' },
+                { name: 'Microsoft', src: '/assets/partner/microsoft-removebg-preview.png' },
+                { name: 'AWS', src: '/assets/partner/aws-removebg-preview.png' },
+                { name: 'Anthropic', src: '/assets/partner/anthropic-removebg-preview.png' },
+                { name: 'Apple', src: '/assets/partner/apple-removebg-preview.png' },
+                { name: 'Intel', src: '/assets/partner/intel-removebg-preview.png' },
+                { name: 'Meta', src: '/assets/partner/meta-removebg-preview.png' },
+                { name: 'Shopify', src: '/assets/partner/shopify-removebg-preview.png' },
+                { name: 'Zoho', src: '/assets/partner/zoho-removebg-preview.png' },
+              ].map((partner) => (
+                <div 
+                  key={partner.name}
+                  style={{
+                    height: '110px',
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <img 
+                    src={partner.src} 
+                    alt={`${partner.name} logo`}
+                    style={{
+                      maxHeight: '100%',
+                      maxWidth: '100%',
+                      objectFit: 'contain',
+                      opacity: 0.65,
+                      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.opacity = '1';
+                      e.currentTarget.style.transform = 'scale(1.08)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.opacity = '0.65';
+                      e.currentTarget.style.transform = 'scale(1)';
+                    }}
+                  />
+                </div>
+              ))}
             </div>
           </div>
 
@@ -643,46 +736,6 @@ export default function ITServicesPageClient() {
 
             </div>
 
-            {/* Partner logos / network banner */}
-            <div style={{
-              marginTop: '8rem',
-              borderTop: '1px solid rgba(255,255,255,0.08)',
-              paddingTop: '5rem',
-              textAlign: 'center',
-            }}>
-              <p style={{
-                fontSize: '0.8rem',
-                fontWeight: 500,
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: 'rgba(255,255,255,0.4)',
-                marginBottom: '3rem',
-              }}>
-                Authorized Integration Partner
-              </p>
-              <div style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'center',
-                alignItems: 'center',
-                gap: '3.5rem',
-                opacity: 0.65,
-              }}>
-                {['AWS', 'Google Cloud', 'Microsoft Azure', 'Nvidia', 'Salesforce', 'Anthropic'].map((partner) => (
-                  <span 
-                    key={partner} 
-                    style={{ 
-                      fontSize: '1.15rem', 
-                      fontWeight: 600, 
-                      color: '#ffffff', 
-                      letterSpacing: '-0.02em' 
-                    }}
-                  >
-                    {partner}
-                  </span>
-                ))}
-              </div>
-            </div>
 
           </div>
         </div>
