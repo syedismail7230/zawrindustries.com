@@ -184,6 +184,19 @@ function WebmasterDashboard() {
   const [customPressFile, setCustomPressFile] = useState<File | null>(null);
   const [customPressBannerFile, setCustomPressBannerFile] = useState<File | null>(null);
 
+  // Blogs States
+  const [blogsData, setBlogsData] = useState<any[]>([]);
+  const [blogTitle, setBlogTitle] = useState('');
+  const [blogCategory, setBlogCategory] = useState('News');
+  const [blogAuthor, setBlogAuthor] = useState('Lina Linder');
+  const [blogDate, setBlogDate] = useState('');
+  const [blogSummary, setBlogSummary] = useState('');
+  const [blogReadTime, setBlogReadTime] = useState('5 min read');
+  const [blogSections, setBlogSections] = useState<any[]>([{ title: '', body: '' }]);
+  const [editingBlog, setEditingBlog] = useState<any>(null);
+  const [customBlogFile, setCustomBlogFile] = useState<File | null>(null);
+  const [customAuthorFile, setCustomAuthorFile] = useState<File | null>(null);
+
 
   // Fetch Data from Supabase
   useEffect(() => {
@@ -253,6 +266,13 @@ function WebmasterDashboard() {
           if (res.ok) {
             const data = await res.json();
             setPressReleases(data || []);
+          }
+        }
+        else if (activeTab === 'blogs') {
+          const res = await fetch('/api/blogs');
+          if (res.ok) {
+            const data = await res.json();
+            setBlogsData(data || []);
           }
         }
       } catch (error: any) {
@@ -2678,7 +2698,345 @@ function WebmasterDashboard() {
             </div>
           </div>
         );
-      
+
+      case 'blogs':
+        return (
+          <div>
+            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '2rem', letterSpacing: '-0.02em' }}>Manage Blog Articles</h2>
+            
+            {/* Blog Form */}
+            <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg, marginBottom: '3rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>
+                {editingBlog ? `Edit Blog Article: ${editingBlog.title}` : 'Write New Blog Article'}
+              </h3>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1.5rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Blog Title *</label>
+                    <input 
+                      type="text" 
+                      value={blogTitle} 
+                      onChange={(e) => setBlogTitle(e.target.value)} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', outline: 'none' }} 
+                      placeholder="e.g. The art of hiring: insights from Khosla Ventures"
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Category</label>
+                    <select 
+                      value={blogCategory} 
+                      onChange={(e) => setBlogCategory(e.target.value)} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', outline: 'none' }}
+                    >
+                      <option value="News">News</option>
+                      <option value="Technology">Technology</option>
+                      <option value="Business">Business</option>
+                      <option value="Corporate">Corporate</option>
+                      <option value="Opinion">Opinion</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Author Name</label>
+                    <input 
+                      type="text" 
+                      value={blogAuthor} 
+                      onChange={(e) => setBlogAuthor(e.target.value)} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', outline: 'none' }} 
+                      placeholder="Lina Linder"
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Date</label>
+                    <input 
+                      type="text" 
+                      value={blogDate} 
+                      onChange={(e) => setBlogDate(e.target.value)} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', outline: 'none' }} 
+                      placeholder="e.g. 12 January 2025"
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Read Time</label>
+                    <input 
+                      type="text" 
+                      value={blogReadTime} 
+                      onChange={(e) => setBlogReadTime(e.target.value)} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', outline: 'none' }} 
+                      placeholder="e.g. 5 min read"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Summary / Excerpt *</label>
+                  <textarea 
+                    value={blogSummary} 
+                    onChange={(e) => setBlogSummary(e.target.value)} 
+                    style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', outline: 'none', height: '80px', resize: 'vertical' }} 
+                    placeholder="Short description of the blog for listing cards..."
+                  />
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Upload Featured Image</label>
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      onChange={(e) => setCustomBlogFile(e.target.files?.[0] || null)}
+                      style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} 
+                    />
+                    {editingBlog && editingBlog.image && (
+                      <div style={{ fontSize: '0.75rem', color: theme.muted, marginTop: '0.25rem' }}>
+                        Current Image: <strong>{editingBlog.image}</strong>
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Upload Author Avatar (Optional)</label>
+                    <input 
+                      type="file" 
+                      accept="image/*"
+                      onChange={(e) => setCustomAuthorFile(e.target.files?.[0] || null)}
+                      style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} 
+                    />
+                    {editingBlog && editingBlog.authorImage && (
+                      <div style={{ fontSize: '0.75rem', color: theme.muted, marginTop: '0.25rem' }}>
+                        Current Avatar: <strong>{editingBlog.authorImage}</strong>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Sections Editor */}
+                <div style={{ padding: '1rem', border: `1px solid ${theme.border}`, borderRadius: '6px', backgroundColor: theme.bg }}>
+                  <label style={{ display: 'block', fontSize: '0.95rem', fontWeight: 600, marginBottom: '1rem' }}>Article Content Sections</label>
+                  
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                    {blogSections.map((sect, i) => (
+                      <div key={i} style={{ padding: '1rem', border: `1px solid ${theme.border}`, borderRadius: '6px', backgroundColor: theme.inputBg, position: 'relative' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                          <span style={{ fontSize: '0.85rem', fontWeight: 600, color: theme.fg }}>Section #{i + 1}</span>
+                          {blogSections.length > 1 && (
+                            <button 
+                              type="button" 
+                              onClick={() => setBlogSections(blogSections.filter((_, idx) => idx !== i))}
+                              style={{ padding: '0.2rem 0.6rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.75rem' }}
+                            >
+                              Remove
+                            </button>
+                          )}
+                        </div>
+                        
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                          <div>
+                            <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Section Heading / Title</label>
+                            <input 
+                              type="text" 
+                              value={sect.title}
+                              onChange={(e) => {
+                                const newSects = [...blogSections];
+                                newSects[i].title = e.target.value;
+                                setBlogSections(newSects);
+                              }}
+                              style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', outline: 'none' }}
+                              placeholder="e.g. 1. The First Principles of Talent Acquisition"
+                            />
+                          </div>
+                          <div>
+                            <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Section Body Text</label>
+                            <textarea 
+                              value={sect.body}
+                              onChange={(e) => {
+                                const newSects = [...blogSections];
+                                newSects[i].body = e.target.value;
+                                setBlogSections(newSects);
+                              }}
+                              rows={5}
+                              style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', outline: 'none', resize: 'vertical' }}
+                              placeholder="Type section contents here..."
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <button 
+                    type="button" 
+                    onClick={() => setBlogSections([...blogSections, { title: '', body: '' }])}
+                    style={{ marginTop: '1rem', padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px dashed ${theme.border}`, borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
+                  >
+                    + Add Another Section
+                  </button>
+                </div>
+
+                <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                  <button 
+                    onClick={async () => {
+                      if (!blogTitle.trim() || !blogSummary.trim()) {
+                        alert('Title and summary are required');
+                        return;
+                      }
+                      setLoading(true);
+
+                      const formData = new FormData();
+                      formData.append('action', editingBlog ? 'update' : 'add');
+                      formData.append('title', blogTitle);
+                      formData.append('category', blogCategory);
+                      formData.append('author', blogAuthor);
+                      formData.append('date', blogDate);
+                      formData.append('readTime', blogReadTime);
+                      formData.append('summary', blogSummary);
+                      formData.append('sections', JSON.stringify(blogSections));
+
+                      if (editingBlog) {
+                        formData.append('id', editingBlog.id);
+                      }
+
+                      if (customBlogFile) {
+                        formData.append('imageFile', customBlogFile);
+                      }
+                      if (customAuthorFile) {
+                        formData.append('authorImageFile', customAuthorFile);
+                      }
+
+                      try {
+                        const res = await fetch('/api/blogs', {
+                          method: 'POST',
+                          body: formData
+                        });
+                        if (res.ok) {
+                          const data = await res.json();
+                          setBlogsData(data.blogs || []);
+                          
+                          // Clear states
+                          setBlogTitle('');
+                          setBlogCategory('News');
+                          setBlogAuthor('Lina Linder');
+                          setBlogDate('');
+                          setBlogSummary('');
+                          setBlogReadTime('5 min read');
+                          setBlogSections([{ title: '', body: '' }]);
+                          setCustomBlogFile(null);
+                          setCustomAuthorFile(null);
+                          setEditingBlog(null);
+                          alert(editingBlog ? 'Blog article updated successfully!' : 'Blog article published successfully!');
+                        } else {
+                          alert('Failed to publish blog.');
+                        }
+                      } catch (err) {
+                        alert('Error saving blog.');
+                      }
+                      setLoading(false);
+                    }}
+                    disabled={loading}
+                    style={{ padding: '0.75rem 1.5rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, borderRadius: '4px', cursor: 'pointer' }}
+                  >
+                    {loading ? 'Publishing...' : editingBlog ? 'Update Article' : 'Publish Article'}
+                  </button>
+                  
+                  {editingBlog && (
+                    <button 
+                      onClick={() => {
+                        setEditingBlog(null);
+                        setBlogTitle('');
+                        setBlogCategory('News');
+                        setBlogAuthor('Lina Linder');
+                        setBlogDate('');
+                        setBlogSummary('');
+                        setBlogReadTime('5 min read');
+                        setBlogSections([{ title: '', body: '' }]);
+                        setCustomBlogFile(null);
+                        setCustomAuthorFile(null);
+                      }}
+                      style={{ padding: '0.75rem 1.5rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer' }}
+                    >
+                      Cancel
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* List of Blogs */}
+            <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>Published Blog Articles</h3>
+              
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                <thead>
+                  <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Author</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {blogsData.length === 0 ? (
+                    <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No blog articles found.</td></tr>
+                  ) : blogsData.map((b) => (
+                    <tr key={b.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                      <td style={{ padding: '1rem', fontWeight: 500 }}>{b.title}</td>
+                      <td style={{ padding: '1rem', color: theme.muted }}>{b.author}</td>
+                      <td style={{ padding: '1rem', color: theme.muted }}>{b.category}</td>
+                      <td style={{ padding: '1rem', color: theme.muted }}>{b.date}</td>
+                      <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                        <button 
+                          onClick={() => {
+                            setEditingBlog(b);
+                            setBlogTitle(b.title);
+                            setBlogCategory(b.category || 'News');
+                            setBlogAuthor(b.author || 'Lina Linder');
+                            setBlogDate(b.date || '');
+                            setBlogSummary(b.summary || '');
+                            setBlogReadTime(b.readTime || '5 min read');
+                            setBlogSections(b.sections || [{ title: '', body: '' }]);
+                            
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
+                        >
+                          Edit
+                        </button>
+                        <button 
+                          onClick={async () => {
+                            if (!confirm(`Are you sure you want to delete "${b.title}"?`)) return;
+                            setLoading(true);
+                            const formData = new FormData();
+                            formData.append('action', 'delete');
+                            formData.append('id', b.id);
+                            try {
+                              const res = await fetch('/api/blogs', { method: 'POST', body: formData });
+                              if (res.ok) {
+                                const data = await res.json();
+                                setBlogsData(data.blogs || []);
+                              } else {
+                                alert('Failed to delete blog.');
+                              }
+                            } catch (e) {
+                              alert('Error deleting blog.');
+                            }
+                            setLoading(false);
+                          }}
+                          style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        );
+
       default:
         return null;
     }
@@ -2696,6 +3054,7 @@ function WebmasterDashboard() {
     { id: 'notices', label: 'Manage Notices' },
     { id: 'notifications', label: 'Manage Notifications' },
     { id: 'press-releases', label: 'Manage Press Releases' },
+    { id: 'blogs', label: 'Manage Blogs' },
   ];
 
   return (

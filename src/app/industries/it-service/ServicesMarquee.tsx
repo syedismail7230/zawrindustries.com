@@ -95,13 +95,30 @@ export default function ServicesMarquee() {
   // Track hover state on rotating cards to toggle vertical vs horizontal scroll
   const isHoveringCardRef = useRef(false);
 
+  const [cardWidth, setCardWidth] = useState(300);
+
+  useEffect(() => {
+    const handleResize = () => {
+      const w = window.innerWidth;
+      if (w < 480) {
+        setCardWidth(180);
+      } else if (w < 768) {
+        setCardWidth(240);
+      } else {
+        setCardWidth(300);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const N = SERVICES_DATA.length;
-  const cardWidth = 300; 
   const cardAngle = 360 / N;
-  
+
   // Calculate dynamic cylinder radius + 22% gap multiplier to completely eliminate card-intersection clipping
   const baseRadius = cardWidth / (2 * Math.sin(Math.PI / N));
-  const radius = Math.max(620, baseRadius * 1.22);
+  const radius = baseRadius * 1.22;
 
   // Smooth LERP loop for high-fidelity physics feel
   const tick = () => {
@@ -206,7 +223,7 @@ export default function ServicesMarquee() {
       setActiveSlug(slug);
       setMorphActive(false); // Hide the morph image wrapper so the subpage details underneath are visible
       window.history.pushState(null, '', `/industries/it-service/${slug}`);
-      document.body.style.overflow = 'hidden'; // Lock standard page scroll
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }, 500);
   };
 
@@ -218,7 +235,13 @@ export default function ServicesMarquee() {
     setMorphExpanded(false);
     setActiveSlug(null);
     window.history.pushState(null, '', '/industries/it-service');
-    document.body.style.overflow = ''; // Restore standard scroll
+    
+    // Smoothly scroll the window back to center the 3D cylinder
+    setTimeout(() => {
+      if (sectionRef.current) {
+        sectionRef.current.scrollIntoView({ behavior: 'instant', block: 'center' });
+      }
+    }, 50);
   };
 
   // Capture browser back/forward buttons (popstate events)
@@ -231,7 +254,11 @@ export default function ServicesMarquee() {
         setMorphActive(false);
         setMorphExpanded(false);
         setActiveSlug(null);
-        document.body.style.overflow = '';
+        setTimeout(() => {
+          if (sectionRef.current) {
+            sectionRef.current.scrollIntoView({ behavior: 'instant', block: 'center' });
+          }
+        }, 50);
       } else {
         const match = path.match(/\/industries\/it-service\/([^/]+)$/);
         if (match) {
@@ -243,7 +270,7 @@ export default function ServicesMarquee() {
             setMorphActive(true);
             setMorphExpanded(true);
             setActiveSlug(slug);
-            document.body.style.overflow = 'hidden';
+            window.scrollTo({ top: 0, behavior: 'instant' });
           }
         }
       }
@@ -261,14 +288,13 @@ export default function ServicesMarquee() {
       setMorphActive(false);
       setMorphExpanded(false);
       setActiveSlug(null);
-      document.body.style.overflow = '';
     }
   }, [pathname]);
 
   // Reset overlay scroll position when changing between services
   useEffect(() => {
-    if (activeSlug && overlayRef.current) {
-      overlayRef.current.scrollTop = 0;
+    if (activeSlug) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
     }
   }, [activeSlug]);
 
@@ -314,12 +340,11 @@ export default function ServicesMarquee() {
       }
       document.removeEventListener('mousemove', handleMouseMove);
       document.removeEventListener('mouseup', handleMouseUp);
-      document.body.style.overflow = '';
     };
-  }, [router]);
+  }, []);
 
   return (
-    <div ref={sectionRef} className="services-section">
+    <div ref={sectionRef} className="services-section" style={activeSlug ? { padding: 0, overflow: 'visible' } : {}}>
       {/* 3D Scene style injection - matching the user mockup perfectly */}
       <style dangerouslySetInnerHTML={{ __html: `
         body {
@@ -335,6 +360,11 @@ export default function ServicesMarquee() {
           overflow: hidden;
           width: 100vw;
           user-select: none;
+        }
+        @media (max-width: 768px) {
+          .services-section {
+            padding: 3rem 0 2rem 0 !important;
+          }
         }
 
         /* 3D Scene Viewport */
@@ -353,6 +383,12 @@ export default function ServicesMarquee() {
         .scene-container:active {
           cursor: grabbing;
         }
+        @media (max-width: 768px) {
+          .scene-container {
+            height: 380px !important;
+            perspective: 1000px !important;
+          }
+        }
 
         /* Cylinder Ring */
         .cylinder-ring {
@@ -361,6 +397,11 @@ export default function ServicesMarquee() {
           height: 400px;
           transform-style: preserve-3d;
           will-change: transform;
+        }
+        @media (max-width: 768px) {
+          .cylinder-ring {
+            height: 280px !important;
+          }
         }
 
         /* 3D Card Item - Styled exactly like the user mockup */
@@ -392,6 +433,12 @@ export default function ServicesMarquee() {
                       background 0.4s ease;
           will-change: transform, opacity;
         }
+        @media (max-width: 768px) {
+          .cylinder-card {
+            border-radius: 16px !important;
+            padding: 14px !important;
+          }
+        }
         
         .cylinder-card:hover {
           background: linear-gradient(180deg, #110d29 0%, #4c116c 100%) padding-box,
@@ -407,6 +454,11 @@ export default function ServicesMarquee() {
           overflow: hidden;
           border: 1px solid rgba(255, 255, 255, 0.08);
           position: relative;
+        }
+        @media (max-width: 768px) {
+          .card-image-box {
+            border-radius: 10px !important;
+          }
         }
         
         .card-img {
@@ -432,6 +484,12 @@ export default function ServicesMarquee() {
           flex-grow: 1;
           word-wrap: break-word;
         }
+        @media (max-width: 768px) {
+          .card-title {
+            font-size: 0.95rem !important;
+            margin: 0.75rem 0 0 0 !important;
+          }
+        }
 
         /* Diagonal Arrow matching the mockup */
         .card-arrow-container {
@@ -447,10 +505,21 @@ export default function ServicesMarquee() {
         .cylinder-card:hover .card-arrow-container {
           transform: translate(3px, -3px);
         }
+        @media (max-width: 768px) {
+          .card-arrow-container {
+            bottom: 14px !important;
+            right: 14px !important;
+          }
+          .card-arrow-container svg {
+            width: 16px !important;
+            height: 16px !important;
+          }
+        }
       ` }} />
 
       {/* Premium Section Title */}
       <h2 style={{
+        display: activeSlug ? 'none' : 'block',
         fontSize: 'clamp(2rem, 4.5vw, 3rem)',
         fontWeight: 300,
         color: '#ffffff',
@@ -473,7 +542,7 @@ export default function ServicesMarquee() {
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        style={{ opacity: isZooming ? 0.3 : 1 }}
+        style={{ display: activeSlug ? 'none' : 'flex', opacity: isZooming ? 0.3 : 1 }}
       >
         {/* 3D Cylinder Ring - Translated backwards in Z by exactly radius to prevent camera overlaps */}
         <div 
@@ -574,18 +643,13 @@ export default function ServicesMarquee() {
             zIndex: 2,
           }} />
         </div>
-      )}
-
-      {/* Virtual SPA dynamic subpage overlay (renders behind Header z-index 1000) */}
+      )}      {/* Virtual SPA dynamic subpage details (rendered inline in normal document flow) */}
       {activeSlug && typedServicesData[activeSlug] && (
         <div
-          ref={overlayRef}
           style={{
-            position: 'fixed',
-            inset: 0,
+            position: 'relative',
+            width: '100%',
             backgroundColor: '#000000',
-            zIndex: 990, // BELOW Header's 1000 so the Header remains completely functional!
-            overflowY: 'auto',
             animation: 'fadeInOverlay 0.4s ease-out forwards',
           }}
         >
@@ -593,6 +657,37 @@ export default function ServicesMarquee() {
             @keyframes fadeInOverlay {
               from { opacity: 0; }
               to { opacity: 1; }
+            }
+            .back-to-services-btn {
+              position: fixed;
+              top: 90px;
+              left: 5%;
+              z-index: 1005;
+              background-color: rgba(0, 0, 0, 0.75);
+              border: 1px solid rgba(255, 255, 255, 0.18);
+              border-radius: 50px;
+              color: #ffffff;
+              padding: 0.65rem 1.45rem;
+              font-size: 0.88rem;
+              cursor: pointer;
+              backdrop-filter: blur(12px);
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              transition: all 0.3s ease;
+              box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+            }
+            .back-to-services-btn:hover {
+              background-color: rgba(255, 255, 255, 0.1);
+              border-color: rgba(255, 255, 255, 0.4);
+            }
+            @media (max-width: 768px) {
+              .back-to-services-btn {
+                top: 75px !important;
+                left: 15px !important;
+                padding: 0.5rem 1rem !important;
+                font-size: 0.75rem !important;
+              }
             }
           `}} />
 
@@ -608,25 +703,7 @@ export default function ServicesMarquee() {
           {/* Floating Back to Services Button */}
           <button
             onClick={handleCloseOverlay}
-            style={{
-              position: 'fixed',
-              top: '90px',
-              left: '5%',
-              zIndex: 1005, // ABOVE header items for guaranteed click capture
-              backgroundColor: 'rgba(0, 0, 0, 0.75)',
-              border: '1px solid rgba(255, 255, 255, 0.18)',
-              borderRadius: '50px',
-              color: '#ffffff',
-              padding: '0.65rem 1.45rem',
-              fontSize: '0.88rem',
-              cursor: 'pointer',
-              backdropFilter: 'blur(12px)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.5rem',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
-            }}
+            className="back-to-services-btn"
           >
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <line x1="19" y1="12" x2="5" y2="12"></line>

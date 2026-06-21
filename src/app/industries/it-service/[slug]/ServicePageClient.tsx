@@ -150,20 +150,27 @@ function ChallengesSection({ challenges }: { challenges: string[] }) {
   return (
     <div 
       ref={containerRef}
-      style={{ 
-        maxWidth: '1200px', 
-        margin: '0 auto', 
-        padding: '11rem 6%', 
-        display: 'flex', 
-        flexWrap: 'wrap', 
-        gap: '4rem',
-        alignItems: 'center',
-        position: 'relative',
-        borderTop: '1px solid rgba(255, 255, 255, 0.04)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.04)'
-      }}
+      className="challenges-container"
     >
       <style dangerouslySetInnerHTML={{__html: `
+        .challenges-container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 11rem 6%;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4rem;
+          align-items: center;
+          position: relative;
+          border-top: 1px solid rgba(255, 255, 255, 0.04);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+        }
+        @media (max-width: 768px) {
+          .challenges-container {
+            padding: 5rem 6% !important;
+            gap: 2.5rem !important;
+          }
+        }
         .barrel-viewport {
           position: relative;
           perspective: 1200px;
@@ -203,16 +210,37 @@ function ChallengesSection({ challenges }: { challenges: string[] }) {
           color: #ffffff;
           text-shadow: 0 0 25px rgba(255, 255, 255, 0.4), 0 0 10px rgba(59, 130, 246, 0.3);
         }
+        .sticky-challenges-title {
+          flex: 1 1 350px;
+          position: sticky;
+          top: 35vh;
+          height: fit-content;
+          z-index: 5;
+        }
+        @media (max-width: 768px) {
+          .sticky-challenges-title {
+            position: relative !important;
+            top: 0 !important;
+            flex: 1 1 100% !important;
+            margin-bottom: 1rem !important;
+          }
+        }
+        .challenges-cylinder-wrapper {
+          flex: 1 1 500px;
+          display: flex;
+          align-items: center;
+          position: relative;
+          width: 100%;
+        }
+        @media (max-width: 768px) {
+          .challenges-cylinder-wrapper {
+            flex: 1 1 100% !important;
+          }
+        }
       `}} />
 
       {/* Left Column: Sticky Title Stack */}
-      <div style={{ 
-        flex: '1 1 350px', 
-        position: 'sticky', 
-        top: '35vh', 
-        height: 'fit-content',
-        zIndex: 5
-      }}>
+      <div className="sticky-challenges-title">
         <h2 style={{
           fontSize: 'clamp(2.5rem, 5vw, 4.2rem)',
           fontWeight: 400,
@@ -230,7 +258,7 @@ function ChallengesSection({ challenges }: { challenges: string[] }) {
       </div>
 
       {/* Right Column: 3D Cylindrical Barrel Roll list */}
-      <div style={{ flex: '1 1 500px', display: 'flex', alignItems: 'center', position: 'relative' }}>
+      <div className="challenges-cylinder-wrapper">
         <div 
           ref={viewportRef}
           className="barrel-viewport"

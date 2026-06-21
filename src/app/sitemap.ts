@@ -79,5 +79,25 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route === '' ? 1 : 0.8,
   }));
 
-  return routes;
+  // Dynamically append blog articles
+  let blogRoutes: any[] = [];
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const filePath = path.join(process.cwd(), 'public/data/blogs.json');
+    if (fs.existsSync(filePath)) {
+      const fileData = fs.readFileSync(filePath, 'utf8');
+      const blogs = JSON.parse(fileData);
+      blogRoutes = blogs.map((b: any) => ({
+        url: `${baseUrl}/about/blog/${b.slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.6,
+      }));
+    }
+  } catch (e) {
+    console.error('Error appending blogs to sitemap:', e);
+  }
+
+  return [...routes, ...blogRoutes];
 }

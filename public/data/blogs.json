@@ -1,0 +1,62 @@
+[
+  {
+    "id": "BLOG-1",
+    "slug": "the-art-of-hiring-insights-from-khosla-ventures-airbnb-ramp-and-traba",
+    "title": "The art of hiring: insights from Khosla Ventures, Airbnb, Ramp and Traba",
+    "author": "Lina Linder",
+    "authorImage": "/assets/authors/lina.png",
+    "date": "12 January 2025",
+    "category": "News",
+    "summary": "Building a world-class team is the single most critical factor in startup success. We synthesize hiring playbooks from leading venture firms and top-tier tech startups.",
+    "image": "/assets/blogs/hiring-artwork.png",
+    "readTime": "6 min read",
+    "sections": [
+      {
+        "title": "The First Principles of Talent Acquisition",
+        "body": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus sed sagittis purus, vel dictum magna. Nullam in hendrerit augue, non pretium purus. Nam sed risus eu elit sollicitudin semper. Curabitur tincidunt eu elit in cursus. Nullam diam justo, auctor sit amet lacus ac, dignissim volutpat arcu. Integer vehicula est nec porta iaculis. Donec vestibulum vehicula nisi a vulputate. Nunc interdum sodales felis ut auctor. Nullam nec blandit urna. Aenean condimentum, nulla eget tristique consectetur, urna sem vulputate ante, sit amet dictum arcu nunc et tellus. Quisque ut aliquam lorem, id faucibus leo. In hac habitasse platea dictumst."
+      },
+      {
+        "title": "Khosla Ventures: Hiring for Slope, Not Intercept",
+        "body": "Aenean condimentum, nulla eget tristique consectetur, urna sem vulputate ante, sit amet dictum arcu nunc et tellus. Quisque ut aliquam lorem, id faucibus leo. In hac habitasse platea dictumst. Phasellus ut arcu dui. Aenean purus tellus, maximus ac sapien ac, blandit interdum ligula. Donec iaculis dictum est, at condimentum eros efficitur at. Mauris malesuada, tellus eget vulputate euismod, eros consec tetur felis, sed aliquet libero enim eget purus. In hac habitasse platea dictumst. Phasellus ut arcu dui. Aenean purus tellus, maximus ac sapien ac, blandit interdum ligula."
+      },
+      {
+        "title": "Airbnb: Designing for Core Values Alignment",
+        "body": "Nullam diam justo, auctor sit amet lacus ac, dignissim volutpat arcu. Integer vehicula est nec porta iaculis. Donec vestibulum vehicula nisi a vulputate. Nunc interdum sodales felis ut auctor. Nullam nec blandit urna. Aenean condimentum, nulla eget tristique consectetur, urna sem vulputate ante, sit amet dictum arcu nunc et tellus. Quisque ut aliquam lorem, id faucibus leo. In hac habitasse platea dictumst. Phasellus ut arcu dui."
+      },
+      {
+        "title": "Ramp: Raising the Bar on Execution Speed",
+        "body": "Phasellus ut arcu dui. Aenean purus tellus, maximus ac sapien ac, blandit interdum ligula. Donec iaculis dictum est, at condimentum eros efficitur at. Mauris malesuada, tellus eget vulputate euismod, eros consec tetur felis, sed aliquet libero enim eget purus. In hac habitasse platea dictumst. Phasellus ut arcu dui. Aenean purus tellus, maximus ac sapien ac, blandit interdum ligula."
+      },
+      {
+        "title": "Traba: Intensity and Mission Lock",
+        "body": "Donec vestibulum vehicula nisi a vulputate. Nunc interdum sodales felis ut auctor. Nullam nec blandit urna. Aenean condimentum, nulla eget tristique consectetur, urna sem vulputate ante, sit amet dictum arcu nunc et tellus. Quisque ut aliquam lorem, id faucibus leo. In hac habitasse platea dictumst. Phasellus ut arcu dui. Aenean purus tellus, maximus ac sapien ac, blandit interdum ligula."
+      }
+    ]
+  },
+  {
+    "id": "BLOG-2",
+    "slug": "the-most-advanced-ops-brain-in-the-world",
+    "title": "The most advanced ops brain in the world",
+    "author": "Marcus Nordstrom",
+    "authorImage": "/assets/authors/marcus.png",
+    "date": "08 January 2025",
+    "category": "Technology",
+    "summary": "Integrating structured databases, internal logs, and real-time open-web queries into a single autonomous operational layer to coordinate business workflows.",
+    "image": "/assets/blogs/ops-brain.png",
+    "readTime": "8 min read",
+    "sections": [
+      {
+        "title": "Your Startup's Internal Data",
+        "body": "From tasks to invoices to offer letters — our platform connects to tools like Google Drive, Slack, Quickbooks, Mercury, Ramp, Gusto, Rippling and more. This forms the foundation of the operations brain, pulling raw transactional records and indexing them securely in a semantic vector space."
+      },
+      {
+        "title": "Chore's Database of Best Practices",
+        "body": "Built from 6+ years and millions of completed tasks across hundreds of startups, we have created the largest knowledge base in startup ops — full of SOPs, hacks, workarounds, and real-world wisdom. When a task is initiated, the ops brain automatically cross-references this repository to choose the most efficient path."
+      },
+      {
+        "title": "The Open Web Integration",
+        "body": "Our engine supplements its answers with real-time insights from hundreds of trusted web sources — just like ChatGPT or Perplexity. This allows the system to monitor external market changes, compliance updates, and public announcements to adjust operations workflows on the fly."
+      }
+    ]
+  }
+]

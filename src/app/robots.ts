@@ -7,6 +7,9 @@ export default function robots(): MetadataRoute.Robots {
       allow: '/',
       disallow: ['/private/', '/api/'],
     },
-    sitemap: 'https://zawrindustries.com/sitemap.xml',
+    sitemap: [
+      'https://zawrindustries.com/sitemap.xml',
+      'https://zawrindustries.com/sitemap-news.xml'
+    ],
   };
 }
