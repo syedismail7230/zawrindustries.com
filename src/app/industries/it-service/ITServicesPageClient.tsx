@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import ServicesMarquee from './ServicesMarquee';
@@ -25,6 +25,31 @@ export default function ITServicesPageClient() {
     startScaleY: number;
   } | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const stickyContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let rafId: number;
+    const handleScroll = () => {
+      rafId = requestAnimationFrame(() => {
+        if (!stickyContainerRef.current) return;
+        const rect = stickyContainerRef.current.getBoundingClientRect();
+        const vh = window.innerHeight;
+        // Track element center as it moves from 90% down the viewport (just entering) to 10% (fully read)
+        const elementCenter = rect.top + rect.height / 2;
+        const startAt = vh * 0.85; // animation starts when center is near bottom
+        const endAt   = vh * 0.15; // animation ends when center is near top
+        const progress = Math.min(1, Math.max(0, (startAt - elementCenter) / (startAt - endAt)));
+        setScrollProgress(progress);
+      });
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      cancelAnimationFrame(rafId);
+    };
+  }, []);
 
   const projectsList = [
     {
@@ -589,6 +614,58 @@ export default function ITServicesPageClient() {
               ))}
             </div>
           </div>
+
+          {/* ── SCROLL TEXT HIGHLIGHT SECTION ── */}
+          {(() => {
+            const text = "We\u2019re here to build something meaningful together, turning ideas into impactful digital experiences that create lasting value and drive real growth.";
+            const words = text.split(' ');
+            const totalWords = words.length;
+            return (
+              <div
+                ref={stickyContainerRef}
+                style={{
+                  maxWidth: '900px',
+                  margin: '0 auto 10rem auto',
+                  textAlign: 'center',
+                  padding: '0 2rem',
+                }}
+              >
+                <p style={{
+                  fontSize: 'clamp(1.6rem, 3.5vw, 2.6rem)',
+                  fontWeight: 300,
+                  lineHeight: 1.55,
+                  letterSpacing: '-0.02em',
+                  margin: 0,
+                }}>
+                  {words.map((word, i) => {
+                    const sliceSize = 1 / totalWords;
+                    const wordStart = i * sliceSize;
+                    const litAmount = Math.min(1, Math.max(0, (scrollProgress - wordStart) / sliceSize));
+                    const wordMid = wordStart + sliceSize * 0.5;
+                    const distFromMid = Math.abs(scrollProgress - wordMid);
+                    const glowRadius = sliceSize * 2;
+                    const glowIntensity = Math.max(0, 1 - distFromMid / glowRadius);
+                    const opacity = 0.12 + 0.88 * litAmount;
+                    const glow = glowIntensity > 0.02
+                      ? `0 0 ${Math.round(20 * glowIntensity)}px rgba(255,255,255,${(0.9 * glowIntensity).toFixed(2)}), 0 0 ${Math.round(50 * glowIntensity)}px rgba(255,255,255,${(0.35 * glowIntensity).toFixed(2)})`
+                      : 'none';
+                    return (
+                      <span
+                        key={i}
+                        style={{
+                          color: `rgba(255,255,255,${opacity.toFixed(3)})`,
+                          textShadow: glow,
+                          display: 'inline',
+                        }}
+                      >
+                        {word}{' '}
+                      </span>
+                    );
+                  })}
+                </p>
+              </div>
+            );
+          })()}
 
           {/* Subtle glowing colorful blobs behind cards */}
           <div style={{
