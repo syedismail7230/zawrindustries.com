@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import Script from 'next/script';
 
 export default function PressReleasePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = React.use(params);
@@ -183,6 +184,56 @@ export default function PressReleasePage({ params }: { params: Promise<{ slug: s
         </div>
 
       </div>
+
+      {/* Schema.org NewsArticle markup for Google News */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'NewsArticle',
+            'headline': release.title,
+            'image': [
+              release.banner ? (release.banner.startsWith('http') ? release.banner : `https://zawrindustries.com${release.banner}`) : 'https://zawrindustries.com/assets/public-relations-hero.png'
+            ],
+            'datePublished': new Date(release.date || Date.now()).toISOString(),
+            'dateModified': new Date(release.date || Date.now()).toISOString(),
+            'author': [{
+              '@type': 'Organization',
+              'name': 'Zawr Industries Public Relations'
+            }],
+            'publisher': {
+              '@type': 'Organization',
+              'name': 'Zawr Industries',
+              'logo': {
+                '@type': 'ImageObject',
+                'url': 'https://zawrindustries.com/assets/logo.png'
+              }
+            },
+            'description': release.summary || ''
+          })
+        }}
+      />
+
+      {/* Google News Reader Revenue Manager Snippet */}
+      <Script
+        async
+        type="application/javascript"
+        src="https://news.google.com/swg/js/v1/swg-basic.js"
+        strategy="afterInteractive"
+      />
+      <Script id="google-swg-init-press" strategy="afterInteractive">
+        {`
+          (self.SWG_BASIC = self.SWG_BASIC || []).push(basicSubscriptions => {
+            basicSubscriptions.init({
+              type: "NewsArticle",
+              isPartOfType: ["Product"],
+              isPartOfProductId: "CAowy4LHDA:openaccess",
+              clientOptions: { theme: "light", lang: "en" },
+            });
+          });
+        `}
+      </Script>
     </div>
   );
 }

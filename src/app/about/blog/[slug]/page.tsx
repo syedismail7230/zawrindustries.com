@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import Script from 'next/script';
 
 interface Section {
   title: string;
@@ -482,6 +483,26 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
           })
         }}
       />
+
+      {/* Google News Reader Revenue Manager Snippet */}
+      <Script
+        async
+        type="application/javascript"
+        src="https://news.google.com/swg/js/v1/swg-basic.js"
+        strategy="afterInteractive"
+      />
+      <Script id="google-swg-init-blog" strategy="afterInteractive">
+        {`
+          (self.SWG_BASIC = self.SWG_BASIC || []).push(basicSubscriptions => {
+            basicSubscriptions.init({
+              type: "NewsArticle",
+              isPartOfType: ["Product"],
+              isPartOfProductId: "CAowy4LHDA:openaccess",
+              clientOptions: { theme: "light", lang: "en" },
+            });
+          });
+        `}
+      </Script>
     </div>
   );
 }
