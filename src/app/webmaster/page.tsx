@@ -1470,7 +1470,7 @@ function WebmasterDashboard() {
                         </button>
                         <button 
                           onClick={async () => {
-                            if (!confirm(`Are you sure you want to delete "${ev.title}"?`)) return;
+                            if (!window.confirm(`Are you sure you want to delete "${ev.title}"?`)) return;
                             setLoading(true);
                             const formData = new FormData();
                             formData.append('action', 'delete');
@@ -1857,7 +1857,7 @@ function WebmasterDashboard() {
                         </button>
                         <button 
                           onClick={async () => {
-                            if (!confirm(`Are you sure you want to delete "${nt.title}"?`)) return;
+                            if (!window.confirm(`Are you sure you want to delete "${nt.title}"?`)) return;
                             setLoading(true);
                             const formData = new FormData();
                             formData.append('action', 'delete');
@@ -2276,7 +2276,7 @@ function WebmasterDashboard() {
                         </button>
                         <button 
                           onClick={async () => {
-                            if (!confirm(`Are you sure you want to delete "${pr.title}"?`)) return;
+                            if (!window.confirm(`Are you sure you want to delete "${pr.title}"?`)) return;
                             setLoading(true);
                             const formData = new FormData();
                             formData.append('action', 'delete');
@@ -2668,7 +2668,7 @@ function WebmasterDashboard() {
                         </button>
                         <button 
                           onClick={async () => {
-                            if (!confirm(`Are you sure you want to delete "${nt.title}"?`)) return;
+                            if (!window.confirm(`Are you sure you want to delete "${nt.title}"?`)) return;
                             setLoading(true);
                             const formData = new FormData();
                             formData.append('action', 'delete');
@@ -3006,7 +3006,7 @@ function WebmasterDashboard() {
                         </button>
                         <button 
                           onClick={async () => {
-                            if (!confirm(`Are you sure you want to delete "${b.title}"?`)) return;
+                            if (!window.confirm(`Are you sure you want to delete "${b.title}"?`)) return;
                             setLoading(true);
                             const formData = new FormData();
                             formData.append('action', 'delete');
