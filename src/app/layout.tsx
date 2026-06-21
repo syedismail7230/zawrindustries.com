@@ -54,6 +54,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://translate.google.com" />
+        <link rel="preconnect" href="https://translate.googleapis.com" crossOrigin="anonymous" />
+      </head>
       <body className={inter.className} suppressHydrationWarning>
         <Preloader />
         <script

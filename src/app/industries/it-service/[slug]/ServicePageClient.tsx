@@ -493,10 +493,25 @@ function OfferingsSection({ serviceName, offerings }: { serviceName: string; off
 }
 
 export default function ServicePageClient({ service, slug, heroSrc }: { service: ServiceDetail; slug: string; heroSrc: string }) {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    const t1 = setTimeout(() => window.scrollTo(0, 0), 0);
+    const t2 = setTimeout(() => window.scrollTo(0, 0), 50);
+    const t3 = setTimeout(() => window.scrollTo(0, 0), 150);
+    return () => {
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+    };
+  }, [slug]);
+
   return (
     <div style={{ backgroundColor: '#000000', color: '#ffffff', fontFamily: 'Inter, sans-serif', minHeight: '100vh', overflowX: 'hidden' }}>
 
       <style dangerouslySetInnerHTML={{__html: `
+        body {
+          background-color: #000000 !important;
+        }
         .neon-btn {
           background: #000000;
           color: #ffffff;
@@ -532,8 +547,6 @@ export default function ServicePageClient({ service, slug, heroSrc }: { service:
         justifyContent: 'flex-start',
         padding: '0 clamp(1rem, 6vw, 8%) 8vh clamp(1rem, 6vw, 8%)',
       }}>
-        {/* High priority preloaded LCP image element */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img 
           src={heroSrc} 
           alt={service.name} 

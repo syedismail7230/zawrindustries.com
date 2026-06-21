@@ -28,9 +28,10 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isMobileMenuOpen]);
 
-  // Close mobile menu on route change
+  // Close mobile menu and reset scroll state on route change to prevent background blinking
   useEffect(() => {
     setIsMobileMenuOpen(false);
+    setIsScrolled(false);
   }, [pathname]);
 
   const closeMobileMenu = () => setIsMobileMenuOpen(false);
@@ -268,6 +269,7 @@ export default function Header() {
           <div className="dropdown" style={{ left: 'auto', right: '-1rem', minWidth: '180px', paddingTop: '1.5rem' }}>
             <div style={{ marginBottom: '10px' }}>
               <input 
+                suppressHydrationWarning
                 type="text" 
                 placeholder="Search language..." 
                 value={langQuery}
@@ -309,13 +311,14 @@ export default function Header() {
           <button className="search-close" onClick={() => { setIsSearchOpen(false); setSearchError(''); }}>×</button>
           <form className="search-form" onSubmit={handleSearchSubmit} style={{ position: 'relative' }}>
             <input 
+              suppressHydrationWarning
               type="text" 
               placeholder="Search Zawr Industries..." 
               value={searchQuery}
               onChange={(e) => { setSearchQuery(e.target.value); setSearchError(''); }}
               autoFocus
             />
-            <button type="submit">Search</button>
+            <button suppressHydrationWarning type="submit">Search</button>
             {searchError && (
               <div style={{ position: 'absolute', top: 'calc(100% + 2rem)', left: 0, right: 0, textAlign: 'center', color: 'var(--bg-white)', opacity: 0.9, fontSize: '1rem', fontWeight: 300 }}>
                 {searchError}

@@ -1,495 +1,641 @@
 "use client";
 
-import React from 'react';
-import Link from 'next/link';
+import React, { useRef, useEffect, useState } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import ServicePageClient from './[slug]/ServicePageClient';
+import servicesData from '@/data/services_data.json';
 
-// High-fidelity Client Component that interpolates mouse movements with inertia (elastic liquid easing)
-function ServicePill({ children }: { children: React.ReactNode }) {
-  const pillRef = React.useRef<HTMLDivElement>(null);
-  
-  // Target mouse coordinates relative to the pill bounding box
-  const targetX = React.useRef(0);
-  const targetY = React.useRef(0);
-  
-  // Current interpolated coordinates
-  const currentX = React.useRef(0);
-  const currentY = React.useRef(0);
-  
-  const isHovered = React.useRef(false);
-  const animationFrameId = React.useRef<number | null>(null);
+// Define Interfaces matching data structure
+interface Offering {
+  title: string;
+  description: string;
+  deliverables: string[];
+}
 
+interface FAQ {
+  q: string;
+  a: string;
+}
+
+interface Industry {
+  name: string;
+  image: string;
+  projectName?: string;
+  projectDescription?: string;
+}
+
+interface ServiceDetail {
+  name: string;
+  slug: string;
+  tagline: string;
+  description: string;
+  challenges: string[];
+  offerings: Offering[];
+  methodology: any[];
+  industries: Industry[];
+  faqs: FAQ[];
+}
+
+const typedServicesData = servicesData as Record<string, ServiceDetail>;
+
+const SERVICES_DATA = [
+  { name: "AI & Data Analytics", slug: "ai-data-analytics" },
+  { name: "Cloud Services", slug: "cloud" },
+  { name: "Cybersecurity", slug: "cybersecurity" },
+  { name: "Network Solutions", slug: "network-solutions" },
+  { name: "Industrial Autonomy", slug: "industrial-autonomy-and-engineering" },
+  { name: "Enterprise Solutions", slug: "enterprise-solutions" },
+  { name: "Tech Consulting", slug: "consulting" },
+  { name: "Software Development", slug: "software-development" },
+  { name: "Cognitive Operations", slug: "cognitive-business-operations" },
+  { name: "Web Development", slug: "web-development" },
+  { name: "App Development", slug: "application-development" },
+  { name: "Startup MVP", slug: "startup-mvp" },
+  { name: "CRM Solutions", slug: "crm-solution" },
+  { name: "CXM Solutions", slug: "cxm-solution" },
+  { name: "Digital Marketing", slug: "digital-marketing" },
+  { name: "Blockchain Solutions", slug: "blockchain" },
+  { name: "IoT Solutions", slug: "iot" },
+  { name: "DevOps Automation", slug: "devops" },
+  { name: "Unit Testing", slug: "unit-test" },
+  { name: "Quality Assurance", slug: "quality-assurance" },
+  { name: "Workplace Platform", slug: "workplace-transformation" },
+  { name: "Process Automation", slug: "process-automation" },
+  { name: "Business Process Management", slug: "business-process-management" }
+];
+
+export default function ServicesMarquee() {
+  const [rotation, setRotation] = useState(0);
+  const [zoomedIndex, setZoomedIndex] = useState<number | null>(null);
+  const [isZooming, setIsZooming] = useState(false);
+  
+  // Shared Layout Morph states
+  const [morphActive, setMorphActive] = useState(false);
+  const [morphExpanded, setMorphExpanded] = useState(false);
+  
+  // Virtual Dynamic Overlay routing state (Buttery smooth details page)
+  const [activeSlug, setActiveSlug] = useState<string | null>(null);
+  
+  const router = useRouter();
+  const pathname = usePathname();
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  
+  // Ref tracking for LERP physics
+  const rotationRef = useRef(0);
+  const targetRotationRef = useRef(0);
+  const animationFrameId = useRef<number | null>(null);
+  
+  // Drag states
+  const isDragging = useRef(false);
+  const hasDragged = useRef(false); 
+  const startX = useRef(0);
+  const startRotation = useRef(0);
+
+  // Track hover state on rotating cards to toggle vertical vs horizontal scroll
+  const isHoveringCardRef = useRef(false);
+
+  const N = SERVICES_DATA.length;
+  const cardWidth = 300; 
+  const cardAngle = 360 / N;
+  
+  // Calculate dynamic cylinder radius + 22% gap multiplier to completely eliminate card-intersection clipping
+  const baseRadius = cardWidth / (2 * Math.sin(Math.PI / N));
+  const radius = Math.max(620, baseRadius * 1.22);
+
+  // Smooth LERP loop for high-fidelity physics feel
   const tick = () => {
-    if (!pillRef.current) return;
-    
-    // Liquid easing math: 0.08 provides a highly viscous, smooth fluid inertia lag
-    const easingFactor = 0.08; 
-    
-    currentX.current += (targetX.current - currentX.current) * easingFactor;
-    currentY.current += (targetY.current - currentY.current) * easingFactor;
-    
-    pillRef.current.style.setProperty('--mouse-x', `${currentX.current}px`);
-    pillRef.current.style.setProperty('--mouse-y', `${currentY.current}px`);
-    
-    const dx = targetX.current - currentX.current;
-    const dy = targetY.current - currentY.current;
-    
-    // If user is hovering, or the liquid glow is still easing/catching up, keep animating
-    if (isHovered.current || Math.abs(dx) > 0.05 || Math.abs(dy) > 0.05) {
+    const diff = targetRotationRef.current - rotationRef.current;
+    if (Math.abs(diff) > 0.01) {
+      rotationRef.current += diff * 0.12; 
+      setRotation(rotationRef.current);
       animationFrameId.current = requestAnimationFrame(tick);
     } else {
+      rotationRef.current = targetRotationRef.current;
+      setRotation(rotationRef.current);
       animationFrameId.current = null;
     }
   };
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    targetX.current = e.clientX - rect.left;
-    targetY.current = e.clientY - rect.top;
-    
+  const updateTargetRotation = (newVal: number) => {
+    targetRotationRef.current = newVal;
     if (animationFrameId.current === null) {
       animationFrameId.current = requestAnimationFrame(tick);
     }
   };
 
-  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
-    isHovered.current = true;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    // Snap initial target coordinate to eliminate origin-jump animations
-    targetX.current = x;
-    targetY.current = y;
-    
-    // Snap current coordinates on first entry
-    if (currentX.current === 0 && currentY.current === 0) {
-      currentX.current = x;
-      currentY.current = y;
-    }
-    
-    if (animationFrameId.current === null) {
-      animationFrameId.current = requestAnimationFrame(tick);
-    }
+  // Drag handlers on the scene container
+  const handleMouseDown = (e: React.MouseEvent) => {
+    if (isZooming) return;
+    isDragging.current = true;
+    hasDragged.current = false; 
+    startX.current = e.clientX;
+    startRotation.current = targetRotationRef.current;
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
   };
 
-  const handleMouseLeave = () => {
-    isHovered.current = false;
-    // Loop will automatically stop once dx/dy decay below the threshold
+  const handleMouseMove = (e: MouseEvent) => {
+    if (!isDragging.current) return;
+    const dx = e.clientX - startX.current;
+    if (Math.abs(dx) > 5) {
+      hasDragged.current = true; 
+    }
+    const newRotation = startRotation.current + (dx / window.innerWidth) * 160;
+    updateTargetRotation(newRotation);
   };
 
-  React.useEffect(() => {
+  const handleMouseUp = () => {
+    isDragging.current = false;
+    document.removeEventListener('mousemove', handleMouseMove);
+    document.removeEventListener('mouseup', handleMouseUp);
+  };
+
+  // Touch Swipe handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    if (isZooming) return;
+    isDragging.current = true;
+    hasDragged.current = false;
+    startX.current = e.touches[0].clientX;
+    startRotation.current = targetRotationRef.current;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging.current) return;
+    const dx = e.touches[0].clientX - startX.current;
+    if (Math.abs(dx) > 5) {
+      hasDragged.current = true;
+    }
+    const newRotation = startRotation.current + (dx / window.innerWidth) * 160;
+    updateTargetRotation(newRotation);
+  };
+
+  const handleTouchEnd = () => {
+    isDragging.current = false;
+  };
+
+  // Click card snap & Morph Zoom sequence
+  const handleCardClick = (e: React.MouseEvent, slug: string, index: number) => {
+    e.preventDefault();
+    
+    if (hasDragged.current) return;
+    if (isZooming) return;
+
+    setIsZooming(true);
+    setZoomedIndex(index);
+
+    // 1. Snap cylinder to face this card forward
+    const currentRot = targetRotationRef.current;
+    const targetRot = -index * cardAngle;
+
+    const diff = targetRot - (currentRot % 360);
+    let adjustedTarget = currentRot + diff;
+    if (diff > 180) adjustedTarget -= 360;
+    if (diff < -180) adjustedTarget += 360;
+
+    updateTargetRotation(adjustedTarget);
+
+    // 2. Trigger FLIP Morph Animation overlay
+    setMorphActive(true);
+    setTimeout(() => {
+      setMorphExpanded(true);
+    }, 40);
+
+    // 3. Mount overlay and update URL dynamically
+    setTimeout(() => {
+      setActiveSlug(slug);
+      setMorphActive(false); // Hide the morph image wrapper so the subpage details underneath are visible
+      window.history.pushState(null, '', `/industries/it-service/${slug}`);
+      document.body.style.overflow = 'hidden'; // Lock standard page scroll
+    }, 500);
+  };
+
+  // Handle closing virtual overlay
+  const handleCloseOverlay = () => {
+    setZoomedIndex(null);
+    setIsZooming(false);
+    setMorphActive(false);
+    setMorphExpanded(false);
+    setActiveSlug(null);
+    window.history.pushState(null, '', '/industries/it-service');
+    document.body.style.overflow = ''; // Restore standard scroll
+  };
+
+  // Capture browser back/forward buttons (popstate events)
+  useEffect(() => {
+    const handlePopState = () => {
+      const path = window.location.pathname;
+      if (path === '/industries/it-service' || path === '/industries/it-service/') {
+        setZoomedIndex(null);
+        setIsZooming(false);
+        setMorphActive(false);
+        setMorphExpanded(false);
+        setActiveSlug(null);
+        document.body.style.overflow = '';
+      } else {
+        const match = path.match(/\/industries\/it-service\/([^/]+)$/);
+        if (match) {
+          const slug = match[1];
+          const index = SERVICES_DATA.findIndex(s => s.slug === slug);
+          if (index !== -1) {
+            setZoomedIndex(index);
+            setIsZooming(true);
+            setMorphActive(true);
+            setMorphExpanded(true);
+            setActiveSlug(slug);
+            document.body.style.overflow = 'hidden';
+          }
+        }
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Monitor pathname changes (e.g. clicking links in persistent Header)
+  useEffect(() => {
+    if (pathname === '/industries/it-service' || pathname === '/industries/it-service/') {
+      setZoomedIndex(null);
+      setIsZooming(false);
+      setMorphActive(false);
+      setMorphExpanded(false);
+      setActiveSlug(null);
+      document.body.style.overflow = '';
+    }
+  }, [pathname]);
+
+  // Reset overlay scroll position when changing between services
+  useEffect(() => {
+    if (activeSlug && overlayRef.current) {
+      overlayRef.current.scrollTop = 0;
+    }
+  }, [activeSlug]);
+
+  // Native wheel event listener bound to the parent section to ensure 100% scroll capture even on card surfaces
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+
+    const handleNativeWheel = (e: WheelEvent) => {
+      if (isZooming) return;
+
+      // Only scroll horizontally if the user's cursor is hovering directly over one of the cylinder cards
+      if (!isHoveringCardRef.current) return;
+
+      // Prevent default page vertical scroll action
+      e.preventDefault();
+
+      // Get delta direction
+      const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      const scrollSpeed = 0.08;
+      const newRotation = targetRotationRef.current - delta * scrollSpeed;
+      updateTargetRotation(newRotation);
+    };
+
+    section.addEventListener('wheel', handleNativeWheel, { passive: false });
+
+    return () => {
+      section.removeEventListener('wheel', handleNativeWheel);
+    };
+  }, [isZooming, cardAngle]);
+
+  useEffect(() => {
+    updateTargetRotation(0);
+
+    // Prefetch all service page routes in the background to ensure instantaneous Next.js client-side mounting
+    SERVICES_DATA.forEach((service) => {
+      router.prefetch(`/industries/it-service/${service.slug}`);
+    });
+
     return () => {
       if (animationFrameId.current !== null) {
         cancelAnimationFrame(animationFrameId.current);
       }
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.body.style.overflow = '';
     };
-  }, []);
+  }, [router]);
 
   return (
-    <div
-      ref={pillRef}
-      className="service-pill"
-      onMouseMove={handleMouseMove}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      {children}
-    </div>
-  );
-}
-
-const slugMap: Record<string, string> = {
-  "AI & Data Analytics": "ai-data-analytics",
-  "Cloud": "cloud",
-  "Cognitive Business Operations": "cognitive-business-operations",
-  "Cybersecurity": "cybersecurity",
-  "Network Solutions": "network-solutions",
-  "Industrial Autonomy and Engineering": "industrial-autonomy-and-engineering",
-  "Enterprise Solutions": "enterprise-solutions",
-  "Consulting": "consulting",
-  "Software Development": "software-development",
-  "Web Development": "web-development",
-  "Application Development": "application-development",
-  "Startup MVP": "startup-mvp",
-  "CRM Solution": "crm-solution",
-  "CXM Solution": "cxm-solution",
-  "Digital Marketing": "digital-marketing",
-  "Blockchain": "blockchain",
-  "IoT": "iot",
-  "DevOps": "devops",
-  "Unit test": "unit-test",
-  "Quality Assurance": "quality-assurance",
-  "Workplace Transformation": "workplace-transformation",
-  "Process Automation": "process-automation",
-  "Business Process Management": "business-process-management"
-};
-
-export default function ServicesMarquee() {
-  const renderPill = (item: string, key: string | number) => {
-    const pill = <ServicePill>{item}</ServicePill>;
-    const slug = slugMap[item];
-    if (slug) {
-      return (
-        <Link key={key} href={`/industries/it-service/${slug}`} style={{ textDecoration: 'none', display: 'inline-block' }}>
-          {pill}
-        </Link>
-      );
-    }
-    return <React.Fragment key={key}>{pill}</React.Fragment>;
-  };
-
-
-  return (
-    <div style={{
-      backgroundColor: '#000000',
-      padding: '6.5rem 0 4.5rem 0',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      position: 'relative',
-      overflow: 'hidden',
-      width: '100%',
-    }}>
-      {/* Style injection for horizontal marquee animations and cursor effects */}
-      <style dangerouslySetInnerHTML={{__html: `
-        @keyframes scrollRowLeft {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-25%); }
+    <div ref={sectionRef} className="services-section">
+      {/* 3D Scene style injection - matching the user mockup perfectly */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        body {
+          background-color: #000000 !important;
         }
-        @keyframes scrollRowRight {
-          0% { transform: translateX(-25%); }
-          100% { transform: translateX(0); }
-        }
-        .marquee-track {
+        .services-section {
+          background-color: #000000;
+          padding: 6rem 0 4rem 0; 
           display: flex;
-          width: max-content;
-        }
-        .scroll-row-left {
-          animation: scrollRowLeft var(--duration, 25s) linear infinite;
-        }
-        .scroll-row-right {
-          animation: scrollRowRight var(--duration, 25s) linear infinite;
-        }
-        .marquee-group {
-          display: flex;
-          flex-shrink: 0;
+          flex-direction: column;
           align-items: center;
-          justify-content: space-around;
-          gap: 1.5rem;
-          padding-right: 1.5rem;
-        }
-        .service-pill {
           position: relative;
-          flex-shrink: 0;
-          padding: 0.9rem 1.8rem;
-          background: linear-gradient(#000000, #000000) padding-box,
+          overflow: hidden;
+          width: 100vw;
+          user-select: none;
+        }
+
+        /* 3D Scene Viewport */
+        .scene-container {
+          position: relative;
+          width: 100%;
+          height: 540px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          perspective: 1500px; 
+          z-index: 8;
+          cursor: grab;
+          transition: opacity 0.8s ease;
+        }
+        .scene-container:active {
+          cursor: grabbing;
+        }
+
+        /* Cylinder Ring */
+        .cylinder-ring {
+          position: relative;
+          width: ${cardWidth}px;
+          height: 400px;
+          transform-style: preserve-3d;
+          will-change: transform;
+        }
+
+        /* 3D Card Item - Styled exactly like the user mockup */
+        .cylinder-card {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          transform-style: preserve-3d;
+          backface-visibility: hidden;
+          
+          /* Mockup card gradient and border decoration */
+          background: linear-gradient(180deg, #110d29 0%, #4c116c 100%) padding-box,
                       linear-gradient(135deg, #3b82f6, #ec4899) border-box;
           border: 2px solid transparent;
-          border-radius: 100px;
-          font-size: 0.95rem;
+          border-radius: 24px;
+          padding: 24px;
+          box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
+          backdrop-filter: blur(16px);
+          cursor: pointer;
+          
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1), 
+                      opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), 
+                      box-shadow 0.4s ease,
+                      background 0.4s ease;
+          will-change: transform, opacity;
+        }
+        
+        .cylinder-card:hover {
+          background: linear-gradient(180deg, #110d29 0%, #4c116c 100%) padding-box,
+                      linear-gradient(135deg, #60a5fa, #f472b6) border-box;
+          box-shadow: 0 0 30px rgba(139, 92, 246, 0.65), 0 14px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .card-image-box {
+          width: 100%;
+          aspect-ratio: 1.6;
+          background-color: #000000;
+          border-radius: 16px;
+          overflow: hidden;
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          position: relative;
+        }
+        
+        .card-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .cylinder-card:hover .card-img {
+          transform: scale(1.08);
+        }
+
+        /* Card Title */
+        .card-title {
+          font-size: 1.38rem;
           font-weight: 500;
           color: #ffffff;
-          text-align: center;
-          white-space: nowrap;
-          display: inline-block;
-          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
-          cursor: pointer;
-          z-index: 2;
-        }
-        
-        /* Viscous liquid-like glowing spotlight halo behind the pill */
-        .service-pill::after {
-          content: '';
-          position: absolute;
-          inset: -2px;
-          border-radius: 100px;
-          background: radial-gradient(
-            130px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
-            rgba(236, 72, 153, 0.75) 0%,
-            rgba(59, 130, 246, 0.75) 50%,
-            transparent 100%
-          );
-          filter: blur(16px);
-          opacity: 0;
-          transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-          z-index: -1;
-          pointer-events: none;
-        }
-        
-        .service-pill:hover {
-          transform: scale(1.06);
-          filter: brightness(1.3);
-        }
-        
-        .service-pill:hover::after {
-          opacity: 1;
+          margin: 1.5rem 0 0 0;
+          line-height: 1.3;
+          font-family: 'Inter', sans-serif;
+          letter-spacing: -0.01em;
+          text-align: left;
+          flex-grow: 1;
+          word-wrap: break-word;
         }
 
-        /* Section-level hover hint */
-        .marquee-click-hint {
+        /* Diagonal Arrow matching the mockup */
+        .card-arrow-container {
           position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
+          bottom: 24px;
+          right: 24px;
           display: flex;
-          justify-content: center;
           align-items: center;
-          padding: 0.5rem 0;
-          opacity: 0;
-          pointer-events: none;
-          transition: opacity 0.3s ease;
-          z-index: 30;
+          justify-content: center;
+          color: #ffffff;
+          transition: transform 0.3s ease;
         }
-        .marquee-click-hint span {
-          font-size: 0.75rem;
-          font-weight: 500;
-          letter-spacing: 0.06em;
-          color: rgba(255,255,255,0.75);
-          text-transform: uppercase;
+        .cylinder-card:hover .card-arrow-container {
+          transform: translate(3px, -3px);
         }
-        .marquee-pill-section:has(.service-pill:hover) .marquee-click-hint {
-          opacity: 1;
-        }
-      `}} />
+      ` }} />
 
-      <div style={{ maxWidth: '1200px', width: '100%', padding: '0 8%', textAlign: 'center', marginBottom: '4rem', zIndex: 10 }}>
-        <span style={{
-          fontSize: '0.8rem',
-          fontWeight: 600,
-          letterSpacing: '0.25em',
-          textTransform: 'uppercase',
-          color: '#a855f7',
-        }}>
-          Portfolio
-        </span>
-        <h2 style={{
-          fontSize: 'clamp(2rem, 4vw, 3.2rem)',
-          fontWeight: 700,
-          letterSpacing: '-0.02em',
-          marginTop: '1rem',
-          color: '#ffffff',
-        }}>
-          Our Services
-        </h2>
-      </div>
-
-      {/* Edge-to-edge Horizontal Marquee Container */}
-      <div className="marquee-pill-section" style={{
-        position: 'relative',
-        width: '100vw',
-        overflow: 'hidden',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1.75rem',
-        zIndex: 8,
-        padding: '2.2rem 0 1.5rem 0',
+      {/* Premium Section Title */}
+      <h2 style={{
+        fontSize: 'clamp(2rem, 4.5vw, 3rem)',
+        fontWeight: 300,
+        color: '#ffffff',
+        marginBottom: '2rem',
+        fontFamily: 'Inter, sans-serif',
+        letterSpacing: '-0.02em',
+        textAlign: 'center',
+        opacity: isZooming ? 0 : 0.85,
+        transition: 'opacity 0.5s ease',
+        zIndex: 10,
       }}>
-        {/* Hover hint */}
-        <div className="marquee-click-hint">
-          <span>Click to know more</span>
-        </div>
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          left: 0,
-          width: 'clamp(40px, 12vw, 150px)',
-          background: 'linear-gradient(to right, #000000 0%, transparent 100%)',
-          zIndex: 15,
-          pointerEvents: 'none',
-        }} />
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          bottom: 0,
-          right: 0,
-          width: 'clamp(40px, 12vw, 150px)',
-          background: 'linear-gradient(to left, #000000 0%, transparent 100%)',
-          zIndex: 15,
-          pointerEvents: 'none',
-        }} />
+        Our Services
+      </h2>
 
-        {/* Row 1: Left */}
-        <div style={{ overflow: 'hidden', width: '100%', padding: '1.25rem 0', margin: '-1.25rem 0' }}>
-          <div className="marquee-track scroll-row-left" style={{ '--duration': '22s' } as React.CSSProperties}>
-            <div className="marquee-group">
-              {[
-                "AI & Data Analytics",
-                "Cloud",
-                "Cognitive Business Operations",
-                "Cybersecurity",
-                "Network Solutions",
-                "Industrial Autonomy and Engineering"
-              ].map((item, idx) => renderPill(item, idx))}
-            </div>
-            <div className="marquee-group" aria-hidden="true">
-              {[
-                "AI & Data Analytics",
-                "Cloud",
-                "Cognitive Business Operations",
-                "Cybersecurity",
-                "Network Solutions",
-                "Industrial Autonomy and Engineering"
-              ].map((item, idx) => renderPill(item, `dup1-1-${idx}`))}
-            </div>
-            <div className="marquee-group" aria-hidden="true">
-              {[
-                "AI & Data Analytics",
-                "Cloud",
-                "Cognitive Business Operations",
-                "Cybersecurity",
-                "Network Solutions",
-                "Industrial Autonomy and Engineering"
-              ].map((item, idx) => renderPill(item, `dup1-2-${idx}`))}
-            </div>
-            <div className="marquee-group" aria-hidden="true">
-              {[
-                "AI & Data Analytics",
-                "Cloud",
-                "Cognitive Business Operations",
-                "Cybersecurity",
-                "Network Solutions",
-                "Industrial Autonomy and Engineering"
-              ].map((item, idx) => renderPill(item, `dup1-3-${idx}`))}
-            </div>
-          </div>
-        </div>
+      <div 
+        className="scene-container"
+        onMouseEnter={() => { isHoveringCardRef.current = true; }}
+        onMouseLeave={() => { isHoveringCardRef.current = false; }}
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        style={{ opacity: isZooming ? 0.3 : 1 }}
+      >
+        {/* 3D Cylinder Ring - Translated backwards in Z by exactly radius to prevent camera overlaps */}
+        <div 
+          className="cylinder-ring"
+          style={{ 
+            transform: `translateZ(-${radius}px) rotateY(${rotation}deg)`,
+          }}
+        >
+          {SERVICES_DATA.map((service, index) => {
+            const isZoomedCard = zoomedIndex === index;
 
-        {/* Row 2: Right */}
-        <div style={{ overflow: 'hidden', width: '100%', padding: '1.25rem 0', margin: '-1.25rem 0' }}>
-          <div className="marquee-track scroll-row-right" style={{ '--duration': '25s' } as React.CSSProperties}>
-            <div className="marquee-group">
-              {[
-                "Enterprise Solutions",
-                "Consulting",
-                "Software Development",
-                "Web Development",
-                "Application Development",
-                "Startup MVP"
-              ].map((item, idx) => renderPill(item, idx))}
-            </div>
-            <div className="marquee-group" aria-hidden="true">
-              {[
-                "Enterprise Solutions",
-                "Consulting",
-                "Software Development",
-                "Web Development",
-                "Application Development",
-                "Startup MVP"
-              ].map((item, idx) => renderPill(item, `dup2-1-${idx}`))}
-            </div>
-            <div className="marquee-group" aria-hidden="true">
-              {[
-                "Enterprise Solutions",
-                "Consulting",
-                "Software Development",
-                "Web Development",
-                "Application Development",
-                "Startup MVP"
-              ].map((item, idx) => renderPill(item, `dup2-2-${idx}`))}
-            </div>
-            <div className="marquee-group" aria-hidden="true">
-              {[
-                "Enterprise Solutions",
-                "Consulting",
-                "Software Development",
-                "Web Development",
-                "Application Development",
-                "Startup MVP"
-              ].map((item, idx) => renderPill(item, `dup2-3-${idx}`))}
-            </div>
-          </div>
-        </div>
+            // Calculate card position Y-rotation angle
+            const relativeAngle = ((index * cardAngle + rotation) % 360 + 540) % 360 - 180;
+            const isFacingAway = Math.abs(relativeAngle) > 85;
 
-        {/* Row 3: Left */}
-        <div style={{ overflow: 'hidden', width: '100%', padding: '1.25rem 0', margin: '-1.25rem 0' }}>
-          <div className="marquee-track scroll-row-left" style={{ '--duration': '20s' } as React.CSSProperties}>
-            <div className="marquee-group">
-              {[
-                "CRM Solution",
-                "CXM Solution",
-                "Digital Marketing",
-                "Blockchain",
-                "IoT",
-                "DevOps"
-              ].map((item, idx) => renderPill(item, idx))}
-            </div>
-            <div className="marquee-group" aria-hidden="true">
-              {[
-                "CRM Solution",
-                "CXM Solution",
-                "Digital Marketing",
-                "Blockchain",
-                "IoT",
-                "DevOps"
-              ].map((item, idx) => renderPill(item, `dup3-1-${idx}`))}
-            </div>
-            <div className="marquee-group" aria-hidden="true">
-              {[
-                "CRM Solution",
-                "CXM Solution",
-                "Digital Marketing",
-                "Blockchain",
-                "IoT",
-                "DevOps"
-              ].map((item, idx) => renderPill(item, `dup3-2-${idx}`))}
-            </div>
-            <div className="marquee-group" aria-hidden="true">
-              {[
-                "CRM Solution",
-                "CXM Solution",
-                "Digital Marketing",
-                "Blockchain",
-                "IoT",
-                "DevOps"
-              ].map((item, idx) => renderPill(item, `dup3-3-${idx}`))}
-            </div>
-          </div>
-        </div>
+            // Opacity decay - center is fully visible, side cards fade, back is hidden
+            const cardOpacity = isZooming 
+              ? 0 
+              : (isFacingAway ? 0 : 1 - Math.min(1, Math.abs(relativeAngle) / 85) * 0.75);
 
-        {/* Row 4: Right */}
-        <div style={{ overflow: 'hidden', width: '100%', padding: '1.25rem 0', margin: '-1.25rem 0' }}>
-          <div className="marquee-track scroll-row-right" style={{ '--duration': '28s' } as React.CSSProperties}>
-            <div className="marquee-group">
-              {[
-                "Unit test",
-                "Quality Assurance",
-                "Workplace Transformation",
-                "Process Automation",
-                "Business Process Management"
-              ].map((item, idx) => renderPill(item, idx))}
-            </div>
-            <div className="marquee-group" aria-hidden="true">
-              {[
-                "Unit test",
-                "Quality Assurance",
-                "Workplace Transformation",
-                "Process Automation",
-                "Business Process Management"
-              ].map((item, idx) => renderPill(item, `dup4-1-${idx}`))}
-            </div>
-            <div className="marquee-group" aria-hidden="true">
-              {[
-                "Unit test",
-                "Quality Assurance",
-                "Workplace Transformation",
-                "Process Automation",
-                "Business Process Management"
-              ].map((item, idx) => renderPill(item, `dup4-2-${idx}`))}
-            </div>
-            <div className="marquee-group" aria-hidden="true">
-              {[
-                "Unit test",
-                "Quality Assurance",
-                "Workplace Transformation",
-                "Process Automation",
-                "Business Process Management"
-              ].map((item, idx) => renderPill(item, `dup4-3-${idx}`))}
-            </div>
-          </div>
-        </div>
+            return (
+              <div
+                key={service.slug}
+                className="cylinder-card"
+                onClick={(e) => handleCardClick(e, service.slug, index)}
+                style={{
+                  transform: `rotateY(${index * cardAngle}deg) translateZ(${radius}px)`,
+                  opacity: cardOpacity,
+                  visibility: isFacingAway && !isZooming ? 'hidden' : 'visible',
+                  pointerEvents: isZooming ? 'none' : 'auto',
+                }}
+              >
+                {/* Related service hero image inside card */}
+                <div className="card-image-box">
+                  <img 
+                    src={`/assets/${service.slug}-hero.png`} 
+                    alt={service.name} 
+                    className="card-img"
+                  />
+                </div>
 
+                {/* Service Name exactly matching mockup styling */}
+                <h3 className="card-title">
+                  {service.name}
+                </h3>
+
+                {/* Diagonal Arrow Icon matching mockup directly */}
+                <div className="card-arrow-container">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
+
+      {/* Shared Layout Morph Overlay Image */}
+      {morphActive && zoomedIndex !== null && (
+        <div 
+          style={{
+            position: 'fixed',
+            zIndex: 99999,
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            
+            // Morphs from the size/aspect ratio of the card image to the full viewport dimensions
+            width: morphExpanded ? '100vw' : '252px', 
+            height: morphExpanded ? '100vh' : '157px',
+            borderRadius: morphExpanded ? '0px' : '16px',
+            
+            overflow: 'hidden',
+            pointerEvents: 'none',
+            transition: 'all 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+            boxShadow: morphExpanded ? 'none' : '0 10px 40px rgba(0,0,0,0.6)',
+          }}
+        >
+          <img 
+            src={`/assets/${SERVICES_DATA[zoomedIndex].slug}-hero.png`} 
+            alt=""
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center',
+            }}
+          />
+          {/* Subtle gradient vignette overlay when morphing to fullscreen */}
+          <div style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0) 100%)',
+            opacity: morphExpanded ? 1 : 0,
+            transition: 'opacity 0.5s ease',
+            zIndex: 2,
+          }} />
+        </div>
+      )}
+
+      {/* Virtual SPA dynamic subpage overlay (renders behind Header z-index 1000) */}
+      {activeSlug && typedServicesData[activeSlug] && (
+        <div
+          ref={overlayRef}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: '#000000',
+            zIndex: 990, // BELOW Header's 1000 so the Header remains completely functional!
+            overflowY: 'auto',
+            animation: 'fadeInOverlay 0.4s ease-out forwards',
+          }}
+        >
+          <style dangerouslySetInnerHTML={{ __html: `
+            @keyframes fadeInOverlay {
+              from { opacity: 0; }
+              to { opacity: 1; }
+            }
+          `}} />
+
+          {/* Render target page details inline - zero network fetches, zero reloading! */}
+          <div style={{ position: 'relative', width: '100%' }}>
+            <ServicePageClient 
+              service={typedServicesData[activeSlug]} 
+              slug={activeSlug} 
+              heroSrc={`/assets/${activeSlug}-hero.png`} 
+            />
+          </div>
+
+          {/* Floating Back to Services Button */}
+          <button
+            onClick={handleCloseOverlay}
+            style={{
+              position: 'fixed',
+              top: '90px',
+              left: '5%',
+              zIndex: 1005, // ABOVE header items for guaranteed click capture
+              backgroundColor: 'rgba(0, 0, 0, 0.75)',
+              border: '1px solid rgba(255, 255, 255, 0.18)',
+              borderRadius: '50px',
+              color: '#ffffff',
+              padding: '0.65rem 1.45rem',
+              fontSize: '0.88rem',
+              cursor: 'pointer',
+              backdropFilter: 'blur(12px)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 4px 15px rgba(0,0,0,0.4)',
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Back to Services
+          </button>
+        </div>
+      )}
     </div>
   );
 }

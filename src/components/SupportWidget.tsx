@@ -93,6 +93,7 @@ export default function SupportWidget() {
       {/* Bubble button overlay — only visible when collapsed */}
       {!isExpanded && (
         <button
+          suppressHydrationWarning
           onClick={() => setIsExpanded(true)}
           aria-label="Open support chat"
           style={{
