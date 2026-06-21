@@ -5,6 +5,17 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 
+const getSafeIsoDate = (dateStr: string): string => {
+  try {
+    if (!dateStr) return new Date().toISOString();
+    const cleanStr = dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
+    const d = new Date(cleanStr);
+    return isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
+  } catch (e) {
+    return new Date().toISOString();
+  }
+};
+
 interface Section {
   title: string;
   body: string;
@@ -465,8 +476,8 @@ export default function BlogDetailPage({ params }: { params: Promise<{ slug: str
             'image': [
               blog.image ? (blog.image.startsWith('http') ? blog.image : `https://zawrindustries.com${blog.image}`) : ''
             ],
-            'datePublished': new Date(blog.date || Date.now()).toISOString(),
-            'dateModified': new Date(blog.date || Date.now()).toISOString(),
+            'datePublished': getSafeIsoDate(blog.date),
+            'dateModified': getSafeIsoDate(blog.date),
             'author': [{
               '@type': 'Person',
               'name': blog.author || 'Zawr Industries Editorial'

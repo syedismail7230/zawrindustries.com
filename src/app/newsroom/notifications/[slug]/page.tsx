@@ -5,6 +5,17 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
 
+const getSafeIsoDate = (dateStr: string): string => {
+  try {
+    if (!dateStr) return new Date().toISOString();
+    const cleanStr = dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
+    const d = new Date(cleanStr);
+    return isNaN(d.getTime()) ? new Date().toISOString() : d.toISOString();
+  } catch (e) {
+    return new Date().toISOString();
+  }
+};
+
 export default function NotificationDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = React.use(params);
   const [notification, setNotification] = useState<any>(null);
@@ -196,8 +207,8 @@ export default function NotificationDetailPage({ params }: { params: Promise<{ s
             'image': [
               'https://zawrindustries.com/assets/public-relations-hero.png'
             ],
-            'datePublished': new Date(notification.date || Date.now()).toISOString(),
-            'dateModified': new Date(notification.date || Date.now()).toISOString(),
+            'datePublished': getSafeIsoDate(notification.date),
+            'dateModified': getSafeIsoDate(notification.date),
             'author': [{
               '@type': 'Organization',
               'name': 'Zawr Industries Corporate Communications'
