@@ -164,8 +164,9 @@ export default function ITServicesPageClient() {
 
   const handleProjectClick = (e: React.MouseEvent<HTMLDivElement>, proj: typeof projectsList[0]) => {
     const rect = e.currentTarget.getBoundingClientRect();
-    const modalWidth = 750;
-    const modalHeight = 520;
+    const isMobile = window.innerWidth <= 768;
+    const modalWidth = isMobile ? window.innerWidth * 0.92 : 750;
+    const modalHeight = isMobile ? window.innerHeight * 0.85 : 520;
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
     
@@ -356,12 +357,14 @@ export default function ITServicesPageClient() {
                 z-index: 10000;
               }
 
-              .mac-modal-window {
+               .mac-modal-window {
                 position: fixed;
                 top: 50%;
                 left: 50%;
-                width: 750px;
-                height: 520px;
+                width: 92vw;
+                max-width: 750px;
+                height: 85vh;
+                max-height: 560px;
                 background: rgba(10, 10, 15, 0.88);
                 border: 1px solid rgba(168, 85, 247, 0.28);
                 box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.9), 0 0 50px rgba(168, 85, 247, 0.18);
@@ -417,11 +420,22 @@ export default function ITServicesPageClient() {
                 justify-content: space-between;
                 overflow-y: auto;
               }
+              @media (max-width: 768px) {
+                .mac-content {
+                  padding: 1.25rem;
+                }
+              }
 
               .mac-grid-layout {
                 display: grid;
                 grid-template-columns: 1.55fr 1fr;
                 gap: 2rem;
+              }
+              @media (max-width: 768px) {
+                .mac-grid-layout {
+                  grid-template-columns: 1fr;
+                  gap: 1.5rem;
+                }
               }
 
               .mac-bullet-list {
@@ -855,11 +869,11 @@ export default function ITServicesPageClient() {
                 {/* Left column: overview, subtitle, bullet achievements */}
                 <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                   <div>
-                    <h3 style={{ fontSize: '1.9rem', fontWeight: 600, color: '#ffffff', marginBottom: '0.3rem', letterSpacing: '-0.02em' }}>
+                    <h3 style={{ fontSize: 'clamp(1.4rem, 4.5vw, 1.9rem)', fontWeight: 600, color: '#ffffff', marginBottom: '0.3rem', letterSpacing: '-0.02em' }}>
                       {selectedProject.name}
                     </h3>
                     <h4 style={{ 
-                      fontSize: '1.05rem', 
+                      fontSize: 'clamp(0.9rem, 2.5vw, 1.05rem)', 
                       fontWeight: 500, 
                       marginBottom: '1.4rem', 
                       letterSpacing: '-0.01em',
