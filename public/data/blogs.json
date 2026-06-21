@@ -1,27 +1,261 @@
 [
   {
-    "id": "BLOG-2",
-    "slug": "the-most-advanced-ops-brain-in-the-world",
-    "title": "The most advanced ops brain in the world",
-    "author": "Marcus Nordstrom",
-    "authorImage": "/assets/authors/marcus.png",
-    "date": "08 January 2025",
+    "id": "BLOG-9",
+    "slug": "next-generation-cloud-solutions-scaling-global-it-infrastructures",
+    "title": "Next-Generation Cloud Solutions: Scaling Global IT Infrastructures",
+    "author": "Zylpha Vance",
+    "authorImage": "/assets/authors/lina.png",
+    "date": "18 June 2026",
     "category": "Technology",
-    "summary": "Integrating structured databases, internal logs, and real-time open-web queries into a single autonomous operational layer to coordinate business workflows.",
-    "image": "/assets/blogs/ops-brain.png",
+    "summary": "Enterprise cloud migrations require robust security, high availability, and containerized microservices. Explore how Zawr IT Services delivers scalable architectures for global industries.",
+    "image": "/assets/blogs/blog-BLOG-9-laptop_on_cloud_with_ERP_dashboard_in_light_gradient__color_theme___000714_and__13578c__1_.jpg",
+    "readTime": "6 min read",
+    "sections": [
+      {
+        "title": "The Mandate for Modern Enterprise Cloud Migration",
+        "body": "As legacy on-premise systems become increasingly expensive and difficult to maintain, large enterprises are transitioning to cloud architectures. However, a lift-and-shift approach often fails to capture the true benefits of the cloud. Zawr IT Services focuses on refactoring legacy monolithic architectures into modular, containerized microservices that optimize cost and response latency."
+      },
+      {
+        "title": "Zero-Trust Infrastructure and Data Governance",
+        "body": "Security is the primary concern for any enterprise moving sensitive operations to the cloud. Zawr implements a strict zero-trust network architecture across all cloud deployments. We utilize granular access controls, automated security scanning, and multi-region data redundancy to protect corporate assets and comply with local data localization regulations."
+      },
+      {
+        "title": "Automated Scaling and Resource Optimization",
+        "body": "To prevent cloud cost overrun, Zawr employs AI-driven cost management tools that analyze application traffic patterns and automatically scale down resources during low-activity periods. This ensures clients only pay for the exact computational power they require, achieving up to 30% reduction in cloud infrastructure expenses."
+      }
+    ]
+  },
+  {
+    "id": "BLOG-8",
+    "slug": "pioneering-smart-mining-technologies-safe-and-clean-extraction",
+    "title": "Pioneering Smart Mining Technologies: Safe and Clean Extraction",
+    "author": "Ondine Marrow",
+    "authorImage": "/assets/authors/lina.png",
+    "date": "15 June 2026",
+    "category": "Corporate",
+    "summary": "Mining operations are undergoing a digital transformation. Zawr Metals & Mining is utilizing automated machinery and real-time safety telemetry to minimize environmental impact.",
+    "image": "/assets/blogs/blog-BLOG-8-pexels-gunshe-5125104.jpg",
     "readTime": "8 min read",
     "sections": [
       {
-        "title": "Your Startup's Internal Data",
-        "body": "From tasks to invoices to offer letters — our platform connects to tools like Google Drive, Slack, Quickbooks, Mercury, Ramp, Gusto, Rippling and more. This forms the foundation of the operations brain, pulling raw transactional records and indexing them securely in a semantic vector space."
+        "title": "The Safety Challenge in Industrial Mining",
+        "body": "Heavy resource extraction remains one of the most hazardous industries in the world. Deep underground operations expose workers to structural risks, hazardous gases, and heavy machinery accidents. Zawr Metals & Mining is addressing these challenges by deploying remote-operated machinery and autonomous haulage fleets, removing workers from high-risk zones."
       },
       {
-        "title": "Chore's Database of Best Practices",
-        "body": "Built from 6+ years and millions of completed tasks across hundreds of startups, we have created the largest knowledge base in startup ops — full of SOPs, hacks, workarounds, and real-world wisdom. When a task is initiated, the ops brain automatically cross-references this repository to choose the most efficient path."
+        "title": "Autonomous Haulage and Remote Machinery",
+        "body": "By utilizing private 5G networks, operators located in clean, remote command centers can guide deep-well mining excavators and automated dump trucks. Machine learning models assist these vehicles with obstacle avoidance, route planning, and predictive maintenance schedules, boosting operational uptime while eliminating human risk."
       },
       {
-        "title": "The Open Web Integration",
-        "body": "Our engine supplements its answers with real-time insights from hundreds of trusted web sources — just like ChatGPT or Perplexity. This allows the system to monitor external market changes, compliance updates, and public announcements to adjust operations workflows on the fly."
+        "title": "Eco-Friendly Extraction and Waste Management",
+        "body": "In addition to safety, sustainable resource extraction is a core priority. Zawr's smart mining framework incorporates real-time tailing pond monitoring and low-emission refining processes. We actively invest in dry-stacking technologies and biological water purification systems to ensure that nearby ecosystems remain undisturbed during operations."
+      }
+    ]
+  },
+  {
+    "id": "BLOG-7",
+    "slug": "designing-the-modern-workspace-ergonomics-and-human-centric-design",
+    "title": "Designing the Modern Workspace: Ergonomics and Human-Centric Design",
+    "author": "Lina Linder",
+    "authorImage": "/assets/authors/lina.png",
+    "date": "11 June 2026",
+    "category": "Opinion",
+    "summary": "The physical workspace plays an essential role in employee productivity and well-being. Discover the ergonomic theories and human-centric layouts driving office design.",
+    "image": "/assets/blogs/blog-BLOG-7-pexels-huy-phan-316220-27436633.jpg",
+    "readTime": "5 min read",
+    "sections": [
+      {
+        "title": "Beyond the Cubicle: The Evolution of Office Environments",
+        "body": "Workspaces have transitioned from rigid cubicles to hyper-collaborative, open-plan spaces, and now toward flexible hybrid setups. Sitting for prolonged periods in poorly designed chairs contributes to repetitive strain injuries and chronic back pain. Zawr Ergonomics design engineers study kinetic movement to create furniture that actively supports the body's natural posture."
+      },
+      {
+        "title": "The Biomechanics of Dynamic Seating",
+        "body": "Dynamic seating is the concept that chairs should adapt to the micro-movements of the human body. Our ergonomic seating lines feature responsive lumbar support systems, highly adjustable armrests, and weight-activated tension controls. This keeps the user in motion, improving blood circulation and reducing physical fatigue throughout the workday."
+      },
+      {
+        "title": "Aesthetic Harmony and Workplace Focus",
+        "body": "A premium office environment combines biomechanical excellence with minimal, clutter-free aesthetics. Using organic textures, sustainable wood finishes, and neutral tones helps build a calming work environment. Providing clutter-free cable channels and height-adjustable standing desks empowers employees to customize their workspaces to suit their daily tasks."
+      }
+    ]
+  },
+  {
+    "id": "BLOG-6",
+    "slug": "decarbonizing-heavy-operations-zawr-s-path-to-net-zero",
+    "title": "Decarbonizing Heavy Operations: Zawr's Path to Net Zero",
+    "author": "Marcus Nordstrom",
+    "authorImage": "/assets/authors/lina.png",
+    "date": "08 June 2026",
+    "category": "Corporate",
+    "summary": "Heavy manufacturing and metal refinement are carbon-intensive sectors. Zawr Industries outlines its strategic roadmap to transition operations to sustainable green energy sources.",
+    "image": "/assets/blogs/blog-BLOG-6-pexels-nc-farm-bureau-mark-15751120.jpg",
+    "readTime": "9 min read",
+    "sections": [
+      {
+        "title": "The Carbon Challenge in Heavy Industrial Manufacturing",
+        "body": "Sectors such as metal processing, chemical manufacturing, and logistics consume massive amounts of energy and fossil fuels. Meeting global climate goals requires industrial conglomerates to restructure their energy pipelines. Zawr is addressing this by transitioning processing plants from coal and gas to solar, wind, and green hydrogen power."
+      },
+      {
+        "title": "Solar Arrays and Microgrid Integration",
+        "body": "We have begun installing industrial-scale solar arrays at our manufacturing plants. These arrays are paired with high-capacity battery storage systems to form isolated microgrids, ensuring a continuous, reliable power supply regardless of external grid fluctuations while offsetting thousands of tons of carbon emissions annually."
+      },
+      {
+        "title": "Sustainable Supply Chains and Circular Economy",
+        "body": "Decarbonization extends beyond raw power consumption. Zawr's recycling initiatives aim to reuse industrial scrap, packaging materials, and manufacturing waste. By establishing closed-loop recovery systems in our factories, we reduce raw material mining requirements, conserving natural resources and lowering scope 3 logistics emissions."
+      }
+    ]
+  },
+  {
+    "id": "BLOG-5",
+    "slug": "empowering-startups-with-semantic-ai-inside-the-ops-brain-project",
+    "title": "Empowering Startups with Semantic AI: Inside the Ops Brain Project",
+    "author": "Ondine Marrow",
+    "authorImage": "/assets/authors/lina.png",
+    "date": "04 June 2026",
+    "category": "Technology",
+    "summary": "Modern businesses generate massive amounts of unstructured data. Discover how Zawr's Ops Brain integrates disparate data pools into an actionable knowledge graph.",
+    "image": "/assets/blogs/blog-BLOG-5-pexels-googledeepmind-17483868.jpg",
+    "readTime": "8 min read",
+    "sections": [
+      {
+        "title": "The Chaos of Unstructured Corporate Data",
+        "body": "Most growing startups store operational information across a variety of isolated apps: Slack threads, spreadsheets, CRM files, and PDF invoices. When founders need to make critical decisions, searching through these fragmented files is incredibly slow and error-prone. The Ops Brain solves this by parsing unstructured documents into a unified, searchable database."
+      },
+      {
+        "title": "Constructing Semantic Knowledge Graphs",
+        "body": "Rather than relying on basic keyword searches, our platform utilizes neural embedding models to read and map the relationship between documents. Invoices are linked to client entities, which are linked to specific delivery logs. This results in a comprehensive knowledge graph that allows founders to query their data in natural language."
+      },
+      {
+        "title": "Real-Time Actionable Business Insights",
+        "body": "By combining internal company data with external web scraping tools, the Ops Brain alerts executives to shifting market trends, regulatory compliance adjustments, and logistics bottlenecks. It turns static documents into dynamic, actionable recommendations, allowing companies to scale rapidly."
+      }
+    ]
+  },
+  {
+    "id": "BLOG-4",
+    "slug": "empowering-the-workforce-diversity-equity-and-inclusion-at-zawr",
+    "title": "Empowering the Workforce: Diversity, Equity, and Inclusion at Zawr",
+    "author": "Lina Linder",
+    "authorImage": "/assets/authors/lina.png",
+    "date": "29 May 2026",
+    "category": "Corporate",
+    "summary": "A progressive workforce is built on diverse ideas and equal opportunities. Learn about the hiring practices and mentorship programs powering our corporate culture.",
+    "image": "/assets/blogs/blog-BLOG-4-Untitled_design__111_.png",
+    "readTime": "6 min read",
+    "sections": [
+      {
+        "title": "DE&I as a Driver of Corporate Innovation",
+        "body": "A workspace that values diverse perspectives consistently outperforms homogeneous environments. Innovation requires challenging established ideas, and this only occurs when people from various backgrounds, disciplines, and cultures collaborate. At Zawr, we treat diversity not as a metric, but as an essential driver of our engineering and business solutions."
+      },
+      {
+        "title": "Removing Biases from the Recruitment Pipeline",
+        "body": "To build an equitable workforce, we utilize blind resume evaluations and structured, multi-stage panel interviews. This ensures that every job applicant is assessed purely on their technical capabilities, problem-solving skills, and alignment with our core values. We actively recruit from regional colleges to source underrepresented engineering talent."
+      },
+      {
+        "title": "Mentorship and Long-Term Career Growth",
+        "body": "Hiring is only the first step. To ensure career development, Zawr provides internal mentorship programs, continuing education grants, and leadership training bootcamps. We empower every employee to build a fulfilling, long-term career path, promoting diversity at all levels of management."
+      }
+    ]
+  },
+  {
+    "id": "BLOG-3",
+    "slug": "automating-b2b-workflows-the-power-of-custom-erp-solutions",
+    "title": "Automating B2B Workflows: The Power of Custom ERP Solutions",
+    "author": "Zylpha Vance",
+    "authorImage": "/assets/authors/lina.png",
+    "date": "25 May 2026",
+    "category": "Technology",
+    "summary": "Standard off-the-shelf software rarely fits complex business workflows. Custom ERP solutions built by Zawr IT Services help streamline operations and reduce overhead.",
+    "image": "/assets/blogs/blog-BLOG-3-pexels-cookiecutter-17489160.jpg",
+    "readTime": "7 min read",
+    "sections": [
+      {
+        "title": "The Limits of Generic Off-the-Shelf Software",
+        "body": "Many expanding companies run their billing, payroll, manufacturing, and inventory systems on separate, unconnected SaaS platforms. This leads to duplicate entry tasks, inconsistent data reports, and rising subscription expenses. A bespoke, custom-built ERP system resolves these problems by providing a unified database for all corporate workflows."
+      },
+      {
+        "title": "Custom API Integrations and Data Flow",
+        "body": "Zawr's software division designs enterprise-grade architectures that link with existing CRM databases and bank payment gateways. We build automated data pipelines that securely sync records between departments, eliminating manual file uploads and accelerating monthly closing cycles."
+      },
+      {
+        "title": "Enterprise Security and Compliance Safeguards",
+        "body": "Bespoke systems allow businesses to enforce custom data encryption and detailed access permissions. Rather than trusting third-party software vendors, companies have complete ownership of their data pipelines, satisfying strict financial audits and international security certifications."
+      }
+    ]
+  },
+  {
+    "id": "BLOG-2",
+    "slug": "southeast-asia-expansion-connecting-regional-markets-to-global-infrastructure",
+    "title": "Southeast Asia Expansion: Connecting Regional Markets to Global Infrastructure",
+    "author": "Marcus Nordstrom",
+    "authorImage": "/assets/authors/lina.png",
+    "date": "20 May 2026",
+    "category": "Business",
+    "summary": "Expanding into Southeast Asia represents a major milestone for Zawr Industries, establishing Singapore as our main regional hub for logistics and IT operations.",
+    "image": "/assets/blogs/blog-BLOG-2-ChatGPT_Image_Jun_21__2026__08_21_20_AM.png",
+    "readTime": "8 min read",
+    "sections": [
+      {
+        "title": "The Growing Economic Prominence of Southeast Asia",
+        "body": "Southeast Asia represents one of the fastest-growing digital economies in the world. Rapid urbanization, high internet adoption, and expanding trade routes make it a key market for technology and logistics services. Establishing Singapore as our regional headquarters allows Zawr to coordinate operations across Indonesia, Vietnam, and Malaysia."
+      },
+      {
+        "title": "Deploying Regional Logistics Networks",
+        "body": "Our logistics expansion focuses on cross-border land shipping corridors and smart port logistics integration. By connecting our localized truck fleets with maritime shipping databases, we provide B2B clients with transparent cargo tracking and faster customs clearances across international borders."
+      },
+      {
+        "title": "Localized IT Infrastructure and Data Hubs",
+        "body": "To serve regional enterprise clients, Zawr IT Services is establishing secure, localized cloud data hubs. These hubs ensure compliance with regional data privacy laws, such as Singapore's PDPA, while offering ultra-low latency connections for local financial institutions and ecommerce businesses."
+      }
+    ]
+  },
+  {
+    "id": "BLOG-10",
+    "slug": "the-future-of-b2b-logistics-how-zawr-is-revolutionizing-supply-chains",
+    "title": "The Future of B2B Logistics: How Zawr is Revolutionizing Supply Chains",
+    "author": "Ondine Marrow",
+    "authorImage": "/assets/authors/lina.png",
+    "date": "1 June 2026",
+    "category": "Business",
+    "summary": "As global supply chains face unprecedented volatility, Zawr Industries is deploying autonomous logistics routing, smart warehousing, and real-time fleet telemetry to redefine cargo efficiency.",
+    "image": "/assets/blogs/blog-BLOG-10-pexels-jan-van-der-wolf-11680885-33537946.jpg",
+    "readTime": "7 min read",
+    "sections": [
+      {
+        "title": "The Logistics Bottleneck of the Modern Era",
+        "body": "Traditional logistics networks are struggling to keep pace with dynamic market demands, fluctuating fuel costs, and unpredictable port delays. B2B freight networks, which carry the bulk of industrial and commercial cargo, have historically relied on fragmented dispatch systems and manual tracking. To address these systemic issues, Zawr Industries has reimagined the supply chain from the ground up, blending advanced telemetry with algorithmic route optimization."
+      },
+      {
+        "title": "Algorithmic Routing and Live Telemetry",
+        "body": "At the core of Zawr's logistics infrastructure is an autonomous route dispatch system. This platform evaluates live traffic, meteorological data, toll pricing, and vehicle fuel efficiency to calculate the most optimal route. By equipping our fleet with advanced IoT sensors, we monitor vehicle health and cargo status in real-time, allowing dispatch teams to address potential issues before they cause costly delays."
+      },
+      {
+        "title": "Next-Generation Smart Warehousing",
+        "body": "Efficiency on the road is meaningless without rapid turnaround times at cargo hubs. Zawr's smart warehouses utilize autonomous guided vehicles (AGVs) and machine vision systems to manage stock placement and picking. Our system integrates directly with clients' inventory databases, auto-generating shipping manifests and dispatching vehicles the moment stock thresholds are met."
+      }
+    ]
+  },
+  {
+    "id": "BLOG-1",
+    "slug": "sustainable-heavy-industry-the-future-of-responsible-manufacturing",
+    "title": "Sustainable Heavy Industry: The Future of Responsible Manufacturing",
+    "author": "Lina Linder",
+    "authorImage": "/assets/authors/lina.png",
+    "date": "15 May 2026",
+    "category": "Sustainability",
+    "summary": "Ethical production methods are vital for modern manufacturing. Zawr Industries explores sustainable material sources and clean production processes in heavy industry.",
+    "image": "/assets/blogs/blog-BLOG-1-pexels-brett-sayles-7178310.jpg",
+    "readTime": "7 min read",
+    "sections": [
+      {
+        "title": "The Environmental Imperative for Clean Manufacturing",
+        "body": "Industrial manufacturing has traditionally been linked with high natural resource consumption and emissions. However, consumers and business clients now expect products to be sourced and built ethically. Zawr Industries is transforming its heavy manufacturing facilities by implementing eco-friendly energy sources and material recycling pipelines."
+      },
+      {
+        "title": "Sourcing Recycled Metals and Biodegradable Polymers",
+        "body": "A key component of our green manufacturing framework is reducing our reliance on virgin raw materials. We source post-consumer recycled steel, aluminum, and biodegradable bio-plastics for our engineering and furniture divisions, substantially lowering energy requirements compared to refining primary ores."
+      },
+      {
+        "title": "Zero-Pollution Discharges and Chemical Control",
+        "body": "Protecting local water bodies from factory runoff is essential. Our manufacturing plants employ closed-loop water treatment systems that filter and reuse industrial wastewater. By neutralizing waste chemicals onsite and preventing toxic discharges, we protect local ecosystems and support communities near our facilities."
       }
     ]
   }
