@@ -6,7 +6,51 @@ export async function GET() {
   const baseUrl = 'https://zawrindustries.com';
   let articles: any[] = [];
 
-  // 1. Fetch articles from blogs.json
+  // Helper to parse date containing ordinals like "27th May"
+  const parseCleanDate = (dateStr: string): Date => {
+    if (!dateStr) return new Date();
+    const cleanStr = dateStr.replace(/(\d+)(st|nd|rd|th)/, '$1');
+    const d = new Date(cleanStr);
+    return isNaN(d.getTime()) ? new Date() : d;
+  };
+
+  // 1. Fetch articles from press-releases.json (Newsroom Press Releases)
+  try {
+    const filePath = path.join(process.cwd(), 'public/data/press-releases.json');
+    if (fs.existsSync(filePath)) {
+      const fileData = fs.readFileSync(filePath, 'utf8');
+      const releases = JSON.parse(fileData);
+      articles = [...articles, ...releases.map((r: any) => ({
+        url: `${baseUrl}/newsroom/press-release/${r.slug}`,
+        title: r.title,
+        dateParsed: parseCleanDate(r.date),
+        dateRaw: r.date,
+        source: 'Press Release'
+      }))];
+    }
+  } catch (e) {
+    console.error('Error reading press releases for sitemap:', e);
+  }
+
+  // 2. Fetch articles from notifications.json (Newsroom Announcements)
+  try {
+    const filePath = path.join(process.cwd(), 'public/data/notifications.json');
+    if (fs.existsSync(filePath)) {
+      const fileData = fs.readFileSync(filePath, 'utf8');
+      const notifications = JSON.parse(fileData);
+      articles = [...articles, ...notifications.map((n: any) => ({
+        url: `${baseUrl}/newsroom/notifications/${n.slug}`,
+        title: n.title,
+        dateParsed: parseCleanDate(n.date),
+        dateRaw: n.date,
+        source: 'Announcement'
+      }))];
+    }
+  } catch (e) {
+    console.error('Error reading notifications for sitemap:', e);
+  }
+
+  // 3. Fetch articles from blogs.json (Blogs)
   try {
     const filePath = path.join(process.cwd(), 'public/data/blogs.json');
     if (fs.existsSync(filePath)) {
@@ -15,19 +59,20 @@ export async function GET() {
       articles = [...articles, ...blogs.map((b: any) => ({
         url: `${baseUrl}/about/blog/${b.slug}`,
         title: b.title,
-        date: b.date || new Date().toISOString(),
-        category: b.category || 'News'
+        dateParsed: parseCleanDate(b.date),
+        dateRaw: b.date,
+        source: 'Blog'
       }))];
     }
   } catch (e) {
     console.error('Error reading blogs for news sitemap:', e);
   }
 
-  // 2. Fetch press releases or other recent news if available
-  // We can add them here as well.
+  // Sort articles: newest first
+  articles.sort((a, b) => b.dateParsed.getTime() - a.dateParsed.getTime());
 
-  // Filter or sort to show latest articles (Google News prefers recent 48 hours, but we list recent articles to guarantee coverage)
-  const recentArticles = articles.slice(0, 10);
+  // Filter to show latest 20 articles
+  const recentArticles = articles.slice(0, 20);
 
   // Build the XML response
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -38,10 +83,10 @@ export async function GET() {
     <loc>${escapeXml(art.url)}</loc>
     <news:news>
       <news:publication>
-        <news:name>Zawr Industries</news:name>
+        <news:name>Zawr Industries Newsroom</news:name>
         <news:language>en</news:language>
       </news:publication>
-      <news:publication_date>${formatIsoDate(art.date)}</news:publication_date>
+      <news:publication_date>${art.dateParsed.toISOString()}</news:publication_date>
       <news:title>${escapeXml(art.title)}</news:title>
     </news:news>
   </url>
@@ -67,15 +112,4 @@ function escapeXml(unsafe: string): string {
       default: return c;
     }
   });
-}
-
-function formatIsoDate(dateStr: string): string {
-  try {
-    // Check if it is a formatted string like "12 January 2025" or ISO
-    const date = new Date(dateStr);
-    if (!isNaN(date.getTime())) {
-      return date.toISOString();
-    }
-  } catch (e) {}
-  return new Date().toISOString();
 }

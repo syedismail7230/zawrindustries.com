@@ -79,25 +79,54 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route === '' ? 1 : 0.8,
   }));
 
-  // Dynamically append blog articles
-  let blogRoutes: any[] = [];
+  // Dynamically append blog, press release, and notification articles
+  let dynamicRoutes: any[] = [];
   try {
     const fs = require('fs');
     const path = require('path');
-    const filePath = path.join(process.cwd(), 'public/data/blogs.json');
-    if (fs.existsSync(filePath)) {
-      const fileData = fs.readFileSync(filePath, 'utf8');
+
+    // 1. Appending blogs
+    const blogsPath = path.join(process.cwd(), 'public/data/blogs.json');
+    if (fs.existsSync(blogsPath)) {
+      const fileData = fs.readFileSync(blogsPath, 'utf8');
       const blogs = JSON.parse(fileData);
-      blogRoutes = blogs.map((b: any) => ({
+      dynamicRoutes = [...dynamicRoutes, ...blogs.map((b: any) => ({
         url: `${baseUrl}/about/blog/${b.slug}`,
         lastModified: new Date(),
         changeFrequency: 'weekly' as const,
         priority: 0.6,
-      }));
+      }))];
     }
+
+    // 2. Appending press releases
+    const pressPath = path.join(process.cwd(), 'public/data/press-releases.json');
+    if (fs.existsSync(pressPath)) {
+      const fileData = fs.readFileSync(pressPath, 'utf8');
+      const releases = JSON.parse(fileData);
+      dynamicRoutes = [...dynamicRoutes, ...releases.map((r: any) => ({
+        url: `${baseUrl}/newsroom/press-release/${r.slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.7,
+      }))];
+    }
+
+    // 3. Appending notifications
+    const notifPath = path.join(process.cwd(), 'public/data/notifications.json');
+    if (fs.existsSync(notifPath)) {
+      const fileData = fs.readFileSync(notifPath, 'utf8');
+      const notifications = JSON.parse(fileData);
+      dynamicRoutes = [...dynamicRoutes, ...notifications.map((n: any) => ({
+        url: `${baseUrl}/newsroom/notifications/${n.slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.6,
+      }))];
+    }
+
   } catch (e) {
-    console.error('Error appending blogs to sitemap:', e);
+    console.error('Error appending dynamic routes to sitemap:', e);
   }
 
-  return [...routes, ...blogRoutes];
+  return [...routes, ...dynamicRoutes];
 }
