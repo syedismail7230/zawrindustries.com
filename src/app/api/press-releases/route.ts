@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
+import { uploadToCloudinary } from '@/lib/cloudinary';
 
 const dataFilePath = path.join(process.cwd(), 'public', 'data', 'press-releases.json');
 const pressDir = path.join(process.cwd(), 'public', 'assets', 'press-releases');
@@ -86,16 +87,12 @@ export async function POST(request: Request) {
       let banner = formData.get('existingBanner') as string || '/assets/public-relations-hero.png';
 
       if (bannerFile && bannerFile.size > 0) {
-        // Ensure press directory exists
         try {
-          await fs.mkdir(pressDir, { recursive: true });
-        } catch (e) {}
-
-        const buffer = Buffer.from(await bannerFile.arrayBuffer());
-        const fileName = `banner-${id}-${bannerFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-        const filePath = path.join(pressDir, fileName);
-        await fs.writeFile(filePath, buffer);
-        banner = `/assets/press-releases/${fileName}`;
+          banner = await uploadToCloudinary(bannerFile, 'zawr/press-releases');
+        } catch (e: any) {
+          console.error('Cloudinary press release banner upload failed:', e);
+          return NextResponse.json({ error: `Banner upload failed: ${e.message}` }, { status: 500 });
+        }
       } else if (action === 'update') {
         const index = releases.findIndex((r: any) => r.id === id);
         if (index > -1 && releases[index].banner) {

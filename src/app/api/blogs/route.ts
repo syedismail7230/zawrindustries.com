@@ -1,10 +1,9 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
+import { uploadToCloudinary } from '@/lib/cloudinary';
 
 const dataFilePath = path.join(process.cwd(), 'public', 'data', 'blogs.json');
-const blogsDir = path.join(process.cwd(), 'public', 'assets', 'blogs');
-const authorsDir = path.join(process.cwd(), 'public', 'assets', 'authors');
 
 export async function GET() {
   try {
@@ -65,14 +64,11 @@ export async function POST(request: Request) {
       const blogImageFile = formData.get('imageFile') as File | null;
       if (blogImageFile && blogImageFile.size > 0) {
         try {
-          await fs.mkdir(blogsDir, { recursive: true });
-        } catch (e) {}
-
-        const buffer = Buffer.from(await blogImageFile.arrayBuffer());
-        const fileName = `blog-${id}-${blogImageFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-        const filePath = path.join(blogsDir, fileName);
-        await fs.writeFile(filePath, buffer);
-        imageUrl = `/assets/blogs/${fileName}`;
+          imageUrl = await uploadToCloudinary(blogImageFile, 'zawr/blogs');
+        } catch (e: any) {
+          console.error('Cloudinary blog cover upload failed:', e);
+          return NextResponse.json({ error: `Cover image upload failed: ${e.message}` }, { status: 500 });
+        }
       }
 
       // Handle Author Image Upload
@@ -80,14 +76,11 @@ export async function POST(request: Request) {
       const authorImageFile = formData.get('authorImageFile') as File | null;
       if (authorImageFile && authorImageFile.size > 0) {
         try {
-          await fs.mkdir(authorsDir, { recursive: true });
-        } catch (e) {}
-
-        const buffer = Buffer.from(await authorImageFile.arrayBuffer());
-        const fileName = `author-${id}-${authorImageFile.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-        const filePath = path.join(authorsDir, fileName);
-        await fs.writeFile(filePath, buffer);
-        authorImageUrl = `/assets/authors/${fileName}`;
+          authorImageUrl = await uploadToCloudinary(authorImageFile, 'zawr/authors');
+        } catch (e: any) {
+          console.error('Cloudinary author image upload failed:', e);
+          return NextResponse.json({ error: `Author image upload failed: ${e.message}` }, { status: 500 });
+        }
       }
 
       const blogData = {
