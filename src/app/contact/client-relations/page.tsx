@@ -80,6 +80,7 @@ export default function ClientRelationsPage() {
                 <button 
                   type="submit"
                   disabled={status === 'loading'}
+                  suppressHydrationWarning
                   style={{ backgroundColor: status === 'success' ? '#10b981' : '#ffffff', color: status === 'success' ? '#ffffff' : '#000000', fontWeight: 600, borderRadius: '9999px', padding: '0.875rem 2rem', fontSize: '0.875rem', cursor: status === 'loading' ? 'not-allowed' : 'pointer', border: 'none', opacity: status === 'loading' ? 0.7 : 1, transition: 'all 0.2s' }}
                   onMouseOver={(e) => { if(status !== 'success') e.currentTarget.style.backgroundColor = '#e5e7eb' }}
                   onMouseOut={(e) => { if(status !== 'success') e.currentTarget.style.backgroundColor = '#ffffff' }}
