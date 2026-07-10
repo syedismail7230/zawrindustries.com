@@ -97,7 +97,7 @@ export default function SustainabilityEnvironmentPage() {
         {/* The actual image — full width, auto height, scrolls with page */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/assets/sustainability-environment.png"
+          src="https://res.cloudinary.com/murfclni/image/upload/v1783710556/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710556/zawr/assets/sustainability-environment.png"
           alt="Canyon river gorge — Nature, Part of life, Anything gained, Must be returned"
           style={{ width: '100%', height: 'auto', display: 'block' }}
         />

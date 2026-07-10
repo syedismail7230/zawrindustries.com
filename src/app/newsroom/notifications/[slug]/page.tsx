@@ -205,7 +205,7 @@ export default function NotificationDetailPage({ params }: { params: Promise<{ s
             '@type': 'NewsArticle',
             'headline': notification.title,
             'image': [
-              'https://zawrindustries.com/assets/public-relations-hero.png'
+              'https://zawrindustries.comhttps://res.cloudinary.com/murfclni/image/upload/v1783710544/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710544/zawr/assets/public-relations-hero.png'
             ],
             'datePublished': getSafeIsoDate(notification.date),
             'dateModified': getSafeIsoDate(notification.date),

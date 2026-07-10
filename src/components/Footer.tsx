@@ -101,7 +101,7 @@ export default function Footer() {
         }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/assets/panda.png"
+            src="https://res.cloudinary.com/murfclni/image/upload/v1783710527/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710527/zawr/assets/panda.png"
             alt="Panda peeking over Zawr Industries"
             className="panda-img"
             style={{

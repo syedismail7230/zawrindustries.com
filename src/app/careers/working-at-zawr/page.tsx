@@ -18,7 +18,7 @@ export default function WorkingAtZawrPage() {
       }}>
         {/* Responsive Image Banner displaying the full uncropped picture */}
         <img 
-          src="/assets/life-at-zawr.png" 
+          src="https://res.cloudinary.com/murfclni/image/upload/v1783710521/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710521/zawr/assets/life-at-zawr.png" 
           alt="Life at Zawr" 
           style={{ 
             width: '100%', 
@@ -87,7 +87,7 @@ export default function WorkingAtZawrPage() {
           overflow: 'hidden'
         }}>
           <img
-            src="/assets/shift-resistance.png"
+            src="https://res.cloudinary.com/murfclni/image/upload/v1783710548/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710548/zawr/assets/shift-resistance.png"
             alt="Zawr office environment"
             style={{
               width: '100%',
@@ -175,7 +175,7 @@ export default function WorkingAtZawrPage() {
           overflow: 'hidden'
         }}>
           <img
-            src="/assets/elevated-lifestyle.png"
+            src="https://res.cloudinary.com/murfclni/image/upload/v1783710469/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710469/zawr/assets/elevated-lifestyle.png"
             alt="Elevated lifestyle at Zawr"
             style={{
               width: '100%',
@@ -203,7 +203,7 @@ export default function WorkingAtZawrPage() {
           overflow: 'hidden'
         }}>
           <img
-            src="/assets/respect-to-talent.png"
+            src="https://res.cloudinary.com/murfclni/image/upload/v1783710547/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710547/zawr/assets/respect-to-talent.png"
             alt="Respect to Talent at Zawr"
             style={{
               width: '100%',
@@ -291,7 +291,7 @@ export default function WorkingAtZawrPage() {
           overflow: 'hidden'
         }}>
           <img
-            src="/assets/equal-growth.png"
+            src="https://res.cloudinary.com/murfclni/image/upload/v1783710476/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710476/zawr/assets/equal-growth.png"
             alt="Equal Growth at Zawr"
             style={{
               width: '100%',
@@ -311,7 +311,7 @@ export default function WorkingAtZawrPage() {
       }}>
         {/* Full natural-size image — no cropping */}
         <img
-          src="/assets/this-is-zawr.png"
+          src="https://res.cloudinary.com/murfclni/image/upload/v1783710557/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710557/zawr/assets/this-is-zawr.png"
           alt="This is Zawr"
           style={{
             width: '100%',

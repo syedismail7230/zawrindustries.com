@@ -62,7 +62,7 @@ export async function POST(request: Request) {
       if (action === 'add') {
         id = Date.now().toString();
       }
-      const image = formData.get('image') as string || '/assets/event-chart.png';
+      const image = formData.get('image') as string || 'https://res.cloudinary.com/murfclni/image/upload/v1783710478/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710478/zawr/assets/event-chart.png';
       
       const eventData = { 
         id, 

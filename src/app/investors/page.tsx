@@ -89,7 +89,7 @@ export default function InvestorsPage() {
         flexDirection: 'column', 
         justifyContent: 'center', 
         overflow: 'hidden',
-        backgroundImage: 'url(/assets/investors-hero-bg.png)',
+        backgroundImage: 'url(https://res.cloudinary.com/murfclni/image/upload/v1783710518/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710518/zawr/assets/investors-hero-bg.png)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
@@ -152,14 +152,14 @@ export default function InvestorsPage() {
         <section style={{ marginBottom: '8rem', backgroundColor: '#ffffff', borderRadius: '2rem', padding: '4rem', display: 'flex', flexWrap: 'wrap', gap: '3rem', alignItems: 'center' }}>
           <div style={{ flex: '1.2 1 500px', display: 'flex', justifyContent: 'center' }}>
             <img 
-              src="/assets/firmai-dashboard.png" 
+              src="https://res.cloudinary.com/murfclni/image/upload/v1783710484/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710484/zawr/assets/firmai-dashboard.png" 
               alt="Firm AI Dashboard" 
               style={{ width: '100%', maxWidth: '1100px', height: 'auto', objectFit: 'contain', borderRadius: '1rem', boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)' }} 
             />
           </div>
           <div style={{ flex: '1 1 350px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div style={{ margin: '-4rem 0 -4rem -1.5rem' }}>
-              <img src="/assets/firmai-logo-dark.png" alt="Firm AI" style={{ width: '100%', maxWidth: '20rem', height: 'auto', objectFit: 'contain' }} />
+              <img src="https://res.cloudinary.com/murfclni/image/upload/v1783710486/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710486/zawr/assets/firmai-logo-dark.png" alt="Firm AI" style={{ width: '100%', maxWidth: '20rem', height: 'auto', objectFit: 'contain' }} />
             </div>
             <p style={{ fontSize: '1.125rem', color: '#374151', lineHeight: 1.7, fontWeight: 500, paddingRight: '1rem' }}>
               Firm AI is Zawr Industries' current flagship project—an AI-powered Business Intelligence Orchestra designed to unify data, automate decision workflows, and orchestrate intelligent business operations through a single connected ecosystem.
@@ -196,7 +196,7 @@ export default function InvestorsPage() {
           </div>
           <div style={{ flex: '1 1 450px', display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
             <img 
-              src="/assets/md-portrait.png" 
+              src="https://res.cloudinary.com/murfclni/image/upload/v1783710523/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710523/zawr/assets/md-portrait.png" 
               alt="Mohammed Ahmed, Managing Director" 
               style={{ width: '100%', maxWidth: '750px', height: 'auto', objectFit: 'contain' }} 
             />
@@ -215,7 +215,7 @@ export default function InvestorsPage() {
             marginBottom: '8rem', 
             width: '100%', 
             height: '100vh',
-            backgroundImage: 'url(/assets/pitch-deck-bg.png)',
+            backgroundImage: 'url(https://res.cloudinary.com/murfclni/image/upload/v1783710541/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710541/zawr/assets/pitch-deck-bg.png)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundColor: '#073840', // Fallback color
@@ -348,7 +348,7 @@ export default function InvestorsPage() {
               >
                 <div style={{ backgroundColor: '#ffffff', borderRadius: '1rem', padding: '1.25rem', cursor: 'pointer', transition: 'transform 0.3s ease', display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }} onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-8px)'} onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
                   <div style={{ position: 'relative', width: '100%', height: '180px', borderRadius: '0.75rem', overflow: 'hidden', marginBottom: '1.5rem' }}>
-                    <img src="/assets/financial-chart.png" alt={report.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src="https://res.cloudinary.com/murfclni/image/upload/v1783710482/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710482/zawr/assets/financial-chart.png" alt={report.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingBottom: '0.5rem', paddingLeft: '0.5rem', paddingRight: '0.5rem' }}>
                     <span style={{ color: '#000000', fontSize: '1.6rem', fontWeight: 500 }}>{report.title}</span>
@@ -693,7 +693,7 @@ export default function InvestorsPage() {
                           {/* Thumbnail */}
                           <div style={{ width: '100%', height: '300px', borderRadius: '1rem', overflow: 'hidden', marginBottom: '1.25rem', flexShrink: 0, backgroundColor: '#ffffff' }}>
                             <img
-                              src={ev.image || '/assets/event-speaker.png'}
+                              src={ev.image || 'https://res.cloudinary.com/murfclni/image/upload/v1783710480/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710480/zawr/assets/event-speaker.png'}
                               alt={ev.title}
                               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                             />
@@ -830,7 +830,7 @@ export default function InvestorsPage() {
               >
                 <g className="constellation-node" style={{ transformOrigin: '212px 412px' }}>
                   <circle cx="212" cy="412" r="54" fill="#ffffff" />
-                  <image href="/assets/firmai-logo-blue.png" x="164" y="364" width="96" height="96" />
+                  <image href="https://res.cloudinary.com/murfclni/image/upload/v1783710485/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710485/zawr/assets/firmai-logo-blue.png" x="164" y="364" width="96" height="96" />
                 </g>
               </a>
 
@@ -844,7 +844,7 @@ export default function InvestorsPage() {
               >
                 <g className="constellation-node" style={{ transformOrigin: '555px 189px' }}>
                   <circle cx="555" cy="189" r="54" fill="#ffffff" />
-                  <image href="/assets/sketch-logo.png" x="507" y="141" width="96" height="96" />
+                  <image href="https://res.cloudinary.com/murfclni/image/upload/v1783710549/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710549/zawr/assets/sketch-logo.png" x="507" y="141" width="96" height="96" />
                 </g>
               </a>
 
@@ -858,14 +858,14 @@ export default function InvestorsPage() {
               >
                 <g className="constellation-node" style={{ transformOrigin: '700px 180px' }}>
                   <circle cx="700" cy="180" r="54" fill="#ffffff" />
-                  <image href="/assets/velocity-logo.png" x="652" y="132" width="96" height="96" />
+                  <image href="https://res.cloudinary.com/murfclni/image/upload/v1783710559/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710559/zawr/assets/velocity-logo.png" x="652" y="132" width="96" height="96" />
                 </g>
               </a>
 
               {/* Node Center: ZAWR INDUSTRIES (Bottom Circle, Center of gravity) */}
               <g style={{ cursor: 'default' }}>
                 <circle cx="400" cy="540" r="115" fill="#ffffff" />
-                <image href="/assets/zawr-logo.png" x="300" y="440" width="200" height="200" />
+                <image href="https://res.cloudinary.com/murfclni/image/upload/v1783710570/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710570/zawr/assets/zawr-logo.png" x="300" y="440" width="200" height="200" />
               </g>
 
             </svg>

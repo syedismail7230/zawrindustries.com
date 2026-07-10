@@ -18,7 +18,7 @@ export default function FraudAlertPage() {
       <section style={{ position: 'relative', width: '100%', overflow: 'hidden' }}>
         {/* Full natural-size image */}
         <img
-          src="/assets/fraud-alert-hero.png"
+          src="https://res.cloudinary.com/murfclni/image/upload/v1783710490/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710490/zawr/assets/fraud-alert-hero.png"
           alt="Fraud Alert"
           style={{ width: '100%', height: 'auto', display: 'block' }}
         />

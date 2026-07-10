@@ -205,7 +205,7 @@ export default function PressReleasePage({ params }: { params: Promise<{ slug: s
             '@type': 'NewsArticle',
             'headline': release.title,
             'image': [
-              release.banner ? (release.banner.startsWith('http') ? release.banner : `https://zawrindustries.com${release.banner}`) : 'https://zawrindustries.com/assets/public-relations-hero.png'
+              release.banner ? (release.banner.startsWith('http') ? release.banner : `https://zawrindustries.com${release.banner}`) : 'https://zawrindustries.comhttps://res.cloudinary.com/murfclni/image/upload/v1783710544/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710544/zawr/assets/public-relations-hero.png'
             ],
             'datePublished': getSafeIsoDate(release.date),
             'dateModified': getSafeIsoDate(release.date),

@@ -84,7 +84,7 @@ export async function POST(request: Request) {
 
       // Handle banner image upload if any
       const bannerFile = formData.get('bannerFile') as File | null;
-      let banner = formData.get('existingBanner') as string || '/assets/public-relations-hero.png';
+      let banner = formData.get('existingBanner') as string || 'https://res.cloudinary.com/murfclni/image/upload/v1783710544/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710544/zawr/assets/public-relations-hero.png';
 
       if (bannerFile && bannerFile.size > 0) {
         try {
