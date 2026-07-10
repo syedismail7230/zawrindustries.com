@@ -194,49 +194,49 @@
     "industries": [
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Predictive Maintenance AI Platform",
         "projectDescription": "Deployed ML models to predict component failures 6 weeks in advance, reducing unplanned downtime by 43%."
       },
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "AI-Driven Quality Control System",
         "projectDescription": "Computer vision pipeline inspecting 2,400 units/hour with 99.2% defect detection accuracy."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Clinical Decision Intelligence Engine",
         "projectDescription": "NLP-powered diagnostic assist tool reducing misdiagnosis rates by 31% across 12 hospitals."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Demand Forecasting & Personalization Engine",
         "projectDescription": "Real-time recommendation system boosting basket size by 28% for a 4M-customer retailer."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Route Optimization AI",
         "projectDescription": "Dynamic routing engine saving $2.1M annually across a 1,200-vehicle fleet."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "Adaptive Learning Analytics Platform",
         "projectDescription": "Personalised curriculum engine improving student completion rates by 38%."
       },
       {
         "name": "Banking",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710499/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710499/zawr/assets/industry/banking-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710499/zawr/assets/industry/banking-industry.png",
         "projectName": "Fraud Detection Analytics",
         "projectDescription": "Real-time transaction scoring model cutting fraud losses by 52% with <0.1% false positives."
       },
       {
         "name": "Smart Mobility",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710512/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710512/zawr/assets/industry/smart-city-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710512/zawr/assets/industry/smart-city-industry.png",
         "projectName": "Traffic Intelligence System",
         "projectDescription": "City-wide sensor network reducing average commute time by 19 minutes."
       }
@@ -481,49 +481,49 @@
     "industries": [
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Global OEM Cloud Migration",
         "projectDescription": "Migrated 340 legacy workloads to AWS with zero production downtime over 18 months."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "HIPAA-Compliant Cloud Infrastructure",
         "projectDescription": "Built multi-region HA cloud platform processing 8M patient records with 99.99% uptime."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Multi-Region E-Commerce Cloud",
         "projectDescription": "Autoscaling platform handling 12× traffic spikes on peak shopping days."
       },
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Industrial Cloud Integration Suite",
         "projectDescription": "Unified 14 factory systems onto a single cloud data platform, cutting reporting time by 70%."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Logistics Management Cloud Platform",
         "projectDescription": "Serverless tracking platform processing 500K shipment events per day in real time."
       },
       {
         "name": "Financial Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Core Banking Cloud Transformation",
         "projectDescription": "Migrated monolithic core banking to microservices on Azure, reducing release cycles from 6 weeks to 3 days."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "Scalable LMS Infrastructure",
         "projectDescription": "Cloud-native learning platform supporting 500K concurrent students during peak exams."
       },
       {
         "name": "Government",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/government-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/government-industry.png",
         "projectName": "Secure Government Cloud Framework",
         "projectDescription": "FedRAMP-aligned cloud environment for 22 government agencies with full audit trail."
       }
@@ -740,49 +740,49 @@
     "industries": [
       {
         "name": "Financial Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Zero-Trust Banking Security",
         "projectDescription": "Implemented zero-trust architecture protecting $4.2B in daily transactions."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "HIPAA Security Framework",
         "projectDescription": "End-to-end security overhaul achieving HIPAA/HITECH compliance across 8 hospital networks."
       },
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "OT/IT Security Integration",
         "projectDescription": "Secured 3,200 industrial endpoints against cyber-physical threats with 24/7 SOC."
       },
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Connected Vehicle Security",
         "projectDescription": "Penetration-tested and hardened V2X communication stack for a Tier-1 OEM."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "PCI-DSS Compliance Platform",
         "projectDescription": "Full PCI-DSS Level 1 compliance for retailer processing 28M cards annually."
       },
       {
         "name": "Government",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/government-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/government-industry.png",
         "projectName": "Critical Infrastructure Protection",
         "projectDescription": "Cyber resilience programme protecting national grid control systems from APT actors."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "EdTech Data Privacy Shield",
         "projectDescription": "FERPA-compliant security architecture for a 250,000-student university system."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Supply Chain Cyber Resilience",
         "projectDescription": "Threat-modelled and secured 460 third-party logistics integrations."
       }
@@ -1015,49 +1015,49 @@
     "industries": [
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Smart Factory Network",
         "projectDescription": "SD-WAN rollout across 18 plants delivering 99.97% uptime and 40% cost reduction."
       },
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Dealership Network Transformation",
         "projectDescription": "Unified MPLS-to-SD-WAN migration for 620 dealerships in 14 countries."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Clinical-Grade Network Infrastructure",
         "projectDescription": "Low-latency network supporting real-time imaging and telemedicine at 35 sites."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Omnichannel Network Platform",
         "projectDescription": "Centrally managed Wi-Fi and POS network for 1,800 retail outlets."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Warehouse Network Modernisation",
         "projectDescription": "High-density Wi-Fi 6 deployment enabling real-time RF scanning at 8 fulfilment centres."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "Campus Network Upgrade",
         "projectDescription": "10Gbps campus backbone with segmented student, staff and IoT VLANs for 3 universities."
       },
       {
         "name": "Financial Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Trading Floor Network",
         "projectDescription": "Sub-millisecond latency network infrastructure for algorithmic trading operations."
       },
       {
         "name": "Government",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/government-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/government-industry.png",
         "projectName": "Secure Government WAN",
         "projectDescription": "Encrypted multi-site WAN connecting 140 government offices with centralised policy control."
       }
@@ -1299,49 +1299,49 @@
     "industries": [
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Autonomous Assembly Line",
         "projectDescription": "Deployed 24 collaborative robots increasing throughput by 55% with zero safety incidents."
       },
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Vehicle Testing Automation",
         "projectDescription": "AI-driven test rig reducing validation cycles from 18 weeks to 4 weeks."
       },
       {
         "name": "Warehousing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710515/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710515/zawr/assets/industry/supplychain-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710515/zawr/assets/industry/supplychain-industry.png",
         "projectName": "Autonomous Warehouse System",
         "projectDescription": "AMR fleet managing 40,000 SKUs with 99.7% pick accuracy and 3× throughput."
       },
       {
         "name": "Agriculture",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/agricultue-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/agricultue-industry.png",
         "projectName": "Precision Agriculture Platform",
         "projectDescription": "Drone + AI system optimising irrigation and fertilisation, cutting input costs by 29%."
       },
       {
         "name": "Energy",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710503/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710503/zawr/assets/industry/energy-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710503/zawr/assets/industry/energy-industry.png",
         "projectName": "Grid Autonomy Platform",
         "projectDescription": "Autonomous fault-detection and self-healing grid system reducing outage duration by 73%."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Port Automation System",
         "projectDescription": "Automated container handling reducing dwell time by 41% at a major international port."
       },
       {
         "name": "Mining",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Underground Autonomous Haulage",
         "projectDescription": "Autonomous haul truck fleet increasing ore-per-shift by 38% in underground mining."
       },
       {
         "name": "Smart Infrastructure",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710512/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710512/zawr/assets/industry/smart-city-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710512/zawr/assets/industry/smart-city-industry.png",
         "projectName": "Smart City Operations Centre",
         "projectDescription": "Real-time infrastructure monitoring platform integrating 18,000 IoT sensors citywide."
       }
@@ -1582,49 +1582,49 @@
     "industries": [
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "ERP Digital Transformation",
         "projectDescription": "SAP S/4HANA rollout for 6,000-employee manufacturer, reducing close cycle from 12 to 3 days."
       },
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Dealer Management Platform",
         "projectDescription": "Custom DMS handling inventory, finance and CRM for 380 dealerships across APAC."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Unified Commerce Platform",
         "projectDescription": "End-to-end retail ERP integrating POS, inventory and e-commerce for $800M retailer."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Hospital Information System",
         "projectDescription": "Enterprise HIS deployment spanning 14 hospitals with unified patient records."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "TMS Enterprise Suite",
         "projectDescription": "Transport management system optimising $1.2B logistics spend for a global 3PL."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "University ERP Implementation",
         "projectDescription": "Banner ERP replacement serving 90,000 students across 5 campuses."
       },
       {
         "name": "Financial Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Banking Core Modernisation",
         "projectDescription": "Temenos T24 implementation replacing 30-year-old core banking for a regional bank."
       },
       {
         "name": "Government",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/government-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/government-industry.png",
         "projectName": "Government Resource Planning",
         "projectDescription": "Whole-of-government ERP consolidating 9 agencies onto a single financial platform."
       }
@@ -1850,49 +1850,49 @@
     "industries": [
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "EV Transition Roadmap",
         "projectDescription": "Designed 5-year electrification strategy for a Tier-2 supplier with $120M capex plan."
       },
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Lean Digital Transformation",
         "projectDescription": "Industry 4.0 maturity assessment and roadmap delivering 22% OEE improvement."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Digital Health Strategy",
         "projectDescription": "Patient experience transformation roadmap resulting in 41% reduction in readmissions."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Supply Chain Resilience Advisory",
         "projectDescription": "Post-pandemic supply chain redesign reducing single-source dependency by 60%."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Omnichannel Growth Strategy",
         "projectDescription": "Unified commerce strategy growing digital revenue by $340M over 24 months."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "EdTech Innovation Advisory",
         "projectDescription": "Digital learning strategy enabling hybrid education for 200K students."
       },
       {
         "name": "Financial Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Open Banking Consulting",
         "projectDescription": "PSD2/Open Banking readiness programme for a top-10 European bank."
       },
       {
         "name": "Startups",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710514/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710514/zawr/assets/industry/startups-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710514/zawr/assets/industry/startups-industry.png",
         "projectName": "Scale-Up Advisory",
         "projectDescription": "GTM and tech architecture consulting helping 14 startups achieve Series A funding."
       }
@@ -2132,49 +2132,49 @@
     "industries": [
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Connected Car Platform",
         "projectDescription": "V2X communication SDK deployed in 2M+ vehicles across North America and Europe."
       },
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "MES Custom Development",
         "projectDescription": "Bespoke manufacturing execution system integrating 40 PLCs in real time."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Telehealth Platform",
         "projectDescription": "HIPAA-compliant video consultation platform handling 80K appointments/month."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "LMS Custom Platform",
         "projectDescription": "White-label learning management system deployed by 120 institutions globally."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Headless Commerce Engine",
         "projectDescription": "Custom headless commerce platform processing $2.4B GMV annually."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Last-Mile Delivery App",
         "projectDescription": "Driver + dispatch mobile platform managing 18,000 daily deliveries."
       },
       {
         "name": "Finance",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Algorithmic Trading System",
         "projectDescription": "Low-latency trading engine executing 4M orders/day with 99.999% reliability."
       },
       {
         "name": "Startups",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710514/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710514/zawr/assets/industry/startups-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710514/zawr/assets/industry/startups-industry.png",
         "projectName": "MVP to Scale",
         "projectDescription": "Took 3 fintech startups from MVP to 100K users within 9 months."
       }
@@ -2399,49 +2399,49 @@
     "industries": [
       {
         "name": "Banking",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710499/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710499/zawr/assets/industry/banking-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710499/zawr/assets/industry/banking-industry.png",
         "projectName": "Intelligent Document Processing",
         "projectDescription": "Automated loan document review, cutting processing time from 4 days to 3 hours."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Clinical Operations Automation",
         "projectDescription": "AI workflows handling prior authorisations, saving 14,000 staff-hours per month."
       },
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Cognitive Supply Chain Operations",
         "projectDescription": "Self-healing supply chain that auto-reroutes orders during disruptions, reducing delays by 61%."
       },
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Dealer Operations Intelligence",
         "projectDescription": "Unified dealer management platform processing 200K transactions/day with AI anomaly detection."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Intelligent Merchandising Ops",
         "projectDescription": "Cognitive replenishment system reducing overstock by 34% and stockouts by 27%."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Autonomous Dispatch Operations",
         "projectDescription": "AI dispatcher allocating 8,000 daily jobs with 94% SLA adherence."
       },
       {
         "name": "Telecom",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710517/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710517/zawr/assets/industry/telecom-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710517/zawr/assets/industry/telecom-industry.png",
         "projectName": "Network Operations AI",
         "projectDescription": "Self-optimising NOC reducing incident MTTR from 4.2h to 38 minutes."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "Admissions Operations Platform",
         "projectDescription": "Automated enrolment workflows processing 80K applications with intelligent shortlisting."
       }
@@ -2701,49 +2701,49 @@
     "industries": [
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "OEM Brand Experience Portal",
         "projectDescription": "Multi-language configurator and dealer locator for a premium automotive brand in 28 markets."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Patient Portal Platform",
         "projectDescription": "Accessible, WCAG 2.1 AA-compliant patient portal with appointment booking and records access."
       },
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "B2B Industrial Marketplace",
         "projectDescription": "Custom B2B e-procurement portal processing $180M in annual orders."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "University Web Ecosystem",
         "projectDescription": "Full digital campus redesign increasing applications by 34% and reducing bounce rate by 48%."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "High-Traffic E-Commerce Site",
         "projectDescription": "Composable commerce storefront sustaining 200K concurrent users during flash sales."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Freight Booking Platform",
         "projectDescription": "Real-time freight quoting and booking web app reducing booking time from 3 days to 4 hours."
       },
       {
         "name": "Financial Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Wealth Management Portal",
         "projectDescription": "Secure investment dashboard with real-time portfolio analytics for 120K clients."
       },
       {
         "name": "Startups",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710514/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710514/zawr/assets/industry/startups-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710514/zawr/assets/industry/startups-industry.png",
         "projectName": "SaaS Product Website & App",
         "projectDescription": "Product-led growth website and onboarding flow achieving 38% trial-to-paid conversion."
       }
@@ -2981,49 +2981,49 @@
     "industries": [
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Mobile Patient Engagement App",
         "projectDescription": "iOS/Android app with EHR integration serving 500K active patients monthly."
       },
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Fleet Management App",
         "projectDescription": "Cross-platform fleet tracking app monitoring 14,000 vehicles in real time."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Unified Retail App",
         "projectDescription": "Consumer super-app combining loyalty, shopping and payments—4.8★ with 2M downloads."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Warehouse Mobile Suite",
         "projectDescription": "RF-gun replacement app boosting pick productivity by 31% across 12 DCs."
       },
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Field Service Mobile App",
         "projectDescription": "Offline-capable technician app reducing mean time-to-repair by 44%."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "Student Success App",
         "projectDescription": "AI-powered study companion app improving pass rates by 22% across 80K users."
       },
       {
         "name": "Financial Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Digital Banking App",
         "projectDescription": "Full-service mobile banking app with biometric auth—onboarded 1.2M users in 6 months."
       },
       {
         "name": "Startups",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710514/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710514/zawr/assets/industry/startups-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710514/zawr/assets/industry/startups-industry.png",
         "projectName": "Rapid MVP Delivery",
         "projectDescription": "Delivered production-ready iOS + Android MVPs for 8 startups in under 12 weeks each."
       }
@@ -3261,49 +3261,49 @@
     "industries": [
       {
         "name": "FinTech",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "FinTech Payment MVP",
         "projectDescription": "Regulatory-compliant payment gateway MVP launched in 8 weeks, securing seed funding."
       },
       {
         "name": "Mobility",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Ride-Share MVP Platform",
         "projectDescription": "Two-sided marketplace MVP with driver and rider apps live in 3 cities within 10 weeks."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "HealthTech MVP",
         "projectDescription": "Symptom-checker and triage app MVP cleared by clinical advisors and live in 6 weeks."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "EdTech MVP Platform",
         "projectDescription": "Micro-learning app MVP achieving 10K users within 30 days of launch."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "D2C Commerce MVP",
         "projectDescription": "Shopify-plus custom MVP with AI recommendations—$200K GMV in first month."
       },
       {
         "name": "SaaS",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710511/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710511/zawr/assets/industry/saas-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710511/zawr/assets/industry/saas-industry.png",
         "projectName": "B2B SaaS MVP",
         "projectDescription": "Multi-tenant SaaS MVP with billing and onboarding, closing 12 enterprise pilots."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "LogTech MVP",
         "projectDescription": "Real-time freight visibility MVP connecting shippers and carriers in 4 weeks."
       },
       {
         "name": "Consumer Products",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Consumer App MVP",
         "projectDescription": "Social commerce MVP with influencer affiliate engine—100K installs in 60 days."
       }
@@ -3538,49 +3538,49 @@
     "industries": [
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Retail CRM Transformation",
         "projectDescription": "Salesforce Commerce Cloud CRM unifying 8M customer profiles and 14 touchpoints."
       },
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Automotive CRM Platform",
         "projectDescription": "Dealer-network CRM tracking test drives to ownership with 360° customer view."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Patient Relationship Management",
         "projectDescription": "HIPAA-compliant CRM enabling personalised care outreach—19% improvement in retention."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Logistics Client CRM",
         "projectDescription": "Enterprise CRM for B2B logistics managing 4,200 accounts with automated renewal workflows."
       },
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Distributor CRM Network",
         "projectDescription": "Salesforce implementation managing 800 distributors and $600M channel pipeline."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "Student Lifecycle CRM",
         "projectDescription": "HubSpot-based enrolment CRM reducing counsellor workload by 40%."
       },
       {
         "name": "Financial Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Wealth Management CRM",
         "projectDescription": "Compliance-first CRM for 340 financial advisers managing $12B AUM."
       },
       {
         "name": "Professional Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710509/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710509/zawr/assets/industry/professional-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710509/zawr/assets/industry/professional-industry.png",
         "projectName": "Professional Services CRM",
         "projectDescription": "Project and client management CRM reducing invoice-to-cash cycle by 11 days."
       }
@@ -3811,49 +3811,49 @@
     "industries": [
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Omnichannel CX Platform",
         "projectDescription": "Unified customer experience hub integrating in-store, app and web—NPS up 22 points."
       },
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "After-Sales CX Engine",
         "projectDescription": "Proactive service reminder and satisfaction platform increasing retention by 18%."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Patient Experience Platform",
         "projectDescription": "Journey-mapped digital experience reducing patient effort score by 34%."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "Student Experience Hub",
         "projectDescription": "360° student engagement platform lifting satisfaction scores from 6.2 to 8.7/10."
       },
       {
         "name": "Financial Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Banking CX Transformation",
         "projectDescription": "End-to-end CX redesign cutting call centre volume by 28% through self-service."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Shipper Experience Portal",
         "projectDescription": "Real-time visibility and proactive exception management portal—CSAT up 31%."
       },
       {
         "name": "Hospitality",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710506/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710506/zawr/assets/industry/hospitality-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710506/zawr/assets/industry/hospitality-industry.png",
         "projectName": "Guest Experience Platform",
         "projectDescription": "Pre-arrival to post-checkout digital guest journey—repeat booking rate up 24%."
       },
       {
         "name": "E-Commerce",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710500/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710500/zawr/assets/industry/e-commerce-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710500/zawr/assets/industry/e-commerce-industry.png",
         "projectName": "E-Commerce CX Optimisation",
         "projectDescription": "Personalisation and support automation reducing returns by 19% and tickets by 33%."
       }
@@ -4082,49 +4082,49 @@
     "industries": [
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Performance Marketing Engine",
         "projectDescription": "Unified paid media + SEO strategy delivering 340% ROAS for an omnichannel retailer."
       },
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Automotive Digital Campaigns",
         "projectDescription": "Full-funnel digital marketing for a national dealership network—lead volume up 2.4×."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Healthcare Content Marketing",
         "projectDescription": "HIPAA-compliant content strategy driving 280% organic traffic growth in 12 months."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "Enrolment Marketing Platform",
         "projectDescription": "Programmatic + content strategy increasing enrolment applications by 47%."
       },
       {
         "name": "Real Estate",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710509/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710509/zawr/assets/industry/professional-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710509/zawr/assets/industry/professional-industry.png",
         "projectName": "PropTech Digital Marketing",
         "projectDescription": "Data-driven property marketing reducing cost-per-lead by 62%."
       },
       {
         "name": "Hospitality",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710506/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710506/zawr/assets/industry/hospitality-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710506/zawr/assets/industry/hospitality-industry.png",
         "projectName": "Hospitality Brand Campaigns",
         "projectDescription": "Social + influencer strategy generating $4.2M in attributable direct bookings."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "B2B Logistics Marketing",
         "projectDescription": "ABM programme generating 180 enterprise MQLs per quarter in logistics sector."
       },
       {
         "name": "Technology",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710516/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710516/zawr/assets/industry/technology-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710516/zawr/assets/industry/technology-industry.png",
         "projectName": "SaaS Growth Marketing",
         "projectDescription": "PLG-aligned content and paid strategy reducing CAC by 38% for a B2B SaaS company."
       }
@@ -4357,49 +4357,49 @@
     "industries": [
       {
         "name": "Financial Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "DeFi Settlement Platform",
         "projectDescription": "Smart-contract settlement layer processing $1.8B in weekly transactions."
       },
       {
         "name": "Supply Chain",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710515/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710515/zawr/assets/industry/supplychain-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710515/zawr/assets/industry/supplychain-industry.png",
         "projectName": "Supply Chain Provenance",
         "projectDescription": "End-to-end blockchain traceability for a global FMCG supply chain with 6,000 nodes."
       },
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Parts Authentication System",
         "projectDescription": "Immutable parts provenance ledger eliminating $14M in annual counterfeit losses."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Medical Records Blockchain",
         "projectDescription": "Patient-controlled medical record sharing platform across 40 hospitals."
       },
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Quality Certification Ledger",
         "projectDescription": "Tamper-proof quality cert issuance and verification for aerospace components."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Freight Documentation Platform",
         "projectDescription": "Paperless bill of lading on blockchain reducing documentation time from 7 days to 4 hours."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Loyalty Token Platform",
         "projectDescription": "Interoperable loyalty token system used by 3.2M consumers across 8 brands."
       },
       {
         "name": "Government",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/government-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/government-industry.png",
         "projectName": "Digital Identity Blockchain",
         "projectDescription": "Self-sovereign identity platform piloted with 200K citizens for government services."
       }
@@ -4632,49 +4632,49 @@
     "industries": [
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Industrial IoT Platform",
         "projectDescription": "Connected factory platform processing 4M sensor events/day with predictive maintenance."
       },
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Connected Vehicle Platform",
         "projectDescription": "OTA update and telematics platform managing 800K connected vehicles."
       },
       {
         "name": "Agriculture",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/agricultue-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/agricultue-industry.png",
         "projectName": "Smart Farm Platform",
         "projectDescription": "Soil, weather and crop sensor network optimising yield by 31% across 12,000 acres."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Patient Monitoring IoT",
         "projectDescription": "Remote patient monitoring system tracking 18 vitals in real time across 5 ICUs."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Asset Tracking Platform",
         "projectDescription": "BLE + GPS asset tracking reducing lost equipment incidents by 89%."
       },
       {
         "name": "Energy",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710503/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710503/zawr/assets/industry/energy-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710503/zawr/assets/industry/energy-industry.png",
         "projectName": "Smart Grid IoT",
         "projectDescription": "Distribution grid monitoring with 14,000 smart meters and predictive fault detection."
       },
       {
         "name": "Smart Cities",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710512/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710512/zawr/assets/industry/smart-city-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710512/zawr/assets/industry/smart-city-industry.png",
         "projectName": "Smart City IoT Platform",
         "projectDescription": "Integrated city sensor network managing parking, waste and lighting for 1.2M residents."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Smart Store Platform",
         "projectDescription": "In-store IoT managing footfall, inventory and energy across 240 retail locations."
       }
@@ -4907,49 +4907,49 @@
     "industries": [
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "CI/CD for Embedded Systems",
         "projectDescription": "DevOps pipeline for automotive ECU firmware reducing release cycles from 6 months to 3 weeks."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "HealthTech DevOps Platform",
         "projectDescription": "HIPAA-compliant GitOps pipeline with automated compliance gates cutting deployment risk by 90%."
       },
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Industrial DevOps",
         "projectDescription": "GitLab CI/CD for MES software enabling daily deployments across 12 plants."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "E-Commerce DevOps",
         "projectDescription": "Blue-green deployment pipeline supporting zero-downtime releases for $1.4B e-commerce platform."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Platform Engineering",
         "projectDescription": "Internal developer platform reducing new service provisioning from 3 weeks to 4 hours."
       },
       {
         "name": "Financial Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Banking DevSecOps",
         "projectDescription": "SOC-2-compliant DevSecOps programme with automated security scanning in every pipeline."
       },
       {
         "name": "SaaS",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710511/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710511/zawr/assets/industry/saas-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710511/zawr/assets/industry/saas-industry.png",
         "projectName": "SaaS Reliability Engineering",
         "projectDescription": "SRE programme achieving 99.99% uptime SLA for a 200K-seat enterprise SaaS product."
       },
       {
         "name": "Technology",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710516/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710516/zawr/assets/industry/technology-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710516/zawr/assets/industry/technology-industry.png",
         "projectName": "Cloud-Native DevOps",
         "projectDescription": "Kubernetes-native CI/CD platform processing 1,400 deployments per week."
       }
@@ -5171,49 +5171,49 @@
     "industries": [
       {
         "name": "SaaS",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710511/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710511/zawr/assets/industry/saas-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710511/zawr/assets/industry/saas-industry.png",
         "projectName": "SaaS Test Automation Suite",
         "projectDescription": "80% automated unit test coverage across 320K LOC, reducing regression cycles by 75%."
       },
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Automotive Software Testing",
         "projectDescription": "MIL/SIL/HIL test automation for AUTOSAR stack with ISO 26262 functional safety compliance."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Medical Software Validation",
         "projectDescription": "IEC 62304-compliant test framework for Class II medical device software."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Commerce Platform Testing",
         "projectDescription": "Full unit and integration test suite for $900M e-commerce platform with 99.3% pass rate."
       },
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "MES Test Automation",
         "projectDescription": "Automated regression suite cutting UAT duration from 6 weeks to 4 days."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "TMS Quality Assurance",
         "projectDescription": "Contract testing framework for 80 microservices ensuring zero-regression deployments."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "EdTech Platform Testing",
         "projectDescription": "Test automation achieving 91% coverage for LMS platform used by 400K learners."
       },
       {
         "name": "Financial Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Core Banking Test Suite",
         "projectDescription": "Automated regression harness covering 2,400 core banking scenarios executed nightly."
       }
@@ -5449,49 +5449,49 @@
     "industries": [
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "ASPICE QA Programme",
         "projectDescription": "ASPICE Level 2 compliance programme across 4 embedded software teams."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Clinical Software QA",
         "projectDescription": "Full QA lifecycle for FDA 510(k)-cleared software including risk analysis and V&V."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Omnichannel QA Platform",
         "projectDescription": "End-to-end QA across web, mobile and POS for a 400-store omnichannel retailer."
       },
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Manufacturing QA Automation",
         "projectDescription": "Robot-framework automation suite reducing manual testing effort by 68%."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Logistics Platform QA",
         "projectDescription": "Performance and chaos testing ensuring 99.9% uptime for last-mile delivery platform."
       },
       {
         "name": "Finance",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Trading Platform QA",
         "projectDescription": "Algorithmic trading system QA including latency benchmarking and regulatory reporting validation."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "EdTech Accessibility QA",
         "projectDescription": "WCAG 2.1 AA accessibility audit and automated checks for 14 education platforms."
       },
       {
         "name": "SaaS",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710511/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710511/zawr/assets/industry/saas-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710511/zawr/assets/industry/saas-industry.png",
         "projectName": "SaaS Continuous QA",
         "projectDescription": "Shift-left QA programme integrated into CI/CD—defect escape rate reduced by 84%."
       }
@@ -5707,49 +5707,49 @@
     "industries": [
       {
         "name": "Technology",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710516/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710516/zawr/assets/industry/technology-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710516/zawr/assets/industry/technology-industry.png",
         "projectName": "Tech Company Hybrid Workplace",
         "projectDescription": "Microsoft 365 + Teams transformation enabling seamless hybrid work for 8,000 employees."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Clinical Workforce Modernisation",
         "projectDescription": "Digital workplace for 12,000 clinical staff with secure mobile access to patient data."
       },
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Factory Floor Digitalisation",
         "projectDescription": "Frontline worker digital tools replacing paper-based processes across 9 plants."
       },
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Global Collaboration Platform",
         "projectDescription": "Unified comms and collaboration platform across 34,000 automotive employees in 18 countries."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "Smart Campus Transformation",
         "projectDescription": "Hybrid learning and staff collaboration platform for 3 universities."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Retail Associate Platform",
         "projectDescription": "Task management and communication app for 22,000 store associates."
       },
       {
         "name": "Financial Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Banking Digital Workplace",
         "projectDescription": "Secure, compliant collaboration suite deployed for 6,000 financial services employees."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Logistics Ops Digital Hub",
         "projectDescription": "Centralised operations dashboard and comms platform for distributed logistics teams."
       }
@@ -5980,49 +5980,49 @@
     "industries": [
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Production Process Automation",
         "projectDescription": "RPA + AI automating 12 manual production reporting processes, saving 4,200 hours/month."
       },
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Dealer Ops Automation",
         "projectDescription": "Automated order-to-delivery workflow reducing processing errors by 91%."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Retail Back-Office Automation",
         "projectDescription": "Invoice processing and inventory reconciliation automation handling 80K documents/month."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Clinical Admin Automation",
         "projectDescription": "Prior auth and claims automation saving 22,000 administrative hours per quarter."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Freight Ops Automation",
         "projectDescription": "Automated freight audit and payment processing for 300K monthly invoices."
       },
       {
         "name": "Financial Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Financial Process Automation",
         "projectDescription": "End-to-end loan origination automation cutting approval time from 9 days to 4 hours."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "Student Services Automation",
         "projectDescription": "Automated enrolment, financial aid and records workflows serving 120K students."
       },
       {
         "name": "Professional Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710509/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710509/zawr/assets/industry/professional-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710509/zawr/assets/industry/professional-industry.png",
         "projectName": "Professional Services Automation",
         "projectDescription": "Automated project staffing, billing and compliance reporting for a 2,000-consultant firm."
       }
@@ -6246,49 +6246,49 @@
     "industries": [
       {
         "name": "Manufacturing",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Manufacturing BPM Platform",
         "projectDescription": "End-to-end process modelling and optimisation delivering 28% operational cost reduction."
       },
       {
         "name": "Automotive",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "Automotive BPM Transformation",
         "projectDescription": "Standardised dealership business processes across 18 countries using SAP Signavio."
       },
       {
         "name": "Retail",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710510/zawr/assets/industry/retail-industry.png",
         "projectName": "Retail Process Excellence",
         "projectDescription": "BPM implementation for merchandising and replenishment cutting cycle time by 45%."
       },
       {
         "name": "Healthcare",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710505/zawr/assets/industry/healthcare-industry.png",
         "projectName": "Healthcare Process Management",
         "projectDescription": "Clinical pathway management system reducing average length of stay by 1.4 days."
       },
       {
         "name": "Logistics",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "Logistics BPM Programme",
         "projectDescription": "Process standardisation across 40 warehouse sites improving throughput by 33%."
       },
       {
         "name": "Financial Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Banking BPM Platform",
         "projectDescription": "Pega-based BPM reducing loan processing cost per application by 58%."
       },
       {
         "name": "Education",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710502/zawr/assets/industry/education-industry.png",
         "projectName": "Education Process Digitisation",
         "projectDescription": "Student journey process automation from inquiry to graduation across 5 campuses."
       },
       {
         "name": "Professional Services",
-        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710509/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710509/zawr/assets/industry/professional-industry.png",
+        "image": "https://res.cloudinary.com/murfclni/image/upload/v1783710509/zawr/assets/industry/professional-industry.png",
         "projectName": "PSA BPM Implementation",
         "projectDescription": "Business process management for project delivery, resourcing and invoicing—utilisation up 14%."
       }

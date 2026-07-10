@@ -272,7 +272,7 @@ export default function PressReleasesPage() {
                     }}>
                       {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img 
-                        src={release.banner || 'https://res.cloudinary.com/murfclni/image/upload/v1783710544/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710544/zawr/assets/public-relations-hero.png'} 
+                        src={release.banner || 'https://res.cloudinary.com/murfclni/image/upload/v1783710544/zawr/assets/public-relations-hero.png'} 
                         alt={release.title}
                         style={{
                           width: '100%',

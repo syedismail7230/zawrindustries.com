@@ -168,7 +168,7 @@ export default function SponsorshipPage() {
         {/* Full-screen Background Image */}
         <div style={{ position: 'absolute', inset: 0, zIndex: 0 }}>
           <img 
-            src="https://res.cloudinary.com/murfclni/image/upload/v1783710552/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710552/zawr/assets/sponsorship-hero.png" 
+            src="https://res.cloudinary.com/murfclni/image/upload/v1783710552/zawr/assets/sponsorship-hero.png" 
             alt="Sponsorship Opportunities" 
             style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
             onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=2070' }} 

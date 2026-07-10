@@ -19,7 +19,7 @@ export default function SustainabilityEmpowermentPage() {
         <div style={{ borderRadius: '20px', overflow: 'hidden', lineHeight: 0, maxHeight: '85vh' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="https://res.cloudinary.com/murfclni/image/upload/v1783710472/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710472/zawr/assets/emp-hero.png"
+            src="https://res.cloudinary.com/murfclni/image/upload/v1783710472/zawr/assets/emp-hero.png"
             alt="Empowerment at Zawr Industries"
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           />
@@ -83,7 +83,7 @@ export default function SustainabilityEmpowermentPage() {
           <div style={{ flex: '1 1 320px', borderRadius: '12px', overflow: 'hidden', lineHeight: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://res.cloudinary.com/murfclni/image/upload/v1783710474/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710474/zawr/assets/emp-people.png"
+              src="https://res.cloudinary.com/murfclni/image/upload/v1783710474/zawr/assets/emp-people.png"
               alt="Empowering People at Zawr"
               style={{ width: '100%', height: 'auto', display: 'block' }}
             />
@@ -103,7 +103,7 @@ export default function SustainabilityEmpowermentPage() {
           <div style={{ flex: '1 1 320px', borderRadius: '12px', overflow: 'hidden', lineHeight: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://res.cloudinary.com/murfclni/image/upload/v1783710471/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710471/zawr/assets/emp-communities.png"
+              src="https://res.cloudinary.com/murfclni/image/upload/v1783710471/zawr/assets/emp-communities.png"
               alt="Empowering Communities at Zawr"
               style={{ width: '100%', height: 'auto', display: 'block' }}
             />
@@ -188,7 +188,7 @@ export default function SustainabilityEmpowermentPage() {
           <div style={{ flex: '1 1 320px', borderRadius: '12px', overflow: 'hidden', lineHeight: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://res.cloudinary.com/murfclni/image/upload/v1783710473/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710473/zawr/assets/emp-innovation.png"
+              src="https://res.cloudinary.com/murfclni/image/upload/v1783710473/zawr/assets/emp-innovation.png"
               alt="Empowering Innovation at Zawr"
               style={{ width: '100%', height: 'auto', display: 'block' }}
             />
@@ -208,7 +208,7 @@ export default function SustainabilityEmpowermentPage() {
           <div style={{ flex: '1 1 320px', borderRadius: '12px', overflow: 'hidden', lineHeight: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://res.cloudinary.com/murfclni/image/upload/v1783710470/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710470/zawr/assets/emp-businesses.png"
+              src="https://res.cloudinary.com/murfclni/image/upload/v1783710470/zawr/assets/emp-businesses.png"
               alt="Empowering Businesses at Zawr"
               style={{ width: '100%', height: 'auto', display: 'block' }}
             />

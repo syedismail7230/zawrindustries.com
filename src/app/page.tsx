@@ -13,7 +13,7 @@ export default function Home() {
       <section className="hero-section" style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
         <div className="hero-bg" style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0, zIndex: 0 }}>
           <img
-            src="https://res.cloudinary.com/murfclni/image/upload/v1783710572/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710572/zawr/images/hero-bg.png"
+            src="https://res.cloudinary.com/murfclni/image/upload/v1783710572/zawr/images/hero-bg.png"
             alt="Zawr Industries Technology Background"
             style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', top: 0, left: 0 }}
           />
@@ -38,7 +38,7 @@ export default function Home() {
           {/* Left Column: Construction Illustration */}
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
             <img 
-              src="https://res.cloudinary.com/murfclni/image/upload/v1783710573/zawr/https://res.cloudinary.com/murfclni/image/upload/v1783710573/zawr/images/reconstruction.png" 
+              src="https://res.cloudinary.com/murfclni/image/upload/v1783710573/zawr/images/reconstruction.png" 
               alt="Website Under Reconstruction" 
               style={{ width: '100%', maxWidth: '460px', height: 'auto', objectFit: 'contain' }}
             />
