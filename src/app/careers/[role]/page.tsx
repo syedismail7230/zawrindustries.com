@@ -47,7 +47,7 @@ function buildJobPostingSchema(job: any): object {
       '@type': 'Organization',
       name: 'Zawr Industries',
       sameAs: 'https://zawrindustries.com',
-      logo: 'https://zawrindustries.comhttps://res.cloudinary.com/murfclni/image/upload/v1783710570/zawr/assets/zawr-logo.png',
+      logo: 'https://zawrindustries.comhttps://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710570/zawr/assets/zawr-logo.png',
     },
     jobLocation: {
       '@type': 'Place',

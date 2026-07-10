@@ -131,7 +131,7 @@ function WebmasterDashboard() {
   const [eventTicketsCapacity, setEventTicketsCapacity] = useState('100');
   const [eventVenue, setEventVenue] = useState('Online');
   const [eventSpecialNote, setEventSpecialNote] = useState('');
-  const [eventImage, setEventImage] = useState('https://res.cloudinary.com/murfclni/image/upload/v1783710478/zawr/assets/event-chart.png');
+  const [eventImage, setEventImage] = useState('https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710478/zawr/assets/event-chart.png');
   const [editingEvent, setEditingEvent] = useState<any>(null);
   const [customImageFile, setCustomImageFile] = useState<File | null>(null);
 
@@ -1254,8 +1254,8 @@ function WebmasterDashboard() {
                           onChange={(e) => setEventImage(e.target.value)} 
                           style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }}
                         >
-                          <option value="https://res.cloudinary.com/murfclni/image/upload/v1783710478/zawr/assets/event-chart.png">Stock Chart Gradient</option>
-                          <option value="https://res.cloudinary.com/murfclni/image/upload/v1783710480/zawr/assets/event-speaker.png">Keynote Stage Presenter</option>
+                          <option value="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710478/zawr/assets/event-chart.png">Stock Chart Gradient</option>
+                          <option value="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710480/zawr/assets/event-speaker.png">Keynote Stage Presenter</option>
                         </select>
                       </div>
                     )}
@@ -1373,7 +1373,7 @@ function WebmasterDashboard() {
                           setEventTicketsCapacity('100');
                           setEventVenue('Online');
                           setEventSpecialNote('');
-                          setEventImage('https://res.cloudinary.com/murfclni/image/upload/v1783710478/zawr/assets/event-chart.png');
+                          setEventImage('https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710478/zawr/assets/event-chart.png');
                           setCustomImageFile(null);
                           setEditingEvent(null);
                           alert(editingEvent ? 'Event updated successfully!' : 'Event added successfully!');
@@ -1406,7 +1406,7 @@ function WebmasterDashboard() {
                         setEventTicketsCapacity('100');
                         setEventVenue('Online');
                         setEventSpecialNote('');
-                        setEventImage('https://res.cloudinary.com/murfclni/image/upload/v1783710478/zawr/assets/event-chart.png');
+                        setEventImage('https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710478/zawr/assets/event-chart.png');
                         setCustomImageFile(null);
                       }}
                       style={{ padding: '0.75rem 1.5rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer' }}
@@ -1462,7 +1462,7 @@ function WebmasterDashboard() {
                             setEventTicketsCapacity(ev.ticketsCapacity || '100');
                             setEventVenue(ev.venue || 'Online');
                             setEventSpecialNote(ev.specialNote || '');
-                            setEventImage(ev.image || 'https://res.cloudinary.com/murfclni/image/upload/v1783710478/zawr/assets/event-chart.png');
+                            setEventImage(ev.image || 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710478/zawr/assets/event-chart.png');
                           }}
                           style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
                         >

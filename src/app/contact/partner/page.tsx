@@ -934,7 +934,7 @@ export default function PartnerPage() {
         <div className="part-hero-right">
           <div className="part-hero-img-wrap">
             <img 
-              src="https://res.cloudinary.com/murfclni/image/upload/v1783710540/zawr/assets/partnership-hero.png" 
+              src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710540/zawr/assets/partnership-hero.png" 
               alt="Zawr Partnership Duo" 
               className="part-hero-img" 
             />

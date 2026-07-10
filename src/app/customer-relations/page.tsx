@@ -52,9 +52,9 @@ export default function CustomerRelationsPage() {
 
           {/* Right Image */}
           <div className="w-full md:w-1/2 relative min-h-[350px] md:min-h-[450px]">
-            {/* The image will be pulled from publichttps://res.cloudinary.com/murfclni/image/upload/v1783710459/zawr/assets/customer-hero.png */}
+            {/* The image will be pulled from publichttps://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710459/zawr/assets/customer-hero.png */}
             <img 
-              src="https://res.cloudinary.com/murfclni/image/upload/v1783710459/zawr/assets/customer-hero.png" 
+              src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710459/zawr/assets/customer-hero.png" 
               alt="Customer Relations" 
               className="absolute inset-0 w-full h-full object-cover"
             />

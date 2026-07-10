@@ -69,11 +69,11 @@ export default function CareersPage() {
   };
 
   const allImages = [
-    'https://res.cloudinary.com/murfclni/image/upload/v1783710436/zawr/assets/careers-1.png', 'https://res.cloudinary.com/murfclni/image/upload/v1783710441/zawr/assets/careers-2.png', 'https://res.cloudinary.com/murfclni/image/upload/v1783710443/zawr/assets/careers-3.png',
-    'https://res.cloudinary.com/murfclni/image/upload/v1783710445/zawr/assets/careers-4.png', 'https://res.cloudinary.com/murfclni/image/upload/v1783710446/zawr/assets/careers-5.png', 'https://res.cloudinary.com/murfclni/image/upload/v1783710447/zawr/assets/careers-6.png',
-    'https://res.cloudinary.com/murfclni/image/upload/v1783710448/zawr/assets/careers-7.png', 'https://res.cloudinary.com/murfclni/image/upload/v1783710449/zawr/assets/careers-8.png', 'https://res.cloudinary.com/murfclni/image/upload/v1783710450/zawr/assets/careers-9.png',
-    'https://res.cloudinary.com/murfclni/image/upload/v1783710437/zawr/assets/careers-10.png', 'https://res.cloudinary.com/murfclni/image/upload/v1783710438/zawr/assets/careers-11.png', 'https://res.cloudinary.com/murfclni/image/upload/v1783710439/zawr/assets/careers-12.png',
-    'https://res.cloudinary.com/murfclni/image/upload/v1783710440/zawr/assets/careers-13.png'
+    'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710436/zawr/assets/careers-1.png', 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710441/zawr/assets/careers-2.png', 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710443/zawr/assets/careers-3.png',
+    'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710445/zawr/assets/careers-4.png', 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710446/zawr/assets/careers-5.png', 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710447/zawr/assets/careers-6.png',
+    'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710448/zawr/assets/careers-7.png', 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710449/zawr/assets/careers-8.png', 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710450/zawr/assets/careers-9.png',
+    'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710437/zawr/assets/careers-10.png', 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710438/zawr/assets/careers-11.png', 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710439/zawr/assets/careers-12.png',
+    'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710440/zawr/assets/careers-13.png'
   ];
 
   return (
