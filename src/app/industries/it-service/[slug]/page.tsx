@@ -151,6 +151,23 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const pageTitle = `${seo.title} | Zawr Industries`;
   const pageDescription = `Get premium, enterprise-grade ${service.name} services from Zawr Industries. ${service.description.substring(0, 160)}...`;
 
+  // Look up Cloudinary URL dynamically
+  let imageUrl = `https://zawrindustries.com/assets/${slug}-hero.png`;
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const mappingPath = path.join(process.cwd(), 'cloudinary-mapping.json');
+    if (fs.existsSync(mappingPath)) {
+      const mapping = JSON.parse(fs.readFileSync(mappingPath, 'utf8'));
+      const lookupKey = `/assets/${slug}-hero.png`;
+      if (mapping[lookupKey]) {
+        imageUrl = mapping[lookupKey];
+      }
+    }
+  } catch (e) {
+    console.error('Error looking up Cloudinary mapping in generateMetadata:', e);
+  }
+
   return {
     title: pageTitle,
     description: pageDescription,
@@ -178,9 +195,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       type: 'website',
       images: [
         {
-          url: `https://zawrindustries.com/assets/${slug}-hero.png`,
-          width: 1200,
-          height: 630,
+          url: imageUrl,
           alt: service.name,
         },
       ],
@@ -189,7 +204,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       card: 'summary_large_image',
       title: pageTitle,
       description: pageDescription,
-      images: [`https://zawrindustries.com/assets/${slug}-hero.png`],
+      images: [imageUrl],
     },
   };
 }
@@ -231,6 +246,23 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     notFound();
   }
 
+  // Look up Cloudinary URL dynamically
+  let heroSrc = `/assets/${slug}-hero.png`;
+  try {
+    const fs = require('fs');
+    const path = require('path');
+    const mappingPath = path.join(process.cwd(), 'cloudinary-mapping.json');
+    if (fs.existsSync(mappingPath)) {
+      const mapping = JSON.parse(fs.readFileSync(mappingPath, 'utf8'));
+      const lookupKey = `/assets/${slug}-hero.png`;
+      if (mapping[lookupKey]) {
+        heroSrc = mapping[lookupKey];
+      }
+    }
+  } catch (e) {
+    console.error('Error looking up Cloudinary mapping in Page:', e);
+  }
+
   // Create Schema.org JSON-LD Service Data
   const jsonLdServiceSchema = {
     '@context': 'https://schema.org',
@@ -252,9 +284,10 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       '@type': 'Organization',
       'name': 'Zawr Industries',
       'url': 'https://zawrindustries.com',
-      'logo': 'https://zawrindustries.com/logo.png',
+      'logo': 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710570/zawr/assets/zawr-logo.png',
       'address': {
         '@type': 'PostalAddress',
+        'streetAddress': 'Old Airport Rd, HAL',
         'addressLocality': 'Bangalore',
         'addressRegion': 'Karnataka',
         'addressCountry': 'IN'
@@ -262,8 +295,8 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
     },
     'offers': {
       '@type': 'Offer',
-      'priceCurrency': 'INR',
-      'price': 'Contact for pricing'
+      'priceCurrency': 'USD',
+      'price': 'Contact for custom pricing'
     }
   };
 
@@ -280,8 +313,6 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       }
     }))
   } : null;
-
-  const heroSrc = `/assets/${slug}-hero.png`;
 
   return (
     <>

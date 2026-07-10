@@ -1,9 +1,10 @@
-'use client';
-
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
+import fs from 'fs';
+import path from 'path';
+import { Metadata } from 'next';
 
 const getSafeIsoDate = (dateStr: string): string => {
   try {
@@ -16,35 +17,78 @@ const getSafeIsoDate = (dateStr: string): string => {
   }
 };
 
-export default function PressReleasePage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = React.use(params);
-  const [release, setRelease] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+export async function generateStaticParams() {
+  try {
+    const pressPath = path.join(process.cwd(), 'public/data/press-releases.json');
+    if (!fs.existsSync(pressPath)) return [];
+    const releases = JSON.parse(fs.readFileSync(pressPath, 'utf8'));
+    return releases.map((r: any) => ({ slug: r.slug }));
+  } catch (e) {
+    console.error('Error generating static params for press-releases:', e);
+    return [];
+  }
+}
 
-  useEffect(() => {
-    const fetchRelease = async () => {
-      try {
-        const res = await fetch('/api/press-releases');
-        if (res.ok) {
-          const list = await res.json();
-          const found = list.find((r: any) => r.slug === slug);
-          setRelease(found || null);
-        }
-      } catch (e) {
-        console.error('Error fetching press release:', e);
-      } finally {
-        setLoading(false);
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  try {
+    const pressPath = path.join(process.cwd(), 'public/data/press-releases.json');
+    if (!fs.existsSync(pressPath)) return {};
+    const releases = JSON.parse(fs.readFileSync(pressPath, 'utf8'));
+    const release = releases.find((r: any) => r.slug === slug);
+    if (!release) return {};
+
+    const fullImageUrl = release.banner 
+      ? (release.banner.startsWith('http') ? release.banner : `https://zawrindustries.com${release.banner}`) 
+      : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710544/zawr/assets/public-relations-hero.png';
+
+    return {
+      title: `${release.title} | Zawr Industries Press Release`,
+      description: release.summary,
+      alternates: {
+        canonical: `https://zawrindustries.com/newsroom/press-release/${slug}`,
+      },
+      openGraph: {
+        title: release.title,
+        description: release.summary,
+        url: `https://zawrindustries.com/newsroom/press-release/${slug}`,
+        siteName: 'Zawr Industries',
+        images: [
+          {
+            url: fullImageUrl,
+            alt: release.title,
+          }
+        ],
+        type: 'article',
+        publishedTime: getSafeIsoDate(release.date),
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: release.title,
+        description: release.summary,
+        images: [fullImageUrl],
       }
     };
-    fetchRelease();
-  }, [slug]);
+  } catch (e) {
+    console.error('Error generating press release metadata:', e);
+    return {};
+  }
+}
 
-  if (loading) {
-    return (
-      <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', color: '#000000', display: 'flex', justifyContent: 'center', alignItems: 'center', fontFamily: 'Inter, system-ui, sans-serif' }}>
-        <span>Loading press release...</span>
-      </div>
-    );
+export default async function PressReleasePage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  
+  const pressPath = path.join(process.cwd(), 'public/data/press-releases.json');
+  if (!fs.existsSync(pressPath)) {
+    notFound();
+  }
+
+  let release;
+  try {
+    const releases = JSON.parse(fs.readFileSync(pressPath, 'utf8'));
+    release = releases.find((r: any) => r.slug === slug);
+  } catch (e) {
+    console.error('Error parsing press releases JSON:', e);
   }
 
   if (!release) {
@@ -53,16 +97,57 @@ export default function PressReleasePage({ params }: { params: Promise<{ slug: s
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', color: '#000000', paddingTop: '8rem', paddingBottom: '6rem', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <style dangerouslySetInnerHTML={{ __html: `
+        .back-link {
+          color: #4b5563;
+          text-decoration: none;
+          font-size: 0.875rem;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          transition: color 0.15s;
+        }
+        .back-link:hover {
+          color: #000000;
+        }
+        
+        .attachment-row {
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+          padding: 1rem 1.75rem;
+          text-decoration: none;
+          background-color: #ffffff;
+          transition: background-color 0.15s;
+        }
+        .attachment-row:hover {
+          background-color: #f9fafb;
+        }
+        
+        .related-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+          padding: 0.4rem 1rem;
+          border: 1px solid #e5e7eb;
+          border-radius: 9999px;
+          font-size: 0.8rem;
+          color: #000000;
+          text-decoration: none;
+          background-color: #f9fafb;
+          transition: all 0.15s;
+        }
+        .related-link:hover {
+          border-color: #000000;
+          background-color: #ffffff;
+        }
+      `}} />
+
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 2rem' }}>
 
         {/* Breadcrumb */}
         <div style={{ marginBottom: '2.5rem' }}>
-          <Link
-            href="/newsroom/press-release"
-            style={{ color: '#4b5563', textDecoration: 'none', fontSize: '0.875rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', transition: 'color 0.15s' }}
-            onMouseOver={(e) => e.currentTarget.style.color = '#000000'}
-            onMouseOut={(e) => e.currentTarget.style.color = '#4b5563'}
-          >
+          <Link href="/newsroom/press-release" className="back-link">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg>
             Back to Press Releases
           </Link>
@@ -117,18 +202,10 @@ export default function PressReleasePage({ params }: { params: Promise<{ slug: s
                 href={att.url}
                 target="_blank"
                 rel="noopener noreferrer"
+                className="attachment-row"
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.6rem',
-                  padding: '1rem 1.75rem',
-                  borderBottom: i < release.attachments.length - 1 ? '1px solid #f3f4f6' : 'none',
-                  textDecoration: 'none',
-                  backgroundColor: '#ffffff',
-                  transition: 'background-color 0.15s'
+                  borderBottom: i < release.attachments.length - 1 ? '1px solid #f3f4f6' : 'none'
                 }}
-                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = '#f9fafb')}
-                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = '#ffffff')}
               >
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563eb" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                 <span style={{ fontSize: '0.875rem', color: '#2563eb', fontWeight: 500 }}>{att.label}</span>
@@ -151,25 +228,7 @@ export default function PressReleasePage({ params }: { params: Promise<{ slug: s
                     href={lnk.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{
-                      display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                      padding: '0.4rem 1rem',
-                      border: '1px solid #e5e7eb',
-                      borderRadius: '9999px',
-                      fontSize: '0.8rem',
-                      color: '#000000',
-                      textDecoration: 'none',
-                      backgroundColor: '#f9fafb',
-                      transition: 'all 0.15s'
-                    }}
-                    onMouseOver={(e) => {
-                      e.currentTarget.style.borderColor = '#000000';
-                      e.currentTarget.style.backgroundColor = '#ffffff';
-                    }}
-                    onMouseOut={(e) => {
-                      e.currentTarget.style.borderColor = '#e5e7eb';
-                      e.currentTarget.style.backgroundColor = '#f9fafb';
-                    }}
+                    className="related-link"
                   >
                     {lnk.label}
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
@@ -182,12 +241,7 @@ export default function PressReleasePage({ params }: { params: Promise<{ slug: s
 
         {/* Footer nav */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '3rem', paddingTop: '2rem', borderTop: '1px solid #e5e7eb' }}>
-          <Link
-            href="/newsroom/press-release"
-            style={{ color: '#4b5563', textDecoration: 'none', fontSize: '0.875rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', transition: 'color 0.15s' }}
-            onMouseOver={(e) => e.currentTarget.style.color = '#000000'}
-            onMouseOut={(e) => e.currentTarget.style.color = '#4b5563'}
-          >
+          <Link href="/newsroom/press-release" className="back-link">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg>
             All Press Releases
           </Link>
@@ -205,7 +259,7 @@ export default function PressReleasePage({ params }: { params: Promise<{ slug: s
             '@type': 'NewsArticle',
             'headline': release.title,
             'image': [
-              release.banner ? (release.banner.startsWith('http') ? release.banner : `https://zawrindustries.com${release.banner}`) : 'https://zawrindustries.comhttps://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710544/zawr/assets/public-relations-hero.png'
+              release.banner ? (release.banner.startsWith('http') ? release.banner : `https://zawrindustries.com${release.banner}`) : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710544/zawr/assets/public-relations-hero.png'
             ],
             'datePublished': getSafeIsoDate(release.date),
             'dateModified': getSafeIsoDate(release.date),
@@ -218,7 +272,7 @@ export default function PressReleasePage({ params }: { params: Promise<{ slug: s
               'name': 'Zawr Industries',
               'logo': {
                 '@type': 'ImageObject',
-                'url': 'https://zawrindustries.com/assets/logo.png'
+                'url': 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710570/zawr/assets/zawr-logo.png'
               }
             },
             'description': release.summary || ''

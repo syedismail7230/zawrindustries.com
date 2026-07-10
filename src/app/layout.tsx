@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     siteName: 'Zawr Industries',
     images: [
       {
-        url: '/hero_background.png',
+        url: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710569/zawr/assets/zawr-industries.png',
         width: 1200,
         height: 630,
         alt: 'Zawr Industries Cover',
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Zawr Industries',
     description: 'Your strategic partner in harnessing the power of technology for business expansion.',
-    images: ['/hero_background.png'],
+    images: ['https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710569/zawr/assets/zawr-industries.png'],
   },
   icons: {
     icon: [
@@ -71,7 +71,7 @@ export default function RootLayout({
                   "@type": "Organization",
                   "name": "Zawr Industries",
                   "url": "https://zawrindustries.com",
-                  "logo": "https://zawrindustries.com/favicon-dark.png",
+                  "logo": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710570/zawr/assets/zawr-logo.png",
                   "contactPoint": {
                     "@type": "ContactPoint",
                     "telephone": "+91-9880464078",
@@ -92,6 +92,41 @@ export default function RootLayout({
                     "@type": "SearchAction",
                     "target": "https://zawrindustries.com/search?q={search_term_string}",
                     "query-input": "required name=search_term_string"
+                  }
+                },
+                {
+                  "@type": "ProfessionalService",
+                  "@id": "https://zawrindustries.com/#service",
+                  "name": "Zawr Industries",
+                  "url": "https://zawrindustries.com",
+                  "logo": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710570/zawr/assets/zawr-logo.png",
+                  "image": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710569/zawr/assets/zawr-industries.png",
+                  "telephone": "+91-9880464078",
+                  "priceRange": "$$$",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "Old Airport Rd, HAL",
+                    "addressLocality": "Bangalore",
+                    "addressRegion": "Karnataka",
+                    "postalCode": "560008",
+                    "addressCountry": "IN"
+                  },
+                  "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 12.9600,
+                    "longitude": 77.6433
+                  },
+                  "openingHoursSpecification": {
+                    "@type": "OpeningHoursSpecification",
+                    "dayOfWeek": [
+                      "Monday",
+                      "Tuesday",
+                      "Wednesday",
+                      "Thursday",
+                      "Friday"
+                    ],
+                    "opens": "09:00",
+                    "closes": "18:00"
                   }
                 }
               ]
