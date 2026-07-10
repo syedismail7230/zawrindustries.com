@@ -15,7 +15,36 @@ export const metadata: Metadata = {
   description: 'Your strategic partner in harnessing the power of technology for business expansion. Expert solutions in AI, SaaS, IT services, and logistics.',
   metadataBase: new URL('https://zawrindustries.com'),
   alternates: {
-    canonical: '/',
+    canonical: 'https://zawrindustries.com',
+  },
+  keywords: [
+    'Zawr Industries',
+    'IT Services Bangalore',
+    'AI Solutions India',
+    'Enterprise SaaS Platforms',
+    'Digital Transformation',
+    'Custom Software Development',
+    'Cloud Migration Services',
+    'Logistics Automation',
+    'Process Automation',
+    'Technology Consulting'
+  ],
+  authors: [{ name: 'Zawr Industries', url: 'https://zawrindustries.com' }],
+  creator: 'Zawr Industries',
+  publisher: 'Zawr Industries',
+  category: 'technology',
+  robots: {
+    index: true,
+    follow: true,
+    nocache: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
   openGraph: {
     title: 'Zawr Industries | Enterprise Technology Solutions',
@@ -31,6 +60,7 @@ export const metadata: Metadata = {
       }
     ],
     locale: 'en_US',
+    alternateLocale: ['en_IN', 'en_GB'],
     type: 'website',
   },
   twitter: {

@@ -278,6 +278,37 @@ export default async function NotificationDetailPage({ params }: { params: Promi
         }}
       />
 
+      {/* Schema.org BreadcrumbList markup */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'BreadcrumbList',
+            'itemListElement': [
+              {
+                '@type': 'ListItem',
+                'position': 1,
+                'name': 'Home',
+                'item': 'https://zawrindustries.com'
+              },
+              {
+                '@type': 'ListItem',
+                'position': 2,
+                'name': 'Notifications',
+                'item': 'https://zawrindustries.com/newsroom/notifications'
+              },
+              {
+                '@type': 'ListItem',
+                'position': 3,
+                'name': notification.title,
+                'item': `https://zawrindustries.com/newsroom/notifications/${slug}`
+              }
+            ]
+          })
+        }}
+      />
+
       {/* Google News Reader Revenue Manager Snippet */}
       <Script
         async
