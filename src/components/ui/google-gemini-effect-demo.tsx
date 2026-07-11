@@ -24,15 +24,14 @@ export function GoogleGeminiEffectDemo({
 
   return (
     <div
-      className="h-[300vh] bg-black w-full dark:border dark:border-white/[0.1] rounded-md relative pt-40 overflow-clip"
+      className="h-[350vh] bg-black w-full dark:border dark:border-white/[0.1] rounded-md relative overflow-clip"
       ref={ref}
       style={{
-        height: "220vh",
+        height: "300vh",
         backgroundColor: "#000000",
         width: "100%",
         borderRadius: "0.375rem",
         position: "relative",
-        paddingTop: "15vh",
         overflow: "hidden",
       }}
     >
