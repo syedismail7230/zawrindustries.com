@@ -92,7 +92,7 @@ export const GoogleGeminiEffect = ({
             boxShadow: "0 4px 14px rgba(255,255,255,0.15)",
           }}
         >
-          ui.aceternity.com
+          zawr
         </button>
       </div>
       <svg
