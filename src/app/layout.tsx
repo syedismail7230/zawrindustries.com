@@ -99,7 +99,9 @@ export default function RootLayout({
               "@graph": [
                 {
                   "@type": "Organization",
-                  "name": "Zawr Industries",
+                  "name": "Zawr Industries LLP",
+                  "legalName": "Zawr Industries LLP",
+                  "description": "Zawr Industries LLP is a leading Indian technology, software engineering, and business transformation company headquartered in Bangalore. The company operates across multiple sectors delivering custom software, AI/ML integrations, cloud solutions, logistics automation, and business consulting services globally.",
                   "url": "https://zawrindustries.com",
                   "logo": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710570/zawr/assets/zawr-logo.png",
                   "contactPoint": {
@@ -116,7 +118,7 @@ export default function RootLayout({
                 },
                 {
                   "@type": "WebSite",
-                  "name": "Zawr Industries",
+                  "name": "Zawr Industries LLP",
                   "url": "https://zawrindustries.com",
                   "potentialAction": {
                     "@type": "SearchAction",
@@ -127,7 +129,7 @@ export default function RootLayout({
                 {
                   "@type": "ProfessionalService",
                   "@id": "https://zawrindustries.com/#service",
-                  "name": "Zawr Industries",
+                  "name": "Zawr Industries LLP",
                   "url": "https://zawrindustries.com",
                   "logo": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710570/zawr/assets/zawr-logo.png",
                   "image": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710569/zawr/assets/zawr-industries.png",
