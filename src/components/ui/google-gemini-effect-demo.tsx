@@ -16,22 +16,23 @@ export function GoogleGeminiEffectDemo({
     offset: ["start start", "end start"],
   });
 
-  const pathLengthFirst = useTransform(scrollYProgress, [0, 0.8], [0.8, 1.2]);
-  const pathLengthSecond = useTransform(scrollYProgress, [0, 0.8], [0.75, 1.2]);
-  const pathLengthThird = useTransform(scrollYProgress, [0, 0.8], [0.7, 1.2]);
-  const pathLengthFourth = useTransform(scrollYProgress, [0, 0.8], [0.65, 1.2]);
-  const pathLengthFifth = useTransform(scrollYProgress, [0, 0.8], [0.6, 1.2]);
+  const pathLengthFirst = useTransform(scrollYProgress, [0, 0.8], [0.2, 1.2]);
+  const pathLengthSecond = useTransform(scrollYProgress, [0, 0.8], [0.15, 1.2]);
+  const pathLengthThird = useTransform(scrollYProgress, [0, 0.8], [0.1, 1.2]);
+  const pathLengthFourth = useTransform(scrollYProgress, [0, 0.8], [0.05, 1.2]);
+  const pathLengthFifth = useTransform(scrollYProgress, [0, 0.8], [0, 1.2]);
 
   return (
     <div
-      className="h-[350vh] bg-black w-full dark:border dark:border-white/[0.1] rounded-md relative overflow-clip"
+      className="h-[300vh] bg-black w-full dark:border dark:border-white/[0.1] rounded-md relative pt-40 overflow-clip"
       ref={ref}
       style={{
-        height: "300vh",
+        height: "220vh",
         backgroundColor: "#000000",
         width: "100%",
         borderRadius: "0.375rem",
         position: "relative",
+        paddingTop: "15vh",
         overflow: "hidden",
       }}
     >

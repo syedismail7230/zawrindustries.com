@@ -686,7 +686,7 @@ export default function ITServicesPageClient() {
           <div style={{ position: 'relative', zIndex: 5, marginTop: '2rem' }}>
             <GoogleGeminiEffectDemo 
               title="Engineered for Enterprise Impact"
-              description="Enterprise-grade IT services and scalable software architectures powered by Firm AI."
+              description="Zawr Industries provides end-to-end Information Technology services to startups, enterprises, and government organizations globally. Powered by our proprietary Firm AI platform, we deliver intelligent, scalable technology solutions that give businesses a measurable competitive advantage."
             />
           </div>
         </div>
