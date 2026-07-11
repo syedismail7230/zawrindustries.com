@@ -28,8 +28,9 @@ export const GoogleGeminiEffect = ({
         height: "100vh",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        justifyContent: "flex-start",
         alignItems: "center",
+        paddingTop: "12vh",
         zIndex: 10,
         overflow: "hidden",
       }}
@@ -68,12 +69,12 @@ export const GoogleGeminiEffect = ({
         works!`}
       </p>
       <div 
-        className="w-full h-[890px] -top-60 md:-top-40 flex items-center justify-center bg-red-transparent absolute "
+        className="w-full h-[890px] absolute"
         style={{
           width: "100%",
           height: "890px",
           position: "absolute",
-          top: "-10rem",
+          bottom: "-150px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -106,10 +107,10 @@ export const GoogleGeminiEffect = ({
         height="890"
         viewBox="0 0 1440 890"
         xmlns="http://www.w3.org/2000/svg"
-        className=" absolute -top-60 md:-top-40 w-full"
+        className="absolute w-full"
         style={{
           position: "absolute",
-          top: "-10rem",
+          bottom: "-150px",
           width: "100%",
           pointerEvents: "none",
         }}
