@@ -4,7 +4,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import ServicesMarquee from './ServicesMarquee';
-import { GoogleGeminiEffectDemo } from '@/components/ui/google-gemini-effect-demo';
 
 export default function ITServicesPageClient() {
   const pathname = usePathname();
@@ -681,14 +680,6 @@ export default function ITServicesPageClient() {
               </div>
             );
           })()}
-
-          {/* Google Gemini Effect Component Integration */}
-          <div style={{ position: 'relative', zIndex: 5, marginTop: '2rem' }}>
-            <GoogleGeminiEffectDemo 
-              title="Engineered for Enterprise Impact"
-              description="Zawr Industries provides end-to-end Information Technology services to startups, enterprises, and government organizations globally. Powered by our proprietary Firm AI platform, we deliver intelligent, scalable technology solutions that give businesses a measurable competitive advantage."
-            />
-          </div>
         </div>
       )}
 
