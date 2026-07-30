@@ -70,7 +70,7 @@ export function IndustriesSection({
         .ind-project-divider {
           width: 2.5rem;
           height: 1.5px;
-          background: linear-gradient(90deg,#60a5fa,#f472b6);
+          background: linear-gradient(90deg, #ffffff, #52525b);
           margin-bottom: 1.2rem;
           border-radius: 2px;
         }
@@ -102,13 +102,13 @@ export function IndustriesSection({
           font-weight: 500;
           letter-spacing: 0.08em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.5);
+          color: rgba(255,255,255,0.6);
           font-family: var(--font-plus-jakarta), Inter, sans-serif;
         }
         .ind-industry-dot {
           width: 5px; height: 5px;
           border-radius: 50%;
-          background: linear-gradient(135deg,#60a5fa,#f472b6);
+          background: #ffffff;
           flex-shrink: 0;
         }
         /* Center accordion */
@@ -134,10 +134,10 @@ export function IndustriesSection({
           background-size: cover;
           background-position: center;
           transition: filter 0.52s ease, transform 0.52s cubic-bezier(0.16,1,0.3,1);
-          filter: brightness(0.45) saturate(0.7);
+          filter: grayscale(100%) brightness(0.45);
         }
         .ind-card.ind-active .ind-card-bg {
-          filter: brightness(0.72) saturate(1.1);
+          filter: grayscale(100%) brightness(0.85);
           transform: scale(1.04);
         }
         .ind-card::after {
