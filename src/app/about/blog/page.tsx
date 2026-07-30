@@ -330,7 +330,7 @@ export default function BlogIndexPage() {
               </Link>
 
               <div className="author-meta">
-                <img className="author-img" src={featuredBlog.authorImage} alt={featuredBlog.author} />
+                <img className="author-img" src={featuredBlog.authorImage} alt={featuredBlog.author}  loading="lazy" decoding="async" />
                 <div className="author-info">
                   By <span className="author-name">{featuredBlog.author}</span> &bull; Updated on {featuredBlog.date}
                 </div>
@@ -339,7 +339,7 @@ export default function BlogIndexPage() {
 
             <div className="featured-image-box">
               <Link href={`/about/blog/${featuredBlog.slug}`}>
-                <img src={featuredBlog.image} alt={featuredBlog.title} />
+                <img src={featuredBlog.image} alt={featuredBlog.title}  loading="lazy" decoding="async" />
               </Link>
             </div>
           </div>
@@ -363,7 +363,7 @@ export default function BlogIndexPage() {
                   {blog.image && (
                     <div className="card-image-wrapper">
                       <Link href={`/about/blog/${blog.slug}`}>
-                        <img src={blog.image} alt={blog.title} />
+                        <img src={blog.image} alt={blog.title}  loading="lazy" decoding="async" />
                       </Link>
                     </div>
                   )}

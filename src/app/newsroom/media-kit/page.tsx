@@ -404,7 +404,7 @@ export default function MediaKitPage() {
                             const fallback = document.getElementById(`fallback-svg-${b.id}`);
                             if (fallback) fallback.style.display = 'flex';
                           }}
-                        />
+                         loading="lazy" decoding="async" />
                       )}
                       <div 
                         id={`fallback-svg-${b.id}`} 

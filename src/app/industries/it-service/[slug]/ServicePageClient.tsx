@@ -592,7 +592,7 @@ export default function ServicePageClient({ service, slug, heroSrc }: { service:
             objectPosition: 'center',
             zIndex: 1
           }}
-        />
+         loading="eager" />
 
         <div style={{
           position: 'absolute',

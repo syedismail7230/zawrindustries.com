@@ -22,7 +22,7 @@ export default function SustainabilityEmpowermentPage() {
             src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710472/zawr/assets/emp-hero.png"
             alt="Empowerment at Zawr Industries"
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-          />
+           loading="lazy" decoding="async" />
         </div>
       </div>
 
@@ -86,7 +86,7 @@ export default function SustainabilityEmpowermentPage() {
               src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710474/zawr/assets/emp-people.png"
               alt="Empowering People at Zawr"
               style={{ width: '100%', height: 'auto', display: 'block' }}
-            />
+             loading="lazy" decoding="async" />
           </div>
         </section>
 
@@ -106,7 +106,7 @@ export default function SustainabilityEmpowermentPage() {
               src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710471/zawr/assets/emp-communities.png"
               alt="Empowering Communities at Zawr"
               style={{ width: '100%', height: 'auto', display: 'block' }}
-            />
+             loading="lazy" decoding="async" />
           </div>
           {/* Text */}
           <div style={{ flex: '1 1 360px' }}>
@@ -191,7 +191,7 @@ export default function SustainabilityEmpowermentPage() {
               src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710473/zawr/assets/emp-innovation.png"
               alt="Empowering Innovation at Zawr"
               style={{ width: '100%', height: 'auto', display: 'block' }}
-            />
+             loading="lazy" decoding="async" />
           </div>
         </section>
 
@@ -211,7 +211,7 @@ export default function SustainabilityEmpowermentPage() {
               src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710470/zawr/assets/emp-businesses.png"
               alt="Empowering Businesses at Zawr"
               style={{ width: '100%', height: 'auto', display: 'block' }}
-            />
+             loading="lazy" decoding="async" />
           </div>
           {/* Text */}
           <div style={{ flex: '1 1 360px' }}>

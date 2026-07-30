@@ -548,12 +548,12 @@ export default function ITServicesPageClient() {
                       src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710489/zawr/assets/folder.png" 
                       alt="Closed Folder" 
                       className="folder-img closed-img"
-                    />
+                     loading="lazy" decoding="async" />
                     <img 
                       src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710488/zawr/assets/folder-open.png" 
                       alt="Open Folder" 
                       className="folder-img open-img"
-                    />
+                     loading="lazy" decoding="async" />
                   </div>
                   <div className="project-folder-name">
                     {proj.name}
@@ -623,7 +623,7 @@ export default function ITServicesPageClient() {
                       e.currentTarget.style.opacity = '0.65';
                       e.currentTarget.style.transform = 'scale(1)';
                     }}
-                  />
+                   loading="lazy" decoding="async" />
                 </div>
               ))}
             </div>

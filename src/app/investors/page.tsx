@@ -155,11 +155,11 @@ export default function InvestorsPage() {
               src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710484/zawr/assets/firmai-dashboard.png" 
               alt="Firm AI Dashboard" 
               style={{ width: '100%', maxWidth: '1100px', height: 'auto', objectFit: 'contain', borderRadius: '1rem', boxShadow: '0 20px 40px -10px rgba(0,0,0,0.1)' }} 
-            />
+             loading="lazy" decoding="async" />
           </div>
           <div style={{ flex: '1 1 350px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div style={{ margin: '-4rem 0 -4rem -1.5rem' }}>
-              <img src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710486/zawr/assets/firmai-logo-dark.png" alt="Firm AI" style={{ width: '100%', maxWidth: '20rem', height: 'auto', objectFit: 'contain' }} />
+              <img src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710486/zawr/assets/firmai-logo-dark.png" alt="Firm AI" style={{ width: '100%', maxWidth: '20rem', height: 'auto', objectFit: 'contain' }}  loading="lazy" decoding="async" />
             </div>
             <p style={{ fontSize: '1.125rem', color: '#374151', lineHeight: 1.7, fontWeight: 500, paddingRight: '1rem' }}>
               Firm AI is Zawr Industries' current flagship project—an AI-powered Business Intelligence Orchestra designed to unify data, automate decision workflows, and orchestrate intelligent business operations through a single connected ecosystem.
@@ -199,7 +199,7 @@ export default function InvestorsPage() {
               src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710523/zawr/assets/md-portrait.png" 
               alt="Mohammed Ahmed, Managing Director" 
               style={{ width: '100%', maxWidth: '750px', height: 'auto', objectFit: 'contain' }} 
-            />
+             loading="lazy" decoding="async" />
             <div className="md-mobile-name" style={{ width: '100%', textAlign: 'left' }}>
               <h4 style={{ fontSize: '1.125rem', fontWeight: 700, color: '#ffffff', marginBottom: '0.25rem', fontStyle: 'italic' }}>Mohammed Ahmed</h4>
               <p style={{ fontSize: '1rem', color: '#d1d5db', fontWeight: 400, fontStyle: 'italic' }}>Managing Director, Zawr Industries</p>
@@ -348,7 +348,7 @@ export default function InvestorsPage() {
               >
                 <div style={{ backgroundColor: '#ffffff', borderRadius: '1rem', padding: '1.25rem', cursor: 'pointer', transition: 'transform 0.3s ease', display: 'flex', flexDirection: 'column', width: '100%', height: '100%' }} onMouseOver={(e) => e.currentTarget.style.transform = 'translateY(-8px)'} onMouseOut={(e) => e.currentTarget.style.transform = 'translateY(0)'}>
                   <div style={{ position: 'relative', width: '100%', height: '180px', borderRadius: '0.75rem', overflow: 'hidden', marginBottom: '1.5rem' }}>
-                    <img src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710482/zawr/assets/financial-chart.png" alt={report.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <img src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710482/zawr/assets/financial-chart.png" alt={report.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }}  loading="lazy" decoding="async" />
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingBottom: '0.5rem', paddingLeft: '0.5rem', paddingRight: '0.5rem' }}>
                     <span style={{ color: '#000000', fontSize: '1.6rem', fontWeight: 500 }}>{report.title}</span>
@@ -696,7 +696,7 @@ export default function InvestorsPage() {
                               src={ev.image || 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710480/zawr/assets/event-speaker.png'}
                               alt={ev.title}
                               style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                            />
+                             loading="lazy" decoding="async" />
                           </div>
 
                           {/* Title */}

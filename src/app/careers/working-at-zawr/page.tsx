@@ -25,7 +25,7 @@ export default function WorkingAtZawrPage() {
             height: 'auto', 
             display: 'block' 
           }} 
-        />
+         loading="lazy" decoding="async" />
 
         {/* Subtle gradient backdrop */}
         <div style={{
@@ -95,7 +95,7 @@ export default function WorkingAtZawrPage() {
               objectFit: 'cover',
               display: 'block'
             }}
-          />
+           loading="lazy" decoding="async" />
         </div>
 
         {/* Right: Text */}
@@ -183,7 +183,7 @@ export default function WorkingAtZawrPage() {
               objectFit: 'cover',
               display: 'block'
             }}
-          />
+           loading="lazy" decoding="async" />
         </div>
       </section>
 
@@ -211,7 +211,7 @@ export default function WorkingAtZawrPage() {
               objectFit: 'cover',
               display: 'block'
             }}
-          />
+           loading="lazy" decoding="async" />
         </div>
 
         {/* Right: Text */}
@@ -299,7 +299,7 @@ export default function WorkingAtZawrPage() {
               objectFit: 'cover',
               display: 'block'
             }}
-          />
+           loading="lazy" decoding="async" />
         </div>
       </section>
 
@@ -318,7 +318,7 @@ export default function WorkingAtZawrPage() {
             height: 'auto',
             display: 'block'
           }}
-        />
+         loading="lazy" decoding="async" />
         {/* Dark overlay */}
         <div style={{
           position: 'absolute',

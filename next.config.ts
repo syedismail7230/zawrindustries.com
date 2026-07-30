@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Silence the Turbopack root warning
+  turbopack: {},
+
   // Enable Brotli / Gzip compression of text assets
   compress: true,
 
@@ -13,7 +16,7 @@ const nextConfig: NextConfig = {
   // Premium Next.js Image CDN Optimizations
   images: {
     formats: ['image/avif', 'image/webp'],
-    minimumCacheTTL: 31536000, // Instructs CDN & browser to cache optimized images for 1 year
+    minimumCacheTTL: 31536000, // 1 year
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     remotePatterns: [
@@ -25,11 +28,10 @@ const nextConfig: NextConfig = {
     ],
   },
 
-  // Setup aggressive Edge CDN & client browser caching for all public media/assets
+  // Aggressive Edge CDN & browser caching headers
   async headers() {
     return [
       {
-        // Matches all static media, images, video formats, PDFs, and webfonts
         source: '/:all*(svg|png|jpg|jpeg|webp|avif|ico|gif|woff2|woff|ttf|otf|mp4|webm|pdf)',
         headers: [
           {
@@ -39,12 +41,25 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        // Specific caching fallback rule for dedicated assets or docs directories
         source: '/assets/:path*',
         headers: [
           {
             key: 'Cache-Control',
             value: 'public, max-age=31536000, s-maxage=31536000, immutable',
+          },
+        ],
+      },
+      {
+        // Service Worker must never be cached by the browser
+        source: '/sw.js',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=0, must-revalidate',
+          },
+          {
+            key: 'Service-Worker-Allowed',
+            value: '/',
           },
         ],
       },

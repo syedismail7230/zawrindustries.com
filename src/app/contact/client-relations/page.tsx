@@ -99,7 +99,7 @@ export default function ClientRelationsPage() {
               src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710459/zawr/assets/customer-hero.png" 
               alt="Client Relations" 
               style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%', objectFit: 'cover' }}
-            />
+             loading="lazy" decoding="async" />
           </div>
         </div>
 

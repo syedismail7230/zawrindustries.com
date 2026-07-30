@@ -581,7 +581,7 @@ export default function ServicesMarquee() {
                     src={`/assets/${service.slug}-hero.png`} 
                     alt={service.name} 
                     className="card-img"
-                  />
+                   loading="lazy" decoding="async" />
                 </div>
 
                 {/* Service Name exactly matching mockup styling */}
@@ -632,7 +632,7 @@ export default function ServicesMarquee() {
               objectFit: 'cover',
               objectPosition: 'center',
             }}
-          />
+           loading="lazy" decoding="async" />
           {/* Subtle gradient vignette overlay when morphing to fullscreen */}
           <div style={{
             position: 'absolute',

@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import CookieBanner from '@/components/CookieBanner';
 import SupportWidget from '@/components/SupportWidget';
 import Preloader from '@/components/Preloader';
+import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -184,6 +185,7 @@ export default function RootLayout({
         <Footer />
         <CookieBanner />
         <SupportWidget />
+        <ServiceWorkerRegistrar />
       </body>
     </html>
   );

@@ -100,7 +100,7 @@ export default function SustainabilityEnvironmentPage() {
           src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710556/zawr/assets/sustainability-environment.png"
           alt="Canyon river gorge — Nature, Part of life, Anything gained, Must be returned"
           style={{ width: '100%', height: 'auto', display: 'block' }}
-        />
+         loading="lazy" decoding="async" />
 
         {/* Vignette overlay */}
         <div

@@ -289,7 +289,7 @@ export default function EventsPage() {
               objectPosition: 'center',
               display: 'block'
             }} 
-          />
+           loading="lazy" decoding="async" />
         </div>
 
         {/* SECTION HEADER */}
@@ -516,7 +516,7 @@ export default function EventsPage() {
                           src={ev.image || 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710480/zawr/assets/event-speaker.png'}
                           alt={ev.title}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                        />
+                         loading="lazy" decoding="async" />
                       </div>
 
                       {/* Event Title */}
@@ -585,7 +585,7 @@ export default function EventsPage() {
                   src={events[activeEventIndex]?.image || 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710480/zawr/assets/event-speaker.png'}
                   alt={events[activeEventIndex]?.title}
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
+                 loading="lazy" decoding="async" />
               </div>
 
               {/* Right Side: Event Details */}

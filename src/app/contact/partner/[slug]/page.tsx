@@ -1449,7 +1449,7 @@ export default function PartnershipFormPage() {
                     src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710455/zawr/assets/creator-hub-hero.png" 
                     alt="Zawr Creator Hub Hero" 
                     className="creator-visual-img" 
-                  />
+                   loading="lazy" decoding="async" />
                   <div className="creator-visual-glow" />
                   <a
                     href="https://creator-alliance.zawrindustries.com"
@@ -1500,7 +1500,7 @@ export default function PartnershipFormPage() {
                     src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710456/zawr/assets/creator-partner-model.png" 
                     alt="Zawr Ideal Partner Model" 
                     className="creator-ideal-img" 
-                  />
+                   loading="lazy" decoding="async" />
                 </div>
               </div>
             </div>
@@ -1632,7 +1632,7 @@ export default function PartnershipFormPage() {
                   src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710454/zawr/assets/creator-alliance-group.png"
                   alt="Creator Alliance community"
                   className="creator-alliance-img"
-                />
+                 loading="lazy" decoding="async" />
               </div>
               <div className="creator-alliance-body">
                 <p className="creator-alliance-text">

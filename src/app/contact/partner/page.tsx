@@ -937,7 +937,7 @@ export default function PartnerPage() {
               src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710540/zawr/assets/partnership-hero.png" 
               alt="Zawr Partnership Duo" 
               className="part-hero-img" 
-            />
+             loading="lazy" decoding="async" />
           </div>
         </div>
       </section>

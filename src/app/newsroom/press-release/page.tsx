@@ -279,7 +279,7 @@ export default function PressReleasesPage() {
                           height: '100%',
                           objectFit: 'cover'
                         }}
-                      />
+                       loading="lazy" decoding="async" />
                     </div>
 
                     {/* Title Box */}

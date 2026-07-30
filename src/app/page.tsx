@@ -16,7 +16,7 @@ export default function Home() {
             src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710572/zawr/images/hero-bg.png"
             alt="Zawr Industries Technology Background"
             style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', top: 0, left: 0 }}
-          />
+           loading="eager" fetchPriority="high" />
           <div className="hero-overlay" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%)' }}></div>
         </div>
         
@@ -41,7 +41,7 @@ export default function Home() {
               src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710573/zawr/images/reconstruction.png" 
               alt="Website Under Reconstruction" 
               style={{ width: '100%', maxWidth: '460px', height: 'auto', objectFit: 'contain' }}
-            />
+             loading="lazy" decoding="async" />
           </div>
 
           {/* Right Column: Reconstruction Text & Action Links */}

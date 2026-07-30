@@ -21,7 +21,7 @@ export default function FraudAlertPage() {
           src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710490/zawr/assets/fraud-alert-hero.png"
           alt="Fraud Alert"
           style={{ width: '100%', height: 'auto', display: 'block' }}
-        />
+         loading="lazy" decoding="async" />
         {/* Dark overlay */}
         <div style={{
           position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,

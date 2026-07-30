@@ -107,7 +107,7 @@ export default function Footer() {
             style={{
               display: 'block',
             }}
-          />
+           loading="lazy" decoding="async" />
         </div>
       )}
 

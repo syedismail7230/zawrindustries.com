@@ -319,7 +319,7 @@ export default function BlogClient({ blog }: { blog: Blog }) {
             <h1 className="hero-title">{blog.title}</h1>
 
             <div className="author-meta">
-              <img className="author-img" src={blog.authorImage} alt={blog.author} />
+              <img className="author-img" src={blog.authorImage} alt={blog.author}  loading="lazy" decoding="async" />
               <div className="author-info">
                 By <span className="author-name">{blog.author}</span> &bull; Last updated on {blog.date}
               </div>
@@ -327,7 +327,7 @@ export default function BlogClient({ blog }: { blog: Blog }) {
           </div>
 
           <div className="featured-image-box">
-            <img src={blog.image} alt={blog.title} />
+            <img src={blog.image} alt={blog.title}  loading="lazy" decoding="async" />
           </div>
         </div>
 

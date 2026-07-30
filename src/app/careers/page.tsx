@@ -120,7 +120,7 @@ export default function CareersPage() {
                   alt="Zawr Culture" 
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                   onError={(e) => { e.currentTarget.style.display = 'none'; }} 
-                />
+                 loading="lazy" decoding="async" />
               </div>
             );
           })}

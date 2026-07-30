@@ -57,7 +57,7 @@ export default function CustomerRelationsPage() {
               src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710459/zawr/assets/customer-hero.png" 
               alt="Customer Relations" 
               className="absolute inset-0 w-full h-full object-cover"
-            />
+             loading="lazy" decoding="async" />
           </div>
         </div>
 

@@ -52,7 +52,7 @@ export default function SustainabilityEducationPage() {
             src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710465/zawr/assets/edu-hero.png"
             alt="Students celebrating learning at Zawr Industries"
             style={{ width: '100%', height: 'auto', display: 'block' }}
-          />
+           loading="lazy" decoding="async" />
         </div>
       </div>
 
@@ -84,7 +84,7 @@ export default function SustainabilityEducationPage() {
               src={icon}
               alt={label}
               style={{ width: '120px', height: '120px', objectFit: 'contain', display: 'block' }}
-            />
+             loading="lazy" decoding="async" />
             <p style={{
               fontSize: '0.88rem',
               fontWeight: 500,
@@ -148,7 +148,7 @@ export default function SustainabilityEducationPage() {
             src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710468/zawr/assets/edu-origami.png"
             alt="Origami crane — continuous learning at Zawr"
             style={{ width: '100%', maxWidth: '380px', height: 'auto', display: 'block' }}
-          />
+           loading="lazy" decoding="async" />
         </div>
         {/* Text */}
         <div style={{ flex: '1 1 340px' }}>

@@ -172,7 +172,7 @@ export default function SponsorshipPage() {
             alt="Sponsorship Opportunities" 
             style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
             onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?auto=format&fit=crop&q=80&w=2070' }} 
-          />
+           loading="lazy" decoding="async" />
           {/* Gradient overlay to ensure text is readable and blends into the black background below */}
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, #000000 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.8) 100%)' }}></div>
         </div>
