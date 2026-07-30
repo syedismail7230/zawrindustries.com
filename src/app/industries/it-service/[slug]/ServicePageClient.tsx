@@ -619,7 +619,7 @@ export default function ServicePageClient({ service, slug, heroSrc }: { service:
           transform: 'translateX(-50%)',
           width: '300px',
           height: '300px',
-          background: 'radial-gradient(circle, rgba(168, 85, 247, 0.1) 0%, rgba(0,0,0,0) 70%)',
+          background: 'radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(0,0,0,0) 70%)',
           pointerEvents: 'none',
           zIndex: 1
         }} />

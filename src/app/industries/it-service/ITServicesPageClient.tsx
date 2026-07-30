@@ -734,7 +734,7 @@ export default function ITServicesPageClient() {
                       fontWeight: 500, 
                       marginBottom: '1.4rem', 
                       letterSpacing: '-0.01em',
-                      background: 'linear-gradient(90deg, #c084fc 0%, #60a5fa 100%)',
+                      background: 'linear-gradient(90deg, #ffffff 0%, #a1a1aa 100%)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
                       display: 'inline-block'
@@ -790,10 +790,10 @@ export default function ITServicesPageClient() {
                     <button 
                       onClick={handleCloseModal}
                       style={{
-                        background: 'rgba(168, 85, 247, 0.1)',
-                        border: '1px solid rgba(168, 85, 247, 0.3)',
+                        background: 'rgba(255, 255, 255, 0.08)',
+                        border: '1px solid rgba(255, 255, 255, 0.25)',
                         borderRadius: '8px',
-                        color: '#c084fc',
+                        color: '#ffffff',
                         padding: '0.6rem 1.4rem',
                         fontSize: '0.9rem',
                         fontWeight: 500,
@@ -801,14 +801,14 @@ export default function ITServicesPageClient() {
                         transition: 'all 0.2s ease',
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(168, 85, 247, 0.2)';
-                        e.currentTarget.style.borderColor = 'rgba(168, 85, 247, 0.5)';
+                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
                         e.currentTarget.style.color = '#ffffff';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(168, 85, 247, 0.1)';
-                        e.currentTarget.style.borderColor = 'rgba(168, 85, 247, 0.3)';
-                        e.currentTarget.style.color = '#c084fc';
+                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+                        e.currentTarget.style.color = '#ffffff';
                       }}
                     >
                       Close Window
