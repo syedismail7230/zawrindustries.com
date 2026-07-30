@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     const fullImageUrl = release.banner 
       ? (release.banner.startsWith('http') ? release.banner : `https://zawrindustries.com${release.banner}`) 
-      : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710544/zawr/assets/public-relations-hero.png';
+      : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710544/zawr/assets/public-relations-hero.png';
 
     return {
       title: `${release.title} | Zawr Industries Press Release`,
@@ -259,7 +259,7 @@ export default async function PressReleasePage({ params }: { params: Promise<{ s
             '@type': 'NewsArticle',
             'headline': release.title,
             'image': [
-              release.banner ? (release.banner.startsWith('http') ? release.banner : `https://zawrindustries.com${release.banner}`) : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710544/zawr/assets/public-relations-hero.png'
+              release.banner ? (release.banner.startsWith('http') ? release.banner : `https://zawrindustries.com${release.banner}`) : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710544/zawr/assets/public-relations-hero.png'
             ],
             'datePublished': getSafeIsoDate(release.date),
             'dateModified': getSafeIsoDate(release.date),
@@ -272,7 +272,7 @@ export default async function PressReleasePage({ params }: { params: Promise<{ s
               'name': 'Zawr Industries',
               'logo': {
                 '@type': 'ImageObject',
-                'url': 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710570/zawr/assets/zawr-logo.png'
+                'url': 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png'
               }
             },
             'description': release.summary || ''

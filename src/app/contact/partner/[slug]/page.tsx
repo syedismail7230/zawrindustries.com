@@ -1446,7 +1446,7 @@ export default function PartnershipFormPage() {
               <div className="creator-header-visual">
                 <div className="creator-visual-wrap">
                   <img 
-                    src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710455/zawr/assets/creator-hub-hero.png" 
+                    src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710455/zawr/assets/creator-hub-hero.png" 
                     alt="Zawr Creator Hub Hero" 
                     className="creator-visual-img" 
                    loading="lazy" decoding="async" />
@@ -1497,7 +1497,7 @@ export default function PartnershipFormPage() {
               <div>
                 <div className="creator-ideal-img-wrap">
                   <img 
-                    src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710456/zawr/assets/creator-partner-model.png" 
+                    src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710456/zawr/assets/creator-partner-model.png" 
                     alt="Zawr Ideal Partner Model" 
                     className="creator-ideal-img" 
                    loading="lazy" decoding="async" />
@@ -1629,7 +1629,7 @@ export default function PartnershipFormPage() {
             <div className="creator-alliance-grid">
               <div className="creator-alliance-img-wrap">
                 <img
-                  src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710454/zawr/assets/creator-alliance-group.png"
+                  src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710454/zawr/assets/creator-alliance-group.png"
                   alt="Creator Alliance community"
                   className="creator-alliance-img"
                  loading="lazy" decoding="async" />

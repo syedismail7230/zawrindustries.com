@@ -280,7 +280,7 @@ export default function EventsPage() {
           position: 'relative'
         }}>
           <img 
-            src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710479/zawr/assets/event-hero.png" 
+            src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710479/zawr/assets/event-hero.png" 
             alt="Zawr Event Hero" 
             style={{ 
               width: '100%', 
@@ -513,7 +513,7 @@ export default function EventsPage() {
                       {/* Event Card image inside stack */}
                       <div style={{ width: '100%', height: '240px', borderRadius: '16px', overflow: 'hidden', marginBottom: '1.5rem', flexShrink: 0, border: '1px solid #eaeaea' }}>
                         <img
-                          src={ev.image || 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710480/zawr/assets/event-speaker.png'}
+                          src={ev.image || 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710480/zawr/assets/event-speaker.png'}
                           alt={ev.title}
                           style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                          loading="lazy" decoding="async" />
@@ -582,7 +582,7 @@ export default function EventsPage() {
                 position: 'relative'
               }}>
                 <img
-                  src={events[activeEventIndex]?.image || 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710480/zawr/assets/event-speaker.png'}
+                  src={events[activeEventIndex]?.image || 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710480/zawr/assets/event-speaker.png'}
                   alt={events[activeEventIndex]?.title}
                   style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                  loading="lazy" decoding="async" />

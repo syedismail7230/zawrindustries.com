@@ -18,7 +18,7 @@ export default function SustainabilityHealthPage() {
         <div style={{ borderRadius: '20px', overflow: 'hidden', lineHeight: 0, maxHeight: '85vh' }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710493/zawr/assets/health-hero.png"
+            src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710493/zawr/assets/health-hero.png"
             alt="Health and Wellbeing at Zawr Industries"
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
            loading="lazy" decoding="async" />
@@ -112,7 +112,7 @@ export default function SustainabilityHealthPage() {
           <div style={{ flex: '1 1 320px', borderRadius: '12px', overflow: 'hidden', lineHeight: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710491/zawr/assets/health-commitment.png"
+              src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710491/zawr/assets/health-commitment.png"
               alt="Wellbeing commitment at Zawr"
               style={{ width: '100%', height: 'auto', display: 'block' }}
              loading="lazy" decoding="async" />
@@ -132,7 +132,7 @@ export default function SustainabilityHealthPage() {
           <div style={{ flex: '1 1 320px', borderRadius: '12px', overflow: 'hidden', lineHeight: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710496/zawr/assets/health-safety.png"
+              src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710496/zawr/assets/health-safety.png"
               alt="Workplace health and safety at Zawr"
               style={{ width: '100%', height: 'auto', display: 'block' }}
              loading="lazy" decoding="async" />
@@ -224,7 +224,7 @@ export default function SustainabilityHealthPage() {
           <div style={{ flex: '1 1 320px', borderRadius: '12px', overflow: 'hidden', lineHeight: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710494/zawr/assets/health-mental.png"
+              src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710494/zawr/assets/health-mental.png"
               alt="Mental health and wellbeing at Zawr"
               style={{ width: '100%', height: 'auto', display: 'block' }}
              loading="lazy" decoding="async" />
@@ -244,7 +244,7 @@ export default function SustainabilityHealthPage() {
           <div style={{ flex: '1 1 320px', borderRadius: '12px', overflow: 'hidden', lineHeight: 0 }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710493/zawr/assets/health-community.png"
+              src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710493/zawr/assets/health-community.png"
               alt="Community health at Zawr"
               style={{ width: '100%', height: 'auto', display: 'block' }}
              loading="lazy" decoding="async" />

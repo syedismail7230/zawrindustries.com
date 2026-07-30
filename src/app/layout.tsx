@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     siteName: 'Zawr Industries',
     images: [
       {
-        url: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710569/zawr/assets/zawr-industries.png',
+        url: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png',
         width: 1200,
         height: 630,
         alt: 'Zawr Industries Cover',
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Zawr Industries',
     description: 'Your strategic partner in harnessing the power of technology for business expansion.',
-    images: ['https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710569/zawr/assets/zawr-industries.png'],
+    images: ['https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png'],
   },
   icons: {
     icon: [
@@ -104,7 +104,7 @@ export default function RootLayout({
                   "legalName": "Zawr Industries LLP",
                   "description": "Zawr Industries LLP is a leading Indian technology, software engineering, and business transformation company headquartered in Bangalore. The company operates across multiple sectors delivering custom software, AI/ML integrations, cloud solutions, logistics automation, and business consulting services globally.",
                   "url": "https://zawrindustries.com",
-                  "logo": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710570/zawr/assets/zawr-logo.png",
+                  "logo": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png",
                   "contactPoint": {
                     "@type": "ContactPoint",
                     "telephone": "+91-9880464078",
@@ -132,8 +132,8 @@ export default function RootLayout({
                   "@id": "https://zawrindustries.com/#service",
                   "name": "Zawr Industries LLP",
                   "url": "https://zawrindustries.com",
-                  "logo": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710570/zawr/assets/zawr-logo.png",
-                  "image": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710569/zawr/assets/zawr-industries.png",
+                  "logo": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png",
+                  "image": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png",
                   "telephone": "+91-9880464078",
                   "priceRange": "$$$",
                   "address": {

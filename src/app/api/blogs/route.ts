@@ -72,7 +72,7 @@ export async function POST(request: Request) {
       }
 
       // Handle Author Image Upload
-      let authorImageUrl = formData.get('authorImageUrl') as string || 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710409/zawr/assets/authors/lina.jpg';
+      let authorImageUrl = formData.get('authorImageUrl') as string || 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710409/zawr/assets/authors/lina.jpg';
       const authorImageFile = formData.get('authorImageFile') as File | null;
       if (authorImageFile && authorImageFile.size > 0) {
         try {

@@ -1,8 +1,13 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
-  // Silence the Turbopack root warning
-  turbopack: {},
+  // Fix: Tell Next.js/Turbopack the exact workspace root to avoid
+  // picking up the wrong package-lock.json from C:\Users\syedi\
+  turbopack: {
+    root: path.resolve(__dirname),
+  },
+
 
   // Enable Brotli / Gzip compression of text assets
   compress: true,

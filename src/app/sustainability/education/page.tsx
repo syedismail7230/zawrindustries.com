@@ -49,7 +49,7 @@ export default function SustainabilityEducationPage() {
         <div style={{ flex: '1 1 320px', borderRadius: '16px', overflow: 'hidden', lineHeight: 0 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710465/zawr/assets/edu-hero.png"
+            src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710465/zawr/assets/edu-hero.png"
             alt="Students celebrating learning at Zawr Industries"
             style={{ width: '100%', height: 'auto', display: 'block' }}
            loading="lazy" decoding="async" />
@@ -67,9 +67,9 @@ export default function SustainabilityEducationPage() {
         gap: '3rem',
       }}>
       {[
-          { icon: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710465/zawr/assets/edu-icon-curiosity.png', label: 'Curiosity Driven\nLearning' },
-          { icon: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710467/zawr/assets/edu-icon-skills.png',    label: 'Future Ready\nSkills' },
-          { icon: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710466/zawr/assets/edu-icon-knowledge.png', label: 'Knowledge\nEcosystems' },
+          { icon: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_400,c_limit/v1783710465/zawr/assets/edu-icon-curiosity.png', label: 'Curiosity Driven\nLearning' },
+          { icon: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_400,c_limit/v1783710467/zawr/assets/edu-icon-skills.png',    label: 'Future Ready\nSkills' },
+          { icon: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_400,c_limit/v1783710466/zawr/assets/edu-icon-knowledge.png', label: 'Knowledge\nEcosystems' },
         ].map(({ icon, label }) => (
           <div key={label} style={{
             flex: '1 1 160px',
@@ -145,7 +145,7 @@ export default function SustainabilityEducationPage() {
         <div style={{ flex: '1 1 300px', lineHeight: 0 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710468/zawr/assets/edu-origami.png"
+            src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710468/zawr/assets/edu-origami.png"
             alt="Origami crane — continuous learning at Zawr"
             style={{ width: '100%', maxWidth: '380px', height: 'auto', display: 'block' }}
            loading="lazy" decoding="async" />

@@ -40,7 +40,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     const fullImageUrl = blog.image 
       ? (blog.image.startsWith('http') ? blog.image : `https://zawrindustries.com${blog.image}`) 
-      : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710569/zawr/assets/zawr-industries.png';
+      : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png';
 
     return {
       title: `${blog.title} | Zawr Industries Blog`,
@@ -109,7 +109,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             '@type': 'BlogPosting',
             'headline': blog.title,
             'image': [
-              blog.image ? (blog.image.startsWith('http') ? blog.image : `https://zawrindustries.com${blog.image}`) : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710569/zawr/assets/zawr-industries.png'
+              blog.image ? (blog.image.startsWith('http') ? blog.image : `https://zawrindustries.com${blog.image}`) : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png'
             ],
             'datePublished': getSafeIsoDate(blog.date),
             'dateModified': getSafeIsoDate(blog.date),
@@ -122,7 +122,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               'name': 'Zawr Industries',
               'logo': {
                 '@type': 'ImageObject',
-                'url': 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710570/zawr/assets/zawr-logo.png'
+                'url': 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png'
               }
             },
             'description': blog.summary || ''

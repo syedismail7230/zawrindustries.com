@@ -284,7 +284,7 @@ export default async function Page({ params }: { params: Promise<{ slug: string 
       '@type': 'Organization',
       'name': 'Zawr Industries',
       'url': 'https://zawrindustries.com',
-      'logo': 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710570/zawr/assets/zawr-logo.png',
+      'logo': 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png',
       'address': {
         '@type': 'PostalAddress',
         'streetAddress': 'Old Airport Rd, HAL',
