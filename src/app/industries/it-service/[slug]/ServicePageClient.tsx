@@ -208,7 +208,7 @@ function ChallengesSection({ challenges }: { challenges: string[] }) {
         .barrel-item.active-item {
           font-weight: 600;
           color: #ffffff;
-          text-shadow: 0 0 25px rgba(255, 255, 255, 0.4), 0 0 10px rgba(59, 130, 246, 0.3);
+          text-shadow: 0 0 25px rgba(255, 255, 255, 0.6), 0 0 10px rgba(255, 255, 255, 0.4);
         }
         .sticky-challenges-title {
           flex: 1 1 350px;
@@ -239,7 +239,6 @@ function ChallengesSection({ challenges }: { challenges: string[] }) {
         }
       `}} />
 
-      {/* Left Column: Sticky Title Stack */}
       <div className="sticky-challenges-title">
         <h2 style={{
           fontSize: 'clamp(2.5rem, 5vw, 4.2rem)',
@@ -247,7 +246,7 @@ function ChallengesSection({ challenges }: { challenges: string[] }) {
           lineHeight: 1.15,
           letterSpacing: '-0.02em',
           margin: 0,
-          background: 'linear-gradient(135deg, #3b82f6 0%, #ec4899 100%)',
+          background: 'linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%)',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
         }}>
@@ -257,7 +256,6 @@ function ChallengesSection({ challenges }: { challenges: string[] }) {
         </h2>
       </div>
 
-      {/* Right Column: 3D Cylindrical Barrel Roll list */}
       <div className="challenges-cylinder-wrapper">
         <div 
           ref={viewportRef}
@@ -384,15 +382,15 @@ function OfferingsSection({ serviceName, offerings }: { serviceName: string; off
           box-sizing: border-box;
         }
         .flip-card-front {
-          background: linear-gradient(135deg, #072a6b 0%, #211c4f 45%, #5a1161 100%);
-          border: 1px solid rgba(255, 255, 255, 0.05);
+          background: linear-gradient(135deg, #18181b 0%, #09090b 100%);
+          border: 1px solid rgba(255, 255, 255, 0.15);
           padding: 2.8rem 2.4rem;
           justify-content: space-between;
           cursor: pointer;
         }
         .flip-card-back {
           background: #ffffff;
-          border: 1px solid rgba(0, 0, 0, 0.06);
+          border: 1px solid rgba(0, 0, 0, 0.1);
           color: #000000;
           padding: 2.2rem 2rem;
           transform: rotateY(180deg);
@@ -448,73 +446,52 @@ function OfferingsSection({ serviceName, offerings }: { serviceName: string; off
           line-height: 1.45;
           color: #333333;
           position: relative;
-          padding-left: 1.25rem;
-        }
-        .back-list-item::before {
-          content: "•";
-          position: absolute;
-          left: 0;
-          top: 0;
-          color: #000000;
-          font-size: 1rem;
         }
       `}} />
 
-      <h2 className="offerings-section-title">
-        {serviceName} Offerings
-      </h2>
+      <h2 className="offerings-section-title">Key Offerings & Capabilities</h2>
 
       <div className="offerings-grid">
-        {offerings.map((offering, idx) => (
-          <div key={idx} className="flip-card-container" onClick={() => toggleFlip(idx)}>
-            <div className={`flip-card ${flippedCards[idx] ? 'flipped' : ''}`}>
-              
-              {/* Front Side */}
-              <div className="flip-card-front">
-                <div className="offering-title">
-                  {offering.title}
+        {offerings.map((offering, idx) => {
+          const isFlipped = flippedCards[idx];
+          return (
+            <div 
+              key={idx} 
+              className="flip-card-container"
+              onClick={() => toggleFlip(idx)}
+            >
+              <div className={`flip-card ${isFlipped ? 'flipped' : ''}`}>
+                <div className="flip-card-front">
+                  <h3 className="offering-title">{offering.title}</h3>
+                  <div className="offering-arrow">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="7" y1="17" x2="17" y2="7"></line>
+                      <polyline points="7 7 17 7 17 17"></polyline>
+                    </svg>
+                  </div>
                 </div>
-                <div className="offering-arrow">
-                  <svg 
-                    width="60" 
-                    height="60" 
-                    viewBox="0 0 24 24" 
-                    fill="none" 
-                    stroke="currentColor" 
-                    strokeWidth="1" 
-                    strokeLinecap="round" 
-                    strokeLinejoin="round"
-                  >
-                    <line x1="7" y1="17" x2="17" y2="7"></line>
-                    <polyline points="7 7 17 7 17 17"></polyline>
-                  </svg>
+
+                <div className="flip-card-back">
+                  <div>
+                    <p className="back-desc">{offering.description}</p>
+                    {offering.deliverables && offering.deliverables.length > 0 && (
+                      <>
+                        <div className="back-subtitle">Key Deliverables:</div>
+                        <ul className="back-list">
+                          {offering.deliverables.map((del, dIdx) => (
+                            <li key={dIdx} className="back-list-item">
+                              • {del}
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    )}
+                  </div>
                 </div>
               </div>
-
-              {/* Back Side */}
-              <div className="flip-card-back">
-                <p className="back-desc">
-                  {offering.description}
-                </p>
-                {offering.deliverables && offering.deliverables.length > 0 && (
-                  <>
-                    <div className="back-subtitle">
-                      Deliverables
-                    </div>
-                    <ul className="back-list">
-                      {offering.deliverables.map((item, itemIdx) => (
-                        <li key={itemIdx} className="back-list-item">
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-              </div>
-
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -534,9 +511,12 @@ export default function ServicePageClient({ service, slug, heroSrc }: { service:
   }, [slug]);
 
   return (
-    <div style={{ backgroundColor: '#000000', color: '#ffffff', fontFamily: 'Inter, sans-serif', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div className="bw-it-service" style={{ backgroundColor: '#000000', color: '#ffffff', fontFamily: 'Inter, sans-serif', minHeight: '100vh', overflowX: 'hidden' }}>
 
       <style dangerouslySetInnerHTML={{__html: `
+        .bw-it-service img {
+          filter: grayscale(100%) !important;
+        }
         body {
           background-color: #000000 !important;
         }
@@ -544,7 +524,7 @@ export default function ServicePageClient({ service, slug, heroSrc }: { service:
           background: #000000;
           color: #ffffff;
           border: 2px solid transparent;
-          background-image: linear-gradient(#000000, #000000), linear-gradient(135deg, #3b82f6, #ec4899);
+          background-image: linear-gradient(#000000, #000000), linear-gradient(135deg, #ffffff, #52525b);
           background-origin: border-box;
           background-clip: padding-box, border-box;
           border-radius: 100px;
@@ -553,14 +533,14 @@ export default function ServicePageClient({ service, slug, heroSrc }: { service:
           font-weight: 500;
           cursor: pointer;
           transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.6);
           display: inline-block;
           text-align: center;
         }
         .neon-btn:hover {
           transform: translateY(-3px) scale(1.03);
-          box-shadow: 0 0 15px rgba(59, 130, 246, 0.5), 0 0 25px rgba(236, 72, 153, 0.4);
-          background-image: linear-gradient(#111111, #111111), linear-gradient(135deg, #ec4899, #3b82f6);
+          box-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+          background-image: linear-gradient(#111111, #111111), linear-gradient(135deg, #e4e4e7, #ffffff);
         }
       `}} />
 
@@ -590,6 +570,7 @@ export default function ServicePageClient({ service, slug, heroSrc }: { service:
             height: '100%',
             objectFit: 'cover',
             objectPosition: 'center',
+            filter: 'grayscale(100%)',
             zIndex: 1
           }}
          loading="eager" />
@@ -597,7 +578,7 @@ export default function ServicePageClient({ service, slug, heroSrc }: { service:
         <div style={{
           position: 'absolute',
           inset: 0,
-          background: 'linear-gradient(to top, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0) 100%)',
+          background: 'linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,0) 100%)',
           pointerEvents: 'none',
           zIndex: 2
         }} />
