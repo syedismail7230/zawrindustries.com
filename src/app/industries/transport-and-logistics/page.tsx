@@ -64,17 +64,6 @@ export default function LogisticsPage() {
           }}>
             Trade &amp; Logistics
           </h1>
-          <p style={{
-            fontSize: 'clamp(1rem, 1.8vw, 1.25rem)',
-            color: '#ffffff',
-            marginTop: '1.5rem',
-            lineHeight: 1.65,
-            maxWidth: '650px',
-            fontWeight: 300,
-            textShadow: '0 2px 14px rgba(0,0,0,0.9)',
-          }}>
-            Architecting intelligent supply chains, automated freight routing, and global smart mobility platforms for modern commerce.
-          </p>
         </div>
       </div>
 
