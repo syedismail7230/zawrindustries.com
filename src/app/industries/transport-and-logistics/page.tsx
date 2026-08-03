@@ -38,18 +38,20 @@ export default function LogisticsPage() {
   return (
     <div style={{ backgroundColor: '#ffffff', color: '#000000', minHeight: '100vh', fontFamily: 'Inter, sans-serif', overflowX: 'hidden' }}>
       
-      {/* ── HERO BANNER WITH LOGISTICS-HERO.PNG (NO OVERLAY / NO FADE) ── */}
+      {/* ── HERO BANNER WITH LOGISTICS-HERO.PNG (TIGHTLY FITTED HEIGHT) ── */}
       <div style={{
         position: 'relative',
         width: '100%',
-        height: '90vh',
+        height: 'calc(100vh - 120px)',
+        minHeight: '520px',
+        maxHeight: '750px',
         backgroundImage: 'url("https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1785797723/zawr/assets/logistics-hero.png"), url("/assets/logistics-hero.png")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         display: 'flex',
         alignItems: 'flex-end',
         justifyContent: 'flex-start',
-        padding: '0 clamp(1rem, 6vw, 8%) 8vh clamp(1rem, 6vw, 8%)',
+        padding: '0 clamp(1rem, 6vw, 8%) 4rem clamp(1rem, 6vw, 8%)',
         boxSizing: 'border-box'
       }}>
         <div style={{ position: 'relative', zIndex: 10, maxWidth: '850px' }}>
@@ -68,8 +70,8 @@ export default function LogisticsPage() {
       </div>
 
       {/* ── OVERVIEW & CAPABILITIES SECTION (CLEAN WHITE BACKGROUND) ── */}
-      <div style={{ backgroundColor: '#ffffff', padding: 'clamp(4rem, 6vw, 7rem) clamp(1rem, 6vw, 8%)', maxWidth: '1200px', margin: '0 auto' }}>
-        <div style={{ maxWidth: '850px', margin: '0 auto 5rem auto', textAlign: 'center' }}>
+      <div style={{ backgroundColor: '#ffffff', padding: 'clamp(3rem, 5vw, 5rem) clamp(1rem, 6vw, 8%)', maxWidth: '1200px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '850px', margin: '0 auto 4rem auto', textAlign: 'center' }}>
           <h2 style={{
             fontSize: 'clamp(2rem, 4vw, 3rem)',
             fontWeight: 300,
@@ -95,7 +97,7 @@ export default function LogisticsPage() {
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
           gap: '2rem',
-          marginBottom: '5rem'
+          marginBottom: '4rem'
         }}>
           {capabilities.map((cap, idx) => (
             <div key={idx} style={{
