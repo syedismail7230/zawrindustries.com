@@ -90,7 +90,7 @@ export function IndustriesWeServeSection({
           display: flex;
           flex-direction: column;
           align-items: center;
-          overflow: hidden;
+          overflow: visible;
         }
 
         .iws-heading {
@@ -289,12 +289,15 @@ export function IndustriesWeServeSection({
           50% { transform: scale(1.25) rotate(14deg); opacity: 1; }
         }
 
-        /* ── SMOOTH CONTINUOUS ARC DOME CONTAINER (SINGLE PERFECT TOP CURVE) ── */
+        /* ── FULL-BLEED EDGE-TO-EDGE (100VW) GLOWING DOME ── */
         .iws-arc-dome-section {
           position: relative;
-          width: 100%;
-          max-width: 1400px;
-          height: 320px;
+          width: 100vw;
+          left: 50%;
+          right: 50%;
+          margin-left: -50vw;
+          margin-right: -50vw;
+          height: 380px;
           z-index: 10;
           display: flex;
           justify-content: center;
@@ -308,9 +311,9 @@ export function IndustriesWeServeSection({
           top: 0;
           left: 50%;
           transform: translateX(-50%);
-          width: 135vw;
-          max-width: 1550px;
-          height: 520px;
+          width: 100vw;
+          min-width: 100vw;
+          height: 600px;
           border-radius: 50% 50% 0 0 / 100% 100% 0 0;
           background: radial-gradient(ellipse at 50% 0%, 
             rgba(67, 56, 202, 0.95) 0%, 
@@ -366,11 +369,7 @@ export function IndustriesWeServeSection({
             transform: translateY(0);
           }
           .iws-arc-dome-section {
-            height: 240px;
-          }
-          .iws-arc-dome-shape {
-            width: 180vw;
-            height: 380px;
+            height: 280px;
           }
         }
       ` }} />
@@ -426,7 +425,7 @@ export function IndustriesWeServeSection({
         </button>
       </div>
 
-      {/* ── SMOOTH CONTINUOUS DOME ARC CONTAINER (SINGLE TOP EDGE GLOW) ── */}
+      {/* ── FULL-BLEED (100VW) EDGE-TO-EDGE GLOWING DOME ── */}
       <div className="iws-arc-dome-section">
         <div className="iws-arc-dome-shape" />
       </div>
