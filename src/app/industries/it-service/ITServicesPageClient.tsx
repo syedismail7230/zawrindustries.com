@@ -263,7 +263,8 @@ export default function ITServicesPageClient() {
 
       {/* ── CORE CAPABILITIES — only rendered on the main ITServices index landing page ──────────────── */}
       {!isDetailPage && (
-        <div style={{ padding: 'clamp(4rem, 8vw, 8rem) clamp(1rem, 6vw, 8%) clamp(6rem, 10vw, 10rem) clamp(1rem, 6vw, 8%)', position: 'relative' }}>
+        <>
+          <div style={{ padding: 'clamp(4rem, 8vw, 8rem) clamp(1rem, 6vw, 8%) clamp(6rem, 10vw, 10rem) clamp(1rem, 6vw, 8%)', position: 'relative' }}>
           
           {/* ── OUR PROJECTS SECTION ── */}
           <div style={{ maxWidth: '1200px', margin: '0 auto 8rem auto', textAlign: 'center' }}>
@@ -682,10 +683,11 @@ export default function ITServicesPageClient() {
               </div>
             );
           })()}
-
-          {/* ── INDUSTRIES WE SERVE SECTION ── */}
-          <IndustriesWeServeSection />
         </div>
+
+        {/* ── INDUSTRIES WE SERVE SECTION (FULL-WIDTH ROOT SECTION) ── */}
+        <IndustriesWeServeSection />
+      </>
       )}
 
       {selectedProject && (

@@ -224,11 +224,11 @@ export function IndustriesWeServeSection({
           font-weight: 500;
         }
 
-        /* AI Consultant Pill Search Button Overlapping Dome */
+        /* AI Consultant Pill Search Button Overlapping Dome Top Apex */
         .iws-button-wrapper {
           position: relative;
           z-index: 30;
-          margin-bottom: -24px; /* Overlaps top curve of dome */
+          margin-bottom: -22px; /* Overlaps top curve of dome */
         }
 
         .iws-ai-pill {
@@ -289,15 +289,15 @@ export function IndustriesWeServeSection({
           50% { transform: scale(1.25) rotate(14deg); opacity: 1; }
         }
 
-        /* ── FULL-BLEED EDGE-TO-EDGE (100VW) GLOWING DOME ── */
-        .iws-arc-dome-section {
+        /* ── 100VW FULL-BLEED PERFECT CURVED NEON DOME ARC ── */
+        .iws-dome-fullbleed-wrapper {
           position: relative;
           width: 100vw;
           left: 50%;
           right: 50%;
           margin-left: -50vw;
           margin-right: -50vw;
-          height: 380px;
+          height: clamp(340px, 45vh, 480px);
           z-index: 10;
           display: flex;
           justify-content: center;
@@ -306,41 +306,10 @@ export function IndustriesWeServeSection({
           pointer-events: none;
         }
 
-        .iws-arc-dome-shape {
-          position: absolute;
-          top: 0;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 100vw;
-          min-width: 100vw;
-          height: 600px;
-          border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-          background: radial-gradient(ellipse at 50% 0%, 
-            rgba(67, 56, 202, 0.95) 0%, 
-            rgba(37, 99, 235, 0.75) 25%, 
-            rgba(30, 27, 75, 0.5) 50%, 
-            rgba(15, 23, 42, 0.85) 75%,
-            #000000 100%);
-          box-shadow: inset 0 20px 60px rgba(168, 85, 247, 0.35), inset 0 40px 100px rgba(59, 130, 246, 0.25);
-        }
-
-        /* Soft edge glow halo directly on top curve */
-        .iws-arc-dome-shape::before {
-          content: '';
-          position: absolute;
-          inset: 0;
-          border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-          padding: 2px;
-          background: linear-gradient(90deg, 
-            transparent 0%, 
-            rgba(96, 165, 250, 0.4) 20%, 
-            rgba(192, 132, 252, 0.95) 50%, 
-            rgba(236, 72, 153, 0.4) 80%, 
-            transparent 100%);
-          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-          -webkit-mask-composite: xor;
-          mask-composite: exclude;
-          pointer-events: none;
+        .iws-dome-full-svg {
+          width: 100%;
+          height: 100%;
+          overflow: visible;
         }
 
         @media (max-width: 768px) {
@@ -368,8 +337,8 @@ export function IndustriesWeServeSection({
             opacity: 1;
             transform: translateY(0);
           }
-          .iws-arc-dome-section {
-            height: 280px;
+          .iws-dome-fullbleed-wrapper {
+            height: 260px;
           }
         }
       ` }} />
@@ -425,9 +394,43 @@ export function IndustriesWeServeSection({
         </button>
       </div>
 
-      {/* ── FULL-BLEED (100VW) EDGE-TO-EDGE GLOWING DOME ── */}
-      <div className="iws-arc-dome-section">
-        <div className="iws-arc-dome-shape" />
+      {/* ── 100VW FULL-BLEED PERFECT CURVED NEON DOME ARC ── */}
+      <div className="iws-dome-fullbleed-wrapper">
+        <svg viewBox="0 0 1400 450" preserveAspectRatio="none" className="iws-dome-full-svg">
+          <defs>
+            {/* Rich Radial Dome Glow Gradient */}
+            <radialGradient id="vividDomeGlow" cx="50%" cy="0%" r="85%">
+              <stop offset="0%" stopColor="#4338ca" stopOpacity="0.95" />
+              <stop offset="25%" stopColor="#2563eb" stopOpacity="0.82" />
+              <stop offset="55%" stopColor="#1e1b4b" stopOpacity="0.55" />
+              <stop offset="85%" stopColor="#090a0f" stopOpacity="0.2" />
+              <stop offset="100%" stopColor="#000000" stopOpacity="0" />
+            </radialGradient>
+
+            {/* Neon Glowing Edge Gradient */}
+            <linearGradient id="domeRimGlow" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0" />
+              <stop offset="15%" stopColor="#60a5fa" stopOpacity="0.75" />
+              <stop offset="50%" stopColor="#c084fc" stopOpacity="1" />
+              <stop offset="85%" stopColor="#ec4899" stopOpacity="0.75" />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+            </linearGradient>
+
+            <filter id="softDomeGlow" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="12" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+
+          {/* Smooth Curved Dome Arc Fill */}
+          <path d="M -100 450 Q 700 8 1500 450 Z" fill="url(#vividDomeGlow)" />
+
+          {/* Neon Rim Line along top curve */}
+          <path d="M -100 450 Q 700 8 1500 450" fill="none" stroke="url(#domeRimGlow)" strokeWidth="3.5" filter="url(#softDomeGlow)" />
+        </svg>
       </div>
     </section>
   );
