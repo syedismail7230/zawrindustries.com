@@ -82,7 +82,7 @@ export function IndustriesWeServeSection({
           width: 100%;
           max-width: 1200px;
           margin: 0 auto;
-          padding: 2rem 2rem 10rem 2rem;
+          padding: 2rem 2rem 14rem 2rem;
           box-sizing: border-box;
           background-color: #000000;
           color: #ffffff;
@@ -90,6 +90,7 @@ export function IndustriesWeServeSection({
           display: flex;
           flex-direction: column;
           align-items: center;
+          overflow: hidden;
         }
 
         .iws-heading {
@@ -288,48 +289,53 @@ export function IndustriesWeServeSection({
           50% { transform: scale(1.25) rotate(14deg); opacity: 1; }
         }
 
-        /* Glowing Neon Gradient Dome Arc at Bottom */
-        .iws-dome-wrapper {
+        /* ── PURE SMOOTH BLURRED GLOWING GLOBE / DOME AT BOTTOM ── */
+        .iws-blurred-globe-wrapper {
           position: absolute;
-          bottom: 0;
+          bottom: -40px;
           left: 50%;
           transform: translateX(-50%);
-          width: 120vw;
-          max-width: 1400px;
-          height: 260px;
+          width: 130vw;
+          max-width: 1500px;
+          height: 340px;
           pointer-events: none;
           z-index: 1;
-          overflow: hidden;
           display: flex;
           justify-content: center;
           align-items: flex-end;
+          overflow: hidden;
         }
 
-        .iws-dome-glow {
+        .iws-blurred-globe-body {
+          position: relative;
           width: 100%;
-          height: 440px;
+          height: 480px;
           border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-          background: radial-gradient(circle at 50% 0%, 
-            rgba(168, 85, 247, 0.65) 0%, 
-            rgba(59, 130, 246, 0.45) 30%, 
-            rgba(15, 23, 42, 0) 75%);
-          filter: blur(28px);
-          opacity: 0.85;
+          background: radial-gradient(ellipse at 50% 0%, 
+            rgba(168, 85, 247, 0.85) 0%, 
+            rgba(99, 102, 241, 0.65) 25%, 
+            rgba(37, 99, 235, 0.45) 50%, 
+            rgba(15, 23, 42, 0.15) 75%,
+            rgba(0, 0, 0, 0) 100%);
+          filter: blur(42px);
+          opacity: 0.92;
         }
 
-        .iws-dome-line {
+        .iws-blurred-globe-rim {
           position: absolute;
           top: 0;
-          left: 0;
-          right: 0;
-          height: 2px;
+          left: 5%;
+          right: 5%;
+          height: 3px;
+          border-radius: 50% 50% 0 0 / 100% 100% 0 0;
           background: linear-gradient(90deg, 
             transparent 0%, 
-            rgba(96, 165, 250, 0.5) 20%, 
+            rgba(96, 165, 250, 0.4) 20%, 
             rgba(168, 85, 247, 0.95) 50%, 
-            rgba(244, 114, 182, 0.5) 80%, 
+            rgba(244, 114, 182, 0.6) 80%, 
             transparent 100%);
-          box-shadow: 0 0 20px #a855f7, 0 0 35px #60a5fa;
+          filter: blur(3px);
+          box-shadow: 0 0 30px #a855f7, 0 0 50px #38bdf8;
         }
 
         @media (max-width: 768px) {
@@ -357,8 +363,8 @@ export function IndustriesWeServeSection({
             opacity: 1;
             transform: translateY(0);
           }
-          .iws-dome-wrapper {
-            height: 180px;
+          .iws-blurred-globe-wrapper {
+            height: 220px;
             width: 180vw;
           }
         }
@@ -415,10 +421,10 @@ export function IndustriesWeServeSection({
         </button>
       </div>
 
-      {/* Glowing Neon Dome Arc at Bottom */}
-      <div className="iws-dome-wrapper">
-        <div className="iws-dome-glow">
-          <div className="iws-dome-line" />
+      {/* ── PURE SMOOTH BLURRED GLOWING GLOBE / DOME AT BOTTOM (NO LINES) ── */}
+      <div className="iws-blurred-globe-wrapper">
+        <div className="iws-blurred-globe-body">
+          <div className="iws-blurred-globe-rim" />
         </div>
       </div>
     </section>
