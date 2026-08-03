@@ -75,14 +75,13 @@ export function IndustriesWeServeSection({
   };
 
   return (
-    <section className="iws-container">
+    <section className="iws-section-root">
       <style dangerouslySetInnerHTML={{ __html: `
-        .iws-container {
+        .iws-section-root {
           position: relative;
           width: 100%;
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 2rem 2rem 0 2rem;
+          margin: 0;
+          padding: 4rem 0 0 0;
           box-sizing: border-box;
           background-color: #000000;
           color: #ffffff;
@@ -90,7 +89,7 @@ export function IndustriesWeServeSection({
           display: flex;
           flex-direction: column;
           align-items: center;
-          overflow: visible;
+          overflow: hidden;
         }
 
         .iws-heading {
@@ -102,6 +101,7 @@ export function IndustriesWeServeSection({
           font-family: Inter, sans-serif;
           opacity: 0.85;
           text-align: center;
+          padding: 0 1rem;
         }
 
         /* Vertical Accordion Gallery */
@@ -114,6 +114,8 @@ export function IndustriesWeServeSection({
           justify-content: center;
           align-items: stretch;
           margin-bottom: 4.5rem;
+          padding: 0 1.5rem;
+          box-sizing: border-box;
           position: relative;
           z-index: 10;
         }
@@ -228,7 +230,7 @@ export function IndustriesWeServeSection({
         .iws-button-wrapper {
           position: relative;
           z-index: 30;
-          margin-bottom: -22px; /* Overlaps top curve of dome */
+          margin-bottom: -26px; /* Overlaps top curve of dome */
         }
 
         .iws-ai-pill {
@@ -289,14 +291,10 @@ export function IndustriesWeServeSection({
           50% { transform: scale(1.25) rotate(14deg); opacity: 1; }
         }
 
-        /* ── 100VW FULL-BLEED PERFECT CURVED NEON DOME ARC ── */
-        .iws-dome-fullbleed-wrapper {
+        /* ── PERFECT FULL-WIDTH CENTERED CURVED NEON DOME ARC ── */
+        .iws-dome-wrapper {
           position: relative;
-          width: 100vw;
-          left: 50%;
-          right: 50%;
-          margin-left: -50vw;
-          margin-right: -50vw;
+          width: 100%;
           height: clamp(340px, 45vh, 480px);
           z-index: 10;
           display: flex;
@@ -306,15 +304,15 @@ export function IndustriesWeServeSection({
           pointer-events: none;
         }
 
-        .iws-dome-full-svg {
+        .iws-dome-svg {
           width: 100%;
           height: 100%;
-          overflow: visible;
+          display: block;
         }
 
         @media (max-width: 768px) {
-          .iws-container {
-            padding: 1rem 1rem 0 1rem;
+          .iws-section-root {
+            padding: 2rem 0 0 0;
           }
           .iws-accordion {
             flex-wrap: wrap;
@@ -337,7 +335,7 @@ export function IndustriesWeServeSection({
             opacity: 1;
             transform: translateY(0);
           }
-          .iws-dome-fullbleed-wrapper {
+          .iws-dome-wrapper {
             height: 260px;
           }
         }
@@ -394,9 +392,9 @@ export function IndustriesWeServeSection({
         </button>
       </div>
 
-      {/* ── 100VW FULL-BLEED PERFECT CURVED NEON DOME ARC ── */}
-      <div className="iws-dome-fullbleed-wrapper">
-        <svg viewBox="0 0 1400 450" preserveAspectRatio="none" className="iws-dome-full-svg">
+      {/* ── PERFECT FULL-WIDTH CENTERED CURVED NEON DOME ARC ── */}
+      <div className="iws-dome-wrapper">
+        <svg viewBox="0 0 1400 450" preserveAspectRatio="none" className="iws-dome-svg">
           <defs>
             {/* Rich Radial Dome Glow Gradient */}
             <radialGradient id="vividDomeGlow" cx="50%" cy="0%" r="85%">
@@ -425,11 +423,11 @@ export function IndustriesWeServeSection({
             </filter>
           </defs>
 
-          {/* Smooth Curved Dome Arc Fill */}
-          <path d="M -100 450 Q 700 8 1500 450 Z" fill="url(#vividDomeGlow)" />
+          {/* Smooth Centered Curved Dome Arc Fill */}
+          <path d="M -50 450 Q 700 8 1450 450 Z" fill="url(#vividDomeGlow)" />
 
           {/* Neon Rim Line along top curve */}
-          <path d="M -100 450 Q 700 8 1500 450" fill="none" stroke="url(#domeRimGlow)" strokeWidth="3.5" filter="url(#softDomeGlow)" />
+          <path d="M -50 450 Q 700 8 1450 450" fill="none" stroke="url(#domeRimGlow)" strokeWidth="3.5" filter="url(#softDomeGlow)" />
         </svg>
       </div>
     </section>
