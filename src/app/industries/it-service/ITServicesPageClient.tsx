@@ -4,6 +4,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import ServicesMarquee from './ServicesMarquee';
+import { IndustriesWeServeSection } from '@/components/IndustriesWeServeSection';
+
 
 export default function ITServicesPageClient() {
   const pathname = usePathname();
@@ -680,6 +682,9 @@ export default function ITServicesPageClient() {
               </div>
             );
           })()}
+
+          {/* ── INDUSTRIES WE SERVE SECTION ── */}
+          <IndustriesWeServeSection />
         </div>
       )}
 
