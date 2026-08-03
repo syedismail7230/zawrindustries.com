@@ -289,12 +289,12 @@ export function IndustriesWeServeSection({
           50% { transform: scale(1.25) rotate(14deg); opacity: 1; }
         }
 
-        /* ── SMOOTH CONTINUOUS ARC DOME CONTAINER ── */
+        /* ── SMOOTH CONTINUOUS ARC DOME CONTAINER (SINGLE PERFECT TOP CURVE) ── */
         .iws-arc-dome-section {
           position: relative;
           width: 100%;
           max-width: 1400px;
-          height: 340px;
+          height: 320px;
           z-index: 10;
           display: flex;
           justify-content: center;
@@ -318,17 +318,26 @@ export function IndustriesWeServeSection({
             rgba(30, 27, 75, 0.5) 50%, 
             rgba(15, 23, 42, 0.85) 75%,
             #000000 100%);
-          box-shadow: inset 0 20px 60px rgba(168, 85, 247, 0.3), inset 0 40px 100px rgba(59, 130, 246, 0.25);
+          box-shadow: inset 0 20px 60px rgba(168, 85, 247, 0.35), inset 0 40px 100px rgba(59, 130, 246, 0.25);
         }
 
-        .iws-arc-dome-svg {
+        /* Soft edge glow halo directly on top curve */
+        .iws-arc-dome-shape::before {
+          content: '';
           position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          overflow: visible;
-          z-index: 12;
+          inset: 0;
+          border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+          padding: 2px;
+          background: linear-gradient(90deg, 
+            transparent 0%, 
+            rgba(96, 165, 250, 0.4) 20%, 
+            rgba(192, 132, 252, 0.95) 50%, 
+            rgba(236, 72, 153, 0.4) 80%, 
+            transparent 100%);
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          pointer-events: none;
         }
 
         @media (max-width: 768px) {
@@ -417,37 +426,9 @@ export function IndustriesWeServeSection({
         </button>
       </div>
 
-      {/* ── SMOOTH CONTINUOUS DOME ARC CONTAINER ── */}
+      {/* ── SMOOTH CONTINUOUS DOME ARC CONTAINER (SINGLE TOP EDGE GLOW) ── */}
       <div className="iws-arc-dome-section">
-        {/* Continuous Elliptical Arc Dome Shape (No flat top or vertical box sides) */}
         <div className="iws-arc-dome-shape" />
-
-        {/* SVG Neon Glow Rim along the Continuous Curve */}
-        <svg viewBox="0 0 1000 240" preserveAspectRatio="none" className="iws-arc-dome-svg">
-          <defs>
-            <linearGradient id="arcRimGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.1" />
-              <stop offset="20%" stopColor="#60a5fa" stopOpacity="0.6" />
-              <stop offset="50%" stopColor="#c084fc" stopOpacity="1" />
-              <stop offset="80%" stopColor="#ec4899" stopOpacity="0.6" />
-              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.1" />
-            </linearGradient>
-            <filter id="arcNeonFilter" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="4" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-          <path
-            d="M -100 240 Q 500 0 1100 240"
-            fill="none"
-            stroke="url(#arcRimGrad)"
-            strokeWidth="3"
-            filter="url(#arcNeonFilter)"
-          />
-        </svg>
       </div>
     </section>
   );
