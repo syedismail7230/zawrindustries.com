@@ -97,7 +97,7 @@ export function FAQSection({ faqs, serviceName }: { faqs: FAQ[]; serviceName: st
           background: #000;
           color: #fff;
           border: 2px solid transparent;
-          background-image: linear-gradient(#000, #000), linear-gradient(135deg, #ffffff, #52525b);
+          background-image: linear-gradient(#000, #000), linear-gradient(135deg, #3b82f6, #ec4899);
           background-origin: border-box;
           background-clip: padding-box, border-box;
           border-radius: 100px;
@@ -114,8 +114,8 @@ export function FAQSection({ faqs, serviceName }: { faqs: FAQ[]; serviceName: st
         }
         .faq-cta-btn:hover {
           transform: translateY(-3px) scale(1.03);
-          box-shadow: 0 0 20px rgba(255,255,255,0.4);
-          background-image: linear-gradient(#111, #111), linear-gradient(135deg, #e4e4e7, #ffffff);
+          box-shadow: 0 0 15px rgba(59,130,246,0.5), 0 0 25px rgba(236,72,153,0.4);
+          background-image: linear-gradient(#111, #111), linear-gradient(135deg, #ec4899, #3b82f6);
         }
       ` }} />
 

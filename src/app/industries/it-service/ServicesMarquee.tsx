@@ -404,7 +404,7 @@ export default function ServicesMarquee() {
           }
         }
 
-        /* 3D Card Item - Monochrome Black & White Theme */
+        /* 3D Card Item - Styled exactly like the user mockup */
         .cylinder-card {
           position: absolute;
           left: 0;
@@ -414,13 +414,13 @@ export default function ServicesMarquee() {
           transform-style: preserve-3d;
           backface-visibility: hidden;
           
-          /* Monochrome card gradient and border decoration */
-          background: linear-gradient(180deg, #0d0d0d 0%, #181818 100%) padding-box,
-                      linear-gradient(135deg, #ffffff, #444444) border-box;
+          /* Mockup card gradient and border decoration */
+          background: linear-gradient(180deg, #110d29 0%, #4c116c 100%) padding-box,
+                      linear-gradient(135deg, #3b82f6, #ec4899) border-box;
           border: 2px solid transparent;
           border-radius: 24px;
           padding: 24px;
-          box-shadow: 0 14px 40px rgba(0, 0, 0, 0.6);
+          box-shadow: 0 14px 40px rgba(0, 0, 0, 0.55);
           backdrop-filter: blur(16px);
           cursor: pointer;
           
@@ -441,9 +441,9 @@ export default function ServicesMarquee() {
         }
         
         .cylinder-card:hover {
-          background: linear-gradient(180deg, #141414 0%, #222222 100%) padding-box,
-                      linear-gradient(135deg, #ffffff, #a1a1aa) border-box;
-          box-shadow: 0 0 30px rgba(255, 255, 255, 0.25), 0 14px 40px rgba(0, 0, 0, 0.7);
+          background: linear-gradient(180deg, #110d29 0%, #4c116c 100%) padding-box,
+                      linear-gradient(135deg, #60a5fa, #f472b6) border-box;
+          box-shadow: 0 0 30px rgba(139, 92, 246, 0.65), 0 14px 40px rgba(0, 0, 0, 0.6);
         }
 
         .card-image-box {
@@ -452,7 +452,7 @@ export default function ServicesMarquee() {
           background-color: #000000;
           border-radius: 16px;
           overflow: hidden;
-          border: 1px solid rgba(255, 255, 255, 0.12);
+          border: 1px solid rgba(255, 255, 255, 0.08);
           position: relative;
         }
         @media (max-width: 768px) {
@@ -465,12 +465,10 @@ export default function ServicesMarquee() {
           width: 100%;
           height: 100%;
           object-fit: cover;
-          filter: grayscale(100%);
-          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .cylinder-card:hover .card-img {
           transform: scale(1.08);
-          filter: grayscale(100%);
         }
 
         /* Card Title */

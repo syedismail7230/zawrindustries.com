@@ -205,7 +205,7 @@ export default function ITServicesPageClient() {
   };
 
   return (
-    <div className="bw-it-service" style={{ backgroundColor: '#000000', color: '#ffffff', minHeight: '100vh', fontFamily: 'Inter, sans-serif', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#000000', color: '#ffffff', minHeight: '100vh', fontFamily: 'Inter, sans-serif', overflowX: 'hidden' }}>
       
       {/* ── HERO BANNER — only rendered on the main ITServices index landing page ──────────────── */}
       {!isDetailPage && (
@@ -216,7 +216,6 @@ export default function ITServicesPageClient() {
           backgroundImage: 'url("https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710520/zawr/assets/it-services-hero.png")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
-          filter: 'grayscale(100%)',
           display: 'flex',
           alignItems: 'flex-end',
           justifyContent: 'flex-start',
@@ -273,15 +272,12 @@ export default function ITServicesPageClient() {
               marginBottom: '4rem',
               letterSpacing: '-0.02em',
               fontFamily: 'Inter, sans-serif',
-              opacity: 0.9
+              opacity: 0.85
             }}>
               Our Projects
             </h2>
 
             <style dangerouslySetInnerHTML={{__html: `
-              .bw-it-service img {
-                filter: grayscale(100%) !important;
-              }
               .projects-grid {
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
@@ -320,7 +316,6 @@ export default function ITServicesPageClient() {
                 width: 100%;
                 height: 100%;
                 object-fit: contain;
-                filter: grayscale(100%) !important;
                 transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
               }
               .folder-img.open-img {
@@ -349,7 +344,7 @@ export default function ITServicesPageClient() {
               .more-projects-label {
                 margin-top: 5rem;
                 font-size: 1rem;
-                color: rgba(255, 255, 255, 0.4);
+                color: rgba(255, 255, 255, 0.35);
                 font-weight: 400;
                 letter-spacing: 0.05em;
               }
@@ -357,12 +352,12 @@ export default function ITServicesPageClient() {
               .mac-modal-overlay {
                 position: fixed;
                 inset: 0;
-                background-color: rgba(0, 0, 0, 0.82);
-                backdrop-filter: blur(12px);
+                background-color: rgba(0, 0, 0, 0.65);
+                backdrop-filter: blur(8px);
                 z-index: 10000;
               }
 
-              .mac-modal-window {
+               .mac-modal-window {
                 position: fixed;
                 top: 50%;
                 left: 50%;
@@ -370,9 +365,9 @@ export default function ITServicesPageClient() {
                 max-width: 750px;
                 height: 85vh;
                 max-height: 560px;
-                background: rgba(12, 12, 12, 0.95);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.95), 0 0 50px rgba(255, 255, 255, 0.08);
+                background: rgba(10, 10, 15, 0.88);
+                border: 1px solid rgba(168, 85, 247, 0.28);
+                box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.9), 0 0 50px rgba(168, 85, 247, 0.18);
                 border-radius: 16px;
                 z-index: 10001;
                 overflow: hidden;
@@ -385,8 +380,8 @@ export default function ITServicesPageClient() {
 
               .mac-titlebar {
                 height: 42px;
-                background: rgba(255, 255, 255, 0.05);
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                background: rgba(255, 255, 255, 0.04);
+                border-bottom: 1px solid rgba(255, 255, 255, 0.08);
                 display: flex;
                 align-items: center;
                 padding: 0 16px;
@@ -403,9 +398,9 @@ export default function ITServicesPageClient() {
                 border-radius: 50%;
                 display: inline-block;
               }
-              .mac-light.close { background-color: #ffffff; cursor: pointer; opacity: 0.9; }
-              .mac-light.minimize { background-color: #888888; }
-              .mac-light.maximize { background-color: #444444; }
+              .mac-light.close { background-color: #ff5f56; cursor: pointer; }
+              .mac-light.minimize { background-color: #ffbd2e; }
+              .mac-light.maximize { background-color: #27c93f; }
               
               .mac-title {
                 position: absolute;
@@ -413,7 +408,7 @@ export default function ITServicesPageClient() {
                 transform: translateX(-50%);
                 font-size: 0.85rem;
                 font-weight: 500;
-                color: rgba(255, 255, 255, 0.7);
+                color: rgba(255, 255, 255, 0.6);
                 letter-spacing: -0.01em;
               }
 
@@ -446,7 +441,7 @@ export default function ITServicesPageClient() {
               .mac-bullet-list {
                 margin: 1rem 0;
                 padding-left: 1.2rem;
-                color: rgba(255, 255, 255, 0.75);
+                color: rgba(255, 255, 255, 0.7);
                 font-size: 0.88rem;
                 line-height: 1.6;
               }
@@ -468,8 +463,8 @@ export default function ITServicesPageClient() {
               }
               
               .mac-metric-card {
-                background: rgba(255, 255, 255, 0.03);
-                border: 1px solid rgba(255, 255, 255, 0.12);
+                background: rgba(255, 255, 255, 0.02);
+                border: 1px solid rgba(255, 255, 255, 0.06);
                 border-radius: 8px;
                 padding: 0.65rem;
                 text-align: center;
@@ -477,15 +472,15 @@ export default function ITServicesPageClient() {
               }
 
               .mac-metric-card:hover {
-                border-color: rgba(255, 255, 255, 0.4);
+                border-color: rgba(168, 85, 247, 0.3);
               }
               
               .mac-metric-val {
                 font-size: 0.95rem;
                 font-weight: 600;
-                color: #ffffff;
+                color: #3b82f6;
                 margin-bottom: 0.15rem;
-                background: linear-gradient(90deg, #ffffff 0%, #a1a1aa 100%);
+                background: linear-gradient(90deg, #a855f7 0%, #3b82f6 100%);
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
               }
@@ -494,13 +489,13 @@ export default function ITServicesPageClient() {
                 font-size: 0.65rem;
                 text-transform: uppercase;
                 letter-spacing: 0.05em;
-                color: rgba(255,255,255,0.5);
+                color: rgba(255,255,255,0.4);
               }
 
               .mac-tech-pill {
-                background-color: rgba(255, 255, 255, 0.06);
-                border: 1px solid rgba(255, 255, 255, 0.2);
-                color: #e4e4e7;
+                background-color: rgba(168, 85, 247, 0.06);
+                border: 1px solid rgba(168, 85, 247, 0.2);
+                color: #c084fc;
                 font-size: 0.75rem;
                 padding: 0.25rem 0.65rem;
                 border-radius: 9999px;
@@ -509,9 +504,8 @@ export default function ITServicesPageClient() {
               }
 
               .mac-tech-pill:hover {
-                border-color: rgba(255, 255, 255, 0.6);
-                background-color: rgba(255, 255, 255, 0.15);
-                color: #ffffff;
+                border-color: rgba(168, 85, 247, 0.55);
+                background-color: rgba(168, 85, 247, 0.12);
               }
 
               .partners-grid {
@@ -734,7 +728,7 @@ export default function ITServicesPageClient() {
                       fontWeight: 500, 
                       marginBottom: '1.4rem', 
                       letterSpacing: '-0.01em',
-                      background: 'linear-gradient(90deg, #ffffff 0%, #a1a1aa 100%)',
+                      background: 'linear-gradient(90deg, #c084fc 0%, #60a5fa 100%)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
                       display: 'inline-block'
@@ -790,10 +784,10 @@ export default function ITServicesPageClient() {
                     <button 
                       onClick={handleCloseModal}
                       style={{
-                        background: 'rgba(255, 255, 255, 0.08)',
-                        border: '1px solid rgba(255, 255, 255, 0.25)',
+                        background: 'rgba(168, 85, 247, 0.1)',
+                        border: '1px solid rgba(168, 85, 247, 0.3)',
                         borderRadius: '8px',
-                        color: '#ffffff',
+                        color: '#c084fc',
                         padding: '0.6rem 1.4rem',
                         fontSize: '0.9rem',
                         fontWeight: 500,
@@ -801,14 +795,14 @@ export default function ITServicesPageClient() {
                         transition: 'all 0.2s ease',
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                        e.currentTarget.style.backgroundColor = 'rgba(168, 85, 247, 0.2)';
+                        e.currentTarget.style.borderColor = 'rgba(168, 85, 247, 0.5)';
                         e.currentTarget.style.color = '#ffffff';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
-                        e.currentTarget.style.color = '#ffffff';
+                        e.currentTarget.style.backgroundColor = 'rgba(168, 85, 247, 0.1)';
+                        e.currentTarget.style.borderColor = 'rgba(168, 85, 247, 0.3)';
+                        e.currentTarget.style.color = '#c084fc';
                       }}
                     >
                       Close Window

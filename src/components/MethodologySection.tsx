@@ -176,7 +176,7 @@ export function MethodologySection({ methodology }: { methodology: PhaseDetail[]
           font-family: var(--font-plus-jakarta), Inter, sans-serif;
         }
         .meth-title-active {
-          background: linear-gradient(135deg, #ffffff 0%, #a1a1aa 100%);
+          background: linear-gradient(135deg, #60a5fa 0%, #f472b6 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -223,10 +223,10 @@ export function MethodologySection({ methodology }: { methodology: PhaseDetail[]
             style={{ display: 'block', overflow: 'hidden' }}
           >
             <defs>
-              {/* White → Zinc monochrome gradient for SVG wave lines */}
+              {/* Blue → Pink gradient, userSpaceOnUse so all paths share same absolute coords */}
               <linearGradient id="wg" x1="0" y1="0" x2={trackWidth} y2="0" gradientUnits="userSpaceOnUse">
-                <stop offset="0%"   stopColor="#ffffff" />
-                <stop offset="100%" stopColor="#52525b" />
+                <stop offset="0%"   stopColor="#60a5fa" />
+                <stop offset="100%" stopColor="#f472b6" />
               </linearGradient>
               <linearGradient id="ag" x1="0%" y1="0%" x2="100%" y2="0%">
                 <stop offset="0%"   stopColor="rgba(255,255,255,0.18)" />
