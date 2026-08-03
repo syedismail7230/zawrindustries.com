@@ -38,7 +38,7 @@ export default function LogisticsPage() {
   return (
     <div style={{ backgroundColor: '#ffffff', color: '#000000', minHeight: '100vh', fontFamily: 'Inter, sans-serif', overflowX: 'hidden' }}>
       
-      {/* ── HERO BANNER WITH LOGISTICS-HERO.PNG (FADING INTO WHITE BG) ── */}
+      {/* ── HERO BANNER WITH LOGISTICS-HERO.PNG (NO OVERLAY / NO FADE) ── */}
       <div style={{
         position: 'relative',
         width: '100%',
@@ -52,42 +52,37 @@ export default function LogisticsPage() {
         padding: '0 clamp(1rem, 6vw, 8%) 8vh clamp(1rem, 6vw, 8%)',
         boxSizing: 'border-box'
       }}>
-        {/* Gradient Overlay transition to white */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          background: 'linear-gradient(to top, rgba(255,255,255,1) 0%, rgba(0,0,0,0.65) 55%, rgba(0,0,0,0.4) 100%)',
-          pointerEvents: 'none',
-        }} />
-
         <div style={{ position: 'relative', zIndex: 10, maxWidth: '850px' }}>
           <div style={{
             fontSize: '0.75rem',
             fontWeight: 600,
             letterSpacing: '0.18em',
             textTransform: 'uppercase',
-            color: '#111111',
+            color: '#ffffff',
             marginBottom: '1rem',
+            textShadow: '0 2px 8px rgba(0,0,0,0.8)',
           }}>
             Industry Solution / Trade &amp; Logistics
           </div>
           <h1 style={{
             fontSize: 'clamp(2.5rem, 6vw, 5.5rem)',
             fontWeight: 300,
-            color: '#000000',
+            color: '#ffffff',
             margin: 0,
             lineHeight: 1.05,
             letterSpacing: '-0.03em',
+            textShadow: '0 4px 24px rgba(0,0,0,0.9)',
           }}>
             Trade &amp; Logistics
           </h1>
           <p style={{
             fontSize: 'clamp(1rem, 1.8vw, 1.25rem)',
-            color: 'rgba(0, 0, 0, 0.8)',
+            color: '#ffffff',
             marginTop: '1.5rem',
             lineHeight: 1.65,
             maxWidth: '650px',
             fontWeight: 300,
+            textShadow: '0 2px 14px rgba(0,0,0,0.9)',
           }}>
             Architecting intelligent supply chains, automated freight routing, and global smart mobility platforms for modern commerce.
           </p>
@@ -95,7 +90,7 @@ export default function LogisticsPage() {
       </div>
 
       {/* ── OVERVIEW & CAPABILITIES SECTION (CLEAN WHITE BACKGROUND) ── */}
-      <div style={{ backgroundColor: '#ffffff', padding: 'clamp(3rem, 6vw, 6rem) clamp(1rem, 6vw, 8%)', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ backgroundColor: '#ffffff', padding: 'clamp(4rem, 6vw, 7rem) clamp(1rem, 6vw, 8%)', maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ maxWidth: '850px', margin: '0 auto 5rem auto', textAlign: 'center' }}>
           <h2 style={{
             fontSize: 'clamp(2rem, 4vw, 3rem)',
