@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface IndustryItem {
   id: string;
@@ -68,6 +68,11 @@ export function IndustriesWeServeSection({
   title?: string;
 }) {
   const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [mounted, setMounted] = useState<boolean>(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleAiConsultantClick = () => {
     // Open SupportWidget AI chat iframe
@@ -75,7 +80,7 @@ export function IndustriesWeServeSection({
   };
 
   return (
-    <section className="iws-section-root">
+    <section className="iws-section-root" suppressHydrationWarning>
       <style dangerouslySetInnerHTML={{ __html: `
         .iws-section-root {
           position: relative;
@@ -349,7 +354,7 @@ export function IndustriesWeServeSection({
         {industries.map((ind, i) => (
           <div
             key={ind.id || i}
-            className={`iws-card ${activeIndex === i ? 'iws-active' : ''}`}
+            className={`iws-card ${mounted && activeIndex === i ? 'iws-active' : ''}`}
             onMouseEnter={() => setActiveIndex(i)}
             onClick={() => setActiveIndex(i)}
           >
