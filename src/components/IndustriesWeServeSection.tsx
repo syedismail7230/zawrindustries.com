@@ -82,7 +82,7 @@ export function IndustriesWeServeSection({
           width: 100%;
           max-width: 1200px;
           margin: 0 auto;
-          padding: 2rem 2rem 14rem 2rem;
+          padding: 2rem 2rem 0 2rem;
           box-sizing: border-box;
           background-color: #000000;
           color: #ffffff;
@@ -224,11 +224,11 @@ export function IndustriesWeServeSection({
           font-weight: 500;
         }
 
-        /* AI Consultant Pill Search Button */
+        /* AI Consultant Pill Search Button Overlapping Dome */
         .iws-button-wrapper {
           position: relative;
-          z-index: 20;
-          margin-bottom: 3.5rem;
+          z-index: 30;
+          margin-bottom: -22px; /* Overlaps top curve of dome */
         }
 
         .iws-ai-pill {
@@ -236,29 +236,29 @@ export function IndustriesWeServeSection({
           display: inline-flex;
           align-items: center;
           gap: 0.85rem;
-          padding: 0.9rem 2.2rem;
+          padding: 0.9rem 2.4rem;
           border-radius: 9999px;
-          background: rgba(10, 10, 15, 0.88);
+          background: rgba(10, 10, 15, 0.92);
           backdrop-filter: blur(20px);
-          color: rgba(255, 255, 255, 0.75);
+          color: rgba(255, 255, 255, 0.8);
           font-size: clamp(0.9rem, 1.2vw, 1.05rem);
           font-weight: 400;
           cursor: pointer;
           outline: none;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
           border: 1.5px solid transparent;
-          background-image: linear-gradient(rgba(10, 10, 15, 0.9), rgba(10, 10, 15, 0.9)), 
+          background-image: linear-gradient(rgba(10, 10, 15, 0.94), rgba(10, 10, 15, 0.94)), 
                             linear-gradient(135deg, #a855f7 0%, #3b82f6 50%, #ec4899 100%);
           background-origin: border-box;
           background-clip: padding-box, border-box;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), 0 0 25px rgba(168, 85, 247, 0.2);
+          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(168, 85, 247, 0.3);
           font-family: Inter, sans-serif;
         }
 
         .iws-ai-pill:hover {
           color: #ffffff;
           transform: translateY(-2px) scale(1.02);
-          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.8), 0 0 35px rgba(168, 85, 247, 0.4), 0 0 20px rgba(59, 130, 246, 0.3);
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.9), 0 0 45px rgba(168, 85, 247, 0.5), 0 0 25px rgba(59, 130, 246, 0.4);
         }
 
         .iws-search-icon {
@@ -289,58 +289,51 @@ export function IndustriesWeServeSection({
           50% { transform: scale(1.25) rotate(14deg); opacity: 1; }
         }
 
-        /* ── PURE SMOOTH BLURRED GLOWING GLOBE / DOME AT BOTTOM ── */
-        .iws-blurred-globe-wrapper {
-          position: absolute;
-          bottom: -40px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 130vw;
-          max-width: 1500px;
-          height: 340px;
-          pointer-events: none;
-          z-index: 1;
-          display: flex;
-          justify-content: center;
-          align-items: flex-end;
-          overflow: hidden;
-        }
-
-        .iws-blurred-globe-body {
+        /* ── GLOWING SPHERE DOME CONTAINER ── */
+        .iws-dome-section {
           position: relative;
           width: 100%;
-          height: 480px;
-          border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-          background: radial-gradient(ellipse at 50% 0%, 
-            rgba(168, 85, 247, 0.85) 0%, 
-            rgba(99, 102, 241, 0.65) 25%, 
-            rgba(37, 99, 235, 0.45) 50%, 
-            rgba(15, 23, 42, 0.15) 75%,
-            rgba(0, 0, 0, 0) 100%);
-          filter: blur(42px);
-          opacity: 0.92;
+          max-width: 1150px;
+          height: 320px;
+          margin-top: 0;
+          z-index: 10;
+          display: flex;
+          justify-content: center;
+          align-items: flex-start;
+          overflow: hidden;
+          border-radius: 120px 120px 0 0 / 70px 70px 0 0;
         }
 
-        .iws-blurred-globe-rim {
+        .iws-dome-background {
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(ellipse at 50% 0%, 
+            rgba(67, 56, 202, 0.95) 0%, 
+            rgba(37, 99, 235, 0.75) 25%, 
+            rgba(30, 27, 75, 0.65) 55%, 
+            rgba(15, 23, 42, 0.85) 80%,
+            #000000 100%);
+          box-shadow: inset 0 20px 60px rgba(168, 85, 247, 0.3), inset 0 40px 100px rgba(59, 130, 246, 0.25);
+        }
+
+        .iws-dome-top-glow {
           position: absolute;
           top: 0;
-          left: 5%;
-          right: 5%;
+          left: 0;
+          right: 0;
           height: 3px;
-          border-radius: 50% 50% 0 0 / 100% 100% 0 0;
           background: linear-gradient(90deg, 
             transparent 0%, 
-            rgba(96, 165, 250, 0.4) 20%, 
-            rgba(168, 85, 247, 0.95) 50%, 
-            rgba(244, 114, 182, 0.6) 80%, 
+            rgba(59, 130, 246, 0.5) 15%, 
+            rgba(192, 132, 252, 1) 50%, 
+            rgba(236, 72, 153, 0.5) 85%, 
             transparent 100%);
-          filter: blur(3px);
-          box-shadow: 0 0 30px #a855f7, 0 0 50px #38bdf8;
+          box-shadow: 0 0 25px #c084fc, 0 0 50px #3b82f6;
         }
 
         @media (max-width: 768px) {
           .iws-container {
-            padding: 1rem 1rem 8rem 1rem;
+            padding: 1rem 1rem 0 1rem;
           }
           .iws-accordion {
             flex-wrap: wrap;
@@ -363,9 +356,9 @@ export function IndustriesWeServeSection({
             opacity: 1;
             transform: translateY(0);
           }
-          .iws-blurred-globe-wrapper {
+          .iws-dome-section {
             height: 220px;
-            width: 180vw;
+            border-radius: 60px 60px 0 0 / 40px 40px 0 0;
           }
         }
       ` }} />
@@ -405,7 +398,7 @@ export function IndustriesWeServeSection({
         ))}
       </div>
 
-      {/* AI Consultant Pill Search Button */}
+      {/* AI Consultant Pill Search Button (Centered & Overlapping Top Arc) */}
       <div className="iws-button-wrapper">
         <button
           className="iws-ai-pill"
@@ -421,11 +414,10 @@ export function IndustriesWeServeSection({
         </button>
       </div>
 
-      {/* ── PURE SMOOTH BLURRED GLOWING GLOBE / DOME AT BOTTOM (NO LINES) ── */}
-      <div className="iws-blurred-globe-wrapper">
-        <div className="iws-blurred-globe-body">
-          <div className="iws-blurred-globe-rim" />
-        </div>
+      {/* ── GLOWING BLUE SPHERE DOME CONTAINER ── */}
+      <div className="iws-dome-section">
+        <div className="iws-dome-background" />
+        <div className="iws-dome-top-glow" />
       </div>
     </section>
   );
