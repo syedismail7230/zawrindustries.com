@@ -53,17 +53,6 @@ export default function LogisticsPage() {
         boxSizing: 'border-box'
       }}>
         <div style={{ position: 'relative', zIndex: 10, maxWidth: '850px' }}>
-          <div style={{
-            fontSize: '0.75rem',
-            fontWeight: 600,
-            letterSpacing: '0.18em',
-            textTransform: 'uppercase',
-            color: '#ffffff',
-            marginBottom: '1rem',
-            textShadow: '0 2px 8px rgba(0,0,0,0.8)',
-          }}>
-            Industry Solution / Trade &amp; Logistics
-          </div>
           <h1 style={{
             fontSize: 'clamp(2.5rem, 6vw, 5.5rem)',
             fontWeight: 300,
