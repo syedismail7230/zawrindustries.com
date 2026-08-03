@@ -228,7 +228,7 @@ export function IndustriesWeServeSection({
         .iws-button-wrapper {
           position: relative;
           z-index: 30;
-          margin-bottom: -22px; /* Overlaps top curve of dome */
+          margin-bottom: -24px; /* Overlaps top curve of dome */
         }
 
         .iws-ai-pill {
@@ -289,46 +289,46 @@ export function IndustriesWeServeSection({
           50% { transform: scale(1.25) rotate(14deg); opacity: 1; }
         }
 
-        /* ── GLOWING SPHERE DOME CONTAINER ── */
-        .iws-dome-section {
+        /* ── SMOOTH CONTINUOUS ARC DOME CONTAINER ── */
+        .iws-arc-dome-section {
           position: relative;
           width: 100%;
-          max-width: 1150px;
-          height: 320px;
-          margin-top: 0;
+          max-width: 1400px;
+          height: 340px;
           z-index: 10;
           display: flex;
           justify-content: center;
           align-items: flex-start;
           overflow: hidden;
-          border-radius: 120px 120px 0 0 / 70px 70px 0 0;
+          pointer-events: none;
         }
 
-        .iws-dome-background {
+        .iws-arc-dome-shape {
           position: absolute;
-          inset: 0;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 135vw;
+          max-width: 1550px;
+          height: 520px;
+          border-radius: 50% 50% 0 0 / 100% 100% 0 0;
           background: radial-gradient(ellipse at 50% 0%, 
             rgba(67, 56, 202, 0.95) 0%, 
             rgba(37, 99, 235, 0.75) 25%, 
-            rgba(30, 27, 75, 0.65) 55%, 
-            rgba(15, 23, 42, 0.85) 80%,
+            rgba(30, 27, 75, 0.5) 50%, 
+            rgba(15, 23, 42, 0.85) 75%,
             #000000 100%);
           box-shadow: inset 0 20px 60px rgba(168, 85, 247, 0.3), inset 0 40px 100px rgba(59, 130, 246, 0.25);
         }
 
-        .iws-dome-top-glow {
+        .iws-arc-dome-svg {
           position: absolute;
           top: 0;
           left: 0;
-          right: 0;
-          height: 3px;
-          background: linear-gradient(90deg, 
-            transparent 0%, 
-            rgba(59, 130, 246, 0.5) 15%, 
-            rgba(192, 132, 252, 1) 50%, 
-            rgba(236, 72, 153, 0.5) 85%, 
-            transparent 100%);
-          box-shadow: 0 0 25px #c084fc, 0 0 50px #3b82f6;
+          width: 100%;
+          height: 100%;
+          overflow: visible;
+          z-index: 12;
         }
 
         @media (max-width: 768px) {
@@ -356,9 +356,12 @@ export function IndustriesWeServeSection({
             opacity: 1;
             transform: translateY(0);
           }
-          .iws-dome-section {
-            height: 220px;
-            border-radius: 60px 60px 0 0 / 40px 40px 0 0;
+          .iws-arc-dome-section {
+            height: 240px;
+          }
+          .iws-arc-dome-shape {
+            width: 180vw;
+            height: 380px;
           }
         }
       ` }} />
@@ -398,7 +401,7 @@ export function IndustriesWeServeSection({
         ))}
       </div>
 
-      {/* AI Consultant Pill Search Button (Centered & Overlapping Top Arc) */}
+      {/* AI Consultant Pill Search Button (Centered & Overlapping Top Arc Apex) */}
       <div className="iws-button-wrapper">
         <button
           className="iws-ai-pill"
@@ -414,10 +417,37 @@ export function IndustriesWeServeSection({
         </button>
       </div>
 
-      {/* ── GLOWING BLUE SPHERE DOME CONTAINER ── */}
-      <div className="iws-dome-section">
-        <div className="iws-dome-background" />
-        <div className="iws-dome-top-glow" />
+      {/* ── SMOOTH CONTINUOUS DOME ARC CONTAINER ── */}
+      <div className="iws-arc-dome-section">
+        {/* Continuous Elliptical Arc Dome Shape (No flat top or vertical box sides) */}
+        <div className="iws-arc-dome-shape" />
+
+        {/* SVG Neon Glow Rim along the Continuous Curve */}
+        <svg viewBox="0 0 1000 240" preserveAspectRatio="none" className="iws-arc-dome-svg">
+          <defs>
+            <linearGradient id="arcRimGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.1" />
+              <stop offset="20%" stopColor="#60a5fa" stopOpacity="0.6" />
+              <stop offset="50%" stopColor="#c084fc" stopOpacity="1" />
+              <stop offset="80%" stopColor="#ec4899" stopOpacity="0.6" />
+              <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.1" />
+            </linearGradient>
+            <filter id="arcNeonFilter" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="4" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+          </defs>
+          <path
+            d="M -100 240 Q 500 0 1100 240"
+            fill="none"
+            stroke="url(#arcRimGrad)"
+            strokeWidth="3"
+            filter="url(#arcNeonFilter)"
+          />
+        </svg>
       </div>
     </section>
   );
