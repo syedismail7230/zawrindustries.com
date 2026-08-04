@@ -631,73 +631,7 @@ export default function ManufacturingPage() {
         </div>
       </section>
 
-      {/* 4. Tech Architecture & Make in India Compliance */}
 
-      <section style={{ padding: 'clamp(3rem, 6vw, 6rem) 5%', backgroundColor: '#ffffff' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem', alignItems: 'center' }}>
-          <div>
-            <span style={{ color: '#000000', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '0.08em' }}>GOVERNMENT INITIATIVE COMPLIANCE</span>
-            <h3 style={{ fontSize: 'clamp(1.5rem, 3vw, 2.2rem)', fontWeight: 800, margin: '1rem 0 1.5rem', lineHeight: 1.2, color: '#000000' }}>
-              Make in India & Production-Linked Incentives (PLI)
-            </h3>
-            <p style={{ color: '#475569', lineHeight: 1.8, marginBottom: '1.5rem' }}>
-              Our manufacturing infrastructures are fully certified under ISO 9001:2015, ISO 14001, and Indian Directorate General of Foreign Trade (DGFT) standards. We help international companies establish localized production hubs with full regulatory compliance and supply-chain resilience.
-            </p>
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.9rem', color: '#1e293b', fontSize: '0.95rem', fontWeight: 500 }}>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <span style={{ color: '#000000', fontWeight: 'bold' }}>✓</span> PLI Scheme Financial Incentive Optimization
-              </li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <span style={{ color: '#000000', fontWeight: 'bold' }}>✓</span> Turnkey Factory Floor Automation & 3D Digital Twins
-              </li>
-              <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <span style={{ color: '#000000', fontWeight: 'bold' }}>✓</span> Export-Quality Metallurgy & Quality Assurance Documentation
-              </li>
-            </ul>
-          </div>
-
-          <div style={{
-            backgroundColor: '#000000',
-            color: '#ffffff',
-            borderRadius: '24px',
-            padding: 'clamp(2rem, 4vw, 3rem) clamp(1.5rem, 3vw, 2.5rem)',
-            boxShadow: '0 25px 50px rgba(0, 0, 0, 0.2)',
-          }}>
-            <h4 style={{ fontSize: 'clamp(1.2rem, 2.5vw, 1.5rem)', fontWeight: 800, marginBottom: '1.8rem', color: '#ffffff' }}>Production Operational Metrics</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.6rem' }}>
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-                  <span>Robotic Arc Welding Precision</span>
-                  <span style={{ color: '#ffffff', fontWeight: 'bold' }}>99.94%</span>
-                </div>
-                <div style={{ height: '6px', backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{ width: '99.94%', height: '100%', backgroundColor: '#ffffff' }}></div>
-                </div>
-              </div>
-
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-                  <span>PLI Export Compliance Readiness</span>
-                  <span style={{ color: '#ffffff', fontWeight: 'bold' }}>100%</span>
-                </div>
-                <div style={{ height: '6px', backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{ width: '100%', height: '100%', backgroundColor: '#ffffff' }}></div>
-                </div>
-              </div>
-
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-                  <span>Cycle Time Reduction</span>
-                  <span style={{ color: '#ffffff', fontWeight: 'bold' }}>-42.5%</span>
-                </div>
-                <div style={{ height: '6px', backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{ width: '85%', height: '100%', backgroundColor: '#ffffff' }}></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* 5. Factory Management System (FMS) Telemetry Dashboard */}
       <FactoryDashboardInteractive />
