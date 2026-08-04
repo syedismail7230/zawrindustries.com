@@ -29,11 +29,11 @@ export function AirFreightSection() {
         }
 
         .air-freight-left-content {
-          max-width: 620px;
+          max-width: 600px;
           padding-left: clamp(2rem, 6vw, 8rem);
           padding-right: 1rem;
           box-sizing: border-box;
-          text-align: right;
+          text-align: left;
           margin-left: auto;
         }
 
@@ -70,7 +70,6 @@ export function AirFreightSection() {
           .air-freight-left-content {
             padding-left: 1.5rem;
             padding-right: 1.5rem;
-            text-align: left;
           }
           .air-freight-right-img-wrapper {
             height: 340px;
@@ -83,7 +82,7 @@ export function AirFreightSection() {
       ` }} />
 
       <div className="air-freight-grid">
-        {/* Left Column: Air Freight Technical Details (Right Aligned) */}
+        {/* Left Column: Clean, Premium Left-Aligned Text Content */}
         <div className="air-freight-left-content">
           <h2 style={{
             fontSize: 'clamp(2rem, 3.8vw, 3rem)',
@@ -92,12 +91,12 @@ export function AirFreightSection() {
             letterSpacing: '-0.025em',
             margin: '0 0 1.5rem 0',
             lineHeight: 1.15,
-            textAlign: 'right',
+            textAlign: 'left',
           }}>
             Next-Day Air Express &amp; Global Freighter Fleet
           </h2>
 
-          <div style={{ width: '3rem', height: '1px', background: '#000000', marginBottom: '1.8rem', opacity: 0.2, marginLeft: 'auto' }} />
+          <div style={{ width: '3rem', height: '1px', background: '#000000', marginBottom: '1.8rem', opacity: 0.2 }} />
 
           <p style={{
             fontSize: 'clamp(0.98rem, 1.2vw, 1.12rem)',
@@ -105,7 +104,7 @@ export function AirFreightSection() {
             color: 'rgba(0, 0, 0, 0.72)',
             fontWeight: 300,
             marginBottom: '1.5rem',
-            textAlign: 'right',
+            textAlign: 'left',
           }}>
             Zawr Industries provides high-velocity air freight charter and scheduled express cargo routing across more than 220 international airports. Operating specialized nose-loading freighter aircraft and climate-controlled ULD containers, our aviation logistics network powers time-critical supply chains for high-tech, aerospace, and pharmaceutical enterprises.
           </p>
@@ -116,22 +115,22 @@ export function AirFreightSection() {
             color: 'rgba(0, 0, 0, 0.65)',
             fontWeight: 300,
             marginBottom: '2.5rem',
-            textAlign: 'right',
+            textAlign: 'left',
           }}>
             Our digital air cargo platform offers instant flight slot reservation, automated customs pre-clearance, and continuous altitude environmental telemetry from tarmac loading to final runway touchdown.
           </p>
 
-          {/* Key Metrics Grid (Right Aligned) */}
+          {/* Key Metrics Grid (Clean Left Aligned) */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
             gap: '1.5rem',
             paddingTop: '1.5rem',
             borderTop: '1px solid rgba(0, 0, 0, 0.08)',
-            textAlign: 'right',
+            textAlign: 'left',
           }}>
             {metrics.map((m, idx) => (
-              <div key={idx} style={{ textAlign: 'right' }}>
+              <div key={idx} style={{ textAlign: 'left' }}>
                 <div style={{
                   fontSize: 'clamp(1.2rem, 2vw, 1.6rem)',
                   fontWeight: 400,
