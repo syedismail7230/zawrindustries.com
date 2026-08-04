@@ -128,13 +128,74 @@ button, input {
 .header.scrolled {
   color: var(--primary-color);
   padding: 1rem 5%;
-  background-color: transparent; /* Wait, user said "put bg on hover", so default is transparent */
+  background-color: transparent;
 }
 
 /* Hover over Light BG (Scrolled) -> Black bg, white text */
 .header.scrolled:hover {
   background-color: var(--primary-color);
   color: var(--bg-white);
+}
+
+/* Dark Page Header */
+.header.dark-page-header {
+  color: #ffffff !important;
+  background-color: transparent !important;
+}
+.header.dark-page-header.scrolled {
+  background-color: rgba(0, 0, 0, 0.85) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.header.dark-page-header .mobile-menu-btn {
+  color: #ffffff !important;
+}
+.header.dark-page-header .dropdown {
+  background-color: #111111 !important;
+  border: 1px solid #333333;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.8) !important;
+}
+.header.dark-page-header .dropdown a {
+  color: #ffffff !important;
+}
+.header.dark-page-header .dropdown a:hover {
+  background-color: #222222 !important;
+}
+.header.dark-page-header:hover {
+  background-color: #000000 !important;
+}
+.header.dark-page-header svg {
+  stroke: #ffffff !important;
+}
+
+/* Light Page Header */
+.header.light-page-header {
+  color: #111111 !important;
+  background-color: transparent !important;
+}
+.header.light-page-header.scrolled {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+.header.light-page-header .mobile-menu-btn {
+  color: #111111 !important;
+}
+.header.light-page-header:hover {
+  background-color: #ffffff !important;
+  color: #111111 !important;
+}
+.header.light-page-header svg {
+  stroke: #111111 !important;
+}
+.header.light-page-header .dropdown {
+  background-color: #ffffff !important;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
+}
+.header.light-page-header .dropdown a {
+  color: #111111 !important;
 }
 
 .logo-container {
