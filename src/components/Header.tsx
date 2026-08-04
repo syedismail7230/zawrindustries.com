@@ -33,6 +33,7 @@ function ChevronDownIcon({ isOpen }: { isOpen: boolean }) {
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
+  const [isMounted, setIsMounted] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMobileSubmenu, setActiveMobileSubmenu] = useState<string | null>(null);
@@ -41,6 +42,10 @@ export default function Header() {
   const [langQuery, setLangQuery] = useState('');
   const [searchError, setSearchError] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -139,12 +144,11 @@ export default function Header() {
     }
   };
 
-  const isDarkPage = pathname.startsWith('/careers') || pathname.startsWith('/contact/client-relations') || pathname.startsWith('/contact/sponsorship') || pathname.startsWith('/investors') || pathname.startsWith('/newsroom/events') || pathname.startsWith('/industries/it-service') || pathname === '/contact/partner/creator-partner';
-  const isLightPage = pathname === '/sustainability/empowerment' || pathname === '/sustainability/health' || pathname === '/sustainability/education' || pathname.startsWith('/about/blog') || pathname.startsWith('/industries/transport-and-logistics');
+  const isDarkPage = isMounted && (pathname.startsWith('/careers') || pathname.startsWith('/contact/client-relations') || pathname.startsWith('/contact/sponsorship') || pathname.startsWith('/investors') || pathname.startsWith('/newsroom/events') || pathname.startsWith('/industries/it-service') || pathname === '/contact/partner/creator-partner');
+  const isLightPage = isMounted && (pathname === '/sustainability/empowerment' || pathname === '/sustainability/health' || pathname === '/sustainability/education' || pathname.startsWith('/about/blog') || pathname.startsWith('/industries/transport-and-logistics'));
 
   return (
-    <>
-    <header className={`header ${!isMobileMenuOpen && (isScrolled || (pathname.startsWith('/contact') && !isDarkPage)) ? 'scrolled' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''} ${isDarkPage ? 'dark-page-header' : ''} ${isLightPage ? 'light-page-header' : ''}`}>
+    <header className={`header ${!isMobileMenuOpen && (isScrolled || (pathname.startsWith('/contact') && !isDarkPage)) ? 'scrolled' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''} ${isDarkPage ? 'dark-page-header' : ''} ${isLightPage ? 'light-page-header' : ''}`} suppressHydrationWarning>
       <div className={`logo-container ${poppins.className}`}>
         <Link href="/" onClick={closeMobileMenu}>
           <span className="logo-bold">ZAWR</span>
@@ -275,7 +279,7 @@ export default function Header() {
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="2" y1="12" x2="22" y2="12"></line>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path>
               <path d="M12 2a15.3 15.3 0 0 0-4 10 15.3 15.3 0 0 0 4 10 15.3 15.3 0 0 0 4-10z"></path>
             </svg>
           </button>
@@ -330,8 +334,6 @@ export default function Header() {
         {isMobileMenuOpen ? '✕' : '☰'}
       </button>
 
-    </header>
-
       {/* Full Screen Search Overlay */}
       {isSearchOpen && (
         <div className="search-overlay">
@@ -354,6 +356,6 @@ export default function Header() {
           </form>
         </div>
       )}
-    </>
+    </header>
   );
 }
