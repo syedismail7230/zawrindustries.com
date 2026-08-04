@@ -22,13 +22,13 @@ export function AirFreightSection() {
         .air-freight-grid {
           width: 100%;
           display: grid;
-          grid-template-columns: 0.8fr 1.6fr;
-          gap: 2rem;
+          grid-template-columns: 1fr 1.1fr;
+          gap: 3rem;
           align-items: center;
         }
 
         .air-freight-left-content {
-          max-width: 580px;
+          max-width: 600px;
           padding-left: clamp(2rem, 6vw, 8rem);
           padding-right: 1rem;
           box-sizing: border-box;
@@ -39,22 +39,21 @@ export function AirFreightSection() {
         .air-freight-right-img-wrapper {
           position: relative;
           width: 100%;
-          height: clamp(580px, 78vh, 850px);
-          overflow: visible;
+          height: clamp(380px, 50vh, 560px);
+          overflow: hidden;
           display: flex;
           align-items: center;
           justify-content: flex-end;
-          background-color: transparent;
+          background-color: #ffffff;
         }
 
         .air-freight-right-img-wrapper img {
-          width: 240%;
+          width: 155%;
           max-width: none;
-          height: auto;
-          max-height: clamp(580px, 78vh, 850px);
-          object-fit: contain;
+          height: 110%;
+          object-fit: cover;
           object-position: right center;
-          margin-right: -42%;
+          margin-right: -24%;
           display: block;
           mix-blend-mode: multiply;
           filter: contrast(1.06) brightness(1.01);
@@ -72,18 +71,11 @@ export function AirFreightSection() {
             padding-right: 1.5rem;
           }
           .air-freight-right-img-wrapper {
-            height: 420px;
-            justify-content: flex-end;
-            align-items: center;
+            height: 320px;
           }
           .air-freight-right-img-wrapper img {
-            width: 220%;
-            height: auto;
-            max-height: 420px;
-            max-width: none;
-            object-fit: contain;
-            object-position: right center;
-            margin-right: -30%;
+            width: 165%;
+            margin-right: -18%;
           }
         }
       ` }} />
