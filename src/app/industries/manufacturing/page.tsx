@@ -654,30 +654,33 @@ export default function ManufacturingPage() {
         <div style={{
           position: 'relative',
           width: '100%',
-          height: 'clamp(360px, 46vw, 680px)',
+          height: 'clamp(480px, 58vw, 850px)',
           overflow: 'hidden',
           backgroundColor: '#ffffff',
         }}>
-          {/* Top fade linear-gradient to seamlessly blend top edge into website background */}
+          {/* Subtle top fade linear-gradient to seamlessly blend top edge into white website background */}
           <div style={{
             position: 'absolute',
-            inset: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '100px',
             zIndex: 2,
             pointerEvents: 'none',
-            background: 'linear-gradient(to bottom, #ffffff 0%, rgba(255, 255, 255, 0) 22%)',
+            background: 'linear-gradient(to bottom, #ffffff 0%, rgba(255, 255, 255, 0) 100%)',
           }} />
 
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/assets/factory-view.png"
-            alt="Zawr Autonomous Smart Factory Floor Landscape View"
+            alt="Zawr Autonomous Smart Factory Floor Monochrome Landscape View"
             style={{
               width: '100%',
               height: '100%',
               objectFit: 'cover',
-              objectPosition: 'center 45%',
+              objectPosition: 'center center',
               display: 'block',
-              filter: 'brightness(1.02) contrast(1.02)',
+              filter: 'grayscale(100%) contrast(1.15) brightness(1.04)',
             }}
           />
         </div>
