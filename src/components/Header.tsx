@@ -36,6 +36,7 @@ export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMobileSubmenu, setActiveMobileSubmenu] = useState<string | null>(null);
+  const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [langQuery, setLangQuery] = useState('');
   const [searchError, setSearchError] = useState('');
@@ -54,12 +55,14 @@ export default function Header() {
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setActiveMobileSubmenu(null);
+    setIsLangDropdownOpen(false);
     setIsScrolled(false);
   }, [pathname]);
 
   const closeMobileMenu = () => {
     setIsMobileMenuOpen(false);
     setActiveMobileSubmenu(null);
+    setIsLangDropdownOpen(false);
   };
 
   const toggleMobileSubmenu = (menuName: string) => {
@@ -355,47 +358,71 @@ export default function Header() {
         </div>
       </nav>
 
+      {/* Header Action Buttons (Search, Language, Call) */}
       <div className={`header-actions ${isMobileMenuOpen ? 'mobile-active' : ''}`}>
+        {/* Search Button */}
         <button className="icon-btn" aria-label="Search" onClick={() => setIsSearchOpen(!isSearchOpen)} suppressHydrationWarning>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
-        <div className="nav-item" style={{ padding: 0, margin: 0 }}>
-          <button className="icon-btn" aria-label="Language" style={{ pointerEvents: 'none' }} suppressHydrationWarning>
+
+        {/* Language Button & Dropdown */}
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+          <button 
+            className="icon-btn" 
+            aria-label="Language" 
+            onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)} 
+            suppressHydrationWarning
+          >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="2" y1="12" x2="22" y2="12"></line>
               <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-              <path d="M12 2a15.3 15.3 0 0 0-4 10 15.3 15.3 0 0 0 4 10 15.3 15.3 0 0 0 4-10 15.3 15.3 0 0 0-4-10z"></path>
+              <path d="M12 2a15.3 15.3 0 0 0-4 10 15.3 15.3 0 0 0 4 10 15.3 15.3 0 0 0 4-10z"></path>
             </svg>
           </button>
-          <div className="dropdown" style={{ left: 'auto', right: '-1rem', minWidth: '180px', paddingTop: '1.5rem' }}>
-            <div style={{ marginBottom: '10px' }}>
-              <input 
-                suppressHydrationWarning
-                type="text" 
-                placeholder="Search language..." 
-                value={langQuery}
-                onChange={(e) => setLangQuery(e.target.value)}
-                onClick={(e) => e.stopPropagation()}
-                style={{ width: '100%', padding: '0.6rem', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.2)', backgroundColor: 'var(--primary-color)', color: 'var(--bg-white)', outline: 'none', fontSize: '0.85rem' }}
-              />
+          
+          {(isLangDropdownOpen || !isMobileMenuOpen) && (
+            <div className="dropdown lang-dropdown" style={{
+              position: 'absolute',
+              top: '100%',
+              left: isMobileMenuOpen ? '0' : 'auto',
+              right: isMobileMenuOpen ? 'auto' : '-1rem',
+              minWidth: '180px',
+              paddingTop: '1.5rem',
+              display: isLangDropdownOpen ? 'flex' : undefined,
+              flexDirection: 'column',
+              zIndex: 100,
+            }}>
+              <div style={{ marginBottom: '10px' }}>
+                <input 
+                  suppressHydrationWarning
+                  type="text" 
+                  placeholder="Search language..." 
+                  value={langQuery}
+                  onChange={(e) => setLangQuery(e.target.value)}
+                  onClick={(e) => e.stopPropagation()}
+                  style={{ width: '100%', padding: '0.6rem', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.2)', backgroundColor: 'var(--primary-color)', color: 'var(--bg-white)', outline: 'none', fontSize: '0.85rem' }}
+                />
+              </div>
+              <div className="custom-scrollbar" style={{ maxHeight: '250px', overflowY: 'auto', paddingRight: '5px', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                {filteredLangs.map((code) => (
+                  <a 
+                    key={code} 
+                    href="#" 
+                    onClick={(e) => { e.preventDefault(); handleLanguageSwitch(code); closeMobileMenu(); }}
+                  >
+                    {ISO6391.getNativeName(code)}
+                  </a>
+                ))}
+              </div>
             </div>
-            <div className="custom-scrollbar" style={{ maxHeight: '300px', overflowY: 'auto', paddingRight: '5px', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-              {filteredLangs.map((code) => (
-                <a 
-                  key={code} 
-                  href="#" 
-                  onClick={(e) => { e.preventDefault(); handleLanguageSwitch(code); }}
-                >
-                  {ISO6391.getNativeName(code)}
-                </a>
-              ))}
-            </div>
-          </div>
+          )}
         </div>
+
+        {/* Phone Call Link */}
         <a href="tel:+919880464078" className="icon-btn" aria-label="Phone">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
