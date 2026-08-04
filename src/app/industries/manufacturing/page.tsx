@@ -270,7 +270,7 @@ export default function ManufacturingPage() {
           </div>
 
           <div className="mfg-badge mfg-badge--br">
-            <ArchitecturalGridBadge metric="±0.005mm" label="Tolerance" />
+            <ArchitecturalGridBadge metric="100%" label="Export Ready Compliance" />
           </div>
 
           {/* CENTER 3D ROBOT CANVAS (zIndex: 15) */}
