@@ -3,44 +3,56 @@
 import React, { useState } from 'react';
 
 export default function FactoryOSMapSection() {
-  const [hoveredNode, setHoveredNode] = useState<{ side: 'left' | 'right'; index: number } | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<{ side: 'left' | 'right'; index: number } | null>(null);
 
-  // 9 Left Nodes: Staggered across 2 columns (Outer at xDot=200, Inner at xDot=410)
   const leftNodes = [
-    { title: 'PRODUCTION', desc: 'Work orders & scheduling', isOuter: true, y: 40 },
-    { title: 'MACHINE MONITORING', desc: 'Status & downtime telemetry', isOuter: false, y: 85 },
-    { title: 'QUALITY CONTROL', desc: 'Inspections & zero-defects', isOuter: true, y: 130 },
-    { title: 'MAINTENANCE', desc: 'Preventive work orders', isOuter: false, y: 175 },
-    { title: 'INVENTORY & WAREHOUSE', desc: 'Stock & material tracking', isOuter: true, y: 220 },
-    { title: 'WORKFORCE MANAGEMENT', desc: 'Shifts & operator safety', isOuter: false, y: 265 },
-    { title: 'EQUIPMENT & ASSETS', desc: 'Lifecycle & calibration', isOuter: true, y: 310 },
-    { title: 'LOGISTICS & SHIPPING', desc: 'Dispatch & fleet routing', isOuter: false, y: 355 },
-    { title: 'ENERGY MANAGEMENT', desc: 'Smart grid cost optimization', isOuter: true, y: 400 },
+    { title: 'PRODUCTION', desc: 'Work orders & scheduling' },
+    { title: 'MACHINE MONITORING', desc: 'Status & downtime telemetry' },
+    { title: 'QUALITY CONTROL', desc: 'Inspections & zero-defects' },
+    { title: 'MAINTENANCE', desc: 'Preventive work orders' },
+    { title: 'INVENTORY & WAREHOUSE', desc: 'Stock & material tracking' },
+    { title: 'WORKFORCE MANAGEMENT', desc: 'Shifts & operator safety' },
+    { title: 'EQUIPMENT & ASSETS', desc: 'Lifecycle & calibration' },
+    { title: 'LOGISTICS & SHIPPING', desc: 'Dispatch & fleet routing' },
+    { title: 'ENERGY MANAGEMENT', desc: 'Smart grid cost optimization' },
   ];
 
-  // 9 Right Nodes: Staggered across 2 columns (Inner at xDot=970, Outer at xDot=1180)
   const rightNodes = [
-    { title: 'REAL-TIME VISIBILITY', desc: 'Live factory telemetry', isOuter: true, y: 40 },
-    { title: 'UNIFIED DASHBOARD', desc: 'All KPIs in one view', isOuter: false, y: 85 },
-    { title: 'SMART ALERTS', desc: 'Instant critical notifications', isOuter: true, y: 130 },
-    { title: 'ANALYTICS & REPORTS', desc: 'Data-driven insights', isOuter: false, y: 175 },
-    { title: 'DATA-DRIVEN DECISIONS', desc: 'Faster smart operations', isOuter: true, y: 220 },
-    { title: 'SCALABLE & SECURE', desc: 'Enterprise security & scale', isOuter: false, y: 265 },
-    { title: 'INTEGRATED ECOSYSTEM', desc: 'Zero silo ERP/PLC sync', isOuter: true, y: 310 },
-    { title: 'AUTOMATED WORKFLOWS', desc: 'End-to-end efficiency', isOuter: false, y: 355 },
-    { title: 'MAXIMUM EFFICIENCY', desc: 'Higher throughput output', isOuter: true, y: 400 },
+    { title: 'REAL-TIME VISIBILITY', desc: 'Live factory telemetry' },
+    { title: 'UNIFIED DASHBOARD', desc: 'All KPIs in one view' },
+    { title: 'SMART ALERTS', desc: 'Instant critical notifications' },
+    { title: 'ANALYTICS & REPORTS', desc: 'Data-driven insights' },
+    { title: 'DATA-DRIVEN DECISIONS', desc: 'Faster smart operations' },
+    { title: 'SCALABLE & SECURE', desc: 'Enterprise security & scale' },
+    { title: 'INTEGRATED ECOSYSTEM', desc: 'Zero silo ERP/PLC sync' },
+    { title: 'AUTOMATED WORKFLOWS', desc: 'End-to-end efficiency' },
+    { title: 'MAXIMUM EFFICIENCY', desc: 'Higher throughput output' },
   ];
 
-  // Canvas Geometry: 1380x440
-  const centerHubX = 690;
-  const centerHubY = 220;
-  const leftAnchorX = 550;
-  const rightAnchorX = 830;
-  const arrowTipX = 865;
+  // Compact 1280x380 SVG Canvas Geometry
+  // Left Text Zone: x = 20..260
+  // Left Dots: x = 275
+  // Left Bezier Curves: x = 275..530 (Pure open space, zero text!)
+  // Center Hub (ZAWR FMS): x = 640, y = 190
+  // Right Bezier Curves: x = 750..1005 (Pure open space, zero text!)
+  // Right Dots: x = 1005
+  // Right Text Zone: x = 1020..1260
+
+  const centerHubX = 640;
+  const centerHubY = 190;
+  const leftAnchorX = 530;
+  const leftDotX = 275;
+  const leftTextX = 260;
+  const rightAnchorX = 750;
+  const rightDotX = 1005;
+  const rightTextX = 1020;
+
+  // Y positions for the 9 compact rows (top 30px, 40px step)
+  const getY = (index: number) => 30 + index * 40;
 
   return (
     <section style={{
-      padding: 'clamp(3.5rem, 6vw, 5rem) 2%',
+      padding: 'clamp(3rem, 5vw, 4.5rem) 2%',
       backgroundColor: '#ffffff',
       borderBottom: '1px solid #e2e8f0',
       overflow: 'hidden',
@@ -48,7 +60,7 @@ export default function FactoryOSMapSection() {
     }}>
       <style>{`
         @media (max-width: 1024px) {
-          .os-map-connected-desktop {
+          .os-map-guaranteed-desktop {
             display: none !important;
           }
           .os-map-mobile-stack {
@@ -60,16 +72,16 @@ export default function FactoryOSMapSection() {
             display: none !important;
           }
         }
-        .os-connected-group {
+        .os-zero-overlap-group {
           cursor: pointer;
           transition: opacity 0.2s ease;
         }
       `}</style>
 
-      <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
         
         {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '2.2rem' }}>
           <span style={{
             fontSize: '0.75rem',
             fontWeight: 500,
@@ -77,18 +89,18 @@ export default function FactoryOSMapSection() {
             color: '#64748b',
             textTransform: 'uppercase',
             display: 'inline-block',
-            marginBottom: '0.6rem',
+            marginBottom: '0.5rem',
           }}>
             UNIFIED OPERATING PLATFORM
           </span>
           
           <h2 style={{
-            fontSize: 'clamp(1.8rem, 3.8vw, 2.8rem)',
+            fontSize: 'clamp(1.8rem, 3.8vw, 2.7rem)',
             fontWeight: 300,
             lineHeight: 1.15,
             letterSpacing: '-0.03em',
             color: '#000000',
-            marginBottom: '0.6rem',
+            marginBottom: '0.5rem',
           }}>
             Real-Time Visibility. Unified Control. Smarter Decisions.
           </h2>
@@ -98,24 +110,21 @@ export default function FactoryOSMapSection() {
           </p>
         </div>
 
-        {/* DESKTOP FULLY CONNECTED STAGGERED MAP (440px HEIGHT, ALL 18 NODES CONNECTED WITH SOLID LINES) */}
-        <div className="os-map-connected-desktop" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        {/* DESKTOP ZERO-OVERLAP MAP (COMPACT 380px HEIGHT, ZERO OVERLAP GUARANTEED) */}
+        <div className="os-map-guaranteed-desktop" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
           <svg
             width="100%"
             height="100%"
-            viewBox="0 0 1380 440"
-            style={{ maxWidth: '1380px', height: 'auto', overflow: 'visible' }}
+            viewBox="0 0 1280 380"
+            style={{ maxWidth: '1280px', height: 'auto', overflow: 'visible' }}
           >
-            {/* 1. LEFT BEZIER CURVES: Connecting all 9 Left Nodes directly to Left Anchor */}
-            {leftNodes.map((node, i) => {
-              const xDot = node.isOuter ? 200 : 410;
-              const isHovered = hoveredNode?.side === 'left' && hoveredNode?.index === i;
-              const isAnyHovered = hoveredNode !== null;
+            {/* 1. LEFT BEZIER CURVES: Strictly bounded in open space x = 275..530 */}
+            {leftNodes.map((_, i) => {
+              const y = getY(i);
+              const isHovered = hoveredIndex?.side === 'left' && hoveredIndex?.index === i;
+              const isAnyHovered = hoveredIndex !== null;
 
-              // Outer curves sweep smoothly through vertical gaps between inner text rows
-              const pathD = node.isOuter
-                ? `M ${xDot} ${node.y} C ${xDot + 160} ${node.y}, ${leftAnchorX - 60} ${centerHubY}, ${leftAnchorX} ${centerHubY}`
-                : `M ${xDot} ${node.y} C ${xDot + 60} ${node.y}, ${leftAnchorX - 40} ${centerHubY}, ${leftAnchorX} ${centerHubY}`;
+              const pathD = `M ${leftDotX} ${y} C ${leftDotX + 110} ${y}, ${leftAnchorX - 70} ${centerHubY}, ${leftAnchorX} ${centerHubY}`;
 
               return (
                 <g key={`l-path-${i}`}>
@@ -127,7 +136,7 @@ export default function FactoryOSMapSection() {
                     opacity={isHovered ? 1 : isAnyHovered ? 0.15 : 0.8}
                     style={{ transition: 'all 0.2s ease' }}
                   />
-                  {/* Moving signal particle along line */}
+                  {/* Moving signal particle */}
                   <circle r={isHovered ? "3.5" : "2.2"} fill="#000000" opacity={isAnyHovered && !isHovered ? 0.2 : 1}>
                     <animateMotion path={pathD} dur={`${3 + i * 0.25}s`} repeatCount="indefinite" />
                   </circle>
@@ -135,31 +144,30 @@ export default function FactoryOSMapSection() {
               );
             })}
 
-            {/* 2. LEFT TEXT LABELS & CONNECTION DOTS (All 9 items fully connected) */}
+            {/* 2. LEFT TEXT LABELS & DOTS (Strictly bounded x = 20..275) */}
             {leftNodes.map((node, i) => {
-              const xDot = node.isOuter ? 200 : 410;
-              const xText = node.isOuter ? 185 : 395;
-              const isHovered = hoveredNode?.side === 'left' && hoveredNode?.index === i;
-              const isAnyHovered = hoveredNode !== null;
+              const y = getY(i);
+              const isHovered = hoveredIndex?.side === 'left' && hoveredIndex?.index === i;
+              const isAnyHovered = hoveredIndex !== null;
 
               return (
                 <g
                   key={`l-node-${i}`}
-                  className="os-connected-group"
-                  onMouseEnter={() => setHoveredNode({ side: 'left', index: i })}
-                  onMouseLeave={() => setHoveredNode(null)}
+                  className="os-zero-overlap-group"
+                  onMouseEnter={() => setHoveredIndex({ side: 'left', index: i })}
+                  onMouseLeave={() => setHoveredIndex(null)}
                   style={{ opacity: isAnyHovered && !isHovered ? 0.35 : 1, transition: 'opacity 0.2s ease' }}
                 >
-                  {/* Connection Node Dot */}
-                  <circle cx={xDot} cy={node.y} r={isHovered ? "4.5" : "3.2"} fill="#000000" style={{ transition: 'all 0.2s ease' }} />
+                  {/* Node Dot */}
+                  <circle cx={leftDotX} cy={y} r={isHovered ? "4.5" : "3.2"} fill="#000000" style={{ transition: 'all 0.2s ease' }} />
 
                   {/* Title */}
                   <text
-                    x={xText}
-                    y={node.y - 4}
+                    x={leftTextX}
+                    y={y - 3}
                     textAnchor="end"
                     fill="#000000"
-                    fontSize="11"
+                    fontSize="11.5"
                     fontWeight={isHovered ? "700" : "600"}
                     letterSpacing="0.04em"
                   >
@@ -167,8 +175,8 @@ export default function FactoryOSMapSection() {
                   </text>
                   {/* Subtitle */}
                   <text
-                    x={xText}
-                    y={node.y + 11}
+                    x={leftTextX}
+                    y={y + 11}
                     textAnchor="end"
                     fill="#64748b"
                     fontSize="9.5"
@@ -182,10 +190,10 @@ export default function FactoryOSMapSection() {
 
             {/* 3. CENTER HUB: ZAWR FMS */}
             <g transform={`translate(${centerHubX}, ${centerHubY})`}>
-              <circle cx="0" cy="0" r="54" fill="none" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="4 4" />
-              <circle cx="0" cy="0" r="42" fill="none" stroke="#f1f5f9" strokeWidth="1" />
+              <circle cx="0" cy="0" r="52" fill="none" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="4 4" />
+              <circle cx="0" cy="0" r="40" fill="none" stroke="#f1f5f9" strokeWidth="1" />
 
-              <text x="0" y="-12" textAnchor="middle" fill="#000000" fontSize="25" fontWeight="700" letterSpacing="-0.02em">
+              <text x="0" y="-12" textAnchor="middle" fill="#000000" fontSize="24" fontWeight="700" letterSpacing="-0.02em">
                 ZAWR
               </text>
               <text x="0" y="8" textAnchor="middle" fill="#000000" fontSize="14" fontWeight="600" letterSpacing="0.1em">
@@ -204,18 +212,16 @@ export default function FactoryOSMapSection() {
             <circle cx={rightAnchorX} cy={centerHubY} r="4.5" fill="#000000" />
 
             {/* Center-to-Right Connector Arrow */}
-            <path d={`M ${rightAnchorX} ${centerHubY} L ${arrowTipX - 8} ${centerHubY}`} fill="none" stroke="#000000" strokeWidth="1.5" />
-            <polygon points={`${arrowTipX - 8},${centerHubY - 4} ${arrowTipX},${centerHubY} ${arrowTipX - 8},${centerHubY + 4}`} fill="#000000" />
+            <path d={`M ${rightAnchorX} ${centerHubY} L ${rightAnchorX + 35} ${centerHubY}`} fill="none" stroke="#000000" strokeWidth="1.5" />
+            <polygon points={`${rightAnchorX + 35},${centerHubY - 4} ${rightAnchorX + 43},${centerHubY} ${rightAnchorX + 35},${centerHubY + 4}`} fill="#000000" />
 
-            {/* 4. RIGHT BEZIER CURVES: Connecting all 9 Right Nodes directly from Arrow Tip */}
-            {rightNodes.map((node, i) => {
-              const xDot = node.isOuter ? 1180 : 970;
-              const isHovered = hoveredNode?.side === 'right' && hoveredNode?.index === i;
-              const isAnyHovered = hoveredNode !== null;
+            {/* 4. RIGHT BEZIER CURVES: Strictly bounded in open space x = 793..1005 */}
+            {rightNodes.map((_, i) => {
+              const y = getY(i);
+              const isHovered = hoveredIndex?.side === 'right' && hoveredIndex?.index === i;
+              const isAnyHovered = hoveredIndex !== null;
 
-              const pathD = node.isOuter
-                ? `M ${arrowTipX} ${centerHubY} C ${arrowTipX + 60} ${centerHubY}, ${xDot - 160} ${node.y}, ${xDot} ${node.y}`
-                : `M ${arrowTipX} ${centerHubY} C ${arrowTipX + 40} ${centerHubY}, ${xDot - 60} ${node.y}, ${xDot} ${node.y}`;
+              const pathD = `M ${rightAnchorX + 43} ${centerHubY} C ${rightAnchorX + 90} ${centerHubY}, ${rightDotX - 110} ${y}, ${rightDotX} ${y}`;
 
               return (
                 <g key={`r-path-${i}`}>
@@ -234,31 +240,30 @@ export default function FactoryOSMapSection() {
               );
             })}
 
-            {/* 5. RIGHT TEXT LABELS & CONNECTION DOTS (All 9 items fully connected) */}
+            {/* 5. RIGHT TEXT LABELS & DOTS (Strictly bounded x = 1005..1260) */}
             {rightNodes.map((node, i) => {
-              const xDot = node.isOuter ? 1180 : 970;
-              const xText = node.isOuter ? 1195 : 985;
-              const isHovered = hoveredNode?.side === 'right' && hoveredNode?.index === i;
-              const isAnyHovered = hoveredNode !== null;
+              const y = getY(i);
+              const isHovered = hoveredIndex?.side === 'right' && hoveredIndex?.index === i;
+              const isAnyHovered = hoveredIndex !== null;
 
               return (
                 <g
                   key={`r-node-${i}`}
-                  className="os-connected-group"
-                  onMouseEnter={() => setHoveredNode({ side: 'right', index: i })}
-                  onMouseLeave={() => setHoveredNode(null)}
+                  className="os-zero-overlap-group"
+                  onMouseEnter={() => setHoveredIndex({ side: 'right', index: i })}
+                  onMouseLeave={() => setHoveredIndex(null)}
                   style={{ opacity: isAnyHovered && !isHovered ? 0.35 : 1, transition: 'opacity 0.2s ease' }}
                 >
-                  {/* Connection Node Dot */}
-                  <circle cx={xDot} cy={node.y} r={isHovered ? "4.5" : "3.2"} fill="#000000" style={{ transition: 'all 0.2s ease' }} />
+                  {/* Node Dot */}
+                  <circle cx={rightDotX} cy={y} r={isHovered ? "4.5" : "3.2"} fill="#000000" style={{ transition: 'all 0.2s ease' }} />
 
                   {/* Title */}
                   <text
-                    x={xText}
-                    y={node.y - 4}
+                    x={rightTextX}
+                    y={y - 3}
                     textAnchor="start"
                     fill="#000000"
-                    fontSize="11"
+                    fontSize="11.5"
                     fontWeight={isHovered ? "700" : "600"}
                     letterSpacing="0.04em"
                   >
@@ -266,8 +271,8 @@ export default function FactoryOSMapSection() {
                   </text>
                   {/* Subtitle */}
                   <text
-                    x={xText}
-                    y={node.y + 11}
+                    x={rightTextX}
+                    y={y + 11}
                     textAnchor="start"
                     fill="#64748b"
                     fontSize="9.5"
@@ -322,8 +327,8 @@ export default function FactoryOSMapSection() {
         {/* BOTTOM CALL TO ACTION */}
         <div style={{
           textAlign: 'center',
-          marginTop: '3rem',
-          paddingTop: '2.5rem',
+          marginTop: '2.5rem',
+          paddingTop: '2.2rem',
           borderTop: '1px solid #e2e8f0',
         }}>
           <span style={{
