@@ -122,7 +122,7 @@ export default function ManufacturingPage() {
           position: 'relative',
           width: '100%',
           maxWidth: '1200px',
-          height: '540px',
+          height: '480px',
           margin: '0 auto',
           display: 'flex',
           alignItems: 'center',
@@ -130,22 +130,22 @@ export default function ManufacturingPage() {
         }}>
 
           {/* FLOATING METRIC BADGE 1: Top Left */}
-          <div style={{ position: 'absolute', top: '18%', left: '6%', zIndex: 20 }}>
+          <div style={{ position: 'absolute', top: '15%', left: '6%', zIndex: 20 }}>
             <ArchitecturalGridBadge metric="±0.005mm" label="Tolerance" />
           </div>
 
           {/* FLOATING METRIC BADGE 2: Bottom Left */}
-          <div style={{ position: 'absolute', bottom: '18%', left: '12%', zIndex: 20 }}>
+          <div style={{ position: 'absolute', bottom: '15%', left: '12%', zIndex: 20 }}>
             <ArchitecturalGridBadge metric="6-Axis" label="Robotics Sync" />
           </div>
 
           {/* FLOATING METRIC BADGE 3: Top Right */}
-          <div style={{ position: 'absolute', top: '18%', right: '6%', zIndex: 20 }}>
+          <div style={{ position: 'absolute', top: '15%', right: '6%', zIndex: 20 }}>
             <ArchitecturalGridBadge metric="99.98%" label="Factory Uptime" />
           </div>
 
           {/* FLOATING METRIC BADGE 4: Bottom Right */}
-          <div style={{ position: 'absolute', bottom: '18%', right: '12%', zIndex: 20 }}>
+          <div style={{ position: 'absolute', bottom: '15%', right: '12%', zIndex: 20 }}>
             <ArchitecturalGridBadge metric="±0.005mm" label="Tolerance" />
           </div>
 
@@ -157,7 +157,7 @@ export default function ManufacturingPage() {
         </div>
 
         {/* Action CTAs */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.2rem', marginTop: '1.5rem', zIndex: 20 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.2rem', marginTop: '2.5rem', zIndex: 20 }}>
           <Link 
             href="/contact"
             style={{

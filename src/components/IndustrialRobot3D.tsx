@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
 export default function IndustrialRobot3D() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -17,41 +18,42 @@ export default function IndustrialRobot3D() {
     // 1. Scene Setup (Clean White Studio Environment)
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup
-    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 1000);
-    camera.position.set(0, 2.0, 5.5);
+    // 2. Camera Setup (Fixed Angle facing Upward Arm)
+    const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
+    camera.position.set(0, 1.6, 5.0);
+    camera.lookAt(0, 0.3, 0);
 
-    // 3. Renderer Setup with Alpha Transparency (No outline artifacts)
+    // 3. Renderer Setup with PMREM Environment Generator
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = false; // Disable self-shadowing acne that created black outlines
-    renderer.toneMapping = THREE.NoToneMapping;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
     container.appendChild(renderer.domElement);
 
-    // 4. Bright Studio Lighting (Highlights matte black robot geometry without pitch black silhouetting)
-    const ambientLight = new THREE.AmbientLight(0xffffff, 2.5);
+    // 4. Generate Studio Environment Map for Realistic Metallic Reflections
+    const pmremGenerator = new THREE.PMREMGenerator(renderer);
+    scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
+
+    // 5. Studio Direct Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.6);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 2.8);
-    keyLight.position.set(6, 12, 8);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 3.5);
+    keyLight.position.set(6, 10, 8);
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0xffffff, 2.2);
+    const fillLight = new THREE.DirectionalLight(0xffffff, 2.5);
     fillLight.position.set(-6, 6, 6);
     scene.add(fillLight);
 
-    const backLight = new THREE.DirectionalLight(0xffffff, 2.5);
-    backLight.position.set(0, 10, -8);
-    scene.add(backLight);
+    const rimLight = new THREE.DirectionalLight(0xffffff, 3.0);
+    rimLight.position.set(0, 8, -8);
+    scene.add(rimLight);
 
-    const bottomLight = new THREE.DirectionalLight(0xffffff, 1.5);
-    bottomLight.position.set(0, -6, 4);
-    scene.add(bottomLight);
-
-    // 5. Load GLB Model (Preserving Original Author Materials)
+    // 6. Load GLB Model (Fixed Base Position)
     const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, -1.1, 0);
+    modelGroup.position.set(0, -1.0, 0); // Fixed in one exact spot
     scene.add(modelGroup);
 
     let mixer: THREE.AnimationMixer | null = null;
@@ -77,20 +79,23 @@ export default function IndustrialRobot3D() {
         const scale = 4.2 / maxDim;
         loadedModel.scale.set(scale, scale, scale);
 
-        // Keep original materials intact & categorize claw nodes
+        // Enhance materials to prevent silhouetting
         loadedModel.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
-            
-            // Ensure material has metallic specular reflection on white studio background
+
             if (mesh.material) {
-              if (Array.isArray(mesh.material)) {
-                mesh.material.forEach((mat) => {
-                  mat.side = THREE.FrontSide;
-                });
-              } else {
-                mesh.material.side = THREE.FrontSide;
-              }
+              const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+              materials.forEach((mat) => {
+                if (mat instanceof THREE.MeshStandardMaterial || mat instanceof THREE.MeshPhysicalMaterial) {
+                  if (mat.color.r < 0.05 && mat.color.g < 0.05 && mat.color.b < 0.05) {
+                    mat.color.setHex(0x2d323c); // Dark metallic charcoal
+                  }
+                  mat.roughness = 0.3;
+                  mat.metalness = 0.8;
+                  mat.envMapIntensity = 1.8;
+                }
+              });
             }
 
             const pos = mesh.position;
@@ -124,7 +129,7 @@ export default function IndustrialRobot3D() {
       }
     );
 
-    // 6. Cursor Mouse & Touch Tracking
+    // 7. Mouse & Touch Tracking
     const mouse = new THREE.Vector2(0, 0);
     const targetMouse = new THREE.Vector2(0, 0);
 
@@ -144,7 +149,7 @@ export default function IndustrialRobot3D() {
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // 7. Render Loop with Arm Pitching & Claw Articulation
+    // 8. Render Loop (Fixed 3D Base Location with Subtle Yaw Response & Claw Articulation)
     const clock = new THREE.Clock();
     let animId: number;
 
@@ -159,34 +164,27 @@ export default function IndustrialRobot3D() {
 
       mouse.lerp(targetMouse, 0.08);
 
-      // Arm Up/Down & Rotation
-      const targetArmHeight = -1.1 + mouse.y * 0.4 + Math.sin(elapsedTime * 1.5) * 0.08;
-      const targetArmRotationY = mouse.x * 0.8 + Math.sin(elapsedTime * 0.5) * 0.12;
+      // Model is FIXED in place (position remains fixed at 0, -1.0, 0)
+      modelGroup.position.set(0, -1.0, 0);
 
-      modelGroup.rotation.y = targetArmRotationY;
-      modelGroup.position.y = targetArmHeight;
-      modelGroup.rotation.x = -mouse.y * 0.28;
+      // Subtle yaw rotation & pitch tilt in place
+      modelGroup.rotation.y = mouse.x * 0.35 + Math.sin(elapsedTime * 0.4) * 0.08;
+      modelGroup.rotation.x = -mouse.y * 0.15;
 
-      // Camera height tracking
-      camera.position.y = 2.0 + mouse.y * 0.4;
-      camera.lookAt(0, 0.3 + mouse.y * 0.2, 0);
-
-      // Open/Close Claw Cycle
-      const clawOpeningFactor = (Math.sin(elapsedTime * 2.2) + 1) / 2;
+      // Subtle Open/Close Claw Cycle
+      const clawOpeningFactor = (Math.sin(elapsedTime * 2.0) + 1) / 2;
 
       clawPartsLeft.forEach((mesh, i) => {
         if (clawInitialPositionsLeft[i]) {
           const initPos = clawInitialPositionsLeft[i];
-          mesh.position.z = initPos.z + clawOpeningFactor * 0.12;
-          mesh.rotation.y = clawOpeningFactor * 0.25;
+          mesh.position.z = initPos.z + clawOpeningFactor * 0.1;
         }
       });
 
       clawPartsRight.forEach((mesh, i) => {
         if (clawInitialPositionsRight[i]) {
           const initPos = clawInitialPositionsRight[i];
-          mesh.position.z = initPos.z - clawOpeningFactor * 0.12;
-          mesh.rotation.y = -clawOpeningFactor * 0.25;
+          mesh.position.z = initPos.z - clawOpeningFactor * 0.1;
         }
       });
 
@@ -195,7 +193,7 @@ export default function IndustrialRobot3D() {
 
     animate();
 
-    // 8. Resize Handling
+    // 9. Resize Listener
     const handleResize = () => {
       if (!containerRef.current) return;
       const w = containerRef.current.clientWidth;
@@ -209,6 +207,7 @@ export default function IndustrialRobot3D() {
 
     return () => {
       cancelAnimationFrame(animId);
+      pmremGenerator.dispose();
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
       container.removeEventListener('touchmove', handleTouchMove);
@@ -226,7 +225,7 @@ export default function IndustrialRobot3D() {
         width: '100%',
         height: '100%',
         position: 'relative',
-        cursor: 'crosshair',
+        cursor: 'default',
         background: 'transparent',
       }}
     >
