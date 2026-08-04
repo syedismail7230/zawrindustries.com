@@ -39,7 +39,7 @@ export function AirFreightSection() {
         .air-freight-right-img-wrapper {
           position: relative;
           width: 100%;
-          height: clamp(400px, 54vh, 600px);
+          height: clamp(380px, 50vh, 560px);
           overflow: hidden;
           display: flex;
           align-items: center;
@@ -71,7 +71,7 @@ export function AirFreightSection() {
             padding-right: 1.5rem;
           }
           .air-freight-right-img-wrapper {
-            height: 340px;
+            height: 320px;
           }
           .air-freight-right-img-wrapper img {
             width: 165%;
@@ -80,23 +80,29 @@ export function AirFreightSection() {
         }
       ` }} />
 
+      {/* Top Centered Header for Air Freight Section */}
+      <div style={{
+        maxWidth: '850px',
+        margin: '0 auto 3.5rem auto',
+        textAlign: 'center',
+        padding: '0 1.5rem',
+      }}>
+        <h2 style={{
+          fontSize: 'clamp(2rem, 3.8vw, 3rem)',
+          fontWeight: 300,
+          color: '#000000',
+          letterSpacing: '-0.025em',
+          margin: '0 0 1.25rem 0',
+          lineHeight: 1.15,
+        }}>
+          Next-Day Air Express &amp; Global Freighter Fleet
+        </h2>
+        <div style={{ width: '3rem', height: '1px', background: '#000000', margin: '0 auto', opacity: 0.2 }} />
+      </div>
+
       <div className="air-freight-grid">
-        {/* Left Column: Clean, Premium Left-Aligned Text Content */}
+        {/* Left Column: Air Freight Technical Details */}
         <div className="air-freight-left-content">
-          <h2 style={{
-            fontSize: 'clamp(2rem, 3.8vw, 3rem)',
-            fontWeight: 300,
-            color: '#000000',
-            letterSpacing: '-0.025em',
-            margin: '0 0 1.5rem 0',
-            lineHeight: 1.15,
-            textAlign: 'left',
-          }}>
-            Next-Day Air Express &amp; Global Freighter Fleet
-          </h2>
-
-          <div style={{ width: '3rem', height: '1px', background: '#000000', marginBottom: '1.8rem', opacity: 0.2 }} />
-
           <p style={{
             fontSize: 'clamp(0.98rem, 1.2vw, 1.12rem)',
             lineHeight: 1.8,
@@ -119,11 +125,11 @@ export function AirFreightSection() {
             Our digital air cargo platform offers instant flight slot reservation, automated customs pre-clearance, and continuous altitude environmental telemetry from tarmac loading to final runway touchdown.
           </p>
 
-          {/* Key Metrics Grid (Clean Left Aligned) */}
+          {/* Key Metrics Grid */}
           <div style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: '1.5rem',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '2rem',
             paddingTop: '1.5rem',
             borderTop: '1px solid rgba(0, 0, 0, 0.08)',
             textAlign: 'left',
