@@ -102,17 +102,6 @@ export function MaritimeFreightSection() {
 
         {/* Right Column: Maritime Details Content */}
         <div className="maritime-right-content">
-          <div style={{
-            fontSize: '0.75rem',
-            fontWeight: 600,
-            letterSpacing: '0.15em',
-            textTransform: 'uppercase',
-            color: 'rgba(0, 0, 0, 0.45)',
-            marginBottom: '1rem',
-          }}>
-            Maritime Logistics Solutions
-          </div>
-
           <h2 style={{
             fontSize: 'clamp(2rem, 3.8vw, 3rem)',
             fontWeight: 300,
