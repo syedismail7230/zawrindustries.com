@@ -5,7 +5,11 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
-export default function ManufacturingRobot3D() {
+interface ManufacturingRobot3DProps {
+  scaleMultiplier?: number;
+}
+
+export default function ManufacturingRobot3D({ scaleMultiplier = 0.001 }: ManufacturingRobot3DProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
 
@@ -18,7 +22,7 @@ export default function ManufacturingRobot3D() {
     // 1. Scene Setup (Clean White Studio Environment)
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup (Positioned for a clean, small & compact 3D robot arm)
+    // 2. Camera Setup
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
     camera.position.set(0, 0.1, 7.5);
     camera.lookAt(0, 0, 0);
@@ -51,27 +55,25 @@ export default function ManufacturingRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Very small compact scale factor 0.2)
+    // 6. Load GLB Model
     const modelGroup = new THREE.Group();
     modelGroup.position.set(0, -0.4, 0);
     scene.add(modelGroup);
 
     const loader = new GLTFLoader();
     loader.load(
-      '/assets/robotic+arm+3d+model.glb?v=8',
+      '/assets/robotic+arm+3d+model.glb?v=10',
       (gltf) => {
         const loadedModel = gltf.scene;
 
-        // Auto-center & scale model
+        // Auto-center model
         const box = new THREE.Box3().setFromObject(loadedModel);
         const center = box.getCenter(new THREE.Vector3());
-        const size = box.getSize(new THREE.Vector3());
-
+        
         loadedModel.position.sub(center);
 
-        const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 0.2 / maxDim; // Very small, compact scale factor
-        loadedModel.scale.set(scale, scale, scale);
+        // Explicit micro scaleMultiplier (0.001) for tiny compact model size
+        loadedModel.scale.set(scaleMultiplier, scaleMultiplier, scaleMultiplier);
 
         // Preserve intact materials & prevent pitch black silhouetting
         loadedModel.traverse((child) => {
@@ -166,7 +168,7 @@ export default function ManufacturingRobot3D() {
       }
       renderer.dispose();
     };
-  }, []);
+  }, [scaleMultiplier]);
 
   return (
     <div 
