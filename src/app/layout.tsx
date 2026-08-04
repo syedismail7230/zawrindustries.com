@@ -86,8 +86,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <link rel="preconnect" href="https://res.cloudinary.com" />
+        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         <link rel="preconnect" href="https://translate.google.com" />
         <link rel="preconnect" href="https://translate.googleapis.com" crossOrigin="anonymous" />
+        <link
+          rel="preload"
+          as="image"
+          href="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_800,c_limit,dpr_auto/v1783710572/zawr/images/hero-bg.png"
+          imageSrcSet="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_600,c_limit,dpr_auto/v1783710572/zawr/images/hero-bg.png 600w, https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1000,c_limit,dpr_auto/v1783710572/zawr/images/hero-bg.png 1000w, https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710572/zawr/images/hero-bg.png 1600w"
+          fetchPriority="high"
+        />
       </head>
       <body className={inter.className} suppressHydrationWarning>
         <Preloader />
@@ -169,9 +178,9 @@ export default function RootLayout({
         <div id="google_translate_element" style={{ display: 'none' }}></div>
         <Script 
           src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit" 
-          strategy="afterInteractive" 
+          strategy="lazyOnload" 
         />
-        <Script id="google-translate-init" strategy="afterInteractive">
+        <Script id="google-translate-init" strategy="lazyOnload">
           {`
             function googleTranslateElementInit() {
               new window.google.translate.TranslateElement({pageLanguage: 'en', autoDisplay: false}, 'google_translate_element');
