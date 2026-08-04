@@ -3,62 +3,52 @@
 import React, { useState } from 'react';
 
 export default function FactoryOSMapSection() {
-  const [hoveredNode, setHoveredNode] = useState<{ side: 'left' | 'right'; index: number } | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<{ side: 'left' | 'right'; index: number } | null>(null);
 
-  // 9 Left Nodes split into 2 staggered columns
+  // 9 Left Nodes organized in 5 compact rows (2 columns)
+  // Column A (outer left): items 0, 2, 4, 6, 8
+  // Column B (inner right): items 1, 3, 5, 7
   const leftNodes = [
-    { title: 'PRODUCTION', desc: 'Work orders & scheduling', col: 1, row: 0 },
-    { title: 'MACHINE MONITORING', desc: 'Status & downtime telemetry', col: 2, row: 0 },
-    { title: 'QUALITY CONTROL', desc: 'Inspections & zero-defects', col: 1, row: 1 },
-    { title: 'MAINTENANCE', desc: 'Preventive work orders', col: 2, row: 1 },
-    { title: 'INVENTORY & WAREHOUSE', desc: 'Stock & material tracking', col: 1, row: 2 },
-    { title: 'WORKFORCE MANAGEMENT', desc: 'Shifts & operator safety', col: 2, row: 2 },
-    { title: 'EQUIPMENT & ASSETS', desc: 'Lifecycle & calibration', col: 1, row: 3 },
-    { title: 'LOGISTICS & SHIPPING', desc: 'Dispatch & fleet routing', col: 2, row: 3 },
-    { title: 'ENERGY MANAGEMENT', desc: 'Smart grid cost optimization', col: 1, row: 4 },
+    { title: 'PRODUCTION', desc: 'Work orders & scheduling', col: 'A', row: 0 },
+    { title: 'MACHINE MONITORING', desc: 'Status & downtime telemetry', col: 'B', row: 0 },
+    { title: 'QUALITY CONTROL', desc: 'Inspections & zero-defects', col: 'A', row: 1 },
+    { title: 'MAINTENANCE', desc: 'Preventive work orders', col: 'B', row: 1 },
+    { title: 'INVENTORY & WAREHOUSE', desc: 'Stock & material tracking', col: 'A', row: 2 },
+    { title: 'WORKFORCE MANAGEMENT', desc: 'Shifts & operator safety', col: 'B', row: 2 },
+    { title: 'EQUIPMENT & ASSETS', desc: 'Lifecycle & calibration', col: 'A', row: 3 },
+    { title: 'LOGISTICS & SHIPPING', desc: 'Dispatch & fleet routing', col: 'B', row: 3 },
+    { title: 'ENERGY MANAGEMENT', desc: 'Smart grid cost optimization', col: 'A', row: 4 },
   ];
 
-  // 9 Right Nodes split into 2 staggered columns
+  // 9 Right Nodes organized in 5 compact rows (2 columns)
   const rightNodes = [
-    { title: 'REAL-TIME VISIBILITY', desc: 'Live factory telemetry', col: 2, row: 0 },
-    { title: 'UNIFIED DASHBOARD', desc: 'All KPIs in one view', col: 1, row: 0 },
-    { title: 'SMART ALERTS', desc: 'Instant critical notifications', col: 2, row: 1 },
-    { title: 'ANALYTICS & REPORTS', desc: 'Data-driven insights', col: 1, row: 1 },
-    { title: 'DATA-DRIVEN DECISIONS', desc: 'Faster smart operations', col: 2, row: 2 },
-    { title: 'SCALABLE & SECURE', desc: 'Enterprise security & scale', col: 1, row: 2 },
-    { title: 'INTEGRATED ECOSYSTEM', desc: 'Zero silo ERP/PLC sync', col: 2, row: 3 },
-    { title: 'AUTOMATED WORKFLOWS', desc: 'End-to-end efficiency', col: 1, row: 3 },
-    { title: 'MAXIMUM EFFICIENCY', desc: 'Higher throughput output', col: 2, row: 4 },
+    { title: 'REAL-TIME VISIBILITY', desc: 'Live factory telemetry', col: 'B', row: 0 },
+    { title: 'UNIFIED DASHBOARD', desc: 'All KPIs in one view', col: 'A', row: 0 },
+    { title: 'SMART ALERTS', desc: 'Instant critical notifications', col: 'B', row: 1 },
+    { title: 'ANALYTICS & REPORTS', desc: 'Data-driven insights', col: 'A', row: 1 },
+    { title: 'DATA-DRIVEN DECISIONS', desc: 'Faster smart operations', col: 'B', row: 2 },
+    { title: 'SCALABLE & SECURE', desc: 'Enterprise security & scale', col: 'A', row: 2 },
+    { title: 'INTEGRATED ECOSYSTEM', desc: 'Zero silo ERP/PLC sync', col: 'B', row: 3 },
+    { title: 'AUTOMATED WORKFLOWS', desc: 'End-to-end efficiency', col: 'A', row: 3 },
+    { title: 'MAXIMUM EFFICIENCY', desc: 'Higher throughput output', col: 'B', row: 4 },
   ];
 
-  // Compact viewBox geometry (1440px width x 420px height)
-  // Left Column 1 (Outer): xDot = 180, textEnd = 165
-  // Left Column 2 (Inner): xDot = 440, textEnd = 425
-  // Center Hub: x = 720, y = 200
-  // Right Column 1 (Inner): xDot = 1000, textStart = 1015
-  // Right Column 2 (Outer): xDot = 1260, textStart = 1275
+  // Geometry: 1300x380 SVG Canvas
+  // Text area LEFT: x = 20..400
+  // Bezier Curves LEFT: x = 420..540
+  // Center Hub: x = 650, y = 180
+  // Bezier Curves RIGHT: x = 760..880
+  // Text area RIGHT: x = 900..1280
 
-  const centerHubX = 720;
-  const centerHubY = 200;
-  const leftAnchorX = 580;
-  const rightAnchorX = 860;
+  const centerHubX = 650;
+  const centerHubY = 180;
+  const leftAnchorX = 540;
+  const leftDotX = 420;
+  const rightAnchorX = 760;
+  const rightDotX = 880;
 
-  // Staggered Y calculation
-  // Col 1 (Outer - 5 items): y = 35 + row * 82
-  // Col 2 (Inner - 4 items): y = 76 + row * 82
-  const getLeftNodePos = (col: number, row: number) => {
-    const xDot = col === 1 ? 190 : 440;
-    const xText = col === 1 ? 175 : 425;
-    const y = col === 1 ? (35 + row * 82) : (76 + row * 82);
-    return { xDot, xText, y };
-  };
-
-  const getRightNodePos = (col: number, row: number) => {
-    const xDot = col === 1 ? 1000 : 1250;
-    const xText = col === 1 ? 1015 : 1265;
-    const y = col === 1 ? (76 + row * 82) : (35 + row * 82);
-    return { xDot, xText, y };
-  };
+  // Y coordinate for each of the 5 rows (row 0 to 4, step = 64px)
+  const getRowY = (row: number) => 40 + row * 64;
 
   return (
     <section style={{
@@ -70,7 +60,7 @@ export default function FactoryOSMapSection() {
     }}>
       <style>{`
         @media (max-width: 1024px) {
-          .os-map-crisscross-desktop {
+          .os-map-no-overlap-desktop {
             display: none !important;
           }
           .os-map-mobile-stack {
@@ -82,13 +72,13 @@ export default function FactoryOSMapSection() {
             display: none !important;
           }
         }
-        .os-crisscross-group {
+        .os-clean-group {
           cursor: pointer;
           transition: opacity 0.2s ease;
         }
       `}</style>
 
-      <div style={{ maxWidth: '1480px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
         
         {/* Section Header */}
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
@@ -120,22 +110,23 @@ export default function FactoryOSMapSection() {
           </p>
         </div>
 
-        {/* DESKTOP 2-COLUMN STAGGERED CRISSCROSS MAP (COMPACT 420px HEIGHT) */}
-        <div className="os-map-crisscross-desktop" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        {/* DESKTOP NON-OVERLAPPING 2-COLUMN MAP (380px HEIGHT, ZERO OVERLAP) */}
+        <div className="os-map-no-overlap-desktop" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
           <svg
             width="100%"
             height="100%"
-            viewBox="0 0 1440 420"
-            style={{ maxWidth: '1440px', height: 'auto', overflow: 'visible' }}
+            viewBox="0 0 1300 380"
+            style={{ maxWidth: '1300px', height: 'auto', overflow: 'visible' }}
           >
-            {/* 1. LEFT BEZIER CURVES: Connecting Staggered Left Dots to Center Anchor */}
-            {leftNodes.map((node, i) => {
-              const { xDot, y } = getLeftNodePos(node.col, node.row);
-              const isHovered = hoveredNode?.side === 'left' && hoveredNode?.index === i;
-              const isAnyHovered = hoveredNode !== null;
+            {/* 1. LEFT BEZIER CURVES: Strictly bounded between x = 420 and x = 540 */}
+            {leftNodes.map((_, i) => {
+              // Map index 0..8 to row Y
+              const row = Math.floor(i / 2) + (i % 2 === 0 ? 0 : 0);
+              const y = getRowY(i === 8 ? 4 : (i % 2 === 0 ? Math.floor(i/2) : Math.floor(i/2)));
+              const isHovered = hoveredIndex?.side === 'left' && hoveredIndex?.index === i;
+              const isAnyHovered = hoveredIndex !== null;
 
-              // Sweep curve smoothly from staggered xDot to center anchor
-              const pathD = `M ${xDot} ${y} C ${xDot + (node.col === 1 ? 180 : 80)} ${y}, ${leftAnchorX - 50} ${centerHubY}, ${leftAnchorX} ${centerHubY}`;
+              const pathD = `M ${leftDotX} ${y} C ${leftDotX + 60} ${y}, ${leftAnchorX - 40} ${centerHubY}, ${leftAnchorX} ${centerHubY}`;
 
               return (
                 <g key={`l-curve-${i}`}>
@@ -154,27 +145,37 @@ export default function FactoryOSMapSection() {
               );
             })}
 
-            {/* 2. LEFT STAGGERED TEXT NODES & CONNECTION DOTS */}
+            {/* 2. LEFT TEXT LABELS & LEADER LINES (x = 20..400) */}
             {leftNodes.map((node, i) => {
-              const { xDot, xText, y } = getLeftNodePos(node.col, node.row);
-              const isHovered = hoveredNode?.side === 'left' && hoveredNode?.index === i;
-              const isAnyHovered = hoveredNode !== null;
+              const y = getRowY(node.row);
+              const isColA = node.col === 'A';
+              const textX = isColA ? 180 : 395;
+              const isHovered = hoveredIndex?.side === 'left' && hoveredIndex?.index === i;
+              const isAnyHovered = hoveredIndex !== null;
 
               return (
                 <g
                   key={`l-node-${i}`}
-                  className="os-crisscross-group"
-                  onMouseEnter={() => setHoveredNode({ side: 'left', index: i })}
-                  onMouseLeave={() => setHoveredNode(null)}
+                  className="os-clean-group"
+                  onMouseEnter={() => setHoveredIndex({ side: 'left', index: i })}
+                  onMouseLeave={() => setHoveredIndex(null)}
                   style={{ opacity: isAnyHovered && !isHovered ? 0.35 : 1, transition: 'opacity 0.2s ease' }}
                 >
+                  {/* Leader Line for Col A text to reach dot column xDot = 420 */}
+                  {isColA && (
+                    <line x1="188" y1={y} x2={leftDotX} y2={y} stroke="#e2e8f0" strokeWidth="1" strokeDasharray="3 3" />
+                  )}
+
+                  {/* Node Dot at xDot = 420 */}
+                  <circle cx={leftDotX} cy={y} r={isHovered ? "4.5" : "3.2"} fill="#000000" style={{ transition: 'all 0.2s ease' }} />
+
                   {/* Title */}
                   <text
-                    x={xText}
+                    x={textX}
                     y={y - 4}
                     textAnchor="end"
                     fill="#000000"
-                    fontSize="11.5"
+                    fontSize="11"
                     fontWeight={isHovered ? "700" : "600"}
                     letterSpacing="0.04em"
                   >
@@ -182,55 +183,53 @@ export default function FactoryOSMapSection() {
                   </text>
                   {/* Subtitle */}
                   <text
-                    x={xText}
+                    x={textX}
                     y={y + 11}
                     textAnchor="end"
                     fill="#64748b"
-                    fontSize="10"
+                    fontSize="9.5"
                     fontWeight="300"
                   >
                     {node.desc}
                   </text>
-                  {/* Connection Node Dot */}
-                  <circle cx={xDot} cy={y} r={isHovered ? "4.5" : "3.2"} fill="#000000" style={{ transition: 'all 0.2s ease' }} />
                 </g>
               );
             })}
 
-            {/* 3. CENTER HUB: ZAWR FMS (Majestic Orbit Ring & Clean Typography) */}
+            {/* 3. CENTER HUB: ZAWR FMS */}
             <g transform={`translate(${centerHubX}, ${centerHubY})`}>
-              <circle cx="0" cy="0" r="55" fill="none" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="4 4" />
-              <circle cx="0" cy="0" r="42" fill="none" stroke="#f1f5f9" strokeWidth="1" />
+              <circle cx="0" cy="0" r="52" fill="none" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="4 4" />
+              <circle cx="0" cy="0" r="40" fill="none" stroke="#f1f5f9" strokeWidth="1" />
 
-              <text x="0" y="-14" textAnchor="middle" fill="#000000" fontSize="26" fontWeight="700" letterSpacing="-0.02em">
+              <text x="0" y="-12" textAnchor="middle" fill="#000000" fontSize="24" fontWeight="700" letterSpacing="-0.02em">
                 ZAWR
               </text>
-              <text x="0" y="8" textAnchor="middle" fill="#000000" fontSize="15" fontWeight="600" letterSpacing="0.1em">
+              <text x="0" y="8" textAnchor="middle" fill="#000000" fontSize="14" fontWeight="600" letterSpacing="0.1em">
                 FMS
               </text>
 
-              <line x1="-30" y1="18" x2="30" y2="18" stroke="#e2e8f0" strokeWidth="1" />
+              <line x1="-25" y1="17" x2="25" y2="17" stroke="#e2e8f0" strokeWidth="1" />
 
-              <text x="0" y="32" textAnchor="middle" fill="#64748b" fontSize="9.5" fontWeight="300">
+              <text x="0" y="30" textAnchor="middle" fill="#64748b" fontSize="9" fontWeight="300">
                 One Platform.
               </text>
             </g>
 
             {/* Center Anchors */}
-            <circle cx={leftAnchorX} cy={centerHubY} r="5" fill="#000000" />
-            <circle cx={rightAnchorX} cy={centerHubY} r="5" fill="#000000" />
+            <circle cx={leftAnchorX} cy={centerHubY} r="4.5" fill="#000000" />
+            <circle cx={rightAnchorX} cy={centerHubY} r="4.5" fill="#000000" />
 
             {/* Center-to-Right Connector Arrow */}
-            <path d={`M ${rightAnchorX} ${centerHubY} L ${rightAnchorX + 45} ${centerHubY}`} fill="none" stroke="#000000" strokeWidth="1.5" />
-            <polygon points={`${rightAnchorX + 45},${centerHubY - 4} ${rightAnchorX + 53},${centerHubY} ${rightAnchorX + 45},${centerHubY + 4}`} fill="#000000" />
+            <path d={`M ${rightAnchorX} ${centerHubY} L ${rightAnchorX + 35} ${centerHubY}`} fill="none" stroke="#000000" strokeWidth="1.5" />
+            <polygon points={`${rightAnchorX + 35},${centerHubY - 4} ${rightAnchorX + 43},${centerHubY} ${rightAnchorX + 35},${centerHubY + 4}`} fill="#000000" />
 
-            {/* 4. RIGHT BEZIER CURVES: Fanning out from Arrow to Staggered Right Dots */}
-            {rightNodes.map((node, i) => {
-              const { xDot, y } = getRightNodePos(node.col, node.row);
-              const isHovered = hoveredNode?.side === 'right' && hoveredNode?.index === i;
-              const isAnyHovered = hoveredNode !== null;
+            {/* 4. RIGHT BEZIER CURVES: Strictly bounded between x = 795 and x = 880 */}
+            {rightNodes.map((_, i) => {
+              const y = getRowY(i === 8 ? 4 : (i % 2 === 0 ? Math.floor(i/2) : Math.floor(i/2)));
+              const isHovered = hoveredIndex?.side === 'right' && hoveredIndex?.index === i;
+              const isAnyHovered = hoveredIndex !== null;
 
-              const pathD = `M ${rightAnchorX + 53} ${centerHubY} C ${rightAnchorX + 90} ${centerHubY}, ${xDot - (node.col === 1 ? 80 : 180)} ${y}, ${xDot} ${y}`;
+              const pathD = `M ${rightAnchorX + 43} ${centerHubY} C ${rightAnchorX + 80} ${centerHubY}, ${rightDotX - 50} ${y}, ${rightDotX} ${y}`;
 
               return (
                 <g key={`r-curve-${i}`}>
@@ -249,30 +248,37 @@ export default function FactoryOSMapSection() {
               );
             })}
 
-            {/* 5. RIGHT STAGGERED TEXT NODES & CONNECTION DOTS */}
+            {/* 5. RIGHT TEXT LABELS & LEADER LINES (x = 900..1280) */}
             {rightNodes.map((node, i) => {
-              const { xDot, xText, y } = getRightNodePos(node.col, node.row);
-              const isHovered = hoveredNode?.side === 'right' && hoveredNode?.index === i;
-              const isAnyHovered = hoveredNode !== null;
+              const y = getRowY(node.row);
+              const isColB = node.col === 'B';
+              const textX = isColB ? 1115 : 905;
+              const isHovered = hoveredIndex?.side === 'right' && hoveredIndex?.index === i;
+              const isAnyHovered = hoveredIndex !== null;
 
               return (
                 <g
                   key={`r-node-${i}`}
-                  className="os-crisscross-group"
-                  onMouseEnter={() => setHoveredNode({ side: 'right', index: i })}
-                  onMouseLeave={() => setHoveredNode(null)}
+                  className="os-clean-group"
+                  onMouseEnter={() => setHoveredIndex({ side: 'right', index: i })}
+                  onMouseLeave={() => setHoveredIndex(null)}
                   style={{ opacity: isAnyHovered && !isHovered ? 0.35 : 1, transition: 'opacity 0.2s ease' }}
                 >
-                  {/* Connection Node Dot */}
-                  <circle cx={xDot} cy={y} r={isHovered ? "4.5" : "3.2"} fill="#000000" style={{ transition: 'all 0.2s ease' }} />
-                  
+                  {/* Node Dot at xDot = 880 */}
+                  <circle cx={rightDotX} cy={y} r={isHovered ? "4.5" : "3.2"} fill="#000000" style={{ transition: 'all 0.2s ease' }} />
+
+                  {/* Leader Line for Col B outer text */}
+                  {isColB && (
+                    <line x1={rightDotX} y1={y} x2="1107" y2={y} stroke="#e2e8f0" strokeWidth="1" strokeDasharray="3 3" />
+                  )}
+
                   {/* Title */}
                   <text
-                    x={xText}
+                    x={textX}
                     y={y - 4}
                     textAnchor="start"
                     fill="#000000"
-                    fontSize="11.5"
+                    fontSize="11"
                     fontWeight={isHovered ? "700" : "600"}
                     letterSpacing="0.04em"
                   >
@@ -280,11 +286,11 @@ export default function FactoryOSMapSection() {
                   </text>
                   {/* Subtitle */}
                   <text
-                    x={xText}
+                    x={textX}
                     y={y + 11}
                     textAnchor="start"
                     fill="#64748b"
-                    fontSize="10"
+                    fontSize="9.5"
                     fontWeight="300"
                   >
                     {node.desc}
@@ -300,7 +306,7 @@ export default function FactoryOSMapSection() {
           
           {/* Mobile Center Hub Text */}
           <div style={{ textAlign: 'center', padding: '1rem 0' }}>
-            <div style={{ fontSize: '2.2rem', fontWeight: 700, color: '#000000', letterSpacing: '-0.02em' }}>ZAWR</div>
+            <div style={{ fontSize: '2rem', fontWeight: 700, color: '#000000', letterSpacing: '-0.02em' }}>ZAWR</div>
             <div style={{ fontSize: '1.2rem', fontWeight: 600, color: '#000000', marginTop: '0.2rem', letterSpacing: '0.1em' }}>FMS</div>
             <div style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '0.6rem', fontWeight: 300 }}>One Platform. Unlimited Control.</div>
           </div>
