@@ -7,12 +7,11 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 export default function IndustrialRobot3D() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [telemetry, setTelemetry] = useState({
-    rotation: '0.0°',
-    camDistance: '5.2m',
-    mode: 'SCROLL DRIVEN 3D TELEMETRY',
-    status: 'SYNCHRONIZED',
+    trackingX: '0.00',
+    trackingY: '0.00',
+    animationState: 'RIGGED ANIMATION ACTIVE',
+    status: 'CURSOR TRACKING',
   });
 
   useEffect(() => {
@@ -21,7 +20,7 @@ export default function IndustrialRobot3D() {
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    // 1. Scene Setup (Pure Studio White Background)
+    // 1. Scene Setup
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xffffff);
 
@@ -39,7 +38,7 @@ export default function IndustrialRobot3D() {
     renderer.toneMappingExposure = 1.25;
     container.appendChild(renderer.domElement);
 
-    // 4. Studio Lighting (Crisp High-Contrast Monochrome Setup)
+    // 4. Studio Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.6);
     scene.add(ambientLight);
 
@@ -48,18 +47,13 @@ export default function IndustrialRobot3D() {
     mainLight.castShadow = true;
     mainLight.shadow.mapSize.width = 2048;
     mainLight.shadow.mapSize.height = 2048;
-    mainLight.shadow.bias = -0.0001;
     scene.add(mainLight);
 
     const fillLight = new THREE.DirectionalLight(0xffffff, 1.6);
     fillLight.position.set(-8, 6, -6);
     scene.add(fillLight);
 
-    const rimLight = new THREE.DirectionalLight(0xffffff, 2.5);
-    rimLight.position.set(0, 10, -10);
-    scene.add(rimLight);
-
-    // Soft Shadow Ground Plane
+    // Shadow Ground Plane
     const shadowPlaneGeo = new THREE.PlaneGeometry(30, 30);
     const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.12 });
     const shadowPlane = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
@@ -68,31 +62,33 @@ export default function IndustrialRobot3D() {
     shadowPlane.receiveShadow = true;
     scene.add(shadowPlane);
 
-    // 5. Load User's GLB 3D Model (/assets/robotic+arm+3d+model.glb)
+    // 5. Load Rigged 3D GLB Model
     const modelGroup = new THREE.Group();
     scene.add(modelGroup);
 
-    let robotMesh: THREE.Object3D | null = null;
+    let mixer: THREE.AnimationMixer | null = null;
+    let ikBones: THREE.Object3D[] = [];
+    let endEffectorBone: THREE.Object3D | null = null;
 
     const loader = new GLTFLoader();
     loader.load(
       '/assets/robotic+arm+3d+model.glb',
       (gltf) => {
-        robotMesh = gltf.scene;
+        const loadedModel = gltf.scene;
 
-        // Auto-center & auto-scale GLB model perfectly inside bounding box
-        const box = new THREE.Box3().setFromObject(robotMesh);
+        // Auto-center & scale model
+        const box = new THREE.Box3().setFromObject(loadedModel);
         const center = box.getCenter(new THREE.Vector3());
         const size = box.getSize(new THREE.Vector3());
 
-        robotMesh.position.sub(center);
+        loadedModel.position.sub(center);
 
         const maxDim = Math.max(size.x, size.y, size.z);
         const scale = 3.6 / maxDim;
-        robotMesh.scale.set(scale, scale, scale);
+        loadedModel.scale.set(scale, scale, scale);
 
-        // Apply crisp shadows & metallic material optimizations
-        robotMesh.traverse((child) => {
+        // Traverse hierarchy to detect rigged bones, joints, and apply shadows
+        loadedModel.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
             mesh.castShadow = true;
@@ -103,98 +99,69 @@ export default function IndustrialRobot3D() {
               mat.metalness = Math.max(mat.metalness || 0.6, 0.75);
             }
           }
+
+          // Collect bone joints for cursor tracking
+          if (child.type === 'Bone' || child.name.toLowerCase().includes('joint') || child.name.toLowerCase().includes('arm') || child.name.toLowerCase().includes('hand')) {
+            ikBones.push(child);
+            if (!endEffectorBone && (child.name.toLowerCase().includes('hand') || child.name.toLowerCase().includes('claw') || child.name.toLowerCase().includes('wrist') || child.name.toLowerCase().includes('effector'))) {
+              endEffectorBone = child;
+            }
+          }
         });
 
-        modelGroup.add(robotMesh);
+        // Setup Animation Mixer if GLB model contains animation clips
+        if (gltf.animations && gltf.animations.length > 0) {
+          mixer = new THREE.AnimationMixer(loadedModel);
+          gltf.animations.forEach((clip) => {
+            const action = mixer!.clipAction(clip);
+            action.play();
+          });
+        }
+
+        modelGroup.add(loadedModel);
         setLoading(false);
       },
       undefined,
       (err) => {
-        console.error('[3D GLB Load Error]', err);
+        console.error('[GLB Load Error]', err);
         setLoading(false);
       }
     );
 
-    // 6. Mouse Parallax & Scroll Listener
-    let mouseX = 0;
-    let mouseY = 0;
-    let targetRotationY = 0.4;
-    let targetRotationX = 0.15;
-    let isDragging = false;
-    let previousMouseX = 0;
-    let previousMouseY = 0;
-
-    const handleWindowScroll = () => {
-      const scrolled = window.scrollY;
-      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = maxScroll > 0 ? scrolled / maxScroll : 0;
-      setScrollProgress(progress);
-
-      // Rotate GLB 3D model based on scroll depth
-      if (!isDragging && modelGroup) {
-        targetRotationY = 0.4 + progress * Math.PI * 2.5;
-      }
-    };
+    // 6. Cursor & Raycaster 3D Position Tracking
+    const raycaster = new THREE.Raycaster();
+    const mouseVector = new THREE.Vector2(0, 0);
+    const target3D = new THREE.Vector3(0, 1.2, 2.5);
+    const currentLookTarget = new THREE.Vector3(0, 1.2, 2.5);
 
     const handleMouseMove = (e: MouseEvent) => {
-      const windowHalfX = window.innerWidth / 2;
-      const windowHalfY = window.innerHeight / 2;
-      mouseX = (e.clientX - windowHalfX) * 0.0005;
-      mouseY = (e.clientY - windowHalfY) * 0.0005;
+      const rect = container.getBoundingClientRect();
+      // Normalized device coordinates (-1 to +1)
+      mouseVector.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      mouseVector.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
 
-      if (isDragging) {
-        const deltaX = e.clientX - previousMouseX;
-        const deltaY = e.clientY - previousMouseY;
+      // Project mouse into 3D space at plane Z=2.0
+      target3D.set(mouseVector.x * 3.5, mouseVector.y * 2.5 + 1.2, 2.5);
 
-        targetRotationY += deltaX * 0.008;
-        targetRotationX += deltaY * 0.008;
-        targetRotationX = Math.max(-0.3, Math.min(0.6, targetRotationX));
-
-        previousMouseX = e.clientX;
-        previousMouseY = e.clientY;
-      }
+      setTelemetry(prev => ({
+        ...prev,
+        trackingX: (mouseVector.x * 100).toFixed(1),
+        trackingY: (mouseVector.y * 100).toFixed(1),
+      }));
     };
 
-    const handleMouseDown = (e: MouseEvent) => {
-      isDragging = true;
-      previousMouseX = e.clientX;
-      previousMouseY = e.clientY;
-    };
-
-    const handleMouseUp = () => {
-      isDragging = false;
-    };
-
-    // Touch gesture support for mobile devices
-    const handleTouchStart = (e: TouchEvent) => {
-      if (e.touches.length === 1) {
-        isDragging = true;
-        previousMouseX = e.touches[0].clientX;
-        previousMouseY = e.touches[0].clientY;
-      }
-    };
-
+    // Touch support for mobile cursor tracking
     const handleTouchMove = (e: TouchEvent) => {
-      if (!isDragging || e.touches.length !== 1) return;
-      const deltaX = e.touches[0].clientX - previousMouseX;
-      const deltaY = e.touches[0].clientY - previousMouseY;
+      if (e.touches.length !== 1) return;
+      const rect = container.getBoundingClientRect();
+      mouseVector.x = ((e.touches[0].clientX - rect.left) / rect.width) * 2 - 1;
+      mouseVector.y = -((e.touches[0].clientY - rect.top) / rect.height) * 2 + 1;
 
-      targetRotationY += deltaX * 0.008;
-      targetRotationX += deltaY * 0.008;
-      targetRotationX = Math.max(-0.3, Math.min(0.6, targetRotationX));
-
-      previousMouseX = e.touches[0].clientX;
-      previousMouseY = e.touches[0].clientY;
+      target3D.set(mouseVector.x * 3.5, mouseVector.y * 2.5 + 1.2, 2.5);
     };
 
-    const domElem = renderer.domElement;
-    domElem.addEventListener('mousedown', handleMouseDown);
     window.addEventListener('mousemove', handleMouseMove);
-    window.addEventListener('mouseup', handleMouseUp);
-    window.addEventListener('scroll', handleWindowScroll, { passive: true });
-    domElem.addEventListener('touchstart', handleTouchStart, { passive: true });
-    window.addEventListener('touchmove', handleTouchMove, { passive: true });
-    window.addEventListener('touchend', handleMouseUp);
+    container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
     // 7. Animation Loop
     const clock = new THREE.Clock();
@@ -202,28 +169,33 @@ export default function IndustrialRobot3D() {
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      const elapsedTime = clock.getElapsedTime();
+      const delta = clock.getDelta();
 
-      // Smooth camera & model rotation
-      modelGroup.rotation.y += (targetRotationY + mouseX - modelGroup.rotation.y) * 0.06;
-      camera.position.y += (targetRotationX * 3 + 3.2 + mouseY * 2 - camera.position.y) * 0.06;
-      camera.lookAt(0, 0.4, 0);
-
-      // Idle subtle breathing motion when not dragging
-      if (!isDragging) {
-        modelGroup.position.y = Math.sin(elapsedTime * 1.5) * 0.08;
+      // Update rigged GLB animations if present
+      if (mixer) {
+        mixer.update(delta);
       }
 
-      // Update HUD telemetry
-      if (Math.floor(elapsedTime * 10) % 5 === 0) {
-        const deg = ((modelGroup.rotation.y % (Math.PI * 2)) * (180 / Math.PI)).toFixed(1);
-        const dist = (4.5 + Math.sin(elapsedTime * 0.8) * 0.2).toFixed(2);
-        setTelemetry({
-          rotation: `${deg}°`,
-          camDistance: `${dist}m`,
-          mode: 'SCROLL DRIVEN 3D TELEMETRY',
-          status: 'SYNCHRONIZED',
-        });
+      // Smoothly interpolate 3D tracking target towards cursor position
+      currentLookTarget.lerp(target3D, 0.08);
+
+      // Rotate entire model base towards cursor
+      const targetRotationY = Math.atan2(currentLookTarget.x, currentLookTarget.z) * 0.75;
+      modelGroup.rotation.y += (targetRotationY - modelGroup.rotation.y) * 0.08;
+
+      // Pitch camera & model height dynamically to see cursor
+      const targetRotationX = (currentLookTarget.y - 1.2) * 0.25;
+      camera.position.y += (targetRotationX + 3.2 - camera.position.y) * 0.08;
+      camera.lookAt(0, 0.4, 0);
+
+      // Articulate inner joints / bones to point at cursor
+      if (ikBones.length > 0) {
+        const primaryJoint = ikBones[0];
+        primaryJoint.rotation.x = Math.sin(clock.getElapsedTime() * 1.5) * 0.1 + (currentLookTarget.y - 1.2) * 0.2;
+      }
+
+      if (endEffectorBone) {
+        endEffectorBone.lookAt(currentLookTarget);
       }
 
       renderer.render(scene, camera);
@@ -246,13 +218,8 @@ export default function IndustrialRobot3D() {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', handleResize);
-      window.removeEventListener('scroll', handleWindowScroll);
-      domElem.removeEventListener('mousedown', handleMouseDown);
       window.removeEventListener('mousemove', handleMouseMove);
-      window.removeEventListener('mouseup', handleMouseUp);
-      domElem.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchmove', handleTouchMove);
-      window.removeEventListener('touchend', handleMouseUp);
+      container.removeEventListener('touchmove', handleTouchMove);
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
@@ -268,7 +235,7 @@ export default function IndustrialRobot3D() {
         height: '100%',
         minHeight: '520px',
         position: 'relative',
-        cursor: 'grab',
+        cursor: 'crosshair',
         borderRadius: '24px',
         overflow: 'hidden',
         background: '#ffffff',
@@ -302,7 +269,7 @@ export default function IndustrialRobot3D() {
             marginBottom: '1rem',
           }}></div>
           <span style={{ fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em' }}>
-            INITIALIZING 3D GLB ROBOT...
+            ACTIVATING RIGGED 3D CURSOR TRACKING...
           </span>
         </div>
       )}
@@ -329,17 +296,17 @@ export default function IndustrialRobot3D() {
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
           <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#000000', boxShadow: '0 0 8px rgba(0,0,0,0.4)' }}></span>
-          <span style={{ color: '#000000', fontWeight: 'bold', letterSpacing: '0.05em' }}>3D GLB MODEL // SCROLL SYNCED</span>
+          <span style={{ color: '#000000', fontWeight: 'bold', letterSpacing: '0.05em' }}>3D RIGGED MODEL // CURSOR TRACKING</span>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.3rem 1rem', opacity: 0.9 }}>
-          <div>ROTATION: <span style={{ color: '#000000', fontWeight: 'bold' }}>{telemetry.rotation}</span></div>
-          <div>SCROLL DEPTH: <span style={{ color: '#000000', fontWeight: 'bold' }}>{(scrollProgress * 100).toFixed(0)}%</span></div>
-          <div>CAMERA DIST: <span style={{ color: '#000000', fontWeight: 'bold' }}>{telemetry.camDistance}</span></div>
+          <div>CURSOR X: <span style={{ color: '#000000', fontWeight: 'bold' }}>{telemetry.trackingX}%</span></div>
+          <div>CURSOR Y: <span style={{ color: '#000000', fontWeight: 'bold' }}>{telemetry.trackingY}%</span></div>
+          <div>ANIMATION: <span style={{ color: '#000000', fontWeight: 'bold' }}>ACTIVE</span></div>
           <div>STATUS: <span style={{ color: '#000000', fontWeight: 'bold' }}>{telemetry.status}</span></div>
         </div>
       </div>
 
-      {/* Orbit Helper Pill Badge */}
+      {/* Helper Pill Badge */}
       <div 
         style={{
           position: 'absolute',
@@ -360,9 +327,11 @@ export default function IndustrialRobot3D() {
         }}
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2">
-          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="16"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
         </svg>
-        <span>Scroll / Drag to Control 3D GLB Robot</span>
+        <span>Move Cursor to Direct 3D Robot Arm</span>
       </div>
 
       <style dangerouslySetInnerHTML={{__html: `
