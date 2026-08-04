@@ -18,9 +18,9 @@ export default function ManufacturingRobot3D() {
     // 1. Scene Setup (Clean White Studio Environment)
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup (Positioned for a doubled-size 3D robot arm)
+    // 2. Camera Setup (Positioned to frame the enlarged 3D robot arm)
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-    camera.position.set(0, 0.3, 4.8);
+    camera.position.set(0, 0.35, 4.0);
     camera.lookAt(0, 0.1, 0);
 
     // 3. Renderer Setup with PMREM Environment Generator
@@ -51,14 +51,14 @@ export default function ManufacturingRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Doubled scale factor 2.4)
+    // 6. Load GLB Model (Properly aligned base and enlarged scale 3.6)
     const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, -0.2, 0);
+    modelGroup.position.set(0, -0.25, 0);
     scene.add(modelGroup);
 
     const loader = new GLTFLoader();
     loader.load(
-      '/assets/robotic+arm+3d+model.glb?v=12',
+      '/assets/robotic+arm+3d+model.glb?v=13',
       (gltf) => {
         const loadedModel = gltf.scene;
 
@@ -67,11 +67,12 @@ export default function ManufacturingRobot3D() {
         const center = box.getCenter(new THREE.Vector3());
         const size = box.getSize(new THREE.Vector3());
 
-        loadedModel.position.sub(center);
-
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 2.4 / maxDim; // Doubled scale factor (2x of previous 1.2 scale)
+        const scale = 3.6 / maxDim; // Increased size for impressive hero presence
         loadedModel.scale.set(scale, scale, scale);
+
+        // Center horizontally & anchor base bottom to y = 0
+        loadedModel.position.set(-center.x * scale, -box.min.y * scale, -center.z * scale);
 
         // Preserve intact materials & prevent pitch black silhouetting
         loadedModel.traverse((child) => {
@@ -132,8 +133,8 @@ export default function ManufacturingRobot3D() {
 
       mouse.lerp(targetMouse, 0.25);
 
-      // Model base is fixed stationary at y = -0.2
-      modelGroup.position.set(0, -0.2, 0);
+      // Model base is fixed stationary at y = -0.25
+      modelGroup.position.set(0, -0.25, 0);
       modelGroup.rotation.y = mouse.x * 0.45;
       modelGroup.rotation.x = 0;
       modelGroup.rotation.z = 0;

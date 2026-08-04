@@ -130,32 +130,31 @@ export default function ManufacturingPage() {
           position: 'relative',
           width: '100%',
           maxWidth: '1400px',
-          height: '560px',
-          marginTop: '-12rem',
-          margin: '-12rem auto 0',
+          height: '600px',
+          margin: '-10rem auto 0',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
         }}>
 
           {/* FLOATING METRIC BADGES (Pushed further OUTWARDS to outer edges) */}
-          <div style={{ position: 'absolute', top: '30%', left: '1%', zIndex: 5 }}>
+          <div style={{ position: 'absolute', top: '25%', left: '1%', zIndex: 5 }}>
             <ArchitecturalGridBadge metric="±0.005mm" label="Tolerance" />
           </div>
 
-          <div style={{ position: 'absolute', bottom: '8%', left: '3%', zIndex: 5 }}>
+          <div style={{ position: 'absolute', bottom: '12%', left: '3%', zIndex: 5 }}>
             <ArchitecturalGridBadge metric="6-Axis" label="Robotics Sync" />
           </div>
 
-          <div style={{ position: 'absolute', top: '30%', right: '1%', zIndex: 5 }}>
+          <div style={{ position: 'absolute', top: '25%', right: '1%', zIndex: 5 }}>
             <ArchitecturalGridBadge metric="99.98%" label="Factory Uptime" />
           </div>
 
-          <div style={{ position: 'absolute', bottom: '8%', right: '3%', zIndex: 5 }}>
+          <div style={{ position: 'absolute', bottom: '12%', right: '3%', zIndex: 5 }}>
             <ArchitecturalGridBadge metric="±0.005mm" label="Tolerance" />
           </div>
 
-          {/* CENTER 3D ROBOT CANVAS (zIndex: 15 - IN CENTER STAGE WITH FREE SPACE) */}
+          {/* CENTER 3D ROBOT CANVAS (zIndex: 15 - PROMINENT IN CENTER STAGE) */}
           <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 15 }}>
             <ManufacturingHeroClient />
           </div>
@@ -163,7 +162,7 @@ export default function ManufacturingPage() {
         </div>
 
         {/* Action CTAs */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.2rem', marginTop: '1rem', zIndex: 20 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.2rem', marginTop: '0.5rem', zIndex: 20 }}>
           <Link 
             href="/contact"
             style={{
