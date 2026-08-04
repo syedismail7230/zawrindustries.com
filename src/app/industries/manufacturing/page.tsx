@@ -658,16 +658,13 @@ export default function ManufacturingPage() {
           overflow: 'hidden',
           backgroundColor: '#ffffff',
         }}>
-          {/* Edge vignette linear-gradients to seamlessly blend image into website background */}
+          {/* Top fade linear-gradient to seamlessly blend top edge into website background */}
           <div style={{
             position: 'absolute',
             inset: 0,
             zIndex: 2,
             pointerEvents: 'none',
-            background: `
-              linear-gradient(to right, #ffffff 0%, rgba(255,255,255,0) 6%, rgba(255,255,255,0) 94%, #ffffff 100%),
-              linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0) 12%, rgba(255,255,255,0) 88%, #ffffff 100%)
-            `,
+            background: 'linear-gradient(to bottom, #ffffff 0%, rgba(255, 255, 255, 0) 22%)',
           }} />
 
           {/* eslint-disable-next-line @next/next/no-img-element */}
