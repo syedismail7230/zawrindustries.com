@@ -27,15 +27,15 @@ export default function FactoryOSMapSection() {
     { title: 'MAXIMUM EFFICIENCY', desc: 'Lower costs. Higher output.' },
   ];
 
-  // SVG viewBox geometry parameters (1200px width x 680px height)
-  const leftDotX = 320;      // Right edge of left cards
-  const centerLeftX = 460;   // Left edge of center hub box
-  const centerRightX = 740;  // Right edge of center hub box
-  const rightDotX = 880;     // Left edge of right cards
-  const centerY = 340;       // Y midpoint of center hub box
+  // SVG viewBox geometry parameters (1200px width x 640px height)
+  const leftDotX = 320;      // Right edge of left text items
+  const centerLeftX = 470;   // Left edge of center hub text
+  const centerRightX = 730;  // Right edge of center hub text
+  const rightDotX = 880;     // Left edge of right text items
+  const centerY = 320;       // Y midpoint of center hub
 
-  // Y positions for each of the 9 cards (height 52px + 16px gap = 68px step)
-  const getY = (index: number) => 68 + index * 68;
+  // Y positions for each of the 9 text items (height 48px + 16px gap = 64px step)
+  const getY = (index: number) => 50 + index * 64;
 
   return (
     <section style={{
@@ -47,15 +47,15 @@ export default function FactoryOSMapSection() {
     }}>
       <style>{`
         @media (max-width: 1024px) {
-          .os-map-desktop-container {
+          .os-map-bw-desktop {
             display: none !important;
           }
-          .os-map-mobile-container {
+          .os-map-bw-mobile {
             display: flex !important;
           }
         }
         @media (min-width: 1025px) {
-          .os-map-mobile-container {
+          .os-map-bw-mobile {
             display: none !important;
           }
         }
@@ -63,13 +63,13 @@ export default function FactoryOSMapSection() {
 
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         
-        {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+        {/* Section Header (Monochrome Black & White) */}
+        <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
           <span style={{
             fontSize: '0.78rem',
             fontWeight: 500,
             letterSpacing: '0.14em',
-            color: '#3b82f6',
+            color: '#64748b',
             textTransform: 'uppercase',
             display: 'inline-block',
             marginBottom: '0.8rem',
@@ -82,7 +82,7 @@ export default function FactoryOSMapSection() {
             fontWeight: 300,
             lineHeight: 1.15,
             letterSpacing: '-0.03em',
-            color: '#0f172a',
+            color: '#000000',
             marginBottom: '0.8rem',
           }}>
             Real-Time Visibility. Unified Control. Smarter Decisions.
@@ -93,25 +93,24 @@ export default function FactoryOSMapSection() {
           </p>
         </div>
 
-        {/* DESKTOP INTEGRATED SVG DIAGRAM (100% Connected Lines) */}
-        <div className="os-map-desktop-container" style={{ position: 'relative', width: '100%', minHeight: '680px' }}>
+        {/* DESKTOP MONOCHROME CONNECTED DIAGRAM (NO CARDS, NO OUTLINES, PURE BLACK & WHITE) */}
+        <div className="os-map-bw-desktop" style={{ position: 'relative', width: '100%', minHeight: '640px' }}>
           
-          {/* SVG Connector Layer behind nodes */}
+          {/* SVG Connector Layer (Pure Black Lines) */}
           <svg
             width="100%"
-            height="680"
-            viewBox="0 0 1200 680"
+            height="640"
+            viewBox="0 0 1200 640"
             style={{ position: 'absolute', inset: 0, overflow: 'visible', pointerEvents: 'none', zIndex: 1 }}
           >
             {/* Left Curves: Funneling 9 Left Nodes into Center Hub Left Anchor */}
             {leftNodes.map((_, i) => {
               const y = getY(i);
-              const pathD = `M ${leftDotX} ${y} C ${leftDotX + 80} ${y}, ${centerLeftX - 50} ${centerY}, ${centerLeftX} ${centerY}`;
+              const pathD = `M ${leftDotX} ${y} C ${leftDotX + 80} ${y}, ${centerLeftX - 40} ${centerY}, ${centerLeftX} ${centerY}`;
               return (
                 <g key={`l-path-${i}`}>
-                  <path d={pathD} fill="none" stroke="#60a5fa" strokeWidth="1.8" opacity="0.85" />
-                  {/* Subtle animated pulse along each line */}
-                  <circle r="3.5" fill="#2563eb">
+                  <path d={pathD} fill="none" stroke="#000000" strokeWidth="1.5" opacity="0.75" />
+                  <circle r="3" fill="#000000">
                     <animateMotion path={pathD} dur={`${3 + i * 0.3}s`} repeatCount="indefinite" />
                   </circle>
                 </g>
@@ -119,17 +118,17 @@ export default function FactoryOSMapSection() {
             })}
 
             {/* Center-to-Right Single Line Segment with Arrow indicator */}
-            <path d={`M ${centerRightX} ${centerY} L ${centerRightX + 45} ${centerY}`} fill="none" stroke="#2563eb" strokeWidth="2" />
-            <polygon points={`${centerRightX + 45},${centerY - 5} ${centerRightX + 54},${centerY} ${centerRightX + 45},${centerY + 5}`} fill="#2563eb" />
+            <path d={`M ${centerRightX} ${centerY} L ${centerRightX + 45} ${centerY}`} fill="none" stroke="#000000" strokeWidth="1.8" />
+            <polygon points={`${centerRightX + 45},${centerY - 4} ${centerRightX + 53},${centerY} ${centerRightX + 45},${centerY + 4}`} fill="#000000" />
 
             {/* Right Curves: Fanning out from Arrow Split into 9 Right Nodes */}
             {rightNodes.map((_, i) => {
               const y = getY(i);
-              const pathD = `M ${centerRightX + 54} ${centerY} C ${centerRightX + 90} ${centerY}, ${rightDotX - 80} ${y}, ${rightDotX} ${y}`;
+              const pathD = `M ${centerRightX + 53} ${centerY} C ${centerRightX + 90} ${centerY}, ${rightDotX - 80} ${y}, ${rightDotX} ${y}`;
               return (
                 <g key={`r-path-${i}`}>
-                  <path d={pathD} fill="none" stroke="#60a5fa" strokeWidth="1.8" opacity="0.85" />
-                  <circle r="3.5" fill="#2563eb">
+                  <path d={pathD} fill="none" stroke="#000000" strokeWidth="1.5" opacity="0.75" />
+                  <circle r="3" fill="#000000">
                     <animateMotion path={pathD} dur={`${3 + i * 0.3}s`} repeatCount="indefinite" />
                   </circle>
                 </g>
@@ -137,120 +136,100 @@ export default function FactoryOSMapSection() {
             })}
           </svg>
 
-          {/* HTML DOM Node Cards Overlay (zIndex: 2) */}
-          <div style={{ position: 'relative', zIndex: 2, width: '100%', height: '680px' }}>
+          {/* HTML DOM Node Text Overlay (NO CARDS, NO OUTLINES) */}
+          <div style={{ position: 'relative', zIndex: 2, width: '100%', height: '640px' }}>
             
-            {/* LEFT CARDS COLUMN */}
+            {/* LEFT TEXT COLUMN */}
             <div style={{ position: 'absolute', left: 0, top: 0, width: '320px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {leftNodes.map((node) => (
                 <div
                   key={node.title}
                   style={{
-                    height: '52px',
-                    backgroundColor: '#ffffff',
-                    padding: '0.55rem 1rem',
-                    borderRadius: '12px',
-                    border: '1px solid #cbd5e1',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
+                    height: '48px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
                     position: 'relative',
-                    transition: 'all 0.2s ease',
-                    cursor: 'pointer',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#2563eb';
-                    e.currentTarget.style.boxShadow = '0 6px 18px rgba(37, 99, 235, 0.12)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#cbd5e1';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.03)';
+                    paddingRight: '1rem',
                   }}
                 >
-                  <div style={{ fontSize: '0.74rem', fontWeight: 600, color: '#0f172a', letterSpacing: '0.03em' }}>{node.title}</div>
-                  <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 400 }}>{node.desc}</div>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#000000', letterSpacing: '0.04em' }}>{node.title}</div>
+                  <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 300, marginTop: '2px' }}>{node.desc}</div>
 
-                  {/* Connected Blue Node Dot */}
+                  {/* Black Connection Dot */}
                   <div style={{
                     position: 'absolute',
-                    right: '-5px',
+                    right: '-4px',
                     top: '50%',
                     transform: 'translateY(-50%)',
-                    width: '10px',
-                    height: '10px',
+                    width: '8px',
+                    height: '8px',
                     borderRadius: '50%',
-                    backgroundColor: '#2563eb',
-                    border: '2px solid #ffffff',
-                    boxShadow: '0 0 0 1px #93c5fd',
+                    backgroundColor: '#000000',
                   }} />
                 </div>
               ))}
             </div>
 
-            {/* CENTER HUB BOX: ZAWR FACTORY OS */}
+            {/* CENTER HUB TEXT (NO CARD BOX, NO OUTLINE) */}
             <div style={{
               position: 'absolute',
-              left: '460px',
-              top: '230px',
-              width: '280px',
+              left: '470px',
+              top: '210px',
+              width: '260px',
               height: '220px',
               backgroundColor: '#ffffff',
-              border: '1px solid #cbd5e1',
-              borderRadius: '24px',
-              padding: '1.8rem 1.4rem',
               textAlign: 'center',
-              boxShadow: '0 20px 50px rgba(37, 99, 235, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
+              padding: '1rem',
             }}>
               {/* Left Connection Anchor Dot */}
               <div style={{
                 position: 'absolute',
-                left: '-6px',
+                left: '-5px',
                 top: '50%',
                 transform: 'translateY(-50%)',
-                width: '12px',
-                height: '12px',
+                width: '10px',
+                height: '10px',
                 borderRadius: '50%',
-                backgroundColor: '#2563eb',
-                border: '2.5px solid #ffffff',
+                backgroundColor: '#000000',
               }} />
 
               <div style={{
-                fontSize: '2.1rem',
+                fontSize: '2.4rem',
                 fontWeight: 600,
                 letterSpacing: '-0.02em',
-                color: '#0f172a',
+                color: '#000000',
                 lineHeight: 1.1,
               }}>
                 ZAWR
               </div>
 
               <div style={{
-                fontSize: '1.2rem',
-                fontWeight: 600,
-                color: '#2563eb',
-                letterSpacing: '0.06em',
-                marginTop: '0.3rem',
+                fontSize: '1.25rem',
+                fontWeight: 500,
+                color: '#000000',
+                letterSpacing: '0.08em',
+                marginTop: '0.4rem',
                 textTransform: 'uppercase',
               }}>
                 FACTORY OS
               </div>
 
               <div style={{
-                width: '60%',
+                width: '50%',
                 height: '1px',
                 backgroundColor: '#e2e8f0',
-                margin: '1.1rem 0 0.9rem',
+                margin: '1.2rem 0 1rem',
               }} />
 
               <div style={{
-                fontSize: '0.8rem',
+                fontSize: '0.82rem',
                 color: '#64748b',
-                fontWeight: 400,
+                fontWeight: 300,
                 lineHeight: 1.4,
               }}>
                 One Platform.<br />
@@ -260,61 +239,44 @@ export default function FactoryOSMapSection() {
               {/* Right Connection Anchor Dot */}
               <div style={{
                 position: 'absolute',
-                right: '-6px',
+                right: '-5px',
                 top: '50%',
                 transform: 'translateY(-50%)',
-                width: '12px',
-                height: '12px',
+                width: '10px',
+                height: '10px',
                 borderRadius: '50%',
-                backgroundColor: '#2563eb',
-                border: '2.5px solid #ffffff',
+                backgroundColor: '#000000',
               }} />
             </div>
 
-            {/* RIGHT CARDS COLUMN */}
+            {/* RIGHT TEXT COLUMN */}
             <div style={{ position: 'absolute', left: '880px', top: 0, width: '320px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
               {rightNodes.map((node) => (
                 <div
                   key={node.title}
                   style={{
-                    height: '52px',
-                    backgroundColor: '#ffffff',
-                    padding: '0.55rem 1rem',
-                    borderRadius: '12px',
-                    border: '1px solid #cbd5e1',
-                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
+                    height: '48px',
                     display: 'flex',
                     flexDirection: 'column',
                     justifyContent: 'center',
                     position: 'relative',
-                    transition: 'all 0.2s ease',
-                    cursor: 'pointer',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#2563eb';
-                    e.currentTarget.style.boxShadow = '0 6px 18px rgba(37, 99, 235, 0.12)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#cbd5e1';
-                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.03)';
+                    paddingLeft: '1rem',
                   }}
                 >
-                  {/* Connected Blue Node Dot */}
+                  {/* Black Connection Dot */}
                   <div style={{
                     position: 'absolute',
-                    left: '-5px',
+                    left: '-4px',
                     top: '50%',
                     transform: 'translateY(-50%)',
-                    width: '10px',
-                    height: '10px',
+                    width: '8px',
+                    height: '8px',
                     borderRadius: '50%',
-                    backgroundColor: '#2563eb',
-                    border: '2px solid #ffffff',
-                    boxShadow: '0 0 0 1px #93c5fd',
+                    backgroundColor: '#000000',
                   }} />
 
-                  <div style={{ fontSize: '0.74rem', fontWeight: 600, color: '#0f172a', letterSpacing: '0.03em' }}>{node.title}</div>
-                  <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 400 }}>{node.desc}</div>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#000000', letterSpacing: '0.04em' }}>{node.title}</div>
+                  <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 300, marginTop: '2px' }}>{node.desc}</div>
                 </div>
               ))}
             </div>
@@ -322,44 +284,37 @@ export default function FactoryOSMapSection() {
           </div>
         </div>
 
-        {/* MOBILE RESPONSIVE STACK CONTAINER (< 1025px) */}
-        <div className="os-map-mobile-container" style={{ flexDirection: 'column', gap: '2rem' }}>
+        {/* MOBILE RESPONSIVE MONOCHROME STACK CONTAINER (< 1025px) */}
+        <div className="os-map-bw-mobile" style={{ flexDirection: 'column', gap: '2.5rem' }}>
           
-          {/* Mobile Center Card */}
-          <div style={{
-            backgroundColor: '#ffffff',
-            border: '1px solid #cbd5e1',
-            borderRadius: '20px',
-            padding: '2rem 1.5rem',
-            textAlign: 'center',
-            boxShadow: '0 12px 30px rgba(0,0,0,0.06)',
-          }}>
-            <div style={{ fontSize: '1.8rem', fontWeight: 600, color: '#0f172a' }}>ZAWR</div>
-            <div style={{ fontSize: '1.1rem', fontWeight: 600, color: '#2563eb', marginTop: '0.2rem' }}>FACTORY OS</div>
-            <div style={{ fontSize: '0.82rem', color: '#64748b', marginTop: '0.6rem' }}>One Platform. Unlimited Control.</div>
+          {/* Mobile Center Hub Text */}
+          <div style={{ textAlign: 'center', padding: '1rem 0' }}>
+            <div style={{ fontSize: '2rem', fontWeight: 600, color: '#000000' }}>ZAWR</div>
+            <div style={{ fontSize: '1.2rem', fontWeight: 500, color: '#000000', marginTop: '0.2rem', letterSpacing: '0.06em' }}>FACTORY OS</div>
+            <div style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '0.6rem', fontWeight: 300 }}>One Platform. Unlimited Control.</div>
           </div>
 
-          {/* Mobile Left Sub-systems List */}
+          {/* Mobile Sub-systems List */}
           <div>
-            <h4 style={{ fontSize: '0.85rem', fontWeight: 600, color: '#2563eb', marginBottom: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Integrated Sub-Systems</h4>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '0.8rem' }}>
+            <h4 style={{ fontSize: '0.82rem', fontWeight: 600, color: '#000000', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Integrated Sub-Systems</h4>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.2rem' }}>
               {leftNodes.map((n) => (
-                <div key={n.title} style={{ padding: '0.8rem 1rem', backgroundColor: '#ffffff', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#0f172a' }}>{n.title}</div>
-                  <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '0.2rem' }}>{n.desc}</div>
+                <div key={n.title} style={{ paddingBottom: '0.5rem', borderBottom: '1px solid #f1f5f9' }}>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#000000' }}>{n.title}</div>
+                  <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '0.2rem', fontWeight: 300 }}>{n.desc}</div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Mobile Right Capabilities List */}
+          {/* Mobile Capabilities List */}
           <div>
-            <h4 style={{ fontSize: '0.85rem', fontWeight: 600, color: '#2563eb', marginBottom: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Core Capabilities</h4>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '0.8rem' }}>
+            <h4 style={{ fontSize: '0.82rem', fontWeight: 600, color: '#000000', marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Core Capabilities</h4>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.2rem' }}>
               {rightNodes.map((n) => (
-                <div key={n.title} style={{ padding: '0.8rem 1rem', backgroundColor: '#ffffff', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#0f172a' }}>{n.title}</div>
-                  <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '0.2rem' }}>{n.desc}</div>
+                <div key={n.title} style={{ paddingBottom: '0.5rem', borderBottom: '1px solid #f1f5f9' }}>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#000000' }}>{n.title}</div>
+                  <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '0.2rem', fontWeight: 300 }}>{n.desc}</div>
                 </div>
               ))}
             </div>
@@ -367,7 +322,7 @@ export default function FactoryOSMapSection() {
 
         </div>
 
-        {/* BOTTOM CALL TO ACTION */}
+        {/* BOTTOM CALL TO ACTION (Monochrome) */}
         <div style={{
           textAlign: 'center',
           marginTop: '4rem',
@@ -376,9 +331,9 @@ export default function FactoryOSMapSection() {
         }}>
           <span style={{
             fontSize: '0.75rem',
-            fontWeight: 600,
+            fontWeight: 500,
             letterSpacing: '0.14em',
-            color: '#2563eb',
+            color: '#64748b',
             textTransform: 'uppercase',
             display: 'inline-block',
             marginBottom: '0.8rem',
@@ -391,7 +346,7 @@ export default function FactoryOSMapSection() {
             fontWeight: 300,
             lineHeight: 1.2,
             letterSpacing: '-0.02em',
-            color: '#0f172a',
+            color: '#000000',
             marginBottom: '0.6rem',
           }}>
             One platform to run your entire factory.
