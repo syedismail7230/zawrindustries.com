@@ -30,6 +30,7 @@ export default function FactoryDashboardInteractive() {
   const [isLive, setIsLive] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [zoomed, setZoomed] = useState<number>(1);
+  const [woFilter, setWoFilter] = useState<string>('ALL');
 
   // Animated AGV positions on path
   const [movingAgvPos, setMovingAgvPos] = useState<{ x: number; y: number }>({ x: 169, y: 45 });
@@ -874,7 +875,10 @@ export default function FactoryDashboardInteractive() {
                     <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Production Line Orchestration & Work Orders</h3>
                     <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Real-time line balancing, batch throughput tracking, and active assembly work orders.</p>
                   </div>
-                  <span style={{ padding: '0.4rem 0.9rem', backgroundColor: '#22c55e15', color: '#16a34a', borderRadius: '50px', fontSize: '0.78rem', fontWeight: 500 }}>● Shift 1 Active</span>
+                  <div style={{ display: 'flex', gap: '0.6rem' }}>
+                    <button style={{ padding: '0.5rem 1rem', backgroundColor: '#000000', color: '#ffffff', border: 'none', borderRadius: '8px', fontSize: '0.78rem', fontWeight: 500, cursor: 'pointer' }}>+ Create Work Order</button>
+                    <span style={{ padding: '0.5rem 0.9rem', backgroundColor: '#22c55e15', color: '#16a34a', borderRadius: '8px', fontSize: '0.78rem', fontWeight: 500, display: 'flex', alignItems: 'center' }}>● Shift 1 Active</span>
+                  </div>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
@@ -889,6 +893,27 @@ export default function FactoryDashboardInteractive() {
                       <div style={{ fontSize: '1.3rem', fontWeight: 500, color: '#000000' }}>{stat.val}</div>
                       <div style={{ fontSize: '0.7rem', color: '#16a34a', marginTop: '0.3rem', fontWeight: 400 }}>{stat.change}</div>
                     </div>
+                  ))}
+                </div>
+
+                {/* Filter Bar */}
+                <div style={{ display: 'flex', gap: '0.6rem', marginBottom: '1rem' }}>
+                  {['ALL', 'IN PROGRESS', 'COMPLETED', 'QUEUED'].map(f => (
+                    <button
+                      key={f}
+                      onClick={() => setWoFilter(f)}
+                      style={{
+                        padding: '0.4rem 0.8rem',
+                        fontSize: '0.75rem',
+                        borderRadius: '6px',
+                        border: '1px solid #cbd5e1',
+                        backgroundColor: woFilter === f ? '#000000' : '#ffffff',
+                        color: woFilter === f ? '#ffffff' : '#000000',
+                        cursor: 'pointer',
+                        fontWeight: 500,
+                      }}>
+                      {f}
+                    </button>
                   ))}
                 </div>
 
@@ -948,22 +973,31 @@ export default function FactoryDashboardInteractive() {
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.2rem' }}>
                   {[
-                    { name: '5-Axis CNC Centre #01', spindle: '12,000 RPM', temp: '42.5°C', vibration: '0.02 mm/s', status: 'Running' },
-                    { name: '5-Axis CNC Centre #02', spindle: '11,800 RPM', temp: '44.1°C', vibration: '0.03 mm/s', status: 'Running' },
-                    { name: 'Laser Cutting Cell A', spindle: 'N/A (Fiber Laser)', temp: '38.0°C', vibration: '0.01 mm/s', status: 'Running' },
-                    { name: 'Robotic Arc Weld Cell 1', spindle: 'N/A (Robotics)', temp: '49.2°C', vibration: '0.04 mm/s', status: 'Running' },
-                    { name: 'Industrial SLA 3D Printer', spindle: 'Heater 210°C', temp: '55.0°C', vibration: '0.00 mm/s', status: 'Running' },
-                    { name: 'CMM Precision Scanner', spindle: 'Calibration OK', temp: '20.1°C', vibration: '0.00 mm/s', status: 'Standby' },
+                    { name: '5-Axis CNC Centre #01', spindle: '12,000 RPM', temp: '42.5°C', vibration: '0.02 mm/s', toolWear: '14%', status: 'Running' },
+                    { name: '5-Axis CNC Centre #02', spindle: '11,800 RPM', temp: '44.1°C', vibration: '0.03 mm/s', toolWear: '22%', status: 'Running' },
+                    { name: 'Laser Cutting Cell A', spindle: 'N/A (Fiber Laser)', temp: '38.0°C', vibration: '0.01 mm/s', toolWear: '8%', status: 'Running' },
+                    { name: 'Robotic Arc Weld Cell 1', spindle: 'N/A (Robotics)', temp: '49.2°C', vibration: '0.04 mm/s', toolWear: '31%', status: 'Running' },
+                    { name: 'Industrial SLA 3D Printer', spindle: 'Heater 210°C', temp: '55.0°C', vibration: '0.00 mm/s', toolWear: '4%', status: 'Running' },
+                    { name: 'CMM Precision Scanner', spindle: 'Calibration OK', temp: '20.1°C', vibration: '0.00 mm/s', toolWear: '0%', status: 'Standby' },
                   ].map((m, i) => (
                     <div key={i} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
                         <span style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000' }}>{m.name}</span>
                         <span style={{ fontSize: '0.7rem', fontWeight: 500, padding: '0.2rem 0.5rem', backgroundColor: '#dcfce7', color: '#15803d', borderRadius: '4px' }}>{m.status}</span>
                       </div>
-                      <div style={{ fontSize: '0.78rem', color: '#475569', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-                        <div>Spindle: <span style={{ color: '#000', fontWeight: 500 }}>{m.spindle}</span></div>
+                      <div style={{ fontSize: '0.78rem', color: '#475569', display: 'flex', flexDirection: 'column', gap: '0.4rem', marginBottom: '1rem' }}>
+                        <div>Spindle Speed: <span style={{ color: '#000', fontWeight: 500 }}>{m.spindle}</span></div>
                         <div>Thermal Temp: <span style={{ color: '#000', fontWeight: 500 }}>{m.temp}</span></div>
-                        <div>Vibration: <span style={{ color: '#000', fontWeight: 500 }}>{m.vibration}</span></div>
+                        <div>Vibration Index: <span style={{ color: '#000', fontWeight: 500 }}>{m.vibration}</span></div>
+                      </div>
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: '#64748b', marginBottom: '0.3rem' }}>
+                          <span>Tool Wear Index</span>
+                          <span>{m.toolWear}</span>
+                        </div>
+                        <div style={{ height: '4px', backgroundColor: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
+                          <div style={{ width: m.toolWear, height: '100%', backgroundColor: '#000000' }} />
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -988,7 +1022,7 @@ export default function FactoryDashboardInteractive() {
                       { step: 'Step 30: Automated Ultrasonic Cleaning', machine: 'Wash Tank 2', duration: '6.0 min', operator: 'AGV-489 Transfer', status: 'Queued' },
                       { step: 'Step 40: CMM Dimensional Inspection', machine: 'Scanner Cell', duration: '3.0 min', operator: 'Quality Tech', status: 'Queued' },
                     ].map((s, i) => (
-                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem 1rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
                         <div>
                           <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#000000' }}>{s.step}</div>
                           <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.2rem' }}>Machine: {s.machine} · Tech: {s.operator}</div>
