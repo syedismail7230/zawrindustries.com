@@ -64,7 +64,7 @@ export function InteractiveTruckXray() {
       ` }} />
 
       {/* Section Title */}
-      <div style={{ textAlign: 'center', maxWidth: '800px', marginBottom: '2rem' }}>
+      <div style={{ textAlign: 'center', maxWidth: '800px', marginBottom: '2.5rem' }}>
         <h2 style={{
           fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
           fontWeight: 300,
@@ -74,6 +74,15 @@ export function InteractiveTruckXray() {
         }}>
           Interactive Cargo Inspection
         </h2>
+        <p style={{
+          fontSize: 'clamp(0.95rem, 1.2vw, 1.1rem)',
+          color: 'rgba(0, 0, 0, 0.6)',
+          marginTop: '0.75rem',
+          fontWeight: 300,
+          lineHeight: 1.6,
+        }}>
+          Hover over the logistics payload to inspect real-time volumetric cargo allocation.
+        </p>
       </div>
 
       {/* Interactive Stacked Truck Images */}
