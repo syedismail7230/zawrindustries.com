@@ -21,7 +21,7 @@ export default function ManufacturingRobot3D() {
     // 2. Camera Setup (Targeting the center of the base cylinder)
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
     camera.position.set(0, 0.35, 4.2);
-    camera.lookAt(0, 0.2, 0);
+    camera.lookAt(0, 0.1, 0);
 
     // 3. Renderer Setup with PMREM Environment Generator
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -51,18 +51,14 @@ export default function ManufacturingRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model & Joint References
+    // 6. Load GLB Model (Centered dead-center on base cylinder with intact posture)
     const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, -1.45, 0);
+    modelGroup.position.set(0, -0.65, 0);
     scene.add(modelGroup);
-
-    let jointShoulder: THREE.Object3D | null = null;
-    let jointElbow: THREE.Object3D | null = null;
-    let jointWrist: THREE.Object3D | null = null;
 
     const loader = new GLTFLoader();
     loader.load(
-      '/assets/robotic+arm+3d+model.glb?v=22',
+      '/assets/robotic+arm+3d+model.glb?v=23',
       (gltf) => {
         const loadedModel = gltf.scene;
 
@@ -80,11 +76,6 @@ export default function ManufacturingRobot3D() {
         const baseBox = new THREE.Box3();
 
         loadedModel.traverse((child) => {
-          // Identify articulated joint nodes
-          if (child.name === 'node_id217') jointShoulder = child;
-          if (child.name === 'node_id209') jointElbow = child;
-          if (child.name === 'node_id112') jointWrist = child;
-
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
             mesh.geometry.computeBoundingBox();
@@ -160,36 +151,19 @@ export default function ManufacturingRobot3D() {
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // 8. Render Loop (Dynamic Joint Motion + Mouse Rotation)
+    // 8. Render Loop (Smooth Mouse Rotation around Base Center, Intact Geometry)
     let animId: number;
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
 
       mouse.lerp(targetMouse, 0.25);
-      const time = Date.now() * 0.0015;
 
-      // Base cylinder stays fixed at y = -1.45 and rotates horizontally with mouse X
-      modelGroup.position.set(0, -1.45, 0);
+      // Model base is centered at (0, -0.65, 0) and pivots smoothly with mouse
+      modelGroup.position.set(0, -0.65, 0);
       modelGroup.rotation.y = mouse.x * 0.45;
-      modelGroup.rotation.x = 0;
+      modelGroup.rotation.x = -mouse.y * 0.1;
       modelGroup.rotation.z = 0;
-
-      // 1. Lower Shoulder Joint Motion (node_id217)
-      if (jointShoulder) {
-        jointShoulder.rotation.x = Math.sin(time * 0.8) * 0.15 - mouse.y * 0.12;
-      }
-
-      // 2. Middle Elbow Joint Motion (node_id209)
-      if (jointElbow) {
-        jointElbow.rotation.z = Math.cos(time * 1.1) * 0.18 + mouse.y * 0.15;
-      }
-
-      // 3. Upper Wrist / Claw Joint Motion (node_id112)
-      if (jointWrist) {
-        jointWrist.rotation.x = Math.sin(time * 1.4) * 0.22;
-        jointWrist.rotation.y = Math.cos(time * 0.9) * 0.15;
-      }
 
       renderer.render(scene, camera);
     };
