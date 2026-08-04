@@ -292,21 +292,6 @@ export default function ManufacturingPage() {
 
       </section>
 
-      {/* 2. Capabilities Section */}
-      <section style={{ padding: 'clamp(3rem, 6vw, 6rem) 5%', backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
-            <h2 style={{ fontSize: 'clamp(1.6rem, 3.5vw, 2.8rem)', fontWeight: 800, marginBottom: '1rem', color: '#000000' }}>
-              Industrial Engineering Capabilities
-            </h2>
-            <p style={{ fontSize: '1.05rem', color: '#64748b', maxWidth: '640px', margin: '0 auto' }}>
-              End-to-end industrial manufacturing capabilities, from automated CNC component fabrication to intelligent 3D robotic assembly.
-            </p>
-          </div>
-
-          <Capabilities3DGrid capabilities={manufacturingCapabilities} />
-        </div>
-      </section>
 
       {/* 3. AGV-2 Autonomous Guided Vehicle Feature Section */}
       <section style={{
