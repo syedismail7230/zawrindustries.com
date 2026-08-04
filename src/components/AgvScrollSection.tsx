@@ -24,8 +24,10 @@ export function AgvScrollSection() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Map scrollProgress (0 to 1) to horizontal position percentage (-20% to 110%)
-  const agvLeftPercent = -25 + scrollProgress * 140;
+  // Map scrollProgress (0 to 1) to horizontal position percentage (-20% to 115%)
+  const agvLeftPercent = -20 + scrollProgress * 135;
+  // Calculate text reveal percentage (0% to 100%)
+  const revealPercent = Math.min(100, Math.max(0, (scrollProgress - 0.1) * 125));
 
   return (
     <section
@@ -48,7 +50,7 @@ export function AgvScrollSection() {
         maxWidth: '750px',
         textAlign: 'center',
         padding: '0 1.5rem',
-        marginBottom: '4rem',
+        marginBottom: '4.5rem',
       }}>
         <p style={{
           fontSize: 'clamp(1.1rem, 2vw, 1.45rem)',
@@ -71,7 +73,26 @@ export function AgvScrollSection() {
         alignItems: 'center',
         overflow: 'hidden',
       }}>
-        {/* Bold Backing Banner Text matching reference screenshot */}
+        {/* Faint Background Placeholder Track Text */}
+        <div style={{
+          position: 'absolute',
+          width: '100%',
+          textAlign: 'center',
+          fontSize: 'clamp(1.2rem, 2.8vw, 2.3rem)',
+          fontWeight: 800,
+          letterSpacing: '0.04em',
+          textTransform: 'uppercase',
+          color: 'rgba(0, 0, 0, 0.06)',
+          whiteSpace: 'nowrap',
+          userSelect: 'none',
+          zIndex: 1,
+          padding: '0 1rem',
+          boxSizing: 'border-box',
+        }}>
+          AUTOMATED AGV &amp; WAREHOUSE ROUTING WITH &lt;12MS LATENCY
+        </div>
+
+        {/* Revealed High-Contrast Text (Unmasked as AGV moves) */}
         <div style={{
           position: 'absolute',
           width: '100%',
@@ -83,9 +104,12 @@ export function AgvScrollSection() {
           color: '#000000',
           whiteSpace: 'nowrap',
           userSelect: 'none',
-          zIndex: 1,
+          zIndex: 2,
           padding: '0 1rem',
           boxSizing: 'border-box',
+          clipPath: `polygon(0 0, ${revealPercent}% 0, ${revealPercent}% 100%, 0 100%)`,
+          WebkitClipPath: `polygon(0 0, ${revealPercent}% 0, ${revealPercent}% 100%, 0 100%)`,
+          transition: 'clip-path 0.05s ease-out, -webkit-clip-path 0.05s ease-out',
         }}>
           AUTOMATED AGV &amp; WAREHOUSE ROUTING WITH &lt;12MS LATENCY
         </div>
