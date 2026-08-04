@@ -4,7 +4,7 @@ import IndustrialRobot3D from '@/components/IndustrialRobot3D';
 import { Capabilities3DGrid } from '@/components/Capabilities3DGrid';
 
 export const metadata: Metadata = {
-  title: "Manufacturing Solutions & Industrial Robotics — Zawr Industries",
+  title: "Precision Manufacturing & 3D Industrial Robotics — Zawr Industries",
   description: "Zawr Industries delivers precision industrial manufacturing, 3D robotics, contract production, and advanced engineering solutions under Make in India.",
 };
 
@@ -39,7 +39,7 @@ export default function ManufacturingPage() {
   return (
     <div style={{ backgroundColor: '#ffffff', color: '#111111', minHeight: '100vh', overflowX: 'hidden' }}>
       
-      {/* 1. Black & White Hero Section with 3D Industrial Robot */}
+      {/* 1. Black & White Hero Section with 3D Interactive GLB Robot */}
       <section style={{
         position: 'relative',
         padding: '8rem 5% 5rem',
@@ -72,7 +72,7 @@ export default function ManufacturingPage() {
               letterSpacing: '0.05em',
             }}>
               <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#000000' }}></span>
-              MAKE IN INDIA // ADVANCED INDUSTRIAL ROBOTICS
+              MAKE IN INDIA // 3D INDUSTRIAL ROBOTICS
             </div>
 
             <h1 style={{
@@ -158,23 +158,23 @@ export default function ManufacturingPage() {
             </div>
           </div>
 
-          {/* Right Column: 3D Interactive Industrial Robot */}
-          <div style={{ width: '100%', height: '520px', minHeight: '420px' }}>
+          {/* Right Column: 3D Interactive GLB Robot Canvas */}
+          <div style={{ width: '100%', height: '560px', minHeight: '450px' }}>
             <IndustrialRobot3D />
           </div>
 
         </div>
       </section>
 
-      {/* 2. Capabilities Section */}
+      {/* 2. 3D Capabilities Section */}
       <section style={{ padding: '6rem 5%', backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
             <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)', fontWeight: 800, marginBottom: '1rem', color: '#000000' }}>
-              Industrial Engineering Capabilities
+              3D Interactive Engineering Capabilities
             </h2>
             <p style={{ fontSize: '1.1rem', color: '#64748b', maxWidth: '640px', margin: '0 auto' }}>
-              End-to-end industrial manufacturing capabilities, from automated CNC component fabrication to intelligent robotic assembly.
+              End-to-end industrial manufacturing capabilities, from automated CNC component fabrication to intelligent 3D robotic assembly.
             </p>
           </div>
 
@@ -217,7 +217,7 @@ export default function ManufacturingPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.6rem' }}>
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-                  <span>Robotic Welding Precision</span>
+                  <span>Robotic Arc Welding Precision</span>
                   <span style={{ color: '#ffffff', fontWeight: 'bold' }}>99.94%</span>
                 </div>
                 <div style={{ height: '6px', backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: '4px', overflow: 'hidden' }}>
