@@ -647,7 +647,7 @@ export default function ManufacturingPage() {
         right: '50%',
         marginLeft: '-50vw',
         marginRight: '-50vw',
-        padding: '1rem 0 3rem',
+        padding: '0 0 3rem',
         backgroundColor: '#ffffff',
         overflow: 'hidden',
       }}>
@@ -658,16 +658,16 @@ export default function ManufacturingPage() {
           overflow: 'hidden',
           backgroundColor: '#ffffff',
         }}>
-          {/* Subtle top fade linear-gradient to seamlessly blend top edge into white website background */}
+          {/* Intense top fade linear-gradient to seamlessly blend top edge into white website background */}
           <div style={{
             position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
-            height: '100px',
+            height: '250px',
             zIndex: 2,
             pointerEvents: 'none',
-            background: 'linear-gradient(to bottom, #ffffff 0%, rgba(255, 255, 255, 0) 100%)',
+            background: 'linear-gradient(to bottom, #ffffff 0%, rgba(255, 255, 255, 0.92) 30%, rgba(255, 255, 255, 0.45) 70%, rgba(255, 255, 255, 0) 100%)',
           }} />
 
           {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -233,7 +233,6 @@ export default function FactoryDashboardInteractive() {
     <section suppressHydrationWarning style={{
       padding: 'clamp(2.5rem, 5vw, 5rem) 3%',
       backgroundColor: '#ffffff',
-      borderBottom: '1px solid #e2e8f0',
       overflow: 'hidden',
     }}>
       <style>{`
