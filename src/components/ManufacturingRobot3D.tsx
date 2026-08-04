@@ -51,14 +51,18 @@ export default function ManufacturingRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Lowered Y-position = -1.45)
+    // 6. Load GLB Model & Joint References
     const modelGroup = new THREE.Group();
     modelGroup.position.set(0, -1.45, 0);
     scene.add(modelGroup);
 
+    let jointShoulder: THREE.Object3D | null = null;
+    let jointElbow: THREE.Object3D | null = null;
+    let jointWrist: THREE.Object3D | null = null;
+
     const loader = new GLTFLoader();
     loader.load(
-      '/assets/robotic+arm+3d+model.glb?v=21',
+      '/assets/robotic+arm+3d+model.glb?v=22',
       (gltf) => {
         const loadedModel = gltf.scene;
 
@@ -76,6 +80,11 @@ export default function ManufacturingRobot3D() {
         const baseBox = new THREE.Box3();
 
         loadedModel.traverse((child) => {
+          // Identify articulated joint nodes
+          if (child.name === 'node_id217') jointShoulder = child;
+          if (child.name === 'node_id209') jointElbow = child;
+          if (child.name === 'node_id112') jointWrist = child;
+
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
             mesh.geometry.computeBoundingBox();
@@ -131,39 +140,56 @@ export default function ManufacturingRobot3D() {
       }
     );
 
-    // 7. Mouse & Touch Cursor Tracking (ONLY Mouse X drives horizontal Y-rotation around base center)
+    // 7. Mouse & Touch Cursor Tracking
     const mouse = new THREE.Vector2(0, 0);
     const targetMouse = new THREE.Vector2(0, 0);
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
       targetMouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      targetMouse.y = 0;
+      targetMouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches.length !== 1) return;
       const rect = container.getBoundingClientRect();
       targetMouse.x = ((e.touches[0].clientX - rect.left) / rect.width) * 2 - 1;
-      targetMouse.y = 0;
+      targetMouse.y = -((e.touches[0].clientY - rect.top) / rect.height) * 2 + 1;
     };
 
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // 8. Render Loop (Model pivots around dead-centered base cylinder lowered at y = -1.45)
+    // 8. Render Loop (Dynamic Joint Motion + Mouse Rotation)
     let animId: number;
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
 
       mouse.lerp(targetMouse, 0.25);
+      const time = Date.now() * 0.0015;
 
-      // Base cylinder is centered at (0, -1.45, 0)
+      // Base cylinder stays fixed at y = -1.45 and rotates horizontally with mouse X
       modelGroup.position.set(0, -1.45, 0);
       modelGroup.rotation.y = mouse.x * 0.45;
       modelGroup.rotation.x = 0;
       modelGroup.rotation.z = 0;
+
+      // 1. Lower Shoulder Joint Motion (node_id217)
+      if (jointShoulder) {
+        jointShoulder.rotation.x = Math.sin(time * 0.8) * 0.15 - mouse.y * 0.12;
+      }
+
+      // 2. Middle Elbow Joint Motion (node_id209)
+      if (jointElbow) {
+        jointElbow.rotation.z = Math.cos(time * 1.1) * 0.18 + mouse.y * 0.15;
+      }
+
+      // 3. Upper Wrist / Claw Joint Motion (node_id112)
+      if (jointWrist) {
+        jointWrist.rotation.x = Math.sin(time * 1.4) * 0.22;
+        jointWrist.rotation.y = Math.cos(time * 0.9) * 0.15;
+      }
 
       renderer.render(scene, camera);
     };
