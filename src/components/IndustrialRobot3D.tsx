@@ -130,7 +130,7 @@ export default function IndustrialRobot3D() {
     const animate = () => {
       animId = requestAnimationFrame(animate);
 
-      mouse.lerp(targetMouse, 0.08);
+      mouse.lerp(targetMouse, 0.25);
 
       // Model remains stationary at elevated position y = 0.1
       modelGroup.position.set(0, 0.1, 0);
