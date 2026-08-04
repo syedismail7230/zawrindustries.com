@@ -39,7 +39,7 @@ export default function ManufacturingPage() {
   return (
     <div style={{ backgroundColor: '#ffffff', color: '#111111', minHeight: '100vh', overflowX: 'hidden' }}>
       
-      {/* 1. Hero Section matching exact reference layout */}
+      {/* 1. Hero Section matching exact user reference layout */}
       <section style={{
         position: 'relative',
         padding: '7rem 5% 4rem',
@@ -85,21 +85,21 @@ export default function ManufacturingPage() {
             position: 'absolute',
             top: '15%',
             left: '5%',
-            padding: '1.4rem 1.8rem',
+            padding: '1.4rem 2.2rem',
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
-            backgroundSize: '12px 12px',
-            border: '1px solid rgba(0, 0, 0, 0.08)',
-            borderRadius: '12px',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)',
+            backgroundSize: '14px 14px',
+            border: '1px solid rgba(0, 0, 0, 0.1)',
+            borderRadius: '20px',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.03)',
             textAlign: 'center',
             zIndex: 20,
-            minWidth: '140px',
+            minWidth: '150px',
           }}>
-            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#000000', marginBottom: '0.2rem' }}>
+            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000', marginBottom: '0.2rem', letterSpacing: '-0.02em' }}>
               ±0.005mm
             </div>
-            <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 500 }}>
+            <div style={{ fontSize: '0.9rem', color: '#8294ac', fontWeight: 500 }}>
               Tolerance
             </div>
           </div>
@@ -109,21 +109,21 @@ export default function ManufacturingPage() {
             position: 'absolute',
             bottom: '15%',
             left: '12%',
-            padding: '1.4rem 1.8rem',
+            padding: '1.4rem 2.2rem',
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
-            backgroundSize: '12px 12px',
-            border: '1px solid rgba(0, 0, 0, 0.08)',
-            borderRadius: '12px',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)',
+            backgroundSize: '14px 14px',
+            border: '1px solid rgba(0, 0, 0, 0.1)',
+            borderRadius: '20px',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.03)',
             textAlign: 'center',
             zIndex: 20,
-            minWidth: '140px',
+            minWidth: '150px',
           }}>
-            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#000000', marginBottom: '0.2rem' }}>
+            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000', marginBottom: '0.2rem', letterSpacing: '-0.02em' }}>
               6-Axis
             </div>
-            <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 500 }}>
+            <div style={{ fontSize: '0.9rem', color: '#8294ac', fontWeight: 500 }}>
               Robotics Sync
             </div>
           </div>
@@ -133,21 +133,21 @@ export default function ManufacturingPage() {
             position: 'absolute',
             top: '15%',
             right: '5%',
-            padding: '1.4rem 1.8rem',
+            padding: '1.4rem 2.2rem',
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
-            backgroundSize: '12px 12px',
-            border: '1px solid rgba(0, 0, 0, 0.08)',
-            borderRadius: '12px',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)',
+            backgroundSize: '14px 14px',
+            border: '1px solid rgba(0, 0, 0, 0.1)',
+            borderRadius: '20px',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.03)',
             textAlign: 'center',
             zIndex: 20,
-            minWidth: '140px',
+            minWidth: '150px',
           }}>
-            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#000000', marginBottom: '0.2rem' }}>
+            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000', marginBottom: '0.2rem', letterSpacing: '-0.02em' }}>
               99.98%
             </div>
-            <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 500 }}>
+            <div style={{ fontSize: '0.9rem', color: '#8294ac', fontWeight: 500 }}>
               Factory Uptime
             </div>
           </div>
@@ -157,21 +157,21 @@ export default function ManufacturingPage() {
             position: 'absolute',
             bottom: '15%',
             right: '12%',
-            padding: '1.4rem 1.8rem',
+            padding: '1.4rem 2.2rem',
             backgroundColor: 'rgba(255, 255, 255, 0.95)',
             backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
-            backgroundSize: '12px 12px',
-            border: '1px solid rgba(0, 0, 0, 0.08)',
-            borderRadius: '12px',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)',
+            backgroundSize: '14px 14px',
+            border: '1px solid rgba(0, 0, 0, 0.1)',
+            borderRadius: '20px',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.03)',
             textAlign: 'center',
             zIndex: 20,
-            minWidth: '140px',
+            minWidth: '150px',
           }}>
-            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#000000', marginBottom: '0.2rem' }}>
+            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000', marginBottom: '0.2rem', letterSpacing: '-0.02em' }}>
               ±0.005mm
             </div>
-            <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 500 }}>
+            <div style={{ fontSize: '0.9rem', color: '#8294ac', fontWeight: 500 }}>
               Tolerance
             </div>
           </div>
