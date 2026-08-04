@@ -183,11 +183,53 @@ export default function FactoryDashboardInteractive() {
 
   return (
     <section style={{
-      padding: 'clamp(4rem, 8vw, 7rem) 4%',
+      padding: 'clamp(3rem, 6vw, 6rem) 4%',
       backgroundColor: '#ffffff',
       borderBottom: '1px solid #e2e8f0',
       overflow: 'hidden',
     }}>
+      <style>{`
+        @media (max-width: 900px) {
+          .fms-main-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .fms-nav-sidebar {
+            flex-direction: row !important;
+            width: 100% !important;
+            max-height: none !important;
+            overflow-x: auto !important;
+            border-right: none !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            padding: 0.6rem !important;
+            justify-content: flex-start !important;
+            gap: 0.4rem !important;
+          }
+          .fms-nav-item {
+            width: auto !important;
+            min-width: 65px !important;
+            padding: 0.35rem 0.5rem !important;
+          }
+          .fms-sub-sidebar {
+            border-right: none !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            width: 100% !important;
+          }
+          .fms-stage {
+            padding: 0.8rem !important;
+            min-height: 360px !important;
+          }
+          .fms-grid-4col {
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
+          }
+          .fms-grid-3col {
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)) !important;
+          }
+          .fms-table-wrap {
+            overflow-x: auto !important;
+          }
+        }
+      `}</style>
+
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         
         {/* Header Information Block */}
@@ -351,10 +393,10 @@ export default function FactoryDashboardInteractive() {
           </div>
 
           {/* MAIN CONTENT WORKSPACE GRID */}
-          <div style={{ display: 'grid', gridTemplateColumns: activeNavTab === 'Dashboard' ? '76px 280px 1fr' : '76px 1fr', minHeight: '660px' }}>
+          <div className="fms-main-grid" style={{ display: 'grid', gridTemplateColumns: activeNavTab === 'Dashboard' ? '76px 280px 1fr' : '76px 1fr', minHeight: '660px' }}>
             
             {/* 1. FAR-LEFT NAVIGATION SIDEBAR (ALL 12 MODULE TABS) */}
-            <div style={{
+            <div className="fms-nav-sidebar" style={{
               borderRight: '1px solid #e2e8f0',
               backgroundColor: '#ffffff',
               padding: '0.8rem 0',
@@ -373,6 +415,7 @@ export default function FactoryDashboardInteractive() {
                       key={item.name}
                       onClick={() => setActiveNavTab(item.name)}
                       title={item.name}
+                      className="fms-nav-item"
                       style={{
                         width: '66px',
                         padding: '0.45rem 0.2rem',
@@ -398,7 +441,7 @@ export default function FactoryDashboardInteractive() {
             {activeNavTab === 'Dashboard' && (
               <>
                 {/* SUB-SIDEBAR (Location & Task List Panel) */}
-                <div style={{
+                <div className="fms-sub-sidebar" style={{
                   borderRight: '1px solid #e2e8f0',
                   backgroundColor: '#ffffff',
                   padding: '1.2rem 1rem',
@@ -538,7 +581,7 @@ export default function FactoryDashboardInteractive() {
                 </div>
 
                 {/* MAIN FLOOR PLAN TELEMETRY STAGE */}
-                <div style={{
+                <div className="fms-stage" style={{
                   backgroundColor: '#f8fafc',
                   padding: '1.2rem 1.6rem',
                   display: 'flex',
@@ -556,7 +599,7 @@ export default function FactoryDashboardInteractive() {
                         <span style={{ fontSize: '0.75rem', color: '#94a3b8', cursor: 'pointer' }}>▼</span>
                       </div>
 
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', fontSize: '0.78rem', color: '#475569' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', fontSize: '0.78rem', color: '#475569', flexWrap: 'wrap' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                           <span><strong>12</strong> Operators</span>
@@ -611,6 +654,7 @@ export default function FactoryDashboardInteractive() {
                       borderRadius: '8px',
                       border: '1px solid #e2e8f0',
                       marginBottom: '1rem',
+                      overflowX: 'auto',
                     }}>
                       <span>08:00</span>
                       <span style={{ color: '#cbd5e1' }}>4.2K</span>
@@ -869,8 +913,8 @@ export default function FactoryDashboardInteractive() {
 
             {/* TAB VIEW 2: PRODUCTION MANAGEMENT VIEW */}
             {activeNavTab === 'Production Management' && (
-              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+              <div style={{ padding: '1.5rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.8rem' }}>
                   <div>
                     <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Production Line Orchestration & Work Orders</h3>
                     <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Real-time line balancing, batch throughput tracking, and active assembly work orders.</p>
@@ -881,7 +925,7 @@ export default function FactoryDashboardInteractive() {
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
+                <div className="fms-grid-4col" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
                   {[
                     { label: 'Active Work Orders', val: '24 Jobs', change: '+3 today' },
                     { label: 'CNC Spindle Load', val: '94.2%', change: 'Optimal' },
@@ -897,7 +941,7 @@ export default function FactoryDashboardInteractive() {
                 </div>
 
                 {/* Filter Bar */}
-                <div style={{ display: 'flex', gap: '0.6rem', marginBottom: '1rem' }}>
+                <div style={{ display: 'flex', gap: '0.6rem', marginBottom: '1rem', overflowX: 'auto' }}>
                   {['ALL', 'IN PROGRESS', 'COMPLETED', 'QUEUED'].map(f => (
                     <button
                       key={f}
@@ -917,9 +961,9 @@ export default function FactoryDashboardInteractive() {
                   ))}
                 </div>
 
-                <div style={{ backgroundColor: '#ffffff', borderRadius: '14px', border: '1px solid #cbd5e1', padding: '1.5rem' }}>
+                <div className="fms-table-wrap" style={{ backgroundColor: '#ffffff', borderRadius: '14px', border: '1px solid #cbd5e1', padding: '1.2rem' }}>
                   <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000', marginBottom: '1rem' }}>Active Work Orders Queue</h4>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.85rem' }}>
+                  <table style={{ width: '100%', minWidth: '600px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.85rem' }}>
                     <thead>
                       <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b' }}>
                         <th style={{ padding: '0.6rem 0' }}>Job ID</th>
@@ -965,13 +1009,13 @@ export default function FactoryDashboardInteractive() {
 
             {/* TAB VIEW 3: MACHINE MONITORING VIEW */}
             {activeNavTab === 'Machine Monitoring' && (
-              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+              <div style={{ padding: '1.5rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>CNC & Robotic Equipment Telemetry</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Live spindle speed, thermal sensors, vibration diagnostics, and tooling lifecycle meters.</p>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.2rem' }}>
+                <div className="fms-grid-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.2rem' }}>
                   {[
                     { name: '5-Axis CNC Centre #01', spindle: '12,000 RPM', temp: '42.5°C', vibration: '0.02 mm/s', toolWear: '14%', status: 'Running' },
                     { name: '5-Axis CNC Centre #02', spindle: '11,800 RPM', temp: '44.1°C', vibration: '0.03 mm/s', toolWear: '22%', status: 'Running' },
@@ -1007,13 +1051,13 @@ export default function FactoryDashboardInteractive() {
 
             {/* TAB VIEW 4: MES (Manufacturing Execution System) */}
             {activeNavTab === 'MES' && (
-              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+              <div style={{ padding: '1.5rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Manufacturing Execution System (MES)</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Step-by-step routing, shop floor dispatch rules, component genealogy, and serial lot tracking.</p>
                 </div>
 
-                <div style={{ backgroundColor: '#ffffff', padding: '1.5rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
+                <div style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
                   <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000', marginBottom: '1rem' }}>Active Workstation Routing Execution</h4>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
                     {[
@@ -1022,7 +1066,7 @@ export default function FactoryDashboardInteractive() {
                       { step: 'Step 30: Automated Ultrasonic Cleaning', machine: 'Wash Tank 2', duration: '6.0 min', operator: 'AGV-489 Transfer', status: 'Queued' },
                       { step: 'Step 40: CMM Dimensional Inspection', machine: 'Scanner Cell', duration: '3.0 min', operator: 'Quality Tech', status: 'Queued' },
                     ].map((s, i) => (
-                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem 1rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem 1rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', flexWrap: 'wrap', gap: '0.5rem' }}>
                         <div>
                           <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#000000' }}>{s.step}</div>
                           <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.2rem' }}>Machine: {s.machine} · Tech: {s.operator}</div>
@@ -1040,13 +1084,13 @@ export default function FactoryDashboardInteractive() {
 
             {/* TAB VIEW 5: INVENTORY/WAREHOUSE */}
             {activeNavTab === 'Inventory/Warehouse' && (
-              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+              <div style={{ padding: '1.5rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Automated Warehouse & Storage Pods (ASRS)</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>8 High-density storage pods (480 storage bins), raw material stock levels, and AGV buffer inventory.</p>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.2rem' }}>
+                <div className="fms-grid-4col" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.2rem' }}>
                   {[
                     { pod: 'Pod 1 (Aluminum Alloy Stock)', bins: '60/60 Bins Full', level: 100 },
                     { pod: 'Pod 2 (Titanium Billets)', bins: '54/60 Bins Full', level: 90 },
@@ -1071,13 +1115,13 @@ export default function FactoryDashboardInteractive() {
 
             {/* TAB VIEW 6: QUALITY MANAGEMENT */}
             {activeNavTab === 'Quality Management' && (
-              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+              <div style={{ padding: '1.5rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Quality Assurance & Zero-Defect Telemetry</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Automated Optical Inspection (AOI), acoustic flaw detection, and Six-Sigma PPM tracking.</p>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.4rem' }}>
+                <div className="fms-grid-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.4rem' }}>
                   <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
                     <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>First Pass Yield (FPY)</div>
                     <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>99.94%</div>
@@ -1101,7 +1145,7 @@ export default function FactoryDashboardInteractive() {
 
             {/* TAB VIEW 7: MAINTENANCE */}
             {activeNavTab === 'Maintenance' && (
-              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+              <div style={{ padding: '1.5rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Predictive & Preventive Maintenance</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>AI vibration analysis, spindle lubrication alerts, and scheduled downtime prevention.</p>
@@ -1113,7 +1157,7 @@ export default function FactoryDashboardInteractive() {
                     { task: 'AGV-489 - Drive Wheel Tread Inspection', due: 'In 120 Hours', status: 'Scheduled' },
                     { task: 'Laser Cutter Optics Cleaning', due: 'Completed Today', status: 'Completed' },
                   ].map((m, i) => (
-                    <div key={i} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '12px', border: '1px solid #cbd5e1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div key={i} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '12px', border: '1px solid #cbd5e1', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
                       <div>
                         <div style={{ fontSize: '0.9rem', fontWeight: 500, color: '#000000' }}>{m.task}</div>
                         <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.2rem' }}>Due: {m.due}</div>
@@ -1127,15 +1171,15 @@ export default function FactoryDashboardInteractive() {
 
             {/* TAB VIEW 8: WORKFORCE MANAGEMENT */}
             {activeNavTab === 'Workforce Management' && (
-              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+              <div style={{ padding: '1.5rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Workforce & Operator Safety Management</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Operator certifications, shift scheduling, safety badge telemetry, and ergonomic load tracking.</p>
                 </div>
 
-                <div style={{ backgroundColor: '#ffffff', borderRadius: '14px', border: '1px solid #cbd5e1', padding: '1.5rem' }}>
+                <div style={{ backgroundColor: '#ffffff', borderRadius: '14px', border: '1px solid #cbd5e1', padding: '1.2rem' }}>
                   <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000', marginBottom: '1rem' }}>Shift 1 Active Operators Roster (12 On Floor)</h4>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                  <div className="fms-grid-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
                     {[
                       { name: 'Sarah Jenkins', role: 'Robotics Lead', station: 'AGV Fleet Control', badge: 'Active' },
                       { name: 'Michael Chen', role: 'CNC Machinist', station: 'Cell 4 (5-Axis)', badge: 'Active' },
@@ -1153,13 +1197,13 @@ export default function FactoryDashboardInteractive() {
 
             {/* TAB VIEW 9: PRODUCTION SCHEDULING */}
             {activeNavTab === 'Production Scheduling' && (
-              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+              <div style={{ padding: '1.5rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Production Timeline & Job Scheduling Engine</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Automated job sequencing, changeover minimization, and order priority dispatching.</p>
                 </div>
 
-                <div style={{ backgroundColor: '#ffffff', padding: '1.5rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
+                <div style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
                   <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000', marginBottom: '1rem' }}>Interactive Shift Schedule Matrix</h4>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
                     {[
@@ -1167,7 +1211,7 @@ export default function FactoryDashboardInteractive() {
                       { job: 'Job #902 - AGV Chassis Welding Pack', line: 'Weld Line B', start: '10:00', end: '15:00', status: 'Active' },
                       { job: 'Job #903 - Medical Manifold 3D Print', line: 'Additive Line 01', start: '13:00', end: '18:00', status: 'Scheduled' },
                     ].map((j, i) => (
-                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem 1rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem 1rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', flexWrap: 'wrap', gap: '0.5rem' }}>
                         <div>
                           <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#000000' }}>{j.job}</div>
                           <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.2rem' }}>Line: {j.line} · Time: {j.start} - {j.end}</div>
@@ -1182,13 +1226,13 @@ export default function FactoryDashboardInteractive() {
 
             {/* TAB VIEW 10: ANALYTICS & REPORTING */}
             {activeNavTab === 'Analytics & Reporting' && (
-              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+              <div style={{ padding: '1.5rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>OEE & Factory Analytics</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Overall Equipment Effectiveness, AGV utilization metrics, and energy efficiency analytics.</p>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
+                <div className="fms-grid-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
                   <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
                     <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>Overall Equipment Effectiveness (OEE)</div>
                     <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>94.8%</div>
@@ -1212,15 +1256,15 @@ export default function FactoryDashboardInteractive() {
 
             {/* TAB VIEW 11: USER & ROLE MANAGEMENT */}
             {activeNavTab === 'User & Role Management' && (
-              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+              <div style={{ padding: '1.5rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Access Control & Security Roles</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Role-based access matrix, administrator privileges, and API security key control.</p>
                 </div>
 
-                <div style={{ backgroundColor: '#ffffff', padding: '1.5rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
+                <div className="fms-table-wrap" style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
                   <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000', marginBottom: '1rem' }}>User Access Permissions Matrix</h4>
-                  <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.85rem' }}>
+                  <table style={{ width: '100%', minWidth: '550px', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.85rem' }}>
                     <thead>
                       <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b' }}>
                         <th style={{ padding: '0.6rem 0' }}>Role Name</th>
@@ -1253,13 +1297,13 @@ export default function FactoryDashboardInteractive() {
 
             {/* TAB VIEW 12: ERP/PLC INTEGRATION */}
             {activeNavTab === 'ERP/PLC Integration' && (
-              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+              <div style={{ padding: '1.5rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Enterprise ERP & OPC-UA PLC Gateways</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Sub-millisecond Industrial Ethernet sync between SAP/Oracle ERP and Siemens/Rockwell PLC gateways.</p>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.2rem' }}>
+                <div className="fms-grid-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.2rem' }}>
                   {[
                     { name: 'SAP S/4HANA ERP Connector', protocol: 'REST / OData', latency: '12ms', status: 'Connected' },
                     { name: 'Siemens S7-1500 PLC Gateway', protocol: 'OPC-UA', latency: '2ms', status: 'Connected' },

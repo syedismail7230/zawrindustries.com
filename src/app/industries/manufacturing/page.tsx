@@ -305,7 +305,7 @@ export default function ManufacturingPage() {
           maxWidth: '1400px',
           margin: '0 auto',
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           minHeight: '540px',
           alignItems: 'stretch',
         }}>
@@ -422,7 +422,7 @@ export default function ManufacturingPage() {
           maxWidth: '1400px',
           margin: '0 auto',
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           minHeight: '540px',
           alignItems: 'stretch',
         }}>
@@ -539,7 +539,7 @@ export default function ManufacturingPage() {
           maxWidth: '1280px',
           margin: '0 auto',
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: '3rem',
           alignItems: 'start',
         }}>
