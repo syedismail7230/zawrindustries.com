@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import React from 'react';
-import { IndustriesWeServeSection } from '@/components/IndustriesWeServeSection';
 import { InteractiveTruckXray } from '@/components/InteractiveTruckXray';
 import { AgvScrollSection } from '@/components/AgvScrollSection';
 import { MaritimeFreightSection } from '@/components/MaritimeFreightSection';
@@ -114,11 +113,6 @@ export default function LogisticsPage() {
 
         {/* 4 In-A-Row 3D Interactive Capabilities Grid */}
         <Capabilities3DGrid capabilities={capabilities} />
-      </div>
-
-      {/* ── INDUSTRIES WE SERVE SECTION ── */}
-      <div style={{ backgroundColor: '#000000', paddingTop: '2rem' }}>
-        <IndustriesWeServeSection title="Industries Powered by Our Logistics" />
       </div>
 
     </div>
