@@ -530,39 +530,39 @@ export default function ManufacturingPage() {
 
       {/* Factory Floor Video Showcase Section */}
       <section style={{
-        padding: 'clamp(3rem, 6vw, 5rem) 5%',
+        padding: '0',
+        width: '100%',
         backgroundColor: '#ffffff',
         borderBottom: '1px solid #e2e8f0',
+        overflow: 'hidden',
       }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <div style={{
-            position: 'relative',
-            width: '100%',
-            aspectRatio: '16 / 9',
-            maxHeight: '560px',
-            overflow: 'hidden',
-            backgroundColor: '#ffffff',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}>
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              src="/assets/factory.mp4"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'center',
-                transform: 'scale(1.3)',
-                mixBlendMode: 'multiply',
-                display: 'block',
-              }}
-            />
-          </div>
+        <div style={{
+          position: 'relative',
+          width: '100%',
+          aspectRatio: '21 / 9',
+          maxHeight: '600px',
+          overflow: 'hidden',
+          backgroundColor: '#ffffff',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            src="/assets/factory.mp4"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center',
+              transform: 'scale(1.35)',
+              mixBlendMode: 'multiply',
+              display: 'block',
+            }}
+          />
         </div>
       </section>
 
