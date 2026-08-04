@@ -25,14 +25,14 @@ export function InteractiveTruckXray() {
     setMousePos(null);
   };
 
-  // Spot size calculated relative to container height/width
+  // Spot size radius (65px diameter 130px)
   const spotlightRadius = 65;
 
   return (
     <section style={{
       width: '100%',
       backgroundColor: '#ffffff',
-      padding: '4rem clamp(1rem, 5vw, 6%) 5rem clamp(1rem, 5vw, 6%)',
+      padding: '3rem clamp(1rem, 5vw, 6%) 4rem clamp(1rem, 5vw, 6%)',
       boxSizing: 'border-box',
       display: 'flex',
       flexDirection: 'column',
@@ -41,36 +41,6 @@ export function InteractiveTruckXray() {
       overflow: 'hidden',
     }}>
       <style dangerouslySetInnerHTML={{ __html: `
-        .truck-xray-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 0.5rem;
-          padding: 0.4rem 1rem;
-          border-radius: 9999px;
-          background: rgba(0, 0, 0, 0.05);
-          border: 1px solid rgba(0, 0, 0, 0.1);
-          color: #111111;
-          font-size: 0.75rem;
-          font-weight: 500;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          margin-bottom: 1.25rem;
-        }
-
-        .truck-pulse-dot {
-          width: 7px;
-          height: 7px;
-          border-radius: 50%;
-          background-color: #22c55e;
-          box-shadow: 0 0 8px #22c55e;
-          animation: truck-pulse 2s infinite ease-in-out;
-        }
-
-        @keyframes truck-pulse {
-          0%, 100% { opacity: 0.5; transform: scale(0.9); }
-          50% { opacity: 1; transform: scale(1.3); }
-        }
-
         .truck-frame-container {
           position: relative;
           width: 100%;
@@ -80,28 +50,6 @@ export function InteractiveTruckXray() {
           cursor: crosshair;
           user-select: none;
           touch-action: none;
-        }
-
-        .truck-hint-pill {
-          position: absolute;
-          bottom: 1.5rem;
-          left: 50%;
-          transform: translateX(-50%);
-          background: rgba(0, 0, 0, 0.85);
-          color: #ffffff;
-          padding: 0.6rem 1.4rem;
-          border-radius: 9999px;
-          font-size: 0.85rem;
-          font-weight: 400;
-          letter-spacing: 0.02em;
-          pointer-events: none;
-          z-index: 30;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.25);
-          backdrop-filter: blur(8px);
-          transition: opacity 0.3s ease;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
         }
 
         .truck-xray-lens {
@@ -115,12 +63,8 @@ export function InteractiveTruckXray() {
         }
       ` }} />
 
-      <div className="truck-xray-badge">
-        <span className="truck-pulse-dot" />
-        <span>Live Volumetric Telemetry</span>
-      </div>
-
-      <div style={{ textAlign: 'center', maxWidth: '800px', marginBottom: '2.5rem' }}>
+      {/* Section Title */}
+      <div style={{ textAlign: 'center', maxWidth: '800px', marginBottom: '2rem' }}>
         <h2 style={{
           fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
           fontWeight: 300,
@@ -130,15 +74,6 @@ export function InteractiveTruckXray() {
         }}>
           Interactive Cargo Inspection
         </h2>
-        <p style={{
-          fontSize: 'clamp(0.95rem, 1.2vw, 1.1rem)',
-          color: 'rgba(0, 0, 0, 0.65)',
-          marginTop: '0.75rem',
-          lineHeight: 1.6,
-          fontWeight: 300,
-        }}>
-          Hover or drag over the container payload to reveal real-time internal cargo stowage and volumetric space allocation.
-        </p>
       </div>
 
       {/* Interactive Stacked Truck Images */}
@@ -195,17 +130,6 @@ export function InteractiveTruckXray() {
               height: `${spotlightRadius * 2}px`,
             }}
           />
-        )}
-
-        {/* Guidance hint pill when not hovering */}
-        {!isHovered && (
-          <div className="truck-hint-pill">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-            <span>Hover to inspect cargo payload 🔍</span>
-          </div>
         )}
       </div>
     </section>
