@@ -18,9 +18,9 @@ export default function ManufacturingRobot3D() {
     // 1. Scene Setup (Clean White Studio Environment)
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup (Positioned for balanced 3D robot arm placement)
+    // 2. Camera Setup (Positioned for a slightly larger 3D robot arm)
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-    camera.position.set(0, 0.3, 4.2);
+    camera.position.set(0, 0.3, 4.1);
     camera.lookAt(0, 0.1, 0);
 
     // 3. Renderer Setup with PMREM Environment Generator
@@ -51,14 +51,14 @@ export default function ManufacturingRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Lowered Y-position = -1.45, slightly reduced scale 2.8)
+    // 6. Load GLB Model (Lowered Y-position = -1.45, slightly increased scale 3.2)
     const modelGroup = new THREE.Group();
     modelGroup.position.set(0, -1.45, 0);
     scene.add(modelGroup);
 
     const loader = new GLTFLoader();
     loader.load(
-      '/assets/robotic+arm+3d+model.glb?v=17',
+      '/assets/robotic+arm+3d+model.glb?v=18',
       (gltf) => {
         const loadedModel = gltf.scene;
 
@@ -68,7 +68,7 @@ export default function ManufacturingRobot3D() {
         const size = box.getSize(new THREE.Vector3());
 
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 2.8 / maxDim; // Slightly reduced scale for cleaner fit
+        const scale = 3.2 / maxDim; // Slightly increased scale factor (3.2)
         loadedModel.scale.set(scale, scale, scale);
 
         // Center horizontally & anchor base bottom to y = 0
