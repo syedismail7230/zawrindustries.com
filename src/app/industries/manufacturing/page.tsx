@@ -308,7 +308,181 @@ export default function ManufacturingPage() {
         </div>
       </section>
 
-      {/* 3. Tech Architecture & Make in India Compliance */}
+      {/* 3. AGV-2 Autonomous Guided Vehicle Feature Section */}
+      <section style={{
+        padding: '0',
+        backgroundColor: '#000000',
+        borderBottom: '1px solid #1a1a1a',
+        overflow: 'hidden',
+      }}>
+        <div style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          minHeight: '540px',
+          alignItems: 'stretch',
+        }}>
+          {/* Text Panel */}
+          <div style={{
+            padding: 'clamp(3rem, 6vw, 5rem) clamp(2rem, 5vw, 5rem)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            backgroundColor: '#000000',
+          }}>
+            <span style={{
+              display: 'inline-block',
+              fontSize: '0.75rem',
+              fontWeight: 800,
+              letterSpacing: '0.14em',
+              color: '#6b7280',
+              marginBottom: '1.4rem',
+              textTransform: 'uppercase',
+              fontFamily: 'system-ui, sans-serif',
+            }}>
+              ZAWR LOGISTICS · AUTONOMOUS FLEET
+            </span>
+
+            <h2 style={{
+              fontSize: 'clamp(2rem, 4vw, 3.4rem)',
+              fontWeight: 400,
+              lineHeight: 1.1,
+              letterSpacing: '-0.03em',
+              color: '#ffffff',
+              marginBottom: '1.6rem',
+              fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            }}>
+              AGV-2<br />
+              <span style={{ color: '#9ca3af', fontWeight: 300 }}>Autonomous Guided<br />Vehicle</span>
+            </h2>
+
+            <p style={{
+              fontSize: '1rem',
+              color: '#9ca3af',
+              lineHeight: 1.8,
+              marginBottom: '2.4rem',
+              maxWidth: '420px',
+            }}>
+              The Zawr AGV-2 is a next-generation autonomous guided vehicle engineered for high-throughput factory floors and warehouse environments. With sub-centimetre navigation precision and a 500 kg payload capacity, it operates around the clock in dynamic, human-shared spaces — eliminating inefficiency from internal logistics.
+            </p>
+
+            {/* Spec Pills */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', marginBottom: '2.4rem' }}>
+              {[
+                { label: 'Payload', value: '500 kg' },
+                { label: 'Speed', value: '1.8 m/s' },
+                { label: 'Nav Accuracy', value: '±5 mm' },
+                { label: 'Battery', value: '10 hr runtime' },
+              ].map(({ label, value }) => (
+                <div key={label} style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  padding: '0.75rem 1.2rem',
+                  border: '1px solid #2d2d2d',
+                  borderRadius: '10px',
+                  minWidth: '100px',
+                  backgroundColor: '#0f0f0f',
+                }}>
+                  <span style={{ fontSize: '1.1rem', fontWeight: 600, color: '#ffffff', letterSpacing: '-0.02em' }}>{value}</span>
+                  <span style={{ fontSize: '0.72rem', color: '#6b7280', marginTop: '0.15rem', letterSpacing: '0.04em' }}>{label}</span>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+              <a href="/contact" style={{
+                display: 'inline-block',
+                padding: '0.9rem 2rem',
+                borderRadius: '50px',
+                backgroundColor: '#ffffff',
+                color: '#000000',
+                fontWeight: 700,
+                fontSize: '0.88rem',
+                textDecoration: 'none',
+                letterSpacing: '0.01em',
+                transition: 'opacity 0.2s ease',
+              }}>
+                Request AGV Demo
+              </a>
+              <a href="/contact/client-relations" style={{
+                display: 'inline-block',
+                padding: '0.9rem 2rem',
+                borderRadius: '50px',
+                backgroundColor: 'transparent',
+                color: '#9ca3af',
+                border: '1px solid #2d2d2d',
+                fontWeight: 600,
+                fontSize: '0.88rem',
+                textDecoration: 'none',
+                transition: 'color 0.2s ease',
+              }}>
+                Fleet Integration
+              </a>
+            </div>
+          </div>
+
+          {/* Image Panel */}
+          <div style={{
+            position: 'relative',
+            overflow: 'hidden',
+            minHeight: '400px',
+            backgroundColor: '#f5f5f5',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            {/* Subtle grid overlay */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: `
+                linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px)
+              `,
+              backgroundSize: '32px 32px',
+              zIndex: 1,
+            }} />
+            {/* AGV-2 Product Image */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/assets/AGV-2.png"
+              alt="Zawr AGV-2 Autonomous Guided Vehicle — front three-quarter view showing ZAWR LOGISTICS branding"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center',
+                position: 'relative',
+                zIndex: 2,
+                display: 'block',
+              }}
+            />
+            {/* Bottom label */}
+            <div style={{
+              position: 'absolute',
+              bottom: '1.5rem',
+              right: '1.5rem',
+              backgroundColor: 'rgba(0,0,0,0.75)',
+              backdropFilter: 'blur(8px)',
+              borderRadius: '8px',
+              padding: '0.5rem 1rem',
+              zIndex: 3,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.5rem',
+            }}>
+              <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#22c55e', flexShrink: 0 }} />
+              <span style={{ fontSize: '0.75rem', color: '#ffffff', fontWeight: 500, letterSpacing: '0.04em' }}>
+                Production Ready · Fleet Available
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. Tech Architecture & Make in India Compliance */}
+
       <section style={{ padding: 'clamp(3rem, 6vw, 6rem) 5%', backgroundColor: '#ffffff' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '3rem', alignItems: 'center' }}>
           <div>
