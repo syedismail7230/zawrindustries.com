@@ -331,18 +331,6 @@ export default function ManufacturingPage() {
             justifyContent: 'center',
             backgroundColor: '#ffffff',
           }}>
-            <span style={{
-              display: 'inline-block',
-              fontSize: '0.75rem',
-              fontWeight: 800,
-              letterSpacing: '0.14em',
-              color: '#94a3b8',
-              marginBottom: '1.4rem',
-              textTransform: 'uppercase',
-              fontFamily: 'system-ui, sans-serif',
-            }}>
-              ZAWR LOGISTICS · AUTONOMOUS FLEET
-            </span>
 
             <h2 style={{
               fontSize: 'clamp(2rem, 4vw, 3.4rem)',
