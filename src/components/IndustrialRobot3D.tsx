@@ -15,15 +15,15 @@ export default function IndustrialRobot3D() {
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    // 1. Scene Setup (Clean White Studio Environment)
+    // 1. Scene Setup
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup (Positioned directly facing the center robot arm)
+    // 2. Camera Setup (Centered Perspective)
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-    camera.position.set(0, 0.8, 4.2);
+    camera.position.set(0, 0.8, 4.4);
     camera.lookAt(0, 0.4, 0);
 
-    // 3. Renderer Setup with PMREM Environment Generator
+    // 3. Renderer Setup with Studio Environment
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -31,11 +31,11 @@ export default function IndustrialRobot3D() {
     renderer.toneMappingExposure = 1.25;
     container.appendChild(renderer.domElement);
 
-    // 4. Generate Studio Environment Map for Realistic Metallic Reflections
+    // 4. Generate Studio Environment Map for Metallic Reflections
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
-    // 5. Studio Direct Lighting
+    // 5. Studio Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
     scene.add(ambientLight);
 
@@ -51,16 +51,10 @@ export default function IndustrialRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Centered in the hero between metric badges)
+    // 6. Load Clean Unmodified GLB 3D Model
     const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, -0.15, 0); // Elevated to sit perfectly in center stage
+    modelGroup.position.set(0, -0.15, 0);
     scene.add(modelGroup);
-
-    let mixer: THREE.AnimationMixer | null = null;
-    let clawPartsLeft: THREE.Object3D[] = [];
-    let clawPartsRight: THREE.Object3D[] = [];
-    let clawInitialPositionsLeft: THREE.Vector3[] = [];
-    let clawInitialPositionsRight: THREE.Vector3[] = [];
 
     const loader = new GLTFLoader();
     loader.load(
@@ -68,7 +62,7 @@ export default function IndustrialRobot3D() {
       (gltf) => {
         const loadedModel = gltf.scene;
 
-        // Auto-center & scale model
+        // Auto-center & scale model perfectly
         const box = new THREE.Box3().setFromObject(loadedModel);
         const center = box.getCenter(new THREE.Vector3());
         const size = box.getSize(new THREE.Vector3());
@@ -79,17 +73,16 @@ export default function IndustrialRobot3D() {
         const scale = 3.8 / maxDim;
         loadedModel.scale.set(scale, scale, scale);
 
-        // Enhance materials to prevent silhouetting
+        // Ensure materials have metallic specular reflections without mutating geometry
         loadedModel.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
-
             if (mesh.material) {
               const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
               materials.forEach((mat) => {
                 if (mat instanceof THREE.MeshStandardMaterial || mat instanceof THREE.MeshPhysicalMaterial) {
                   if (mat.color.r < 0.05 && mat.color.g < 0.05 && mat.color.b < 0.05) {
-                    mat.color.setHex(0x2d323c); // Dark metallic charcoal
+                    mat.color.setHex(0x2d323c); // Premium dark metallic charcoal
                   }
                   mat.roughness = 0.3;
                   mat.metalness = 0.8;
@@ -97,27 +90,8 @@ export default function IndustrialRobot3D() {
                 }
               });
             }
-
-            const pos = mesh.position;
-            if (mesh.name.includes('claw') || mesh.name.includes('finger') || mesh.name.includes('id2') || (pos.x > 0.4 && pos.y > 0.2)) {
-              if (pos.z >= 0) {
-                clawPartsLeft.push(mesh);
-                clawInitialPositionsLeft.push(mesh.position.clone());
-              } else {
-                clawPartsRight.push(mesh);
-                clawInitialPositionsRight.push(mesh.position.clone());
-              }
-            }
           }
         });
-
-        if (gltf.animations && gltf.animations.length > 0) {
-          mixer = new THREE.AnimationMixer(loadedModel);
-          gltf.animations.forEach((clip) => {
-            const action = mixer!.clipAction(clip);
-            action.play();
-          });
-        }
 
         modelGroup.add(loadedModel);
         setLoading(false);
@@ -129,7 +103,7 @@ export default function IndustrialRobot3D() {
       }
     );
 
-    // 7. Mouse & Touch Tracking
+    // 7. Subtle Smooth Cursor Parallax Response
     const mouse = new THREE.Vector2(0, 0);
     const targetMouse = new THREE.Vector2(0, 0);
 
@@ -149,44 +123,16 @@ export default function IndustrialRobot3D() {
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // 8. Render Loop (Model fixed in center stage with gentle rotation & claw articulation)
-    const clock = new THREE.Clock();
+    // 8. Clean Smooth Render Loop
     let animId: number;
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      const delta = clock.getDelta();
-      const elapsedTime = clock.getElapsedTime();
+      mouse.lerp(targetMouse, 0.05);
 
-      if (mixer) {
-        mixer.update(delta);
-      }
-
-      mouse.lerp(targetMouse, 0.08);
-
-      // Model is FIXED in center stage at y = -0.15
-      modelGroup.position.set(0, -0.15, 0);
-
-      // Subtle yaw rotation & pitch tilt in place
-      modelGroup.rotation.y = mouse.x * 0.35 + Math.sin(elapsedTime * 0.4) * 0.08;
-      modelGroup.rotation.x = -mouse.y * 0.15;
-
-      // Subtle Open/Close Claw Cycle
-      const clawOpeningFactor = (Math.sin(elapsedTime * 2.0) + 1) / 2;
-
-      clawPartsLeft.forEach((mesh, i) => {
-        if (clawInitialPositionsLeft[i]) {
-          const initPos = clawInitialPositionsLeft[i];
-          mesh.position.z = initPos.z + clawOpeningFactor * 0.1;
-        }
-      });
-
-      clawPartsRight.forEach((mesh, i) => {
-        if (clawInitialPositionsRight[i]) {
-          const initPos = clawInitialPositionsRight[i];
-          mesh.position.z = initPos.z - clawOpeningFactor * 0.1;
-        }
-      });
+      // Subtle smooth cursor rotation in place
+      modelGroup.rotation.y = mouse.x * 0.25;
+      modelGroup.rotation.x = -mouse.y * 0.1;
 
       renderer.render(scene, camera);
     };
