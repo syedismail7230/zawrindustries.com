@@ -1,13 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
+import ManufacturingHeroClient from '@/components/ManufacturingHeroClient';
 import { Capabilities3DGrid } from '@/components/Capabilities3DGrid';
-
-// Dynamic import with SSR disabled to prevent Three.js WebGL server-side rendering errors
-const ManufacturingRobot3D = dynamic(
-  () => import('@/components/ManufacturingRobot3D'),
-  { ssr: false }
-);
 
 export const metadata: Metadata = {
   title: "AI Powered Precision Manufacturing — Zawr Industries",
@@ -167,7 +161,7 @@ export default function ManufacturingPage() {
 
           {/* CENTER 3D ROBOT CANVAS OVERLAY */}
           <div style={{ width: '100%', height: '100%', position: 'relative', zIndex: 15 }}>
-            <ManufacturingRobot3D />
+            <ManufacturingHeroClient />
           </div>
 
         </div>
