@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import React from 'react';
 import { IndustriesWeServeSection } from '@/components/IndustriesWeServeSection';
+import { InteractiveTruckXray } from '@/components/InteractiveTruckXray';
 
 export const metadata: Metadata = {
   title: "Trade & Logistics Solutions — Zawr Industries India",
@@ -68,8 +69,11 @@ export default function LogisticsPage() {
         </div>
       </div>
 
+      {/* ── INTERACTIVE TRUCK CARGO X-RAY INSPECTION (BELOW HERO) ── */}
+      <InteractiveTruckXray />
+
       {/* ── OVERVIEW & CAPABILITIES SECTION (CLEAN WHITE BACKGROUND) ── */}
-      <div style={{ backgroundColor: '#ffffff', padding: 'clamp(4rem, 6vw, 7rem) clamp(1rem, 6vw, 8%)', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ backgroundColor: '#ffffff', padding: 'clamp(3rem, 6vw, 5rem) clamp(1rem, 6vw, 8%)', maxWidth: '1200px', margin: '0 auto' }}>
         <div style={{ maxWidth: '850px', margin: '0 auto 5rem auto', textAlign: 'center' }}>
           <h2 style={{
             fontSize: 'clamp(2rem, 4vw, 3rem)',
