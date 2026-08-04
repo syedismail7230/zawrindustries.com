@@ -4,8 +4,8 @@ import IndustrialRobot3D from '@/components/IndustrialRobot3D';
 import { Capabilities3DGrid } from '@/components/Capabilities3DGrid';
 
 export const metadata: Metadata = {
-  title: "Manufacturing Solutions & 3D Robotics — Zawr Industries",
-  description: "Zawr Industries delivers precision industrial manufacturing, automated 3D robotics, contract production, and advanced engineering solutions under Make in India.",
+  title: "Manufacturing Solutions & Industrial Robotics — Zawr Industries",
+  description: "Zawr Industries delivers precision industrial manufacturing, 3D robotics, contract production, and advanced engineering solutions under Make in India.",
 };
 
 const manufacturingCapabilities = [
@@ -17,7 +17,7 @@ const manufacturingCapabilities = [
   },
   {
     title: "Automated Robotic Assembly",
-    description: "6-Axis articulated industrial robotic arms with integrated vision telemetry, laser arc welding, and autonomous pick-and-place routing.",
+    description: "Multi-axis articulated industrial robotic arms with integrated vision telemetry, laser arc welding, and autonomous pick-and-place routing.",
     metric: "<12 ms",
     metricLabel: "Control Response Latency",
   },
@@ -37,14 +37,14 @@ const manufacturingCapabilities = [
 
 export default function ManufacturingPage() {
   return (
-    <div style={{ backgroundColor: '#0a0d12', color: '#ffffff', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#ffffff', color: '#111111', minHeight: '100vh', overflowX: 'hidden' }}>
       
-      {/* 1. Hero Section with 3D Industrial Robot */}
+      {/* 1. Black & White Hero Section with 3D Industrial Robot */}
       <section style={{
         position: 'relative',
         padding: '8rem 5% 5rem',
-        background: 'radial-gradient(ellipse at 70% 20%, rgba(230, 81, 0, 0.12) 0%, rgba(10, 13, 18, 1) 70%)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        backgroundColor: '#ffffff',
+        borderBottom: '1px solid #e2e8f0',
       }}>
         <div style={{
           maxWidth: '1280px',
@@ -63,39 +63,37 @@ export default function ManufacturingPage() {
               gap: '0.6rem',
               padding: '0.4rem 1rem',
               borderRadius: '30px',
-              background: 'rgba(230, 81, 0, 0.12)',
-              border: '1px solid rgba(230, 81, 0, 0.3)',
-              color: '#ff9800',
+              backgroundColor: '#f1f5f9',
+              border: '1px solid #cbd5e1',
+              color: '#0f172a',
               fontSize: '0.85rem',
-              fontWeight: 600,
+              fontWeight: 700,
               marginBottom: '1.8rem',
               letterSpacing: '0.05em',
             }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#ff9800' }}></span>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#000000' }}></span>
               MAKE IN INDIA // ADVANCED INDUSTRIAL ROBOTICS
             </div>
 
             <h1 style={{
               fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-              fontWeight: 700,
+              fontWeight: 800,
               lineHeight: 1.1,
-              letterSpacing: '-0.02em',
+              letterSpacing: '-0.03em',
               marginBottom: '1.5rem',
-              background: 'linear-gradient(135deg, #ffffff 0%, #a0aec0 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
+              color: '#000000',
             }}>
-              Smart Manufacturing & 3D Precision Robotics
+              Precision Industrial Manufacturing & 3D Robotics
             </h1>
 
             <p style={{
               fontSize: 'clamp(1rem, 1.8vw, 1.2rem)',
               lineHeight: 1.7,
-              color: 'rgba(255, 255, 255, 0.75)',
+              color: '#475569',
               marginBottom: '2.2rem',
               maxWidth: '580px',
             }}>
-              Zawr Industries' Manufacturing Vertical combines high-precision metallurgy, 6-axis autonomous 3D industrial robotics, and AI computer-vision inspection to engineer scalable production lines for global enterprises.
+              Zawr Industries' Manufacturing division delivers high-precision metallurgy, multi-axis autonomous 3D industrial robotics, and contract production lines engineered for global scale and quality compliance.
             </p>
 
             {/* Quick Metrics Bar */}
@@ -105,21 +103,21 @@ export default function ManufacturingPage() {
               gap: '1rem',
               marginBottom: '2.5rem',
               padding: '1.2rem',
-              background: 'rgba(255, 255, 255, 0.03)',
+              backgroundColor: '#f8fafc',
               borderRadius: '16px',
-              border: '1px solid rgba(255, 255, 255, 0.08)',
+              border: '1px solid #e2e8f0',
             }}>
               <div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 700, color: '#ff9800' }}>±0.005mm</div>
-                <div style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.5)' }}>Tolerance</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000' }}>±0.005mm</div>
+                <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 500 }}>Tolerance</div>
               </div>
               <div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 700, color: '#00e5ff' }}>6-Axis</div>
-                <div style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.5)' }}>Robotic Sync</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000' }}>6-Axis</div>
+                <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 500 }}>Robotics Sync</div>
               </div>
               <div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 700, color: '#00ff66' }}>99.98%</div>
-                <div style={{ fontSize: '0.75rem', color: 'rgba(255, 255, 255, 0.5)' }}>Factory Uptime</div>
+                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000' }}>99.98%</div>
+                <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 500 }}>Factory Uptime</div>
               </div>
             </div>
 
@@ -130,12 +128,12 @@ export default function ManufacturingPage() {
                 style={{
                   padding: '1rem 2rem',
                   borderRadius: '50px',
-                  background: 'linear-gradient(135deg, #e65100 0%, #f57c00 100%)',
+                  backgroundColor: '#000000',
                   color: '#ffffff',
                   fontWeight: 600,
                   fontSize: '0.95rem',
                   textDecoration: 'none',
-                  boxShadow: '0 10px 25px rgba(230, 81, 0, 0.4)',
+                  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
                   transition: 'all 0.3s ease',
                 }}
               >
@@ -146,9 +144,9 @@ export default function ManufacturingPage() {
                 style={{
                   padding: '1rem 2rem',
                   borderRadius: '50px',
-                  background: 'rgba(255, 255, 255, 0.06)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  color: '#ffffff',
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #000000',
+                  color: '#000000',
                   fontWeight: 600,
                   fontSize: '0.95rem',
                   textDecoration: 'none',
@@ -169,13 +167,13 @@ export default function ManufacturingPage() {
       </section>
 
       {/* 2. Capabilities Section */}
-      <section style={{ padding: '6rem 5%', background: '#07090d' }}>
+      <section style={{ padding: '6rem 5%', backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-            <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)', fontWeight: 700, marginBottom: '1rem', color: '#ffffff' }}>
+            <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)', fontWeight: 800, marginBottom: '1rem', color: '#000000' }}>
               Industrial Engineering Capabilities
             </h2>
-            <p style={{ fontSize: '1.1rem', color: 'rgba(255, 255, 255, 0.65)', maxWidth: '640px', margin: '0 auto' }}>
+            <p style={{ fontSize: '1.1rem', color: '#64748b', maxWidth: '640px', margin: '0 auto' }}>
               End-to-end industrial manufacturing capabilities, from automated CNC component fabrication to intelligent robotic assembly.
             </p>
           </div>
@@ -185,65 +183,65 @@ export default function ManufacturingPage() {
       </section>
 
       {/* 3. Tech Architecture & Make in India Compliance */}
-      <section style={{ padding: '6rem 5%', background: '#0a0d12', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem', alignItems: 'center' }}>
+      <section style={{ padding: '6rem 5%', backgroundColor: '#ffffff' }}>
+        <div style={{ maxWidth: '1280px', margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3.5rem', alignItems: 'center' }}>
           <div>
-            <span style={{ color: '#e65100', fontWeight: 600, fontSize: '0.9rem', letterSpacing: '0.05em' }}>GOVERNMENT INITIATIVE COMPLIANCE</span>
-            <h3 style={{ fontSize: '2.2rem', fontWeight: 700, margin: '1rem 0 1.5rem', lineHeight: 1.2 }}>
+            <span style={{ color: '#000000', fontWeight: 800, fontSize: '0.85rem', letterSpacing: '0.08em' }}>GOVERNMENT INITIATIVE COMPLIANCE</span>
+            <h3 style={{ fontSize: '2.2rem', fontWeight: 800, margin: '1rem 0 1.5rem', lineHeight: 1.2, color: '#000000' }}>
               Make in India & Production-Linked Incentives (PLI)
             </h3>
-            <p style={{ color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.8, marginBottom: '1.5rem' }}>
+            <p style={{ color: '#475569', lineHeight: 1.8, marginBottom: '1.5rem' }}>
               Our manufacturing infrastructures are fully certified under ISO 9001:2015, ISO 14001, and Indian Directorate General of Foreign Trade (DGFT) standards. We help international companies establish localized production hubs with full regulatory compliance and supply-chain resilience.
             </p>
-            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.8rem', color: 'rgba(255, 255, 255, 0.85)', fontSize: '0.95rem' }}>
+            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '0.9rem', color: '#1e293b', fontSize: '0.95rem', fontWeight: 500 }}>
               <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <span style={{ color: '#00ff66', fontWeight: 'bold' }}>✓</span> PLI Scheme Financial Incentive Optimization
+                <span style={{ color: '#000000', fontWeight: 'bold' }}>✓</span> PLI Scheme Financial Incentive Optimization
               </li>
               <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <span style={{ color: '#00ff66', fontWeight: 'bold' }}>✓</span> Turnkey Factory Floor Automation & 3D Digital Twins
+                <span style={{ color: '#000000', fontWeight: 'bold' }}>✓</span> Turnkey Factory Floor Automation & 3D Digital Twins
               </li>
               <li style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                <span style={{ color: '#00ff66', fontWeight: 'bold' }}>✓</span> Export-Quality Metallurgy & Quality Assurance Documentation
+                <span style={{ color: '#000000', fontWeight: 'bold' }}>✓</span> Export-Quality Metallurgy & Quality Assurance Documentation
               </li>
             </ul>
           </div>
 
           <div style={{
-            background: 'linear-gradient(135deg, rgba(230, 81, 0, 0.1) 0%, rgba(0, 229, 255, 0.05) 100%)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            backgroundColor: '#000000',
+            color: '#ffffff',
             borderRadius: '24px',
             padding: '3rem 2.5rem',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.5)',
+            boxShadow: '0 25px 50px rgba(0, 0, 0, 0.2)',
           }}>
-            <h4 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1.5rem', color: '#ffffff' }}>Production Operational Metrics</h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <h4 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '1.8rem', color: '#ffffff' }}>Production Operational Metrics</h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.6rem' }}>
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
                   <span>Robotic Welding Precision</span>
-                  <span style={{ color: '#00e5ff', fontWeight: 'bold' }}>99.94%</span>
+                  <span style={{ color: '#ffffff', fontWeight: 'bold' }}>99.94%</span>
                 </div>
-                <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{ width: '99.94%', height: '100%', background: '#00e5ff' }}></div>
+                <div style={{ height: '6px', backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ width: '99.94%', height: '100%', backgroundColor: '#ffffff' }}></div>
                 </div>
               </div>
 
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
                   <span>PLI Export Compliance Readiness</span>
-                  <span style={{ color: '#00ff66', fontWeight: 'bold' }}>100%</span>
+                  <span style={{ color: '#ffffff', fontWeight: 'bold' }}>100%</span>
                 </div>
-                <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{ width: '100%', height: '100%', background: '#00ff66' }}></div>
+                <div style={{ height: '6px', backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ width: '100%', height: '100%', backgroundColor: '#ffffff' }}></div>
                 </div>
               </div>
 
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
                   <span>Cycle Time Reduction</span>
-                  <span style={{ color: '#ff9800', fontWeight: 'bold' }}>-42.5%</span>
+                  <span style={{ color: '#ffffff', fontWeight: 'bold' }}>-42.5%</span>
                 </div>
-                <div style={{ height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '4px', overflow: 'hidden' }}>
-                  <div style={{ width: '85%', height: '100%', background: '#ff9800' }}></div>
+                <div style={{ height: '6px', backgroundColor: 'rgba(255, 255, 255, 0.2)', borderRadius: '4px', overflow: 'hidden' }}>
+                  <div style={{ width: '85%', height: '100%', backgroundColor: '#ffffff' }}></div>
                 </div>
               </div>
             </div>
