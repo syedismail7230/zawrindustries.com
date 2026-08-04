@@ -1,8 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 
 export default function FactoryOSMapSection() {
+  const [hoveredIndex, setHoveredIndex] = useState<{ type: 'left' | 'right' | null; index: number | null }>({ type: null, index: null });
+
   const leftNodes = [
     { title: 'PRODUCTION', desc: 'Work orders, scheduling, tracking' },
     { title: 'MACHINE MONITORING', desc: 'Machine status, performance, downtime' },
@@ -27,21 +29,21 @@ export default function FactoryOSMapSection() {
     { title: 'MAXIMUM EFFICIENCY', desc: 'Lower costs. Higher output.' },
   ];
 
-  // Geometry parameters for 1200x660 SVG canvas
-  const leftTextX = 300;     // Right-aligned text end X
-  const leftDotX = 320;      // Left column node dots
-  const centerLeftX = 470;   // Left anchor of center hub text
-  const centerRightX = 730;  // Right anchor of center hub text
-  const rightDotX = 880;     // Right column node dots
-  const rightTextX = 900;    // Left-aligned text start X
-  const centerY = 330;       // Center hub vertical midpoint
+  // Wide 1300x700 SVG canvas geometry
+  const leftTextX = 330;     // Right-aligned text end X
+  const leftDotX = 350;      // Left column node dots
+  const centerLeftX = 540;   // Left anchor of center hub text
+  const centerRightX = 760;  // Right anchor of center hub text
+  const rightDotX = 950;     // Right column node dots
+  const rightTextX = 970;    // Left-aligned text start X
+  const centerY = 350;       // Center hub vertical midpoint
 
-  // Y coordinate for each of the 9 nodes (top padding 50px, 66px step)
-  const getY = (index: number) => 50 + index * 66;
+  // Y coordinate for each of the 9 nodes (top padding 50px, 70px step)
+  const getY = (index: number) => 50 + index * 70;
 
   return (
     <section style={{
-      padding: 'clamp(4rem, 7vw, 6rem) 2%',
+      padding: 'clamp(4.5rem, 8vw, 7rem) 2%',
       backgroundColor: '#ffffff',
       borderBottom: '1px solid #e2e8f0',
       overflow: 'hidden',
@@ -61,16 +63,23 @@ export default function FactoryOSMapSection() {
             display: none !important;
           }
         }
+        .os-text-group {
+          cursor: pointer;
+          transition: opacity 0.2s ease;
+        }
+        .os-text-group:hover text {
+          fill: #000000 !important;
+        }
       `}</style>
 
-      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
         
         {/* Section Header */}
         <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
           <span style={{
-            fontSize: '0.78rem',
+            fontSize: '0.75rem',
             fontWeight: 500,
-            letterSpacing: '0.14em',
+            letterSpacing: '0.16em',
             color: '#64748b',
             textTransform: 'uppercase',
             display: 'inline-block',
@@ -95,19 +104,55 @@ export default function FactoryOSMapSection() {
           </p>
         </div>
 
-        {/* DESKTOP SINGLE SVG ARCHITECTURE MAP (NO OVERLAPPING, 100% PIXEL PERFECT) */}
+        {/* DESKTOP MONOCHROME INTERACTIVE SVG ARCHITECTURE MAP */}
         <div className="os-map-svg-desktop" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
           <svg
             width="100%"
             height="100%"
-            viewBox="0 0 1200 660"
-            style={{ maxWidth: '1200px', height: 'auto', overflow: 'visible' }}
+            viewBox="0 0 1300 700"
+            style={{ maxWidth: '1300px', height: 'auto', overflow: 'visible' }}
           >
-            {/* 1. LEFT COLUMN: Text Labels & Connection Dots */}
+            {/* 1. LEFT BEZIER CURVES: Connecting Left Dots to Center Hub */}
+            {leftNodes.map((_, i) => {
+              const y = getY(i);
+              const isHovered = hoveredIndex.type === 'left' && hoveredIndex.index === i;
+              const isAnyHovered = hoveredIndex.type !== null;
+              
+              // Smooth S-Curve geometry with controlled control points
+              const pathD = `M ${leftDotX} ${y} C ${leftDotX + 90} ${y}, ${centerLeftX - 60} ${centerY}, ${centerLeftX} ${centerY}`;
+              
+              return (
+                <g key={`left-curve-${i}`}>
+                  <path
+                    d={pathD}
+                    fill="none"
+                    stroke="#000000"
+                    strokeWidth={isHovered ? "2.5" : "1.2"}
+                    opacity={isHovered ? 1 : isAnyHovered ? 0.15 : 0.75}
+                    style={{ transition: 'all 0.25s ease' }}
+                  />
+                  {/* Moving particle along line */}
+                  <circle r={isHovered ? "3.5" : "2.2"} fill="#000000" opacity={isAnyHovered && !isHovered ? 0.2 : 1}>
+                    <animateMotion path={pathD} dur={`${3.5 + i * 0.25}s`} repeatCount="indefinite" />
+                  </circle>
+                </g>
+              );
+            })}
+
+            {/* 2. LEFT COLUMN: Connection Dots & Interactive Text Group */}
             {leftNodes.map((node, i) => {
               const y = getY(i);
+              const isHovered = hoveredIndex.type === 'left' && hoveredIndex.index === i;
+              const isAnyHovered = hoveredIndex.type !== null;
+
               return (
-                <g key={`left-node-${i}`}>
+                <g
+                  key={`left-node-${i}`}
+                  className="os-text-group"
+                  onMouseEnter={() => setHoveredIndex({ type: 'left', index: i })}
+                  onMouseLeave={() => setHoveredIndex({ type: null, index: null })}
+                  style={{ opacity: isAnyHovered && !isHovered ? 0.35 : 1, transition: 'opacity 0.2s ease' }}
+                >
                   {/* Title */}
                   <text
                     x={leftTextX}
@@ -115,8 +160,8 @@ export default function FactoryOSMapSection() {
                     textAnchor="end"
                     fill="#000000"
                     fontSize="12.5"
-                    fontWeight="600"
-                    letterSpacing="0.04em"
+                    fontWeight={isHovered ? "700" : "600"}
+                    letterSpacing="0.05em"
                   >
                     {node.title}
                   </text>
@@ -131,79 +176,90 @@ export default function FactoryOSMapSection() {
                   >
                     {node.desc}
                   </text>
-                  {/* Node Dot */}
-                  <circle cx={leftDotX} cy={y} r="4" fill="#000000" />
+                  {/* Connection Node Dot */}
+                  <circle cx={leftDotX} cy={y} r={isHovered ? "5" : "3.5"} fill="#000000" style={{ transition: 'all 0.2s ease' }} />
                 </g>
               );
             })}
 
-            {/* 2. LEFT BEZIER CURVES: Connecting Left Dots (320, Yi) to Center Hub (470, 330) */}
-            {leftNodes.map((_, i) => {
-              const y = getY(i);
-              const pathD = `M ${leftDotX} ${y} C ${leftDotX + 70} ${y}, ${centerLeftX - 40} ${centerY}, ${centerLeftX} ${centerY}`;
-              return (
-                <g key={`left-curve-${i}`}>
-                  <path d={pathD} fill="none" stroke="#000000" strokeWidth="1.2" opacity="0.8" />
-                  <circle r="2.5" fill="#000000">
-                    <animateMotion path={pathD} dur={`${3 + i * 0.3}s`} repeatCount="indefinite" />
-                  </circle>
-                </g>
-              );
-            })}
-
-            {/* 3. CENTER HUB: ZAWR FACTORY OS Text & Anchors (NO BOX, NO OUTLINE) */}
+            {/* 3. CENTER HUB: ZAWR FMS (Majestic Center Ring + Clean Typography) */}
             <g>
+              {/* Decorative Subtle Orbit Rings behind text */}
+              <circle cx="650" cy={centerY} r="65" fill="none" stroke="#e2e8f0" strokeWidth="1" strokeDasharray="4 4" />
+              <circle cx="650" cy={centerY} r="52" fill="none" stroke="#f1f5f9" strokeWidth="1" />
+
               {/* Left Anchor Dot */}
-              <circle cx={centerLeftX} cy={centerY} r="5" fill="#000000" />
+              <circle cx={centerLeftX} cy={centerY} r="5.5" fill="#000000" />
 
               {/* Main Title */}
-              <text x="600" y={centerY - 24} textAnchor="middle" fill="#000000" fontSize="32" fontWeight="600" letterSpacing="-0.02em">
+              <text x="650" y={centerY - 22} textAnchor="middle" fill="#000000" fontSize="30" fontWeight="700" letterSpacing="-0.02em">
                 ZAWR
               </text>
-              <text x="600" y={centerY + 4} textAnchor="middle" fill="#000000" fontSize="18" fontWeight="600" letterSpacing="0.08em">
+              <text x="650" y={centerY + 6} textAnchor="middle" fill="#000000" fontSize="17" fontWeight="600" letterSpacing="0.12em">
                 FMS
               </text>
               
               {/* Divider Line */}
-              <line x1="560" y1={centerY + 20} x2="640" y2={centerY + 20} stroke="#e2e8f0" strokeWidth="1" />
+              <line x1="615" y1={centerY + 22} x2="685" y2={centerY + 22} stroke="#cbd5e1" strokeWidth="1" />
               
               {/* Tagline */}
-              <text x="600" y={centerY + 42} textAnchor="middle" fill="#64748b" fontSize="12" fontWeight="300">
+              <text x="650" y={centerY + 42} textAnchor="middle" fill="#64748b" fontSize="11.5" fontWeight="300">
                 One Platform.
               </text>
-              <text x="600" y={centerY + 58} textAnchor="middle" fill="#64748b" fontSize="12" fontWeight="300">
+              <text x="650" y={centerY + 58} textAnchor="middle" fill="#64748b" fontSize="11.5" fontWeight="300">
                 Unlimited Control.
               </text>
 
               {/* Right Anchor Dot */}
-              <circle cx={centerRightX} cy={centerY} r="5" fill="#000000" />
+              <circle cx={centerRightX} cy={centerY} r="5.5" fill="#000000" />
             </g>
 
             {/* 4. CENTER TO RIGHT CONNECTOR ARROW */}
-            <path d={`M ${centerRightX} ${centerY} L ${centerRightX + 45} ${centerY}`} fill="none" stroke="#000000" strokeWidth="1.5" />
-            <polygon points={`${centerRightX + 45},${centerY - 4} ${centerRightX + 53},${centerY} ${centerRightX + 45},${centerY + 4}`} fill="#000000" />
+            <path d={`M ${centerRightX} ${centerY} L ${centerRightX + 45} ${centerY}`} fill="none" stroke="#000000" strokeWidth="1.6" />
+            <polygon points={`${centerRightX + 45},${centerY - 4} ${centerRightX + 54},${centerY} ${centerRightX + 45},${centerY + 4}`} fill="#000000" />
 
-            {/* 5. RIGHT BEZIER CURVES: Fanning out from Arrow (775, 330) to Right Dots (880, Yi) */}
+            {/* 5. RIGHT BEZIER CURVES: Fanning out from Arrow to Right Dots */}
             {rightNodes.map((_, i) => {
               const y = getY(i);
-              const pathD = `M ${centerRightX + 53} ${centerY} C ${centerRightX + 90} ${centerY}, ${rightDotX - 70} ${y}, ${rightDotX} ${y}`;
+              const isHovered = hoveredIndex.type === 'right' && hoveredIndex.index === i;
+              const isAnyHovered = hoveredIndex.type !== null;
+
+              const pathD = `M ${centerRightX + 54} ${centerY} C ${centerRightX + 110} ${centerY}, ${rightDotX - 80} ${y}, ${rightDotX} ${y}`;
+              
               return (
                 <g key={`right-curve-${i}`}>
-                  <path d={pathD} fill="none" stroke="#000000" strokeWidth="1.2" opacity="0.8" />
-                  <circle r="2.5" fill="#000000">
-                    <animateMotion path={pathD} dur={`${3 + i * 0.3}s`} repeatCount="indefinite" />
+                  <path
+                    d={pathD}
+                    fill="none"
+                    stroke="#000000"
+                    strokeWidth={isHovered ? "2.5" : "1.2"}
+                    opacity={isHovered ? 1 : isAnyHovered ? 0.15 : 0.75}
+                    style={{ transition: 'all 0.25s ease' }}
+                  />
+                  <circle r={isHovered ? "3.5" : "2.2"} fill="#000000" opacity={isAnyHovered && !isHovered ? 0.2 : 1}>
+                    <animateMotion path={pathD} dur={`${3.5 + i * 0.25}s`} repeatCount="indefinite" />
                   </circle>
                 </g>
               );
             })}
 
-            {/* 6. RIGHT COLUMN: Connection Dots & Text Labels */}
+            {/* 6. RIGHT COLUMN: Connection Dots & Interactive Text Group */}
             {rightNodes.map((node, i) => {
               const y = getY(i);
+              const isHovered = hoveredIndex.type === 'right' && hoveredIndex.index === i;
+              const isAnyHovered = hoveredIndex.type !== null;
+
               return (
-                <g key={`right-node-${i}`}>
-                  {/* Node Dot */}
-                  <circle cx={rightDotX} cy={y} r="4" fill="#000000" />
+                <g
+                  key={`right-node-${i}`}
+                  className="os-text-group"
+                  onMouseEnter={() => setHoveredIndex({ type: 'right', index: i })}
+                  onMouseLeave={() => setHoveredIndex({ type: null, index: null })}
+                  style={{ opacity: isAnyHovered && !isHovered ? 0.35 : 1, transition: 'opacity 0.2s ease' }}
+                >
+                  {/* Connection Node Dot */}
+                  <circle cx={rightDotX} cy={y} r={isHovered ? "5" : "3.5"} fill="#000000" style={{ transition: 'all 0.2s ease' }} />
+                  
                   {/* Title */}
                   <text
                     x={rightTextX}
@@ -211,8 +267,8 @@ export default function FactoryOSMapSection() {
                     textAnchor="start"
                     fill="#000000"
                     fontSize="12.5"
-                    fontWeight="600"
-                    letterSpacing="0.04em"
+                    fontWeight={isHovered ? "700" : "600"}
+                    letterSpacing="0.05em"
                   >
                     {node.title}
                   </text>
@@ -238,8 +294,8 @@ export default function FactoryOSMapSection() {
           
           {/* Mobile Center Hub Text */}
           <div style={{ textAlign: 'center', padding: '1rem 0' }}>
-            <div style={{ fontSize: '2rem', fontWeight: 600, color: '#000000' }}>ZAWR</div>
-            <div style={{ fontSize: '1.2rem', fontWeight: 500, color: '#000000', marginTop: '0.2rem', letterSpacing: '0.06em' }}>FMS</div>
+            <div style={{ fontSize: '2.2rem', fontWeight: 700, color: '#000000', letterSpacing: '-0.02em' }}>ZAWR</div>
+            <div style={{ fontSize: '1.2rem', fontWeight: 600, color: '#000000', marginTop: '0.2rem', letterSpacing: '0.1em' }}>FMS</div>
             <div style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '0.6rem', fontWeight: 300 }}>One Platform. Unlimited Control.</div>
           </div>
 
