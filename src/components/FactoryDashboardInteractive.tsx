@@ -17,7 +17,7 @@ export default function FactoryDashboardInteractive() {
   const [zoomed, setZoomed] = useState<number>(1);
 
   // Animated AGV positions on path
-  const [movingAgvPos, setMovingAgvPos] = useState<{ x: number; y: number }>({ x: 140, y: 125 });
+  const [movingAgvPos, setMovingAgvPos] = useState<{ x: number; y: number }>({ x: 190, y: 70 });
 
   // 1. Scroll-driven 3D tilt animation
   useEffect(() => {
@@ -48,14 +48,12 @@ export default function FactoryDashboardInteractive() {
       if (!start) start = timestamp;
       const elapsed = timestamp - start;
       
-      // Animate dash offset for route line
-      setAgvOffset((elapsed / 25) % 1000);
+      setAgvOffset((elapsed / 20) % 1000);
 
-      // Interpolate AGV 78 position along path
       if (activePathRef.current && isLive) {
         const totalLen = activePathRef.current.getTotalLength();
         if (totalLen > 0) {
-          const currentDistance = ((elapsed / 15) % totalLen);
+          const currentDistance = ((elapsed / 12) % totalLen);
           const point = activePathRef.current.getPointAtLength(currentDistance);
           setMovingAgvPos({ x: point.x, y: point.y });
         }
@@ -94,19 +92,61 @@ export default function FactoryDashboardInteractive() {
     { time: '10:25:11', msg: 'AGV-571 battery reached 94% threshold', type: 'success' },
   ];
 
-  // Specific path routes corresponding to selected tasks
+  // Specific path routes corresponding to selected tasks matching Bezier curves
   const getTaskPathD = () => {
     switch (selectedTask) {
       case 'TSK-00047':
-        return 'M 140 305 H 390 V 215 H 680';
+        return 'M 600 70 L 490 70 C 490 140, 490 200, 490 280 C 490 380, 680 440, 850 440';
       case 'TSK-00031':
-        return 'M 140 125 H 270 V 305 H 680';
+        return 'M 350 440 C 350 350, 490 280, 490 140 L 490 70';
       case 'TSK-00022':
-        return 'M 390 125 V 305 H 680';
+        return 'M 190 440 C 190 320, 490 280, 680 280 L 880 280';
       default:
         // TSK-00051
-        return 'M 140 125 H 390 V 215 H 680';
+        return 'M 190 70 C 190 210, 490 280, 660 140 L 880 140';
     }
+  };
+
+  // Helper to render high-density pod matrix (6 cols x 10 rows)
+  const renderPodGrid = (startX: number, startY: number) => {
+    const cells = [];
+    for (let r = 0; r < 10; r++) {
+      for (let c = 0; c < 6; c++) {
+        cells.push(
+          <rect
+            key={`${r}-${c}`}
+            x={startX + c * 13}
+            y={startY + r * 13}
+            width="10"
+            height="10"
+            rx="2"
+            fill="#4b5563"
+          />
+        );
+      }
+    }
+    return cells;
+  };
+
+  // Helper to render component tray grid (4 cols x 4 rows)
+  const renderTrayGrid = (startX: number, startY: number) => {
+    const cells = [];
+    for (let r = 0; r < 4; r++) {
+      for (let c = 0; c < 4; c++) {
+        cells.push(
+          <rect
+            key={`t-${r}-${c}`}
+            x={startX + c * 11}
+            y={startY + r * 11}
+            width="8"
+            height="8"
+            rx="1.5"
+            fill="#64748b"
+          />
+        );
+      }
+    }
+    return cells;
   };
 
   return (
@@ -576,13 +616,13 @@ export default function FactoryDashboardInteractive() {
                 </div>
               </div>
 
-              {/* BLUEPRINT FLOOR PLAN MAP CANVAS (2D / 3D Perspective) */}
+              {/* BLUEPRINT FLOOR PLAN MAP CANVAS (EXACT MATCH TO MOCKUP GRAPHIC) */}
               <div style={{
                 position: 'relative',
-                flex: '1 1 380px',
-                minHeight: '400px',
-                borderRadius: '16px',
-                backgroundColor: '#ffffff',
+                flex: '1 1 420px',
+                minHeight: '440px',
+                borderRadius: '24px',
+                backgroundColor: '#eaeef4',
                 border: '1px solid #cbd5e1',
                 overflow: 'hidden',
                 display: 'flex',
@@ -594,67 +634,89 @@ export default function FactoryDashboardInteractive() {
 
                 {/* 2D / 3D Floor Canvas Render */}
                 <div style={{
-                  width: '94%',
-                  height: '92%',
+                  width: '98%',
+                  height: '96%',
                   position: 'relative',
                   transform: `scale(${zoomed}) ${viewMode === '3D' ? 'rotateX(42deg) rotateZ(-12deg) scale(0.92)' : ''}`,
                   transition: 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)',
                   transformOrigin: 'center center',
                 }}>
                   
-                  {/* SVG Blueprint Track Lines */}
-                  <svg width="100%" height="100%" viewBox="0 0 800 450" style={{ position: 'absolute', inset: 0, overflow: 'visible' }}>
+                  {/* SVG Blueprint exact replica of user image */}
+                  <svg width="100%" height="100%" viewBox="0 0 1000 600" style={{ position: 'absolute', inset: 0, overflow: 'visible' }}>
                     
-                    {/* Grid Guidelines matching user reference image */}
-                    {/* Horizontal Guidelines */}
-                    <line x1="40" y1="125" x2="760" y2="125" stroke="#94a3b8" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
-                    <line x1="40" y1="215" x2="760" y2="215" stroke="#94a3b8" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
-                    <line x1="40" y1="305" x2="760" y2="305" stroke="#94a3b8" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
+                    {/* Outer Cutout Shell with Semicircular Notches */}
+                    <path
+                      d="M 40 30 H 480 A 16 16 0 0 0 520 30 H 960 A 30 30 0 0 1 990 60 V 270 A 16 16 0 0 0 990 310 V 540 A 30 30 0 0 1 960 570 H 520 A 16 16 0 0 0 480 570 H 40 A 30 30 0 0 1 10 540 V 310 A 16 16 0 0 0 10 270 V 60 A 30 30 0 0 1 40 30 Z"
+                      fill="#e6ebf2"
+                      stroke="#cbd5e1"
+                      strokeWidth="2"
+                    />
 
-                    {/* Vertical Guidelines */}
-                    <line x1="140" y1="30" x2="140" y2="400" stroke="#94a3b8" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
-                    <line x1="445" y1="30" x2="445" y2="400" stroke="#94a3b8" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
-                    <line x1="680" y1="30" x2="680" y2="400" stroke="#94a3b8" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
-
-                    {/* 8 Soft Light Blue Rack Pods matching reference image */}
-                    {[
-                      { id: 1, x: 170, y: 55 },
-                      { id: 2, x: 275, y: 55 },
-                      { id: 3, x: 380, y: 55 },
-                      { id: 4, x: 485, y: 55 },
-                      { id: 5, x: 170, y: 245 },
-                      { id: 6, x: 275, y: 245 },
-                      { id: 7, x: 380, y: 245 },
-                      { id: 8, x: 485, y: 245 },
-                    ].map((rack) => (
-                      <g key={rack.id}>
-                        <rect
-                          x={rack.x}
-                          y={rack.y}
-                          width="85"
-                          height="135"
-                          rx="14"
-                          fill="#f0f4f8"
-                          stroke="#cbd5e1"
-                          strokeWidth="1.5"
-                        />
-                        {/* Rack shelves texture lines */}
-                        {Array.from({ length: 6 }).map((_, rIdx) => (
-                          <line
-                            key={rIdx}
-                            x1={rack.x + 10}
-                            y1={rack.y + 18 + rIdx * 18}
-                            x2={rack.x + 75}
-                            y2={rack.y + 18 + rIdx * 18}
-                            stroke="#cbd5e1"
-                            strokeWidth="1"
-                            strokeDasharray="3 3"
-                          />
-                        ))}
+                    {/* 8 Storage Pod Blocks (4 Top Row, 4 Bottom Row) with 6x10 Array of Dark Cells */}
+                    {/* Top Row Pods */}
+                    {[70, 190, 310, 430].map((px, i) => (
+                      <g key={`top-pod-${i}`}>
+                        <rect x={px - 8} y="62" width="94" height="144" rx="10" fill="#cbd5e1" opacity="0.5" />
+                        {renderPodGrid(px, 70)}
+                        {/* Station Tool Callout between pods */}
+                        {i < 3 && (
+                          <g transform={`translate(${px + 78}, 110)`}>
+                            <rect x="-10" y="-18" width="20" height="36" rx="6" fill="#94a3b8" />
+                            <text x="0" y="-4" fill="#ffffff" fontSize="9" textAnchor="middle">🦾</text>
+                            <text x="0" y="10" fill="#ffffff" fontSize="9" textAnchor="middle">🔧</text>
+                            <rect x="-12" y="-6" width="24" height="12" rx="3" fill="#ffffff" stroke="#000000" strokeWidth="1"/>
+                            <text x="0" y="3" fill="#000000" fontSize="8" fontWeight="bold" textAnchor="middle">🛍️</text>
+                          </g>
+                        )}
                       </g>
                     ))}
 
-                    {/* Active Mission Heavy Black Path following exact grid corridors */}
+                    {/* Bottom Row Pods */}
+                    {[70, 190, 310, 430].map((px, i) => (
+                      <g key={`bot-pod-${i}`}>
+                        <rect x={px - 8} y="322" width="94" height="144" rx="10" fill="#cbd5e1" opacity="0.5" />
+                        {renderPodGrid(px, 330)}
+                        {/* Station Tool Callout between pods */}
+                        {i < 3 && (
+                          <g transform={`translate(${px + 78}, 370)`}>
+                            <rect x="-10" y="-18" width="20" height="36" rx="6" fill="#94a3b8" />
+                            <text x="0" y="-4" fill="#ffffff" fontSize="9" textAnchor="middle">🦾</text>
+                            <text x="0" y="10" fill="#ffffff" fontSize="9" textAnchor="middle">🔧</text>
+                            <rect x="-12" y="-6" width="24" height="12" rx="3" fill="#ffffff" stroke="#000000" strokeWidth="1"/>
+                            <text x="0" y="3" fill="#000000" fontSize="8" fontWeight="bold" textAnchor="middle">🛍️</text>
+                          </g>
+                        )}
+                      </g>
+                    ))}
+
+                    {/* Far Right Component Tray Arrays (4 Blocks of 4x4) */}
+                    {renderTrayGrid(700, 70)}
+                    {renderTrayGrid(770, 70)}
+                    {renderTrayGrid(700, 340)}
+                    {renderTrayGrid(770, 340)}
+
+                    {/* Central Stadium Track Loops */}
+                    <rect x="130" y="250" width="370" height="60" rx="30" fill="none" stroke="#64748b" strokeWidth="1.5" strokeDasharray="3 3" />
+                    <rect x="130" y="250" width="370" height="60" rx="30" fill="none" stroke="#cbd5e1" strokeWidth="1" />
+                    <circle cx="210" cy="280" r="12" fill="none" stroke="#94a3b8" strokeWidth="1.5" />
+                    <circle cx="780" cy="280" r="12" fill="none" stroke="#94a3b8" strokeWidth="1.5" />
+
+                    {/* Interconnecting Bezier Track Lines */}
+                    <path
+                      d="M 60 280 H 130 M 500 280 H 680 L 930 130 M 490 80 H 520 L 520 280 M 680 280 H 930 M 190 200 C 190 250, 490 250, 490 280"
+                      fill="none"
+                      stroke="#475569"
+                      strokeWidth="1.5"
+                    />
+
+                    {/* Far Right 4-Lane Dispatch Curves */}
+                    <path d="M 930 360 C 880 360, 850 400, 850 480" fill="none" stroke="#475569" strokeWidth="1.2" />
+                    <path d="M 930 380 C 890 380, 850 420, 850 480" fill="none" stroke="#475569" strokeWidth="1.2" />
+                    <path d="M 930 400 C 900 400, 850 440, 850 480" fill="none" stroke="#475569" strokeWidth="1.2" />
+                    <path d="M 930 420 C 910 420, 850 460, 850 480" fill="none" stroke="#475569" strokeWidth="1.2" />
+
+                    {/* Active Route Curve Path (Selected Task) */}
                     <path
                       ref={activePathRef}
                       d={getTaskPathD()}
@@ -664,88 +726,94 @@ export default function FactoryDashboardInteractive() {
                       strokeDasharray="8 6"
                       strokeDashoffset={-agvOffset}
                       strokeLinecap="round"
-                      strokeLinejoin="round"
                     />
 
-                    {/* AGV Badges positioned on exact grid nodes matching reference image */}
-                    
-                    {/* AGV 94 (Pod 1 bottom) */}
-                    <g transform="translate(230, 175)">
-                      <rect x="-16" y="-9" width="32" height="18" rx="4" fill="#000000" />
-                      <text x="0" y="3.5" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">94</text>
-                      <circle cx="12" cy="-6" r="2" fill="#22c55e" />
-                    </g>
-
-                    {/* AGV 59 (Pod 3 right aisle) */}
-                    <g transform="translate(465, 160)">
-                      <rect x="-16" y="-9" width="32" height="18" rx="4" fill="#000000" />
-                      <text x="0" y="3.5" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">59</text>
-                      <circle cx="12" cy="-6" r="2" fill="#22c55e" />
-                    </g>
-
-                    {/* Dynamic Moving AGV 78 following active path */}
+                    {/* Dynamic Moving AGV along active path */}
                     <g transform={`translate(${movingAgvPos.x}, ${movingAgvPos.y})`}>
                       <rect x="-18" y="-10" width="36" height="20" rx="5" fill="#000000" stroke="#38bdf8" strokeWidth="1.5" />
                       <text x="0" y="4" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">78</text>
                       <circle cx="14" cy="-7" r="2.5" fill="#22c55e" />
                     </g>
 
-                    {/* AGV 178 (Pod 7 top) */}
-                    <g transform="translate(430, 235)">
-                      <rect x="-16" y="-9" width="32" height="18" rx="4" fill="#000000" />
-                      <text x="0" y="3.5" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">178</text>
-                      <circle cx="12" cy="-6" r="2" fill="#22c55e" />
+                    {/* AGV Callouts matching exact image */}
+                    {/* 94 */}
+                    <g transform="translate(190, 215)">
+                      <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
+                      <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">94</text>
                     </g>
 
-                    {/* AGV 283 (Pod 8 top) */}
-                    <g transform="translate(535, 235)">
-                      <rect x="-16" y="-9" width="32" height="18" rx="4" fill="#000000" />
-                      <text x="0" y="3.5" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">283</text>
-                      <circle cx="12" cy="-6" r="2" fill="#22c55e" />
+                    {/* 234 */}
+                    <g transform="translate(340, 205)">
+                      <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
+                      <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">234</text>
                     </g>
 
-                    {/* AGV 114 (Pod 7 bottom) */}
-                    <g transform="translate(385, 385)">
-                      <rect x="-16" y="-9" width="32" height="18" rx="4" fill="#000000" />
-                      <text x="0" y="3.5" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">114</text>
-                      <circle cx="12" cy="-6" r="2" fill="#22c55e" />
+                    {/* 59 */}
+                    <g transform="translate(490, 175)">
+                      <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
+                      <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">59</text>
                     </g>
 
-                    {/* AGV 96 & 234 paired at top dock */}
-                    <g transform="translate(535, 30)">
-                      {/* Charge icon */}
-                      <rect x="-34" y="-9" width="16" height="18" rx="4" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
-                      <text x="-26" y="4" fill="#000000" fontSize="10" fontWeight="bold" textAnchor="middle">⚡</text>
-
-                      {/* AGV 96 */}
-                      <rect x="-15" y="-9" width="30" height="18" rx="4" fill="#000000" />
-                      <text x="0" y="3.5" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">96</text>
-                      <circle cx="11" cy="-6" r="2" fill="#22c55e" />
-
-                      {/* AGV 234 */}
-                      <rect x="18" y="-9" width="32" height="18" rx="4" fill="#000000" />
-                      <text x="34" y="3.5" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">234</text>
-                      <circle cx="46" cy="-6" r="2" fill="#22c55e" />
+                    {/* 98 */}
+                    <g transform="translate(660, 220)">
+                      <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
+                      <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">98</text>
                     </g>
 
-                    {/* AGV 196 & 209 stacked at left portal */}
-                    <g transform="translate(140, 190)">
-                      <rect x="-16" y="-18" width="32" height="16" rx="4" fill="#000000" />
-                      <text x="0" y="-6" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">196</text>
-                      <rect x="-16" y="2" width="32" height="16" rx="4" fill="#000000" />
-                      <text x="0" y="14" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">209</text>
+                    {/* 178 */}
+                    <g transform="translate(410, 270)">
+                      <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
+                      <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">178</text>
                     </g>
 
-                    {/* Destination Hub Station (Right Corridor) */}
-                    <g transform="translate(680, 260)">
+                    {/* 283 */}
+                    <g transform="translate(560, 270)">
+                      <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
+                      <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">283</text>
+                    </g>
+
+                    {/* 114 */}
+                    <g transform="translate(340, 480)">
+                      <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
+                      <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">114</text>
+                    </g>
+
+                    {/* 198 & 209 at left portal */}
+                    <g transform="translate(45, 250)">
+                      <rect x="-12" y="-16" width="24" height="14" rx="3" fill="#000000" />
+                      <text x="0" y="-6" fill="#ffffff" fontSize="8" fontWeight="700" textAnchor="middle">198</text>
+                      <rect x="-12" y="2" width="24" height="14" rx="3" fill="#000000" />
+                      <text x="0" y="12" fill="#ffffff" fontSize="8" fontWeight="700" textAnchor="middle">209</text>
+                    </g>
+
+                    {/* 96 & 234 at top charging dock */}
+                    <g transform="translate(630, 40)">
+                      <rect x="-30" y="-10" width="18" height="20" rx="4" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
+                      <text x="-21" y="4" fill="#000000" fontSize="11" fontWeight="bold" textAnchor="middle">⚡</text>
+                      <rect x="-8" y="-9" width="24" height="18" rx="4" fill="#000000" />
+                      <text x="4" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">96</text>
+                      <rect x="20" y="-9" width="26" height="18" rx="4" fill="#000000" />
+                      <text x="33" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">234</text>
+                    </g>
+
+                    {/* Charging Station Badge ⚡ (Left) */}
+                    <g transform="translate(75, 280)">
                       <rect x="-12" y="-12" width="24" height="24" rx="6" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
-                      <text x="0" y="4" fill="#000000" fontSize="11" fontWeight="bold" textAnchor="middle">📦</text>
+                      <text x="0" y="4" fill="#000000" fontSize="12" fontWeight="bold" textAnchor="middle">⚡</text>
                     </g>
 
-                    {/* Aisle Node Badge (V) */}
-                    <g transform="translate(445, 90)">
-                      <rect x="-8" y="-8" width="16" height="16" rx="3" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1"/>
-                      <text x="0" y="3" fill="#475569" fontSize="9" fontWeight="bold" textAnchor="middle">V</text>
+                    {/* Charging Station Badge ⚡ (Far Right) */}
+                    <g transform="translate(945, 380)">
+                      <rect x="-12" y="-12" width="24" height="24" rx="6" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
+                      <text x="0" y="4" fill="#000000" fontSize="12" fontWeight="bold" textAnchor="middle">⚡</text>
+                    </g>
+
+                    {/* Alert Warning Bag Badge 🛍️ ! (Right Center) */}
+                    <g transform="translate(660, 130)">
+                      <rect x="-12" y="-12" width="24" height="24" rx="6" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
+                      <text x="0" y="4" fill="#000000" fontSize="11" fontWeight="bold" textAnchor="middle">🛍️</text>
+                      <circle cx="10" cy="-10" r="5" fill="#000000" />
+                      <text x="10" y="-7" fill="#ffffff" fontSize="8" fontWeight="bold" textAnchor="middle">!</text>
                     </g>
 
                   </svg>
