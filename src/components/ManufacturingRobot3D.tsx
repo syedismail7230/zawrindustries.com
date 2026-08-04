@@ -18,10 +18,10 @@ export default function ManufacturingRobot3D() {
     // 1. Scene Setup (Clean White Studio Environment)
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup (Positioned for an elegant, perfectly proportioned 3D robot arm)
+    // 2. Camera Setup (Positioned for a doubled-size 3D robot arm)
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-    camera.position.set(0, 0.2, 5.5);
-    camera.lookAt(0, 0, 0);
+    camera.position.set(0, 0.3, 4.8);
+    camera.lookAt(0, 0.1, 0);
 
     // 3. Renderer Setup with PMREM Environment Generator
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -51,14 +51,14 @@ export default function ManufacturingRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Sleek proportional scale factor)
+    // 6. Load GLB Model (Doubled scale factor 2.4)
     const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, -0.35, 0);
+    modelGroup.position.set(0, -0.2, 0);
     scene.add(modelGroup);
 
     const loader = new GLTFLoader();
     loader.load(
-      '/assets/robotic+arm+3d+model.glb?v=11',
+      '/assets/robotic+arm+3d+model.glb?v=12',
       (gltf) => {
         const loadedModel = gltf.scene;
 
@@ -70,7 +70,7 @@ export default function ManufacturingRobot3D() {
         loadedModel.position.sub(center);
 
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 1.2 / maxDim; // Elegant proportional scale factor
+        const scale = 2.4 / maxDim; // Doubled scale factor (2x of previous 1.2 scale)
         loadedModel.scale.set(scale, scale, scale);
 
         // Preserve intact materials & prevent pitch black silhouetting
@@ -132,8 +132,8 @@ export default function ManufacturingRobot3D() {
 
       mouse.lerp(targetMouse, 0.25);
 
-      // Model base is fixed stationary at y = -0.35
-      modelGroup.position.set(0, -0.35, 0);
+      // Model base is fixed stationary at y = -0.2
+      modelGroup.position.set(0, -0.2, 0);
       modelGroup.rotation.y = mouse.x * 0.45;
       modelGroup.rotation.x = 0;
       modelGroup.rotation.z = 0;
