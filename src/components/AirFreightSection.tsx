@@ -22,13 +22,13 @@ export function AirFreightSection() {
         .air-freight-grid {
           width: 100%;
           display: grid;
-          grid-template-columns: 0.95fr 1.35fr;
+          grid-template-columns: 0.8fr 1.6fr;
           gap: 2rem;
           align-items: center;
         }
 
         .air-freight-left-content {
-          max-width: 600px;
+          max-width: 580px;
           padding-left: clamp(2rem, 6vw, 8rem);
           padding-right: 1rem;
           box-sizing: border-box;
@@ -39,7 +39,7 @@ export function AirFreightSection() {
         .air-freight-right-img-wrapper {
           position: relative;
           width: 100%;
-          height: clamp(520px, 70vh, 750px);
+          height: clamp(580px, 78vh, 850px);
           overflow: visible;
           display: flex;
           align-items: center;
@@ -48,13 +48,13 @@ export function AirFreightSection() {
         }
 
         .air-freight-right-img-wrapper img {
-          width: 195%;
+          width: 240%;
           max-width: none;
           height: auto;
-          max-height: clamp(520px, 70vh, 750px);
+          max-height: clamp(580px, 78vh, 850px);
           object-fit: contain;
           object-position: right center;
-          margin-right: -32%;
+          margin-right: -42%;
           display: block;
           mix-blend-mode: multiply;
           filter: contrast(1.06) brightness(1.01);
@@ -72,18 +72,18 @@ export function AirFreightSection() {
             padding-right: 1.5rem;
           }
           .air-freight-right-img-wrapper {
-            height: 380px;
+            height: 420px;
             justify-content: flex-end;
             align-items: center;
           }
           .air-freight-right-img-wrapper img {
-            width: 180%;
+            width: 220%;
             height: auto;
-            max-height: 380px;
+            max-height: 420px;
             max-width: none;
             object-fit: contain;
             object-position: right center;
-            margin-right: -25%;
+            margin-right: -30%;
           }
         }
       ` }} />
