@@ -157,7 +157,7 @@ export default function ManufacturingPage() {
         </div>
 
         {/* Action CTAs */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.2rem', marginTop: '2.5rem', zIndex: 20 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.2rem', marginTop: '3.5rem', zIndex: 20 }}>
           <Link 
             href="/contact"
             style={{

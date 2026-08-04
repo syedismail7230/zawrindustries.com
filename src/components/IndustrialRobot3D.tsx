@@ -18,17 +18,17 @@ export default function IndustrialRobot3D() {
     // 1. Scene Setup (Clean White Studio Environment)
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup (Fixed Angle facing Upward Arm)
+    // 2. Camera Setup (Positioned directly facing the center robot arm)
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-    camera.position.set(0, 1.6, 5.0);
-    camera.lookAt(0, 0.3, 0);
+    camera.position.set(0, 0.8, 4.2);
+    camera.lookAt(0, 0.4, 0);
 
     // 3. Renderer Setup with PMREM Environment Generator
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 1.25;
     container.appendChild(renderer.domElement);
 
     // 4. Generate Studio Environment Map for Realistic Metallic Reflections
@@ -36,7 +36,7 @@ export default function IndustrialRobot3D() {
     scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
     // 5. Studio Direct Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.6);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
     scene.add(ambientLight);
 
     const keyLight = new THREE.DirectionalLight(0xffffff, 3.5);
@@ -51,9 +51,9 @@ export default function IndustrialRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Fixed Base Position)
+    // 6. Load GLB Model (Centered in the hero between metric badges)
     const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, -1.0, 0); // Fixed in one exact spot
+    modelGroup.position.set(0, -0.15, 0); // Elevated to sit perfectly in center stage
     scene.add(modelGroup);
 
     let mixer: THREE.AnimationMixer | null = null;
@@ -76,7 +76,7 @@ export default function IndustrialRobot3D() {
         loadedModel.position.sub(center);
 
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 4.2 / maxDim;
+        const scale = 3.8 / maxDim;
         loadedModel.scale.set(scale, scale, scale);
 
         // Enhance materials to prevent silhouetting
@@ -149,7 +149,7 @@ export default function IndustrialRobot3D() {
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // 8. Render Loop (Fixed 3D Base Location with Subtle Yaw Response & Claw Articulation)
+    // 8. Render Loop (Model fixed in center stage with gentle rotation & claw articulation)
     const clock = new THREE.Clock();
     let animId: number;
 
@@ -164,8 +164,8 @@ export default function IndustrialRobot3D() {
 
       mouse.lerp(targetMouse, 0.08);
 
-      // Model is FIXED in place (position remains fixed at 0, -1.0, 0)
-      modelGroup.position.set(0, -1.0, 0);
+      // Model is FIXED in center stage at y = -0.15
+      modelGroup.position.set(0, -0.15, 0);
 
       // Subtle yaw rotation & pitch tilt in place
       modelGroup.rotation.y = mouse.x * 0.35 + Math.sin(elapsedTime * 0.4) * 0.08;
