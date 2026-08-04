@@ -51,8 +51,7 @@ export default function ManufacturingRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model — slightly smaller scale on mobile to fit narrow viewport
-    const isMobile = width < 769;
+    // 6. Load GLB Model — same Y offset on all screen sizes (desktop look preserved on mobile)
     const modelYOffset = -1.45;
     const modelGroup = new THREE.Group();
     modelGroup.position.set(0, modelYOffset, 0);
@@ -70,7 +69,7 @@ export default function ManufacturingRobot3D() {
         const totalBox = new THREE.Box3().setFromObject(loadedModel);
         const totalSize = totalBox.getSize(new THREE.Vector3());
         const maxDim = Math.max(totalSize.x, totalSize.y, totalSize.z);
-        const scale = (isMobile ? 2.2 : 3.2) / maxDim; // Smaller on mobile
+        const scale = 3.2 / maxDim;
         loadedModel.scale.set(scale, scale, scale);
 
         // Find base cylinder meshes (bottom 20% height of model)
