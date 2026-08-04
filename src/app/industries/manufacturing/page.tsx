@@ -4,6 +4,9 @@ import ManufacturingHeroClient from '@/components/ManufacturingHeroClient';
 import { Capabilities3DGrid } from '@/components/Capabilities3DGrid';
 import FactoryDashboardInteractive from '@/components/FactoryDashboardInteractive';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export const metadata: Metadata = {
   title: "AI Powered Precision Manufacturing — Zawr Industries",
   description: "Zawr Industries delivers AI-powered precision manufacturing, 3D robotics, contract production, and advanced engineering solutions under Make in India.",
