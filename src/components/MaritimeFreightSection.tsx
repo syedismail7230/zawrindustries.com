@@ -36,16 +36,19 @@ export function MaritimeFreightSection() {
           display: flex;
           align-items: center;
           justify-content: flex-start;
+          background-color: #ffffff;
         }
 
-        .maritime-left-img-wrapper img {
+        .maritime-ship-video {
           width: 125%;
           max-width: none;
-          height: auto;
-          object-fit: contain;
+          height: 100%;
+          object-fit: cover;
           object-position: left center;
           margin-left: -15%;
           display: block;
+          transform: translateZ(0);
+          backface-visibility: hidden;
         }
 
         .maritime-right-content {
@@ -63,7 +66,7 @@ export function MaritimeFreightSection() {
           .maritime-left-img-wrapper {
             height: 320px;
           }
-          .maritime-left-img-wrapper img {
+          .maritime-ship-video {
             width: 135%;
             margin-left: -10%;
           }
@@ -75,12 +78,24 @@ export function MaritimeFreightSection() {
       ` }} />
 
       <div className="maritime-grid">
-        {/* Left Column: Ship GIF starting 100% flush from complete left edge */}
+        {/* Left Column: Ultra-smooth HTML5 Video (Converted from Ship.gif for 0 blinking) */}
         <div className="maritime-left-img-wrapper">
-          <img
-            src="/assets/Ship.gif"
-            alt="Zawr Industries Maritime Container Ship Telemetry"
-          />
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            aria-label="Zawr Industries Maritime Container Ship Telemetry"
+            className="maritime-ship-video"
+          >
+            <source src="/assets/Ship.mp4" type="video/mp4" />
+            <img
+              src="/assets/Ship.gif"
+              alt="Zawr Industries Maritime Container Ship Telemetry"
+              className="maritime-ship-video"
+            />
+          </video>
         </div>
 
         {/* Right Column: Maritime Details Content */}
