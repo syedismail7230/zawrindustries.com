@@ -18,9 +18,13 @@ export default function ManufacturingRobot3D() {
     // 1. Scene Setup (Clean White Studio Environment)
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup (Targeting the center of the base cylinder)
-    const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-    camera.position.set(0, 0.35, 4.2);
+    // 2. Camera Setup — wider FOV on mobile so model fills the smaller canvas
+    const isMobile = width < 769;
+    const fov = isMobile ? 50 : 36;
+    const camZ = isMobile ? 4.0 : 4.2;
+    const camY = isMobile ? 0.2 : 0.35;
+    const camera = new THREE.PerspectiveCamera(fov, width / height, 0.1, 1000);
+    camera.position.set(0, camY, camZ);
     camera.lookAt(0, 0.2, 0);
 
     // 3. Renderer Setup with PMREM Environment Generator
@@ -51,9 +55,10 @@ export default function ManufacturingRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Lowered Y-position = -1.45)
+    // 6. Load GLB Model — adjust Y for mobile (less overlap needed)
+    const modelYOffset = isMobile ? -0.65 : -1.45;
     const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, -1.45, 0);
+    modelGroup.position.set(0, modelYOffset, 0);
     scene.add(modelGroup);
 
     const loader = new GLTFLoader();
@@ -159,8 +164,8 @@ export default function ManufacturingRobot3D() {
 
       mouse.lerp(targetMouse, 0.25);
 
-      // Base cylinder is centered at (0, -1.45, 0)
-      modelGroup.position.set(0, -1.45, 0);
+      // Base cylinder is centered at modelYOffset
+      modelGroup.position.set(0, modelYOffset, 0);
       modelGroup.rotation.y = mouse.x * 0.45;
       modelGroup.rotation.x = 0;
       modelGroup.rotation.z = 0;
