@@ -538,11 +538,23 @@ export default function ManufacturingPage() {
           <div style={{
             position: 'relative',
             width: '100%',
-            aspectRatio: '16 / 9',
-            maxHeight: '560px',
+            aspectRatio: '21 / 9',
+            maxHeight: '520px',
             overflow: 'hidden',
             backgroundColor: '#ffffff',
           }}>
+            {/* Soft White Edge Fade Overlay */}
+            <div style={{
+              position: 'absolute',
+              inset: 0,
+              zIndex: 2,
+              pointerEvents: 'none',
+              background: `
+                linear-gradient(to right, #ffffff 0%, rgba(255,255,255,0) 15%, rgba(255,255,255,0) 85%, #ffffff 100%),
+                linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0) 10%, rgba(255,255,255,0) 90%, #ffffff 100%)
+              `,
+            }} />
+
             <video
               autoPlay
               loop
@@ -554,6 +566,7 @@ export default function ManufacturingPage() {
                 height: '100%',
                 objectFit: 'cover',
                 objectPosition: 'center',
+                transform: 'scale(1.35)',
                 display: 'block',
                 backgroundColor: '#ffffff',
               }}
