@@ -47,8 +47,12 @@ export function MaritimeFreightSection() {
           object-position: left center;
           margin-left: -15%;
           display: block;
+          mix-blend-mode: multiply;
+          filter: contrast(1.08) brightness(1.02);
           transform: translateZ(0);
           backface-visibility: hidden;
+          mask-image: linear-gradient(to right, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%);
+          -webkit-mask-image: linear-gradient(to right, rgba(0,0,0,1) 75%, rgba(0,0,0,0) 100%);
         }
 
         .maritime-right-content {
@@ -78,7 +82,7 @@ export function MaritimeFreightSection() {
       ` }} />
 
       <div className="maritime-grid">
-        {/* Left Column: Ultra-smooth HTML5 Video (Converted from Ship.gif for 0 blinking) */}
+        {/* Left Column: Seamlessly Blended Video with Multiply Blend Mode */}
         <div className="maritime-left-img-wrapper">
           <video
             autoPlay
