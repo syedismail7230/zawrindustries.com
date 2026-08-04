@@ -51,14 +51,14 @@ export default function ManufacturingRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Lowered Y-position)
+    // 6. Load GLB Model (Lowered Y-position = -0.85)
     const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, -0.55, 0); // Brought lower down
+    modelGroup.position.set(0, -0.85, 0); // Lowered further down
     scene.add(modelGroup);
 
     const loader = new GLTFLoader();
     loader.load(
-      '/assets/robotic+arm+3d+model.glb?v=14',
+      '/assets/robotic+arm+3d+model.glb?v=15',
       (gltf) => {
         const loadedModel = gltf.scene;
 
@@ -125,7 +125,7 @@ export default function ManufacturingRobot3D() {
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // 8. Render Loop (Stationary Base lowered at y = -0.55, ONLY horizontal Y-axis rotation)
+    // 8. Render Loop (Stationary Base lowered at y = -0.85, ONLY horizontal Y-axis rotation)
     let animId: number;
 
     const animate = () => {
@@ -133,8 +133,8 @@ export default function ManufacturingRobot3D() {
 
       mouse.lerp(targetMouse, 0.25);
 
-      // Model base is fixed stationary at y = -0.55
-      modelGroup.position.set(0, -0.55, 0);
+      // Model base is fixed stationary at y = -0.85
+      modelGroup.position.set(0, -0.85, 0);
       modelGroup.rotation.y = mouse.x * 0.45;
       modelGroup.rotation.x = 0;
       modelGroup.rotation.z = 0;
