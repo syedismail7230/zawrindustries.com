@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 
 interface Capability {
   title: string;
@@ -9,149 +9,129 @@ interface Capability {
   metricLabel: string;
 }
 
-interface CapabilityCardProps {
-  cap: Capability;
-}
-
-function Capability3DTiltCard({ cap }: CapabilityCardProps) {
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [transformStyle, setTransformStyle] = useState<string>('perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)');
-  const [glowStyle, setGlowStyle] = useState<{ x: number; y: number; opacity: number }>({ x: 50, y: 50, opacity: 0 });
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!cardRef.current) return;
-    const rect = cardRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    
-    // Rotate max 12 degrees
-    const rotateY = ((x - centerX) / centerX) * 10;
-    const rotateX = -((y - centerY) / centerY) * 10;
-
-    const glowX = (x / rect.width) * 100;
-    const glowY = (y / rect.height) * 100;
-
-    setTransformStyle(`perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.03, 1.03, 1.03)`);
-    setGlowStyle({ x: glowX, y: glowY, opacity: 1 });
-  };
-
-  const handleMouseLeave = () => {
-    setTransformStyle('perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)');
-    setGlowStyle({ x: 50, y: 50, opacity: 0 });
-  };
-
-  return (
-    <div
-      ref={cardRef}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        transform: transformStyle,
-        transition: 'transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease',
-        transformStyle: 'preserve-3d',
-        background: '#f8f9fa',
-        border: '1px solid rgba(0, 0, 0, 0.08)',
-        borderRadius: '20px',
-        padding: '2.2rem 1.6rem',
-        position: 'relative',
-        cursor: 'pointer',
-        boxShadow: glowStyle.opacity > 0 ? '0 20px 40px rgba(0, 0, 0, 0.1)' : '0 4px 12px rgba(0, 0, 0, 0.03)',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        height: '100%',
-        boxSizing: 'border-box',
-        overflow: 'hidden',
-      }}
-    >
-      {/* 3D Glow reflection overlay following mouse */}
-      <div
-        style={{
-          position: 'absolute',
-          inset: 0,
-          pointerEvents: 'none',
-          borderRadius: '20px',
-          background: `radial-gradient(circle at ${glowStyle.x}% ${glowStyle.y}%, rgba(0, 0, 0, 0.05), transparent 70%)`,
-          opacity: glowStyle.opacity,
-          transition: 'opacity 0.2s ease',
-        }}
-      />
-
-      <div style={{ transform: 'translateZ(20px)', transition: 'transform 0.2s ease' }}>
-        <div style={{
-          fontSize: 'clamp(1.8rem, 2.5vw, 2.3rem)',
-          fontWeight: 400,
-          color: '#000000',
-          letterSpacing: '-0.03em',
-          marginBottom: '0.2rem'
-        }}>
-          {cap.metric}
-        </div>
-        <div style={{
-          fontSize: '0.68rem',
-          textTransform: 'uppercase',
-          letterSpacing: '0.12em',
-          color: 'rgba(0, 0, 0, 0.45)',
-          marginBottom: '1.8rem'
-        }}>
-          {cap.metricLabel}
-        </div>
-        <h3 style={{
-          fontSize: '1.15rem',
-          fontWeight: 500,
-          color: '#000000',
-          marginBottom: '0.75rem',
-          letterSpacing: '-0.01em',
-          lineHeight: 1.3,
-        }}>
-          {cap.title}
-        </h3>
-        <p style={{
-          fontSize: '0.88rem',
-          lineHeight: 1.65,
-          color: 'rgba(0, 0, 0, 0.65)',
-          fontWeight: 300,
-          margin: 0
-        }}>
-          {cap.description}
-        </p>
-      </div>
-    </div>
-  );
-}
-
 export function Capabilities3DGrid({ capabilities }: { capabilities: Capability[] }) {
+  const [hovered, setHovered] = useState<number | null>(null);
+
   return (
-    <div style={{ width: '100%', marginBottom: '5rem' }}>
+    <div style={{ width: '100%', marginBottom: '2rem' }}>
       <style dangerouslySetInnerHTML={{ __html: `
-        .capabilities-4-col-grid {
+        .bento-grid {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 1.5rem;
-          width: 100%;
+          grid-template-columns: 1fr 1fr;
+          grid-template-rows: auto auto;
+          gap: 1px;
+          background: #e2e8f0;
+          border: 1px solid #e2e8f0;
+          border-radius: 16px;
+          overflow: hidden;
         }
 
-        @media (max-width: 1080px) {
-          .capabilities-4-col-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1.5rem;
-          }
+        .bento-cell {
+          background: #ffffff;
+          padding: 3rem 2.8rem;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          min-height: 280px;
+          position: relative;
+          overflow: hidden;
+          transition: background 0.25s ease;
         }
 
-        @media (max-width: 600px) {
-          .capabilities-4-col-grid {
+        .bento-cell:hover {
+          background: #f8fafc;
+        }
+
+        .bento-metric-bg {
+          position: absolute;
+          bottom: -0.5rem;
+          right: 1rem;
+          font-size: clamp(5rem, 10vw, 9rem);
+          font-weight: 800;
+          color: rgba(0,0,0,0.04);
+          letter-spacing: -0.06em;
+          line-height: 1;
+          pointer-events: none;
+          user-select: none;
+          transition: color 0.25s ease;
+          white-space: nowrap;
+        }
+
+        .bento-cell:hover .bento-metric-bg {
+          color: rgba(0,0,0,0.07);
+        }
+
+        .bento-label {
+          font-size: 0.7rem;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          color: #94a3b8;
+          margin-bottom: 0.6rem;
+        }
+
+        .bento-metric-display {
+          font-size: clamp(2.2rem, 4vw, 3.2rem);
+          font-weight: 400;
+          color: #000000;
+          letter-spacing: -0.04em;
+          line-height: 1;
+          margin-bottom: 2rem;
+        }
+
+        .bento-title {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #000000;
+          margin-bottom: 0.5rem;
+          letter-spacing: -0.01em;
+        }
+
+        .bento-desc {
+          font-size: 0.875rem;
+          color: #64748b;
+          line-height: 1.7;
+          font-weight: 300;
+          max-width: 340px;
+        }
+
+        @media (max-width: 768px) {
+          .bento-grid {
             grid-template-columns: 1fr;
-            gap: 1.25rem;
+            border-radius: 12px;
+          }
+          .bento-cell {
+            min-height: 220px;
+            padding: 2rem 1.8rem;
+          }
+          .bento-metric-bg {
+            font-size: clamp(4rem, 18vw, 7rem);
           }
         }
-      ` }} />
+      `}} />
 
-      <div className="capabilities-4-col-grid">
+      <div className="bento-grid">
         {capabilities.map((cap, idx) => (
-          <Capability3DTiltCard key={idx} cap={cap} />
+          <div
+            key={idx}
+            className="bento-cell"
+            onMouseEnter={() => setHovered(idx)}
+            onMouseLeave={() => setHovered(null)}
+          >
+            {/* Ghost watermark metric */}
+            <span className="bento-metric-bg" aria-hidden="true">{cap.metric}</span>
+
+            {/* Top: label + metric */}
+            <div>
+              <div className="bento-label">{cap.metricLabel}</div>
+              <div className="bento-metric-display">{cap.metric}</div>
+            </div>
+
+            {/* Bottom: title + description */}
+            <div>
+              <div className="bento-title">{cap.title}</div>
+              <div className="bento-desc">{cap.description}</div>
+            </div>
+          </div>
         ))}
       </div>
     </div>
