@@ -186,41 +186,41 @@ export default function ManufacturingPage() {
           transition: all 0.3s ease;
         }
 
-        /* ─── Mobile ≤ 768px ─── */
+        /* ─── Mobile ≤ 768px — same layout as desktop, just scaled ─── */
         @media (max-width: 768px) {
           .mfg-hero {
-            padding: 4rem 5% 2.5rem;
-            min-height: auto;
+            padding: 5rem 1% 3rem;
           }
 
+          /* Scale headline down so it stays on one line without overflow */
           .mfg-headline h1 {
-            font-size: clamp(1.8rem, 8vw, 2.8rem);
-            white-space: normal;
+            font-size: clamp(1rem, 5.2vw, 5.2rem);
+            white-space: nowrap;
           }
 
+          /* Same 600px stage & negative overlap as desktop */
           .mfg-robot-stage {
-            height: 340px;
-            margin: -4rem auto 0;
+            height: 600px;
+            margin: -10rem auto 0;
           }
 
-          /* Hide flanking badges on mobile — not enough horizontal space */
-          .mfg-badge {
-            display: none;
-          }
+          /* Badges visible — hug the very edge on narrow screens */
+          .mfg-badge--tl { top: 25%; left: -1%; }
+          .mfg-badge--bl { bottom: 12%; left: -1%; }
+          .mfg-badge--tr { top: 25%; right: -1%; }
+          .mfg-badge--br { bottom: 12%; right: -1%; }
 
+          /* CTAs stay in a row, slightly smaller */
           .mfg-ctas {
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            gap: 0.8rem;
+            flex-direction: row;
+            justify-content: center;
+            gap: 0.7rem;
           }
 
           .mfg-cta-primary,
           .mfg-cta-secondary {
-            width: 100%;
-            max-width: 300px;
-            text-align: center;
-            padding: 0.9rem 1.6rem;
+            padding: 0.8rem 1.1rem;
+            font-size: 0.82rem;
           }
         }
 
