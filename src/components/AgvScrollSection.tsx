@@ -24,8 +24,8 @@ export function AgvScrollSection() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Map scrollProgress (0 to 1) to horizontal position percentage (-20% to 115%)
-  const agvLeftPercent = -20 + scrollProgress * 135;
+  // Map scrollProgress (0 to 1) to horizontal position percentage (-25% to 115%)
+  const agvLeftPercent = -25 + scrollProgress * 140;
   // Calculate text reveal percentage (0% to 100%)
   const revealPercent = Math.min(100, Math.max(0, (scrollProgress - 0.1) * 125));
 
@@ -35,7 +35,7 @@ export function AgvScrollSection() {
       style={{
         width: '100%',
         backgroundColor: '#ffffff',
-        padding: '5rem 0 6rem 0',
+        padding: 'clamp(2.5rem, 6vw, 5rem) 0',
         overflow: 'hidden',
         position: 'relative',
         display: 'flex',
@@ -45,15 +45,54 @@ export function AgvScrollSection() {
         fontFamily: 'Inter, sans-serif',
       }}
     >
+      <style dangerouslySetInnerHTML={{ __html: `
+        .agv-track-container {
+          position: relative;
+          width: 100%;
+          height: clamp(160px, 24vh, 240px);
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+        }
+
+        .agv-banner-text {
+          position: absolute;
+          width: 100%;
+          text-align: center;
+          font-size: clamp(0.85rem, 3.2vw, 2.3rem);
+          font-weight: 800;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          white-space: nowrap;
+          user-select: none;
+          padding: 0 0.5rem;
+          box-sizing: border-box;
+        }
+
+        .agv-vehicle-img {
+          width: clamp(180px, 30vw, 460px);
+        }
+
+        @media (max-width: 600px) {
+          .agv-banner-text {
+            font-size: clamp(0.75rem, 3vw, 1.1rem);
+            letter-spacing: 0.02em;
+          }
+          .agv-vehicle-img {
+            width: clamp(160px, 45vw, 280px);
+          }
+        }
+      ` }} />
+
       {/* Top Description Text matching reference screenshot */}
       <div style={{
         maxWidth: '750px',
         textAlign: 'center',
         padding: '0 1.5rem',
-        marginBottom: '4.5rem',
+        marginBottom: 'clamp(2rem, 5vw, 4.5rem)',
       }}>
         <p style={{
-          fontSize: 'clamp(1.1rem, 2vw, 1.45rem)',
+          fontSize: 'clamp(1rem, 1.8vw, 1.45rem)',
           fontWeight: 400,
           color: '#111111',
           lineHeight: 1.5,
@@ -65,52 +104,29 @@ export function AgvScrollSection() {
       </div>
 
       {/* Track & AGV Animation Container */}
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        height: '240px',
-        display: 'flex',
-        alignItems: 'center',
-        overflow: 'hidden',
-      }}>
+      <div className="agv-track-container">
         {/* Faint Background Placeholder Track Text */}
-        <div style={{
-          position: 'absolute',
-          width: '100%',
-          textAlign: 'center',
-          fontSize: 'clamp(1.2rem, 2.8vw, 2.3rem)',
-          fontWeight: 800,
-          letterSpacing: '0.04em',
-          textTransform: 'uppercase',
-          color: 'rgba(0, 0, 0, 0.06)',
-          whiteSpace: 'nowrap',
-          userSelect: 'none',
-          zIndex: 1,
-          padding: '0 1rem',
-          boxSizing: 'border-box',
-        }}>
+        <div
+          className="agv-banner-text"
+          style={{
+            color: 'rgba(0, 0, 0, 0.06)',
+            zIndex: 1,
+          }}
+        >
           AUTOMATED AGV &amp; WAREHOUSE ROUTING WITH &lt;12MS LATENCY
         </div>
 
         {/* Revealed High-Contrast Text (Unmasked as AGV moves) */}
-        <div style={{
-          position: 'absolute',
-          width: '100%',
-          textAlign: 'center',
-          fontSize: 'clamp(1.2rem, 2.8vw, 2.3rem)',
-          fontWeight: 800,
-          letterSpacing: '0.04em',
-          textTransform: 'uppercase',
-          color: '#000000',
-          whiteSpace: 'nowrap',
-          userSelect: 'none',
-          zIndex: 2,
-          padding: '0 1rem',
-          boxSizing: 'border-box',
-          clipPath: `polygon(0 0, ${revealPercent}% 0, ${revealPercent}% 100%, 0 100%)`,
-          WebkitClipPath: `polygon(0 0, ${revealPercent}% 0, ${revealPercent}% 100%, 0 100%)`,
-          transition: 'clip-path 0.05s ease-out, -webkit-clip-path 0.05s ease-out',
-        }}>
+        <div
+          className="agv-banner-text"
+          style={{
+            color: '#000000',
+            zIndex: 2,
+            clipPath: `polygon(0 0, ${revealPercent}% 0, ${revealPercent}% 100%, 0 100%)`,
+            WebkitClipPath: `polygon(0 0, ${revealPercent}% 0, ${revealPercent}% 100%, 0 100%)`,
+            transition: 'clip-path 0.05s ease-out, -webkit-clip-path 0.05s ease-out',
+          }}
+        >
           AUTOMATED AGV &amp; WAREHOUSE ROUTING WITH &lt;12MS LATENCY
         </div>
 
@@ -121,7 +137,6 @@ export function AgvScrollSection() {
             left: `${agvLeftPercent}%`,
             top: '50%',
             transform: 'translateY(-50%)',
-            width: 'clamp(260px, 32vw, 460px)',
             zIndex: 10,
             willChange: 'left',
             pointerEvents: 'none',
@@ -130,8 +145,8 @@ export function AgvScrollSection() {
           <img
             src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit,dpr_auto/v1785803597/zawr/assets/AGV.png"
             alt="ZAWR Automated Guided Vehicle AGV Robot"
+            className="agv-vehicle-img"
             style={{
-              width: '100%',
               height: 'auto',
               display: 'block',
               filter: 'drop-shadow(0 15px 25px rgba(0, 0, 0, 0.25))',

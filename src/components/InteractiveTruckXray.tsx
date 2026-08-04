@@ -25,14 +25,32 @@ export function InteractiveTruckXray() {
     setMousePos(null);
   };
 
-  // Spot size radius (65px diameter 130px)
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!containerRef.current || !e.touches[0]) return;
+    const rect = containerRef.current.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left;
+    const y = e.touches[0].clientY - rect.top;
+    setMousePos({ x, y });
+    setIsHovered(true);
+  };
+
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    handleTouchMove(e);
+  };
+
+  const handleTouchEnd = () => {
+    setIsHovered(false);
+    setMousePos(null);
+  };
+
+  // Spot size radius
   const spotlightRadius = 65;
 
   return (
     <section style={{
       width: '100%',
       backgroundColor: '#ffffff',
-      padding: '4rem clamp(1rem, 5vw, 6%) 4rem clamp(1rem, 5vw, 6%)',
+      padding: 'clamp(2.5rem, 5vw, 4rem) clamp(1rem, 5vw, 6%)',
       boxSizing: 'border-box',
       display: 'flex',
       flexDirection: 'column',
@@ -61,10 +79,16 @@ export function InteractiveTruckXray() {
           border: 1.5px stroke rgba(0, 0, 0, 0.8);
           box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.9), 0 10px 30px rgba(0, 0, 0, 0.3);
         }
+
+        @media (max-width: 600px) {
+          .truck-frame-container {
+            border-radius: 12px;
+          }
+        }
       ` }} />
 
       {/* Section Title & 5-6 Line Tech Summary */}
-      <div style={{ textAlign: 'center', maxWidth: '840px', marginBottom: '3rem' }}>
+      <div style={{ textAlign: 'center', maxWidth: '840px', marginBottom: 'clamp(1.8rem, 4vw, 3rem)' }}>
         <h2 style={{
           fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
           fontWeight: 300,
@@ -75,7 +99,7 @@ export function InteractiveTruckXray() {
           Interactive Cargo Inspection
         </h2>
         <p style={{
-          fontSize: 'clamp(0.95rem, 1.15vw, 1.08rem)',
+          fontSize: 'clamp(0.9rem, 1.15vw, 1.08rem)',
           lineHeight: 1.8,
           color: 'rgba(0, 0, 0, 0.7)',
           fontWeight: 300,
@@ -92,6 +116,9 @@ export function InteractiveTruckXray() {
         onPointerMove={handlePointerMove}
         onPointerEnter={handlePointerEnter}
         onPointerLeave={handlePointerLeave}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
         {/* Layer 1: Closed Container Truck (truck-container.png) */}
         <img
