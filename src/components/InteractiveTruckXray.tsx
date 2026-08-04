@@ -26,7 +26,7 @@ export function InteractiveTruckXray() {
   };
 
   // Spot size calculated relative to container height/width
-  const spotlightRadius = 110;
+  const spotlightRadius = 65;
 
   return (
     <section style={{
