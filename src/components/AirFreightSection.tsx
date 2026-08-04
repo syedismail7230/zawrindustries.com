@@ -24,7 +24,7 @@ export function AirFreightSection() {
           width: 100%;
           display: grid;
           grid-template-columns: 1fr 1.15fr;
-          gap: 3rem;
+          gap: 2rem;
           align-items: center;
         }
 
@@ -42,17 +42,15 @@ export function AirFreightSection() {
           overflow: hidden;
           display: flex;
           align-items: center;
-          justify-content: flex-end;
+          justify-content: flex-start;
           background-color: #ffffff;
         }
 
         .air-freight-right-img-wrapper img {
-          width: 130%;
-          max-width: none;
-          height: auto;
+          width: 100%;
+          height: 100%;
           object-fit: contain;
-          object-position: right center;
-          margin-right: -15%;
+          object-position: left center;
           display: block;
           mix-blend-mode: multiply;
           filter: contrast(1.05) brightness(1.01);
@@ -71,8 +69,7 @@ export function AirFreightSection() {
             height: 320px;
           }
           .air-freight-right-img-wrapper img {
-            width: 140%;
-            margin-right: -10%;
+            width: 100%;
           }
         }
       ` }} />
@@ -145,7 +142,7 @@ export function AirFreightSection() {
           </div>
         </div>
 
-        {/* Right Column: plane.png starting 100% flush from complete right edge */}
+        {/* Right Column: plane.png shifted right so the nose on the left is 100% complete and uncropped */}
         <div className="air-freight-right-img-wrapper">
           <img
             src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1785808162/zawr/assets/plane.png"
