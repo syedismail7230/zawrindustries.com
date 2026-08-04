@@ -35,6 +35,55 @@ const manufacturingCapabilities = [
   },
 ];
 
+interface MetricBadgeProps {
+  metric: string;
+  label: string;
+}
+
+function ArchitecturalGridBadge({ metric, label }: MetricBadgeProps) {
+  return (
+    <div style={{
+      position: 'relative',
+      display: 'inline-flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '180px',
+      height: '140px',
+      backgroundImage: `
+        linear-gradient(to right, rgba(0, 0, 0, 0.07) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.07) 1px, transparent 1px)
+      `,
+      backgroundSize: '24px 24px',
+      backgroundPosition: 'center center',
+      textAlign: 'center',
+      zIndex: 20,
+    }}>
+      <div style={{
+        fontSize: '1.45rem',
+        fontWeight: 500,
+        color: '#000000',
+        marginBottom: '0.15rem',
+        fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        letterSpacing: '-0.02em',
+        backgroundColor: '#ffffff',
+        padding: '0 0.4rem',
+      }}>
+        {metric}
+      </div>
+      <div style={{
+        fontSize: '0.95rem',
+        color: '#94a3b8',
+        fontWeight: 400,
+        backgroundColor: '#ffffff',
+        padding: '0 0.4rem',
+      }}>
+        {label}
+      </div>
+    </div>
+  );
+}
+
 export default function ManufacturingPage() {
   return (
     <div style={{ backgroundColor: '#ffffff', color: '#111111', minHeight: '100vh', overflowX: 'hidden' }}>
@@ -68,7 +117,7 @@ export default function ManufacturingPage() {
           </h1>
         </div>
 
-        {/* 3D Robot Arm & Flanking Grid Metric Cards Container */}
+        {/* 3D Robot Arm & Flanking Architectural Grid Badges Container */}
         <div style={{
           position: 'relative',
           width: '100%',
@@ -81,99 +130,23 @@ export default function ManufacturingPage() {
         }}>
 
           {/* FLOATING METRIC BADGE 1: Top Left */}
-          <div style={{
-            position: 'absolute',
-            top: '15%',
-            left: '5%',
-            padding: '1.4rem 2.2rem',
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-            backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
-            backgroundSize: '14px 14px',
-            border: '1px solid rgba(0, 0, 0, 0.1)',
-            borderRadius: '20px',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.03)',
-            textAlign: 'center',
-            zIndex: 20,
-            minWidth: '150px',
-          }}>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000', marginBottom: '0.2rem', letterSpacing: '-0.02em' }}>
-              ±0.005mm
-            </div>
-            <div style={{ fontSize: '0.9rem', color: '#8294ac', fontWeight: 500 }}>
-              Tolerance
-            </div>
+          <div style={{ position: 'absolute', top: '18%', left: '6%', zIndex: 20 }}>
+            <ArchitecturalGridBadge metric="±0.005mm" label="Tolerance" />
           </div>
 
           {/* FLOATING METRIC BADGE 2: Bottom Left */}
-          <div style={{
-            position: 'absolute',
-            bottom: '15%',
-            left: '12%',
-            padding: '1.4rem 2.2rem',
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-            backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
-            backgroundSize: '14px 14px',
-            border: '1px solid rgba(0, 0, 0, 0.1)',
-            borderRadius: '20px',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.03)',
-            textAlign: 'center',
-            zIndex: 20,
-            minWidth: '150px',
-          }}>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000', marginBottom: '0.2rem', letterSpacing: '-0.02em' }}>
-              6-Axis
-            </div>
-            <div style={{ fontSize: '0.9rem', color: '#8294ac', fontWeight: 500 }}>
-              Robotics Sync
-            </div>
+          <div style={{ position: 'absolute', bottom: '18%', left: '12%', zIndex: 20 }}>
+            <ArchitecturalGridBadge metric="6-Axis" label="Robotics Sync" />
           </div>
 
           {/* FLOATING METRIC BADGE 3: Top Right */}
-          <div style={{
-            position: 'absolute',
-            top: '15%',
-            right: '5%',
-            padding: '1.4rem 2.2rem',
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-            backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
-            backgroundSize: '14px 14px',
-            border: '1px solid rgba(0, 0, 0, 0.1)',
-            borderRadius: '20px',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.03)',
-            textAlign: 'center',
-            zIndex: 20,
-            minWidth: '150px',
-          }}>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000', marginBottom: '0.2rem', letterSpacing: '-0.02em' }}>
-              99.98%
-            </div>
-            <div style={{ fontSize: '0.9rem', color: '#8294ac', fontWeight: 500 }}>
-              Factory Uptime
-            </div>
+          <div style={{ position: 'absolute', top: '18%', right: '6%', zIndex: 20 }}>
+            <ArchitecturalGridBadge metric="99.98%" label="Factory Uptime" />
           </div>
 
           {/* FLOATING METRIC BADGE 4: Bottom Right */}
-          <div style={{
-            position: 'absolute',
-            bottom: '15%',
-            right: '12%',
-            padding: '1.4rem 2.2rem',
-            backgroundColor: 'rgba(255, 255, 255, 0.95)',
-            backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
-            backgroundSize: '14px 14px',
-            border: '1px solid rgba(0, 0, 0, 0.1)',
-            borderRadius: '20px',
-            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.03)',
-            textAlign: 'center',
-            zIndex: 20,
-            minWidth: '150px',
-          }}>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000', marginBottom: '0.2rem', letterSpacing: '-0.02em' }}>
-              ±0.005mm
-            </div>
-            <div style={{ fontSize: '0.9rem', color: '#8294ac', fontWeight: 500 }}>
-              Tolerance
-            </div>
+          <div style={{ position: 'absolute', bottom: '18%', right: '12%', zIndex: 20 }}>
+            <ArchitecturalGridBadge metric="±0.005mm" label="Tolerance" />
           </div>
 
           {/* CENTER 3D ROBOT CANVAS */}
