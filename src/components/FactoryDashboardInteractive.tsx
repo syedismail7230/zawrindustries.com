@@ -17,7 +17,7 @@ export default function FactoryDashboardInteractive() {
   const [zoomed, setZoomed] = useState<number>(1);
 
   // Animated AGV positions on path
-  const [movingAgvPos, setMovingAgvPos] = useState<{ x: number; y: number }>({ x: 190, y: 70 });
+  const [movingAgvPos, setMovingAgvPos] = useState<{ x: number; y: number }>({ x: 169, y: 45 });
 
   // 1. Scroll-driven 3D tilt animation
   useEffect(() => {
@@ -92,18 +92,18 @@ export default function FactoryDashboardInteractive() {
     { time: '10:25:11', msg: 'AGV-571 battery reached 94% threshold', type: 'success' },
   ];
 
-  // Specific path routes corresponding to selected tasks matching Bezier curves
+  // Orthogonal grid routes corresponding to selected tasks (strictly through clear aisles, 0 pod overlaps)
   const getTaskPathD = () => {
     switch (selectedTask) {
       case 'TSK-00047':
-        return 'M 600 70 L 490 70 C 490 140, 490 200, 490 280 C 490 380, 680 440, 850 440';
+        return 'M 409 485 V 275 A 10 10 0 0 0 419 265 H 780';
       case 'TSK-00031':
-        return 'M 350 440 C 350 350, 490 280, 490 140 L 490 70';
+        return 'M 40 265 H 279 A 10 10 0 0 1 289 275 V 475 A 10 10 0 0 0 299 485 H 780';
       case 'TSK-00022':
-        return 'M 190 440 C 190 320, 490 280, 680 280 L 880 280';
+        return 'M 169 45 H 279 A 10 10 0 0 1 289 55 V 475 A 10 10 0 0 0 299 485 H 780';
       default:
         // TSK-00051
-        return 'M 190 70 C 190 210, 490 280, 660 140 L 880 140';
+        return 'M 169 235 V 55 A 10 10 0 0 1 179 45 H 530 A 10 10 0 0 1 540 55 V 255 A 10 10 0 0 0 550 265 H 780';
     }
   };
 
@@ -616,7 +616,7 @@ export default function FactoryDashboardInteractive() {
                 </div>
               </div>
 
-              {/* BLUEPRINT FLOOR PLAN MAP CANVAS (EXACT MATCH TO MOCKUP GRAPHIC) */}
+              {/* BLUEPRINT FLOOR PLAN MAP CANVAS (ORTHOGONAL GRID ROUTING - 0 POD OVERLAPS) */}
               <div style={{
                 position: 'relative',
                 flex: '1 1 420px',
@@ -642,7 +642,7 @@ export default function FactoryDashboardInteractive() {
                   transformOrigin: 'center center',
                 }}>
                   
-                  {/* SVG Blueprint exact replica of user image */}
+                  {/* SVG Blueprint exact orthogonal grid mapping */}
                   <svg width="100%" height="100%" viewBox="0 0 1000 600" style={{ position: 'absolute', inset: 0, overflow: 'visible' }}>
                     
                     {/* Outer Cutout Shell with Semicircular Notches */}
@@ -653,70 +653,65 @@ export default function FactoryDashboardInteractive() {
                       strokeWidth="2"
                     />
 
-                    {/* 8 Storage Pod Blocks (4 Top Row, 4 Bottom Row) with 6x10 Array of Dark Cells */}
-                    {/* Top Row Pods */}
-                    {[70, 190, 310, 430].map((px, i) => (
-                      <g key={`top-pod-${i}`}>
-                        <rect x={px - 8} y="62" width="94" height="144" rx="10" fill="#cbd5e1" opacity="0.5" />
-                        {renderPodGrid(px, 70)}
-                        {/* Station Tool Callout between pods */}
-                        {i < 3 && (
-                          <g transform={`translate(${px + 78}, 110)`}>
-                            <rect x="-10" y="-18" width="20" height="36" rx="6" fill="#94a3b8" />
-                            <text x="0" y="-4" fill="#ffffff" fontSize="9" textAnchor="middle">🦾</text>
-                            <text x="0" y="10" fill="#ffffff" fontSize="9" textAnchor="middle">🔧</text>
-                            <rect x="-12" y="-6" width="24" height="12" rx="3" fill="#ffffff" stroke="#000000" strokeWidth="1"/>
-                            <text x="0" y="3" fill="#000000" fontSize="8" fontWeight="bold" textAnchor="middle">🛍️</text>
-                          </g>
-                        )}
+                    {/* 8 Storage Pod Blocks (Pods 1-4 Top: Y=65, Pods 5-8 Bottom: Y=375) */}
+                    {[
+                      { px: 62, py: 65, id: 1 },
+                      { px: 182, py: 65, id: 2 },
+                      { px: 302, py: 65, id: 3 },
+                      { px: 422, py: 65, id: 4 },
+                      { px: 62, py: 375, id: 5 },
+                      { px: 182, py: 375, id: 6 },
+                      { px: 302, py: 375, id: 7 },
+                      { px: 422, py: 375, id: 8 },
+                    ].map((pod) => (
+                      <g key={`pod-${pod.id}`}>
+                        <rect x={pod.px} y={pod.py} width="94" height="144" rx="10" fill="#cbd5e1" opacity="0.4" />
+                        {renderPodGrid(pod.px + 8, pod.py + 8)}
                       </g>
                     ))}
 
-                    {/* Bottom Row Pods */}
-                    {[70, 190, 310, 430].map((px, i) => (
-                      <g key={`bot-pod-${i}`}>
-                        <rect x={px - 8} y="322" width="94" height="144" rx="10" fill="#cbd5e1" opacity="0.5" />
-                        {renderPodGrid(px, 330)}
-                        {/* Station Tool Callout between pods */}
-                        {i < 3 && (
-                          <g transform={`translate(${px + 78}, 370)`}>
-                            <rect x="-10" y="-18" width="20" height="36" rx="6" fill="#94a3b8" />
-                            <text x="0" y="-4" fill="#ffffff" fontSize="9" textAnchor="middle">🦾</text>
-                            <text x="0" y="10" fill="#ffffff" fontSize="9" textAnchor="middle">🔧</text>
-                            <rect x="-12" y="-6" width="24" height="12" rx="3" fill="#ffffff" stroke="#000000" strokeWidth="1"/>
-                            <text x="0" y="3" fill="#000000" fontSize="8" fontWeight="bold" textAnchor="middle">🛍️</text>
-                          </g>
-                        )}
+                    {/* Station Tool Callout Icons between Pods */}
+                    {[[160, 110], [280, 110], [400, 110], [160, 420], [280, 420], [400, 420]].map((pos, i) => (
+                      <g key={`st-${i}`} transform={`translate(${pos[0]}, ${pos[1]})`}>
+                        <rect x="-10" y="-18" width="20" height="36" rx="6" fill="#94a3b8" />
+                        <text x="0" y="-4" fill="#ffffff" fontSize="9" textAnchor="middle">🦾</text>
+                        <text x="0" y="10" fill="#ffffff" fontSize="9" textAnchor="middle">🔧</text>
+                        <rect x="-12" y="-6" width="24" height="12" rx="3" fill="#ffffff" stroke="#000000" strokeWidth="1"/>
+                        <text x="0" y="3" fill="#000000" fontSize="8" fontWeight="bold" textAnchor="middle">🛍️</text>
                       </g>
                     ))}
 
-                    {/* Far Right Component Tray Arrays (4 Blocks of 4x4) */}
-                    {renderTrayGrid(700, 70)}
-                    {renderTrayGrid(770, 70)}
-                    {renderTrayGrid(700, 340)}
-                    {renderTrayGrid(770, 340)}
+                    {/* Component Tray Arrays (Far Right) */}
+                    {renderTrayGrid(680, 65)}
+                    {renderTrayGrid(750, 65)}
+                    {renderTrayGrid(680, 375)}
+                    {renderTrayGrid(750, 375)}
 
-                    {/* Central Stadium Track Loops */}
-                    <rect x="130" y="250" width="370" height="60" rx="30" fill="none" stroke="#64748b" strokeWidth="1.5" strokeDasharray="3 3" />
-                    <rect x="130" y="250" width="370" height="60" rx="30" fill="none" stroke="#cbd5e1" strokeWidth="1" />
-                    <circle cx="210" cy="280" r="12" fill="none" stroke="#94a3b8" strokeWidth="1.5" />
-                    <circle cx="780" cy="280" r="12" fill="none" stroke="#94a3b8" strokeWidth="1.5" />
+                    {/* ORTHOGONAL AISLE & CORRIDOR TRACK NETWORK (Zero pod overlap) */}
+                    {/* Horizontal Hallways */}
+                    <line x1="40" y1="45" x2="940" y2="45" stroke="#64748b" strokeWidth="1.5" strokeDasharray="3 3" />
+                    <line x1="40" y1="235" x2="940" y2="235" stroke="#64748b" strokeWidth="1.5" strokeDasharray="3 3" />
+                    <line x1="40" y1="265" x2="940" y2="265" stroke="#475569" strokeWidth="1.8" />
+                    <line x1="40" y1="295" x2="940" y2="295" stroke="#64748b" strokeWidth="1.5" strokeDasharray="3 3" />
+                    <line x1="40" y1="335" x2="940" y2="335" stroke="#64748b" strokeWidth="1.5" strokeDasharray="3 3" />
+                    <line x1="40" y1="535" x2="940" y2="535" stroke="#64748b" strokeWidth="1.5" strokeDasharray="3 3" />
 
-                    {/* Interconnecting Bezier Track Lines */}
-                    <path
-                      d="M 60 280 H 130 M 500 280 H 680 L 930 130 M 490 80 H 520 L 520 280 M 680 280 H 930 M 190 200 C 190 250, 490 250, 490 280"
-                      fill="none"
-                      stroke="#475569"
-                      strokeWidth="1.5"
-                    />
+                    {/* Vertical Aisles */}
+                    <line x1="40" y1="45" x2="40" y2="535" stroke="#64748b" strokeWidth="1.5" strokeDasharray="3 3" />
+                    <line x1="169" y1="45" x2="169" y2="535" stroke="#64748b" strokeWidth="1.5" strokeDasharray="3 3" />
+                    <line x1="289" y1="45" x2="289" y2="535" stroke="#64748b" strokeWidth="1.5" strokeDasharray="3 3" />
+                    <line x1="409" y1="45" x2="409" y2="535" stroke="#64748b" strokeWidth="1.5" strokeDasharray="3 3" />
+                    <line x1="540" y1="45" x2="540" y2="535" stroke="#64748b" strokeWidth="1.5" strokeDasharray="3 3" />
+
+                    {/* Stadium Oval Loop in Center Hallway */}
+                    <rect x="150" y="245" width="370" height="40" rx="20" fill="none" stroke="#64748b" strokeWidth="1.5" strokeDasharray="4 4" />
 
                     {/* Far Right 4-Lane Dispatch Curves */}
-                    <path d="M 930 360 C 880 360, 850 400, 850 480" fill="none" stroke="#475569" strokeWidth="1.2" />
-                    <path d="M 930 380 C 890 380, 850 420, 850 480" fill="none" stroke="#475569" strokeWidth="1.2" />
-                    <path d="M 930 400 C 900 400, 850 440, 850 480" fill="none" stroke="#475569" strokeWidth="1.2" />
-                    <path d="M 930 420 C 910 420, 850 460, 850 480" fill="none" stroke="#475569" strokeWidth="1.2" />
+                    <path d="M 940 375 C 880 375, 840 430, 840 510" fill="none" stroke="#475569" strokeWidth="1.2" />
+                    <path d="M 940 395 C 890 395, 840 445, 840 510" fill="none" stroke="#475569" strokeWidth="1.2" />
+                    <path d="M 940 415 C 900 415, 840 460, 840 510" fill="none" stroke="#475569" strokeWidth="1.2" />
 
-                    {/* Active Route Curve Path (Selected Task) */}
+                    {/* Active Route Curve Path (Selected Task - 100% Corridor Aligned) */}
                     <path
                       ref={activePathRef}
                       d={getTaskPathD()}
@@ -726,6 +721,7 @@ export default function FactoryDashboardInteractive() {
                       strokeDasharray="8 6"
                       strokeDashoffset={-agvOffset}
                       strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
 
                     {/* Dynamic Moving AGV along active path */}
@@ -735,51 +731,51 @@ export default function FactoryDashboardInteractive() {
                       <circle cx="14" cy="-7" r="2.5" fill="#22c55e" />
                     </g>
 
-                    {/* AGV Callouts matching exact image */}
-                    {/* 94 */}
-                    <g transform="translate(190, 215)">
+                    {/* AGV Callouts positioned cleanly inside aisles */}
+                    {/* 94 (Aisle 1 top) */}
+                    <g transform="translate(169, 140)">
                       <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
                       <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">94</text>
                     </g>
 
-                    {/* 234 */}
-                    <g transform="translate(340, 205)">
+                    {/* 234 (Aisle 2 top) */}
+                    <g transform="translate(289, 140)">
                       <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
                       <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">234</text>
                     </g>
 
-                    {/* 59 */}
-                    <g transform="translate(490, 175)">
+                    {/* 59 (Aisle 3 top) */}
+                    <g transform="translate(409, 140)">
                       <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
                       <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">59</text>
                     </g>
 
-                    {/* 98 */}
-                    <g transform="translate(660, 220)">
+                    {/* 98 (Aisle 4 center) */}
+                    <g transform="translate(540, 200)">
                       <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
                       <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">98</text>
                     </g>
 
-                    {/* 178 */}
-                    <g transform="translate(410, 270)">
+                    {/* 178 (Center Hallway) */}
+                    <g transform="translate(350, 265)">
                       <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
                       <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">178</text>
                     </g>
 
-                    {/* 283 */}
-                    <g transform="translate(560, 270)">
+                    {/* 283 (Center Hallway Right) */}
+                    <g transform="translate(470, 265)">
                       <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
                       <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">283</text>
                     </g>
 
-                    {/* 114 */}
-                    <g transform="translate(340, 480)">
+                    {/* 114 (Aisle 2 bottom) */}
+                    <g transform="translate(289, 440)">
                       <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
                       <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">114</text>
                     </g>
 
                     {/* 198 & 209 at left portal */}
-                    <g transform="translate(45, 250)">
+                    <g transform="translate(40, 200)">
                       <rect x="-12" y="-16" width="24" height="14" rx="3" fill="#000000" />
                       <text x="0" y="-6" fill="#ffffff" fontSize="8" fontWeight="700" textAnchor="middle">198</text>
                       <rect x="-12" y="2" width="24" height="14" rx="3" fill="#000000" />
@@ -787,7 +783,7 @@ export default function FactoryDashboardInteractive() {
                     </g>
 
                     {/* 96 & 234 at top charging dock */}
-                    <g transform="translate(630, 40)">
+                    <g transform="translate(620, 45)">
                       <rect x="-30" y="-10" width="18" height="20" rx="4" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
                       <text x="-21" y="4" fill="#000000" fontSize="11" fontWeight="bold" textAnchor="middle">⚡</text>
                       <rect x="-8" y="-9" width="24" height="18" rx="4" fill="#000000" />
@@ -797,19 +793,19 @@ export default function FactoryDashboardInteractive() {
                     </g>
 
                     {/* Charging Station Badge ⚡ (Left) */}
-                    <g transform="translate(75, 280)">
+                    <g transform="translate(80, 265)">
                       <rect x="-12" y="-12" width="24" height="24" rx="6" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
                       <text x="0" y="4" fill="#000000" fontSize="12" fontWeight="bold" textAnchor="middle">⚡</text>
                     </g>
 
                     {/* Charging Station Badge ⚡ (Far Right) */}
-                    <g transform="translate(945, 380)">
+                    <g transform="translate(920, 460)">
                       <rect x="-12" y="-12" width="24" height="24" rx="6" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
                       <text x="0" y="4" fill="#000000" fontSize="12" fontWeight="bold" textAnchor="middle">⚡</text>
                     </g>
 
                     {/* Alert Warning Bag Badge 🛍️ ! (Right Center) */}
-                    <g transform="translate(660, 130)">
+                    <g transform="translate(640, 180)">
                       <rect x="-12" y="-12" width="24" height="24" rx="6" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
                       <text x="0" y="4" fill="#000000" fontSize="11" fontWeight="bold" textAnchor="middle">🛍️</text>
                       <circle cx="10" cy="-10" r="5" fill="#000000" />
