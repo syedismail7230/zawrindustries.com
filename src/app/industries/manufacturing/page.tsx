@@ -530,7 +530,7 @@ export default function ManufacturingPage() {
 
       {/* Factory Floor Video Showcase Section */}
       <section style={{
-        padding: 'clamp(2rem, 5vw, 4rem) 5%',
+        padding: 'clamp(3rem, 6vw, 5rem) 5%',
         backgroundColor: '#ffffff',
         borderBottom: '1px solid #e2e8f0',
       }}>
@@ -538,23 +538,14 @@ export default function ManufacturingPage() {
           <div style={{
             position: 'relative',
             width: '100%',
-            aspectRatio: '21 / 9',
-            maxHeight: '520px',
+            aspectRatio: '16 / 9',
+            maxHeight: '560px',
             overflow: 'hidden',
             backgroundColor: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}>
-            {/* Soft White Edge Fade Overlay */}
-            <div style={{
-              position: 'absolute',
-              inset: 0,
-              zIndex: 2,
-              pointerEvents: 'none',
-              background: `
-                linear-gradient(to right, #ffffff 0%, rgba(255,255,255,0) 15%, rgba(255,255,255,0) 85%, #ffffff 100%),
-                linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0) 10%, rgba(255,255,255,0) 90%, #ffffff 100%)
-              `,
-            }} />
-
             <video
               autoPlay
               loop
@@ -566,9 +557,9 @@ export default function ManufacturingPage() {
                 height: '100%',
                 objectFit: 'cover',
                 objectPosition: 'center',
-                transform: 'scale(1.35)',
+                transform: 'scale(1.3)',
+                mixBlendMode: 'multiply',
                 display: 'block',
-                backgroundColor: '#ffffff',
               }}
             />
           </div>
