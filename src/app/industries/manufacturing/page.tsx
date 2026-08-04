@@ -539,51 +539,93 @@ export default function ManufacturingPage() {
           margin: '0 auto',
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '2.5rem',
-          alignItems: 'center',
+          gap: '3rem',
+          alignItems: 'start',
         }}>
-          {/* CNC-2 Card */}
-          <div style={{
-            borderRadius: '28px',
-            overflow: 'hidden',
-            backgroundColor: '#ffffff',
-            boxShadow: '0 12px 32px rgba(0, 0, 0, 0.06)',
-            aspectRatio: '4 / 3',
-            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-          }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/cnc-2.png"
-              alt="High-Precision Multi-Axis CNC Milling Spindle"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                display: 'block',
-              }}
-            />
+          {/* CNC-2 Card Block */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+            <div style={{
+              borderRadius: '24px',
+              overflow: 'hidden',
+              backgroundColor: '#ffffff',
+              boxShadow: '0 12px 32px rgba(0, 0, 0, 0.06)',
+              aspectRatio: '4 / 3',
+            }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/assets/cnc-2.png"
+                alt="High-Precision Multi-Axis CNC Milling Spindle"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block',
+                }}
+              />
+            </div>
+            <div>
+              <h3 style={{
+                fontSize: '1.4rem',
+                fontWeight: 600,
+                color: '#000000',
+                marginBottom: '0.5rem',
+                letterSpacing: '-0.02em',
+              }}>
+                Multi-Axis CNC Milling & Metallurgy
+              </h3>
+              <p style={{
+                fontSize: '0.95rem',
+                color: '#64748b',
+                lineHeight: 1.65,
+                fontWeight: 300,
+                margin: 0,
+              }}>
+                Sub-micron precision CNC component fabrication engineered for aerospace, defense, and high-spec industrial machinery.
+              </p>
+            </div>
           </div>
 
-          {/* 3D Print Card */}
-          <div style={{
-            borderRadius: '28px',
-            overflow: 'hidden',
-            backgroundColor: '#ffffff',
-            boxShadow: '0 12px 32px rgba(0, 0, 0, 0.06)',
-            aspectRatio: '4 / 3',
-            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-          }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/3d-print.png"
-              alt="Industrial Additive Manufacturing 3D Printer"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                display: 'block',
-              }}
-            />
+          {/* 3D Print Card Block */}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem' }}>
+            <div style={{
+              borderRadius: '24px',
+              overflow: 'hidden',
+              backgroundColor: '#ffffff',
+              boxShadow: '0 12px 32px rgba(0, 0, 0, 0.06)',
+              aspectRatio: '4 / 3',
+            }}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/assets/3d-print.png"
+                alt="Industrial Additive Manufacturing 3D Printer"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  display: 'block',
+                }}
+              />
+            </div>
+            <div>
+              <h3 style={{
+                fontSize: '1.4rem',
+                fontWeight: 600,
+                color: '#000000',
+                marginBottom: '0.5rem',
+                letterSpacing: '-0.02em',
+              }}>
+                Industrial Additive 3D Printing
+              </h3>
+              <p style={{
+                fontSize: '0.95rem',
+                color: '#64748b',
+                lineHeight: 1.65,
+                fontWeight: 300,
+                margin: 0,
+              }}>
+                High-resolution additive manufacturing for rapid functional prototyping and end-use production components.
+              </p>
+            </div>
           </div>
         </div>
       </section>
