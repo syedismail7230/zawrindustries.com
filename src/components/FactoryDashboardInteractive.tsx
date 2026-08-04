@@ -2,7 +2,19 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 
-type NavTab = 'Dashboard' | 'Operations' | 'Missions' | 'Vehicles' | 'Logs' | 'Alerts' | 'Analytics';
+type NavTab =
+  | 'Dashboard'
+  | 'Production Management'
+  | 'Machine Monitoring'
+  | 'MES'
+  | 'Inventory/Warehouse'
+  | 'Quality Management'
+  | 'Maintenance'
+  | 'Workforce Management'
+  | 'Production Scheduling'
+  | 'Analytics & Reporting'
+  | 'User & Role Management'
+  | 'ERP/PLC Integration';
 
 export default function FactoryDashboardInteractive() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -152,14 +164,20 @@ export default function FactoryDashboardInteractive() {
     return cells;
   };
 
-  const navItems: { name: NavTab; icon: React.ReactNode }[] = [
-    { name: 'Dashboard', icon: <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/> },
-    { name: 'Operations', icon: <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/> },
-    { name: 'Missions', icon: <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/> },
-    { name: 'Vehicles', icon: <path d="M1 3h15v13H1zM16 8h4l3 3v5h-7V8zM5.5 18.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM18.5 18.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"/> },
-    { name: 'Logs', icon: <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/> },
-    { name: 'Alerts', icon: <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/> },
-    { name: 'Analytics', icon: <g><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></g> },
+  // All 12 Navigation Modules requested by User
+  const navItems: { name: NavTab; icon: React.ReactNode; shortLabel: string }[] = [
+    { name: 'Dashboard', shortLabel: 'Dashboard', icon: <path d="M3 3h7v7H3zM14 3h7v7h-7zM14 14h7v7h-7zM3 14h7v7H3z"/> },
+    { name: 'Production Management', shortLabel: 'Production', icon: <path d="M2 20h20M5 20V8l7-5 7 5v12"/> },
+    { name: 'Machine Monitoring', shortLabel: 'Machines', icon: <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/> },
+    { name: 'MES', shortLabel: 'MES', icon: <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/> },
+    { name: 'Inventory/Warehouse', shortLabel: 'Inventory', icon: <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/> },
+    { name: 'Quality Management', shortLabel: 'Quality', icon: <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14M22 4L12 14.01l-3-3"/> },
+    { name: 'Maintenance', shortLabel: 'Maintenance', icon: <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/> },
+    { name: 'Workforce Management', shortLabel: 'Workforce', icon: <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/> },
+    { name: 'Production Scheduling', shortLabel: 'Scheduling', icon: <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/> },
+    { name: 'Analytics & Reporting', shortLabel: 'Analytics', icon: <g><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></g> },
+    { name: 'User & Role Management', shortLabel: 'Users/Roles', icon: <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/> },
+    { name: 'ERP/PLC Integration', shortLabel: 'ERP / PLC', icon: <path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16M5 19a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/> },
   ];
 
   return (
@@ -332,19 +350,21 @@ export default function FactoryDashboardInteractive() {
           </div>
 
           {/* MAIN CONTENT WORKSPACE GRID */}
-          <div style={{ display: 'grid', gridTemplateColumns: activeNavTab === 'Dashboard' ? '60px 300px 1fr' : '60px 1fr', minHeight: '640px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: activeNavTab === 'Dashboard' ? '76px 280px 1fr' : '76px 1fr', minHeight: '660px' }}>
             
-            {/* 1. FAR-LEFT NAVIGATION SIDEBAR (INTERACTIVE TABS) */}
+            {/* 1. FAR-LEFT NAVIGATION SIDEBAR (ALL 12 MODULE TABS) */}
             <div style={{
               borderRight: '1px solid #e2e8f0',
               backgroundColor: '#ffffff',
-              padding: '1rem 0',
+              padding: '0.8rem 0',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'space-between',
+              overflowY: 'auto',
+              maxHeight: '660px',
             }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.4rem', alignItems: 'center', width: '100%' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', alignItems: 'center', width: '100%', padding: '0 4px' }}>
                 {navItems.map((item) => {
                   const isActive = activeNavTab === item.name;
                   return (
@@ -353,8 +373,8 @@ export default function FactoryDashboardInteractive() {
                       onClick={() => setActiveNavTab(item.name)}
                       title={item.name}
                       style={{
-                        width: '44px',
-                        height: '44px',
+                        width: '66px',
+                        padding: '0.45rem 0.2rem',
                         borderRadius: '10px',
                         backgroundColor: isActive ? '#f1f5f9' : 'transparent',
                         border: isActive ? '1px solid #cbd5e1' : '1px solid transparent',
@@ -366,16 +386,10 @@ export default function FactoryDashboardInteractive() {
                         transition: 'all 0.2s ease',
                       }}>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={isActive ? '#000000' : '#64748b'} strokeWidth={isActive ? '1.8' : '1.5'}>{item.icon}</svg>
-                      <span style={{ fontSize: '0.55rem', color: isActive ? '#000000' : '#64748b', marginTop: '2px', fontWeight: isActive ? 500 : 400 }}>{item.name}</span>
+                      <span style={{ fontSize: '0.52rem', color: isActive ? '#000000' : '#64748b', marginTop: '3px', fontWeight: isActive ? 500 : 400, textAlign: 'center', lineHeight: 1.15 }}>{item.shortLabel}</span>
                     </div>
                   );
                 })}
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
-                <div title="Settings" style={{ cursor: 'pointer' }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                </div>
               </div>
             </div>
 
@@ -852,15 +866,15 @@ export default function FactoryDashboardInteractive() {
               </>
             )}
 
-            {/* TAB VIEW 2: OPERATIONS VIEW */}
-            {activeNavTab === 'Operations' && (
+            {/* TAB VIEW 2: PRODUCTION MANAGEMENT VIEW */}
+            {activeNavTab === 'Production Management' && (
               <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                   <div>
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Factory Operations & Work Orders</h3>
-                    <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Real-time shop floor scheduling, CNC cell utilization, and active assembly work orders.</p>
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Production Line Orchestration & Work Orders</h3>
+                    <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Real-time line balancing, batch throughput tracking, and active assembly work orders.</p>
                   </div>
-                  <span style={{ padding: '0.4rem 0.9rem', backgroundColor: '#22c55e15', color: '#16a34a', borderRadius: '50px', fontSize: '0.78rem', fontWeight: 500 }}>● Shift 1 Running</span>
+                  <span style={{ padding: '0.4rem 0.9rem', backgroundColor: '#22c55e15', color: '#16a34a', borderRadius: '50px', fontSize: '0.78rem', fontWeight: 500 }}>● Shift 1 Active</span>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
@@ -924,78 +938,32 @@ export default function FactoryDashboardInteractive() {
               </div>
             )}
 
-            {/* TAB VIEW 3: MISSIONS VIEW */}
-            {activeNavTab === 'Missions' && (
+            {/* TAB VIEW 3: MACHINE MONITORING VIEW */}
+            {activeNavTab === 'Machine Monitoring' && (
               <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Autonomous Fleet Missions</h3>
-                  <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Multi-vehicle coordinated missions, waypoints, and automated dispatch routing.</p>
-                </div>
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
-                  {[
-                    { name: 'Mission Alpha-01', desc: 'Raw Material Ingestion from Dock 4 to Assembly Pod 1-4', agvs: ['AGV-489', 'AGV-571'], progress: 84, status: 'Active' },
-                    { name: 'Mission Beta-04', desc: 'Finished Component Transfer from CNC Cell to Quality Rig', agvs: ['AGV-018', 'AGV-254'], progress: 42, status: 'Active' },
-                    { name: 'Mission Gamma-09', desc: 'Automated Battery Re-charging Cycle Sequence', agvs: ['AGV-096', 'AGV-234'], progress: 100, status: 'Completed' },
-                  ].map((m, i) => (
-                    <div key={i} style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '16px', border: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                      <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
-                          <h4 style={{ fontSize: '1rem', fontWeight: 500, color: '#000000', margin: 0 }}>{m.name}</h4>
-                          <span style={{ fontSize: '0.72rem', fontWeight: 500, color: m.status === 'Completed' ? '#16a34a' : '#2563eb' }}>● {m.status}</span>
-                        </div>
-                        <p style={{ fontSize: '0.82rem', color: '#64748b', lineHeight: 1.5, marginBottom: '1.2rem' }}>{m.desc}</p>
-                        <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.2rem' }}>
-                          {m.agvs.map(a => (
-                            <span key={a} style={{ padding: '0.2rem 0.5rem', backgroundColor: '#f1f5f9', borderRadius: '4px', fontSize: '0.72rem', fontWeight: 500, color: '#000000' }}>🚚 {a}</span>
-                          ))}
-                        </div>
-                      </div>
-
-                      <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.4rem', color: '#475569' }}>
-                          <span>Mission Progress</span>
-                          <span style={{ fontWeight: 500 }}>{m.progress}%</span>
-                        </div>
-                        <div style={{ height: '6px', backgroundColor: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
-                          <div style={{ width: `${m.progress}%`, height: '100%', backgroundColor: '#000000', borderRadius: '4px' }} />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* TAB VIEW 4: VEHICLES VIEW */}
-            {activeNavTab === 'Vehicles' && (
-              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>AGV & AMR Vehicle Telemetry Roster</h3>
-                  <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Real-time battery metrics, LIDAR obstacle diagnostics, and individual vehicle health.</p>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>CNC & Robotic Equipment Telemetry</h3>
+                  <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Live spindle speed, thermal sensors, vibration diagnostics, and tooling lifecycle meters.</p>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.2rem' }}>
                   {[
-                    { id: 'AGV-489', type: 'Zawr Heavy Payload (500kg)', battery: 82, speed: '1.6 m/s', load: '320 kg', health: '100% Good', loc: 'Corridor B' },
-                    { id: 'AGV-571', type: 'Zawr Heavy Payload (500kg)', battery: 94, speed: '0.0 m/s', load: '0 kg', health: 'Charging', loc: 'Dock 4' },
-                    { id: 'AGV-018', type: 'Zawr Compact AMR (250kg)', battery: 76, speed: '1.8 m/s', load: '180 kg', health: '100% Good', loc: 'Aisle 2' },
-                    { id: 'AGV-254', type: 'Zawr Heavy Payload (500kg)', battery: 61, speed: '1.2 m/s', load: '450 kg', health: '100% Good', loc: 'Assembly 9' },
-                    { id: 'AGV-096', type: 'Zawr High-Speed Picker', battery: 98, speed: '2.4 m/s', load: '90 kg', health: '100% Good', loc: 'Top Dock' },
-                    { id: 'AGV-234', type: 'Zawr High-Speed Picker', battery: 89, speed: '2.2 m/s', load: '110 kg', health: '100% Good', loc: 'Top Dock' },
-                  ].map((v) => (
-                    <div key={v.id} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
-                        <span style={{ fontSize: '1rem', fontWeight: 500, color: '#000000' }}>🚚 {v.id}</span>
-                        <span style={{ fontSize: '0.72rem', fontWeight: 500, padding: '0.2rem 0.5rem', backgroundColor: '#f1f5f9', borderRadius: '4px' }}>{v.health}</span>
+                    { name: '5-Axis CNC Centre #01', spindle: '12,000 RPM', temp: '42.5°C', vibration: '0.02 mm/s', status: 'Running' },
+                    { name: '5-Axis CNC Centre #02', spindle: '11,800 RPM', temp: '44.1°C', vibration: '0.03 mm/s', status: 'Running' },
+                    { name: 'Laser Cutting Cell A', spindle: 'N/A (Fiber Laser)', temp: '38.0°C', vibration: '0.01 mm/s', status: 'Running' },
+                    { name: 'Robotic Arc Weld Cell 1', spindle: 'N/A (Robotics)', temp: '49.2°C', vibration: '0.04 mm/s', status: 'Running' },
+                    { name: 'Industrial SLA 3D Printer', spindle: 'Heater 210°C', temp: '55.0°C', vibration: '0.00 mm/s', status: 'Running' },
+                    { name: 'CMM Precision Scanner', spindle: 'Calibration OK', temp: '20.1°C', vibration: '0.00 mm/s', status: 'Standby' },
+                  ].map((m, i) => (
+                    <div key={i} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
+                        <span style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000' }}>{m.name}</span>
+                        <span style={{ fontSize: '0.7rem', fontWeight: 500, padding: '0.2rem 0.5rem', backgroundColor: '#dcfce7', color: '#15803d', borderRadius: '4px' }}>{m.status}</span>
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '1rem' }}>{v.type}</div>
-                      
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem', fontSize: '0.75rem', color: '#334155' }}>
-                        <div>Battery: <strong style={{ color: '#000', fontWeight: 500 }}>{v.battery}%</strong></div>
-                        <div>Speed: <strong style={{ color: '#000', fontWeight: 500 }}>{v.speed}</strong></div>
-                        <div>Payload: <strong style={{ color: '#000', fontWeight: 500 }}>{v.load}</strong></div>
-                        <div>Location: <strong style={{ color: '#000', fontWeight: 500 }}>{v.loc}</strong></div>
+                      <div style={{ fontSize: '0.78rem', color: '#475569', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                        <div>Spindle: <span style={{ color: '#000', fontWeight: 500 }}>{m.spindle}</span></div>
+                        <div>Thermal Temp: <span style={{ color: '#000', fontWeight: 500 }}>{m.temp}</span></div>
+                        <div>Vibration: <span style={{ color: '#000', fontWeight: 500 }}>{m.vibration}</span></div>
                       </div>
                     </div>
                   ))}
@@ -1003,63 +971,183 @@ export default function FactoryDashboardInteractive() {
               </div>
             )}
 
-            {/* TAB VIEW 5: LOGS VIEW */}
-            {activeNavTab === 'Logs' && (
+            {/* TAB VIEW 4: MES (Manufacturing Execution System) */}
+            {activeNavTab === 'MES' && (
               <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>System Telemetry & Audit Logs</h3>
-                  <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Real-time event stream from AGVs, CNC controllers, and automated safety gates.</p>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Manufacturing Execution System (MES)</h3>
+                  <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Step-by-step routing, shop floor dispatch rules, component genealogy, and serial lot tracking.</p>
                 </div>
 
-                <div style={{ backgroundColor: '#000000', color: '#38bdf8', padding: '1.4rem', borderRadius: '14px', fontFamily: 'monospace', fontSize: '0.82rem', height: '420px', overflowY: 'auto' }}>
+                <div style={{ backgroundColor: '#ffffff', padding: '1.5rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
+                  <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000', marginBottom: '1rem' }}>Active Workstation Routing Execution</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                    {[
+                      { step: 'Step 10: Laser Sheet Metal Blanking', machine: 'Laser Cutter Cell A', duration: '4.5 min', operator: 'Auto-Feed', status: 'Completed' },
+                      { step: 'Step 20: 5-Axis Precision Milling', machine: 'CNC Centre #01', duration: '18.2 min', operator: 'Auto-Rigging', status: 'In Progress' },
+                      { step: 'Step 30: Automated Ultrasonic Cleaning', machine: 'Wash Tank 2', duration: '6.0 min', operator: 'AGV-489 Transfer', status: 'Queued' },
+                      { step: 'Step 40: CMM Dimensional Inspection', machine: 'Scanner Cell', duration: '3.0 min', operator: 'Quality Tech', status: 'Queued' },
+                    ].map((s, i) => (
+                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                        <div>
+                          <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#000000' }}>{s.step}</div>
+                          <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.2rem' }}>Machine: {s.machine} · Tech: {s.operator}</div>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                          <span style={{ fontSize: '0.78rem', color: '#475569' }}>{s.duration}</span>
+                          <span style={{ fontSize: '0.72rem', fontWeight: 500, padding: '0.2rem 0.6rem', borderRadius: '4px', backgroundColor: s.status === 'Completed' ? '#dcfce7' : s.status === 'In Progress' ? '#e0f2fe' : '#f1f5f9', color: s.status === 'Completed' ? '#15803d' : s.status === 'In Progress' ? '#0369a1' : '#64748b' }}>{s.status}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB VIEW 5: INVENTORY/WAREHOUSE */}
+            {activeNavTab === 'Inventory/Warehouse' && (
+              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Automated Warehouse & Storage Pods (ASRS)</h3>
+                  <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>8 High-density storage pods (480 storage bins), raw material stock levels, and AGV buffer inventory.</p>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.2rem' }}>
                   {[
-                    '[10:34:12] [INFO] [AGV_NAV] AGV-489 reached waypoint (169, 235) successfully',
-                    '[10:33:55] [SUCCESS] [CNC_CELL_04] Cycle #1842 completed with tolerance ±0.003mm',
-                    '[10:32:05] [INFO] [FMS_DISPATCH] Task TSK-00051 auto-assigned to AGV-489',
-                    '[10:30:44] [INFO] [SAFETY_LIDAR] Zone B-4 clear of human obstacles',
-                    '[10:28:10] [INFO] [AGV_NAV] AGV-571 docked at Station 4 (Battery 94%)',
-                    '[10:25:01] [SUCCESS] [QUALITY_RIG] Laser acoustic scan passed for Batch #8902',
-                    '[10:21:40] [INFO] [PLC_GATEWAY] Telemetry packet sync 100% OK (Latency 4ms)',
-                  ].map((log, i) => (
-                    <div key={i} style={{ marginBottom: '0.6rem', borderBottom: '1px solid #1e293b', paddingBottom: '0.4rem' }}>
-                      {log}
+                    { pod: 'Pod 1 (Aluminum Alloy Stock)', bins: '60/60 Bins Full', level: 100 },
+                    { pod: 'Pod 2 (Titanium Billets)', bins: '54/60 Bins Full', level: 90 },
+                    { pod: 'Pod 3 (Fasteners & Fittings)', bins: '48/60 Bins Full', level: 80 },
+                    { pod: 'Pod 4 (Finished Hydraulics)', bins: '58/60 Bins Full', level: 96 },
+                    { pod: 'Pod 5 (Electronic Sub-assemblies)', bins: '42/60 Bins Full', level: 70 },
+                    { pod: 'Pod 6 (Raw Carbon Sheet)', bins: '60/60 Bins Full', level: 100 },
+                    { pod: 'Pod 7 (Buffer Station East)', bins: '30/60 Bins Full', level: 50 },
+                    { pod: 'Pod 8 (Buffer Station West)', bins: '24/60 Bins Full', level: 40 },
+                  ].map((p, i) => (
+                    <div key={i} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '12px', border: '1px solid #cbd5e1' }}>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#000000', marginBottom: '0.4rem' }}>{p.pod}</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.8rem' }}>{p.bins}</div>
+                      <div style={{ height: '6px', backgroundColor: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
+                        <div style={{ width: `${p.level}%`, height: '100%', backgroundColor: '#000000', borderRadius: '4px' }} />
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* TAB VIEW 6: ALERTS VIEW */}
-            {activeNavTab === 'Alerts' && (
+            {/* TAB VIEW 6: QUALITY MANAGEMENT */}
+            {activeNavTab === 'Quality Management' && (
               <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Safety & Maintenance Alerts</h3>
-                  <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Automated diagnostic alerts, obstacle triggers, and predictive maintenance notifications.</p>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Quality Assurance & Zero-Defect Telemetry</h3>
+                  <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Automated Optical Inspection (AOI), acoustic flaw detection, and Six-Sigma PPM tracking.</p>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.4rem' }}>
+                  <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
+                    <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>First Pass Yield (FPY)</div>
+                    <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>99.94%</div>
+                    <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem' }}>Target &gt; 99.8%</div>
+                  </div>
+
+                  <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
+                    <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>Defect Rate (PPM)</div>
+                    <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>0.02 PPM</div>
+                    <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem' }}>World-Class Aerospace Standard</div>
+                  </div>
+
+                  <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
+                    <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>CMM Calibration Status</div>
+                    <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>Passed</div>
+                    <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem' }}>NIST Traceable</div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB VIEW 7: MAINTENANCE */}
+            {activeNavTab === 'Maintenance' && (
+              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Predictive & Preventive Maintenance</h3>
+                  <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>AI vibration analysis, spindle lubrication alerts, and scheduled downtime prevention.</p>
                 </div>
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {[
-                    { id: 'ALT-109', title: 'Scheduled Spindle Lubrication', desc: 'CNC Cell 04 requires automated spindle lubrication cycle within 48 hours.', severity: 'Low', time: '10 mins ago' },
-                    { id: 'ALT-108', title: 'AGV-254 Low Battery Warning', desc: 'Battery level reached 32%. Re-routing to Dock 2 scheduled upon task finish.', severity: 'Medium', time: '25 mins ago' },
-                    { id: 'ALT-107', title: 'Safety LIDAR Obstacle Auto-Cleared', desc: 'Temporary aisle obstruction cleared in Corridor B. Normal velocity restored.', severity: 'Resolved', time: '1 hour ago' },
-                  ].map((alt) => (
-                    <div key={alt.id} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '12px', border: '1px solid #cbd5e1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    { task: 'CNC Centre #01 - Spindle Lubrication', due: 'In 48 Hours', status: 'Scheduled' },
+                    { task: 'AGV-489 - Drive Wheel Tread Inspection', due: 'In 120 Hours', status: 'Scheduled' },
+                    { task: 'Laser Cutter Optics Cleaning', due: 'Completed Today', status: 'Completed' },
+                  ].map((m, i) => (
+                    <div key={i} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '12px', border: '1px solid #cbd5e1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.3rem' }}>
-                          <span style={{ fontWeight: 500, color: '#000000', fontSize: '0.95rem' }}>{alt.title}</span>
-                          <span style={{ fontSize: '0.7rem', fontWeight: 500, padding: '0.15rem 0.5rem', borderRadius: '4px', backgroundColor: alt.severity === 'Resolved' ? '#dcfce7' : '#fef3c7', color: alt.severity === 'Resolved' ? '#15803d' : '#b45309' }}>{alt.severity}</span>
-                        </div>
-                        <div style={{ fontSize: '0.82rem', color: '#475569' }}>{alt.desc}</div>
+                        <div style={{ fontSize: '0.9rem', fontWeight: 500, color: '#000000' }}>{m.task}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.2rem' }}>Due: {m.due}</div>
                       </div>
-                      <button style={{ padding: '0.4rem 0.9rem', border: '1px solid #cbd5e1', backgroundColor: '#ffffff', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 500, cursor: 'pointer' }}>Acknowledge</button>
+                      <span style={{ padding: '0.3rem 0.8rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 500, backgroundColor: m.status === 'Completed' ? '#dcfce7' : '#f1f5f9', color: m.status === 'Completed' ? '#15803d' : '#000000' }}>{m.status}</span>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* TAB VIEW 7: ANALYTICS VIEW */}
-            {activeNavTab === 'Analytics' && (
+            {/* TAB VIEW 8: WORKFORCE MANAGEMENT */}
+            {activeNavTab === 'Workforce Management' && (
+              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Workforce & Operator Safety Management</h3>
+                  <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Operator certifications, shift scheduling, safety badge telemetry, and ergonomic load tracking.</p>
+                </div>
+
+                <div style={{ backgroundColor: '#ffffff', borderRadius: '14px', border: '1px solid #cbd5e1', padding: '1.5rem' }}>
+                  <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000', marginBottom: '1rem' }}>Shift 1 Active Operators Roster (12 On Floor)</h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                    {[
+                      { name: 'Sarah Jenkins', role: 'Robotics Lead', station: 'AGV Fleet Control', badge: 'Active' },
+                      { name: 'Michael Chen', role: 'CNC Machinist', station: 'Cell 4 (5-Axis)', badge: 'Active' },
+                      { name: 'Elena Rostova', role: 'Quality Inspector', station: 'CMM Scanner Cell', badge: 'Active' },
+                    ].map((op, i) => (
+                      <div key={i} style={{ padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                        <div style={{ fontSize: '0.88rem', fontWeight: 500, color: '#000000' }}>{op.name}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.2rem' }}>{op.role} · {op.station}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB VIEW 9: PRODUCTION SCHEDULING */}
+            {activeNavTab === 'Production Scheduling' && (
+              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Production Timeline & Job Scheduling Engine</h3>
+                  <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Automated job sequencing, changeover minimization, and order priority dispatching.</p>
+                </div>
+
+                <div style={{ backgroundColor: '#ffffff', padding: '1.5rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
+                  <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000', marginBottom: '1rem' }}>Interactive Shift Schedule Matrix</h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                    {[
+                      { job: 'Job #901 - Aerospace Flange Batch', line: 'CNC Line A', start: '08:00', end: '12:30', status: 'Active' },
+                      { job: 'Job #902 - AGV Chassis Welding Pack', line: 'Weld Line B', start: '10:00', end: '15:00', status: 'Active' },
+                      { job: 'Job #903 - Medical Manifold 3D Print', line: 'Additive Line 01', start: '13:00', end: '18:00', status: 'Scheduled' },
+                    ].map((j, i) => (
+                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem 1rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0' }}>
+                        <div>
+                          <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#000000' }}>{j.job}</div>
+                          <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.2rem' }}>Line: {j.line} · Time: {j.start} - {j.end}</div>
+                        </div>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 500, padding: '0.2rem 0.6rem', borderRadius: '4px', backgroundColor: j.status === 'Active' ? '#e0f2fe' : '#f1f5f9', color: j.status === 'Active' ? '#0369a1' : '#64748b' }}>{j.status}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB VIEW 10: ANALYTICS & REPORTING */}
+            {activeNavTab === 'Analytics & Reporting' && (
               <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
                   <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>OEE & Factory Analytics</h3>
@@ -1084,6 +1172,71 @@ export default function FactoryDashboardInteractive() {
                     <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>-38.5%</div>
                     <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem', fontWeight: 500 }}>AI Smart Grid Active</div>
                   </div>
+                </div>
+              </div>
+            )}
+
+            {/* TAB VIEW 11: USER & ROLE MANAGEMENT */}
+            {activeNavTab === 'User & Role Management' && (
+              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Access Control & Security Roles</h3>
+                  <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Role-based access matrix, administrator privileges, and API security key control.</p>
+                </div>
+
+                <div style={{ backgroundColor: '#ffffff', padding: '1.5rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
+                  <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000', marginBottom: '1rem' }}>User Access Permissions Matrix</h4>
+                  <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.85rem' }}>
+                    <thead>
+                      <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b' }}>
+                        <th style={{ padding: '0.6rem 0' }}>Role Name</th>
+                        <th>Assigned Users</th>
+                        <th>Floor Override</th>
+                        <th>FMS Config</th>
+                        <th>Security Token</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        { role: 'Administrator', count: '2 Users', override: 'Allowed', config: 'Full Access', token: 'Active RSA-4096' },
+                        { role: 'Robotics Engineer', count: '4 Users', override: 'Allowed', config: 'Fleet Only', token: 'Active RSA-2048' },
+                        { role: 'Shift Supervisor', count: '3 Users', override: 'Restricted', config: 'Read-Only', token: 'Active' },
+                        { role: 'Shop Floor Operator', count: '12 Users', override: 'Disabled', config: 'Disabled', token: 'Basic Badge' },
+                      ].map((r, i) => (
+                        <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                          <td style={{ padding: '0.8rem 0', fontWeight: 500, color: '#000000' }}>{r.role}</td>
+                          <td>{r.count}</td>
+                          <td>{r.override}</td>
+                          <td>{r.config}</td>
+                          <td><span style={{ color: '#16a34a', fontWeight: 500 }}>{r.token}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
+
+            {/* TAB VIEW 12: ERP/PLC INTEGRATION */}
+            {activeNavTab === 'ERP/PLC Integration' && (
+              <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
+                <div style={{ marginBottom: '1.5rem' }}>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Enterprise ERP & OPC-UA PLC Gateways</h3>
+                  <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Sub-millisecond Industrial Ethernet sync between SAP/Oracle ERP and Siemens/Rockwell PLC gateways.</p>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.2rem' }}>
+                  {[
+                    { name: 'SAP S/4HANA ERP Connector', protocol: 'REST / OData', latency: '12ms', status: 'Connected' },
+                    { name: 'Siemens S7-1500 PLC Gateway', protocol: 'OPC-UA', latency: '2ms', status: 'Connected' },
+                    { name: 'Rockwell ControlLogix PLC', protocol: 'EtherNet/IP', latency: '3ms', status: 'Connected' },
+                  ].map((g, i) => (
+                    <div key={i} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
+                      <div style={{ fontSize: '0.9rem', fontWeight: 500, color: '#000000', marginBottom: '0.4rem' }}>{g.name}</div>
+                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.8rem' }}>Protocol: {g.protocol} · Latency: {g.latency}</div>
+                      <span style={{ padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.72rem', fontWeight: 500, backgroundColor: '#dcfce7', color: '#15803d' }}>● {g.status}</span>
+                    </div>
+                  ))}
                 </div>
               </div>
             )}
