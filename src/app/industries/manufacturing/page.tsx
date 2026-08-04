@@ -4,8 +4,8 @@ import IndustrialRobot3D from '@/components/IndustrialRobot3D';
 import { Capabilities3DGrid } from '@/components/Capabilities3DGrid';
 
 export const metadata: Metadata = {
-  title: "Precision Manufacturing & 3D Industrial Robotics — Zawr Industries",
-  description: "Zawr Industries delivers precision industrial manufacturing, 3D robotics, contract production, and advanced engineering solutions under Make in India.",
+  title: "AI Powered Precision Manufacturing — Zawr Industries",
+  description: "Zawr Industries delivers AI-powered precision manufacturing, 3D robotics, contract production, and advanced engineering solutions under Make in India.",
 };
 
 const manufacturingCapabilities = [
@@ -39,139 +39,194 @@ export default function ManufacturingPage() {
   return (
     <div style={{ backgroundColor: '#ffffff', color: '#111111', minHeight: '100vh', overflowX: 'hidden' }}>
       
-      {/* 1. Black & White Hero Section with 3D Interactive GLB Robot */}
+      {/* 1. Hero Section matching exact reference layout */}
       <section style={{
         position: 'relative',
-        padding: '8rem 5% 5rem',
+        padding: '7rem 5% 4rem',
         backgroundColor: '#ffffff',
         borderBottom: '1px solid #e2e8f0',
+        minHeight: '85vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        overflow: 'hidden',
       }}>
+        
+        {/* Centered Large Title */}
+        <div style={{ textAlign: 'center', zIndex: 10, maxWidth: '900px', margin: '0 auto 1rem' }}>
+          <h1 style={{
+            fontSize: 'clamp(3rem, 6.5vw, 5.5rem)',
+            fontWeight: 400,
+            lineHeight: 1.15,
+            letterSpacing: '-0.03em',
+            color: '#000000',
+            fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+          }}>
+            AI powered<br />
+            precision manufacturing
+          </h1>
+        </div>
+
+        {/* 3D Robot Arm & Flanking Grid Metric Cards Container */}
         <div style={{
-          maxWidth: '1280px',
+          position: 'relative',
+          width: '100%',
+          maxWidth: '1200px',
+          height: '540px',
           margin: '0 auto',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '3.5rem',
+          display: 'flex',
           alignItems: 'center',
+          justifyContent: 'center',
         }}>
-          
-          {/* Left Column: Hero Text & CTAs */}
-          <div>
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '0.6rem',
-              padding: '0.4rem 1rem',
-              borderRadius: '30px',
-              backgroundColor: '#f1f5f9',
-              border: '1px solid #cbd5e1',
-              color: '#0f172a',
-              fontSize: '0.85rem',
-              fontWeight: 700,
-              marginBottom: '1.8rem',
-              letterSpacing: '0.05em',
-            }}>
-              <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#000000' }}></span>
-              MAKE IN INDIA // 3D INDUSTRIAL ROBOTICS
+
+          {/* FLOATING METRIC BADGE 1: Top Left */}
+          <div style={{
+            position: 'absolute',
+            top: '15%',
+            left: '5%',
+            padding: '1.4rem 1.8rem',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
+            backgroundSize: '12px 12px',
+            border: '1px solid rgba(0, 0, 0, 0.08)',
+            borderRadius: '12px',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)',
+            textAlign: 'center',
+            zIndex: 20,
+            minWidth: '140px',
+          }}>
+            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#000000', marginBottom: '0.2rem' }}>
+              ±0.005mm
             </div>
-
-            <h1 style={{
-              fontSize: 'clamp(2.5rem, 5vw, 4rem)',
-              fontWeight: 800,
-              lineHeight: 1.1,
-              letterSpacing: '-0.03em',
-              marginBottom: '1.5rem',
-              color: '#000000',
-            }}>
-              Precision Industrial Manufacturing & 3D Robotics
-            </h1>
-
-            <p style={{
-              fontSize: 'clamp(1rem, 1.8vw, 1.2rem)',
-              lineHeight: 1.7,
-              color: '#475569',
-              marginBottom: '2.2rem',
-              maxWidth: '580px',
-            }}>
-              Zawr Industries' Manufacturing division delivers high-precision metallurgy, multi-axis autonomous 3D industrial robotics, and contract production lines engineered for global scale and quality compliance.
-            </p>
-
-            {/* Quick Metrics Bar */}
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '1rem',
-              marginBottom: '2.5rem',
-              padding: '1.2rem',
-              backgroundColor: '#f8fafc',
-              borderRadius: '16px',
-              border: '1px solid #e2e8f0',
-            }}>
-              <div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000' }}>±0.005mm</div>
-                <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 500 }}>Tolerance</div>
-              </div>
-              <div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000' }}>6-Axis</div>
-                <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 500 }}>Robotics Sync</div>
-              </div>
-              <div>
-                <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000' }}>99.98%</div>
-                <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 500 }}>Factory Uptime</div>
-              </div>
-            </div>
-
-            {/* Action CTAs */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-              <Link 
-                href="/contact"
-                style={{
-                  padding: '1rem 2rem',
-                  borderRadius: '50px',
-                  backgroundColor: '#000000',
-                  color: '#ffffff',
-                  fontWeight: 600,
-                  fontSize: '0.95rem',
-                  textDecoration: 'none',
-                  boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
-                  transition: 'all 0.3s ease',
-                }}
-              >
-                Schedule Technical Audit
-              </Link>
-              <Link 
-                href="/contact/client-relations"
-                style={{
-                  padding: '1rem 2rem',
-                  borderRadius: '50px',
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #000000',
-                  color: '#000000',
-                  fontWeight: 600,
-                  fontSize: '0.95rem',
-                  textDecoration: 'none',
-                  transition: 'all 0.3s ease',
-                }}
-              >
-                Contract Manufacturing
-              </Link>
+            <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 500 }}>
+              Tolerance
             </div>
           </div>
 
-          {/* Right Column: 3D Interactive GLB Robot Canvas */}
-          <div style={{ width: '100%', height: '560px', minHeight: '450px' }}>
+          {/* FLOATING METRIC BADGE 2: Bottom Left */}
+          <div style={{
+            position: 'absolute',
+            bottom: '15%',
+            left: '12%',
+            padding: '1.4rem 1.8rem',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
+            backgroundSize: '12px 12px',
+            border: '1px solid rgba(0, 0, 0, 0.08)',
+            borderRadius: '12px',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)',
+            textAlign: 'center',
+            zIndex: 20,
+            minWidth: '140px',
+          }}>
+            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#000000', marginBottom: '0.2rem' }}>
+              6-Axis
+            </div>
+            <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 500 }}>
+              Robotics Sync
+            </div>
+          </div>
+
+          {/* FLOATING METRIC BADGE 3: Top Right */}
+          <div style={{
+            position: 'absolute',
+            top: '15%',
+            right: '5%',
+            padding: '1.4rem 1.8rem',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
+            backgroundSize: '12px 12px',
+            border: '1px solid rgba(0, 0, 0, 0.08)',
+            borderRadius: '12px',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)',
+            textAlign: 'center',
+            zIndex: 20,
+            minWidth: '140px',
+          }}>
+            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#000000', marginBottom: '0.2rem' }}>
+              99.98%
+            </div>
+            <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 500 }}>
+              Factory Uptime
+            </div>
+          </div>
+
+          {/* FLOATING METRIC BADGE 4: Bottom Right */}
+          <div style={{
+            position: 'absolute',
+            bottom: '15%',
+            right: '12%',
+            padding: '1.4rem 1.8rem',
+            backgroundColor: 'rgba(255, 255, 255, 0.95)',
+            backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px)',
+            backgroundSize: '12px 12px',
+            border: '1px solid rgba(0, 0, 0, 0.08)',
+            borderRadius: '12px',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.04)',
+            textAlign: 'center',
+            zIndex: 20,
+            minWidth: '140px',
+          }}>
+            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#000000', marginBottom: '0.2rem' }}>
+              ±0.005mm
+            </div>
+            <div style={{ fontSize: '0.8rem', color: '#94a3b8', fontWeight: 500 }}>
+              Tolerance
+            </div>
+          </div>
+
+          {/* CENTER 3D ROBOT CANVAS */}
+          <div style={{ width: '100%', height: '100%', position: 'relative', zIndex: 10 }}>
             <IndustrialRobot3D />
           </div>
 
         </div>
+
+        {/* Action CTAs */}
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.2rem', marginTop: '1.5rem', zIndex: 20 }}>
+          <Link 
+            href="/contact"
+            style={{
+              padding: '1rem 2.2rem',
+              borderRadius: '50px',
+              backgroundColor: '#000000',
+              color: '#ffffff',
+              fontWeight: 600,
+              fontSize: '0.95rem',
+              textDecoration: 'none',
+              boxShadow: '0 10px 25px rgba(0, 0, 0, 0.15)',
+              transition: 'all 0.3s ease',
+            }}
+          >
+            Schedule Technical Audit
+          </Link>
+          <Link 
+            href="/contact/client-relations"
+            style={{
+              padding: '1rem 2.2rem',
+              borderRadius: '50px',
+              backgroundColor: '#ffffff',
+              border: '1px solid #000000',
+              color: '#000000',
+              fontWeight: 600,
+              fontSize: '0.95rem',
+              textDecoration: 'none',
+              transition: 'all 0.3s ease',
+            }}
+          >
+            Contract Manufacturing
+          </Link>
+        </div>
+
       </section>
 
-      {/* 2. 3D Capabilities Section */}
+      {/* 2. Capabilities Section */}
       <section style={{ padding: '6rem 5%', backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto' }}>
           <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
             <h2 style={{ fontSize: 'clamp(2rem, 3.5vw, 2.8rem)', fontWeight: 800, marginBottom: '1rem', color: '#000000' }}>
-              3D Interactive Engineering Capabilities
+              Industrial Engineering Capabilities
             </h2>
             <p style={{ fontSize: '1.1rem', color: '#64748b', maxWidth: '640px', margin: '0 auto' }}>
               End-to-end industrial manufacturing capabilities, from automated CNC component fabrication to intelligent 3D robotic assembly.
