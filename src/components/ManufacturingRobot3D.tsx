@@ -18,7 +18,7 @@ export default function ManufacturingRobot3D() {
     // 1. Scene Setup (Clean White Studio Environment)
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup (Positioned to frame the enlarged 3D robot arm)
+    // 2. Camera Setup (Positioned for lower 3D robot arm placement)
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
     camera.position.set(0, 0.35, 4.0);
     camera.lookAt(0, 0.1, 0);
@@ -51,14 +51,14 @@ export default function ManufacturingRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Properly aligned base and enlarged scale 3.6)
+    // 6. Load GLB Model (Lowered Y-position)
     const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, -0.25, 0);
+    modelGroup.position.set(0, -0.55, 0); // Brought lower down
     scene.add(modelGroup);
 
     const loader = new GLTFLoader();
     loader.load(
-      '/assets/robotic+arm+3d+model.glb?v=13',
+      '/assets/robotic+arm+3d+model.glb?v=14',
       (gltf) => {
         const loadedModel = gltf.scene;
 
@@ -68,7 +68,7 @@ export default function ManufacturingRobot3D() {
         const size = box.getSize(new THREE.Vector3());
 
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 3.6 / maxDim; // Increased size for impressive hero presence
+        const scale = 3.6 / maxDim;
         loadedModel.scale.set(scale, scale, scale);
 
         // Center horizontally & anchor base bottom to y = 0
@@ -125,7 +125,7 @@ export default function ManufacturingRobot3D() {
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // 8. Render Loop (Stationary Base, ONLY horizontal Y-axis rotation from mouse X)
+    // 8. Render Loop (Stationary Base lowered at y = -0.55, ONLY horizontal Y-axis rotation)
     let animId: number;
 
     const animate = () => {
@@ -133,8 +133,8 @@ export default function ManufacturingRobot3D() {
 
       mouse.lerp(targetMouse, 0.25);
 
-      // Model base is fixed stationary at y = -0.25
-      modelGroup.position.set(0, -0.25, 0);
+      // Model base is fixed stationary at y = -0.55
+      modelGroup.position.set(0, -0.55, 0);
       modelGroup.rotation.y = mouse.x * 0.45;
       modelGroup.rotation.x = 0;
       modelGroup.rotation.z = 0;
