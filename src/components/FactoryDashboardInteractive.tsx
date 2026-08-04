@@ -61,6 +61,7 @@ export default function FactoryDashboardInteractive() {
   const containerRef = useRef<HTMLDivElement>(null);
   const activePathRef = useRef<SVGPathElement>(null);
   
+  const [mounted, setMounted] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeNavTab, setActiveNavTab] = useState<NavTab>('Dashboard');
   const [activeTab, setActiveTab] = useState<'TASKS' | 'FLEET' | 'EVENTS'>('TASKS');
@@ -75,6 +76,10 @@ export default function FactoryDashboardInteractive() {
 
   // Animated AGV positions on path
   const [movingAgvPos, setMovingAgvPos] = useState<{ x: number; y: number }>({ x: 169, y: 45 });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // 1. Scroll-driven 3D tilt animation
   useEffect(() => {
@@ -222,8 +227,10 @@ export default function FactoryDashboardInteractive() {
     { name: 'ERP/PLC Integration', shortLabel: 'ERP / PLC', icon: <path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16M5 19a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/> },
   ];
 
+  if (!mounted) return null;
+
   return (
-    <section style={{
+    <section suppressHydrationWarning style={{
       padding: 'clamp(2.5rem, 5vw, 5rem) 3%',
       backgroundColor: '#ffffff',
       borderBottom: '1px solid #e2e8f0',
