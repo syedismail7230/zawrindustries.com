@@ -122,7 +122,7 @@ export default function FactoryDashboardInteractive() {
         >
           {/* Dashboard Image Viewport */}
           <div style={{ position: 'relative', width: '100%', overflow: 'hidden', backgroundColor: '#ffffff' }}>
-            {/* Base High-Resolution Dashboard UI Image */}
+            {/* Base High-Resolution Dashboard UI Image — Monochrome Black & White */}
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/assets/factory-dashboard.png"
@@ -131,11 +131,12 @@ export default function FactoryDashboardInteractive() {
                 width: '100%',
                 height: 'auto',
                 display: 'block',
+                filter: 'grayscale(100%) contrast(1.05)',
                 transform: is3DView
                   ? `perspective(1200px) rotateX(20deg) rotateZ(-2deg) scale(${zoomLevel * 1.04})`
                   : `scale(${zoomLevel})`,
                 transformOrigin: 'center center',
-                transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+                transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease',
               }}
             />
 
@@ -215,14 +216,14 @@ export default function FactoryDashboardInteractive() {
                     width: '20px',
                     height: '20px',
                     borderRadius: '50%',
-                    backgroundColor: 'rgba(34, 197, 94, 0.25)',
-                    border: '2px solid #22c55e',
+                    backgroundColor: 'rgba(0, 0, 0, 0.15)',
+                    border: '2px solid #000000',
                     animation: 'pulseRing 2s infinite ease-in-out',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                   }}>
-                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#22c55e' }} />
+                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#000000' }} />
                   </div>
 
                   {hoveredAgv === agv.id && (
@@ -321,7 +322,7 @@ export default function FactoryDashboardInteractive() {
             gap: '1rem',
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
-              <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#22c55e', animation: 'pulse 1.5s infinite' }} />
+              <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#ffffff', animation: 'pulse 1.5s infinite' }} />
               <div>
                 <span style={{ fontSize: '0.72rem', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em', display: 'block' }}>SELECTED VIEW TELEMETRY</span>
                 <span style={{ fontSize: '1rem', fontWeight: 600, color: '#ffffff' }}>
