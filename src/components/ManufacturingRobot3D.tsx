@@ -18,10 +18,10 @@ export default function ManufacturingRobot3D() {
     // 1. Scene Setup (Clean White Studio Environment)
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup (Positioned for a slightly larger 3D robot arm)
+    // 2. Camera Setup (Targeting the center of the base cylinder)
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-    camera.position.set(0, 0.3, 4.1);
-    camera.lookAt(0, 0.1, 0);
+    camera.position.set(0, 0.35, 4.2);
+    camera.lookAt(0, 0.2, 0);
 
     // 3. Renderer Setup with PMREM Environment Generator
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -51,28 +51,54 @@ export default function ManufacturingRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Lowered Y-position = -1.45, slightly increased scale 3.2)
+    // 6. Load GLB Model (Centered dead-center on the base cylinder)
     const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, -1.45, 0);
+    modelGroup.position.set(0, -0.65, 0);
     scene.add(modelGroup);
 
     const loader = new GLTFLoader();
     loader.load(
-      '/assets/robotic+arm+3d+model.glb?v=18',
+      '/assets/robotic+arm+3d+model.glb?v=19',
       (gltf) => {
         const loadedModel = gltf.scene;
 
-        // Auto-center & scale model
-        const box = new THREE.Box3().setFromObject(loadedModel);
-        const center = box.getCenter(new THREE.Vector3());
-        const size = box.getSize(new THREE.Vector3());
+        // Force update world matrices to calculate accurate geometry bounds
+        loadedModel.updateMatrixWorld(true);
 
-        const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 3.2 / maxDim; // Slightly increased scale factor (3.2)
+        const totalBox = new THREE.Box3().setFromObject(loadedModel);
+        const totalSize = totalBox.getSize(new THREE.Vector3());
+        const maxDim = Math.max(totalSize.x, totalSize.y, totalSize.z);
+        const scale = 3.2 / maxDim;
         loadedModel.scale.set(scale, scale, scale);
 
-        // Center horizontally & anchor base bottom to y = 0
-        loadedModel.position.set(-center.x * scale, -box.min.y * scale, -center.z * scale);
+        // Find base cylinder meshes (bottom 20% height of model)
+        const cutoffY = totalBox.min.y + totalSize.y * 0.20;
+        const baseBox = new THREE.Box3();
+
+        loadedModel.traverse((child) => {
+          if ((child as THREE.Mesh).isMesh) {
+            const mesh = child as THREE.Mesh;
+            mesh.geometry.computeBoundingBox();
+            if (mesh.geometry.boundingBox) {
+              const meshWorldBox = mesh.geometry.boundingBox.clone().applyMatrix4(mesh.matrixWorld);
+              if (meshWorldBox.min.y <= cutoffY) {
+                baseBox.union(meshWorldBox);
+              }
+            }
+          }
+        });
+
+        // Fallback to total center if baseBox is empty
+        const baseCenter = baseBox.isEmpty() 
+          ? totalBox.getCenter(new THREE.Vector3()) 
+          : baseBox.getCenter(new THREE.Vector3());
+
+        // Center dead-center on the BASE CYLINDER at x = 0, z = 0
+        loadedModel.position.set(
+          -baseCenter.x * scale, 
+          -totalBox.min.y * scale, 
+          -baseCenter.z * scale
+        );
 
         // Preserve intact materials & prevent pitch black silhouetting
         loadedModel.traverse((child) => {
@@ -105,7 +131,7 @@ export default function ManufacturingRobot3D() {
       }
     );
 
-    // 7. Mouse & Touch Cursor Tracking (ONLY Mouse X drives horizontal Y-rotation)
+    // 7. Mouse & Touch Cursor Tracking (ONLY Mouse X drives horizontal Y-rotation around base center)
     const mouse = new THREE.Vector2(0, 0);
     const targetMouse = new THREE.Vector2(0, 0);
 
@@ -125,7 +151,7 @@ export default function ManufacturingRobot3D() {
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // 8. Render Loop (Stationary Base lowered at y = -1.45, ONLY horizontal Y-axis rotation)
+    // 8. Render Loop (Model pivots around dead-centered base cylinder)
     let animId: number;
 
     const animate = () => {
@@ -133,8 +159,8 @@ export default function ManufacturingRobot3D() {
 
       mouse.lerp(targetMouse, 0.25);
 
-      // Model base is fixed stationary at y = -1.45
-      modelGroup.position.set(0, -1.45, 0);
+      // Base cylinder is centered at (0, -0.65, 0)
+      modelGroup.position.set(0, -0.65, 0);
       modelGroup.rotation.y = mouse.x * 0.45;
       modelGroup.rotation.x = 0;
       modelGroup.rotation.z = 0;
