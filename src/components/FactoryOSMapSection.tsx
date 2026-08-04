@@ -1,26 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 export default function FactoryOSMapSection() {
-  const [pulseOffset, setPulseOffset] = useState(0);
-
-  // Animate pulses along bezier lines
-  useEffect(() => {
-    let animId: number;
-    let start: number;
-
-    const step = (timestamp: number) => {
-      if (!start) start = timestamp;
-      const elapsed = timestamp - start;
-      setPulseOffset((elapsed / 15) % 1000);
-      animId = requestAnimationFrame(step);
-    };
-
-    animId = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(animId);
-  }, []);
-
   const leftNodes = [
     { title: 'PRODUCTION', desc: 'Work orders, scheduling, tracking' },
     { title: 'MACHINE MONITORING', desc: 'Machine status, performance, downtime' },
@@ -45,44 +27,19 @@ export default function FactoryOSMapSection() {
     { title: 'MAXIMUM EFFICIENCY', desc: 'Lower costs. Higher output.' },
   ];
 
-  // Generate Bezier curves connecting left cards to center hub
-  const generateLeftPaths = () => {
-    const total = leftNodes.length;
-    const startX = 240;
-    const endX = 460;
-    const centerY = 280;
+  // SVG viewBox geometry parameters (1200px width x 680px height)
+  const leftDotX = 320;      // Right edge of left cards
+  const centerLeftX = 460;   // Left edge of center hub box
+  const centerRightX = 740;  // Right edge of center hub box
+  const rightDotX = 880;     // Left edge of right cards
+  const centerY = 340;       // Y midpoint of center hub box
 
-    return leftNodes.map((_, i) => {
-      const startY = 40 + i * 58;
-      const controlX1 = startX + 110;
-      const controlX2 = endX - 80;
-      const pathD = `M ${startX} ${startY} C ${controlX1} ${startY}, ${controlX2} ${centerY}, ${endX} ${centerY}`;
-      return { pathD, startY };
-    });
-  };
-
-  // Generate Bezier curves connecting center hub to right cards
-  const generateRightPaths = () => {
-    const total = rightNodes.length;
-    const startX = 540;
-    const endX = 760;
-    const centerY = 280;
-
-    return rightNodes.map((_, i) => {
-      const endY = 40 + i * 58;
-      const controlX1 = startX + 80;
-      const controlX2 = endX - 110;
-      const pathD = `M ${startX} ${centerY} C ${controlX1} ${centerY}, ${controlX2} ${endY}, ${endX} ${endY}`;
-      return { pathD, endY };
-    });
-  };
-
-  const leftPaths = generateLeftPaths();
-  const rightPaths = generateRightPaths();
+  // Y positions for each of the 9 cards (height 52px + 16px gap = 68px step)
+  const getY = (index: number) => 68 + index * 68;
 
   return (
     <section style={{
-      padding: 'clamp(4rem, 8vw, 7rem) 4%',
+      padding: 'clamp(4rem, 7vw, 6rem) 2%',
       backgroundColor: '#ffffff',
       borderBottom: '1px solid #e2e8f0',
       overflow: 'hidden',
@@ -90,309 +47,352 @@ export default function FactoryOSMapSection() {
     }}>
       <style>{`
         @media (max-width: 1024px) {
-          .os-map-grid {
-            display: flex !important;
-            flex-direction: column !important;
-            gap: 2rem !important;
-          }
-          .os-map-svg-layer {
+          .os-map-desktop-container {
             display: none !important;
           }
-          .os-map-col {
-            width: 100% !important;
+          .os-map-mobile-container {
+            display: flex !important;
+          }
+        }
+        @media (min-width: 1025px) {
+          .os-map-mobile-container {
+            display: none !important;
           }
         }
       `}</style>
 
-      <div style={{ maxWidth: '1380px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         
         {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
+        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
           <span style={{
             fontSize: '0.78rem',
             fontWeight: 500,
             letterSpacing: '0.14em',
-            color: '#64748b',
+            color: '#3b82f6',
             textTransform: 'uppercase',
             display: 'inline-block',
-            marginBottom: '1rem',
+            marginBottom: '0.8rem',
           }}>
             UNIFIED OPERATING PLATFORM
           </span>
           
           <h2 style={{
-            fontSize: 'clamp(2rem, 4vw, 3.2rem)',
+            fontSize: 'clamp(1.8rem, 3.8vw, 3rem)',
             fontWeight: 300,
             lineHeight: 1.15,
             letterSpacing: '-0.03em',
-            color: '#000000',
-            marginBottom: '1rem',
+            color: '#0f172a',
+            marginBottom: '0.8rem',
           }}>
             Real-Time Visibility. Unified Control. Smarter Decisions.
           </h2>
 
-          <p style={{ fontSize: '1rem', color: '#64748b', maxWidth: '680px', margin: '0 auto', fontWeight: 300 }}>
+          <p style={{ fontSize: '0.98rem', color: '#64748b', maxWidth: '680px', margin: '0 auto', fontWeight: 300 }}>
             Connect all factory sub-systems into one autonomous intelligence engine.
           </p>
         </div>
 
-        {/* INTERACTIVE CONNECTOR DIAGRAM CONTAINER */}
-        <div style={{ position: 'relative', width: '100%' }}>
+        {/* DESKTOP INTEGRATED SVG DIAGRAM (100% Connected Lines) */}
+        <div className="os-map-desktop-container" style={{ position: 'relative', width: '100%', minHeight: '680px' }}>
           
-          <div className="os-map-grid" style={{
-            display: 'grid',
-            gridTemplateColumns: '310px 1fr 310px',
-            gap: '1rem',
-            alignItems: 'center',
-            position: 'relative',
-            zIndex: 10,
-          }}>
+          {/* SVG Connector Layer behind nodes */}
+          <svg
+            width="100%"
+            height="680"
+            viewBox="0 0 1200 680"
+            style={{ position: 'absolute', inset: 0, overflow: 'visible', pointerEvents: 'none', zIndex: 1 }}
+          >
+            {/* Left Curves: Funneling 9 Left Nodes into Center Hub Left Anchor */}
+            {leftNodes.map((_, i) => {
+              const y = getY(i);
+              const pathD = `M ${leftDotX} ${y} C ${leftDotX + 80} ${y}, ${centerLeftX - 50} ${centerY}, ${centerLeftX} ${centerY}`;
+              return (
+                <g key={`l-path-${i}`}>
+                  <path d={pathD} fill="none" stroke="#60a5fa" strokeWidth="1.8" opacity="0.85" />
+                  {/* Subtle animated pulse along each line */}
+                  <circle r="3.5" fill="#2563eb">
+                    <animateMotion path={pathD} dur={`${3 + i * 0.3}s`} repeatCount="indefinite" />
+                  </circle>
+                </g>
+              );
+            })}
+
+            {/* Center-to-Right Single Line Segment with Arrow indicator */}
+            <path d={`M ${centerRightX} ${centerY} L ${centerRightX + 45} ${centerY}`} fill="none" stroke="#2563eb" strokeWidth="2" />
+            <polygon points={`${centerRightX + 45},${centerY - 5} ${centerRightX + 54},${centerY} ${centerRightX + 45},${centerY + 5}`} fill="#2563eb" />
+
+            {/* Right Curves: Fanning out from Arrow Split into 9 Right Nodes */}
+            {rightNodes.map((_, i) => {
+              const y = getY(i);
+              const pathD = `M ${centerRightX + 54} ${centerY} C ${centerRightX + 90} ${centerY}, ${rightDotX - 80} ${y}, ${rightDotX} ${y}`;
+              return (
+                <g key={`r-path-${i}`}>
+                  <path d={pathD} fill="none" stroke="#60a5fa" strokeWidth="1.8" opacity="0.85" />
+                  <circle r="3.5" fill="#2563eb">
+                    <animateMotion path={pathD} dur={`${3 + i * 0.3}s`} repeatCount="indefinite" />
+                  </circle>
+                </g>
+              );
+            })}
+          </svg>
+
+          {/* HTML DOM Node Cards Overlay (zIndex: 2) */}
+          <div style={{ position: 'relative', zIndex: 2, width: '100%', height: '680px' }}>
             
-            {/* LEFT COLUMN: INPUT MODULES */}
-            <div className="os-map-col" style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-              {leftNodes.map((node, i) => (
+            {/* LEFT CARDS COLUMN */}
+            <div style={{ position: 'absolute', left: 0, top: 0, width: '320px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {leftNodes.map((node) => (
                 <div
                   key={node.title}
                   style={{
+                    height: '52px',
                     backgroundColor: '#ffffff',
-                    padding: '0.85rem 1.1rem',
-                    borderRadius: '14px',
+                    padding: '0.55rem 1rem',
+                    borderRadius: '12px',
                     border: '1px solid #cbd5e1',
-                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.03)',
-                    transition: 'all 0.25s ease',
-                    cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
                     position: 'relative',
+                    transition: 'all 0.2s ease',
+                    cursor: 'pointer',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#000000';
-                    e.currentTarget.style.transform = 'translateX(4px)';
+                    e.currentTarget.style.borderColor = '#2563eb';
+                    e.currentTarget.style.boxShadow = '0 6px 18px rgba(37, 99, 235, 0.12)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.borderColor = '#cbd5e1';
-                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.03)';
                   }}
                 >
-                  <div style={{ fontSize: '0.78rem', fontWeight: 500, color: '#000000', letterSpacing: '0.04em' }}>
-                    {node.title}
-                  </div>
-                  <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '0.2rem', fontWeight: 400 }}>
-                    {node.desc}
-                  </div>
-                  
-                  {/* Connection Node Point */}
+                  <div style={{ fontSize: '0.74rem', fontWeight: 600, color: '#0f172a', letterSpacing: '0.03em' }}>{node.title}</div>
+                  <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 400 }}>{node.desc}</div>
+
+                  {/* Connected Blue Node Dot */}
                   <div style={{
                     position: 'absolute',
-                    right: '-6px',
+                    right: '-5px',
                     top: '50%',
                     transform: 'translateY(-50%)',
                     width: '10px',
                     height: '10px',
                     borderRadius: '50%',
-                    backgroundColor: '#000000',
+                    backgroundColor: '#2563eb',
                     border: '2px solid #ffffff',
-                    boxShadow: '0 0 0 1px #cbd5e1',
+                    boxShadow: '0 0 0 1px #93c5fd',
                   }} />
                 </div>
               ))}
             </div>
 
-            {/* CENTER HUB: ZAWR FACTORY OS */}
+            {/* CENTER HUB BOX: ZAWR FACTORY OS */}
             <div style={{
+              position: 'absolute',
+              left: '460px',
+              top: '230px',
+              width: '280px',
+              height: '220px',
+              backgroundColor: '#ffffff',
+              border: '1px solid #cbd5e1',
+              borderRadius: '24px',
+              padding: '1.8rem 1.4rem',
+              textAlign: 'center',
+              boxShadow: '0 20px 50px rgba(37, 99, 235, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
-              padding: '2rem 1rem',
             }}>
+              {/* Left Connection Anchor Dot */}
               <div style={{
-                backgroundColor: '#ffffff',
-                border: '1px solid #cbd5e1',
-                borderRadius: '24px',
-                padding: '3rem 2.2rem',
-                textAlign: 'center',
-                boxShadow: '0 25px 60px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.03)',
-                maxWidth: '300px',
-                width: '100%',
-                position: 'relative',
+                position: 'absolute',
+                left: '-6px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                backgroundColor: '#2563eb',
+                border: '2.5px solid #ffffff',
+              }} />
+
+              <div style={{
+                fontSize: '2.1rem',
+                fontWeight: 600,
+                letterSpacing: '-0.02em',
+                color: '#0f172a',
+                lineHeight: 1.1,
               }}>
-                <div style={{
-                  fontSize: '1.9rem',
-                  fontWeight: 300,
-                  letterSpacing: '-0.02em',
-                  color: '#000000',
-                  lineHeight: 1.1,
-                  fontFamily: 'system-ui, sans-serif',
-                }}>
-                  ZAWR
-                </div>
-                
-                <div style={{
-                  fontSize: '1.25rem',
-                  fontWeight: 500,
-                  color: '#0284c7',
-                  letterSpacing: '0.06em',
-                  marginTop: '0.4rem',
-                  textTransform: 'uppercase',
-                }}>
-                  FACTORY OS
-                </div>
-
-                <div style={{
-                  height: '1px',
-                  backgroundColor: '#e2e8f0',
-                  margin: '1.5rem 0',
-                }} />
-
-                <div style={{
-                  fontSize: '0.82rem',
-                  color: '#64748b',
-                  fontWeight: 400,
-                  lineHeight: 1.5,
-                }}>
-                  One Platform.<br />
-                  Unlimited Control.
-                </div>
+                ZAWR
               </div>
+
+              <div style={{
+                fontSize: '1.2rem',
+                fontWeight: 600,
+                color: '#2563eb',
+                letterSpacing: '0.06em',
+                marginTop: '0.3rem',
+                textTransform: 'uppercase',
+              }}>
+                FACTORY OS
+              </div>
+
+              <div style={{
+                width: '60%',
+                height: '1px',
+                backgroundColor: '#e2e8f0',
+                margin: '1.1rem 0 0.9rem',
+              }} />
+
+              <div style={{
+                fontSize: '0.8rem',
+                color: '#64748b',
+                fontWeight: 400,
+                lineHeight: 1.4,
+              }}>
+                One Platform.<br />
+                Unlimited Control.
+              </div>
+
+              {/* Right Connection Anchor Dot */}
+              <div style={{
+                position: 'absolute',
+                right: '-6px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                width: '12px',
+                height: '12px',
+                borderRadius: '50%',
+                backgroundColor: '#2563eb',
+                border: '2.5px solid #ffffff',
+              }} />
             </div>
 
-            {/* RIGHT COLUMN: OUTPUT CAPABILITIES */}
-            <div className="os-map-col" style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
-              {rightNodes.map((node, i) => (
+            {/* RIGHT CARDS COLUMN */}
+            <div style={{ position: 'absolute', left: '880px', top: 0, width: '320px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              {rightNodes.map((node) => (
                 <div
                   key={node.title}
                   style={{
+                    height: '52px',
                     backgroundColor: '#ffffff',
-                    padding: '0.85rem 1.1rem',
-                    borderRadius: '14px',
+                    padding: '0.55rem 1rem',
+                    borderRadius: '12px',
                     border: '1px solid #cbd5e1',
-                    boxShadow: '0 4px 14px rgba(0, 0, 0, 0.03)',
-                    transition: 'all 0.25s ease',
-                    cursor: 'pointer',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.03)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
                     position: 'relative',
+                    transition: 'all 0.2s ease',
+                    cursor: 'pointer',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#000000';
-                    e.currentTarget.style.transform = 'translateX(-4px)';
+                    e.currentTarget.style.borderColor = '#2563eb';
+                    e.currentTarget.style.boxShadow = '0 6px 18px rgba(37, 99, 235, 0.12)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.borderColor = '#cbd5e1';
-                    e.currentTarget.style.transform = 'none';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.03)';
                   }}
                 >
-                  {/* Connection Node Point */}
+                  {/* Connected Blue Node Dot */}
                   <div style={{
                     position: 'absolute',
-                    left: '-6px',
+                    left: '-5px',
                     top: '50%',
                     transform: 'translateY(-50%)',
                     width: '10px',
                     height: '10px',
                     borderRadius: '50%',
-                    backgroundColor: '#0284c7',
+                    backgroundColor: '#2563eb',
                     border: '2px solid #ffffff',
-                    boxShadow: '0 0 0 1px #cbd5e1',
+                    boxShadow: '0 0 0 1px #93c5fd',
                   }} />
 
-                  <div style={{ fontSize: '0.78rem', fontWeight: 500, color: '#000000', letterSpacing: '0.04em' }}>
-                    {node.title}
-                  </div>
-                  <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '0.2rem', fontWeight: 400 }}>
-                    {node.desc}
-                  </div>
+                  <div style={{ fontSize: '0.74rem', fontWeight: 600, color: '#0f172a', letterSpacing: '0.03em' }}>{node.title}</div>
+                  <div style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 400 }}>{node.desc}</div>
                 </div>
               ))}
             </div>
 
           </div>
+        </div>
 
-          {/* BACKGROUND SVG BEZIER CURVE LINES LAYER */}
-          <svg
-            className="os-map-svg-layer"
-            width="1000"
-            height="560"
-            viewBox="0 0 1000 560"
-            style={{
-              position: 'absolute',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '100%',
-              height: '100%',
-              pointerEvents: 'none',
-              zIndex: 1,
-            }}
-          >
-            {/* Left-to-Center Lines */}
-            {leftPaths.map((item, idx) => (
-              <g key={`l-${idx}`}>
-                <path
-                  d={item.pathD}
-                  fill="none"
-                  stroke="#cbd5e1"
-                  strokeWidth="1.5"
-                />
-                <path
-                  d={item.pathD}
-                  fill="none"
-                  stroke="#000000"
-                  strokeWidth="2"
-                  strokeDasharray="8 12"
-                  strokeDashoffset={-pulseOffset}
-                  opacity="0.8"
-                />
-              </g>
-            ))}
+        {/* MOBILE RESPONSIVE STACK CONTAINER (< 1025px) */}
+        <div className="os-map-mobile-container" style={{ flexDirection: 'column', gap: '2rem' }}>
+          
+          {/* Mobile Center Card */}
+          <div style={{
+            backgroundColor: '#ffffff',
+            border: '1px solid #cbd5e1',
+            borderRadius: '20px',
+            padding: '2rem 1.5rem',
+            textAlign: 'center',
+            boxShadow: '0 12px 30px rgba(0,0,0,0.06)',
+          }}>
+            <div style={{ fontSize: '1.8rem', fontWeight: 600, color: '#0f172a' }}>ZAWR</div>
+            <div style={{ fontSize: '1.1rem', fontWeight: 600, color: '#2563eb', marginTop: '0.2rem' }}>FACTORY OS</div>
+            <div style={{ fontSize: '0.82rem', color: '#64748b', marginTop: '0.6rem' }}>One Platform. Unlimited Control.</div>
+          </div>
 
-            {/* Center-to-Right Lines */}
-            {rightPaths.map((item, idx) => (
-              <g key={`r-${idx}`}>
-                <path
-                  d={item.pathD}
-                  fill="none"
-                  stroke="#cbd5e1"
-                  strokeWidth="1.5"
-                />
-                <path
-                  d={item.pathD}
-                  fill="none"
-                  stroke="#0284c7"
-                  strokeWidth="2"
-                  strokeDasharray="8 12"
-                  strokeDashoffset={-pulseOffset}
-                  opacity="0.8"
-                />
-              </g>
-            ))}
-          </svg>
+          {/* Mobile Left Sub-systems List */}
+          <div>
+            <h4 style={{ fontSize: '0.85rem', fontWeight: 600, color: '#2563eb', marginBottom: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Integrated Sub-Systems</h4>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '0.8rem' }}>
+              {leftNodes.map((n) => (
+                <div key={n.title} style={{ padding: '0.8rem 1rem', backgroundColor: '#ffffff', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#0f172a' }}>{n.title}</div>
+                  <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '0.2rem' }}>{n.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Mobile Right Capabilities List */}
+          <div>
+            <h4 style={{ fontSize: '0.85rem', fontWeight: 600, color: '#2563eb', marginBottom: '0.8rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Core Capabilities</h4>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '0.8rem' }}>
+              {rightNodes.map((n) => (
+                <div key={n.title} style={{ padding: '0.8rem 1rem', backgroundColor: '#ffffff', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#0f172a' }}>{n.title}</div>
+                  <div style={{ fontSize: '0.72rem', color: '#64748b', marginTop: '0.2rem' }}>{n.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
 
         </div>
 
-        {/* BOTTOM CTA BLOCK */}
+        {/* BOTTOM CALL TO ACTION */}
         <div style={{
           textAlign: 'center',
-          marginTop: '5rem',
-          paddingTop: '3rem',
+          marginTop: '4rem',
+          paddingTop: '2.5rem',
           borderTop: '1px solid #e2e8f0',
         }}>
           <span style={{
             fontSize: '0.75rem',
-            fontWeight: 500,
+            fontWeight: 600,
             letterSpacing: '0.14em',
-            color: '#0284c7',
+            color: '#2563eb',
             textTransform: 'uppercase',
             display: 'inline-block',
-            marginBottom: '1rem',
+            marginBottom: '0.8rem',
           }}>
             BUILT FOR MODERN MANUFACTURING
           </span>
 
           <h3 style={{
-            fontSize: 'clamp(1.6rem, 3.5vw, 2.5rem)',
+            fontSize: 'clamp(1.5rem, 3.2vw, 2.4rem)',
             fontWeight: 300,
             lineHeight: 1.2,
             letterSpacing: '-0.02em',
-            color: '#000000',
-            marginBottom: '0.8rem',
+            color: '#0f172a',
+            marginBottom: '0.6rem',
           }}>
             One platform to run your entire factory.
           </h3>
@@ -400,7 +400,7 @@ export default function FactoryOSMapSection() {
           <p style={{
             fontSize: '0.95rem',
             color: '#64748b',
-            marginBottom: '2rem',
+            marginBottom: '1.8rem',
             fontWeight: 300,
           }}>
             Integrate. Automate. Optimize.
@@ -412,11 +412,11 @@ export default function FactoryOSMapSection() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.5rem',
-              padding: '0.9rem 2.2rem',
+              padding: '0.85rem 2.2rem',
               borderRadius: '50px',
               backgroundColor: '#000000',
               color: '#ffffff',
-              fontSize: '0.9rem',
+              fontSize: '0.88rem',
               fontWeight: 500,
               textDecoration: 'none',
               boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
@@ -424,7 +424,7 @@ export default function FactoryOSMapSection() {
             }}
           >
             <span>Book a demo</span>
-            <span style={{ fontSize: '1rem' }}>→</span>
+            <span style={{ fontSize: '0.95rem' }}>→</span>
           </a>
         </div>
 
