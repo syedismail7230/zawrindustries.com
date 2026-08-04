@@ -5,6 +5,7 @@ import { InteractiveTruckXray } from '@/components/InteractiveTruckXray';
 import { AgvScrollSection } from '@/components/AgvScrollSection';
 import { MaritimeFreightSection } from '@/components/MaritimeFreightSection';
 import { RailFreightSection } from '@/components/RailFreightSection';
+import { AirFreightSection } from '@/components/AirFreightSection';
 
 export const metadata: Metadata = {
   title: "Trade & Logistics Solutions — Zawr Industries India",
@@ -83,6 +84,9 @@ export default function LogisticsPage() {
 
       {/* ── INTERMODAL RAIL FREIGHT SECTION (TRAIN.PNG ON TOP + DETAILS BELOW) ── */}
       <RailFreightSection />
+
+      {/* ── AIR FREIGHT & GLOBAL FREIGHTER FLEET (PLANE.PNG ON RIGHT + DETAILS ON LEFT) ── */}
+      <AirFreightSection />
 
       {/* ── OVERVIEW & CAPABILITIES SECTION (CLEAN WHITE BACKGROUND) ── */}
       <div style={{ backgroundColor: '#ffffff', padding: 'clamp(3rem, 6vw, 5rem) clamp(1rem, 6vw, 8%)', maxWidth: '1200px', margin: '0 auto' }}>
