@@ -27,15 +27,17 @@ export default function FactoryOSMapSection() {
     { title: 'MAXIMUM EFFICIENCY', desc: 'Lower costs. Higher output.' },
   ];
 
-  // SVG viewBox geometry parameters (1200px width x 640px height)
-  const leftDotX = 320;      // Right edge of left text items
-  const centerLeftX = 470;   // Left edge of center hub text
-  const centerRightX = 730;  // Right edge of center hub text
-  const rightDotX = 880;     // Left edge of right text items
-  const centerY = 320;       // Y midpoint of center hub
+  // Geometry parameters for 1200x660 SVG canvas
+  const leftTextX = 300;     // Right-aligned text end X
+  const leftDotX = 320;      // Left column node dots
+  const centerLeftX = 470;   // Left anchor of center hub text
+  const centerRightX = 730;  // Right anchor of center hub text
+  const rightDotX = 880;     // Right column node dots
+  const rightTextX = 900;    // Left-aligned text start X
+  const centerY = 330;       // Center hub vertical midpoint
 
-  // Y positions for each of the 9 text items (height 48px + 16px gap = 64px step)
-  const getY = (index: number) => 50 + index * 64;
+  // Y coordinate for each of the 9 nodes (top padding 50px, 66px step)
+  const getY = (index: number) => 50 + index * 66;
 
   return (
     <section style={{
@@ -47,15 +49,15 @@ export default function FactoryOSMapSection() {
     }}>
       <style>{`
         @media (max-width: 1024px) {
-          .os-map-bw-desktop {
+          .os-map-svg-desktop {
             display: none !important;
           }
-          .os-map-bw-mobile {
+          .os-map-mobile-list {
             display: flex !important;
           }
         }
         @media (min-width: 1025px) {
-          .os-map-bw-mobile {
+          .os-map-mobile-list {
             display: none !important;
           }
         }
@@ -63,7 +65,7 @@ export default function FactoryOSMapSection() {
 
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         
-        {/* Section Header (Monochrome Black & White) */}
+        {/* Section Header */}
         <div style={{ textAlign: 'center', marginBottom: '3.5rem' }}>
           <span style={{
             fontSize: '0.78rem',
@@ -93,199 +95,146 @@ export default function FactoryOSMapSection() {
           </p>
         </div>
 
-        {/* DESKTOP MONOCHROME CONNECTED DIAGRAM (NO CARDS, NO OUTLINES, PURE BLACK & WHITE) */}
-        <div className="os-map-bw-desktop" style={{ position: 'relative', width: '100%', minHeight: '640px' }}>
-          
-          {/* SVG Connector Layer (Pure Black Lines) */}
+        {/* DESKTOP SINGLE SVG ARCHITECTURE MAP (NO OVERLAPPING, 100% PIXEL PERFECT) */}
+        <div className="os-map-svg-desktop" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
           <svg
             width="100%"
-            height="640"
-            viewBox="0 0 1200 640"
-            style={{ position: 'absolute', inset: 0, overflow: 'visible', pointerEvents: 'none', zIndex: 1 }}
+            height="100%"
+            viewBox="0 0 1200 660"
+            style={{ maxWidth: '1200px', height: 'auto', overflow: 'visible' }}
           >
-            {/* Left Curves: Funneling 9 Left Nodes into Center Hub Left Anchor */}
+            {/* 1. LEFT COLUMN: Text Labels & Connection Dots */}
+            {leftNodes.map((node, i) => {
+              const y = getY(i);
+              return (
+                <g key={`left-node-${i}`}>
+                  {/* Title */}
+                  <text
+                    x={leftTextX}
+                    y={y - 5}
+                    textAnchor="end"
+                    fill="#000000"
+                    fontSize="12.5"
+                    fontWeight="600"
+                    letterSpacing="0.04em"
+                  >
+                    {node.title}
+                  </text>
+                  {/* Subtitle */}
+                  <text
+                    x={leftTextX}
+                    y={y + 11}
+                    textAnchor="end"
+                    fill="#64748b"
+                    fontSize="11"
+                    fontWeight="300"
+                  >
+                    {node.desc}
+                  </text>
+                  {/* Node Dot */}
+                  <circle cx={leftDotX} cy={y} r="4" fill="#000000" />
+                </g>
+              );
+            })}
+
+            {/* 2. LEFT BEZIER CURVES: Connecting Left Dots (320, Yi) to Center Hub (470, 330) */}
             {leftNodes.map((_, i) => {
               const y = getY(i);
-              const pathD = `M ${leftDotX} ${y} C ${leftDotX + 80} ${y}, ${centerLeftX - 40} ${centerY}, ${centerLeftX} ${centerY}`;
+              const pathD = `M ${leftDotX} ${y} C ${leftDotX + 70} ${y}, ${centerLeftX - 40} ${centerY}, ${centerLeftX} ${centerY}`;
               return (
-                <g key={`l-path-${i}`}>
-                  <path d={pathD} fill="none" stroke="#000000" strokeWidth="1.5" opacity="0.75" />
-                  <circle r="3" fill="#000000">
+                <g key={`left-curve-${i}`}>
+                  <path d={pathD} fill="none" stroke="#000000" strokeWidth="1.2" opacity="0.8" />
+                  <circle r="2.5" fill="#000000">
                     <animateMotion path={pathD} dur={`${3 + i * 0.3}s`} repeatCount="indefinite" />
                   </circle>
                 </g>
               );
             })}
 
-            {/* Center-to-Right Single Line Segment with Arrow indicator */}
-            <path d={`M ${centerRightX} ${centerY} L ${centerRightX + 45} ${centerY}`} fill="none" stroke="#000000" strokeWidth="1.8" />
+            {/* 3. CENTER HUB: ZAWR FACTORY OS Text & Anchors (NO BOX, NO OUTLINE) */}
+            <g>
+              {/* Left Anchor Dot */}
+              <circle cx={centerLeftX} cy={centerY} r="5" fill="#000000" />
+
+              {/* Main Title */}
+              <text x="600" y={centerY - 24} textAnchor="middle" fill="#000000" fontSize="32" fontWeight="600" letterSpacing="-0.02em">
+                ZAWR
+              </text>
+              <text x="600" y={centerY + 4} textAnchor="middle" fill="#000000" fontSize="18" fontWeight="600" letterSpacing="0.08em">
+                FACTORY OS
+              </text>
+              
+              {/* Divider Line */}
+              <line x1="560" y1={centerY + 20} x2="640" y2={centerY + 20} stroke="#e2e8f0" strokeWidth="1" />
+              
+              {/* Tagline */}
+              <text x="600" y={centerY + 42} textAnchor="middle" fill="#64748b" fontSize="12" fontWeight="300">
+                One Platform.
+              </text>
+              <text x="600" y={centerY + 58} textAnchor="middle" fill="#64748b" fontSize="12" fontWeight="300">
+                Unlimited Control.
+              </text>
+
+              {/* Right Anchor Dot */}
+              <circle cx={centerRightX} cy={centerY} r="5" fill="#000000" />
+            </g>
+
+            {/* 4. CENTER TO RIGHT CONNECTOR ARROW */}
+            <path d={`M ${centerRightX} ${centerY} L ${centerRightX + 45} ${centerY}`} fill="none" stroke="#000000" strokeWidth="1.5" />
             <polygon points={`${centerRightX + 45},${centerY - 4} ${centerRightX + 53},${centerY} ${centerRightX + 45},${centerY + 4}`} fill="#000000" />
 
-            {/* Right Curves: Fanning out from Arrow Split into 9 Right Nodes */}
+            {/* 5. RIGHT BEZIER CURVES: Fanning out from Arrow (775, 330) to Right Dots (880, Yi) */}
             {rightNodes.map((_, i) => {
               const y = getY(i);
-              const pathD = `M ${centerRightX + 53} ${centerY} C ${centerRightX + 90} ${centerY}, ${rightDotX - 80} ${y}, ${rightDotX} ${y}`;
+              const pathD = `M ${centerRightX + 53} ${centerY} C ${centerRightX + 90} ${centerY}, ${rightDotX - 70} ${y}, ${rightDotX} ${y}`;
               return (
-                <g key={`r-path-${i}`}>
-                  <path d={pathD} fill="none" stroke="#000000" strokeWidth="1.5" opacity="0.75" />
-                  <circle r="3" fill="#000000">
+                <g key={`right-curve-${i}`}>
+                  <path d={pathD} fill="none" stroke="#000000" strokeWidth="1.2" opacity="0.8" />
+                  <circle r="2.5" fill="#000000">
                     <animateMotion path={pathD} dur={`${3 + i * 0.3}s`} repeatCount="indefinite" />
                   </circle>
+                </g>
+              );
+            })}
+
+            {/* 6. RIGHT COLUMN: Connection Dots & Text Labels */}
+            {rightNodes.map((node, i) => {
+              const y = getY(i);
+              return (
+                <g key={`right-node-${i}`}>
+                  {/* Node Dot */}
+                  <circle cx={rightDotX} cy={y} r="4" fill="#000000" />
+                  {/* Title */}
+                  <text
+                    x={rightTextX}
+                    y={y - 5}
+                    textAnchor="start"
+                    fill="#000000"
+                    fontSize="12.5"
+                    fontWeight="600"
+                    letterSpacing="0.04em"
+                  >
+                    {node.title}
+                  </text>
+                  {/* Subtitle */}
+                  <text
+                    x={rightTextX}
+                    y={y + 11}
+                    textAnchor="start"
+                    fill="#64748b"
+                    fontSize="11"
+                    fontWeight="300"
+                  >
+                    {node.desc}
+                  </text>
                 </g>
               );
             })}
           </svg>
-
-          {/* HTML DOM Node Text Overlay (NO CARDS, NO OUTLINES) */}
-          <div style={{ position: 'relative', zIndex: 2, width: '100%', height: '640px' }}>
-            
-            {/* LEFT TEXT COLUMN */}
-            <div style={{ position: 'absolute', left: 0, top: 0, width: '320px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {leftNodes.map((node) => (
-                <div
-                  key={node.title}
-                  style={{
-                    height: '48px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    position: 'relative',
-                    paddingRight: '1rem',
-                  }}
-                >
-                  <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#000000', letterSpacing: '0.04em' }}>{node.title}</div>
-                  <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 300, marginTop: '2px' }}>{node.desc}</div>
-
-                  {/* Black Connection Dot */}
-                  <div style={{
-                    position: 'absolute',
-                    right: '-4px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '50%',
-                    backgroundColor: '#000000',
-                  }} />
-                </div>
-              ))}
-            </div>
-
-            {/* CENTER HUB TEXT (NO CARD BOX, NO OUTLINE) */}
-            <div style={{
-              position: 'absolute',
-              left: '470px',
-              top: '210px',
-              width: '260px',
-              height: '220px',
-              backgroundColor: '#ffffff',
-              textAlign: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: '1rem',
-            }}>
-              {/* Left Connection Anchor Dot */}
-              <div style={{
-                position: 'absolute',
-                left: '-5px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                width: '10px',
-                height: '10px',
-                borderRadius: '50%',
-                backgroundColor: '#000000',
-              }} />
-
-              <div style={{
-                fontSize: '2.4rem',
-                fontWeight: 600,
-                letterSpacing: '-0.02em',
-                color: '#000000',
-                lineHeight: 1.1,
-              }}>
-                ZAWR
-              </div>
-
-              <div style={{
-                fontSize: '1.25rem',
-                fontWeight: 500,
-                color: '#000000',
-                letterSpacing: '0.08em',
-                marginTop: '0.4rem',
-                textTransform: 'uppercase',
-              }}>
-                FACTORY OS
-              </div>
-
-              <div style={{
-                width: '50%',
-                height: '1px',
-                backgroundColor: '#e2e8f0',
-                margin: '1.2rem 0 1rem',
-              }} />
-
-              <div style={{
-                fontSize: '0.82rem',
-                color: '#64748b',
-                fontWeight: 300,
-                lineHeight: 1.4,
-              }}>
-                One Platform.<br />
-                Unlimited Control.
-              </div>
-
-              {/* Right Connection Anchor Dot */}
-              <div style={{
-                position: 'absolute',
-                right: '-5px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                width: '10px',
-                height: '10px',
-                borderRadius: '50%',
-                backgroundColor: '#000000',
-              }} />
-            </div>
-
-            {/* RIGHT TEXT COLUMN */}
-            <div style={{ position: 'absolute', left: '880px', top: 0, width: '320px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              {rightNodes.map((node) => (
-                <div
-                  key={node.title}
-                  style={{
-                    height: '48px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    position: 'relative',
-                    paddingLeft: '1rem',
-                  }}
-                >
-                  {/* Black Connection Dot */}
-                  <div style={{
-                    position: 'absolute',
-                    left: '-4px',
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                    width: '8px',
-                    height: '8px',
-                    borderRadius: '50%',
-                    backgroundColor: '#000000',
-                  }} />
-
-                  <div style={{ fontSize: '0.78rem', fontWeight: 600, color: '#000000', letterSpacing: '0.04em' }}>{node.title}</div>
-                  <div style={{ fontSize: '0.72rem', color: '#64748b', fontWeight: 300, marginTop: '2px' }}>{node.desc}</div>
-                </div>
-              ))}
-            </div>
-
-          </div>
         </div>
 
-        {/* MOBILE RESPONSIVE MONOCHROME STACK CONTAINER (< 1025px) */}
-        <div className="os-map-bw-mobile" style={{ flexDirection: 'column', gap: '2.5rem' }}>
+        {/* MOBILE RESPONSIVE MONOCHROME LIST (< 1025px) */}
+        <div className="os-map-mobile-list" style={{ flexDirection: 'column', gap: '2.5rem' }}>
           
           {/* Mobile Center Hub Text */}
           <div style={{ textAlign: 'center', padding: '1rem 0' }}>
