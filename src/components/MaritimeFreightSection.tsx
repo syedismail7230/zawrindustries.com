@@ -13,47 +13,78 @@ export function MaritimeFreightSection() {
     <section style={{
       width: '100%',
       backgroundColor: '#ffffff',
-      padding: '4rem clamp(1rem, 6vw, 8%) 6rem clamp(1rem, 6vw, 8%)',
+      padding: '4rem 0 6rem 0',
       boxSizing: 'border-box',
       fontFamily: 'Inter, sans-serif',
       color: '#000000',
       overflow: 'hidden',
     }}>
-      <div style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-        gap: '4rem',
-        alignItems: 'center',
-      }}>
-        {/* Left Column: Big Container Ship GIF (Borderless, Scaled up showing front half) */}
-        <div style={{
-          position: 'relative',
-          width: '100%',
-          height: 'clamp(320px, 45vh, 480px)',
-          overflow: 'hidden',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-        }}>
+      <style dangerouslySetInnerHTML={{ __html: `
+        .maritime-grid {
+          width: 100%;
+          display: grid;
+          grid-template-columns: 1.1fr 1fr;
+          gap: 3rem;
+          align-items: center;
+        }
+
+        .maritime-left-img-wrapper {
+          position: relative;
+          width: 100%;
+          height: clamp(380px, 50vh, 560px);
+          overflow: hidden;
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+        }
+
+        .maritime-left-img-wrapper img {
+          width: 125%;
+          max-width: none;
+          height: auto;
+          object-fit: contain;
+          object-position: left center;
+          margin-left: -15%;
+          display: block;
+        }
+
+        .maritime-right-content {
+          max-width: 620px;
+          padding-right: clamp(2rem, 6vw, 8rem);
+          padding-left: 1rem;
+          box-sizing: border-box;
+        }
+
+        @media (max-width: 900px) {
+          .maritime-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+          }
+          .maritime-left-img-wrapper {
+            height: 320px;
+          }
+          .maritime-left-img-wrapper img {
+            width: 135%;
+            margin-left: -10%;
+          }
+          .maritime-right-content {
+            padding-right: 1.5rem;
+            padding-left: 1.5rem;
+          }
+        }
+      ` }} />
+
+      <div className="maritime-grid">
+        {/* Left Column: Ship GIF starting 100% flush from complete left edge */}
+        <div className="maritime-left-img-wrapper">
           <img
             src="/assets/Ship.gif"
             alt="Zawr Industries Maritime Container Ship Telemetry"
-            style={{
-              width: '145%',
-              maxWidth: 'none',
-              height: 'auto',
-              display: 'block',
-              objectFit: 'cover',
-              transform: 'scale(1.25) translateX(-5%)',
-              transition: 'transform 0.5s ease-out',
-            }}
           />
         </div>
 
         {/* Right Column: Maritime Details Content */}
-        <div>
+        <div className="maritime-right-content">
           <div style={{
             fontSize: '0.75rem',
             fontWeight: 600,
