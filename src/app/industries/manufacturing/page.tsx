@@ -50,7 +50,6 @@ function ArchitecturalGridBadge({ metric, label }: MetricBadgeProps) {
       justifyContent: 'center',
       width: '180px',
       height: '140px',
-      backgroundColor: 'rgba(255, 255, 255, 0.95)',
       backgroundImage: `
         linear-gradient(to right, rgba(0, 0, 0, 0.07) 1px, transparent 1px),
         linear-gradient(to bottom, rgba(0, 0, 0, 0.07) 1px, transparent 1px)
@@ -58,7 +57,7 @@ function ArchitecturalGridBadge({ metric, label }: MetricBadgeProps) {
       backgroundSize: '24px 24px',
       backgroundPosition: 'center center',
       textAlign: 'center',
-      zIndex: 30,
+      zIndex: 5,
     }}>
       <div style={{
         fontSize: '1.45rem',
@@ -89,7 +88,7 @@ export default function ManufacturingPage() {
   return (
     <div style={{ backgroundColor: '#ffffff', color: '#111111', minHeight: '100vh', overflowX: 'hidden' }}>
       
-      {/* 1. Hero Section with 3D Robot Arm overlapping Text */}
+      {/* 1. Hero Section with 3D Robot Arm in FRONT of Text and Badges */}
       <section style={{
         position: 'relative',
         padding: '6rem 5% 4rem',
@@ -103,7 +102,7 @@ export default function ManufacturingPage() {
         overflow: 'hidden',
       }}>
         
-        {/* Centered Headline positioned BEHIND the 3D Canvas (zIndex: 1) */}
+        {/* Centered Headline positioned BEHIND everything (zIndex: 1) */}
         <div style={{
           textAlign: 'center',
           zIndex: 1,
@@ -126,7 +125,7 @@ export default function ManufacturingPage() {
           </h1>
         </div>
 
-        {/* 3D Robot Arm & Flanking Badges (zIndex: 10) */}
+        {/* 3D Robot Arm & Flanking Badges Container */}
         <div style={{
           position: 'relative',
           width: '100%',
@@ -137,29 +136,28 @@ export default function ManufacturingPage() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 10,
         }}>
 
-          {/* CENTER 3D ROBOT CANVAS (zIndex: 5 - BEHIND METRIC BADGES) */}
-          <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 5 }}>
-            <ManufacturingHeroClient />
-          </div>
-
-          {/* FLOATING METRIC BADGES (zIndex: 30 - IN FRONT OF 3D ROBOT) */}
-          <div style={{ position: 'absolute', top: '25%', left: '6%', zIndex: 30 }}>
+          {/* FLOATING METRIC BADGES (zIndex: 5 - BEHIND 3D ROBOT MODEL) */}
+          <div style={{ position: 'absolute', top: '25%', left: '6%', zIndex: 5 }}>
             <ArchitecturalGridBadge metric="±0.005mm" label="Tolerance" />
           </div>
 
-          <div style={{ position: 'absolute', bottom: '15%', left: '12%', zIndex: 30 }}>
+          <div style={{ position: 'absolute', bottom: '15%', left: '12%', zIndex: 5 }}>
             <ArchitecturalGridBadge metric="6-Axis" label="Robotics Sync" />
           </div>
 
-          <div style={{ position: 'absolute', top: '25%', right: '6%', zIndex: 30 }}>
+          <div style={{ position: 'absolute', top: '25%', right: '6%', zIndex: 5 }}>
             <ArchitecturalGridBadge metric="99.98%" label="Factory Uptime" />
           </div>
 
-          <div style={{ position: 'absolute', bottom: '15%', right: '12%', zIndex: 30 }}>
+          <div style={{ position: 'absolute', bottom: '15%', right: '12%', zIndex: 5 }}>
             <ArchitecturalGridBadge metric="±0.005mm" label="Tolerance" />
+          </div>
+
+          {/* CENTER 3D ROBOT CANVAS (zIndex: 15 - IN FRONT OF METRIC BADGES & TEXT) */}
+          <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 15 }}>
+            <ManufacturingHeroClient />
           </div>
 
         </div>
