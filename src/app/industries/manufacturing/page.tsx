@@ -293,7 +293,124 @@ export default function ManufacturingPage() {
       </section>
 
 
+      {/* CNC Machine Feature Section */}
+      <section style={{
+        padding: '0',
+        backgroundColor: '#ffffff',
+        borderBottom: '1px solid #e2e8f0',
+        overflow: 'hidden',
+      }}>
+        <div style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+          minHeight: '540px',
+          alignItems: 'stretch',
+        }}>
+          {/* Image Panel — left side */}
+          <div style={{
+            backgroundColor: '#ffffff',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minHeight: '400px',
+            overflow: 'hidden',
+          }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src="/assets/cnc.png"
+              alt="Zawr CNC Machining Centre — multi-axis precision CNC milling machine"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                objectPosition: 'center',
+                display: 'block',
+                padding: '2rem',
+              }}
+            />
+          </div>
+
+          {/* Text Panel — right side */}
+          <div style={{
+            padding: 'clamp(3rem, 6vw, 5rem) clamp(2rem, 5vw, 5rem)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            backgroundColor: '#ffffff',
+          }}>
+            <h2 style={{
+              fontSize: 'clamp(2rem, 4vw, 3.4rem)',
+              fontWeight: 400,
+              lineHeight: 1.1,
+              letterSpacing: '-0.03em',
+              color: '#000000',
+              marginBottom: '1.6rem',
+              fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+            }}>
+              Precision CNC<br />
+              <span style={{ color: '#64748b', fontWeight: 300 }}>Multi-Axis<br />Machining Centre</span>
+            </h2>
+
+            <p style={{
+              fontSize: '1rem',
+              color: '#475569',
+              lineHeight: 1.8,
+              marginBottom: '2.4rem',
+              maxWidth: '420px',
+            }}>
+              The Zawr CNC Machining Centre delivers micron-level accuracy across aerospace, defence, and heavy-industry components. Equipped with a multi-axis spindle, intelligent tool-change carousel, and integrated CNC controller, it runs 24/7 adaptive machining programs with zero operator intervention.
+            </p>
+
+            {/* Spec items */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2rem', marginBottom: '2.4rem' }}>
+              {[
+                { label: 'Tolerance', value: '±0.005 mm' },
+                { label: 'Axes', value: '5-Axis' },
+                { label: 'Spindle Speed', value: '12,000 rpm' },
+                { label: 'Table Load', value: '800 kg' },
+              ].map(({ label, value }) => (
+                <div key={label} style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span style={{ fontSize: '1.4rem', fontWeight: 500, color: '#000000', letterSpacing: '-0.03em' }}>{value}</span>
+                  <span style={{ fontSize: '0.78rem', color: '#94a3b8', marginTop: '0.1rem' }}>{label}</span>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+              <a href="/contact" style={{
+                display: 'inline-block',
+                padding: '0.9rem 2rem',
+                borderRadius: '50px',
+                backgroundColor: '#000000',
+                color: '#ffffff',
+                fontWeight: 600,
+                fontSize: '0.88rem',
+                textDecoration: 'none',
+              }}>
+                Request CNC Quote
+              </a>
+              <a href="/contact/client-relations" style={{
+                display: 'inline-block',
+                padding: '0.9rem 2rem',
+                borderRadius: '50px',
+                backgroundColor: '#ffffff',
+                color: '#000000',
+                border: '1px solid #000000',
+                fontWeight: 600,
+                fontSize: '0.88rem',
+                textDecoration: 'none',
+              }}>
+                View Capabilities
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* 3. AGV-2 Autonomous Guided Vehicle Feature Section */}
+
       <section style={{
         padding: '0',
         backgroundColor: '#ffffff',
