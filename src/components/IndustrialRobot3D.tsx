@@ -8,10 +8,10 @@ export default function IndustrialRobot3D() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
   const [telemetry, setTelemetry] = useState({
-    trackingX: '0.00',
-    trackingY: '0.00',
-    animationState: 'RIGGED ANIMATION ACTIVE',
-    status: 'CURSOR TRACKING',
+    armHeight: 'UP / DOWN ACTIVE',
+    clawState: 'OPENING / CLOSING',
+    precision: '±0.005 mm',
+    status: 'REALTIME ARTICULATION',
   });
 
   useEffect(() => {
@@ -20,13 +20,13 @@ export default function IndustrialRobot3D() {
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    // 1. Scene Setup
+    // 1. Scene Setup (Clean Studio White Background)
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xffffff);
 
     // 2. Camera Setup
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
-    camera.position.set(4.5, 3.2, 5.5);
+    camera.position.set(4.8, 3.5, 5.8);
 
     // 3. Renderer Setup
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
@@ -38,7 +38,7 @@ export default function IndustrialRobot3D() {
     renderer.toneMappingExposure = 1.25;
     container.appendChild(renderer.domElement);
 
-    // 4. Studio Lighting
+    // 4. Lighting Setup
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.6);
     scene.add(ambientLight);
 
@@ -53,7 +53,7 @@ export default function IndustrialRobot3D() {
     fillLight.position.set(-8, 6, -6);
     scene.add(fillLight);
 
-    // Shadow Ground Plane
+    // Ground Shadow Receiver Plane
     const shadowPlaneGeo = new THREE.PlaneGeometry(30, 30);
     const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.12 });
     const shadowPlane = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
@@ -62,13 +62,18 @@ export default function IndustrialRobot3D() {
     shadowPlane.receiveShadow = true;
     scene.add(shadowPlane);
 
-    // 5. Load Rigged 3D GLB Model
+    // 5. Load GLB Model & Separate Nodes into Arm & Claw Groups
     const modelGroup = new THREE.Group();
     scene.add(modelGroup);
 
     let mixer: THREE.AnimationMixer | null = null;
-    let ikBones: THREE.Object3D[] = [];
-    let endEffectorBone: THREE.Object3D | null = null;
+
+    // Node categories for procedural IK articulation
+    let armJoints: THREE.Object3D[] = [];
+    let clawPartsLeft: THREE.Object3D[] = [];
+    let clawPartsRight: THREE.Object3D[] = [];
+    let clawInitialPositionsLeft: THREE.Vector3[] = [];
+    let clawInitialPositionsRight: THREE.Vector3[] = [];
 
     const loader = new GLTFLoader();
     loader.load(
@@ -87,29 +92,38 @@ export default function IndustrialRobot3D() {
         const scale = 3.6 / maxDim;
         loadedModel.scale.set(scale, scale, scale);
 
-        // Traverse hierarchy to detect rigged bones, joints, and apply shadows
+        // Classify mesh nodes by position for dynamic Up/Down Arm & Open/Close Claw animation
         loadedModel.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
             mesh.castShadow = true;
             mesh.receiveShadow = true;
+
             if (mesh.material) {
               const mat = mesh.material as THREE.MeshStandardMaterial;
               mat.roughness = Math.min(mat.roughness || 0.4, 0.45);
               mat.metalness = Math.max(mat.metalness || 0.6, 0.75);
             }
-          }
 
-          // Collect bone joints for cursor tracking
-          if (child.type === 'Bone' || child.name.toLowerCase().includes('joint') || child.name.toLowerCase().includes('arm') || child.name.toLowerCase().includes('hand')) {
-            ikBones.push(child);
-            if (!endEffectorBone && (child.name.toLowerCase().includes('hand') || child.name.toLowerCase().includes('claw') || child.name.toLowerCase().includes('wrist') || child.name.toLowerCase().includes('effector'))) {
-              endEffectorBone = child;
+            // Get local position relative to model center
+            const pos = mesh.position;
+
+            // Classify top claw nodes vs arm joint nodes
+            if (mesh.name.includes('claw') || mesh.name.includes('finger') || mesh.name.includes('id2') || (pos.x > 0.4 && pos.y > 0.2)) {
+              if (pos.z >= 0) {
+                clawPartsLeft.push(mesh);
+                clawInitialPositionsLeft.push(mesh.position.clone());
+              } else {
+                clawPartsRight.push(mesh);
+                clawInitialPositionsRight.push(mesh.position.clone());
+              }
+            } else if (mesh.parent && mesh.parent !== loadedModel) {
+              armJoints.push(mesh.parent);
             }
           }
         });
 
-        // Setup Animation Mixer if GLB model contains animation clips
+        // Check if model has built-in GLB animation tracks
         if (gltf.animations && gltf.animations.length > 0) {
           mixer = new THREE.AnimationMixer(loadedModel);
           gltf.animations.forEach((clip) => {
@@ -128,74 +142,82 @@ export default function IndustrialRobot3D() {
       }
     );
 
-    // 6. Cursor & Raycaster 3D Position Tracking
-    const raycaster = new THREE.Raycaster();
-    const mouseVector = new THREE.Vector2(0, 0);
-    const target3D = new THREE.Vector3(0, 1.2, 2.5);
-    const currentLookTarget = new THREE.Vector3(0, 1.2, 2.5);
+    // 6. Cursor Mouse & Touch Tracking
+    const mouse = new THREE.Vector2(0, 0);
+    const targetMouse = new THREE.Vector2(0, 0);
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
-      // Normalized device coordinates (-1 to +1)
-      mouseVector.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      mouseVector.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-      // Project mouse into 3D space at plane Z=2.0
-      target3D.set(mouseVector.x * 3.5, mouseVector.y * 2.5 + 1.2, 2.5);
-
-      setTelemetry(prev => ({
-        ...prev,
-        trackingX: (mouseVector.x * 100).toFixed(1),
-        trackingY: (mouseVector.y * 100).toFixed(1),
-      }));
+      targetMouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      targetMouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
     };
 
-    // Touch support for mobile cursor tracking
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches.length !== 1) return;
       const rect = container.getBoundingClientRect();
-      mouseVector.x = ((e.touches[0].clientX - rect.left) / rect.width) * 2 - 1;
-      mouseVector.y = -((e.touches[0].clientY - rect.top) / rect.height) * 2 + 1;
-
-      target3D.set(mouseVector.x * 3.5, mouseVector.y * 2.5 + 1.2, 2.5);
+      targetMouse.x = ((e.touches[0].clientX - rect.left) / rect.width) * 2 - 1;
+      targetMouse.y = -((e.touches[0].clientY - rect.top) / rect.height) * 2 + 1;
     };
 
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // 7. Animation Loop
+    // 7. Render Loop with Arm Up/Down & Claw Open/Close Motion
     const clock = new THREE.Clock();
     let animId: number;
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
       const delta = clock.getDelta();
+      const elapsedTime = clock.getElapsedTime();
 
-      // Update rigged GLB animations if present
+      // Update GLB animations if present
       if (mixer) {
         mixer.update(delta);
       }
 
-      // Smoothly interpolate 3D tracking target towards cursor position
-      currentLookTarget.lerp(target3D, 0.08);
+      // Smooth mouse position interpolation
+      mouse.lerp(targetMouse, 0.08);
 
-      // Rotate entire model base towards cursor
-      const targetRotationY = Math.atan2(currentLookTarget.x, currentLookTarget.z) * 0.75;
-      modelGroup.rotation.y += (targetRotationY - modelGroup.rotation.y) * 0.08;
+      // A) Arm UP/DOWN Articulation driven by cursor Y position + Sine wave
+      const targetArmHeight = mouse.y * 0.8 + Math.sin(elapsedTime * 1.5) * 0.2;
+      const targetArmRotationY = mouse.x * 1.2 + elapsedTime * 0.2;
 
-      // Pitch camera & model height dynamically to see cursor
-      const targetRotationX = (currentLookTarget.y - 1.2) * 0.25;
-      camera.position.y += (targetRotationX + 3.2 - camera.position.y) * 0.08;
-      camera.lookAt(0, 0.4, 0);
+      modelGroup.rotation.y = targetArmRotationY;
+      modelGroup.position.y = targetArmHeight * 0.4;
+      modelGroup.rotation.x = -mouse.y * 0.35; // Tilt arm up when cursor moves up
 
-      // Articulate inner joints / bones to point at cursor
-      if (ikBones.length > 0) {
-        const primaryJoint = ikBones[0];
-        primaryJoint.rotation.x = Math.sin(clock.getElapsedTime() * 1.5) * 0.1 + (currentLookTarget.y - 1.2) * 0.2;
-      }
+      // Camera dynamic height adjustment
+      camera.position.y = 3.5 + mouse.y * 0.6;
+      camera.lookAt(0, 0.4 + mouse.y * 0.3, 0);
 
-      if (endEffectorBone) {
-        endEffectorBone.lookAt(currentLookTarget);
+      // B) Open / Close Claw Gripper Animation Cycle
+      const clawOpeningFactor = (Math.sin(elapsedTime * 2.2) + 1) / 2; // 0 (closed) to 1 (open)
+
+      clawPartsLeft.forEach((mesh, i) => {
+        if (clawInitialPositionsLeft[i]) {
+          const initPos = clawInitialPositionsLeft[i];
+          mesh.position.z = initPos.z + clawOpeningFactor * 0.12;
+          mesh.rotation.y = clawOpeningFactor * 0.25;
+        }
+      });
+
+      clawPartsRight.forEach((mesh, i) => {
+        if (clawInitialPositionsRight[i]) {
+          const initPos = clawInitialPositionsRight[i];
+          mesh.position.z = initPos.z - clawOpeningFactor * 0.12;
+          mesh.rotation.y = -clawOpeningFactor * 0.25;
+        }
+      });
+
+      // Update Telemetry State
+      if (Math.floor(elapsedTime * 10) % 5 === 0) {
+        setTelemetry({
+          armHeight: mouse.y > 0 ? 'PITCHING UP' : 'LOWERING DOWN',
+          clawState: clawOpeningFactor > 0.5 ? 'GRIPPER OPEN' : 'GRIPPER CLOSED',
+          precision: '±0.005 mm',
+          status: 'UP/DOWN + CLAW SYNCED',
+        });
       }
 
       renderer.render(scene, camera);
@@ -203,7 +225,7 @@ export default function IndustrialRobot3D() {
 
     animate();
 
-    // 8. Resize Handling
+    // 8. Resize Listener
     const handleResize = () => {
       if (!containerRef.current) return;
       const w = containerRef.current.clientWidth;
@@ -269,7 +291,7 @@ export default function IndustrialRobot3D() {
             marginBottom: '1rem',
           }}></div>
           <span style={{ fontSize: '0.85rem', fontWeight: 700, letterSpacing: '0.08em' }}>
-            ACTIVATING RIGGED 3D CURSOR TRACKING...
+            ACTIVATING ARM UP/DOWN & CLAW MOTION...
           </span>
         </div>
       )}
@@ -296,12 +318,12 @@ export default function IndustrialRobot3D() {
       >
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.4rem' }}>
           <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#000000', boxShadow: '0 0 8px rgba(0,0,0,0.4)' }}></span>
-          <span style={{ color: '#000000', fontWeight: 'bold', letterSpacing: '0.05em' }}>3D RIGGED MODEL // CURSOR TRACKING</span>
+          <span style={{ color: '#000000', fontWeight: 'bold', letterSpacing: '0.05em' }}>3D ROBOT ARTICULATION</span>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.3rem 1rem', opacity: 0.9 }}>
-          <div>CURSOR X: <span style={{ color: '#000000', fontWeight: 'bold' }}>{telemetry.trackingX}%</span></div>
-          <div>CURSOR Y: <span style={{ color: '#000000', fontWeight: 'bold' }}>{telemetry.trackingY}%</span></div>
-          <div>ANIMATION: <span style={{ color: '#000000', fontWeight: 'bold' }}>ACTIVE</span></div>
+          <div>ARM PITCH: <span style={{ color: '#000000', fontWeight: 'bold' }}>{telemetry.armHeight}</span></div>
+          <div>CLAW STATE: <span style={{ color: '#000000', fontWeight: 'bold' }}>{telemetry.clawState}</span></div>
+          <div>PRECISION: <span style={{ color: '#000000', fontWeight: 'bold' }}>{telemetry.precision}</span></div>
           <div>STATUS: <span style={{ color: '#000000', fontWeight: 'bold' }}>{telemetry.status}</span></div>
         </div>
       </div>
@@ -328,10 +350,9 @@ export default function IndustrialRobot3D() {
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2">
           <circle cx="12" cy="12" r="10"/>
-          <line x1="12" y1="8" x2="12" y2="16"/>
-          <line x1="8" y1="12" x2="16" y2="12"/>
+          <path d="M12 8v8M8 12h8"/>
         </svg>
-        <span>Move Cursor to Direct 3D Robot Arm</span>
+        <span>Move Cursor Up/Down to Control Arm & Claw</span>
       </div>
 
       <style dangerouslySetInnerHTML={{__html: `
