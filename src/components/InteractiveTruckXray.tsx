@@ -32,7 +32,7 @@ export function InteractiveTruckXray() {
     <section style={{
       width: '100%',
       backgroundColor: '#ffffff',
-      padding: '3rem clamp(1rem, 5vw, 6%) 4rem clamp(1rem, 5vw, 6%)',
+      padding: '4rem clamp(1rem, 5vw, 6%) 4rem clamp(1rem, 5vw, 6%)',
       boxSizing: 'border-box',
       display: 'flex',
       flexDirection: 'column',
@@ -63,25 +63,25 @@ export function InteractiveTruckXray() {
         }
       ` }} />
 
-      {/* Section Title */}
-      <div style={{ textAlign: 'center', maxWidth: '800px', marginBottom: '2.5rem' }}>
+      {/* Section Title & 5-6 Line Tech Summary */}
+      <div style={{ textAlign: 'center', maxWidth: '840px', marginBottom: '3rem' }}>
         <h2 style={{
           fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
           fontWeight: 300,
           color: '#000000',
           letterSpacing: '-0.02em',
-          margin: 0,
+          margin: '0 0 1.25rem 0',
         }}>
           Interactive Cargo Inspection
         </h2>
         <p style={{
-          fontSize: 'clamp(0.95rem, 1.2vw, 1.1rem)',
-          color: 'rgba(0, 0, 0, 0.6)',
-          marginTop: '0.75rem',
+          fontSize: 'clamp(0.95rem, 1.15vw, 1.08rem)',
+          lineHeight: 1.8,
+          color: 'rgba(0, 0, 0, 0.7)',
           fontWeight: 300,
-          lineHeight: 1.6,
+          margin: 0,
         }}>
-          Hover over the logistics payload to inspect real-time volumetric cargo allocation.
+          Zawr Industries integrates next-generation non-intrusive cargo inspection technology to provide real-time volumetric telemetry, tamper verification, and automated payload auditing across global trade corridors. Utilizing advanced optical sensors, IoT environmental monitoring, and spatial AI algorithms, our platform continuously scans internal container conditions without disrupting transit timelines. Logistics managers gain instant visibility into cargo density, weight distribution, and environmental integrity from dispatch to final delivery. This automated intelligence eliminates manual customs bottlenecks, safeguards high-value freight against unauthorized tampering, and accelerates cross-border compliance with unprecedented accuracy.
         </p>
       </div>
 
