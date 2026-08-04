@@ -3,6 +3,7 @@ import Link from 'next/link';
 import ManufacturingHeroClient from '@/components/ManufacturingHeroClient';
 import { Capabilities3DGrid } from '@/components/Capabilities3DGrid';
 import FactoryDashboardInteractive from '@/components/FactoryDashboardInteractive';
+import FactoryOSMapSection from '@/components/FactoryOSMapSection';
 
 export const metadata: Metadata = {
   title: "AI Powered Precision Manufacturing — Zawr Industries",
@@ -635,6 +636,9 @@ export default function ManufacturingPage() {
 
       {/* 5. Factory Management System (FMS) Telemetry Dashboard */}
       <FactoryDashboardInteractive />
+
+      {/* 6. ZAWR Factory OS Sub-system Mapping Architecture Section */}
+      <FactoryOSMapSection />
 
     </div>
   );
