@@ -23,8 +23,8 @@ export function AirFreightSection() {
         .air-freight-grid {
           width: 100%;
           display: grid;
-          grid-template-columns: 1fr 1.15fr;
-          gap: 2rem;
+          grid-template-columns: 1fr 1.1fr;
+          gap: 3rem;
           align-items: center;
         }
 
@@ -38,22 +38,26 @@ export function AirFreightSection() {
         .air-freight-right-img-wrapper {
           position: relative;
           width: 100%;
-          height: clamp(380px, 52vh, 580px);
+          height: clamp(400px, 54vh, 600px);
           overflow: hidden;
           display: flex;
           align-items: center;
-          justify-content: flex-start;
+          justify-content: flex-end;
           background-color: #ffffff;
         }
 
         .air-freight-right-img-wrapper img {
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-          object-position: left center;
+          width: 155%;
+          max-width: none;
+          height: 110%;
+          object-fit: cover;
+          object-position: right center;
+          margin-right: -24%;
           display: block;
           mix-blend-mode: multiply;
-          filter: contrast(1.05) brightness(1.01);
+          filter: contrast(1.06) brightness(1.01);
+          transform: translateZ(0);
+          backface-visibility: hidden;
         }
 
         @media (max-width: 900px) {
@@ -66,10 +70,11 @@ export function AirFreightSection() {
             padding-right: 1.5rem;
           }
           .air-freight-right-img-wrapper {
-            height: 320px;
+            height: 340px;
           }
           .air-freight-right-img-wrapper img {
-            width: 100%;
+            width: 165%;
+            margin-right: -18%;
           }
         }
       ` }} />
@@ -142,7 +147,7 @@ export function AirFreightSection() {
           </div>
         </div>
 
-        {/* Right Column: plane.png shifted right so the nose on the left is 100% complete and uncropped */}
+        {/* Right Column: plane.png flush against the right edge of the viewport (mirrored from Ship.gif) */}
         <div className="air-freight-right-img-wrapper">
           <img
             src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1785808162/zawr/assets/plane.png"
