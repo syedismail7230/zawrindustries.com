@@ -31,7 +31,7 @@ export function MaritimeFreightSection() {
         .maritime-left-img-wrapper {
           position: relative;
           width: 100%;
-          height: clamp(380px, 50vh, 560px);
+          height: clamp(400px, 54vh, 600px);
           overflow: hidden;
           display: flex;
           align-items: center;
@@ -40,15 +40,15 @@ export function MaritimeFreightSection() {
         }
 
         .maritime-ship-video {
-          width: 125%;
+          width: 155%;
           max-width: none;
-          height: 100%;
+          height: 110%;
           object-fit: cover;
           object-position: left center;
-          margin-left: -15%;
+          margin-left: -24%;
           display: block;
           mix-blend-mode: multiply;
-          filter: contrast(1.05) brightness(1.01);
+          filter: contrast(1.06) brightness(1.01);
           transform: translateZ(0);
           backface-visibility: hidden;
         }
@@ -66,11 +66,11 @@ export function MaritimeFreightSection() {
             gap: 2rem;
           }
           .maritime-left-img-wrapper {
-            height: 320px;
+            height: 340px;
           }
           .maritime-ship-video {
-            width: 135%;
-            margin-left: -10%;
+            width: 165%;
+            margin-left: -18%;
           }
           .maritime-right-content {
             padding-right: 1.5rem;
@@ -80,7 +80,7 @@ export function MaritimeFreightSection() {
       ` }} />
 
       <div className="maritime-grid">
-        {/* Left Column: Ultra-crisp Ship Video (Multiply Blend, No Mask Fade) */}
+        {/* Left Column: Zoomed-in Container Ship Video */}
         <div className="maritime-left-img-wrapper">
           <video
             autoPlay
