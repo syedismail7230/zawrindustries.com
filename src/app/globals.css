@@ -759,20 +759,36 @@ button, input {
     font-size: 1.2rem;
   }
   
-  .dropdown {
-    position: static;
+  .dropdown,
+  .header.mobile-open .dropdown,
+  .header.light-page-header.mobile-open .dropdown,
+  .header.dark-page-header.mobile-open .dropdown {
+    position: static !important;
     display: none;
-    box-shadow: none;
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 12px;
-    padding: 0.8rem 1rem;
-    margin-top: 0.5rem;
-    width: 100%;
+    box-shadow: none !important;
+    background-color: rgba(255, 255, 255, 0.06) !important;
+    background: rgba(255, 255, 255, 0.06) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    padding: 0.8rem 1rem !important;
+    margin-top: 0.75rem !important;
+    width: 100% !important;
   }
 
-  .dropdown.mobile-submenu-open {
+  .dropdown.mobile-submenu-open,
+  .header.mobile-open .dropdown.mobile-submenu-open,
+  .header.light-page-header.mobile-open .dropdown.mobile-submenu-open,
+  .header.dark-page-header.mobile-open .dropdown.mobile-submenu-open {
     display: flex !important;
     flex-direction: column !important;
+  }
+
+  .header.mobile-open .dropdown a,
+  .header.light-page-header.mobile-open .dropdown a,
+  .header.dark-page-header.mobile-open .dropdown a {
+    color: rgba(255, 255, 255, 0.9) !important;
+    padding: 0.5rem 0.6rem !important;
+    display: block !important;
   }
 
   .mobile-menu-btn {
