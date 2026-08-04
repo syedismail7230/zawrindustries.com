@@ -646,40 +646,6 @@ export default function ManufacturingPage() {
         borderTop: '1px solid #e2e8f0',
       }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-            <span style={{
-              fontSize: '0.75rem',
-              fontWeight: 500,
-              letterSpacing: '0.14em',
-              color: '#64748b',
-              textTransform: 'uppercase',
-              display: 'block',
-              marginBottom: '0.8rem',
-            }}>
-              SMART FACTORY INFRASTRUCTURE
-            </span>
-            <h2 style={{
-              fontSize: 'clamp(1.8rem, 4vw, 3rem)',
-              fontWeight: 400,
-              color: '#000000',
-              letterSpacing: '-0.03em',
-              margin: '0 0 1rem',
-              fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-            }}>
-              Autonomous High-Throughput Manufacturing Floor
-            </h2>
-            <p style={{
-              fontSize: '1rem',
-              color: '#475569',
-              maxWidth: '720px',
-              margin: '0 auto',
-              lineHeight: 1.75,
-              fontWeight: 300,
-            }}>
-              State-of-the-art multi-axis CNC cells, automated AGV logistics corridors, and 24/7 robotic assembly stages operating under unified AI floor orchestration.
-            </p>
-          </div>
-
           <div style={{
             position: 'relative',
             width: '100%',
@@ -691,13 +657,11 @@ export default function ManufacturingPage() {
           }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/assets/factory-dashboard.png"
-              alt="Zawr Autonomous Factory Floor Overview"
+              src="/assets/factory-view.png"
+              alt="Zawr Autonomous Smart Factory Floor View"
               style={{
                 width: '100%',
                 height: 'auto',
-                maxHeight: '800px',
-                objectFit: 'cover',
                 display: 'block',
               }}
             />
