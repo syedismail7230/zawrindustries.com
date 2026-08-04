@@ -42,24 +42,6 @@ export function Capabilities3DGrid({ capabilities }: { capabilities: Capability[
           background: #f8fafc;
         }
 
-        .bento-metric-bg {
-          position: absolute;
-          bottom: -0.5rem;
-          right: 1rem;
-          font-size: clamp(5rem, 10vw, 9rem);
-          font-weight: 800;
-          color: rgba(0,0,0,0.04);
-          letter-spacing: -0.06em;
-          line-height: 1;
-          pointer-events: none;
-          user-select: none;
-          transition: color 0.25s ease;
-          white-space: nowrap;
-        }
-
-        .bento-cell:hover .bento-metric-bg {
-          color: rgba(0,0,0,0.07);
-        }
 
         .bento-label {
           font-size: 0.7rem;
@@ -117,9 +99,6 @@ export function Capabilities3DGrid({ capabilities }: { capabilities: Capability[
             onMouseEnter={() => setHovered(idx)}
             onMouseLeave={() => setHovered(null)}
           >
-            {/* Ghost watermark metric */}
-            <span className="bento-metric-bg" aria-hidden="true">{cap.metric}</span>
-
             {/* Top: label + metric */}
             <div>
               <div className="bento-label">{cap.metricLabel}</div>
