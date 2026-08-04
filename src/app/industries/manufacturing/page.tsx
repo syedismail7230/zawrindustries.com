@@ -528,6 +528,38 @@ export default function ManufacturingPage() {
         </div>
       </section>
 
+      {/* Factory Floor Video Showcase Section */}
+      <section style={{
+        padding: 'clamp(3rem, 6vw, 5rem) 5%',
+        backgroundColor: '#ffffff',
+        borderBottom: '1px solid #e2e8f0',
+      }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+          <div style={{
+            position: 'relative',
+            width: '100%',
+            borderRadius: '24px',
+            overflow: 'hidden',
+            backgroundColor: '#000000',
+            boxShadow: '0 20px 40px rgba(0,0,0,0.08)',
+          }}>
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              src="/assets/factory.mp4"
+              style={{
+                width: '100%',
+                maxHeight: '700px',
+                objectFit: 'cover',
+                display: 'block',
+              }}
+            />
+          </div>
+        </div>
+      </section>
+
       {/* 4. Tech Architecture & Make in India Compliance */}
 
       <section style={{ padding: 'clamp(3rem, 6vw, 6rem) 5%', backgroundColor: '#ffffff' }}>
