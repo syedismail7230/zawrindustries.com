@@ -6,6 +6,7 @@ import { AgvScrollSection } from '@/components/AgvScrollSection';
 import { MaritimeFreightSection } from '@/components/MaritimeFreightSection';
 import { RailFreightSection } from '@/components/RailFreightSection';
 import { AirFreightSection } from '@/components/AirFreightSection';
+import { Capabilities3DGrid } from '@/components/Capabilities3DGrid';
 
 export const metadata: Metadata = {
   title: "Trade & Logistics Solutions — Zawr Industries India",
@@ -89,7 +90,7 @@ export default function LogisticsPage() {
       <AirFreightSection />
 
       {/* ── OVERVIEW & CAPABILITIES SECTION (CLEAN WHITE BACKGROUND) ── */}
-      <div style={{ backgroundColor: '#ffffff', padding: 'clamp(3rem, 6vw, 5rem) clamp(1rem, 6vw, 8%)', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ backgroundColor: '#ffffff', padding: 'clamp(3rem, 6vw, 5rem) clamp(1rem, 6vw, 8%)', maxWidth: '1280px', margin: '0 auto' }}>
         <div style={{ maxWidth: '850px', margin: '0 auto 5rem auto', textAlign: 'center' }}>
           <h2 style={{
             fontSize: 'clamp(2rem, 4vw, 3rem)',
@@ -111,65 +112,8 @@ export default function LogisticsPage() {
           </p>
         </div>
 
-        {/* Capabilities Grid (Minimalist White Theme Cards) */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-          gap: '2rem',
-          marginBottom: '5rem'
-        }}>
-          {capabilities.map((cap, idx) => (
-            <div key={idx} style={{
-              background: '#f8f9fa',
-              border: '1px solid rgba(0, 0, 0, 0.08)',
-              borderRadius: '16px',
-              padding: '2.2rem 1.8rem',
-              transition: 'all 0.3s ease',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'space-between'
-            }}>
-              <div>
-                <div style={{
-                  fontSize: '2rem',
-                  fontWeight: 400,
-                  color: '#000000',
-                  letterSpacing: '-0.03em',
-                  marginBottom: '0.2rem'
-                }}>
-                  {cap.metric}
-                </div>
-                <div style={{
-                  fontSize: '0.68rem',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.12em',
-                  color: 'rgba(0, 0, 0, 0.45)',
-                  marginBottom: '1.8rem'
-                }}>
-                  {cap.metricLabel}
-                </div>
-                <h3 style={{
-                  fontSize: '1.2rem',
-                  fontWeight: 500,
-                  color: '#000000',
-                  marginBottom: '0.75rem',
-                  letterSpacing: '-0.01em'
-                }}>
-                  {cap.title}
-                </h3>
-                <p style={{
-                  fontSize: '0.9rem',
-                  lineHeight: 1.65,
-                  color: 'rgba(0, 0, 0, 0.65)',
-                  fontWeight: 300,
-                  margin: 0
-                }}>
-                  {cap.description}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
+        {/* 4 In-A-Row 3D Interactive Capabilities Grid */}
+        <Capabilities3DGrid capabilities={capabilities} />
       </div>
 
       {/* ── INDUSTRIES WE SERVE SECTION ── */}
