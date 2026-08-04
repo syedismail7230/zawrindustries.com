@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import ManufacturingHeroClient from '@/components/ManufacturingHeroClient';
 import { Capabilities3DGrid } from '@/components/Capabilities3DGrid';
+import FactoryDashboardInteractive from '@/components/FactoryDashboardInteractive';
 
 export const metadata: Metadata = {
   title: "AI Powered Precision Manufacturing — Zawr Industries",
@@ -697,6 +698,9 @@ export default function ManufacturingPage() {
           </div>
         </div>
       </section>
+
+      {/* 5. Interactive Factory Management System Dashboard */}
+      <FactoryDashboardInteractive />
 
     </div>
   );
