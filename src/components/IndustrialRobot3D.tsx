@@ -15,15 +15,15 @@ export default function IndustrialRobot3D() {
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    // 1. Scene Setup
+    // 1. Scene Setup (Clean White Studio Environment)
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup (Centered Perspective)
+    // 2. Camera Setup
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-    camera.position.set(0, 0.8, 4.4);
+    camera.position.set(0, 0.8, 4.2);
     camera.lookAt(0, 0.4, 0);
 
-    // 3. Renderer Setup with Studio Environment
+    // 3. Renderer Setup with PMREM Environment Generator
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -35,7 +35,7 @@ export default function IndustrialRobot3D() {
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
-    // 5. Studio Lighting
+    // 5. Studio Direct Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
     scene.add(ambientLight);
 
@@ -51,7 +51,7 @@ export default function IndustrialRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load Clean Unmodified GLB 3D Model
+    // 6. Load GLB Model (Static & Solid Intact Geometry)
     const modelGroup = new THREE.Group();
     modelGroup.position.set(0, -0.15, 0);
     scene.add(modelGroup);
@@ -62,7 +62,7 @@ export default function IndustrialRobot3D() {
       (gltf) => {
         const loadedModel = gltf.scene;
 
-        // Auto-center & scale model perfectly
+        // Auto-center & scale model
         const box = new THREE.Box3().setFromObject(loadedModel);
         const center = box.getCenter(new THREE.Vector3());
         const size = box.getSize(new THREE.Vector3());
@@ -73,16 +73,17 @@ export default function IndustrialRobot3D() {
         const scale = 3.8 / maxDim;
         loadedModel.scale.set(scale, scale, scale);
 
-        // Ensure materials have metallic specular reflections without mutating geometry
+        // Preserve intact materials & prevent pitch black silhouetting
         loadedModel.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
             const mesh = child as THREE.Mesh;
+
             if (mesh.material) {
               const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
               materials.forEach((mat) => {
                 if (mat instanceof THREE.MeshStandardMaterial || mat instanceof THREE.MeshPhysicalMaterial) {
                   if (mat.color.r < 0.05 && mat.color.g < 0.05 && mat.color.b < 0.05) {
-                    mat.color.setHex(0x2d323c); // Premium dark metallic charcoal
+                    mat.color.setHex(0x2d323c); // Dark metallic charcoal
                   }
                   mat.roughness = 0.3;
                   mat.metalness = 0.8;
@@ -103,7 +104,7 @@ export default function IndustrialRobot3D() {
       }
     );
 
-    // 7. Subtle Smooth Cursor Parallax Response
+    // 7. Mouse & Touch Cursor Tracking (Gentle Yaw Tilt Only)
     const mouse = new THREE.Vector2(0, 0);
     const targetMouse = new THREE.Vector2(0, 0);
 
@@ -123,16 +124,18 @@ export default function IndustrialRobot3D() {
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // 8. Clean Smooth Render Loop
+    // 8. Render Loop (Solid 3D model with subtle mouse tilt)
     let animId: number;
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      mouse.lerp(targetMouse, 0.05);
 
-      // Subtle smooth cursor rotation in place
-      modelGroup.rotation.y = mouse.x * 0.25;
-      modelGroup.rotation.x = -mouse.y * 0.1;
+      mouse.lerp(targetMouse, 0.08);
+
+      // Model remains completely static & intact in place
+      modelGroup.position.set(0, -0.15, 0);
+      modelGroup.rotation.y = mouse.x * 0.3;
+      modelGroup.rotation.x = -mouse.y * 0.12;
 
       renderer.render(scene, camera);
     };
