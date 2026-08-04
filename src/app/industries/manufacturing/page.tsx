@@ -1,7 +1,13 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import ManufacturingRobot3D from '@/components/ManufacturingRobot3D';
+import dynamic from 'next/dynamic';
 import { Capabilities3DGrid } from '@/components/Capabilities3DGrid';
+
+// Dynamic import with SSR disabled to prevent Three.js WebGL server-side rendering errors
+const ManufacturingRobot3D = dynamic(
+  () => import('@/components/ManufacturingRobot3D'),
+  { ssr: false }
+);
 
 export const metadata: Metadata = {
   title: "AI Powered Precision Manufacturing — Zawr Industries",
@@ -131,7 +137,7 @@ export default function ManufacturingPage() {
           width: '100%',
           maxWidth: '1200px',
           height: '560px',
-          marginTop: '-12rem', // Pulls the 3D robot canvas UP so it overlaps over the headline text
+          marginTop: '-12rem',
           margin: '-12rem auto 0',
           display: 'flex',
           alignItems: 'center',
