@@ -3,52 +3,40 @@
 import React, { useState } from 'react';
 
 export default function FactoryOSMapSection() {
-  const [hoveredIndex, setHoveredIndex] = useState<{ side: 'left' | 'right'; index: number } | null>(null);
+  const [hoveredNode, setHoveredNode] = useState<{ side: 'left' | 'right'; index: number } | null>(null);
 
-  // 9 Left Nodes organized in 5 compact rows (2 columns)
-  // Column A (outer left): items 0, 2, 4, 6, 8
-  // Column B (inner right): items 1, 3, 5, 7
+  // 9 Left Nodes: Staggered across 2 columns (Outer at xDot=200, Inner at xDot=410)
   const leftNodes = [
-    { title: 'PRODUCTION', desc: 'Work orders & scheduling', col: 'A', row: 0 },
-    { title: 'MACHINE MONITORING', desc: 'Status & downtime telemetry', col: 'B', row: 0 },
-    { title: 'QUALITY CONTROL', desc: 'Inspections & zero-defects', col: 'A', row: 1 },
-    { title: 'MAINTENANCE', desc: 'Preventive work orders', col: 'B', row: 1 },
-    { title: 'INVENTORY & WAREHOUSE', desc: 'Stock & material tracking', col: 'A', row: 2 },
-    { title: 'WORKFORCE MANAGEMENT', desc: 'Shifts & operator safety', col: 'B', row: 2 },
-    { title: 'EQUIPMENT & ASSETS', desc: 'Lifecycle & calibration', col: 'A', row: 3 },
-    { title: 'LOGISTICS & SHIPPING', desc: 'Dispatch & fleet routing', col: 'B', row: 3 },
-    { title: 'ENERGY MANAGEMENT', desc: 'Smart grid cost optimization', col: 'A', row: 4 },
+    { title: 'PRODUCTION', desc: 'Work orders & scheduling', isOuter: true, y: 40 },
+    { title: 'MACHINE MONITORING', desc: 'Status & downtime telemetry', isOuter: false, y: 85 },
+    { title: 'QUALITY CONTROL', desc: 'Inspections & zero-defects', isOuter: true, y: 130 },
+    { title: 'MAINTENANCE', desc: 'Preventive work orders', isOuter: false, y: 175 },
+    { title: 'INVENTORY & WAREHOUSE', desc: 'Stock & material tracking', isOuter: true, y: 220 },
+    { title: 'WORKFORCE MANAGEMENT', desc: 'Shifts & operator safety', isOuter: false, y: 265 },
+    { title: 'EQUIPMENT & ASSETS', desc: 'Lifecycle & calibration', isOuter: true, y: 310 },
+    { title: 'LOGISTICS & SHIPPING', desc: 'Dispatch & fleet routing', isOuter: false, y: 355 },
+    { title: 'ENERGY MANAGEMENT', desc: 'Smart grid cost optimization', isOuter: true, y: 400 },
   ];
 
-  // 9 Right Nodes organized in 5 compact rows (2 columns)
+  // 9 Right Nodes: Staggered across 2 columns (Inner at xDot=970, Outer at xDot=1180)
   const rightNodes = [
-    { title: 'REAL-TIME VISIBILITY', desc: 'Live factory telemetry', col: 'B', row: 0 },
-    { title: 'UNIFIED DASHBOARD', desc: 'All KPIs in one view', col: 'A', row: 0 },
-    { title: 'SMART ALERTS', desc: 'Instant critical notifications', col: 'B', row: 1 },
-    { title: 'ANALYTICS & REPORTS', desc: 'Data-driven insights', col: 'A', row: 1 },
-    { title: 'DATA-DRIVEN DECISIONS', desc: 'Faster smart operations', col: 'B', row: 2 },
-    { title: 'SCALABLE & SECURE', desc: 'Enterprise security & scale', col: 'A', row: 2 },
-    { title: 'INTEGRATED ECOSYSTEM', desc: 'Zero silo ERP/PLC sync', col: 'B', row: 3 },
-    { title: 'AUTOMATED WORKFLOWS', desc: 'End-to-end efficiency', col: 'A', row: 3 },
-    { title: 'MAXIMUM EFFICIENCY', desc: 'Higher throughput output', col: 'B', row: 4 },
+    { title: 'REAL-TIME VISIBILITY', desc: 'Live factory telemetry', isOuter: true, y: 40 },
+    { title: 'UNIFIED DASHBOARD', desc: 'All KPIs in one view', isOuter: false, y: 85 },
+    { title: 'SMART ALERTS', desc: 'Instant critical notifications', isOuter: true, y: 130 },
+    { title: 'ANALYTICS & REPORTS', desc: 'Data-driven insights', isOuter: false, y: 175 },
+    { title: 'DATA-DRIVEN DECISIONS', desc: 'Faster smart operations', isOuter: true, y: 220 },
+    { title: 'SCALABLE & SECURE', desc: 'Enterprise security & scale', isOuter: false, y: 265 },
+    { title: 'INTEGRATED ECOSYSTEM', desc: 'Zero silo ERP/PLC sync', isOuter: true, y: 310 },
+    { title: 'AUTOMATED WORKFLOWS', desc: 'End-to-end efficiency', isOuter: false, y: 355 },
+    { title: 'MAXIMUM EFFICIENCY', desc: 'Higher throughput output', isOuter: true, y: 400 },
   ];
 
-  // Geometry: 1300x380 SVG Canvas
-  // Text area LEFT: x = 20..400
-  // Bezier Curves LEFT: x = 420..540
-  // Center Hub: x = 650, y = 180
-  // Bezier Curves RIGHT: x = 760..880
-  // Text area RIGHT: x = 900..1280
-
-  const centerHubX = 650;
-  const centerHubY = 180;
-  const leftAnchorX = 540;
-  const leftDotX = 420;
-  const rightAnchorX = 760;
-  const rightDotX = 880;
-
-  // Y coordinate for each of the 5 rows (row 0 to 4, step = 64px)
-  const getRowY = (row: number) => 40 + row * 64;
+  // Canvas Geometry: 1380x440
+  const centerHubX = 690;
+  const centerHubY = 220;
+  const leftAnchorX = 550;
+  const rightAnchorX = 830;
+  const arrowTipX = 865;
 
   return (
     <section style={{
@@ -60,7 +48,7 @@ export default function FactoryOSMapSection() {
     }}>
       <style>{`
         @media (max-width: 1024px) {
-          .os-map-no-overlap-desktop {
+          .os-map-connected-desktop {
             display: none !important;
           }
           .os-map-mobile-stack {
@@ -72,7 +60,7 @@ export default function FactoryOSMapSection() {
             display: none !important;
           }
         }
-        .os-clean-group {
+        .os-connected-group {
           cursor: pointer;
           transition: opacity 0.2s ease;
         }
@@ -110,69 +98,65 @@ export default function FactoryOSMapSection() {
           </p>
         </div>
 
-        {/* DESKTOP NON-OVERLAPPING 2-COLUMN MAP (380px HEIGHT, ZERO OVERLAP) */}
-        <div className="os-map-no-overlap-desktop" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
+        {/* DESKTOP FULLY CONNECTED STAGGERED MAP (440px HEIGHT, ALL 18 NODES CONNECTED WITH SOLID LINES) */}
+        <div className="os-map-connected-desktop" style={{ width: '100%', display: 'flex', justifyContent: 'center' }}>
           <svg
             width="100%"
             height="100%"
-            viewBox="0 0 1300 380"
-            style={{ maxWidth: '1300px', height: 'auto', overflow: 'visible' }}
+            viewBox="0 0 1380 440"
+            style={{ maxWidth: '1380px', height: 'auto', overflow: 'visible' }}
           >
-            {/* 1. LEFT BEZIER CURVES: Strictly bounded between x = 420 and x = 540 */}
-            {leftNodes.map((_, i) => {
-              // Map index 0..8 to row Y
-              const row = Math.floor(i / 2) + (i % 2 === 0 ? 0 : 0);
-              const y = getRowY(i === 8 ? 4 : (i % 2 === 0 ? Math.floor(i/2) : Math.floor(i/2)));
-              const isHovered = hoveredIndex?.side === 'left' && hoveredIndex?.index === i;
-              const isAnyHovered = hoveredIndex !== null;
+            {/* 1. LEFT BEZIER CURVES: Connecting all 9 Left Nodes directly to Left Anchor */}
+            {leftNodes.map((node, i) => {
+              const xDot = node.isOuter ? 200 : 410;
+              const isHovered = hoveredNode?.side === 'left' && hoveredNode?.index === i;
+              const isAnyHovered = hoveredNode !== null;
 
-              const pathD = `M ${leftDotX} ${y} C ${leftDotX + 60} ${y}, ${leftAnchorX - 40} ${centerHubY}, ${leftAnchorX} ${centerHubY}`;
+              // Outer curves sweep smoothly through vertical gaps between inner text rows
+              const pathD = node.isOuter
+                ? `M ${xDot} ${node.y} C ${xDot + 160} ${node.y}, ${leftAnchorX - 60} ${centerHubY}, ${leftAnchorX} ${centerHubY}`
+                : `M ${xDot} ${node.y} C ${xDot + 60} ${node.y}, ${leftAnchorX - 40} ${centerHubY}, ${leftAnchorX} ${centerHubY}`;
 
               return (
-                <g key={`l-curve-${i}`}>
+                <g key={`l-path-${i}`}>
                   <path
                     d={pathD}
                     fill="none"
                     stroke="#000000"
-                    strokeWidth={isHovered ? "2.5" : "1.2"}
-                    opacity={isHovered ? 1 : isAnyHovered ? 0.15 : 0.75}
+                    strokeWidth={isHovered ? "2.5" : "1.3"}
+                    opacity={isHovered ? 1 : isAnyHovered ? 0.15 : 0.8}
                     style={{ transition: 'all 0.2s ease' }}
                   />
+                  {/* Moving signal particle along line */}
                   <circle r={isHovered ? "3.5" : "2.2"} fill="#000000" opacity={isAnyHovered && !isHovered ? 0.2 : 1}>
-                    <animateMotion path={pathD} dur={`${3.2 + i * 0.2}s`} repeatCount="indefinite" />
+                    <animateMotion path={pathD} dur={`${3 + i * 0.25}s`} repeatCount="indefinite" />
                   </circle>
                 </g>
               );
             })}
 
-            {/* 2. LEFT TEXT LABELS & LEADER LINES (x = 20..400) */}
+            {/* 2. LEFT TEXT LABELS & CONNECTION DOTS (All 9 items fully connected) */}
             {leftNodes.map((node, i) => {
-              const y = getRowY(node.row);
-              const isColA = node.col === 'A';
-              const textX = isColA ? 180 : 395;
-              const isHovered = hoveredIndex?.side === 'left' && hoveredIndex?.index === i;
-              const isAnyHovered = hoveredIndex !== null;
+              const xDot = node.isOuter ? 200 : 410;
+              const xText = node.isOuter ? 185 : 395;
+              const isHovered = hoveredNode?.side === 'left' && hoveredNode?.index === i;
+              const isAnyHovered = hoveredNode !== null;
 
               return (
                 <g
                   key={`l-node-${i}`}
-                  className="os-clean-group"
-                  onMouseEnter={() => setHoveredIndex({ side: 'left', index: i })}
-                  onMouseLeave={() => setHoveredIndex(null)}
+                  className="os-connected-group"
+                  onMouseEnter={() => setHoveredNode({ side: 'left', index: i })}
+                  onMouseLeave={() => setHoveredNode(null)}
                   style={{ opacity: isAnyHovered && !isHovered ? 0.35 : 1, transition: 'opacity 0.2s ease' }}
                 >
-                  {/* Leader Line for Col A text to reach dot column xDot = 420 */}
-                  {isColA && (
-                    <line x1="188" y1={y} x2={leftDotX} y2={y} stroke="#e2e8f0" strokeWidth="1" strokeDasharray="3 3" />
-                  )}
-
-                  {/* Node Dot at xDot = 420 */}
-                  <circle cx={leftDotX} cy={y} r={isHovered ? "4.5" : "3.2"} fill="#000000" style={{ transition: 'all 0.2s ease' }} />
+                  {/* Connection Node Dot */}
+                  <circle cx={xDot} cy={node.y} r={isHovered ? "4.5" : "3.2"} fill="#000000" style={{ transition: 'all 0.2s ease' }} />
 
                   {/* Title */}
                   <text
-                    x={textX}
-                    y={y - 4}
+                    x={xText}
+                    y={node.y - 4}
                     textAnchor="end"
                     fill="#000000"
                     fontSize="11"
@@ -183,8 +167,8 @@ export default function FactoryOSMapSection() {
                   </text>
                   {/* Subtitle */}
                   <text
-                    x={textX}
-                    y={y + 11}
+                    x={xText}
+                    y={node.y + 11}
                     textAnchor="end"
                     fill="#64748b"
                     fontSize="9.5"
@@ -198,17 +182,17 @@ export default function FactoryOSMapSection() {
 
             {/* 3. CENTER HUB: ZAWR FMS */}
             <g transform={`translate(${centerHubX}, ${centerHubY})`}>
-              <circle cx="0" cy="0" r="52" fill="none" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="4 4" />
-              <circle cx="0" cy="0" r="40" fill="none" stroke="#f1f5f9" strokeWidth="1" />
+              <circle cx="0" cy="0" r="54" fill="none" stroke="#cbd5e1" strokeWidth="1" strokeDasharray="4 4" />
+              <circle cx="0" cy="0" r="42" fill="none" stroke="#f1f5f9" strokeWidth="1" />
 
-              <text x="0" y="-12" textAnchor="middle" fill="#000000" fontSize="24" fontWeight="700" letterSpacing="-0.02em">
+              <text x="0" y="-12" textAnchor="middle" fill="#000000" fontSize="25" fontWeight="700" letterSpacing="-0.02em">
                 ZAWR
               </text>
               <text x="0" y="8" textAnchor="middle" fill="#000000" fontSize="14" fontWeight="600" letterSpacing="0.1em">
                 FMS
               </text>
 
-              <line x1="-25" y1="17" x2="25" y2="17" stroke="#e2e8f0" strokeWidth="1" />
+              <line x1="-25" y1="17" x2="25" y2="17" stroke="#cbd5e1" strokeWidth="1" />
 
               <text x="0" y="30" textAnchor="middle" fill="#64748b" fontSize="9" fontWeight="300">
                 One Platform.
@@ -220,62 +204,58 @@ export default function FactoryOSMapSection() {
             <circle cx={rightAnchorX} cy={centerHubY} r="4.5" fill="#000000" />
 
             {/* Center-to-Right Connector Arrow */}
-            <path d={`M ${rightAnchorX} ${centerHubY} L ${rightAnchorX + 35} ${centerHubY}`} fill="none" stroke="#000000" strokeWidth="1.5" />
-            <polygon points={`${rightAnchorX + 35},${centerHubY - 4} ${rightAnchorX + 43},${centerHubY} ${rightAnchorX + 35},${centerHubY + 4}`} fill="#000000" />
+            <path d={`M ${rightAnchorX} ${centerHubY} L ${arrowTipX - 8} ${centerHubY}`} fill="none" stroke="#000000" strokeWidth="1.5" />
+            <polygon points={`${arrowTipX - 8},${centerHubY - 4} ${arrowTipX},${centerHubY} ${arrowTipX - 8},${centerHubY + 4}`} fill="#000000" />
 
-            {/* 4. RIGHT BEZIER CURVES: Strictly bounded between x = 795 and x = 880 */}
-            {rightNodes.map((_, i) => {
-              const y = getRowY(i === 8 ? 4 : (i % 2 === 0 ? Math.floor(i/2) : Math.floor(i/2)));
-              const isHovered = hoveredIndex?.side === 'right' && hoveredIndex?.index === i;
-              const isAnyHovered = hoveredIndex !== null;
+            {/* 4. RIGHT BEZIER CURVES: Connecting all 9 Right Nodes directly from Arrow Tip */}
+            {rightNodes.map((node, i) => {
+              const xDot = node.isOuter ? 1180 : 970;
+              const isHovered = hoveredNode?.side === 'right' && hoveredNode?.index === i;
+              const isAnyHovered = hoveredNode !== null;
 
-              const pathD = `M ${rightAnchorX + 43} ${centerHubY} C ${rightAnchorX + 80} ${centerHubY}, ${rightDotX - 50} ${y}, ${rightDotX} ${y}`;
+              const pathD = node.isOuter
+                ? `M ${arrowTipX} ${centerHubY} C ${arrowTipX + 60} ${centerHubY}, ${xDot - 160} ${node.y}, ${xDot} ${node.y}`
+                : `M ${arrowTipX} ${centerHubY} C ${arrowTipX + 40} ${centerHubY}, ${xDot - 60} ${node.y}, ${xDot} ${node.y}`;
 
               return (
-                <g key={`r-curve-${i}`}>
+                <g key={`r-path-${i}`}>
                   <path
                     d={pathD}
                     fill="none"
                     stroke="#000000"
-                    strokeWidth={isHovered ? "2.5" : "1.2"}
-                    opacity={isHovered ? 1 : isAnyHovered ? 0.15 : 0.75}
+                    strokeWidth={isHovered ? "2.5" : "1.3"}
+                    opacity={isHovered ? 1 : isAnyHovered ? 0.15 : 0.8}
                     style={{ transition: 'all 0.2s ease' }}
                   />
                   <circle r={isHovered ? "3.5" : "2.2"} fill="#000000" opacity={isAnyHovered && !isHovered ? 0.2 : 1}>
-                    <animateMotion path={pathD} dur={`${3.2 + i * 0.2}s`} repeatCount="indefinite" />
+                    <animateMotion path={pathD} dur={`${3 + i * 0.25}s`} repeatCount="indefinite" />
                   </circle>
                 </g>
               );
             })}
 
-            {/* 5. RIGHT TEXT LABELS & LEADER LINES (x = 900..1280) */}
+            {/* 5. RIGHT TEXT LABELS & CONNECTION DOTS (All 9 items fully connected) */}
             {rightNodes.map((node, i) => {
-              const y = getRowY(node.row);
-              const isColB = node.col === 'B';
-              const textX = isColB ? 1115 : 905;
-              const isHovered = hoveredIndex?.side === 'right' && hoveredIndex?.index === i;
-              const isAnyHovered = hoveredIndex !== null;
+              const xDot = node.isOuter ? 1180 : 970;
+              const xText = node.isOuter ? 1195 : 985;
+              const isHovered = hoveredNode?.side === 'right' && hoveredNode?.index === i;
+              const isAnyHovered = hoveredNode !== null;
 
               return (
                 <g
                   key={`r-node-${i}`}
-                  className="os-clean-group"
-                  onMouseEnter={() => setHoveredIndex({ side: 'right', index: i })}
-                  onMouseLeave={() => setHoveredIndex(null)}
+                  className="os-connected-group"
+                  onMouseEnter={() => setHoveredNode({ side: 'right', index: i })}
+                  onMouseLeave={() => setHoveredNode(null)}
                   style={{ opacity: isAnyHovered && !isHovered ? 0.35 : 1, transition: 'opacity 0.2s ease' }}
                 >
-                  {/* Node Dot at xDot = 880 */}
-                  <circle cx={rightDotX} cy={y} r={isHovered ? "4.5" : "3.2"} fill="#000000" style={{ transition: 'all 0.2s ease' }} />
-
-                  {/* Leader Line for Col B outer text */}
-                  {isColB && (
-                    <line x1={rightDotX} y1={y} x2="1107" y2={y} stroke="#e2e8f0" strokeWidth="1" strokeDasharray="3 3" />
-                  )}
+                  {/* Connection Node Dot */}
+                  <circle cx={xDot} cy={node.y} r={isHovered ? "4.5" : "3.2"} fill="#000000" style={{ transition: 'all 0.2s ease' }} />
 
                   {/* Title */}
                   <text
-                    x={textX}
-                    y={y - 4}
+                    x={xText}
+                    y={node.y - 4}
                     textAnchor="start"
                     fill="#000000"
                     fontSize="11"
@@ -286,8 +266,8 @@ export default function FactoryOSMapSection() {
                   </text>
                   {/* Subtitle */}
                   <text
-                    x={textX}
-                    y={y + 11}
+                    x={xText}
+                    y={node.y + 11}
                     textAnchor="start"
                     fill="#64748b"
                     fontSize="9.5"
