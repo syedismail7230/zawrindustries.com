@@ -18,7 +18,7 @@ export default function IndustrialRobot3D() {
     // 1. Scene Setup (Clean White Studio Environment)
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup (Positioned facing the upper arm & claw)
+    // 2. Camera Setup (Fixed Perspective facing Upward Arm)
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
     camera.position.set(0, 0.5, 3.9);
     camera.lookAt(0, 0.3, 0);
@@ -51,9 +51,9 @@ export default function IndustrialRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Elevated higher up to overlap text)
+    // 6. Load GLB Model (Stationary Base on Ground)
     const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, 0.1, 0); // Elevated to overlap the headline text
+    modelGroup.position.set(0, 0.1, 0); // Stationary base position
     scene.add(modelGroup);
 
     const loader = new GLTFLoader();
@@ -70,7 +70,7 @@ export default function IndustrialRobot3D() {
         loadedModel.position.sub(center);
 
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 4.2 / maxDim; // Larger scale to match reference image
+        const scale = 4.2 / maxDim;
         loadedModel.scale.set(scale, scale, scale);
 
         // Preserve intact materials & prevent pitch black silhouetting
@@ -104,27 +104,27 @@ export default function IndustrialRobot3D() {
       }
     );
 
-    // 7. Mouse & Touch Cursor Tracking (Gentle Yaw & Pitch Tilt)
+    // 7. Mouse & Touch Cursor Tracking (ONLY Mouse X drives horizontal Y-rotation)
     const mouse = new THREE.Vector2(0, 0);
     const targetMouse = new THREE.Vector2(0, 0);
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
       targetMouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      targetMouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      targetMouse.y = 0; // Lock Y axis to 0
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches.length !== 1) return;
       const rect = container.getBoundingClientRect();
       targetMouse.x = ((e.touches[0].clientX - rect.left) / rect.width) * 2 - 1;
-      targetMouse.y = -((e.touches[0].clientY - rect.top) / rect.height) * 2 + 1;
+      targetMouse.y = 0;
     };
 
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // 8. Render Loop (Model positioned elevated in center stage)
+    // 8. Render Loop (Stationary Base, ONLY horizontal Y-axis rotation from mouse X)
     let animId: number;
 
     const animate = () => {
@@ -132,10 +132,13 @@ export default function IndustrialRobot3D() {
 
       mouse.lerp(targetMouse, 0.25);
 
-      // Model remains stationary at elevated position y = 0.1
+      // Model base is fixed stationary at y = 0.1, x = 0, z = 0
       modelGroup.position.set(0, 0.1, 0);
-      modelGroup.rotation.y = mouse.x * 0.3;
-      modelGroup.rotation.x = -mouse.y * 0.12;
+      
+      // ROTATION: Only rotate horizontally around Y axis based on mouse X position
+      modelGroup.rotation.y = mouse.x * 0.45;
+      modelGroup.rotation.x = 0; // Lock X tilt to 0 (no vertical pitch/tilt)
+      modelGroup.rotation.z = 0; // Lock Z tilt to 0
 
       renderer.render(scene, camera);
     };
