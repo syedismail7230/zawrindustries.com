@@ -8,6 +8,28 @@ import ISO6391 from 'iso-639-1';
 
 const poppins = Poppins({ subsets: ['latin'], weight: ['400', '700'] });
 
+function ChevronDownIcon({ isOpen }: { isOpen: boolean }) {
+  return (
+    <svg 
+      width="16" 
+      height="16" 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+      style={{
+        transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+        transition: 'transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1)',
+        opacity: 0.7,
+      }}
+    >
+      <path d="M6 9l6 6 6-6" />
+    </svg>
+  );
+}
+
 export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
@@ -28,7 +50,7 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isMobileMenuOpen]);
 
-  // Close mobile menu and reset scroll state on route change to prevent background issues
+  // Close mobile menu and reset scroll state on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setActiveMobileSubmenu(null);
@@ -241,8 +263,8 @@ export default function Header() {
             onClick={() => toggleMobileSubmenu('about')}
           >
             <span>About</span>
-            <span style={{ fontSize: '0.8rem', opacity: 0.6, display: isMobileMenuOpen ? 'inline-block' : 'none' }}>
-              {activeMobileSubmenu === 'about' ? '▲' : '▼'}
+            <span style={{ display: isMobileMenuOpen ? 'inline-flex' : 'none', alignItems: 'center' }}>
+              <ChevronDownIcon isOpen={activeMobileSubmenu === 'about'} />
             </span>
           </div>
           <div className={`dropdown ${activeMobileSubmenu === 'about' ? 'mobile-submenu-open' : ''}`}>
@@ -260,8 +282,8 @@ export default function Header() {
             onClick={() => toggleMobileSubmenu('industries')}
           >
             <span>Industries</span>
-            <span style={{ fontSize: '0.8rem', opacity: 0.6, display: isMobileMenuOpen ? 'inline-block' : 'none' }}>
-              {activeMobileSubmenu === 'industries' ? '▲' : '▼'}
+            <span style={{ display: isMobileMenuOpen ? 'inline-flex' : 'none', alignItems: 'center' }}>
+              <ChevronDownIcon isOpen={activeMobileSubmenu === 'industries'} />
             </span>
           </div>
           <div className={`dropdown ${activeMobileSubmenu === 'industries' ? 'mobile-submenu-open' : ''}`}>
@@ -280,8 +302,8 @@ export default function Header() {
             onClick={() => toggleMobileSubmenu('platforms')}
           >
             <span>Platforms</span>
-            <span style={{ fontSize: '0.8rem', opacity: 0.6, display: isMobileMenuOpen ? 'inline-block' : 'none' }}>
-              {activeMobileSubmenu === 'platforms' ? '▲' : '▼'}
+            <span style={{ display: isMobileMenuOpen ? 'inline-flex' : 'none', alignItems: 'center' }}>
+              <ChevronDownIcon isOpen={activeMobileSubmenu === 'platforms'} />
             </span>
           </div>
           <div className={`dropdown ${activeMobileSubmenu === 'platforms' ? 'mobile-submenu-open' : ''}`}>
@@ -300,8 +322,8 @@ export default function Header() {
             onClick={() => toggleMobileSubmenu('newsroom')}
           >
             <Link href="/newsroom/press-release" style={{ color: 'inherit', textDecoration: 'none' }} onClick={closeMobileMenu}>Newsroom</Link>
-            <span style={{ fontSize: '0.8rem', opacity: 0.6, display: isMobileMenuOpen ? 'inline-block' : 'none' }}>
-              {activeMobileSubmenu === 'newsroom' ? '▲' : '▼'}
+            <span style={{ display: isMobileMenuOpen ? 'inline-flex' : 'none', alignItems: 'center' }}>
+              <ChevronDownIcon isOpen={activeMobileSubmenu === 'newsroom'} />
             </span>
           </div>
           <div className={`dropdown ${activeMobileSubmenu === 'newsroom' ? 'mobile-submenu-open' : ''}`}>
@@ -321,8 +343,8 @@ export default function Header() {
             onClick={() => toggleMobileSubmenu('contact')}
           >
             <Link href="/contact" style={{ color: 'inherit', textDecoration: 'none' }} onClick={closeMobileMenu}>Contact</Link>
-            <span style={{ fontSize: '0.8rem', opacity: 0.6, display: isMobileMenuOpen ? 'inline-block' : 'none' }}>
-              {activeMobileSubmenu === 'contact' ? '▲' : '▼'}
+            <span style={{ display: isMobileMenuOpen ? 'inline-flex' : 'none', alignItems: 'center' }}>
+              <ChevronDownIcon isOpen={activeMobileSubmenu === 'contact'} />
             </span>
           </div>
           <div className={`dropdown ${activeMobileSubmenu === 'contact' ? 'mobile-submenu-open' : ''}`}>
@@ -340,7 +362,7 @@ export default function Header() {
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
-        <div className="nav-item" style={{ padding: 0 }}>
+        <div className="nav-item" style={{ padding: 0, margin: 0 }}>
           <button className="icon-btn" aria-label="Language" style={{ pointerEvents: 'none' }} suppressHydrationWarning>
             <svg viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"></circle>
