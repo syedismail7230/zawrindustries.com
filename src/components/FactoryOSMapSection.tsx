@@ -161,7 +161,7 @@ export default function FactoryOSMapSection() {
                 ZAWR
               </text>
               <text x="600" y={centerY + 4} textAnchor="middle" fill="#000000" fontSize="18" fontWeight="600" letterSpacing="0.08em">
-                FACTORY OS
+                FMS
               </text>
               
               {/* Divider Line */}
@@ -239,7 +239,7 @@ export default function FactoryOSMapSection() {
           {/* Mobile Center Hub Text */}
           <div style={{ textAlign: 'center', padding: '1rem 0' }}>
             <div style={{ fontSize: '2rem', fontWeight: 600, color: '#000000' }}>ZAWR</div>
-            <div style={{ fontSize: '1.2rem', fontWeight: 500, color: '#000000', marginTop: '0.2rem', letterSpacing: '0.06em' }}>FACTORY OS</div>
+            <div style={{ fontSize: '1.2rem', fontWeight: 500, color: '#000000', marginTop: '0.2rem', letterSpacing: '0.06em' }}>FMS</div>
             <div style={{ fontSize: '0.85rem', color: '#64748b', marginTop: '0.6rem', fontWeight: 300 }}>One Platform. Unlimited Control.</div>
           </div>
 
