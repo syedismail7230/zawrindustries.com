@@ -16,6 +16,47 @@ type NavTab =
   | 'User & Role Management'
   | 'ERP/PLC Integration';
 
+// Helper Component for Smooth Gradient Area Sparkline Charts (matching user screenshot)
+const Sparkline = ({
+  color = '#22c55e',
+  data = [30, 45, 35, 55, 40, 65, 50, 75, 60, 85],
+  height = 42,
+  width = 120,
+  id = 'sp-1',
+}: {
+  color?: string;
+  data?: number[];
+  height?: number;
+  width?: number;
+  id?: string;
+}) => {
+  const max = Math.max(...data, 100);
+  const min = Math.min(...data, 0);
+  const range = max - min || 1;
+
+  const points = data.map((val, idx) => {
+    const x = (idx / (data.length - 1)) * width;
+    const y = height - ((val - min) / range) * (height - 8) - 4;
+    return `${x},${y}`;
+  });
+
+  const pathD = `M ${points.join(' L ')}`;
+  const areaD = `M 0,${height} L ${points.join(' L ')} L ${width},${height} Z`;
+
+  return (
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} style={{ overflow: 'visible' }}>
+      <defs>
+        <linearGradient id={`grad-${id}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={color} stopOpacity={0.35} />
+          <stop offset="100%" stopColor={color} stopOpacity={0.0} />
+        </linearGradient>
+      </defs>
+      <path d={areaD} fill={`url(#grad-${id})`} />
+      <path d={pathD} fill="none" stroke={color} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+};
+
 export default function FactoryDashboardInteractive() {
   const containerRef = useRef<HTMLDivElement>(null);
   const activePathRef = useRef<SVGPathElement>(null);
@@ -422,7 +463,7 @@ export default function FactoryDashboardInteractive() {
           {/* MAIN CONTENT WORKSPACE GRID */}
           <div className="fms-main-grid" style={{ display: 'grid', gridTemplateColumns: activeNavTab === 'Dashboard' ? '76px 280px 1fr' : '76px 1fr', minHeight: '660px' }}>
             
-            {/* 1. NAVIGATION SIDEBAR (HORIZONTAL PILLS ON MOBILE, VERTICAL ICON STRIP ON DESKTOP) */}
+            {/* 1. NAVIGATION SIDEBAR */}
             <div className="fms-nav-sidebar fms-no-scrollbar" style={{
               borderRight: '1px solid #e2e8f0',
               backgroundColor: '#ffffff',
@@ -615,7 +656,6 @@ export default function FactoryDashboardInteractive() {
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                   position: 'relative',
-                  gap: '1.2rem',
                 }}>
                   {/* Telemetry Stage Header */}
                   <div>
@@ -670,95 +710,6 @@ export default function FactoryDashboardInteractive() {
                       </div>
                     </div>
 
-                    {/* LIVE SPARKLINE GRAPH CARDS (as requested by user) */}
-                    <div style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                      gap: '1rem',
-                      marginBottom: '1rem',
-                    }}>
-                      {/* Card 1: Machine Online (Green Area Sparkline) */}
-                      <div style={{
-                        backgroundColor: '#ffffff',
-                        borderRadius: '16px',
-                        padding: '1rem 1.2rem',
-                        border: '1px solid #e2e8f0',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                      }}>
-                        <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 400, fontStyle: 'italic' }}>Machine Online</div>
-                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '0.4rem 0' }}>
-                          <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.2rem' }}>
-                            <span style={{ fontSize: '1.6rem', fontWeight: 500, color: '#000000', letterSpacing: '-0.02em' }}>128</span>
-                            <span style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: 400 }}>/140</span>
-                          </div>
-                          {/* Smooth Green Area Sparkline SVG */}
-                          <svg width="70" height="32" viewBox="0 0 70 32" style={{ overflow: 'visible' }}>
-                            <defs>
-                              <linearGradient id="greenGrad" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#22c55e" stopOpacity="0.35" />
-                                <stop offset="100%" stopColor="#22c55e" stopOpacity="0.0" />
-                              </linearGradient>
-                            </defs>
-                            <path
-                              d="M 0 24 Q 15 22, 25 18 T 45 10 T 60 4 T 70 8 L 70 32 L 0 32 Z"
-                              fill="url(#greenGrad)"
-                            />
-                            <path
-                              d="M 0 24 Q 15 22, 25 18 T 45 10 T 60 4 T 70 8"
-                              fill="none"
-                              stroke="#22c55e"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                        </div>
-                        <div style={{ fontSize: '0.72rem', color: '#16a34a', fontWeight: 500 }}>+4 today</div>
-                      </div>
-
-                      {/* Card 2: Production Rate (Blue Area Sparkline Wave) */}
-                      <div style={{
-                        backgroundColor: '#ffffff',
-                        borderRadius: '16px',
-                        padding: '1rem 1.2rem',
-                        border: '1px solid #e2e8f0',
-                        boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                      }}>
-                        <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 400, fontStyle: 'italic' }}>Production Rate</div>
-                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.1rem', marginTop: '0.3rem' }}>
-                          <span style={{ fontSize: '1.6rem', fontWeight: 500, color: '#000000', letterSpacing: '-0.02em' }}>92.6</span>
-                          <span style={{ fontSize: '1rem', color: '#64748b', fontWeight: 400 }}>%</span>
-                        </div>
-                        {/* Smooth Blue Wave Area Sparkline SVG */}
-                        <div style={{ marginTop: '0.4rem' }}>
-                          <svg width="100%" height="28" viewBox="0 0 160 28" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
-                            <defs>
-                              <linearGradient id="blueGrad" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
-                                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
-                              </linearGradient>
-                            </defs>
-                            <path
-                              d="M 0 22 C 30 20, 50 14, 80 12 C 110 10, 130 4, 160 6 L 160 28 L 0 28 Z"
-                              fill="url(#blueGrad)"
-                            />
-                            <path
-                              d="M 0 22 C 30 20, 50 14, 80 12 C 110 10, 130 4, 160 6"
-                              fill="none"
-                              stroke="#3b82f6"
-                              strokeWidth="2"
-                              strokeLinecap="round"
-                            />
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
-
                     {/* Timeline scrubber bar */}
                     <div className="fms-no-scrollbar" style={{
                       display: 'flex',
@@ -770,7 +721,7 @@ export default function FactoryDashboardInteractive() {
                       backgroundColor: '#ffffff',
                       borderRadius: '8px',
                       border: '1px solid #e2e8f0',
-                      marginBottom: '0.5rem',
+                      marginBottom: '1rem',
                       overflowX: 'auto',
                     }}>
                       <span>08:00</span>
@@ -1028,7 +979,7 @@ export default function FactoryDashboardInteractive() {
               </>
             )}
 
-            {/* TAB VIEW 2: PRODUCTION MANAGEMENT VIEW */}
+            {/* TAB VIEW 2: PRODUCTION MANAGEMENT VIEW WITH GRADIENT AREA CHARTS */}
             {activeNavTab === 'Production Management' && (
               <div className="fms-no-scrollbar" style={{ padding: '1.2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.2rem', flexWrap: 'wrap', gap: '0.8rem' }}>
@@ -1044,15 +995,20 @@ export default function FactoryDashboardInteractive() {
 
                 <div className="fms-grid-4col" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '1.8rem' }}>
                   {[
-                    { label: 'Active Work Orders', val: '24 Jobs', change: '+3 today' },
-                    { label: 'CNC Spindle Load', val: '94.2%', change: 'Optimal' },
-                    { label: 'Robotic Arc Precision', val: '99.94%', change: 'ISO Certified' },
-                    { label: 'Target Output Rate', val: '4,200 pcs/hr', change: '+12.5% vs target' },
-                  ].map((stat, i) => (
-                    <div key={i} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '12px', border: '1px solid #cbd5e1' }}>
-                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.4rem' }}>{stat.label}</div>
-                      <div style={{ fontSize: '1.3rem', fontWeight: 500, color: '#000000' }}>{stat.val}</div>
-                      <div style={{ fontSize: '0.7rem', color: '#16a34a', marginTop: '0.3rem', fontWeight: 400 }}>{stat.change}</div>
+                    { label: 'Active Work Orders', val: '24 Jobs', change: '+3 today', color: '#22c55e', data: [15, 18, 14, 20, 19, 22, 24], id: 'pm-1' },
+                    { label: 'CNC Spindle Load', val: '94.2%', change: 'Optimal', color: '#0284c7', data: [80, 85, 82, 90, 88, 92, 94], id: 'pm-2' },
+                    { label: 'Robotic Arc Precision', val: '99.94%', change: 'ISO Certified', color: '#16a34a', data: [98, 99, 99.2, 99.5, 99.8, 99.94], id: 'pm-3' },
+                    { label: 'Target Output Rate', val: '4,200 pcs/hr', change: '+12.5% vs target', color: '#6366f1', data: [3200, 3500, 3700, 3900, 4100, 4200], id: 'pm-4' },
+                  ].map((stat) => (
+                    <div key={stat.id} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '12px', border: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                      <div>
+                        <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.4rem' }}>{stat.label}</div>
+                        <div style={{ fontSize: '1.3rem', fontWeight: 500, color: '#000000' }}>{stat.val}</div>
+                      </div>
+                      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginTop: '0.8rem' }}>
+                        <div style={{ fontSize: '0.7rem', color: '#16a34a', fontWeight: 400 }}>{stat.change}</div>
+                        <Sparkline color={stat.color} data={stat.data} width={90} height={32} id={stat.id} />
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -1124,7 +1080,7 @@ export default function FactoryDashboardInteractive() {
               </div>
             )}
 
-            {/* TAB VIEW 3: MACHINE MONITORING VIEW */}
+            {/* TAB VIEW 3: MACHINE MONITORING VIEW WITH SPARKLINE GRAPHS */}
             {activeNavTab === 'Machine Monitoring' && (
               <div className="fms-no-scrollbar" style={{ padding: '1.2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.2rem' }}>
@@ -1134,14 +1090,14 @@ export default function FactoryDashboardInteractive() {
 
                 <div className="fms-grid-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.2rem' }}>
                   {[
-                    { name: '5-Axis CNC Centre #01', spindle: '12,000 RPM', temp: '42.5°C', vibration: '0.02 mm/s', toolWear: '14%', status: 'Running' },
-                    { name: '5-Axis CNC Centre #02', spindle: '11,800 RPM', temp: '44.1°C', vibration: '0.03 mm/s', toolWear: '22%', status: 'Running' },
-                    { name: 'Laser Cutting Cell A', spindle: 'N/A (Fiber Laser)', temp: '38.0°C', vibration: '0.01 mm/s', toolWear: '8%', status: 'Running' },
-                    { name: 'Robotic Arc Weld Cell 1', spindle: 'N/A (Robotics)', temp: '49.2°C', vibration: '0.04 mm/s', toolWear: '31%', status: 'Running' },
-                    { name: 'Industrial SLA 3D Printer', spindle: 'Heater 210°C', temp: '55.0°C', vibration: '0.00 mm/s', toolWear: '4%', status: 'Running' },
-                    { name: 'CMM Precision Scanner', spindle: 'Calibration OK', temp: '20.1°C', vibration: '0.00 mm/s', toolWear: '0%', status: 'Standby' },
-                  ].map((m, i) => (
-                    <div key={i} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
+                    { name: '5-Axis CNC Centre #01', spindle: '12,000 RPM', temp: '42.5°C', vibration: '0.02 mm/s', toolWear: '14%', status: 'Running', color: '#22c55e', data: [10, 11, 11.5, 12, 11.9, 12], id: 'mm-1' },
+                    { name: '5-Axis CNC Centre #02', spindle: '11,800 RPM', temp: '44.1°C', vibration: '0.03 mm/s', toolWear: '22%', status: 'Running', color: '#0284c7', data: [10, 10.8, 11.2, 11.8, 11.6, 11.8], id: 'mm-2' },
+                    { name: 'Laser Cutting Cell A', spindle: 'N/A (Fiber Laser)', temp: '38.0°C', vibration: '0.01 mm/s', toolWear: '8%', status: 'Running', color: '#16a34a', data: [35, 36, 37, 38, 38, 38], id: 'mm-3' },
+                    { name: 'Robotic Arc Weld Cell 1', spindle: 'N/A (Robotics)', temp: '49.2°C', vibration: '0.04 mm/s', toolWear: '31%', status: 'Running', color: '#f59e0b', data: [40, 42, 45, 47, 49, 49.2], id: 'mm-4' },
+                    { name: 'Industrial SLA 3D Printer', spindle: 'Heater 210°C', temp: '55.0°C', vibration: '0.00 mm/s', toolWear: '4%', status: 'Running', color: '#6366f1', data: [200, 205, 208, 210, 210, 210], id: 'mm-5' },
+                    { name: 'CMM Precision Scanner', spindle: 'Calibration OK', temp: '20.1°C', vibration: '0.00 mm/s', toolWear: '0%', status: 'Standby', color: '#64748b', data: [20, 20.1, 20.1, 20.1, 20.1], id: 'mm-6' },
+                  ].map((m) => (
+                    <div key={m.id} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
                         <span style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000' }}>{m.name}</span>
                         <span style={{ fontSize: '0.7rem', fontWeight: 500, padding: '0.2rem 0.5rem', backgroundColor: '#dcfce7', color: '#15803d', borderRadius: '4px' }}>{m.status}</span>
@@ -1151,6 +1107,13 @@ export default function FactoryDashboardInteractive() {
                         <div>Thermal Temp: <span style={{ color: '#000', fontWeight: 500 }}>{m.temp}</span></div>
                         <div>Vibration Index: <span style={{ color: '#000', fontWeight: 500 }}>{m.vibration}</span></div>
                       </div>
+                      
+                      {/* Gradient Area Chart for Spindle/Thermal Telemetry */}
+                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.6rem' }}>
+                        <span style={{ fontSize: '0.7rem', color: '#64748b' }}>24h Telemetry</span>
+                        <Sparkline color={m.color} data={m.data} width={100} height={28} id={m.id} />
+                      </div>
+
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: '#64748b', marginBottom: '0.3rem' }}>
                           <span>Tool Wear Index</span>
@@ -1166,7 +1129,7 @@ export default function FactoryDashboardInteractive() {
               </div>
             )}
 
-            {/* TAB VIEW 4: MES (Manufacturing Execution System) */}
+            {/* TAB VIEW 4: MES WITH ROUTING SPARKLINE CHARTS */}
             {activeNavTab === 'MES' && (
               <div className="fms-no-scrollbar" style={{ padding: '1.2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.2rem' }}>
@@ -1178,17 +1141,18 @@ export default function FactoryDashboardInteractive() {
                   <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000', marginBottom: '1rem' }}>Active Workstation Routing Execution</h4>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
                     {[
-                      { step: 'Step 10: Laser Sheet Metal Blanking', machine: 'Laser Cutter Cell A', duration: '4.5 min', operator: 'Auto-Feed', status: 'Completed' },
-                      { step: 'Step 20: 5-Axis Precision Milling', machine: 'CNC Centre #01', duration: '18.2 min', operator: 'Auto-Rigging', status: 'In Progress' },
-                      { step: 'Step 30: Automated Ultrasonic Cleaning', machine: 'Wash Tank 2', duration: '6.0 min', operator: 'AGV-489 Transfer', status: 'Queued' },
-                      { step: 'Step 40: CMM Dimensional Inspection', machine: 'Scanner Cell', duration: '3.0 min', operator: 'Quality Tech', status: 'Queued' },
-                    ].map((s, i) => (
-                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem 1rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      { step: 'Step 10: Laser Sheet Metal Blanking', machine: 'Laser Cutter Cell A', duration: '4.5 min', operator: 'Auto-Feed', status: 'Completed', color: '#22c55e', data: [6, 5.2, 4.8, 4.5], id: 'mes-1' },
+                      { step: 'Step 20: 5-Axis Precision Milling', machine: 'CNC Centre #01', duration: '18.2 min', operator: 'Auto-Rigging', status: 'In Progress', color: '#0284c7', data: [22, 20, 19, 18.2], id: 'mes-2' },
+                      { step: 'Step 30: Automated Ultrasonic Cleaning', machine: 'Wash Tank 2', duration: '6.0 min', operator: 'AGV-489 Transfer', status: 'Queued', color: '#64748b', data: [8, 7.5, 6.8, 6.0], id: 'mes-3' },
+                      { step: 'Step 40: CMM Dimensional Inspection', machine: 'Scanner Cell', duration: '3.0 min', operator: 'Quality Tech', status: 'Queued', color: '#6366f1', data: [4, 3.8, 3.2, 3.0], id: 'mes-4' },
+                    ].map((s) => (
+                      <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem 1rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', flexWrap: 'wrap', gap: '0.5rem' }}>
                         <div>
                           <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#000000' }}>{s.step}</div>
                           <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.2rem' }}>Machine: {s.machine} · Tech: {s.operator}</div>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
+                          <Sparkline color={s.color} data={s.data} width={80} height={26} id={s.id} />
                           <span style={{ fontSize: '0.78rem', color: '#475569' }}>{s.duration}</span>
                           <span style={{ fontSize: '0.72rem', fontWeight: 500, padding: '0.2rem 0.6rem', borderRadius: '4px', backgroundColor: s.status === 'Completed' ? '#dcfce7' : s.status === 'In Progress' ? '#e0f2fe' : '#f1f5f9', color: s.status === 'Completed' ? '#15803d' : s.status === 'In Progress' ? '#0369a1' : '#64748b' }}>{s.status}</span>
                         </div>
@@ -1199,7 +1163,7 @@ export default function FactoryDashboardInteractive() {
               </div>
             )}
 
-            {/* TAB VIEW 5: INVENTORY/WAREHOUSE */}
+            {/* TAB VIEW 5: INVENTORY WITH STOCK TREND CHARTS */}
             {activeNavTab === 'Inventory/Warehouse' && (
               <div className="fms-no-scrollbar" style={{ padding: '1.2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.2rem' }}>
@@ -1209,20 +1173,28 @@ export default function FactoryDashboardInteractive() {
 
                 <div className="fms-grid-4col" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.2rem' }}>
                   {[
-                    { pod: 'Pod 1 (Aluminum Alloy Stock)', bins: '60/60 Bins Full', level: 100 },
-                    { pod: 'Pod 2 (Titanium Billets)', bins: '54/60 Bins Full', level: 90 },
-                    { pod: 'Pod 3 (Fasteners & Fittings)', bins: '48/60 Bins Full', level: 80 },
-                    { pod: 'Pod 4 (Finished Hydraulics)', bins: '58/60 Bins Full', level: 96 },
-                    { pod: 'Pod 5 (Electronic Sub-assemblies)', bins: '42/60 Bins Full', level: 70 },
-                    { pod: 'Pod 6 (Raw Carbon Sheet)', bins: '60/60 Bins Full', level: 100 },
-                    { pod: 'Pod 7 (Buffer Station East)', bins: '30/60 Bins Full', level: 50 },
-                    { pod: 'Pod 8 (Buffer Station West)', bins: '24/60 Bins Full', level: 40 },
-                  ].map((p, i) => (
-                    <div key={i} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '12px', border: '1px solid #cbd5e1' }}>
-                      <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#000000', marginBottom: '0.4rem' }}>{p.pod}</div>
-                      <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.8rem' }}>{p.bins}</div>
-                      <div style={{ height: '6px', backgroundColor: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
-                        <div style={{ width: `${p.level}%`, height: '100%', backgroundColor: '#000000', borderRadius: '4px' }} />
+                    { pod: 'Pod 1 (Aluminum Alloy Stock)', bins: '60/60 Bins Full', level: 100, color: '#22c55e', data: [80, 85, 90, 95, 100], id: 'inv-1' },
+                    { pod: 'Pod 2 (Titanium Billets)', bins: '54/60 Bins Full', level: 90, color: '#0284c7', data: [75, 80, 82, 88, 90], id: 'inv-2' },
+                    { pod: 'Pod 3 (Fasteners & Fittings)', bins: '48/60 Bins Full', level: 80, color: '#16a34a', data: [65, 70, 75, 78, 80], id: 'inv-3' },
+                    { pod: 'Pod 4 (Finished Hydraulics)', bins: '58/60 Bins Full', level: 96, color: '#6366f1', data: [85, 88, 92, 94, 96], id: 'inv-4' },
+                    { pod: 'Pod 5 (Electronic Sub-assemblies)', bins: '42/60 Bins Full', level: 70, color: '#f59e0b', data: [50, 55, 60, 68, 70], id: 'inv-5' },
+                    { pod: 'Pod 6 (Raw Carbon Sheet)', bins: '60/60 Bins Full', level: 100, color: '#22c55e', data: [90, 92, 95, 98, 100], id: 'inv-6' },
+                    { pod: 'Pod 7 (Buffer Station East)', bins: '30/60 Bins Full', level: 50, color: '#0284c7', data: [40, 42, 45, 48, 50], id: 'inv-7' },
+                    { pod: 'Pod 8 (Buffer Station West)', bins: '24/60 Bins Full', level: 40, color: '#64748b', data: [30, 32, 35, 38, 40], id: 'inv-8' },
+                  ].map((p) => (
+                    <div key={p.id} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '12px', border: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                      <div>
+                        <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#000000', marginBottom: '0.4rem' }}>{p.pod}</div>
+                        <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.8rem' }}>{p.bins}</div>
+                      </div>
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
+                          <span style={{ fontSize: '0.7rem', color: '#64748b' }}>Occupancy Rate</span>
+                          <Sparkline color={p.color} data={p.data} width={70} height={24} id={p.id} />
+                        </div>
+                        <div style={{ height: '6px', backgroundColor: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
+                          <div style={{ width: `${p.level}%`, height: '100%', backgroundColor: '#000000', borderRadius: '4px' }} />
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -1230,7 +1202,7 @@ export default function FactoryDashboardInteractive() {
               </div>
             )}
 
-            {/* TAB VIEW 6: QUALITY MANAGEMENT */}
+            {/* TAB VIEW 6: QUALITY MANAGEMENT WITH TREND AREA CHARTS */}
             {activeNavTab === 'Quality Management' && (
               <div className="fms-no-scrollbar" style={{ padding: '1.2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.2rem' }}>
@@ -1239,28 +1211,43 @@ export default function FactoryDashboardInteractive() {
                 </div>
 
                 <div className="fms-grid-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.4rem' }}>
-                  <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
-                    <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>First Pass Yield (FPY)</div>
-                    <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>99.94%</div>
-                    <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem' }}>Target &gt; 99.8%</div>
+                  <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                      <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>First Pass Yield (FPY)</div>
+                      <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>99.94%</div>
+                      <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem' }}>Target &gt; 99.8%</div>
+                    </div>
+                    <div style={{ marginTop: '1rem' }}>
+                      <Sparkline color="#22c55e" data={[99.1, 99.3, 99.5, 99.7, 99.8, 99.94]} width={200} height={45} id="qm-1" />
+                    </div>
                   </div>
 
-                  <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
-                    <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>Defect Rate (PPM)</div>
-                    <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>0.02 PPM</div>
-                    <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem' }}>World-Class Aerospace Standard</div>
+                  <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                      <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>Defect Rate (PPM)</div>
+                      <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>0.02 PPM</div>
+                      <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem' }}>World-Class Aerospace Standard</div>
+                    </div>
+                    <div style={{ marginTop: '1rem' }}>
+                      <Sparkline color="#0284c7" data={[0.5, 0.4, 0.2, 0.1, 0.05, 0.02]} width={200} height={45} id="qm-2" />
+                    </div>
                   </div>
 
-                  <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
-                    <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>CMM Calibration Status</div>
-                    <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>Passed</div>
-                    <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem' }}>NIST Traceable</div>
+                  <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                      <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>CMM Calibration Accuracy</div>
+                      <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>Passed</div>
+                      <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem' }}>NIST Traceable</div>
+                    </div>
+                    <div style={{ marginTop: '1rem' }}>
+                      <Sparkline color="#16a34a" data={[98, 99, 99.5, 99.9, 100, 100]} width={200} height={45} id="qm-3" />
+                    </div>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* TAB VIEW 7: MAINTENANCE */}
+            {/* TAB VIEW 7: MAINTENANCE WITH VIBRATION SPECTRUM CHARTS */}
             {activeNavTab === 'Maintenance' && (
               <div className="fms-no-scrollbar" style={{ padding: '1.2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.2rem' }}>
@@ -1270,23 +1257,26 @@ export default function FactoryDashboardInteractive() {
 
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                   {[
-                    { task: 'CNC Centre #01 - Spindle Lubrication', due: 'In 48 Hours', status: 'Scheduled' },
-                    { task: 'AGV-489 - Drive Wheel Tread Inspection', due: 'In 120 Hours', status: 'Scheduled' },
-                    { task: 'Laser Cutter Optics Cleaning', due: 'Completed Today', status: 'Completed' },
-                  ].map((m, i) => (
-                    <div key={i} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '12px', border: '1px solid #cbd5e1', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+                    { task: 'CNC Centre #01 - Spindle Lubrication', due: 'In 48 Hours', status: 'Scheduled', color: '#0284c7', data: [80, 82, 85, 88, 92], id: 'mt-1' },
+                    { task: 'AGV-489 - Drive Wheel Tread Inspection', due: 'In 120 Hours', status: 'Scheduled', color: '#6366f1', data: [60, 65, 70, 75, 80], id: 'mt-2' },
+                    { task: 'Laser Cutter Optics Cleaning', due: 'Completed Today', status: 'Completed', color: '#22c55e', data: [90, 95, 98, 100, 100], id: 'mt-3' },
+                  ].map((m) => (
+                    <div key={m.id} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '12px', border: '1px solid #cbd5e1', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
                       <div>
                         <div style={{ fontSize: '0.9rem', fontWeight: 500, color: '#000000' }}>{m.task}</div>
                         <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.2rem' }}>Due: {m.due}</div>
                       </div>
-                      <span style={{ padding: '0.3rem 0.8rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 500, backgroundColor: m.status === 'Completed' ? '#dcfce7' : '#f1f5f9', color: m.status === 'Completed' ? '#15803d' : '#000000' }}>{m.status}</span>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                        <Sparkline color={m.color} data={m.data} width={100} height={30} id={m.id} />
+                        <span style={{ padding: '0.3rem 0.8rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 500, backgroundColor: m.status === 'Completed' ? '#dcfce7' : '#f1f5f9', color: m.status === 'Completed' ? '#15803d' : '#000000' }}>{m.status}</span>
+                      </div>
                     </div>
                   ))}
                 </div>
               </div>
             )}
 
-            {/* TAB VIEW 8: WORKFORCE MANAGEMENT */}
+            {/* TAB VIEW 8: WORKFORCE MANAGEMENT WITH ERGONOMIC LOAD CHARTS */}
             {activeNavTab === 'Workforce Management' && (
               <div className="fms-no-scrollbar" style={{ padding: '1.2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.2rem' }}>
@@ -1298,13 +1288,16 @@ export default function FactoryDashboardInteractive() {
                   <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000', marginBottom: '1rem' }}>Shift 1 Active Operators Roster (12 On Floor)</h4>
                   <div className="fms-grid-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
                     {[
-                      { name: 'Sarah Jenkins', role: 'Robotics Lead', station: 'AGV Fleet Control', badge: 'Active' },
-                      { name: 'Michael Chen', role: 'CNC Machinist', station: 'Cell 4 (5-Axis)', badge: 'Active' },
-                      { name: 'Elena Rostova', role: 'Quality Inspector', station: 'CMM Scanner Cell', badge: 'Active' },
-                    ].map((op, i) => (
-                      <div key={i} style={{ padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0' }}>
-                        <div style={{ fontSize: '0.88rem', fontWeight: 500, color: '#000000' }}>{op.name}</div>
-                        <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.2rem' }}>{op.role} · {op.station}</div>
+                      { name: 'Sarah Jenkins', role: 'Robotics Lead', station: 'AGV Fleet Control', badge: 'Active', color: '#22c55e', data: [90, 92, 94, 96, 98], id: 'wf-1' },
+                      { name: 'Michael Chen', role: 'CNC Machinist', station: 'Cell 4 (5-Axis)', badge: 'Active', color: '#0284c7', data: [85, 88, 90, 92, 95], id: 'wf-2' },
+                      { name: 'Elena Rostova', role: 'Quality Inspector', station: 'CMM Scanner Cell', badge: 'Active', color: '#6366f1', data: [92, 94, 95, 98, 99], id: 'wf-3' },
+                    ].map((op) => (
+                      <div key={op.id} style={{ padding: '1rem', backgroundColor: '#f8fafc', borderRadius: '10px', border: '1px solid #e2e8f0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <div>
+                          <div style={{ fontSize: '0.88rem', fontWeight: 500, color: '#000000' }}>{op.name}</div>
+                          <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.2rem' }}>{op.role} · {op.station}</div>
+                        </div>
+                        <Sparkline color={op.color} data={op.data} width={75} height={26} id={op.id} />
                       </div>
                     ))}
                   </div>
@@ -1312,7 +1305,7 @@ export default function FactoryDashboardInteractive() {
               </div>
             )}
 
-            {/* TAB VIEW 9: PRODUCTION SCHEDULING */}
+            {/* TAB VIEW 9: PRODUCTION SCHEDULING WITH TIMELINE SPARKLINE CHARTS */}
             {activeNavTab === 'Production Scheduling' && (
               <div className="fms-no-scrollbar" style={{ padding: '1.2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.2rem' }}>
@@ -1324,16 +1317,19 @@ export default function FactoryDashboardInteractive() {
                   <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000', marginBottom: '1rem' }}>Interactive Shift Schedule Matrix</h4>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
                     {[
-                      { job: 'Job #901 - Aerospace Flange Batch', line: 'CNC Line A', start: '08:00', end: '12:30', status: 'Active' },
-                      { job: 'Job #902 - AGV Chassis Welding Pack', line: 'Weld Line B', start: '10:00', end: '15:00', status: 'Active' },
-                      { job: 'Job #903 - Medical Manifold 3D Print', line: 'Additive Line 01', start: '13:00', end: '18:00', status: 'Scheduled' },
-                    ].map((j, i) => (
-                      <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem 1rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      { job: 'Job #901 - Aerospace Flange Batch', line: 'CNC Line A', start: '08:00', end: '12:30', status: 'Active', color: '#22c55e', data: [30, 45, 60, 75, 90], id: 'ps-1' },
+                      { job: 'Job #902 - AGV Chassis Welding Pack', line: 'Weld Line B', start: '10:00', end: '15:00', status: 'Active', color: '#0284c7', data: [20, 35, 50, 65, 80], id: 'ps-2' },
+                      { job: 'Job #903 - Medical Manifold 3D Print', line: 'Additive Line 01', start: '13:00', end: '18:00', status: 'Scheduled', color: '#64748b', data: [0, 10, 20, 25, 30], id: 'ps-3' },
+                    ].map((j) => (
+                      <div key={j.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem 1rem', backgroundColor: '#f8fafc', borderRadius: '8px', border: '1px solid #e2e8f0', flexWrap: 'wrap', gap: '0.5rem' }}>
                         <div>
                           <div style={{ fontSize: '0.85rem', fontWeight: 500, color: '#000000' }}>{j.job}</div>
                           <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.2rem' }}>Line: {j.line} · Time: {j.start} - {j.end}</div>
                         </div>
-                        <span style={{ fontSize: '0.72rem', fontWeight: 500, padding: '0.2rem 0.6rem', borderRadius: '4px', backgroundColor: j.status === 'Active' ? '#e0f2fe' : '#f1f5f9', color: j.status === 'Active' ? '#0369a1' : '#64748b' }}>{j.status}</span>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem' }}>
+                          <Sparkline color={j.color} data={j.data} width={90} height={28} id={j.id} />
+                          <span style={{ fontSize: '0.72rem', fontWeight: 500, padding: '0.2rem 0.6rem', borderRadius: '4px', backgroundColor: j.status === 'Active' ? '#e0f2fe' : '#f1f5f9', color: j.status === 'Active' ? '#0369a1' : '#64748b' }}>{j.status}</span>
+                        </div>
                       </div>
                     ))}
                   </div>
@@ -1341,7 +1337,7 @@ export default function FactoryDashboardInteractive() {
               </div>
             )}
 
-            {/* TAB VIEW 10: ANALYTICS & REPORTING */}
+            {/* TAB VIEW 10: ANALYTICS & REPORTING WITH LARGE AREA TREND CHARTS */}
             {activeNavTab === 'Analytics & Reporting' && (
               <div className="fms-no-scrollbar" style={{ padding: '1.2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.2rem' }}>
@@ -1350,28 +1346,43 @@ export default function FactoryDashboardInteractive() {
                 </div>
 
                 <div className="fms-grid-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
-                  <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
-                    <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>Overall Equipment Effectiveness (OEE)</div>
-                    <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>94.8%</div>
-                    <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem', fontWeight: 500 }}>+2.4% vs last month</div>
+                  <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                      <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>Overall Equipment Effectiveness (OEE)</div>
+                      <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>94.8%</div>
+                      <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem', fontWeight: 500 }}>+2.4% vs last month</div>
+                    </div>
+                    <div style={{ marginTop: '1rem' }}>
+                      <Sparkline color="#22c55e" data={[88, 90, 91.5, 93, 94, 94.8]} width={200} height={45} id="ar-1" />
+                    </div>
                   </div>
 
-                  <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
-                    <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>AGV Fleet Utilization</div>
-                    <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>91.2%</div>
-                    <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem', fontWeight: 500 }}>Optimal Efficiency</div>
+                  <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                      <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>AGV Fleet Utilization</div>
+                      <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>91.2%</div>
+                      <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem', fontWeight: 500 }}>Optimal Efficiency</div>
+                    </div>
+                    <div style={{ marginTop: '1rem' }}>
+                      <Sparkline color="#0284c7" data={[82, 85, 87, 89, 90.5, 91.2]} width={200} height={45} id="ar-2" />
+                    </div>
                   </div>
 
-                  <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
-                    <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>Energy Cost Optimization</div>
-                    <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>-38.5%</div>
-                    <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem', fontWeight: 500 }}>AI Smart Grid Active</div>
+                  <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                    <div>
+                      <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>Energy Cost Optimization</div>
+                      <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>-38.5%</div>
+                      <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem', fontWeight: 500 }}>AI Smart Grid Active</div>
+                    </div>
+                    <div style={{ marginTop: '1rem' }}>
+                      <Sparkline color="#6366f1" data={[-10, -18, -25, -30, -35, -38.5]} width={200} height={45} id="ar-3" />
+                    </div>
                   </div>
                 </div>
               </div>
             )}
 
-            {/* TAB VIEW 11: USER & ROLE MANAGEMENT */}
+            {/* TAB VIEW 11: USER & ROLE MANAGEMENT WITH API TELEMETRY SPARKLINE */}
             {activeNavTab === 'User & Role Management' && (
               <div className="fms-no-scrollbar" style={{ padding: '1.2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.2rem' }}>
@@ -1389,21 +1400,25 @@ export default function FactoryDashboardInteractive() {
                         <th>Floor Override</th>
                         <th>FMS Config</th>
                         <th>Security Token</th>
+                        <th>Auth Telemetry</th>
                       </tr>
                     </thead>
                     <tbody>
                       {[
-                        { role: 'Administrator', count: '2 Users', override: 'Allowed', config: 'Full Access', token: 'Active RSA-4096' },
-                        { role: 'Robotics Engineer', count: '4 Users', override: 'Allowed', config: 'Fleet Only', token: 'Active RSA-2048' },
-                        { role: 'Shift Supervisor', count: '3 Users', override: 'Restricted', config: 'Read-Only', token: 'Active' },
-                        { role: 'Shop Floor Operator', count: '12 Users', override: 'Disabled', config: 'Disabled', token: 'Basic Badge' },
-                      ].map((r, i) => (
-                        <tr key={i} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                        { role: 'Administrator', count: '2 Users', override: 'Allowed', config: 'Full Access', token: 'Active RSA-4096', color: '#22c55e', data: [95, 98, 99, 100], id: 'ur-1' },
+                        { role: 'Robotics Engineer', count: '4 Users', override: 'Allowed', config: 'Fleet Only', token: 'Active RSA-2048', color: '#0284c7', data: [90, 92, 95, 98], id: 'ur-2' },
+                        { role: 'Shift Supervisor', count: '3 Users', override: 'Restricted', config: 'Read-Only', token: 'Active', color: '#64748b', data: [85, 88, 90, 92], id: 'ur-3' },
+                        { role: 'Shop Floor Operator', count: '12 Users', override: 'Disabled', config: 'Disabled', token: 'Basic Badge', color: '#6366f1', data: [98, 99, 99, 100], id: 'ur-4' },
+                      ].map((r) => (
+                        <tr key={r.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
                           <td style={{ padding: '0.8rem 0', fontWeight: 500, color: '#000000' }}>{r.role}</td>
                           <td>{r.count}</td>
                           <td>{r.override}</td>
                           <td>{r.config}</td>
                           <td><span style={{ color: '#16a34a', fontWeight: 500 }}>{r.token}</span></td>
+                          <td>
+                            <Sparkline color={r.color} data={r.data} width={70} height={22} id={r.id} />
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -1412,7 +1427,7 @@ export default function FactoryDashboardInteractive() {
               </div>
             )}
 
-            {/* TAB VIEW 12: ERP/PLC INTEGRATION */}
+            {/* TAB VIEW 12: ERP/PLC INTEGRATION WITH LATENCY TREND CHARTS */}
             {activeNavTab === 'ERP/PLC Integration' && (
               <div className="fms-no-scrollbar" style={{ padding: '1.2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.2rem' }}>
@@ -1422,13 +1437,19 @@ export default function FactoryDashboardInteractive() {
 
                 <div className="fms-grid-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.2rem' }}>
                   {[
-                    { name: 'SAP S/4HANA ERP Connector', protocol: 'REST / OData', latency: '12ms', status: 'Connected' },
-                    { name: 'Siemens S7-1500 PLC Gateway', protocol: 'OPC-UA', latency: '2ms', status: 'Connected' },
-                    { name: 'Rockwell ControlLogix PLC', protocol: 'EtherNet/IP', latency: '3ms', status: 'Connected' },
-                  ].map((g, i) => (
-                    <div key={i} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
+                    { name: 'SAP S/4HANA ERP Connector', protocol: 'REST / OData', latency: '12ms', status: 'Connected', color: '#0284c7', data: [18, 16, 14, 13, 12], id: 'erp-1' },
+                    { name: 'Siemens S7-1500 PLC Gateway', protocol: 'OPC-UA', latency: '2ms', status: 'Connected', color: '#22c55e', data: [5, 4, 3, 2.5, 2], id: 'erp-2' },
+                    { name: 'Rockwell ControlLogix PLC', protocol: 'EtherNet/IP', latency: '3ms', status: 'Connected', color: '#16a34a', data: [6, 5, 4, 3.5, 3], id: 'erp-3' },
+                  ].map((g) => (
+                    <div key={g.id} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
                       <div style={{ fontSize: '0.9rem', fontWeight: 500, color: '#000000', marginBottom: '0.4rem' }}>{g.name}</div>
                       <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.8rem' }}>Protocol: {g.protocol} · Latency: {g.latency}</div>
+                      
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.8rem' }}>
+                        <span style={{ fontSize: '0.7rem', color: '#64748b' }}>Packet Latency Trend</span>
+                        <Sparkline color={g.color} data={g.data} width={90} height={26} id={g.id} />
+                      </div>
+
                       <span style={{ padding: '0.2rem 0.6rem', borderRadius: '4px', fontSize: '0.72rem', fontWeight: 500, backgroundColor: '#dcfce7', color: '#15803d' }}>● {g.status}</span>
                     </div>
                   ))}
