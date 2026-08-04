@@ -615,6 +615,7 @@ export default function FactoryDashboardInteractive() {
                   flexDirection: 'column',
                   justifyContent: 'space-between',
                   position: 'relative',
+                  gap: '1.2rem',
                 }}>
                   {/* Telemetry Stage Header */}
                   <div>
@@ -669,6 +670,95 @@ export default function FactoryDashboardInteractive() {
                       </div>
                     </div>
 
+                    {/* LIVE SPARKLINE GRAPH CARDS (as requested by user) */}
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                      gap: '1rem',
+                      marginBottom: '1rem',
+                    }}>
+                      {/* Card 1: Machine Online (Green Area Sparkline) */}
+                      <div style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '16px',
+                        padding: '1rem 1.2rem',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                      }}>
+                        <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 400, fontStyle: 'italic' }}>Machine Online</div>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '0.4rem 0' }}>
+                          <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.2rem' }}>
+                            <span style={{ fontSize: '1.6rem', fontWeight: 500, color: '#000000', letterSpacing: '-0.02em' }}>128</span>
+                            <span style={{ fontSize: '0.85rem', color: '#94a3b8', fontWeight: 400 }}>/140</span>
+                          </div>
+                          {/* Smooth Green Area Sparkline SVG */}
+                          <svg width="70" height="32" viewBox="0 0 70 32" style={{ overflow: 'visible' }}>
+                            <defs>
+                              <linearGradient id="greenGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#22c55e" stopOpacity="0.35" />
+                                <stop offset="100%" stopColor="#22c55e" stopOpacity="0.0" />
+                              </linearGradient>
+                            </defs>
+                            <path
+                              d="M 0 24 Q 15 22, 25 18 T 45 10 T 60 4 T 70 8 L 70 32 L 0 32 Z"
+                              fill="url(#greenGrad)"
+                            />
+                            <path
+                              d="M 0 24 Q 15 22, 25 18 T 45 10 T 60 4 T 70 8"
+                              fill="none"
+                              stroke="#22c55e"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </div>
+                        <div style={{ fontSize: '0.72rem', color: '#16a34a', fontWeight: 500 }}>+4 today</div>
+                      </div>
+
+                      {/* Card 2: Production Rate (Blue Area Sparkline Wave) */}
+                      <div style={{
+                        backgroundColor: '#ffffff',
+                        borderRadius: '16px',
+                        padding: '1rem 1.2rem',
+                        border: '1px solid #e2e8f0',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.03)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between',
+                      }}>
+                        <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 400, fontStyle: 'italic' }}>Production Rate</div>
+                        <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.1rem', marginTop: '0.3rem' }}>
+                          <span style={{ fontSize: '1.6rem', fontWeight: 500, color: '#000000', letterSpacing: '-0.02em' }}>92.6</span>
+                          <span style={{ fontSize: '1rem', color: '#64748b', fontWeight: 400 }}>%</span>
+                        </div>
+                        {/* Smooth Blue Wave Area Sparkline SVG */}
+                        <div style={{ marginTop: '0.4rem' }}>
+                          <svg width="100%" height="28" viewBox="0 0 160 28" preserveAspectRatio="none" style={{ overflow: 'visible' }}>
+                            <defs>
+                              <linearGradient id="blueGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.4" />
+                                <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
+                              </linearGradient>
+                            </defs>
+                            <path
+                              d="M 0 22 C 30 20, 50 14, 80 12 C 110 10, 130 4, 160 6 L 160 28 L 0 28 Z"
+                              fill="url(#blueGrad)"
+                            />
+                            <path
+                              d="M 0 22 C 30 20, 50 14, 80 12 C 110 10, 130 4, 160 6"
+                              fill="none"
+                              stroke="#3b82f6"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+
                     {/* Timeline scrubber bar */}
                     <div className="fms-no-scrollbar" style={{
                       display: 'flex',
@@ -680,7 +770,7 @@ export default function FactoryDashboardInteractive() {
                       backgroundColor: '#ffffff',
                       borderRadius: '8px',
                       border: '1px solid #e2e8f0',
-                      marginBottom: '1rem',
+                      marginBottom: '0.5rem',
                       overflowX: 'auto',
                     }}>
                       <span>08:00</span>
