@@ -662,23 +662,24 @@ button, input {
   .header-actions.mobile-active {
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
+    justify-content: flex-start;
     align-items: center;
+    gap: 1.25rem;
     order: 4;
-    padding: 0.8rem 1.2rem;
-    margin: 1.5rem auto 5rem auto;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 50px;
-    width: calc(100% - 3rem);
-    max-width: 320px;
+    padding: 0.8rem 0 0.8rem 1.5rem;
+    margin: 1.5rem 0 5rem 0;
+    background: transparent;
+    border: none;
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .header-actions.mobile-active .icon-btn {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
