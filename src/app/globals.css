@@ -725,20 +725,19 @@ button, input {
     flex-direction: row !important;
     justify-content: flex-start !important;
     align-items: center !important;
-    gap: 1.25rem !important;
+    gap: 1rem !important;
     order: 4 !important;
     padding: 0.8rem 0 0.8rem 1.5rem !important;
-    margin: 1.5rem 0 5rem 0 !important;
+    margin: 1rem 0 6rem 0 !important;
     background: transparent !important;
     border: none !important;
     width: 100% !important;
     box-sizing: border-box !important;
   }
 
-  .header-actions.mobile-active .nav-item {
-    width: auto !important;
-    margin-bottom: 0 !important;
-    font-size: inherit !important;
+  .header-actions.mobile-active > * {
+    margin: 0 !important;
+    flex: 0 0 auto !important;
   }
 
   .header-actions.mobile-active .icon-btn {
