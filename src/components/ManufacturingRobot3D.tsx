@@ -209,13 +209,6 @@ export default function ManufacturingRobot3D() {
           </span>
         </div>
       )}
-
-      <style dangerouslySetInnerHTML={{__html: `
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}} />
     </div>
   );
 }
