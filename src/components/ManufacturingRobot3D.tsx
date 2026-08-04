@@ -18,9 +18,9 @@ export default function ManufacturingRobot3D() {
     // 1. Scene Setup (Clean White Studio Environment)
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup (Positioned for lower 3D robot arm placement)
+    // 2. Camera Setup (Positioned for balanced 3D robot arm placement)
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-    camera.position.set(0, 0.35, 4.0);
+    camera.position.set(0, 0.3, 4.2);
     camera.lookAt(0, 0.1, 0);
 
     // 3. Renderer Setup with PMREM Environment Generator
@@ -51,14 +51,14 @@ export default function ManufacturingRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Lowered Y-position = -1.25)
+    // 6. Load GLB Model (Lowered Y-position = -1.45, slightly reduced scale 2.8)
     const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, -1.25, 0); // Lowered 1 more inch down
+    modelGroup.position.set(0, -1.45, 0);
     scene.add(modelGroup);
 
     const loader = new GLTFLoader();
     loader.load(
-      '/assets/robotic+arm+3d+model.glb?v=16',
+      '/assets/robotic+arm+3d+model.glb?v=17',
       (gltf) => {
         const loadedModel = gltf.scene;
 
@@ -68,7 +68,7 @@ export default function ManufacturingRobot3D() {
         const size = box.getSize(new THREE.Vector3());
 
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 3.6 / maxDim;
+        const scale = 2.8 / maxDim; // Slightly reduced scale for cleaner fit
         loadedModel.scale.set(scale, scale, scale);
 
         // Center horizontally & anchor base bottom to y = 0
@@ -125,7 +125,7 @@ export default function ManufacturingRobot3D() {
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // 8. Render Loop (Stationary Base lowered at y = -1.25, ONLY horizontal Y-axis rotation)
+    // 8. Render Loop (Stationary Base lowered at y = -1.45, ONLY horizontal Y-axis rotation)
     let animId: number;
 
     const animate = () => {
@@ -133,8 +133,8 @@ export default function ManufacturingRobot3D() {
 
       mouse.lerp(targetMouse, 0.25);
 
-      // Model base is fixed stationary at y = -1.25
-      modelGroup.position.set(0, -1.25, 0);
+      // Model base is fixed stationary at y = -1.45
+      modelGroup.position.set(0, -1.45, 0);
       modelGroup.rotation.y = mouse.x * 0.45;
       modelGroup.rotation.x = 0;
       modelGroup.rotation.z = 0;
