@@ -3,6 +3,7 @@ import React from 'react';
 import { IndustriesWeServeSection } from '@/components/IndustriesWeServeSection';
 import { InteractiveTruckXray } from '@/components/InteractiveTruckXray';
 import { AgvScrollSection } from '@/components/AgvScrollSection';
+import { MaritimeFreightSection } from '@/components/MaritimeFreightSection';
 
 export const metadata: Metadata = {
   title: "Trade & Logistics Solutions — Zawr Industries India",
@@ -75,6 +76,9 @@ export default function LogisticsPage() {
 
       {/* ── AGV ROBOT SCROLL ANIMATION (LEFT TO RIGHT) ── */}
       <AgvScrollSection />
+
+      {/* ── MARITIME OCEAN FREIGHT TELEMETRY (SHIP.GIF ON LEFT + DETAILS ON RIGHT) ── */}
+      <MaritimeFreightSection />
 
       {/* ── OVERVIEW & CAPABILITIES SECTION (CLEAN WHITE BACKGROUND) ── */}
       <div style={{ backgroundColor: '#ffffff', padding: 'clamp(3rem, 6vw, 5rem) clamp(1rem, 6vw, 8%)', maxWidth: '1200px', margin: '0 auto' }}>
