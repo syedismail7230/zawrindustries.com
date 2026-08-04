@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import IndustrialRobot3D from '@/components/IndustrialRobot3D';
+import ManufacturingRobot3D from '@/components/ManufacturingRobot3D';
 import { Capabilities3DGrid } from '@/components/Capabilities3DGrid';
 
 export const metadata: Metadata = {
@@ -161,7 +161,7 @@ export default function ManufacturingPage() {
 
           {/* CENTER 3D ROBOT CANVAS OVERLAY */}
           <div style={{ width: '100%', height: '100%', position: 'relative', zIndex: 15 }}>
-            <IndustrialRobot3D />
+            <ManufacturingRobot3D />
           </div>
 
         </div>
