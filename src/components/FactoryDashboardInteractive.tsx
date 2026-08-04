@@ -176,7 +176,7 @@ export default function FactoryDashboardInteractive() {
           <span style={{
             display: 'inline-block',
             fontSize: '0.78rem',
-            fontWeight: 800,
+            fontWeight: 500,
             letterSpacing: '0.14em',
             color: '#64748b',
             marginBottom: '1.2rem',
@@ -188,7 +188,7 @@ export default function FactoryDashboardInteractive() {
 
           <h2 style={{
             fontSize: 'clamp(2rem, 4vw, 3.4rem)',
-            fontWeight: 400,
+            fontWeight: 300,
             lineHeight: 1.15,
             letterSpacing: '-0.03em',
             color: '#000000',
@@ -242,9 +242,9 @@ export default function FactoryDashboardInteractive() {
               <button
                 aria-label="Toggle Navigation Menu"
                 style={{ background: 'none', border: 'none', cursor: 'pointer', padding: '4px', display: 'flex' }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="1.5"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
               </button>
-              <span style={{ fontSize: '0.95rem', fontWeight: 800, letterSpacing: '0.08em', color: '#000000' }}>
+              <span style={{ fontSize: '0.9rem', fontWeight: 500, letterSpacing: '0.08em', color: '#000000' }}>
                 ZAWR MANUFACTURING
               </span>
             </div>
@@ -265,9 +265,10 @@ export default function FactoryDashboardInteractive() {
                   backgroundColor: '#f8fafc',
                   outline: 'none',
                   color: '#000000',
+                  fontWeight: 400,
                 }}
               />
-              <svg style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)' }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <svg style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)' }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
             </div>
 
             {/* Right Action Icons & Admin Profile */}
@@ -278,7 +279,7 @@ export default function FactoryDashboardInteractive() {
                 border: '1px solid #e2e8f0',
                 backgroundColor: '#ffffff',
                 color: '#000000',
-                fontWeight: 600,
+                fontWeight: 500,
                 fontSize: '0.82rem',
                 cursor: 'pointer',
                 display: 'flex',
@@ -290,15 +291,15 @@ export default function FactoryDashboardInteractive() {
 
               {/* Notification Bell Badge */}
               <div style={{ position: 'relative', cursor: 'pointer', padding: '6px' }}>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" strokeWidth="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#475569" strokeWidth="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                 <span style={{
                   position: 'absolute',
                   top: '2px',
                   right: '2px',
                   backgroundColor: '#000000',
                   color: '#ffffff',
-                  fontSize: '0.62rem',
-                  fontWeight: 700,
+                  fontSize: '0.6rem',
+                  fontWeight: 500,
                   width: '14px',
                   height: '14px',
                   borderRadius: '50%',
@@ -319,12 +320,12 @@ export default function FactoryDashboardInteractive() {
                   alignItems: 'center',
                   justifyContent: 'center',
                   fontSize: '0.78rem',
-                  fontWeight: 700,
+                  fontWeight: 500,
                   color: '#1e293b',
                 }}>RR</div>
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
-                  <span style={{ fontSize: '0.78rem', fontWeight: 600, color: '#000000', lineHeight: 1.1 }}>Robert Robertson</span>
-                  <span style={{ fontSize: '0.68rem', color: '#64748b' }}>Administrator</span>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 500, color: '#000000', lineHeight: 1.1 }}>Robert Robertson</span>
+                  <span style={{ fontSize: '0.68rem', color: '#64748b', fontWeight: 400 }}>Administrator</span>
                 </div>
               </div>
             </div>
@@ -364,8 +365,8 @@ export default function FactoryDashboardInteractive() {
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
                       }}>
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={isActive ? '#000000' : '#64748b'} strokeWidth={isActive ? '2.4' : '1.8'}>{item.icon}</svg>
-                      <span style={{ fontSize: '0.55rem', color: isActive ? '#000000' : '#64748b', marginTop: '2px', fontWeight: isActive ? 700 : 400 }}>{item.name}</span>
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={isActive ? '#000000' : '#64748b'} strokeWidth={isActive ? '1.8' : '1.5'}>{item.icon}</svg>
+                      <span style={{ fontSize: '0.55rem', color: isActive ? '#000000' : '#64748b', marginTop: '2px', fontWeight: isActive ? 500 : 400 }}>{item.name}</span>
                     </div>
                   );
                 })}
@@ -373,7 +374,7 @@ export default function FactoryDashboardInteractive() {
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
                 <div title="Settings" style={{ cursor: 'pointer' }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                 </div>
               </div>
             </div>
@@ -397,11 +398,11 @@ export default function FactoryDashboardInteractive() {
                     padding: '0.8rem 1rem',
                     border: '1px solid #e2e8f0',
                   }}>
-                    <span style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#64748b', fontWeight: 700 }}>LOCATION</span>
+                    <span style={{ fontSize: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#64748b', fontWeight: 500 }}>LOCATION</span>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '0.3rem' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        <span style={{ fontSize: '0.82rem', fontWeight: 600, color: '#000000' }}>Menlo Park HQ</span>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#000000" strokeWidth="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        <span style={{ fontSize: '0.82rem', fontWeight: 500, color: '#000000' }}>Menlo Park HQ</span>
                       </div>
                       <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>▼</span>
                     </div>
@@ -424,7 +425,7 @@ export default function FactoryDashboardInteractive() {
                         style={{
                           padding: '0.45rem 0',
                           fontSize: '0.7rem',
-                          fontWeight: 700,
+                          fontWeight: activeTab === tab ? 500 : 400,
                           borderRadius: '6px',
                           border: 'none',
                           cursor: 'pointer',
@@ -448,7 +449,7 @@ export default function FactoryDashboardInteractive() {
                           style={{
                             padding: '0.85rem 0.9rem',
                             borderRadius: '12px',
-                            border: selectedTask === task.id ? '1.5px solid #000000' : '1px solid #e2e8f0',
+                            border: selectedTask === task.id ? '1px solid #000000' : '1px solid #e2e8f0',
                             backgroundColor: selectedTask === task.id ? '#f8fafc' : '#ffffff',
                             cursor: 'pointer',
                             transition: 'all 0.2s ease',
@@ -457,9 +458,9 @@ export default function FactoryDashboardInteractive() {
                           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.4rem' }}>
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                               <span style={{ color: '#000000', fontSize: '0.75rem' }}>⚡</span>
-                              <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#000000' }}>{task.id}</span>
+                              <span style={{ fontSize: '0.8rem', fontWeight: 500, color: '#000000' }}>{task.id}</span>
                             </div>
-                            <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 600 }}>● Active</span>
+                            <span style={{ fontSize: '0.68rem', color: '#16a34a', fontWeight: 500 }}>● Active</span>
                           </div>
 
                           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: '#475569', marginBottom: '0.5rem' }}>
@@ -482,7 +483,7 @@ export default function FactoryDashboardInteractive() {
                         </div>
                       ))}
                       <div style={{ textAlign: 'center', paddingTop: '0.4rem' }}>
-                        <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#000000', cursor: 'pointer' }}>
+                        <span style={{ fontSize: '0.75rem', fontWeight: 500, color: '#000000', cursor: 'pointer' }}>
                           View all tasks &gt;
                         </span>
                       </div>
@@ -494,7 +495,7 @@ export default function FactoryDashboardInteractive() {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', overflowY: 'auto', maxHeight: '420px' }}>
                       {fleetList.map((item) => (
                         <div key={item.agv} style={{ padding: '0.8rem', borderRadius: '10px', border: '1px solid #e2e8f0', backgroundColor: '#ffffff' }}>
-                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 700, color: '#000000' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', fontWeight: 500, color: '#000000' }}>
                             <span>{item.agv}</span>
                             <span style={{ fontSize: '0.7rem', color: '#16a34a' }}>{item.status}</span>
                           </div>
@@ -513,7 +514,7 @@ export default function FactoryDashboardInteractive() {
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', overflowY: 'auto', maxHeight: '420px' }}>
                       {eventsList.map((ev, i) => (
                         <div key={i} style={{ padding: '0.75rem', borderRadius: '8px', border: '1px solid #e2e8f0', backgroundColor: '#f8fafc' }}>
-                          <div style={{ fontSize: '0.68rem', color: '#94a3b8', fontWeight: 600 }}>{ev.time}</div>
+                          <div style={{ fontSize: '0.68rem', color: '#94a3b8', fontWeight: 500 }}>{ev.time}</div>
                           <div style={{ fontSize: '0.74rem', color: '#000000', marginTop: '0.2rem', lineHeight: 1.4 }}>{ev.msg}</div>
                         </div>
                       ))}
@@ -534,7 +535,7 @@ export default function FactoryDashboardInteractive() {
                   <div>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem', flexWrap: 'wrap', gap: '0.8rem' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                        <h3 style={{ fontSize: '1.2rem', fontWeight: 800, color: '#000000', margin: 0, letterSpacing: '-0.02em' }}>
+                        <h3 style={{ fontSize: '1.15rem', fontWeight: 500, color: '#000000', margin: 0, letterSpacing: '-0.01em' }}>
                           {activeHall}
                         </h3>
                         <span style={{ fontSize: '0.75rem', color: '#94a3b8', cursor: 'pointer' }}>▼</span>
@@ -542,17 +543,17 @@ export default function FactoryDashboardInteractive() {
 
                       <div style={{ display: 'flex', alignItems: 'center', gap: '1.2rem', fontSize: '0.78rem', color: '#475569' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                           <span><strong>12</strong> Operators</span>
                         </div>
 
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/></svg>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="1.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/></svg>
                           <span><strong>18</strong> AGVs</span>
                         </div>
 
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#64748b" strokeWidth="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
                           <span><strong>7</strong> Active Tasks</span>
                         </div>
 
@@ -567,7 +568,7 @@ export default function FactoryDashboardInteractive() {
                             alignItems: 'center',
                             gap: '0.4rem',
                             fontSize: '0.72rem',
-                            fontWeight: 700,
+                            fontWeight: 500,
                             color: '#000000',
                             cursor: 'pointer',
                           }}>
@@ -604,7 +605,7 @@ export default function FactoryDashboardInteractive() {
                         padding: '0.2rem 0.5rem',
                         backgroundColor: '#000000',
                         color: '#ffffff',
-                        fontWeight: 700,
+                        fontWeight: 500,
                         borderRadius: '4px',
                         fontSize: '0.68rem',
                         display: 'flex',
@@ -671,7 +672,7 @@ export default function FactoryDashboardInteractive() {
                             <text x="0" y="-4" fill="#ffffff" fontSize="9" textAnchor="middle">🦾</text>
                             <text x="0" y="10" fill="#ffffff" fontSize="9" textAnchor="middle">🔧</text>
                             <rect x="-12" y="-6" width="24" height="12" rx="3" fill="#ffffff" stroke="#000000" strokeWidth="1"/>
-                            <text x="0" y="3" fill="#000000" fontSize="8" fontWeight="bold" textAnchor="middle">🛍️</text>
+                            <text x="0" y="3" fill="#000000" fontSize="8" fontWeight="normal" textAnchor="middle">🛍️</text>
                           </g>
                         ))}
                         {renderTrayGrid(680, 65)}
@@ -706,64 +707,64 @@ export default function FactoryDashboardInteractive() {
                         />
                         <g transform={`translate(${movingAgvPos.x}, ${movingAgvPos.y})`}>
                           <rect x="-18" y="-10" width="36" height="20" rx="5" fill="#000000" stroke="#38bdf8" strokeWidth="1.5" />
-                          <text x="0" y="4" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">78</text>
+                          <text x="0" y="4" fill="#ffffff" fontSize="10" fontWeight="500" textAnchor="middle">78</text>
                           <circle cx="14" cy="-7" r="2.5" fill="#22c55e" />
                         </g>
                         <g transform="translate(169, 140)">
                           <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
-                          <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">94</text>
+                          <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="500" textAnchor="middle">94</text>
                         </g>
                         <g transform="translate(289, 140)">
                           <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
-                          <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">234</text>
+                          <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="500" textAnchor="middle">234</text>
                         </g>
                         <g transform="translate(409, 140)">
                           <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
-                          <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">59</text>
+                          <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="500" textAnchor="middle">59</text>
                         </g>
                         <g transform="translate(540, 200)">
                           <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
-                          <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">98</text>
+                          <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="500" textAnchor="middle">98</text>
                         </g>
                         <g transform="translate(350, 265)">
                           <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
-                          <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">178</text>
+                          <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="500" textAnchor="middle">178</text>
                         </g>
                         <g transform="translate(470, 265)">
                           <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
-                          <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">283</text>
+                          <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="500" textAnchor="middle">283</text>
                         </g>
                         <g transform="translate(289, 440)">
                           <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
-                          <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">114</text>
+                          <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="500" textAnchor="middle">114</text>
                         </g>
                         <g transform="translate(40, 200)">
                           <rect x="-12" y="-16" width="24" height="14" rx="3" fill="#000000" />
-                          <text x="0" y="-6" fill="#ffffff" fontSize="8" fontWeight="700" textAnchor="middle">198</text>
+                          <text x="0" y="-6" fill="#ffffff" fontSize="8" fontWeight="500" textAnchor="middle">198</text>
                           <rect x="-12" y="2" width="24" height="14" rx="3" fill="#000000" />
-                          <text x="0" y="12" fill="#ffffff" fontSize="8" fontWeight="700" textAnchor="middle">209</text>
+                          <text x="0" y="12" fill="#ffffff" fontSize="8" fontWeight="500" textAnchor="middle">209</text>
                         </g>
                         <g transform="translate(620, 45)">
                           <rect x="-30" y="-10" width="18" height="20" rx="4" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
-                          <text x="-21" y="4" fill="#000000" fontSize="11" fontWeight="bold" textAnchor="middle">⚡</text>
+                          <text x="-21" y="4" fill="#000000" fontSize="11" fontWeight="normal" textAnchor="middle">⚡</text>
                           <rect x="-8" y="-9" width="24" height="18" rx="4" fill="#000000" />
-                          <text x="4" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">96</text>
+                          <text x="4" y="3" fill="#ffffff" fontSize="9" fontWeight="500" textAnchor="middle">96</text>
                           <rect x="20" y="-9" width="26" height="18" rx="4" fill="#000000" />
-                          <text x="33" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">234</text>
+                          <text x="33" y="3" fill="#ffffff" fontSize="9" fontWeight="500" textAnchor="middle">234</text>
                         </g>
                         <g transform="translate(80, 265)">
                           <rect x="-12" y="-12" width="24" height="24" rx="6" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
-                          <text x="0" y="4" fill="#000000" fontSize="12" fontWeight="bold" textAnchor="middle">⚡</text>
+                          <text x="0" y="4" fill="#000000" fontSize="12" fontWeight="normal" textAnchor="middle">⚡</text>
                         </g>
                         <g transform="translate(920, 460)">
                           <rect x="-12" y="-12" width="24" height="24" rx="6" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
-                          <text x="0" y="4" fill="#000000" fontSize="12" fontWeight="bold" textAnchor="middle">⚡</text>
+                          <text x="0" y="4" fill="#000000" fontSize="12" fontWeight="normal" textAnchor="middle">⚡</text>
                         </g>
                         <g transform="translate(640, 180)">
                           <rect x="-12" y="-12" width="24" height="24" rx="6" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
-                          <text x="0" y="4" fill="#000000" fontSize="11" fontWeight="bold" textAnchor="middle">🛍️</text>
+                          <text x="0" y="4" fill="#000000" fontSize="11" fontWeight="normal" textAnchor="middle">🛍️</text>
                           <circle cx="10" cy="-10" r="5" fill="#000000" />
-                          <text x="10" y="-7" fill="#ffffff" fontSize="8" fontWeight="bold" textAnchor="middle">!</text>
+                          <text x="10" y="-7" fill="#ffffff" fontSize="8" fontWeight="normal" textAnchor="middle">!</text>
                         </g>
                       </svg>
                     </div>
@@ -786,7 +787,7 @@ export default function FactoryDashboardInteractive() {
                         borderRadius: '6px',
                         padding: '0.3rem 0.7rem',
                         fontSize: '0.7rem',
-                        fontWeight: 600,
+                        fontWeight: 500,
                         color: '#000000',
                       }}>
                         10 m <span style={{ color: '#94a3b8', fontWeight: 400 }}>| 50 ft</span>
@@ -805,7 +806,7 @@ export default function FactoryDashboardInteractive() {
                           style={{
                             padding: '0.35rem 0.8rem',
                             fontSize: '0.72rem',
-                            fontWeight: 700,
+                            fontWeight: viewMode === '2D' ? 500 : 400,
                             borderRadius: '6px',
                             border: 'none',
                             cursor: 'pointer',
@@ -821,7 +822,7 @@ export default function FactoryDashboardInteractive() {
                           style={{
                             padding: '0.35rem 0.8rem',
                             fontSize: '0.72rem',
-                            fontWeight: 700,
+                            fontWeight: viewMode === '3D' ? 500 : 400,
                             borderRadius: '6px',
                             border: 'none',
                             cursor: 'pointer',
@@ -856,10 +857,10 @@ export default function FactoryDashboardInteractive() {
               <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                   <div>
-                    <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000', margin: 0 }}>Factory Operations & Work Orders</h3>
+                    <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Factory Operations & Work Orders</h3>
                     <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Real-time shop floor scheduling, CNC cell utilization, and active assembly work orders.</p>
                   </div>
-                  <span style={{ padding: '0.4rem 0.9rem', backgroundColor: '#22c55e15', color: '#16a34a', borderRadius: '50px', fontSize: '0.78rem', fontWeight: 700 }}>● Shift 1 Running</span>
+                  <span style={{ padding: '0.4rem 0.9rem', backgroundColor: '#22c55e15', color: '#16a34a', borderRadius: '50px', fontSize: '0.78rem', fontWeight: 500 }}>● Shift 1 Running</span>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1rem', marginBottom: '2rem' }}>
@@ -871,14 +872,14 @@ export default function FactoryDashboardInteractive() {
                   ].map((stat, i) => (
                     <div key={i} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '12px', border: '1px solid #cbd5e1' }}>
                       <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '0.4rem' }}>{stat.label}</div>
-                      <div style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000' }}>{stat.val}</div>
-                      <div style={{ fontSize: '0.7rem', color: '#16a34a', marginTop: '0.3rem', fontWeight: 600 }}>{stat.change}</div>
+                      <div style={{ fontSize: '1.3rem', fontWeight: 500, color: '#000000' }}>{stat.val}</div>
+                      <div style={{ fontSize: '0.7rem', color: '#16a34a', marginTop: '0.3rem', fontWeight: 400 }}>{stat.change}</div>
                     </div>
                   ))}
                 </div>
 
                 <div style={{ backgroundColor: '#ffffff', borderRadius: '14px', border: '1px solid #cbd5e1', padding: '1.5rem' }}>
-                  <h4 style={{ fontSize: '1rem', fontWeight: 700, color: '#000000', marginBottom: '1rem' }}>Active Work Orders Queue</h4>
+                  <h4 style={{ fontSize: '0.95rem', fontWeight: 500, color: '#000000', marginBottom: '1rem' }}>Active Work Orders Queue</h4>
                   <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.85rem' }}>
                     <thead>
                       <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b' }}>
@@ -899,18 +900,18 @@ export default function FactoryDashboardInteractive() {
                         { id: 'WO-8905', desc: 'High-Temperature Manifold 3D', cell: 'Additive Rig 01', target: '150 pcs', comp: '45 pcs', eff: '96.2%', status: 'In Progress' },
                       ].map((row) => (
                         <tr key={row.id} style={{ borderBottom: '1px solid #f1f5f9' }}>
-                          <td style={{ padding: '0.8rem 0', fontWeight: 700, color: '#000000' }}>{row.id}</td>
+                          <td style={{ padding: '0.8rem 0', fontWeight: 500, color: '#000000' }}>{row.id}</td>
                           <td style={{ color: '#334155' }}>{row.desc}</td>
                           <td style={{ color: '#64748b' }}>{row.cell}</td>
                           <td>{row.target}</td>
                           <td>{row.comp}</td>
-                          <td style={{ fontWeight: 700, color: '#000000' }}>{row.eff}</td>
+                          <td style={{ fontWeight: 500, color: '#000000' }}>{row.eff}</td>
                           <td>
                             <span style={{
                               padding: '0.2rem 0.6rem',
                               borderRadius: '4px',
                               fontSize: '0.72rem',
-                              fontWeight: 700,
+                              fontWeight: 500,
                               backgroundColor: row.status === 'Completed' ? '#dcfce7' : '#e0f2fe',
                               color: row.status === 'Completed' ? '#15803d' : '#0369a1',
                             }}>{row.status}</span>
@@ -927,7 +928,7 @@ export default function FactoryDashboardInteractive() {
             {activeNavTab === 'Missions' && (
               <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000', margin: 0 }}>Autonomous Fleet Missions</h3>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Autonomous Fleet Missions</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Multi-vehicle coordinated missions, waypoints, and automated dispatch routing.</p>
                 </div>
 
@@ -940,13 +941,13 @@ export default function FactoryDashboardInteractive() {
                     <div key={i} style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '16px', border: '1px solid #cbd5e1', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
-                          <h4 style={{ fontSize: '1.05rem', fontWeight: 800, color: '#000000', margin: 0 }}>{m.name}</h4>
-                          <span style={{ fontSize: '0.72rem', fontWeight: 700, color: m.status === 'Completed' ? '#16a34a' : '#2563eb' }}>● {m.status}</span>
+                          <h4 style={{ fontSize: '1rem', fontWeight: 500, color: '#000000', margin: 0 }}>{m.name}</h4>
+                          <span style={{ fontSize: '0.72rem', fontWeight: 500, color: m.status === 'Completed' ? '#16a34a' : '#2563eb' }}>● {m.status}</span>
                         </div>
                         <p style={{ fontSize: '0.82rem', color: '#64748b', lineHeight: 1.5, marginBottom: '1.2rem' }}>{m.desc}</p>
                         <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1.2rem' }}>
                           {m.agvs.map(a => (
-                            <span key={a} style={{ padding: '0.2rem 0.5rem', backgroundColor: '#f1f5f9', borderRadius: '4px', fontSize: '0.72rem', fontWeight: 700, color: '#000000' }}>🚚 {a}</span>
+                            <span key={a} style={{ padding: '0.2rem 0.5rem', backgroundColor: '#f1f5f9', borderRadius: '4px', fontSize: '0.72rem', fontWeight: 500, color: '#000000' }}>🚚 {a}</span>
                           ))}
                         </div>
                       </div>
@@ -954,7 +955,7 @@ export default function FactoryDashboardInteractive() {
                       <div>
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.4rem', color: '#475569' }}>
                           <span>Mission Progress</span>
-                          <span style={{ fontWeight: 700 }}>{m.progress}%</span>
+                          <span style={{ fontWeight: 500 }}>{m.progress}%</span>
                         </div>
                         <div style={{ height: '6px', backgroundColor: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
                           <div style={{ width: `${m.progress}%`, height: '100%', backgroundColor: '#000000', borderRadius: '4px' }} />
@@ -970,7 +971,7 @@ export default function FactoryDashboardInteractive() {
             {activeNavTab === 'Vehicles' && (
               <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000', margin: 0 }}>AGV & AMR Vehicle Telemetry Roster</h3>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>AGV & AMR Vehicle Telemetry Roster</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Real-time battery metrics, LIDAR obstacle diagnostics, and individual vehicle health.</p>
                 </div>
 
@@ -985,16 +986,16 @@ export default function FactoryDashboardInteractive() {
                   ].map((v) => (
                     <div key={v.id} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.6rem' }}>
-                        <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#000000' }}>🚚 {v.id}</span>
-                        <span style={{ fontSize: '0.72rem', fontWeight: 700, padding: '0.2rem 0.5rem', backgroundColor: '#f1f5f9', borderRadius: '4px' }}>{v.health}</span>
+                        <span style={{ fontSize: '1rem', fontWeight: 500, color: '#000000' }}>🚚 {v.id}</span>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 500, padding: '0.2rem 0.5rem', backgroundColor: '#f1f5f9', borderRadius: '4px' }}>{v.health}</span>
                       </div>
                       <div style={{ fontSize: '0.75rem', color: '#64748b', marginBottom: '1rem' }}>{v.type}</div>
                       
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.8rem', fontSize: '0.75rem', color: '#334155' }}>
-                        <div>Battery: <strong style={{ color: '#000' }}>{v.battery}%</strong></div>
-                        <div>Speed: <strong style={{ color: '#000' }}>{v.speed}</strong></div>
-                        <div>Payload: <strong style={{ color: '#000' }}>{v.load}</strong></div>
-                        <div>Location: <strong style={{ color: '#000' }}>{v.loc}</strong></div>
+                        <div>Battery: <strong style={{ color: '#000', fontWeight: 500 }}>{v.battery}%</strong></div>
+                        <div>Speed: <strong style={{ color: '#000', fontWeight: 500 }}>{v.speed}</strong></div>
+                        <div>Payload: <strong style={{ color: '#000', fontWeight: 500 }}>{v.load}</strong></div>
+                        <div>Location: <strong style={{ color: '#000', fontWeight: 500 }}>{v.loc}</strong></div>
                       </div>
                     </div>
                   ))}
@@ -1006,7 +1007,7 @@ export default function FactoryDashboardInteractive() {
             {activeNavTab === 'Logs' && (
               <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000', margin: 0 }}>System Telemetry & Audit Logs</h3>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>System Telemetry & Audit Logs</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Real-time event stream from AGVs, CNC controllers, and automated safety gates.</p>
                 </div>
 
@@ -1032,7 +1033,7 @@ export default function FactoryDashboardInteractive() {
             {activeNavTab === 'Alerts' && (
               <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000', margin: 0 }}>Safety & Maintenance Alerts</h3>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>Safety & Maintenance Alerts</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Automated diagnostic alerts, obstacle triggers, and predictive maintenance notifications.</p>
                 </div>
 
@@ -1045,12 +1046,12 @@ export default function FactoryDashboardInteractive() {
                     <div key={alt.id} style={{ backgroundColor: '#ffffff', padding: '1.2rem', borderRadius: '12px', border: '1px solid #cbd5e1', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.3rem' }}>
-                          <span style={{ fontWeight: 800, color: '#000000', fontSize: '0.95rem' }}>{alt.title}</span>
-                          <span style={{ fontSize: '0.7rem', fontWeight: 700, padding: '0.15rem 0.5rem', borderRadius: '4px', backgroundColor: alt.severity === 'Resolved' ? '#dcfce7' : '#fef3c7', color: alt.severity === 'Resolved' ? '#15803d' : '#b45309' }}>{alt.severity}</span>
+                          <span style={{ fontWeight: 500, color: '#000000', fontSize: '0.95rem' }}>{alt.title}</span>
+                          <span style={{ fontSize: '0.7rem', fontWeight: 500, padding: '0.15rem 0.5rem', borderRadius: '4px', backgroundColor: alt.severity === 'Resolved' ? '#dcfce7' : '#fef3c7', color: alt.severity === 'Resolved' ? '#15803d' : '#b45309' }}>{alt.severity}</span>
                         </div>
                         <div style={{ fontSize: '0.82rem', color: '#475569' }}>{alt.desc}</div>
                       </div>
-                      <button style={{ padding: '0.4rem 0.9rem', border: '1px solid #cbd5e1', backgroundColor: '#ffffff', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer' }}>Acknowledge</button>
+                      <button style={{ padding: '0.4rem 0.9rem', border: '1px solid #cbd5e1', backgroundColor: '#ffffff', borderRadius: '6px', fontSize: '0.75rem', fontWeight: 500, cursor: 'pointer' }}>Acknowledge</button>
                     </div>
                   ))}
                 </div>
@@ -1061,27 +1062,27 @@ export default function FactoryDashboardInteractive() {
             {activeNavTab === 'Analytics' && (
               <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000', margin: 0 }}>OEE & Factory Analytics</h3>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#000000', margin: 0 }}>OEE & Factory Analytics</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Overall Equipment Effectiveness, AGV utilization metrics, and energy efficiency analytics.</p>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
                   <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
                     <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>Overall Equipment Effectiveness (OEE)</div>
-                    <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#000000' }}>94.8%</div>
-                    <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem', fontWeight: 700 }}>+2.4% vs last month</div>
+                    <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>94.8%</div>
+                    <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem', fontWeight: 500 }}>+2.4% vs last month</div>
                   </div>
 
                   <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
                     <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>AGV Fleet Utilization</div>
-                    <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#000000' }}>91.2%</div>
-                    <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem', fontWeight: 700 }}>Optimal Efficiency</div>
+                    <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>91.2%</div>
+                    <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem', fontWeight: 500 }}>Optimal Efficiency</div>
                   </div>
 
                   <div style={{ backgroundColor: '#ffffff', padding: '1.4rem', borderRadius: '14px', border: '1px solid #cbd5e1' }}>
                     <div style={{ fontSize: '0.8rem', color: '#64748b', marginBottom: '0.4rem' }}>Energy Cost Optimization</div>
-                    <div style={{ fontSize: '2.2rem', fontWeight: 800, color: '#000000' }}>-38.5%</div>
-                    <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem', fontWeight: 700 }}>AI Smart Grid Active</div>
+                    <div style={{ fontSize: '2rem', fontWeight: 500, color: '#000000' }}>-38.5%</div>
+                    <div style={{ fontSize: '0.75rem', color: '#16a34a', marginTop: '0.4rem', fontWeight: 500 }}>AI Smart Grid Active</div>
                   </div>
                 </div>
               </div>
