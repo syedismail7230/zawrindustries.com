@@ -970,7 +970,7 @@ export default function FactoryDashboardInteractive() {
             {activeNavTab === 'Vehicles' && (
               <div style={{ padding: '2rem', backgroundColor: '#f8fafc', overflowY: 'auto' }}>
                 <div style={{ marginBottom: '1.5rem' }}>
-                  <h3 style={{ fontSize: '1.4rem', fontWeight 800, color: '#000000', margin: 0 }}>AGV & AMR Vehicle Telemetry Roster</h3>
+                  <h3 style={{ fontSize: '1.4rem', fontWeight: 800, color: '#000000', margin: 0 }}>AGV & AMR Vehicle Telemetry Roster</h3>
                   <p style={{ fontSize: '0.85rem', color: '#64748b', margin: '0.2rem 0 0' }}>Real-time battery metrics, LIDAR obstacle diagnostics, and individual vehicle health.</p>
                 </div>
 
