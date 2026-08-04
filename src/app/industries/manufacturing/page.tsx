@@ -91,7 +91,7 @@ export default function ManufacturingPage() {
       {/* 1. Hero Section with 3D Robot Arm in FRONT of Text and Badges */}
       <section style={{
         position: 'relative',
-        padding: '6rem 5% 4rem',
+        padding: '6rem 3% 4rem',
         backgroundColor: '#ffffff',
         borderBottom: '1px solid #e2e8f0',
         minHeight: '85vh',
@@ -107,7 +107,7 @@ export default function ManufacturingPage() {
           textAlign: 'center',
           zIndex: 1,
           position: 'relative',
-          maxWidth: '1100px',
+          maxWidth: '1200px',
           margin: '0 auto',
           paddingTop: '1rem',
           pointerEvents: 'none',
@@ -129,7 +129,7 @@ export default function ManufacturingPage() {
         <div style={{
           position: 'relative',
           width: '100%',
-          maxWidth: '1200px',
+          maxWidth: '1400px',
           height: '560px',
           marginTop: '-12rem',
           margin: '-12rem auto 0',
@@ -138,24 +138,24 @@ export default function ManufacturingPage() {
           justifyContent: 'center',
         }}>
 
-          {/* FLOATING METRIC BADGES (zIndex: 5 - BEHIND 3D ROBOT MODEL) */}
-          <div style={{ position: 'absolute', top: '25%', left: '6%', zIndex: 5 }}>
+          {/* FLOATING METRIC BADGES (Pushed further OUTWARDS to outer edges) */}
+          <div style={{ position: 'absolute', top: '30%', left: '1%', zIndex: 5 }}>
             <ArchitecturalGridBadge metric="±0.005mm" label="Tolerance" />
           </div>
 
-          <div style={{ position: 'absolute', bottom: '15%', left: '12%', zIndex: 5 }}>
+          <div style={{ position: 'absolute', bottom: '8%', left: '3%', zIndex: 5 }}>
             <ArchitecturalGridBadge metric="6-Axis" label="Robotics Sync" />
           </div>
 
-          <div style={{ position: 'absolute', top: '25%', right: '6%', zIndex: 5 }}>
+          <div style={{ position: 'absolute', top: '30%', right: '1%', zIndex: 5 }}>
             <ArchitecturalGridBadge metric="99.98%" label="Factory Uptime" />
           </div>
 
-          <div style={{ position: 'absolute', bottom: '15%', right: '12%', zIndex: 5 }}>
+          <div style={{ position: 'absolute', bottom: '8%', right: '3%', zIndex: 5 }}>
             <ArchitecturalGridBadge metric="±0.005mm" label="Tolerance" />
           </div>
 
-          {/* CENTER 3D ROBOT CANVAS (zIndex: 15 - IN FRONT OF METRIC BADGES & TEXT) */}
+          {/* CENTER 3D ROBOT CANVAS (zIndex: 15 - IN CENTER STAGE WITH FREE SPACE) */}
           <div style={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 15 }}>
             <ManufacturingHeroClient />
           </div>

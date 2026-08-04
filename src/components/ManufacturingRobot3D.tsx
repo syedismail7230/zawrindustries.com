@@ -18,10 +18,10 @@ export default function ManufacturingRobot3D() {
     // 1. Scene Setup (Clean White Studio Environment)
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup (Positioned to fit the full 3D robot arm comfortably)
+    // 2. Camera Setup (Positioned for a sleek, compact 3D robot arm)
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-    camera.position.set(0, 0.4, 4.8);
-    camera.lookAt(0, 0.2, 0);
+    camera.position.set(0, 0.3, 5.2);
+    camera.lookAt(0, 0.1, 0);
 
     // 3. Renderer Setup with PMREM Environment Generator
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -51,14 +51,14 @@ export default function ManufacturingRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Sized & Scaled Perfectly)
+    // 6. Load GLB Model (Compact Sleek Scale)
     const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, -0.2, 0);
+    modelGroup.position.set(0, -0.3, 0);
     scene.add(modelGroup);
 
     const loader = new GLTFLoader();
     loader.load(
-      '/assets/robotic+arm+3d+model.glb?v=4',
+      '/assets/robotic+arm+3d+model.glb?v=5',
       (gltf) => {
         const loadedModel = gltf.scene;
 
@@ -70,7 +70,7 @@ export default function ManufacturingRobot3D() {
         loadedModel.position.sub(center);
 
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 2.5 / maxDim; // Reduced scale so model fits perfectly inside canvas
+        const scale = 1.75 / maxDim; // Sleek compact scale factor
         loadedModel.scale.set(scale, scale, scale);
 
         // Preserve intact materials & prevent pitch black silhouetting
@@ -132,8 +132,8 @@ export default function ManufacturingRobot3D() {
 
       mouse.lerp(targetMouse, 0.25);
 
-      // Model base is fixed stationary at y = -0.2
-      modelGroup.position.set(0, -0.2, 0);
+      // Model base is fixed stationary at y = -0.3
+      modelGroup.position.set(0, -0.3, 0);
       modelGroup.rotation.y = mouse.x * 0.45;
       modelGroup.rotation.x = 0;
       modelGroup.rotation.z = 0;
