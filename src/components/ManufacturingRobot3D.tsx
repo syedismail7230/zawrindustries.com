@@ -18,9 +18,9 @@ export default function ManufacturingRobot3D() {
     // 1. Scene Setup (Clean White Studio Environment)
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup (Positioned for a compact, elegantly proportioned 3D robot arm)
+    // 2. Camera Setup (Positioned for a compact, doubled-reduction 3D robot arm)
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-    camera.position.set(0, 0.2, 5.8);
+    camera.position.set(0, 0.1, 6.2);
     camera.lookAt(0, 0, 0);
 
     // 3. Renderer Setup with PMREM Environment Generator
@@ -51,14 +51,14 @@ export default function ManufacturingRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Compact Elegant Scale)
+    // 6. Load GLB Model (Doubled reduction scale factor 0.55)
     const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, -0.35, 0);
+    modelGroup.position.set(0, -0.4, 0);
     scene.add(modelGroup);
 
     const loader = new GLTFLoader();
     loader.load(
-      '/assets/robotic+arm+3d+model.glb?v=6',
+      '/assets/robotic+arm+3d+model.glb?v=7',
       (gltf) => {
         const loadedModel = gltf.scene;
 
@@ -70,7 +70,7 @@ export default function ManufacturingRobot3D() {
         loadedModel.position.sub(center);
 
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 1.1 / maxDim; // Further reduced scale for clean, compact proportion
+        const scale = 0.55 / maxDim; // Doubled size reduction (half of previous 1.1 scale)
         loadedModel.scale.set(scale, scale, scale);
 
         // Preserve intact materials & prevent pitch black silhouetting
@@ -132,8 +132,8 @@ export default function ManufacturingRobot3D() {
 
       mouse.lerp(targetMouse, 0.25);
 
-      // Model base is fixed stationary at y = -0.35
-      modelGroup.position.set(0, -0.35, 0);
+      // Model base is fixed stationary at y = -0.4
+      modelGroup.position.set(0, -0.4, 0);
       modelGroup.rotation.y = mouse.x * 0.45;
       modelGroup.rotation.x = 0;
       modelGroup.rotation.z = 0;
