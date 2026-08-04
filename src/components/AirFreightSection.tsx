@@ -6,7 +6,6 @@ export function AirFreightSection() {
   const metrics = [
     { label: "Global Hubs", value: "220+ Airports" },
     { label: "Express Transit", value: "< 24 Hours" },
-    { label: "Cargo Security", value: "TAPA Certified" },
   ];
 
   return (
