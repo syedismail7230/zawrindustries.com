@@ -13,10 +13,11 @@ export function MaritimeFreightSection() {
     <section style={{
       width: '100%',
       backgroundColor: '#ffffff',
-      padding: '5rem clamp(1rem, 6vw, 8%) 6rem clamp(1rem, 6vw, 8%)',
+      padding: '4rem clamp(1rem, 6vw, 8%) 6rem clamp(1rem, 6vw, 8%)',
       boxSizing: 'border-box',
       fontFamily: 'Inter, sans-serif',
       color: '#000000',
+      overflow: 'hidden',
     }}>
       <div style={{
         maxWidth: '1200px',
@@ -26,26 +27,27 @@ export function MaritimeFreightSection() {
         gap: '4rem',
         alignItems: 'center',
       }}>
-        {/* Left Column: Container Ship GIF matching user screenshot */}
+        {/* Left Column: Big Container Ship GIF (Borderless, Scaled up showing front half) */}
         <div style={{
+          position: 'relative',
           width: '100%',
-          borderRadius: '20px',
+          height: 'clamp(320px, 45vh, 480px)',
           overflow: 'hidden',
-          backgroundColor: '#f8f9fa',
-          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.08)',
-          border: '1px solid rgba(0, 0, 0, 0.08)',
           display: 'flex',
-          justifyContent: 'center',
           alignItems: 'center',
+          justifyContent: 'flex-start',
         }}>
           <img
             src="/assets/Ship.gif"
             alt="Zawr Industries Maritime Container Ship Telemetry"
             style={{
-              width: '100%',
+              width: '145%',
+              maxWidth: 'none',
               height: 'auto',
               display: 'block',
               objectFit: 'cover',
+              transform: 'scale(1.25) translateX(-5%)',
+              transition: 'transform 0.5s ease-out',
             }}
           />
         </div>
