@@ -530,7 +530,7 @@ export default function ManufacturingPage() {
 
       {/* Factory Floor Video Showcase Section */}
       <section style={{
-        padding: 'clamp(3rem, 6vw, 5rem) 5%',
+        padding: 'clamp(2rem, 5vw, 4rem) 5%',
         backgroundColor: '#ffffff',
         borderBottom: '1px solid #e2e8f0',
       }}>
@@ -538,10 +538,10 @@ export default function ManufacturingPage() {
           <div style={{
             position: 'relative',
             width: '100%',
-            borderRadius: '24px',
+            aspectRatio: '16 / 9',
+            maxHeight: '560px',
             overflow: 'hidden',
-            backgroundColor: '#000000',
-            boxShadow: '0 20px 40px rgba(0,0,0,0.08)',
+            backgroundColor: '#ffffff',
           }}>
             <video
               autoPlay
@@ -551,9 +551,11 @@ export default function ManufacturingPage() {
               src="/assets/factory.mp4"
               style={{
                 width: '100%',
-                maxHeight: '700px',
+                height: '100%',
                 objectFit: 'cover',
+                objectPosition: 'center',
                 display: 'block',
+                backgroundColor: '#ffffff',
               }}
             />
           </div>
