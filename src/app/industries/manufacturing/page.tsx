@@ -639,33 +639,50 @@ export default function ManufacturingPage() {
       {/* 5. Factory Management System (FMS) Telemetry Dashboard */}
       <FactoryDashboardInteractive />
 
-      {/* 6. Full-Size Autonomous Factory View Showcase */}
+      {/* 6. End-to-End Cinematic Landscape Factory View */}
       <section style={{
-        padding: 'clamp(3rem, 6vw, 6rem) 4%',
+        width: '100vw',
+        position: 'relative',
+        left: '50%',
+        right: '50%',
+        marginLeft: '-50vw',
+        marginRight: '-50vw',
+        padding: '1rem 0 3rem',
         backgroundColor: '#ffffff',
-        borderTop: '1px solid #e2e8f0',
+        overflow: 'hidden',
       }}>
-        <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+        <div style={{
+          position: 'relative',
+          width: '100%',
+          height: 'clamp(360px, 46vw, 680px)',
+          overflow: 'hidden',
+          backgroundColor: '#ffffff',
+        }}>
+          {/* Edge vignette linear-gradients to seamlessly blend image into website background */}
           <div style={{
-            position: 'relative',
-            width: '100%',
-            borderRadius: '24px',
-            overflow: 'hidden',
-            boxShadow: '0 25px 60px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.04)',
-            border: '1px solid #cbd5e1',
-            backgroundColor: '#f8fafc',
-          }}>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/factory-view.png"
-              alt="Zawr Autonomous Smart Factory Floor View"
-              style={{
-                width: '100%',
-                height: 'auto',
-                display: 'block',
-              }}
-            />
-          </div>
+            position: 'absolute',
+            inset: 0,
+            zIndex: 2,
+            pointerEvents: 'none',
+            background: `
+              linear-gradient(to right, #ffffff 0%, rgba(255,255,255,0) 6%, rgba(255,255,255,0) 94%, #ffffff 100%),
+              linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0) 12%, rgba(255,255,255,0) 88%, #ffffff 100%)
+            `,
+          }} />
+
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/factory-view.png"
+            alt="Zawr Autonomous Smart Factory Floor Landscape View"
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center 45%',
+              display: 'block',
+              filter: 'brightness(1.02) contrast(1.02)',
+            }}
+          />
         </div>
       </section>
 
