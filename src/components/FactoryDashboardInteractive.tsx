@@ -4,6 +4,8 @@ import React, { useState, useEffect, useRef } from 'react';
 
 export default function FactoryDashboardInteractive() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const activePathRef = useRef<SVGPathElement>(null);
+  
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeTab, setActiveTab] = useState<'TASKS' | 'FLEET' | 'EVENTS'>('TASKS');
   const [viewMode, setViewMode] = useState<'2D' | '3D'>('2D');
@@ -12,6 +14,10 @@ export default function FactoryDashboardInteractive() {
   const [activeHall, setActiveHall] = useState<string>('PRODUCTION HALL 2');
   const [isLive, setIsLive] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [zoomed, setZoomed] = useState<number>(1);
+
+  // Animated AGV positions on path
+  const [movingAgvPos, setMovingAgvPos] = useState<{ x: number; y: number }>({ x: 140, y: 125 });
 
   // 1. Scroll-driven 3D tilt animation
   useEffect(() => {
@@ -20,12 +26,10 @@ export default function FactoryDashboardInteractive() {
       const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
       
-      // Calculate progress from 0 (below viewport) to 1 (center) to 2 (above)
       const elementCenter = rect.top + rect.height / 2;
       const viewportCenter = windowHeight / 2;
       const distance = elementCenter - viewportCenter;
       
-      // Normalize distance
       const normalized = Math.max(-1, Math.min(1, distance / (windowHeight / 2)));
       setScrollProgress(normalized);
     };
@@ -35,7 +39,7 @@ export default function FactoryDashboardInteractive() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // 2. Animated AGV movement loop
+  // 2. Continuous AGV Path Interpolation Loop
   useEffect(() => {
     let animId: number;
     let start: number;
@@ -43,24 +47,37 @@ export default function FactoryDashboardInteractive() {
     const step = (timestamp: number) => {
       if (!start) start = timestamp;
       const elapsed = timestamp - start;
-      setAgvOffset((elapsed / 30) % 1000);
+      
+      // Animate dash offset for route line
+      setAgvOffset((elapsed / 25) % 1000);
+
+      // Interpolate AGV 78 position along path
+      if (activePathRef.current && isLive) {
+        const totalLen = activePathRef.current.getTotalLength();
+        if (totalLen > 0) {
+          const currentDistance = ((elapsed / 15) % totalLen);
+          const point = activePathRef.current.getPointAtLength(currentDistance);
+          setMovingAgvPos({ x: point.x, y: point.y });
+        }
+      }
+
       animId = requestAnimationFrame(step);
     };
 
     animId = requestAnimationFrame(step);
     return () => cancelAnimationFrame(animId);
-  }, []);
+  }, [isLive]);
 
   // 3D Transform values based on scroll
-  const rotateX = scrollProgress * 8; // Max 8deg tilt
-  const scale = 1 - Math.abs(scrollProgress) * 0.03; // Subtle scale
+  const rotateX = scrollProgress * 8;
+  const scale = 1 - Math.abs(scrollProgress) * 0.03;
   const opacity = 1 - Math.abs(scrollProgress) * 0.15;
 
   const tasksList = [
-    { id: 'TSK-00051', origin: 'PRB-0240', dest: 'HSO-30171', time: '+15m', agv: 'AGV-489', stops: '1/4', battery: '82%', progress: 65, active: true },
-    { id: 'TSK-00047', origin: 'ESO-1102', dest: 'FSO-74812', time: '+15m', agv: 'AGV-571', stops: '3/4', battery: '94%', progress: 27, active: true },
-    { id: 'TSK-00031', origin: 'PRB-0240', dest: 'HSO-30171', time: '+22m', agv: 'AGV-018', stops: '1/4', battery: '76%', progress: 48, active: true },
-    { id: 'TSK-00022', origin: 'ESO-1102', dest: 'FSO-74812', time: '+30m', agv: 'AGV-254', stops: '3/4', battery: '61%', progress: 85, active: true },
+    { id: 'TSK-00051', origin: 'PRB-0240', dest: 'HSO-30171', time: '+15m', agv: 'AGV-489', stops: '1/4', battery: '32%', progress: 65, active: true },
+    { id: 'TSK-00047', origin: 'ESO-1102', dest: 'FSO-74812', time: '+15m', agv: 'AGV-571', stops: '3/4', battery: '27%', progress: 27, active: true },
+    { id: 'TSK-00031', origin: 'PRB-0240', dest: 'HSO-30171', time: '+15m', agv: 'AGV-018', stops: '1/4', battery: '32%', progress: 48, active: true },
+    { id: 'TSK-00022', origin: 'ESO-1102', dest: 'FSO-74812', time: '+15m', agv: 'AGV-254', stops: '3/4', battery: '32%', progress: 85, active: true },
   ];
 
   const fleetList = [
@@ -76,6 +93,21 @@ export default function FactoryDashboardInteractive() {
     { time: '10:28:40', msg: 'CNC Station 04 completed cycle #1842', type: 'info' },
     { time: '10:25:11', msg: 'AGV-571 battery reached 94% threshold', type: 'success' },
   ];
+
+  // Specific path routes corresponding to selected tasks
+  const getTaskPathD = () => {
+    switch (selectedTask) {
+      case 'TSK-00047':
+        return 'M 140 305 H 390 V 215 H 680';
+      case 'TSK-00031':
+        return 'M 140 125 H 270 V 305 H 680';
+      case 'TSK-00022':
+        return 'M 390 125 V 305 H 680';
+      default:
+        // TSK-00051
+        return 'M 140 125 H 390 V 215 H 680';
+    }
+  };
 
   return (
     <section style={{
@@ -362,7 +394,7 @@ export default function FactoryDashboardInteractive() {
                       style={{
                         padding: '0.85rem 0.9rem',
                         borderRadius: '12px',
-                        border: selectedTask === task.id ? '1px solid #000000' : '1px solid #e2e8f0',
+                        border: selectedTask === task.id ? '1.5px solid #000000' : '1px solid #e2e8f0',
                         backgroundColor: selectedTask === task.id ? '#f8fafc' : '#ffffff',
                         cursor: 'pointer',
                         transition: 'all 0.2s ease',
@@ -548,7 +580,7 @@ export default function FactoryDashboardInteractive() {
               <div style={{
                 position: 'relative',
                 flex: '1 1 380px',
-                minHeight: '360px',
+                minHeight: '400px',
                 borderRadius: '16px',
                 backgroundColor: '#ffffff',
                 border: '1px solid #cbd5e1',
@@ -562,10 +594,10 @@ export default function FactoryDashboardInteractive() {
 
                 {/* 2D / 3D Floor Canvas Render */}
                 <div style={{
-                  width: '92%',
-                  height: '88%',
+                  width: '94%',
+                  height: '92%',
                   position: 'relative',
-                  transform: viewMode === '3D' ? 'rotateX(42deg) rotateZ(-12deg) scale(0.92)' : 'none',
+                  transform: `scale(${zoomed}) ${viewMode === '3D' ? 'rotateX(42deg) rotateZ(-12deg) scale(0.92)' : ''}`,
                   transition: 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)',
                   transformOrigin: 'center center',
                 }}>
@@ -573,30 +605,47 @@ export default function FactoryDashboardInteractive() {
                   {/* SVG Blueprint Track Lines */}
                   <svg width="100%" height="100%" viewBox="0 0 800 450" style={{ position: 'absolute', inset: 0, overflow: 'visible' }}>
                     
-                    {/* Grid Racks background (8 dark rack blocks) */}
+                    {/* Grid Guidelines matching user reference image */}
+                    {/* Horizontal Guidelines */}
+                    <line x1="40" y1="125" x2="760" y2="125" stroke="#94a3b8" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
+                    <line x1="40" y1="215" x2="760" y2="215" stroke="#94a3b8" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
+                    <line x1="40" y1="305" x2="760" y2="305" stroke="#94a3b8" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
+
+                    {/* Vertical Guidelines */}
+                    <line x1="140" y1="30" x2="140" y2="400" stroke="#94a3b8" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
+                    <line x1="445" y1="30" x2="445" y2="400" stroke="#94a3b8" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
+                    <line x1="680" y1="30" x2="680" y2="400" stroke="#94a3b8" strokeWidth="1" strokeDasharray="4 4" opacity="0.6" />
+
+                    {/* 8 Soft Light Blue Rack Pods matching reference image */}
                     {[
-                      { x: 140, y: 50 }, { x: 260, y: 50 }, { x: 380, y: 50 }, { x: 500, y: 50 },
-                      { x: 140, y: 260 }, { x: 260, y: 260 }, { x: 380, y: 260 }, { x: 500, y: 260 },
-                    ].map((rack, i) => (
-                      <g key={i}>
+                      { id: 1, x: 170, y: 55 },
+                      { id: 2, x: 275, y: 55 },
+                      { id: 3, x: 380, y: 55 },
+                      { id: 4, x: 485, y: 55 },
+                      { id: 5, x: 170, y: 245 },
+                      { id: 6, x: 275, y: 245 },
+                      { id: 7, x: 380, y: 245 },
+                      { id: 8, x: 485, y: 245 },
+                    ].map((rack) => (
+                      <g key={rack.id}>
                         <rect
                           x={rack.x}
                           y={rack.y}
-                          width="90"
-                          height="140"
-                          rx="6"
-                          fill="#f1f5f9"
+                          width="85"
+                          height="135"
+                          rx="14"
+                          fill="#f0f4f8"
                           stroke="#cbd5e1"
                           strokeWidth="1.5"
                         />
-                        {/* Rack grid texture */}
+                        {/* Rack shelves texture lines */}
                         {Array.from({ length: 6 }).map((_, rIdx) => (
                           <line
                             key={rIdx}
-                            x1={rack.x + 8}
-                            y1={rack.y + 20 + rIdx * 20}
-                            x2={rack.x + 82}
-                            y2={rack.y + 20 + rIdx * 20}
+                            x1={rack.x + 10}
+                            y1={rack.y + 18 + rIdx * 18}
+                            x2={rack.x + 75}
+                            y2={rack.y + 18 + rIdx * 18}
                             stroke="#cbd5e1"
                             strokeWidth="1"
                             strokeDasharray="3 3"
@@ -605,55 +654,100 @@ export default function FactoryDashboardInteractive() {
                       </g>
                     ))}
 
-                    {/* Outer & Inner Conveyor Loop Track Paths */}
+                    {/* Active Mission Heavy Black Path following exact grid corridors */}
                     <path
-                      d="M 60 225 L 740 225 M 60 110 L 740 110 M 60 340 L 740 340 M 100 50 L 100 390 M 700 50 L 700 390"
-                      fill="none"
-                      stroke="#94a3b8"
-                      strokeWidth="1.5"
-                      strokeDasharray="4 4"
-                    />
-
-                    {/* Active Route Highlight Path (Selected Task Route) */}
-                    <path
-                      d="M 100 110 L 380 110 L 380 225 L 700 225"
+                      ref={activePathRef}
+                      d={getTaskPathD()}
                       fill="none"
                       stroke="#000000"
-                      strokeWidth="3"
+                      strokeWidth="3.5"
                       strokeDasharray="8 6"
                       strokeDashoffset={-agvOffset}
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
                     />
 
-                    {/* Animated Moving AGVs on Tracks */}
-                    {[
-                      { num: '96', x: 550, y: 35 },
-                      { num: '234', x: 585, y: 35 },
-                      { num: '94', x: 230, y: 195 },
-                      { num: '59', x: 470, y: 175 },
-                      { num: '78', x: 490, y: 215 },
-                      { num: '178', x: 430, y: 275 },
-                      { num: '283', x: 530, y: 275 },
-                      { num: '114', x: 380, y: 395 },
-                    ].map((agv, idx) => (
-                      <g key={idx} transform={`translate(${agv.x + Math.sin((agvOffset / 40) + idx) * 8}, ${agv.y})`}>
-                        {/* AGV Vehicle Box */}
-                        <rect x="-14" y="-9" width="28" height="18" rx="4" fill="#000000" stroke="#ffffff" strokeWidth="1.5" />
-                        <text x="0" y="3" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">{agv.num}</text>
-                        {/* Status signal light */}
-                        <circle cx="10" cy="-6" r="2.5" fill="#22c55e" />
-                      </g>
-                    ))}
-
-                    {/* Charging & Drop Stations */}
-                    <g transform="translate(520, 25)">
-                      <rect x="0" y="0" width="16" height="16" rx="3" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
-                      <text x="8" y="12" fill="#000000" fontSize="10" fontWeight="bold" textAnchor="middle">⚡</text>
+                    {/* AGV Badges positioned on exact grid nodes matching reference image */}
+                    
+                    {/* AGV 94 (Pod 1 bottom) */}
+                    <g transform="translate(230, 175)">
+                      <rect x="-16" y="-9" width="32" height="18" rx="4" fill="#000000" />
+                      <text x="0" y="3.5" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">94</text>
+                      <circle cx="12" cy="-6" r="2" fill="#22c55e" />
                     </g>
 
-                    <g transform="translate(680, 280)">
-                      <rect x="0" y="0" width="18" height="18" rx="4" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
-                      <text x="9" y="13" fill="#000000" fontSize="9" fontWeight="bold" textAnchor="middle">📦</text>
+                    {/* AGV 59 (Pod 3 right aisle) */}
+                    <g transform="translate(465, 160)">
+                      <rect x="-16" y="-9" width="32" height="18" rx="4" fill="#000000" />
+                      <text x="0" y="3.5" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">59</text>
+                      <circle cx="12" cy="-6" r="2" fill="#22c55e" />
                     </g>
+
+                    {/* Dynamic Moving AGV 78 following active path */}
+                    <g transform={`translate(${movingAgvPos.x}, ${movingAgvPos.y})`}>
+                      <rect x="-18" y="-10" width="36" height="20" rx="5" fill="#000000" stroke="#38bdf8" strokeWidth="1.5" />
+                      <text x="0" y="4" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">78</text>
+                      <circle cx="14" cy="-7" r="2.5" fill="#22c55e" />
+                    </g>
+
+                    {/* AGV 178 (Pod 7 top) */}
+                    <g transform="translate(430, 235)">
+                      <rect x="-16" y="-9" width="32" height="18" rx="4" fill="#000000" />
+                      <text x="0" y="3.5" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">178</text>
+                      <circle cx="12" cy="-6" r="2" fill="#22c55e" />
+                    </g>
+
+                    {/* AGV 283 (Pod 8 top) */}
+                    <g transform="translate(535, 235)">
+                      <rect x="-16" y="-9" width="32" height="18" rx="4" fill="#000000" />
+                      <text x="0" y="3.5" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">283</text>
+                      <circle cx="12" cy="-6" r="2" fill="#22c55e" />
+                    </g>
+
+                    {/* AGV 114 (Pod 7 bottom) */}
+                    <g transform="translate(385, 385)">
+                      <rect x="-16" y="-9" width="32" height="18" rx="4" fill="#000000" />
+                      <text x="0" y="3.5" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">114</text>
+                      <circle cx="12" cy="-6" r="2" fill="#22c55e" />
+                    </g>
+
+                    {/* AGV 96 & 234 paired at top dock */}
+                    <g transform="translate(535, 30)">
+                      {/* Charge icon */}
+                      <rect x="-34" y="-9" width="16" height="18" rx="4" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
+                      <text x="-26" y="4" fill="#000000" fontSize="10" fontWeight="bold" textAnchor="middle">⚡</text>
+
+                      {/* AGV 96 */}
+                      <rect x="-15" y="-9" width="30" height="18" rx="4" fill="#000000" />
+                      <text x="0" y="3.5" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">96</text>
+                      <circle cx="11" cy="-6" r="2" fill="#22c55e" />
+
+                      {/* AGV 234 */}
+                      <rect x="18" y="-9" width="32" height="18" rx="4" fill="#000000" />
+                      <text x="34" y="3.5" fill="#ffffff" fontSize="10" fontWeight="700" textAnchor="middle">234</text>
+                      <circle cx="46" cy="-6" r="2" fill="#22c55e" />
+                    </g>
+
+                    {/* AGV 196 & 209 stacked at left portal */}
+                    <g transform="translate(140, 190)">
+                      <rect x="-16" y="-18" width="32" height="16" rx="4" fill="#000000" />
+                      <text x="0" y="-6" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">196</text>
+                      <rect x="-16" y="2" width="32" height="16" rx="4" fill="#000000" />
+                      <text x="0" y="14" fill="#ffffff" fontSize="9" fontWeight="700" textAnchor="middle">209</text>
+                    </g>
+
+                    {/* Destination Hub Station (Right Corridor) */}
+                    <g transform="translate(680, 260)">
+                      <rect x="-12" y="-12" width="24" height="24" rx="6" fill="#ffffff" stroke="#000000" strokeWidth="1.5"/>
+                      <text x="0" y="4" fill="#000000" fontSize="11" fontWeight="bold" textAnchor="middle">📦</text>
+                    </g>
+
+                    {/* Aisle Node Badge (V) */}
+                    <g transform="translate(445, 90)">
+                      <rect x="-8" y="-8" width="16" height="16" rx="3" fill="#ffffff" stroke="#cbd5e1" strokeWidth="1"/>
+                      <text x="0" y="3" fill="#475569" fontSize="9" fontWeight="bold" textAnchor="middle">V</text>
+                    </g>
+
                   </svg>
 
                 </div>
@@ -734,10 +828,9 @@ export default function FactoryDashboardInteractive() {
                     padding: '3px',
                     border: '1px solid #cbd5e1',
                   }}>
-                    <button title="Fit Bounds" style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '4px 8px', fontSize: '0.75rem' }}>⛶</button>
-                    <button title="Zoom Out" style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '4px 8px', fontSize: '0.75rem' }}>-</button>
-                    <button title="Zoom In" style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '4px 8px', fontSize: '0.75rem' }}>+</button>
-                    <button title="Fullscreen" style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '4px 8px', fontSize: '0.75rem' }}>⤢</button>
+                    <button onClick={() => setZoomed(1)} title="Fit Bounds" style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '4px 8px', fontSize: '0.75rem' }}>⛶</button>
+                    <button onClick={() => setZoomed(prev => Math.max(0.8, prev - 0.15))} title="Zoom Out" style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '4px 8px', fontSize: '0.75rem' }}>-</button>
+                    <button onClick={() => setZoomed(prev => Math.min(1.5, prev + 0.15))} title="Zoom In" style={{ border: 'none', background: 'none', cursor: 'pointer', padding: '4px 8px', fontSize: '0.75rem' }}>+</button>
                   </div>
                 </div>
 
