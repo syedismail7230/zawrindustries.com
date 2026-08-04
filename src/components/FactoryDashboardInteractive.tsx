@@ -767,17 +767,28 @@ export default function FactoryDashboardInteractive() {
                       width: '98%',
                       height: '96%',
                       position: 'relative',
-                      transform: `scale(${zoomed}) ${viewMode === '3D' ? 'rotateX(42deg) rotateZ(-12deg) scale(0.92)' : ''}`,
+                      transform: `scale(${zoomed}) ${viewMode === '3D' ? 'rotateX(52deg) rotateZ(-20deg) translateY(-25px) scale(0.92)' : ''}`,
                       transition: 'transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1)',
                       transformOrigin: 'center center',
+                      filter: viewMode === '3D' ? 'drop-shadow(0px 30px 40px rgba(0, 0, 0, 0.22))' : 'none',
                     }}>
                       <svg width="100%" height="100%" viewBox="0 0 1000 600" style={{ position: 'absolute', inset: 0, overflow: 'visible' }}>
+                        {/* Floor Boundary - Base Layer & 3D Extruded Perimeter Wall */}
+                        {viewMode === '3D' && (
+                          <path
+                            d="M 40 46 H 480 A 16 16 0 0 0 520 46 H 960 A 30 30 0 0 1 990 76 V 286 A 16 16 0 0 0 990 326 V 556 A 30 30 0 0 1 960 586 H 520 A 16 16 0 0 0 480 586 H 40 A 30 30 0 0 1 10 556 V 326 A 16 16 0 0 0 10 286 V 76 A 30 30 0 0 1 40 46 Z"
+                            fill="#cbd5e1"
+                            opacity="0.8"
+                          />
+                        )}
                         <path
                           d="M 40 30 H 480 A 16 16 0 0 0 520 30 H 960 A 30 30 0 0 1 990 60 V 270 A 16 16 0 0 0 990 310 V 540 A 30 30 0 0 1 960 570 H 520 A 16 16 0 0 0 480 570 H 40 A 30 30 0 0 1 10 540 V 310 A 16 16 0 0 0 10 270 V 60 A 30 30 0 0 1 40 30 Z"
-                          fill="#e6ebf2"
+                          fill={viewMode === '3D' ? '#f1f5f9' : '#e6ebf2'}
                           stroke="#cbd5e1"
                           strokeWidth="2"
                         />
+                        
+                        {/* 8 Storage Pods — 2D flat or 3D Extruded Isometric Towers */}
                         {[
                           { px: 62, py: 65, id: 1 },
                           { px: 182, py: 65, id: 2 },
@@ -789,19 +800,48 @@ export default function FactoryDashboardInteractive() {
                           { px: 422, py: 375, id: 8 },
                         ].map((pod) => (
                           <g key={`pod-${pod.id}`}>
-                            <rect x={pod.px} y={pod.py} width="94" height="144" rx="10" fill="#cbd5e1" opacity="0.4" />
-                            {renderPodGrid(pod.px + 8, pod.py + 8)}
+                            {viewMode === '3D' ? (
+                              <>
+                                {/* 3D Pod Base Drop Shadow */}
+                                <rect x={pod.px + 6} y={pod.py + 10} width="94" height="144" rx="10" fill="rgba(0,0,0,0.18)" />
+                                {/* 3D Pod Extruded Front Face */}
+                                <rect x={pod.px} y={pod.py + 130} width="94" height="18" rx="4" fill="#475569" />
+                                {/* 3D Pod Extruded Side Face */}
+                                <path d={`M ${pod.px + 94} ${pod.py - 14} L ${pod.px + 104} ${pod.py - 6} L ${pod.px + 104} ${pod.py + 138} L ${pod.px + 94} ${pod.py + 130} Z`} fill="#334155" />
+                                {/* 3D Raised Top Face */}
+                                <g transform="translate(-6, -14)">
+                                  <rect x={pod.px} y={pod.py} width="94" height="144" rx="10" fill="#94a3b8" stroke="#64748b" strokeWidth="1.5" />
+                                  {renderPodGrid(pod.px + 8, pod.py + 8)}
+                                </g>
+                              </>
+                            ) : (
+                              <>
+                                <rect x={pod.px} y={pod.py} width="94" height="144" rx="10" fill="#cbd5e1" opacity="0.4" />
+                                {renderPodGrid(pod.px + 8, pod.py + 8)}
+                              </>
+                            )}
                           </g>
                         ))}
+
+                        {/* Robotic Workstations — 2D or 3D Extruded */}
                         {[[160, 110], [280, 110], [400, 110], [160, 420], [280, 420], [400, 420]].map((pos, i) => (
                           <g key={`st-${i}`} transform={`translate(${pos[0]}, ${pos[1]})`}>
-                            <rect x="-10" y="-18" width="20" height="36" rx="6" fill="#94a3b8" />
-                            <text x="0" y="-4" fill="#ffffff" fontSize="9" textAnchor="middle">🦾</text>
-                            <text x="0" y="10" fill="#ffffff" fontSize="9" textAnchor="middle">🔧</text>
-                            <rect x="-12" y="-6" width="24" height="12" rx="3" fill="#ffffff" stroke="#000000" strokeWidth="1"/>
-                            <text x="0" y="3" fill="#000000" fontSize="8" fontWeight="normal" textAnchor="middle">🛍️</text>
+                            {viewMode === '3D' && (
+                              <>
+                                {/* 3D Workstation Base Shadow */}
+                                <rect x="-12" y="-14" width="24" height="40" rx="6" fill="rgba(0,0,0,0.22)" />
+                                {/* 3D Pillar Extrusion */}
+                                <rect x="-10" y="-24" width="20" height="36" rx="6" fill="#475569" />
+                              </>
+                            )}
+                            <rect x="-10" y={viewMode === '3D' ? "-28" : "-18"} width="20" height="36" rx="6" fill={viewMode === '3D' ? '#000000' : '#94a3b8'} />
+                            <text x="0" y={viewMode === '3D' ? "-14" : "-4"} fill="#ffffff" fontSize="9" textAnchor="middle">🦾</text>
+                            <text x="0" y={viewMode === '3D' ? "0" : "10"} fill="#ffffff" fontSize="9" textAnchor="middle">🔧</text>
+                            <rect x="-12" y={viewMode === '3D' ? "-16" : "-6"} width="24" height="12" rx="3" fill="#ffffff" stroke="#000000" strokeWidth="1"/>
+                            <text x="0" y={viewMode === '3D' ? "-7" : "3"} fill="#000000" fontSize="8" fontWeight="normal" textAnchor="middle">🛍️</text>
                           </g>
                         ))}
+
                         {renderTrayGrid(680, 65)}
                         {renderTrayGrid(750, 65)}
                         {renderTrayGrid(680, 375)}
@@ -832,10 +872,26 @@ export default function FactoryDashboardInteractive() {
                           strokeLinecap="round"
                           strokeLinejoin="round"
                         />
+                        
+                        {/* Moving 3D Volumetric AGV Vehicle */}
                         <g transform={`translate(${movingAgvPos.x}, ${movingAgvPos.y})`}>
-                          <rect x="-18" y="-10" width="36" height="20" rx="5" fill="#000000" stroke="#38bdf8" strokeWidth="1.5" />
-                          <text x="0" y="4" fill="#ffffff" fontSize="10" fontWeight="500" textAnchor="middle">78</text>
-                          <circle cx="14" cy="-7" r="2.5" fill="#22c55e" />
+                          {viewMode === '3D' ? (
+                            <>
+                              {/* 3D AGV Shadow */}
+                              <rect x="-18" y="-6" width="36" height="20" rx="5" fill="rgba(0,0,0,0.25)" />
+                              {/* 3D Extruded Body */}
+                              <rect x="-20" y="-18" width="40" height="20" rx="6" fill="#000000" stroke="#38bdf8" strokeWidth="1.8" />
+                              <rect x="-16" y="-22" width="32" height="14" rx="4" fill="#1e293b" />
+                              <text x="0" y="-12" fill="#ffffff" fontSize="10" fontWeight="500" textAnchor="middle">78</text>
+                              <circle cx="12" cy="-18" r="3" fill="#22c55e" />
+                            </>
+                          ) : (
+                            <>
+                              <rect x="-18" y="-10" width="36" height="20" rx="5" fill="#000000" stroke="#38bdf8" strokeWidth="1.5" />
+                              <text x="0" y="4" fill="#ffffff" fontSize="10" fontWeight="500" textAnchor="middle">78</text>
+                              <circle cx="14" cy="-7" r="2.5" fill="#22c55e" />
+                            </>
+                          )}
                         </g>
                         <g transform="translate(169, 140)">
                           <rect x="-14" y="-8" width="28" height="16" rx="4" fill="#000000" />
