@@ -194,7 +194,6 @@ export default function Header() {
             <Link href="/industries/transport-and-logistics" onClick={closeMobileMenu}>Transport and Logistics</Link>
             <Link href="/industries/manufacturing" onClick={closeMobileMenu}>Manufacturing</Link>
             <Link href="/industries/estate" onClick={closeMobileMenu}>Estate</Link>
-            <Link href="/industries/healthcare" onClick={closeMobileMenu}>Healthcare</Link>
           </div>
         </div>
 

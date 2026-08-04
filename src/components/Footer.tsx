@@ -214,7 +214,6 @@ export default function Footer() {
             <li><Link href="/industries/transport-and-logistics">Transport and Logistics</Link></li>
             <li><Link href="/industries/manufacturing">Manufacturing</Link></li>
             <li><Link href="/industries/estate">Estate</Link></li>
-            <li><Link href="/industries/healthcare">Healthcare</Link></li>
           </ul>
         </div>
 
