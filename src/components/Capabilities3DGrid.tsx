@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 
 interface Capability {
   title: string;
@@ -10,106 +10,71 @@ interface Capability {
 }
 
 export function Capabilities3DGrid({ capabilities }: { capabilities: Capability[] }) {
-  const [hovered, setHovered] = useState<number | null>(null);
-
   return (
     <div style={{ width: '100%', marginBottom: '2rem' }}>
       <style dangerouslySetInnerHTML={{ __html: `
-        .bento-grid {
+        .cap-flat-grid {
           display: grid;
-          grid-template-columns: 1fr 1fr;
-          grid-template-rows: auto auto;
-          gap: 1px;
-          background: #e2e8f0;
-          border: 1px solid #e2e8f0;
-          border-radius: 16px;
-          overflow: hidden;
+          grid-template-columns: repeat(4, 1fr);
+          gap: 0;
         }
 
-        .bento-cell {
-          background: #ffffff;
-          padding: 3rem 2.8rem;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          min-height: 280px;
-          position: relative;
-          overflow: hidden;
-          transition: background 0.25s ease;
+        .cap-flat-item {
+          padding: 2rem 2rem 2rem 0;
+          border-left: 1px solid #e2e8f0;
+          padding-left: 2rem;
         }
 
-        .bento-cell:hover {
-          background: #f8fafc;
+        .cap-flat-item:first-child {
+          border-left: none;
+          padding-left: 0;
         }
 
-
-        .bento-label {
-          font-size: 0.7rem;
-          text-transform: uppercase;
-          letter-spacing: 0.12em;
-          color: #94a3b8;
-          margin-bottom: 0.6rem;
-        }
-
-        .bento-metric-display {
-          font-size: clamp(2.2rem, 4vw, 3.2rem);
+        .cap-flat-metric {
+          font-size: clamp(1.8rem, 2.8vw, 2.6rem);
           font-weight: 400;
           color: #000000;
           letter-spacing: -0.04em;
           line-height: 1;
-          margin-bottom: 2rem;
-        }
-
-        .bento-title {
-          font-size: 1rem;
-          font-weight: 600;
-          color: #000000;
+          display: block;
           margin-bottom: 0.5rem;
-          letter-spacing: -0.01em;
         }
 
-        .bento-desc {
-          font-size: 0.875rem;
-          color: #64748b;
-          line-height: 1.7;
-          font-weight: 300;
-          max-width: 340px;
+        .cap-flat-title {
+          font-size: 0.85rem;
+          color: #94a3b8;
+          font-weight: 400;
+          display: block;
         }
 
         @media (max-width: 768px) {
-          .bento-grid {
-            grid-template-columns: 1fr;
-            border-radius: 12px;
+          .cap-flat-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem 0;
           }
-          .bento-cell {
-            min-height: 220px;
-            padding: 2rem 1.8rem;
+          .cap-flat-item {
+            border-left: 1px solid #e2e8f0;
+            padding-left: 1.5rem;
           }
-          .bento-metric-bg {
-            font-size: clamp(4rem, 18vw, 7rem);
+          .cap-flat-item:first-child,
+          .cap-flat-item:nth-child(3) {
+            border-left: none;
+            padding-left: 0;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .cap-flat-grid {
+            grid-template-columns: repeat(2, 1fr);
           }
         }
       `}} />
 
-      <div className="bento-grid">
+      <div className="cap-flat-grid">
         {capabilities.map((cap, idx) => (
-          <div
-            key={idx}
-            className="bento-cell"
-            onMouseEnter={() => setHovered(idx)}
-            onMouseLeave={() => setHovered(null)}
-          >
-            {/* Top: label + metric */}
-            <div>
-              <div className="bento-label">{cap.metricLabel}</div>
-              <div className="bento-metric-display">{cap.metric}</div>
-            </div>
-
-            {/* Bottom: title + description */}
-            <div>
-              <div className="bento-title">{cap.title}</div>
-              <div className="bento-desc">{cap.description}</div>
-            </div>
+          <div key={idx} className="cap-flat-item">
+            <span className="cap-flat-metric">{cap.metric}</span>
+            <span className="cap-flat-title">{cap.title}</span>
           </div>
         ))}
       </div>
