@@ -678,21 +678,26 @@ button, input {
     position: static;
     display: none;
     box-shadow: none;
-    background: rgba(255,255,255,0.05);
-    padding: 1rem;
+    background: rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
     margin-top: 0.5rem;
     width: 100%;
   }
 
-  /* Allow clicking parent on mobile to show dropdown */
-  .nav-item:hover .dropdown, .nav-item:active .dropdown {
-    display: flex;
-    flex-direction: column;
+  .dropdown.mobile-submenu-open {
+    display: flex !important;
+    flex-direction: column !important;
   }
 
   .mobile-menu-btn {
-    display: block;
-    color: var(--bg-white);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    color: inherit !important;
+    font-size: 1.6rem;
+    padding: 0.4rem;
+    z-index: 1001;
   }
 
   /* Global Typography Scaling for Mobile */

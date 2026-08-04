@@ -13,6 +13,7 @@ export default function Header() {
   const pathname = usePathname();
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeMobileSubmenu, setActiveMobileSubmenu] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [langQuery, setLangQuery] = useState('');
   const [searchError, setSearchError] = useState('');
@@ -20,7 +21,6 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Don't update scroll state while mobile menu is open
       if (isMobileMenuOpen) return;
       setIsScrolled(window.scrollY > window.innerHeight - 80);
     };
@@ -28,13 +28,21 @@ export default function Header() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isMobileMenuOpen]);
 
-  // Close mobile menu and reset scroll state on route change to prevent background blinking
+  // Close mobile menu and reset scroll state on route change to prevent background issues
   useEffect(() => {
     setIsMobileMenuOpen(false);
+    setActiveMobileSubmenu(null);
     setIsScrolled(false);
   }, [pathname]);
 
-  const closeMobileMenu = () => setIsMobileMenuOpen(false);
+  const closeMobileMenu = () => {
+    setIsMobileMenuOpen(false);
+    setActiveMobileSubmenu(null);
+  };
+
+  const toggleMobileSubmenu = (menuName: string) => {
+    setActiveMobileSubmenu(prev => prev === menuName ? null : menuName);
+  };
 
   const filteredLangs = ISO6391.getAllCodes().filter(code => 
     ISO6391.getNativeName(code).toLowerCase().includes(langQuery.toLowerCase()) || 
@@ -81,7 +89,6 @@ export default function Header() {
 
     let matchedRoute = '';
 
-    // Find best match
     if (routes[q]) {
       matchedRoute = routes[q];
     } else {
@@ -103,7 +110,6 @@ export default function Header() {
       setSearchQuery('');
       setSearchError('');
     } else {
-      // Show error directly in the overlay
       setSearchError(`We could not find any exact matches for "${searchQuery.trim()}". As our platform is expanding, please try navigating via the header menu.`);
     }
   };
@@ -121,6 +127,9 @@ export default function Header() {
           backdrop-filter: ${isScrolled ? 'blur(12px)' : 'none'};
           -webkit-backdrop-filter: ${isScrolled ? 'blur(12px)' : 'none'};
           border-bottom: ${isScrolled ? '1px solid rgba(255, 255, 255, 0.08)' : 'none'};
+        }
+        .header.dark-page-header .mobile-menu-btn {
+          color: #ffffff !important;
         }
         .header.dark-page-header .dropdown {
           background-color: #111111 !important;
@@ -150,6 +159,9 @@ export default function Header() {
           -webkit-backdrop-filter: ${isScrolled ? 'blur(12px)' : 'none'};
           border-bottom: ${isScrolled ? '1px solid rgba(0, 0, 0, 0.05)' : 'none'};
         }
+        .header.light-page-header .mobile-menu-btn {
+          color: #111111 !important;
+        }
         .header.light-page-header:hover {
           background-color: #ffffff !important;
           color: #111111 !important;
@@ -166,7 +178,8 @@ export default function Header() {
         }
       `}} />
     )}
-    {/* Always-on override: lock text white when mobile menu is open */}
+
+    {/* Overrides when Mobile Menu is Open */}
     <style dangerouslySetInnerHTML={{__html: `
       @media (max-width: 900px) {
         .header.mobile-open,
@@ -180,10 +193,28 @@ export default function Header() {
           color: #ffffff !important;
           background-color: #000000 !important;
         }
-        .header.mobile-open .nav-item,
-        .header.mobile-open .dropdown a,
         .header.mobile-open .mobile-menu-btn {
           color: #ffffff !important;
+        }
+        .header.mobile-open .nav-item {
+          color: #ffffff !important;
+        }
+        .header.mobile-open .dropdown {
+          background-color: rgba(255, 255, 255, 0.06) !important;
+          border: 1px solid rgba(255, 255, 255, 0.1) !important;
+          border-radius: 12px !important;
+          box-shadow: none !important;
+          margin-top: 0.75rem !important;
+          padding: 0.8rem 1rem !important;
+        }
+        .header.mobile-open .dropdown a {
+          color: rgba(255, 255, 255, 0.85) !important;
+          padding: 0.5rem 0.6rem !important;
+          display: block !important;
+        }
+        .header.mobile-open .dropdown a:hover {
+          color: #ffffff !important;
+          background-color: rgba(255, 255, 255, 0.1) !important;
         }
         .header.mobile-open .icon-btn svg,
         .header.mobile-open svg {
@@ -194,7 +225,7 @@ export default function Header() {
 
     <header className={`header ${!isMobileMenuOpen && (isScrolled || (pathname.startsWith('/contact') && !isDarkPage)) ? 'scrolled' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''} ${isDarkPage ? 'dark-page-header' : ''} ${isLightPage ? 'light-page-header' : ''}`}>
       <div className={`logo-container ${poppins.className}`}>
-        <Link href="/">
+        <Link href="/" onClick={closeMobileMenu}>
           <span className="logo-bold">ZAWR</span>
           <span className="logo-regular">INDUSTRIES</span>
         </Link>
@@ -202,18 +233,38 @@ export default function Header() {
 
       <nav className={`nav-links ${isMobileMenuOpen ? 'mobile-active' : ''}`}>
         <Link href="/" className="nav-item" onClick={closeMobileMenu}>Home</Link>
+        
+        {/* About */}
         <div className="nav-item">
-          About
-          <div className="dropdown">
+          <div 
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+            onClick={() => toggleMobileSubmenu('about')}
+          >
+            <span>About</span>
+            <span style={{ fontSize: '0.8rem', opacity: 0.6, display: isMobileMenuOpen ? 'inline-block' : 'none' }}>
+              {activeMobileSubmenu === 'about' ? '▲' : '▼'}
+            </span>
+          </div>
+          <div className={`dropdown ${activeMobileSubmenu === 'about' ? 'mobile-submenu-open' : ''}`}>
             <Link href="/about/blog" onClick={closeMobileMenu}>Blog</Link>
             <Link href="/about/values" onClick={closeMobileMenu}>Values</Link>
             <Link href="/about/vision" onClick={closeMobileMenu}>Vision</Link>
             <Link href="/about/mission" onClick={closeMobileMenu}>Mission</Link>
           </div>
         </div>
+
+        {/* Industries */}
         <div className="nav-item">
-          Industries
-          <div className="dropdown">
+          <div 
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+            onClick={() => toggleMobileSubmenu('industries')}
+          >
+            <span>Industries</span>
+            <span style={{ fontSize: '0.8rem', opacity: 0.6, display: isMobileMenuOpen ? 'inline-block' : 'none' }}>
+              {activeMobileSubmenu === 'industries' ? '▲' : '▼'}
+            </span>
+          </div>
+          <div className={`dropdown ${activeMobileSubmenu === 'industries' ? 'mobile-submenu-open' : ''}`}>
             <Link href="/industries/it-service" onClick={closeMobileMenu}>IT Service</Link>
             <Link href="/industries/transport-and-logistics" onClick={closeMobileMenu}>Transport and Logistics</Link>
             <Link href="/industries/manufacturing" onClick={closeMobileMenu}>Manufacturing</Link>
@@ -221,9 +272,19 @@ export default function Header() {
             <Link href="/industries/healthcare" onClick={closeMobileMenu}>Healthcare</Link>
           </div>
         </div>
+
+        {/* Platforms */}
         <div className="nav-item">
-          Platforms
-          <div className="dropdown">
+          <div 
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+            onClick={() => toggleMobileSubmenu('platforms')}
+          >
+            <span>Platforms</span>
+            <span style={{ fontSize: '0.8rem', opacity: 0.6, display: isMobileMenuOpen ? 'inline-block' : 'none' }}>
+              {activeMobileSubmenu === 'platforms' ? '▲' : '▼'}
+            </span>
+          </div>
+          <div className={`dropdown ${activeMobileSubmenu === 'platforms' ? 'mobile-submenu-open' : ''}`}>
             <a href="https://www.firm.expert/" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>Firm AI</a>
             <a href="https://sketchstudio.dev/" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>Sketch Studio</a>
             <a href="https://ai.zawrindustries.com/" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>Zawr AI</a>
@@ -231,19 +292,40 @@ export default function Header() {
             <a href="https://velocityos.in/" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>VelocityOS</a>
           </div>
         </div>
+
+        {/* Newsroom */}
         <div className="nav-item">
-          <Link href="/newsroom/press-release" style={{ color: 'inherit', textDecoration: 'none' }} onClick={closeMobileMenu}>Newsroom</Link>
-          <div className="dropdown">
+          <div 
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+            onClick={() => toggleMobileSubmenu('newsroom')}
+          >
+            <Link href="/newsroom/press-release" style={{ color: 'inherit', textDecoration: 'none' }} onClick={closeMobileMenu}>Newsroom</Link>
+            <span style={{ fontSize: '0.8rem', opacity: 0.6, display: isMobileMenuOpen ? 'inline-block' : 'none' }}>
+              {activeMobileSubmenu === 'newsroom' ? '▲' : '▼'}
+            </span>
+          </div>
+          <div className={`dropdown ${activeMobileSubmenu === 'newsroom' ? 'mobile-submenu-open' : ''}`}>
             <Link href="/newsroom/press-release" onClick={closeMobileMenu}>Press Release</Link>
             <Link href="/newsroom/notifications" onClick={closeMobileMenu}>Notifications</Link>
             <Link href="/newsroom/media-kit" onClick={closeMobileMenu}>Media Kit</Link>
           </div>
         </div>
+
         <Link href="/investors" className="nav-item" onClick={closeMobileMenu}>Investors</Link>
         <Link href="/careers" className="nav-item" onClick={closeMobileMenu}>Careers</Link>
+
+        {/* Contact */}
         <div className="nav-item">
-          <Link href="/contact" style={{ color: 'inherit', textDecoration: 'none' }} onClick={closeMobileMenu}>Contact</Link>
-          <div className="dropdown">
+          <div 
+            style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
+            onClick={() => toggleMobileSubmenu('contact')}
+          >
+            <Link href="/contact" style={{ color: 'inherit', textDecoration: 'none' }} onClick={closeMobileMenu}>Contact</Link>
+            <span style={{ fontSize: '0.8rem', opacity: 0.6, display: isMobileMenuOpen ? 'inline-block' : 'none' }}>
+              {activeMobileSubmenu === 'contact' ? '▲' : '▼'}
+            </span>
+          </div>
+          <div className={`dropdown ${activeMobileSubmenu === 'contact' ? 'mobile-submenu-open' : ''}`}>
             <Link href="/contact/client-relations" onClick={closeMobileMenu}>Client Relations</Link>
             <Link href="/contact/public-relations" onClick={closeMobileMenu}>Public Relations</Link>
             <Link href="/contact/partner" onClick={closeMobileMenu}>Partner</Link>
@@ -263,7 +345,7 @@ export default function Header() {
             <svg viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"></circle>
               <line x1="2" y1="12" x2="22" y2="12"></line>
-              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path>
             </svg>
           </button>
           <div className="dropdown" style={{ left: 'auto', right: '-1rem', minWidth: '180px', paddingTop: '1.5rem' }}>
@@ -303,7 +385,6 @@ export default function Header() {
       </button>
 
     </header>
-
 
       {/* Full Screen Search Overlay */}
       {isSearchOpen && (
