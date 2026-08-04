@@ -5,7 +5,6 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 
-// IndustrialRobot3D Component - v3.0 Clean White Studio
 export default function IndustrialRobot3D() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [loading, setLoading] = useState(true);
@@ -19,10 +18,10 @@ export default function IndustrialRobot3D() {
     // 1. Scene Setup (Clean White Studio Environment)
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup
+    // 2. Camera Setup (Positioned facing the upper arm & claw)
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-    camera.position.set(0, 0.8, 4.2);
-    camera.lookAt(0, 0.4, 0);
+    camera.position.set(0, 0.5, 3.9);
+    camera.lookAt(0, 0.3, 0);
 
     // 3. Renderer Setup with PMREM Environment Generator
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -52,9 +51,9 @@ export default function IndustrialRobot3D() {
     rimLight.position.set(0, 8, -8);
     scene.add(rimLight);
 
-    // 6. Load GLB Model (Static & Solid Intact Geometry)
+    // 6. Load GLB Model (Elevated higher up to overlap text)
     const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, -0.15, 0);
+    modelGroup.position.set(0, 0.1, 0); // Elevated to overlap the headline text
     scene.add(modelGroup);
 
     const loader = new GLTFLoader();
@@ -71,7 +70,7 @@ export default function IndustrialRobot3D() {
         loadedModel.position.sub(center);
 
         const maxDim = Math.max(size.x, size.y, size.z);
-        const scale = 3.8 / maxDim;
+        const scale = 4.2 / maxDim; // Larger scale to match reference image
         loadedModel.scale.set(scale, scale, scale);
 
         // Preserve intact materials & prevent pitch black silhouetting
@@ -105,7 +104,7 @@ export default function IndustrialRobot3D() {
       }
     );
 
-    // 7. Mouse & Touch Cursor Tracking (Gentle Yaw Tilt Only)
+    // 7. Mouse & Touch Cursor Tracking (Gentle Yaw & Pitch Tilt)
     const mouse = new THREE.Vector2(0, 0);
     const targetMouse = new THREE.Vector2(0, 0);
 
@@ -125,7 +124,7 @@ export default function IndustrialRobot3D() {
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('touchmove', handleTouchMove, { passive: true });
 
-    // 8. Render Loop (Solid 3D model with subtle mouse tilt)
+    // 8. Render Loop (Model positioned elevated in center stage)
     let animId: number;
 
     const animate = () => {
@@ -133,8 +132,8 @@ export default function IndustrialRobot3D() {
 
       mouse.lerp(targetMouse, 0.08);
 
-      // Model remains completely static & intact in place
-      modelGroup.position.set(0, -0.15, 0);
+      // Model remains stationary at elevated position y = 0.1
+      modelGroup.position.set(0, 0.1, 0);
       modelGroup.rotation.y = mouse.x * 0.3;
       modelGroup.rotation.x = -mouse.y * 0.12;
 

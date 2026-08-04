@@ -88,10 +88,10 @@ export default function ManufacturingPage() {
   return (
     <div style={{ backgroundColor: '#ffffff', color: '#111111', minHeight: '100vh', overflowX: 'hidden' }}>
       
-      {/* 1. Hero Section matching exact user reference layout */}
+      {/* 1. Hero Section with 3D Robot Arm overlapping Text */}
       <section style={{
         position: 'relative',
-        padding: '7rem 5% 4rem',
+        padding: '6rem 5% 4rem',
         backgroundColor: '#ffffff',
         borderBottom: '1px solid #e2e8f0',
         minHeight: '85vh',
@@ -102,10 +102,18 @@ export default function ManufacturingPage() {
         overflow: 'hidden',
       }}>
         
-        {/* Centered Large Title */}
-        <div style={{ textAlign: 'center', zIndex: 10, maxWidth: '900px', margin: '0 auto 1rem' }}>
+        {/* Centered Headline positioned BEHIND the 3D Canvas (zIndex: 1) */}
+        <div style={{
+          textAlign: 'center',
+          zIndex: 1,
+          position: 'relative',
+          maxWidth: '950px',
+          margin: '0 auto',
+          paddingTop: '1rem',
+          pointerEvents: 'none',
+        }}>
           <h1 style={{
-            fontSize: 'clamp(3rem, 6.5vw, 5.5rem)',
+            fontSize: 'clamp(3.5rem, 7.5vw, 6rem)',
             fontWeight: 400,
             lineHeight: 1.15,
             letterSpacing: '-0.03em',
@@ -117,20 +125,22 @@ export default function ManufacturingPage() {
           </h1>
         </div>
 
-        {/* 3D Robot Arm & Flanking Architectural Grid Badges Container */}
+        {/* 3D Robot Arm & Flanking Badges (zIndex: 10 - Overlapping Text) */}
         <div style={{
           position: 'relative',
           width: '100%',
           maxWidth: '1200px',
-          height: '480px',
-          margin: '0 auto',
+          height: '560px',
+          marginTop: '-12rem', // Pulls the 3D robot canvas UP so it overlaps over the headline text
+          margin: '-12rem auto 0',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          zIndex: 10,
         }}>
 
           {/* FLOATING METRIC BADGE 1: Top Left */}
-          <div style={{ position: 'absolute', top: '15%', left: '6%', zIndex: 20 }}>
+          <div style={{ position: 'absolute', top: '25%', left: '6%', zIndex: 20 }}>
             <ArchitecturalGridBadge metric="±0.005mm" label="Tolerance" />
           </div>
 
@@ -140,7 +150,7 @@ export default function ManufacturingPage() {
           </div>
 
           {/* FLOATING METRIC BADGE 3: Top Right */}
-          <div style={{ position: 'absolute', top: '15%', right: '6%', zIndex: 20 }}>
+          <div style={{ position: 'absolute', top: '25%', right: '6%', zIndex: 20 }}>
             <ArchitecturalGridBadge metric="99.98%" label="Factory Uptime" />
           </div>
 
@@ -149,15 +159,15 @@ export default function ManufacturingPage() {
             <ArchitecturalGridBadge metric="±0.005mm" label="Tolerance" />
           </div>
 
-          {/* CENTER 3D ROBOT CANVAS */}
-          <div style={{ width: '100%', height: '100%', position: 'relative', zIndex: 10 }}>
+          {/* CENTER 3D ROBOT CANVAS OVERLAY */}
+          <div style={{ width: '100%', height: '100%', position: 'relative', zIndex: 15 }}>
             <IndustrialRobot3D />
           </div>
 
         </div>
 
         {/* Action CTAs */}
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.2rem', marginTop: '3.5rem', zIndex: 20 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1.2rem', marginTop: '1rem', zIndex: 20 }}>
           <Link 
             href="/contact"
             style={{
