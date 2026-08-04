@@ -22,8 +22,8 @@ export function AirFreightSection() {
         .air-freight-grid {
           width: 100%;
           display: grid;
-          grid-template-columns: 1fr 1.1fr;
-          gap: 3rem;
+          grid-template-columns: 0.95fr 1.35fr;
+          gap: 2rem;
           align-items: center;
         }
 
@@ -39,22 +39,22 @@ export function AirFreightSection() {
         .air-freight-right-img-wrapper {
           position: relative;
           width: 100%;
-          height: clamp(500px, 62vh, 700px);
-          overflow: hidden;
+          height: clamp(520px, 70vh, 750px);
+          overflow: visible;
           display: flex;
           align-items: center;
           justify-content: flex-end;
-          background-color: #ffffff;
+          background-color: transparent;
         }
 
         .air-freight-right-img-wrapper img {
-          width: 155%;
+          width: 195%;
           max-width: none;
           height: auto;
-          max-height: 100%;
+          max-height: clamp(520px, 70vh, 750px);
           object-fit: contain;
           object-position: right center;
-          margin-right: -22%;
+          margin-right: -32%;
           display: block;
           mix-blend-mode: multiply;
           filter: contrast(1.06) brightness(1.01);
@@ -72,18 +72,18 @@ export function AirFreightSection() {
             padding-right: 1.5rem;
           }
           .air-freight-right-img-wrapper {
-            height: 360px;
+            height: 380px;
             justify-content: flex-end;
             align-items: center;
           }
           .air-freight-right-img-wrapper img {
-            width: 150%;
+            width: 180%;
             height: auto;
-            max-height: 100%;
+            max-height: 380px;
             max-width: none;
             object-fit: contain;
             object-position: right center;
-            margin-right: -15%;
+            margin-right: -25%;
           }
         }
       ` }} />
