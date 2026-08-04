@@ -672,7 +672,7 @@ export default function ManufacturingPage() {
 
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/assets/factory-view.png"
+            src="/assets/factory-vew2.png"
             alt="Zawr Autonomous Smart Factory Floor Monochrome Landscape View"
             style={{
               width: '100%',
