@@ -6,13 +6,28 @@ import { useEffect } from 'react';
  * ServiceWorkerRegistrar
  * 
  * Registers /sw.js silently after the page loads in production.
- * Disabled in development to avoid caching stale HMR assets & Turbopack chunks.
+ * In development, actively unregisters any previous service workers and clears caches to ensure 100% fresh HMR updates.
  */
 export default function ServiceWorkerRegistrar() {
   useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (process.env.NODE_ENV === 'development') return;
-    if (!('serviceWorker' in navigator)) return;
+    if (typeof window === 'undefined' || !('serviceWorker' in navigator)) return;
+
+    if (process.env.NODE_ENV === 'development') {
+      // Actively purge service workers and cache storage in development
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        for (const registration of registrations) {
+          registration.unregister();
+        }
+      });
+      if ('caches' in window) {
+        caches.keys().then((names) => {
+          for (const name of names) {
+            caches.delete(name);
+          }
+        });
+      }
+      return;
+    }
 
     const register = async () => {
       try {

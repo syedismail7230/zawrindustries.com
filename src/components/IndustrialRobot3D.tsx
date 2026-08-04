@@ -58,7 +58,7 @@ export default function IndustrialRobot3D() {
 
     const loader = new GLTFLoader();
     loader.load(
-      '/assets/robotic+arm+3d+model.glb',
+      '/assets/robotic+arm+3d+model.glb?v=3',
       (gltf) => {
         const loadedModel = gltf.scene;
 
