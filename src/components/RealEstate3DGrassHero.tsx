@@ -117,183 +117,18 @@ export default function RealEstate3DGrassHero() {
     terrain.receiveShadow = true;
     scene.add(terrain);
 
-    // 7. AAA Micro-Leaf Branch Texture Generator (100+ Tiny Leaves per Sprig)
-    const createMicroLeafTexture = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = 512;
-      canvas.height = 512;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return null;
+    // 7. Pure 3D Instanced Grass Meadow (4x Density - 1.8 Million Blades)
+    const BLADE_COUNT = 1800000;
 
-      ctx.clearRect(0, 0, 512, 512);
-
-      const leafPalette = ['#2e7d32', '#388e3c', '#4caf50', '#76ff03', '#1b5e20', '#aeea00', '#66bb6a'];
-
-      // Draw Central Wooden Twig Stem
-      ctx.beginPath();
-      ctx.moveTo(256, 490);
-      ctx.quadraticCurveTo(260, 256, 256, 20);
-      ctx.strokeStyle = '#3e2723';
-      ctx.lineWidth = 14;
-      ctx.stroke();
-
-      // Side stem branches
-      for (let b = 0; b < 12; b++) {
-        const by = 80 + b * 34;
-        const dir = b % 2 === 0 ? 1 : -1;
-        ctx.beginPath();
-        ctx.moveTo(256, by);
-        ctx.quadraticCurveTo(256 + dir * 60, by - 20, 256 + dir * 140, by - 50);
-        ctx.strokeStyle = '#4e342e';
-        ctx.lineWidth = 6;
-        ctx.stroke();
-      }
-
-      // Draw 140 Tiny Micro Leaves along stems
-      for (let i = 0; i < 140; i++) {
-        const lx = 256 + (Math.random() - 0.5) * 360;
-        const ly = 50 + Math.random() * 420;
-        const rx = 3.5 + Math.random() * 5.5; // Drastically smaller micro leaves
-        const ry = 8.0 + Math.random() * 12.0;
-        const rot = (Math.random() - 0.5) * Math.PI;
-
-        ctx.save();
-        ctx.translate(lx, ly);
-        ctx.rotate(rot);
-
-        ctx.beginPath();
-        ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
-        ctx.fillStyle = leafPalette[i % leafPalette.length];
-        ctx.fill();
-
-        // Central leaf vein
-        ctx.beginPath();
-        ctx.moveTo(0, -ry * 0.85);
-        ctx.lineTo(0, ry * 0.85);
-        ctx.strokeStyle = 'rgba(255,255,255,0.45)';
-        ctx.lineWidth = 0.8;
-        ctx.stroke();
-
-        ctx.restore();
-      }
-
-      const tex = new THREE.CanvasTexture(canvas);
-      tex.colorSpace = THREE.SRGBColorSpace;
-      return tex;
-    };
-
-    const microLeafTex = createMicroLeafTexture();
-
-    const trunkMat = new THREE.MeshStandardMaterial({
-      color: 0x3d2719,
-      roughness: 0.90,
-      metalness: 0.04,
-    });
-
-    const microLeafMat = new THREE.MeshStandardMaterial({
-      map: microLeafTex,
-      transparent: true,
-      alphaTest: 0.22,
-      side: THREE.DoubleSide,
-      roughness: 0.45,
-      metalness: 0.03,
-    });
-
-    // Micro-Leaf Card Geometry (Drastically Reduced Size: 0.55 x 0.55)
-    const microBranchGeo = new THREE.PlaneGeometry(0.55, 0.55);
-
-    const createHyperRealisticTree = (tx: number, tz: number, scale = 1) => {
-      const tree = new THREE.Group();
-      const ty = getTerrainHeight(tx, tz);
-      tree.position.set(tx, ty, tz);
-      tree.scale.setScalar(scale);
-
-      // Smooth Tapered Wood Trunk
-      const trunkGeo = new THREE.CylinderGeometry(0.18, 0.52, 4.8, 12);
-      trunkGeo.translate(0, 2.4, 0);
-      const trunk = new THREE.Mesh(trunkGeo, trunkMat);
-      trunk.castShadow = true;
-      tree.add(trunk);
-
-      // 5 Spreading Branch Arms
-      const branchAngles = [-0.65, 0.55, -0.35, 0.45, 0];
-      const branchHeights = [3.2, 3.5, 4.0, 4.2, 4.6];
-      const branchDirs = [
-        { x: -0.8, z: 0.3 },
-        { x: 0.7, z: -0.4 },
-        { x: -0.4, z: -0.7 },
-        { x: 0.5, z: 0.6 },
-        { x: 0, z: 0 },
-      ];
-
-      branchAngles.forEach((ang, idx) => {
-        const bGeo = new THREE.CylinderGeometry(0.06, 0.16, 2.4, 8);
-        bGeo.rotateZ(ang);
-        bGeo.translate(branchDirs[idx].x, branchHeights[idx], branchDirs[idx].z);
-        const bMesh = new THREE.Mesh(bGeo, trunkMat);
-        bMesh.castShadow = true;
-        tree.add(bMesh);
-      });
-
-      // 120 Micro-Leaf Sprig Cards forming dense, soft, natural tree canopy
-      const leafCluster = new THREE.Group();
-      leafCluster.position.set(0, 4.5, 0);
-
-      for (let i = 0; i < 120; i++) {
-        const sprig = new THREE.Mesh(microBranchGeo, microLeafMat);
-        
-        // Random spherical distribution
-        const u = Math.random();
-        const v = Math.random();
-        const theta = u * 2.0 * Math.PI;
-        const phi = Math.acos(2.0 * v - 1.0);
-        const r = 0.4 + Math.pow(Math.random(), 0.7) * 2.1;
-
-        const rx = r * Math.sin(phi) * Math.cos(theta);
-        const ry = (r * Math.cos(phi)) * 0.85 + 0.3;
-        const rz = r * Math.sin(phi) * Math.sin(theta);
-
-        sprig.position.set(rx, ry, rz);
-        sprig.rotation.set(
-          Math.random() * Math.PI,
-          Math.random() * Math.PI,
-          Math.random() * Math.PI
-        );
-        sprig.scale.setScalar(0.75 + Math.random() * 0.5);
-        sprig.castShadow = true;
-        sprig.receiveShadow = true;
-        leafCluster.add(sprig);
-      }
-      tree.add(leafCluster);
-
-      return tree;
-    };
-
-    // Scatter 52 Photorealistic Micro-Leaf Trees across hills
-    const treeGroup = new THREE.Group();
-    const treesList: THREE.Group[] = [];
-    for (let i = 0; i < 52; i++) {
-      const tx = (Math.random() - 0.5) * 140;
-      const tz = -10 - Math.random() * 65;
-      const scale = 0.95 + Math.random() * 1.15;
-      const tree = createHyperRealisticTree(tx, tz, scale);
-      treeGroup.add(tree);
-      treesList.push(tree);
-    }
-    scene.add(treeGroup);
-
-    // 8. Universal 3D Instanced Grass Meadow Covering 100% of Terrain (450,000 Blades)
-    const BLADE_COUNT = 450000;
-
-    const bladeWidth = 0.011;
-    const bladeHeight = 0.60;
+    const bladeWidth = 0.007;
+    const bladeHeight = 0.52;
     const bladeGeo = new THREE.PlaneGeometry(bladeWidth, bladeHeight, 1, 5);
     bladeGeo.translate(0, bladeHeight / 2, 0);
 
     const pos = bladeGeo.attributes.position;
     for (let i = 0; i < pos.count; i++) {
       const yRatio = pos.getY(i) / bladeHeight;
-      const zCurve = Math.pow(yRatio, 2) * 0.09;
+      const zCurve = Math.pow(yRatio, 2) * 0.08;
       const xTaper = 1 - Math.pow(yRatio, 1.5) * 0.75;
       pos.setZ(i, zCurve);
       pos.setX(i, pos.getX(i) * xTaper);
@@ -328,10 +163,10 @@ export default function RealEstate3DGrassHero() {
     const dummy = new THREE.Object3D();
     const bladeData: { x: number; y: number; z: number; rotY: number; scaleY: number; currentBendX: number; currentBendZ: number }[] = [];
 
-    // Distribute 450,000 grass blades across 100% of terrain (covers all hills & around all trees)
+    // Distribute 1,800,000 grass blades across 100% of terrain (pure rolling grass meadow)
     for (let i = 0; i < BLADE_COUNT; i++) {
-      const x = (Math.random() - 0.5) * 160;
-      const z = Math.random() * 102 - 82; // Spans from z = -82 (far horizon trees) to z = +20 (camera)
+      const x = (Math.random() - 0.5) * 180;
+      const z = Math.random() * 117 - 95; // Spans from z = -95 (far horizon) to z = +22 (camera)
       const y = getTerrainHeight(x, z);
 
       const rotY = Math.random() * Math.PI;
@@ -353,7 +188,6 @@ export default function RealEstate3DGrassHero() {
         currentBendX: 0,
         currentBendZ: 0,
       });
-    }
     grassMesh.instanceMatrix.needsUpdate = true;
     scene.add(grassMesh);
 
@@ -397,13 +231,6 @@ export default function RealEstate3DGrassHero() {
         camera.position.y += (2.6 + mouse.y * 1.1 - camera.position.y) * 0.03;
         camera.lookAt(0, 0.6, -8);
       }
-
-      // Gentle Organic Tree Sway in Wind
-      treesList.forEach((tree, idx) => {
-        const swayTime = time * 1.2 + idx * 0.5;
-        tree.rotation.z = Math.sin(swayTime) * 0.02;
-        tree.rotation.x = Math.cos(swayTime * 0.7) * 0.012;
-      });
 
       // Wind & Cursor Hover Physics on Grass
       const DISPLACEMENT_RADIUS = 4.8;
