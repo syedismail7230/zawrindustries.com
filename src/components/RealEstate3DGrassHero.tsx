@@ -97,15 +97,15 @@ export default function RealEstate3DGrassHero() {
     }
     bladeGeo.computeVertexNormals();
 
-    // Color attribute for gradient (Sunlit Lime Tip -> Deep Forest Emerald Base)
-    const baseColor = new THREE.Color('#143811');
-    const midColor = new THREE.Color('#4d7c0f');
-    const tipColor = new THREE.Color('#a3e635');
-    const sunlitColor = new THREE.Color('#d9f99d');
+    // Color attribute for gradient matching vibrant new background landscape photo
+    const baseColor = new THREE.Color('#1b4332');
+    const midColor = new THREE.Color('#2d6a4f');
+    const tipColor = new THREE.Color('#74c69d');
+    const sunlitColor = new THREE.Color('#b7e4c7');
 
     const colors = new Float32Array(BLADE_COUNT * 3);
     for (let i = 0; i < BLADE_COUNT; i++) {
-      const isSunlit = Math.random() > 0.75;
+      const isSunlit = Math.random() > 0.7;
       const c = isSunlit ? sunlitColor : tipColor;
       colors[i * 3] = c.r;
       colors[i * 3 + 1] = c.g;
@@ -114,9 +114,9 @@ export default function RealEstate3DGrassHero() {
     bladeGeo.setAttribute('color', new THREE.InstancedBufferAttribute(colors, 3));
 
     const bladeMat = new THREE.MeshStandardMaterial({
-      color: new THREE.Color('#65a30d'),
-      roughness: 0.45,
-      metalness: 0.08,
+      color: new THREE.Color('#40916c'),
+      roughness: 0.5,
+      metalness: 0.05,
       side: THREE.DoubleSide,
     });
 
