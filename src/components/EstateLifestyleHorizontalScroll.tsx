@@ -84,19 +84,6 @@ export default function EstateLifestyleHorizontalScroll() {
           backgroundColor: '#ffffff',
         }}
       >
-        {/* Section Header */}
-        <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 3rem', padding: '0 1rem' }}>
-          <h2 style={{
-            fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
-            fontWeight: 400,
-            color: '#0f172a',
-            letterSpacing: '-0.02em',
-            lineHeight: 1.25,
-          }}>
-            The Art of Living — Curated Estate Lifestyle
-          </h2>
-        </div>
-
         {/* Horizontal Track Wrapper */}
         <div style={{ width: '100%', overflow: 'hidden', padding: '1rem 0 3rem' }}>
           <div
