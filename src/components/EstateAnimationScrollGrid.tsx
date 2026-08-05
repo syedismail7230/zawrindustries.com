@@ -47,9 +47,11 @@ const row5HorizontalItems: EstateImageItem[] = [
 
 export default function EstateAnimationScrollGrid() {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [verticalShift, setVerticalShift] = useState(0);
+  const [scrollY, setScrollY] = useState(0);
   const [horizontalProgress, setHorizontalProgress] = useState(0);
   const [showLifestyle, setShowLifestyle] = useState(false);
+  const [isPinned, setIsPinned] = useState(false);
+  const [isUnpinnedBottom, setIsUnpinnedBottom] = useState(false);
 
   useEffect(() => {
     let rafId: number;
@@ -60,27 +62,34 @@ export default function EstateAnimationScrollGrid() {
       const windowHeight = window.innerHeight;
       const navOffset = 96;
 
+      // Section Pinning logic
       if (rect.top <= navOffset && rect.bottom > windowHeight) {
-        const scrolledIn = navOffset - rect.top;
+        setIsPinned(true);
+        setIsUnpinnedBottom(false);
+      } else if (rect.bottom <= windowHeight) {
+        setIsPinned(false);
+        setIsUnpinnedBottom(true);
+      } else {
+        setIsPinned(false);
+        setIsUnpinnedBottom(false);
+      }
+
+      if (rect.top < windowHeight && rect.bottom > 0) {
+        const scrolledIn = windowHeight - rect.top;
         const totalHeight = rect.height - windowHeight;
         const scrollRatio = Math.max(0, Math.min(1, scrolledIn / totalHeight));
 
-        // STEP 1: Vertical Grid Shift (0.0 to 0.45)
-        // Moves Rows 1-4 upwards until Row 5 locks centered in the viewport
-        const maxVertShift = 1750; // Total vertical distance to bring Row 5 up to screen center
-        const vertProgress = Math.min(1, scrollRatio / 0.45);
-        const currentVertShift = vertProgress * maxVertShift;
+        // STEP 1 & 2: Last row (Row 5) reaches end at 0.48 -> lifestyle images appear immediately
+        const isLifestyleVisible = scrollRatio >= 0.48;
 
-        // STEP 2: Last row reached end -> lifestyle images appear immediately at 0.45+
-        const isLifestyleVisible = scrollRatio >= 0.45;
-
-        // STEP 3 & 4: Small pause between 0.45 and 0.62, then horizontal scroll starts at 0.62+
-        const horizontalStartRatio = 0.62;
+        // STEP 3 & 4: Small pause between 0.48 and 0.65 (horizontal progress stays 0.0)
+        // Horizontal scroll glides left at 0.65+
+        const horizontalStartRatio = 0.65;
         const rawHorizProgress = Math.max(0, scrollRatio - horizontalStartRatio) / (1 - horizontalStartRatio);
         const clampedHorizontalProgress = Math.max(0, Math.min(1, rawHorizProgress));
 
         rafId = requestAnimationFrame(() => {
-          setVerticalShift(currentVertShift);
+          setScrollY(scrolledIn);
           setShowLifestyle(isLifestyleVisible);
           setHorizontalProgress(clampedHorizontalProgress);
         });
@@ -103,146 +112,147 @@ export default function EstateAnimationScrollGrid() {
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
+        padding: '2rem 0 10rem',
         width: '100%',
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        minHeight: '380vh',
+        minHeight: '400vh',
       }}
     >
-      {/* Viewport Locked Frame: Sticks below header navigation */}
+      {/* Invisible Spacer when heading is pinned */}
+      {isPinned && <div style={{ height: '180px' }} />}
+
+      {/* STICKY HEADING CONTAINER WITH CLEARANCE BELOW NAVBAR */}
       <div
         style={{
-          position: 'sticky',
-          top: '5.5rem',
-          height: 'calc(100vh - 5.5rem)',
+          position: isPinned ? 'fixed' : isUnpinnedBottom ? 'absolute' : 'relative',
+          top: isPinned ? 0 : 'auto',
+          bottom: isUnpinnedBottom ? '2rem' : 'auto',
+          left: 0,
+          right: 0,
           width: '100%',
-          overflow: 'hidden',
+          zIndex: 40, // Below site navbar zIndex 100
           backgroundColor: '#ffffff',
-          display: 'flex',
-          flexDirection: 'column',
+          paddingTop: isPinned ? '6.5rem' : '2rem', // Sits cleanly below site navbar
+          paddingBottom: '2.5rem',
+          textAlign: 'center',
+          boxShadow: isPinned ? '0 20px 30px rgba(255,255,255,1)' : 'none',
         }}
       >
-        {/* Sticky Section Heading */}
-        <div
-          style={{
-            width: '100%',
-            zIndex: 50,
-            backgroundColor: '#ffffff',
-            paddingTop: '1.5rem',
-            paddingBottom: '2rem',
-            textAlign: 'center',
-            borderBottom: '1px solid rgba(241, 245, 249, 0.8)',
-          }}
-        >
-          <div style={{ maxWidth: '850px', margin: '0 auto', padding: '0 1rem' }}>
-            <h2
-              style={{
-                fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
-                fontWeight: 400,
-                color: '#0f172a',
-                letterSpacing: '-0.02em',
-                lineHeight: 1.25,
-              }}
-            >
-              Curated Spaces Built Across Global Growth Corridors
-            </h2>
-          </div>
-
-          {/* Ultra-Dense Soft White Fade Bar Below Heading */}
-          <div
+        <div style={{ maxWidth: '850px', margin: '0 auto', padding: '0 1rem' }}>
+          <h2
             style={{
-              position: 'absolute',
-              bottom: '-4.5rem',
-              left: 0,
-              right: 0,
-              height: '5rem',
-              background:
-                'linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0.98) 40%, rgba(255,255,255,0.7) 70%, rgba(255,255,255,0) 100%)',
-              pointerEvents: 'none',
-            }}
-          />
-        </div>
-
-        {/* Scroll Content Viewport Window */}
-        <div
-          style={{
-            flex: 1,
-            maxWidth: '1600px',
-            width: '100%',
-            margin: '0 auto',
-            padding: '2rem 4vw 0',
-            position: 'relative',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Vertical Container that translates upward during Step 1 */}
-          <div
-            style={{
-              transform: `translate3d(0, -${verticalShift}px, 0)`,
-              willChange: 'transform',
-              transition: 'transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)',
+              fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+              fontWeight: 400,
+              color: '#0f172a',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.25,
             }}
           >
-            {/* Rows 1 to 4: Checkerboard Grid */}
-            <div className="checkerboard-grid">
-              {verticalRows.map((item) => (
+            Curated Spaces Built Across Global Growth Corridors
+          </h2>
+        </div>
+
+        {/* Dense White Fade Bar Extending Below Heading */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '-6.5rem',
+            left: 0,
+            right: 0,
+            height: '7rem',
+            background:
+              'linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0.98) 40%, rgba(255,255,255,0.7) 70%, rgba(255,255,255,0) 100%)',
+            pointerEvents: 'none',
+          }}
+        />
+      </div>
+
+      {/* MAIN CONTENT CONTAINER */}
+      <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 4vw' }}>
+        {/* PHASE 1: Vertical Grid (Rows 1 to 4) */}
+        <div
+          className="checkerboard-grid"
+          style={{
+            position: 'relative',
+            zIndex: 1,
+            marginTop: isPinned ? '0' : '2rem',
+          }}
+        >
+          {verticalRows.map((item) => {
+            const parallaxMult = (item.col || 1) % 2 === 0 ? 0.10 : 0.05;
+            const parallaxOffset = scrollY * parallaxMult;
+            const isRow1 = item.row === 1;
+            const row1TopPadding = isRow1 ? '7.5rem' : '0px';
+
+            return (
+              <div
+                key={item.id}
+                className={`checker-item col-${item.col} row-${item.row}`}
+                style={{
+                  gridColumn: item.col,
+                  gridRow: item.row,
+                  marginTop: row1TopPadding,
+                  transform: `translate3d(0, -${parallaxOffset}px, 0)`,
+                  willChange: 'transform',
+                  transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                }}
+              >
+                <EstateCard item={item} />
+              </div>
+            );
+          })}
+        </div>
+
+        {/* PHASE 2: Row 5 (Locked at viewport center when last row reaches end) */}
+        <div
+          style={{
+            position: isPinned && showLifestyle ? 'fixed' : 'relative',
+            top: isPinned && showLifestyle ? '17.5rem' : 'auto',
+            left: isPinned && showLifestyle ? '4vw' : 'auto',
+            right: isPinned && showLifestyle ? '4vw' : 'auto',
+            zIndex: 10,
+            width: '100%',
+            overflow: 'hidden',
+            padding: '1rem 0 4rem',
+            marginTop: isPinned && showLifestyle ? '0' : '8rem',
+          }}
+        >
+          {/* Row 5 Interleaved Horizontal Track */}
+          <div
+            style={{
+              display: 'flex',
+              gap: '2.5vw',
+              transform: `translate3d(-${horizontalProgress * 70}%, 0, 0)`,
+              willChange: 'transform, opacity',
+              transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+          >
+            {row5HorizontalItems.map((item) => {
+              const isLifestyleCard = item.id >= 14;
+              // STEP 1: Last row reaches end -> showLifestyle is true
+              // STEP 2: Lifestyle cards fade in IMMEDIATELY (opacity: 1)
+              // STEP 3: Small pause buffer while horizontalProgress is 0
+              // STEP 4: Horizontal scroll glides left when horizontalProgress > 0
+              const cardOpacity = isLifestyleCard ? (showLifestyle ? 1 : 0) : 1;
+
+              return (
                 <div
                   key={item.id}
-                  className={`checker-item col-${item.col} row-${item.row}`}
                   style={{
-                    gridColumn: item.col,
-                    gridRow: item.row,
+                    flexShrink: 0,
+                    width: 'calc((100vw - 8vw - 10vw) / 5)',
+                    opacity: cardOpacity,
+                    visibility: isLifestyleCard && !showLifestyle ? 'hidden' : 'visible',
+                    transition: isLifestyleCard ? 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease' : 'none',
+                    pointerEvents: isLifestyleCard && !showLifestyle ? 'none' : 'auto',
                   }}
                 >
                   <EstateCard item={item} />
                 </div>
-              ))}
-            </div>
-
-            {/* Row 5: Positioned below Row 4 with natural gap. Glides horizontally in Step 4 */}
-            <div
-              style={{
-                marginTop: '10rem',
-                width: '100%',
-                overflow: 'hidden',
-                paddingBottom: '4rem',
-              }}
-            >
-              <div
-                style={{
-                  display: 'flex',
-                  gap: '2.5vw',
-                  transform: `translate3d(-${horizontalProgress * 70}%, 0, 0)`,
-                  willChange: 'transform, opacity',
-                  transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
-                }}
-              >
-                {row5HorizontalItems.map((item) => {
-                  const isLifestyleCard = item.id >= 14;
-                  // STEP 2: Lifestyle cards fade in IMMEDIATELY when last row reaches end (showLifestyle is true)
-                  // STEP 3: Small pause buffer while showLifestyle is true and horizontalProgress is 0
-                  // STEP 4: Horizontal scroll glides left when horizontalProgress > 0
-                  const cardOpacity = isLifestyleCard ? (showLifestyle ? 1 : 0) : 1;
-
-                  return (
-                    <div
-                      key={item.id}
-                      style={{
-                        flexShrink: 0,
-                        width: 'calc((100vw - 8vw - 10vw) / 5)',
-                        opacity: cardOpacity,
-                        visibility: isLifestyleCard && !showLifestyle ? 'hidden' : 'visible',
-                        transition: isLifestyleCard ? 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease' : 'none',
-                        pointerEvents: isLifestyleCard && !showLifestyle ? 'none' : 'auto',
-                      }}
-                    >
-                      <EstateCard item={item} />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -263,6 +273,8 @@ export default function EstateAnimationScrollGrid() {
           .checker-item {
             grid-column: auto !important;
             grid-row: auto !important;
+            transform: none !important;
+            margin-top: 0 !important;
           }
         }
         @media (max-width: 640px) {
