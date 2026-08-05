@@ -7,8 +7,8 @@ interface EstateImageItem {
   src: string;
   tag: string;
   category: string;
-  col: number; // 1-indexed column position in 5-column checkerboard
-  row: number; // 1-indexed row position
+  col: number;
+  row: number;
 }
 
 const estateItems: EstateImageItem[] = [
@@ -17,7 +17,7 @@ const estateItems: EstateImageItem[] = [
   { id: 2, src: '/assets/estate-animation/image (2).png', tag: 'Pop Brutalism', category: 'Color Gradient Facades', col: 3, row: 1 },
   { id: 3, src: '/assets/estate-animation/image (3).png', tag: 'Organic Bio-Villa', category: 'Canopy Forest Sanctuary', col: 5, row: 1 },
 
-  // Row 2: Columns 2, 4 (staggered in between gaps)
+  // Row 2: Columns 2, 4
   { id: 4, src: '/assets/estate-animation/image (4).png', tag: 'Heritage Palace', category: 'Lakeside Waterfront Estate', col: 2, row: 2 },
   { id: 5, src: '/assets/estate-animation/image (5).png', tag: 'Cliffside Cave Estate', category: 'Rock Carved Living Suites', col: 4, row: 2 },
 
@@ -34,6 +34,7 @@ const estateItems: EstateImageItem[] = [
 export default function EstateAnimationScrollGrid() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [scrollY, setScrollY] = useState(0);
+  const [headerState, setHeaderState] = useState<'relative' | 'fixed' | 'bottom'>('relative');
 
   useEffect(() => {
     const handleScroll = () => {
@@ -43,6 +44,18 @@ export default function EstateAnimationScrollGrid() {
 
       if (rect.top < windowHeight && rect.bottom > 0) {
         setScrollY(windowHeight - rect.top);
+      }
+
+      // Pin header when top of section reaches 6.5rem (104px) from window top
+      const targetTop = 104;
+      const endOffset = 220;
+
+      if (rect.top <= targetTop && rect.bottom > targetTop + endOffset) {
+        setHeaderState('fixed');
+      } else if (rect.bottom <= targetTop + endOffset) {
+        setHeaderState('bottom');
+      } else {
+        setHeaderState('relative');
       }
     };
 
@@ -56,26 +69,34 @@ export default function EstateAnimationScrollGrid() {
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '0 4vw 26rem',
+        padding: '3rem 4vw 20rem',
         width: '100%',
         maxWidth: '1600px',
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
+        minHeight: '220vh',
       }}
     >
-      {/* Sticky Heading Container: Set top: 7rem (112px) to sit cleanly below the fixed navbar */}
+      {/* Invisible Spacer when header is fixed to prevent layout shift */}
+      {headerState === 'fixed' && <div style={{ height: '110px' }} />}
+
+      {/* Rock-Solid Fixed Heading Container */}
       <div style={{
-        position: 'sticky',
-        top: '7rem',
-        zIndex: 40,
+        position: headerState === 'fixed' ? 'fixed' : headerState === 'bottom' ? 'absolute' : 'relative',
+        top: headerState === 'fixed' ? '6.5rem' : 'auto',
+        bottom: headerState === 'bottom' ? '2rem' : 'auto',
+        left: 0,
+        right: 0,
+        width: '100%',
+        zIndex: 50,
         backgroundColor: '#ffffff',
         paddingTop: '1.5rem',
         paddingBottom: '1.5rem',
         textAlign: 'center',
-        width: '100%',
+        boxShadow: headerState === 'fixed' ? '0 10px 30px rgba(255,255,255,0.98)' : 'none',
       }}>
-        <div style={{ maxWidth: '850px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '850px', margin: '0 auto', padding: '0 1rem' }}>
           <h2 style={{
             fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
             fontWeight: 400,
@@ -94,7 +115,7 @@ export default function EstateAnimationScrollGrid() {
         style={{
           position: 'relative',
           zIndex: 1,
-          marginTop: '1.5rem',
+          marginTop: headerState === 'fixed' ? '0' : '2rem',
         }}
       >
         {estateItems.map((item) => {
