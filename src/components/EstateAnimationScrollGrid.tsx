@@ -25,15 +25,15 @@ const verticalRows: EstateImageItem[] = [
   { id: 10, src: '/assets/estate-animation/image (10).png', tag: 'Eco Mountain Sanctuary', category: 'Sustainable Alpine Haven', col: 4, row: 4 },
 ];
 
-// Row 5: Full-Width 5-Column Interleaved Row (Animation + Lifestyle Cards Interleaved)
+// Row 5: Full 5-Column Interleaved Row (Animation Cards visible initially; Lifestyle Cards fade in ONLY AFTER vertical scroll ends)
 const row5HorizontalItems: EstateImageItem[] = [
   // Col 1: Animation 11
   { id: 11, src: '/assets/estate-animation/image (11).png', tag: 'Sunlit Architectural Promenade', category: 'Outdoor Terrace Living' },
-  // Col 2: Lifestyle 1 (Interleaved between 11 & 12)
+  // Col 2: Lifestyle 1 (Hidden during vertical scroll, fades in at Col 2 after vertical scroll ends)
   { id: 14, src: '/assets/estate-lifestyle/image (1).png', tag: 'Private Cliffside Lounge', category: 'Panoramic Vista Suites' },
   // Col 3: Animation 12
   { id: 12, src: '/assets/estate-animation/image (12).png', tag: 'Infinity Pool & Horizon Deck', category: 'Aquatic Sanctuary' },
-  // Col 4: Lifestyle 2 (Interleaved between 12 & 13)
+  // Col 4: Lifestyle 2 (Hidden during vertical scroll, fades in at Col 4 after vertical scroll ends)
   { id: 15, src: '/assets/estate-lifestyle/image (2).png', tag: 'Lakeside Wellness Pavilion', category: 'Hydrotherapy & Spa' },
   // Col 5: Animation 13
   { id: 13, src: '/assets/estate-animation/image (13).png', tag: 'Biophilic Garden Atrium', category: 'Nature-Integrated Spaces' },
@@ -76,7 +76,7 @@ export default function EstateAnimationScrollGrid() {
         const scrolledIn = windowHeight - rect.top;
         const totalHeight = rect.height - windowHeight;
 
-        // Trigger horizontal glide after vertical scroll reaches Row 5
+        // Trigger horizontal glide strictly AFTER vertical scroll of Row 5 finishes settling (at 68%)
         const horizontalStartRatio = 0.68;
         const rawProgress = Math.max(0, scrolledIn / totalHeight - horizontalStartRatio) / (1 - horizontalStartRatio);
         const clampedHorizontalProgress = Math.max(0, Math.min(1, rawProgress));
@@ -109,7 +109,7 @@ export default function EstateAnimationScrollGrid() {
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        minHeight: '400vh',
+        minHeight: '420vh',
       }}
     >
       {/* Invisible Spacer when heading is pinned */}
@@ -197,7 +197,7 @@ export default function EstateAnimationScrollGrid() {
           })}
         </div>
 
-        {/* Row 5: Full 5-Column Interleaved Row (Spans full grid width across Columns 1 to 5) */}
+        {/* Row 5: Spans full width across 5 columns. Lifestyle cards fade in ONLY AFTER vertical scroll ends */}
         <div
           style={{
             marginTop: '8rem',
@@ -214,15 +214,35 @@ export default function EstateAnimationScrollGrid() {
               display: 'flex',
               gap: '2.5vw',
               transform: `translate3d(-${horizontalProgress * 70}%, 0, 0)`,
-              willChange: 'transform',
+              willChange: 'transform, opacity',
               transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
-            {row5HorizontalItems.map((item) => (
-              <div key={item.id} style={{ flexShrink: 0, width: 'calc((100vw - 8vw - 10vw) / 5)' }}>
-                <EstateCard item={item} />
-              </div>
-            ))}
+            {row5HorizontalItems.map((item) => {
+              const isLifestyleCard = item.id >= 14;
+              // Lifestyle cards stay 100% HIDDEN during vertical scroll, and ONLY FADE IN when vertical scroll finishes (horizontalProgress > 0)
+              const lifestyleOpacity = isLifestyleCard
+                ? horizontalProgress > 0.02
+                  ? Math.min(1, (horizontalProgress - 0.02) * 6)
+                  : 0
+                : 1;
+
+              return (
+                <div
+                  key={item.id}
+                  style={{
+                    flexShrink: 0,
+                    width: 'calc((100vw - 8vw - 10vw) / 5)',
+                    opacity: isLifestyleCard ? lifestyleOpacity : 1,
+                    visibility: isLifestyleCard && lifestyleOpacity === 0 ? 'hidden' : 'visible',
+                    transition: isLifestyleCard ? 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease' : 'none',
+                    pointerEvents: isLifestyleCard && lifestyleOpacity < 0.5 ? 'none' : 'auto',
+                  }}
+                >
+                  <EstateCard item={item} />
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
