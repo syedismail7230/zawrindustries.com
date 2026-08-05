@@ -121,14 +121,14 @@ export default function RealEstate3DGrassHero() {
     const BLADE_COUNT = 3600000;
 
     const bladeWidth = 0.014;
-    const bladeHeight = 0.54;
+    const bladeHeight = 0.78;
     const bladeGeo = new THREE.PlaneGeometry(bladeWidth, bladeHeight, 1, 5);
     bladeGeo.translate(0, bladeHeight / 2, 0);
 
     const pos = bladeGeo.attributes.position;
     for (let i = 0; i < pos.count; i++) {
       const yRatio = pos.getY(i) / bladeHeight;
-      const zCurve = Math.pow(yRatio, 2) * 0.08;
+      const zCurve = Math.pow(yRatio, 2) * 0.12;
       const xTaper = 1 - Math.pow(yRatio, 1.5) * 0.75;
       pos.setZ(i, zCurve);
       pos.setX(i, pos.getX(i) * xTaper);
