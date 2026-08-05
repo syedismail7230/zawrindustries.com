@@ -188,6 +188,7 @@ export default function RealEstate3DGrassHero() {
         currentBendX: 0,
         currentBendZ: 0,
       });
+    }
     grassMesh.instanceMatrix.needsUpdate = true;
     scene.add(grassMesh);
 
