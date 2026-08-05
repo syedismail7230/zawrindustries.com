@@ -107,7 +107,7 @@ export default function RealEstate3DGrassHero() {
     // 7. GPU-Accelerated 3D Grass Meadow (Silky Smooth 60 FPS, Zero CPU Lag)
     const BLADE_COUNT = 800000;
 
-    const bladeWidth = 0.014;
+    const bladeWidth = 0.024;
     const bladeHeight = 0.78;
     const bladeGeo = new THREE.PlaneGeometry(bladeWidth, bladeHeight, 1, 5);
     bladeGeo.translate(0, bladeHeight / 2, 0);
