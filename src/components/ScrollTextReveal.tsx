@@ -22,8 +22,10 @@ export default function ScrollTextReveal({
 
       // Start revealing when container top reaches 75% of viewport
       // Complete reveal when container reaches 35% of viewport
-      const start = windowHeight * 0.85;
-      const end = windowHeight * 0.25;
+      // Start revealing when container top reaches 90% of viewport
+      // Complete 100% reveal when container reaches 45% of viewport
+      const start = windowHeight * 0.90;
+      const end = windowHeight * 0.45;
 
       const progress = (start - rect.top) / (start - end);
       const clamped = Math.max(0, Math.min(1, progress));
@@ -46,7 +48,7 @@ export default function ScrollTextReveal({
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        minHeight: '45vh',
+        minHeight: '40vh',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}
     >
@@ -59,13 +61,13 @@ export default function ScrollTextReveal({
           wordWrap: 'break-word',
         }}>
           {words.map((word, index) => {
-            const wordProgress = index / words.length;
+            const wordProgress = index / Math.max(1, words.length - 1);
             const isRevealed = scrollProgress >= wordProgress;
 
-            // Compute subtle per-word transition intensity
+            // Compute crisp transition to 100% black opacity and 0px blur
             const diff = scrollProgress - wordProgress;
-            const opacity = isRevealed ? Math.min(1, 0.25 + diff * 6) : 0.15;
-            const blurAmount = isRevealed ? Math.max(0, 4 - diff * 24) : 4;
+            const opacity = isRevealed ? Math.min(1, 0.25 + diff * 10) : 0.15;
+            const blurAmount = isRevealed ? Math.max(0, 4 - diff * 32) : 4;
 
             return (
               <span
