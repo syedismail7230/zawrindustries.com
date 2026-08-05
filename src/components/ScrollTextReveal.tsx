@@ -41,21 +41,21 @@ export default function ScrollTextReveal({
       ref={containerRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '8rem 6% 9rem',
+        padding: '5rem 6% 6rem',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        minHeight: '60vh',
+        minHeight: '45vh',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}
     >
-      <div style={{ maxWidth: '1100px', margin: '0 auto' }}>
+      <div style={{ maxWidth: '900px', margin: '0 auto' }}>
         <p style={{
-          fontSize: 'clamp(2.1rem, 4.4vw, 3.8rem)',
-          fontWeight: 500,
-          lineHeight: 1.35,
-          letterSpacing: '-0.025em',
+          fontSize: 'clamp(1.35rem, 2.5vw, 2.1rem)',
+          fontWeight: 400,
+          lineHeight: 1.5,
+          letterSpacing: '-0.015em',
           wordWrap: 'break-word',
         }}>
           {words.map((word, index) => {
