@@ -56,7 +56,7 @@ export default function EstateAnimationScrollGrid() {
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '0 4vw 11rem',
+        padding: '0 4vw 26rem',
         width: '100%',
         maxWidth: '1600px',
         margin: '0 auto',
@@ -64,18 +64,18 @@ export default function EstateAnimationScrollGrid() {
         position: 'relative',
       }}
     >
-      {/* Sticky Header Container: Locks cleanly below the navbar (top: 5.5rem) throughout the grid scroll */}
+      {/* Sticky Heading Container: Heading "Curated Spaces Built Across Global Growth Corridors" pins at top: 5.5rem throughout the entire image grid scroll */}
       <div style={{
         position: 'sticky',
         top: '5.5rem',
-        zIndex: 40,
+        zIndex: 50,
         backgroundColor: '#ffffff',
         paddingTop: '2.5rem',
         paddingBottom: '2.5rem',
         textAlign: 'center',
         width: '100%',
       }}>
-        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '850px', margin: '0 auto' }}>
           <h2 style={{
             fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
             fontWeight: 400,
