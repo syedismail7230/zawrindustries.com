@@ -11,7 +11,7 @@ interface EstateImageItem {
   row?: number;
 }
 
-// Vertical Rows 1 to 4 (Items 1 - 10)
+// Vertical Checkerboard Grid Items (Rows 1 to 4)
 const verticalRows: EstateImageItem[] = [
   { id: 1, src: '/assets/estate-animation/image (1).png', tag: 'Parametric Pavilion', category: 'Fluid Future Architecture', col: 1, row: 1 },
   { id: 2, src: '/assets/estate-animation/image (2).png', tag: 'Pop Brutalism', category: 'Color Gradient Facades', col: 3, row: 1 },
@@ -32,7 +32,7 @@ const row5HorizontalItems: EstateImageItem[] = [
   { id: 12, src: '/assets/estate-animation/image (12).png', tag: 'Infinity Pool & Horizon Deck', category: 'Aquatic Sanctuary' },
   { id: 13, src: '/assets/estate-animation/image (13).png', tag: 'Biophilic Garden Atrium', category: 'Nature-Integrated Spaces' },
 
-  // 6 Lifestyle Cards that appear in Row 5 during horizontal scroll
+  // 6 Lifestyle Cards that appear in Row 5 after vertical scroll animation finishes
   { id: 14, src: '/assets/estate-lifestyle/image (1).png', tag: 'Private Cliffside Lounge', category: 'Panoramic Vista Suites' },
   { id: 15, src: '/assets/estate-lifestyle/image (2).png', tag: 'Lakeside Wellness Pavilion', category: 'Hydrotherapy & Spa' },
   { id: 16, src: '/assets/estate-lifestyle/image (3).png', tag: 'Zen Courtyard Gardens', category: 'Botanical Reflection Hub' },
@@ -57,10 +57,10 @@ export default function EstateAnimationScrollGrid() {
       const windowHeight = window.innerHeight;
       const navOffset = 96;
 
-      if (rect.top <= navOffset && rect.bottom > navOffset + 300) {
+      if (rect.top <= navOffset && rect.bottom > navOffset + 350) {
         setIsPinned(true);
         setIsUnpinnedBottom(false);
-      } else if (rect.bottom <= navOffset + 300) {
+      } else if (rect.bottom <= navOffset + 350) {
         setIsPinned(false);
         setIsUnpinnedBottom(true);
       } else {
@@ -72,8 +72,8 @@ export default function EstateAnimationScrollGrid() {
         const scrolledIn = windowHeight - rect.top;
         const totalHeight = rect.height - windowHeight;
 
-        // Progress threshold for horizontal scroll of Row 5
-        const horizontalStartRatio = 0.52;
+        // Progress threshold: horizontal scroll triggers ONLY AFTER Row 5 vertical scroll finishes settling (at 68%)
+        const horizontalStartRatio = 0.68;
         const rawProgress = Math.max(0, scrolledIn / totalHeight - horizontalStartRatio) / (1 - horizontalStartRatio);
         const clampedHorizontalProgress = Math.max(0, Math.min(1, rawProgress));
 
@@ -100,12 +100,12 @@ export default function EstateAnimationScrollGrid() {
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '2rem 0 10rem',
+        padding: '2rem 0 12rem',
         width: '100%',
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        minHeight: '360vh',
+        minHeight: '400vh', // Extended scroll space so horizontal glide triggers after vertical scroll completes
       }}
     >
       {/* Invisible Spacer when heading is pinned */}
@@ -193,7 +193,7 @@ export default function EstateAnimationScrollGrid() {
           })}
         </div>
 
-        {/* Row 5: The Last Row of the Grid that horizontally glides Lifestyle Cards */}
+        {/* Row 5: The Last Row of the Grid. Starts horizontal scroll ONLY AFTER vertical scroll animation finishes */}
         <div
           style={{
             marginTop: '8rem',
