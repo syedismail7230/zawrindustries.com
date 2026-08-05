@@ -52,16 +52,16 @@ export default function EstateAnimationScrollGrid() {
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '5rem 6% 9rem',
-        maxWidth: '1050px',
+        padding: '5rem 4% 8rem',
+        maxWidth: '1320px',
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}
     >
       {/* Header Section */}
-      <div style={{ textAlign: 'center', maxWidth: '650px', margin: '0 auto 5rem' }}>
+      <div style={{ textAlign: 'center', maxWidth: '750px', margin: '0 auto 4.5rem' }}>
         <div style={{
-          fontSize: '0.78rem',
+          fontSize: '0.8rem',
           fontWeight: 700,
           textTransform: 'uppercase',
           letterSpacing: '0.14em',
@@ -71,7 +71,7 @@ export default function EstateAnimationScrollGrid() {
           Architectural Portfolio & PropTech Visions
         </div>
         <h2 style={{
-          fontSize: 'clamp(1.8rem, 3.2vw, 2.6rem)',
+          fontSize: 'clamp(2rem, 3.8vw, 3rem)',
           fontWeight: 800,
           color: '#0f172a',
           letterSpacing: '-0.025em',
@@ -81,19 +81,18 @@ export default function EstateAnimationScrollGrid() {
         </h2>
       </div>
 
-      {/* Compact Staggered 3-Column Grid with Generous Gaps */}
+      {/* Balanced Staggered 3-Column Grid */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
-        gap: '6rem 4.5rem',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: '4.5rem 3rem',
         alignItems: 'start',
-        justifyContent: 'center',
       }}>
         {/* Column 1 (Speed Multiplier 0.08) */}
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '5.5rem',
+          gap: '4rem',
           transform: `translateY(-${scrollY * 0.08}px)`,
           transition: 'transform 0.1s cubic-bezier(0, 0, 0.2, 1)',
         }}>
@@ -106,8 +105,8 @@ export default function EstateAnimationScrollGrid() {
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '5.5rem',
-          marginTop: '5rem',
+          gap: '4rem',
+          marginTop: '4rem',
           transform: `translateY(-${scrollY * 0.14}px)`,
           transition: 'transform 0.1s cubic-bezier(0, 0, 0.2, 1)',
         }}>
@@ -120,8 +119,8 @@ export default function EstateAnimationScrollGrid() {
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '5.5rem',
-          marginTop: '9rem',
+          gap: '4rem',
+          marginTop: '8rem',
           transform: `translateY(-${scrollY * 0.06}px)`,
           transition: 'transform 0.1s cubic-bezier(0, 0, 0.2, 1)',
         }}>
@@ -144,20 +143,18 @@ function EstateCard({ item }: { item: EstateImageItem }) {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '0.75rem',
+        gap: '0.85rem',
         cursor: 'pointer',
         width: '100%',
-        maxWidth: '260px',
-        margin: '0 auto',
       }}
     >
       {/* Image Container with Smooth Scale Effect */}
       <div style={{
         position: 'relative',
         width: '100%',
-        borderRadius: '16px',
+        borderRadius: '18px',
         overflow: 'hidden',
-        boxShadow: isHovered ? '0 16px 36px rgba(0,0,0,0.12)' : '0 6px 18px rgba(0,0,0,0.04)',
+        boxShadow: isHovered ? '0 20px 40px rgba(0,0,0,0.12)' : '0 8px 22px rgba(0,0,0,0.05)',
         backgroundColor: '#f1f5f9',
         aspectRatio: '3.2 / 4',
         transition: 'box-shadow 0.35s ease, transform 0.35s ease',
@@ -177,10 +174,10 @@ function EstateCard({ item }: { item: EstateImageItem }) {
         />
       </div>
 
-      {/* Clean Tag & Label Block (Matching Mockup Precisely) */}
-      <div style={{ paddingLeft: '0.15rem' }}>
+      {/* Clean Tag & Label Block */}
+      <div style={{ paddingLeft: '0.2rem' }}>
         <div style={{
-          fontSize: '0.92rem',
+          fontSize: '0.95rem',
           fontWeight: 600,
           color: '#0f172a',
           letterSpacing: '-0.01em',
@@ -188,10 +185,10 @@ function EstateCard({ item }: { item: EstateImageItem }) {
           {item.tag}
         </div>
         <div style={{
-          fontSize: '0.8rem',
+          fontSize: '0.82rem',
           color: '#64748b',
           fontWeight: 400,
-          marginTop: '0.1rem',
+          marginTop: '0.15rem',
         }}>
           {item.category}
         </div>
