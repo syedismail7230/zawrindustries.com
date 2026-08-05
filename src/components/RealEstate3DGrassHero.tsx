@@ -97,7 +97,7 @@ export default function RealEstate3DGrassHero() {
     terrainGeo.computeVertexNormals();
 
     const terrainMat = new THREE.MeshStandardMaterial({
-      color: new THREE.Color('#43a047'),
+      color: new THREE.Color('#2b5329'),
       roughness: 0.85,
       metalness: 0.04,
     });
@@ -122,9 +122,9 @@ export default function RealEstate3DGrassHero() {
     }
     bladeGeo.computeVertexNormals();
 
-    const tipColor = new THREE.Color('#9be526');
-    const sunlitColor = new THREE.Color('#d4fc79');
-    const baseGreen = new THREE.Color('#388e3c');
+    const tipColor = new THREE.Color('#66bb6a');
+    const sunlitColor = new THREE.Color('#81c784');
+    const baseGreen = new THREE.Color('#1b5e20');
 
     const colors = new Float32Array(BLADE_COUNT * 3);
     for (let i = 0; i < BLADE_COUNT; i++) {
