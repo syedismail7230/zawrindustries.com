@@ -12,7 +12,7 @@ interface EstateImageItem {
 }
 
 const estateItems: EstateImageItem[] = [
-  // Row 1: Columns 1, 3, 5 (First 3 Images - will have top padding)
+  // Row 1: Columns 1, 3, 5 (First 3 Images with spacious top padding)
   { id: 1, src: '/assets/estate-animation/image (1).png', tag: 'Parametric Pavilion', category: 'Fluid Future Architecture', col: 1, row: 1 },
   { id: 2, src: '/assets/estate-animation/image (2).png', tag: 'Pop Brutalism', category: 'Color Gradient Facades', col: 3, row: 1 },
   { id: 3, src: '/assets/estate-animation/image (3).png', tag: 'Organic Bio-Villa', category: 'Canopy Forest Sanctuary', col: 5, row: 1 },
@@ -34,34 +34,29 @@ const estateItems: EstateImageItem[] = [
 export default function EstateAnimationScrollGrid() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [scrollY, setScrollY] = useState(0);
-  const [headerState, setHeaderState] = useState<'relative' | 'fixed' | 'bottom'>('relative');
 
   useEffect(() => {
+    let rafId: number;
+
     const handleScroll = () => {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
       if (rect.top < windowHeight && rect.bottom > 0) {
-        setScrollY(windowHeight - rect.top);
-      }
-
-      // Pin header when top of section reaches 6rem (96px) from window top
-      const targetTop = 96;
-      const endOffset = 260;
-
-      if (rect.top <= targetTop && rect.bottom > targetTop + endOffset) {
-        setHeaderState('fixed');
-      } else if (rect.bottom <= targetTop + endOffset) {
-        setHeaderState('bottom');
-      } else {
-        setHeaderState('relative');
+        rafId = requestAnimationFrame(() => {
+          setScrollY(windowHeight - rect.top);
+        });
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
   }, []);
 
   return (
@@ -69,55 +64,55 @@ export default function EstateAnimationScrollGrid() {
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '3rem 4vw 20rem',
+        padding: '2rem 4vw 16rem',
         width: '100%',
         maxWidth: '1600px',
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        minHeight: '220vh',
       }}
     >
-      {/* Invisible Spacer when header is fixed to prevent layout shift */}
-      {headerState === 'fixed' && <div style={{ height: '180px' }} />}
-
-      {/* Solid White Fixed Header Container with Dense Bottom Fade */}
-      <div style={{
-        position: headerState === 'fixed' ? 'fixed' : headerState === 'bottom' ? 'absolute' : 'relative',
-        top: headerState === 'fixed' ? 0 : 'auto',
-        bottom: headerState === 'bottom' ? '2rem' : 'auto',
-        left: 0,
-        right: 0,
-        width: '100%',
-        zIndex: 50,
-        backgroundColor: '#ffffff',
-        paddingTop: headerState === 'fixed' ? '5.8rem' : '1.5rem',
-        paddingBottom: '2.5rem',
-        textAlign: 'center',
-        boxShadow: headerState === 'fixed' ? '0 25px 45px rgba(255,255,255,1)' : 'none',
-      }}>
+      {/* 100% Silk-Smooth GPU Compositor Sticky Heading Container */}
+      <div
+        style={{
+          position: 'sticky',
+          top: '5.8rem',
+          zIndex: 50,
+          backgroundColor: '#ffffff',
+          paddingTop: '2rem',
+          paddingBottom: '2.5rem',
+          textAlign: 'center',
+          width: '100%',
+          willChange: 'transform',
+        }}
+      >
         <div style={{ maxWidth: '850px', margin: '0 auto', padding: '0 1rem' }}>
-          <h2 style={{
-            fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
-            fontWeight: 400,
-            color: '#0f172a',
-            letterSpacing: '-0.02em',
-            lineHeight: 1.25,
-          }}>
+          <h2
+            style={{
+              fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+              fontWeight: 400,
+              color: '#0f172a',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.25,
+            }}
+          >
             Curated Spaces Built Across Global Growth Corridors
           </h2>
         </div>
 
-        {/* Dense Soft White Fade Bar Extending Below Heading */}
-        <div style={{
-          position: 'absolute',
-          bottom: '-6rem',
-          left: 0,
-          right: 0,
-          height: '6.5rem',
-          background: 'linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0.96) 35%, rgba(255,255,255,0.7) 65%, rgba(255,255,255,0) 100%)',
-          pointerEvents: 'none',
-        }} />
+        {/* Ultra-Dense Soft White Fade Bar Extending Below Heading */}
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '-6rem',
+            left: 0,
+            right: 0,
+            height: '6.5rem',
+            background:
+              'linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0.98) 40%, rgba(255,255,255,0.7) 70%, rgba(255,255,255,0) 100%)',
+            pointerEvents: 'none',
+          }}
+        />
       </div>
 
       {/* 5-Column Checkerboard Grid Container */}
@@ -126,15 +121,15 @@ export default function EstateAnimationScrollGrid() {
         style={{
           position: 'relative',
           zIndex: 1,
-          marginTop: headerState === 'fixed' ? '0' : '2.5rem',
+          marginTop: '1.5rem',
         }}
       >
         {estateItems.map((item) => {
-          // Parallax lift on scroll
-          const parallaxMult = item.col % 2 === 0 ? 0.12 : 0.06;
+          // Hardware-accelerated smooth parallax lift
+          const parallaxMult = item.col % 2 === 0 ? 0.10 : 0.05;
           const parallaxOffset = scrollY * parallaxMult;
 
-          // Add extra top padding specifically for the first 3 images (Row 1)
+          // Top padding for Row 1 (First 3 Images)
           const isRow1 = item.row === 1;
           const row1TopPadding = isRow1 ? '5rem' : '0px';
 
@@ -146,8 +141,9 @@ export default function EstateAnimationScrollGrid() {
                 gridColumn: item.col,
                 gridRow: item.row,
                 marginTop: row1TopPadding,
-                transform: `translateY(-${parallaxOffset}px)`,
-                transition: 'transform 0.1s cubic-bezier(0, 0, 0.2, 1)',
+                transform: `translate3d(0, -${parallaxOffset}px, 0)`,
+                willChange: 'transform',
+                transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
             >
               <EstateCard item={item} />
@@ -205,16 +201,18 @@ function EstateCard({ item }: { item: EstateImageItem }) {
       }}
     >
       {/* Small Compact Image Container */}
-      <div style={{
-        position: 'relative',
-        width: '100%',
-        borderRadius: '14px',
-        overflow: 'hidden',
-        boxShadow: isHovered ? '0 18px 36px rgba(0,0,0,0.12)' : '0 6px 18px rgba(0,0,0,0.04)',
-        backgroundColor: '#f1f5f9',
-        aspectRatio: '3.1 / 4',
-        transition: 'box-shadow 0.35s ease, transform 0.35s ease',
-      }}>
+      <div
+        style={{
+          position: 'relative',
+          width: '100%',
+          borderRadius: '14px',
+          overflow: 'hidden',
+          boxShadow: isHovered ? '0 18px 36px rgba(0,0,0,0.12)' : '0 6px 18px rgba(0,0,0,0.04)',
+          backgroundColor: '#f1f5f9',
+          aspectRatio: '3.1 / 4',
+          transition: 'box-shadow 0.35s ease, transform 0.35s ease',
+        }}
+      >
         <img
           src={item.src}
           alt={item.tag}
@@ -232,20 +230,24 @@ function EstateCard({ item }: { item: EstateImageItem }) {
 
       {/* Tag Label Below */}
       <div style={{ paddingLeft: '0.1rem' }}>
-        <div style={{
-          fontSize: '0.92rem',
-          fontWeight: 600,
-          color: '#0f172a',
-          letterSpacing: '-0.01em',
-        }}>
+        <div
+          style={{
+            fontSize: '0.92rem',
+            fontWeight: 600,
+            color: '#0f172a',
+            letterSpacing: '-0.01em',
+          }}
+        >
           {item.tag}
         </div>
-        <div style={{
-          fontSize: '0.78rem',
-          color: '#64748b',
-          fontWeight: 400,
-          marginTop: '0.1rem',
-        }}>
+        <div
+          style={{
+            fontSize: '0.78rem',
+            color: '#64748b',
+            fontWeight: 400,
+            marginTop: '0.1rem',
+          }}
+        >
           {item.category}
         </div>
       </div>
