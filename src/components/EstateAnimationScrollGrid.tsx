@@ -79,9 +79,9 @@ export default function EstateAnimationScrollGrid() {
       }}
     >
       {/* Invisible Spacer when header is fixed to prevent layout shift */}
-      {headerState === 'fixed' && <div style={{ height: '160px' }} />}
+      {headerState === 'fixed' && <div style={{ height: '180px' }} />}
 
-      {/* Solid White Fixed Header Container covering top region to hide upward scrolling images */}
+      {/* Solid White Fixed Header Container with Dense Bottom Fade */}
       <div style={{
         position: headerState === 'fixed' ? 'fixed' : headerState === 'bottom' ? 'absolute' : 'relative',
         top: headerState === 'fixed' ? 0 : 'auto',
@@ -92,9 +92,9 @@ export default function EstateAnimationScrollGrid() {
         zIndex: 50,
         backgroundColor: '#ffffff',
         paddingTop: headerState === 'fixed' ? '5.8rem' : '1.5rem',
-        paddingBottom: '1.5rem',
+        paddingBottom: '2.5rem',
         textAlign: 'center',
-        boxShadow: headerState === 'fixed' ? '0 15px 35px rgba(255,255,255,1)' : 'none',
+        boxShadow: headerState === 'fixed' ? '0 25px 45px rgba(255,255,255,1)' : 'none',
       }}>
         <div style={{ maxWidth: '850px', margin: '0 auto', padding: '0 1rem' }}>
           <h2 style={{
@@ -107,6 +107,17 @@ export default function EstateAnimationScrollGrid() {
             Curated Spaces Built Across Global Growth Corridors
           </h2>
         </div>
+
+        {/* Dense Soft White Fade Bar Extending Below Heading */}
+        <div style={{
+          position: 'absolute',
+          bottom: '-6rem',
+          left: 0,
+          right: 0,
+          height: '6.5rem',
+          background: 'linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0.96) 35%, rgba(255,255,255,0.7) 65%, rgba(255,255,255,0) 100%)',
+          pointerEvents: 'none',
+        }} />
       </div>
 
       {/* 5-Column Checkerboard Grid Container */}
