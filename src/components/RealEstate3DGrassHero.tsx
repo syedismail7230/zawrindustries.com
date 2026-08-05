@@ -3,6 +3,79 @@
 import React, { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
+// Cache tree texture outside component scope so 2,200 canvas draw calls run ONLY ONCE across lifetime
+let cachedTreeTexture: THREE.CanvasTexture | null = null;
+
+const getCachedRealTreeTexture = (): THREE.CanvasTexture | null => {
+  if (cachedTreeTexture) return cachedTreeTexture;
+  if (typeof document === 'undefined') return null;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = 512;
+  canvas.height = 512;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return null;
+
+  ctx.clearRect(0, 0, 512, 512);
+
+  // Curved Trunk
+  ctx.beginPath();
+  ctx.moveTo(256, 510);
+  ctx.quadraticCurveTo(245, 375, 256, 225);
+  ctx.strokeStyle = '#2b1b17';
+  ctx.lineWidth = 22;
+  ctx.stroke();
+
+  // Boughs
+  const drawBranch = (x1: number, y1: number, angle: number, length: number, width: number, depth: number) => {
+    if (depth > 3) return;
+    const x2 = x1 + Math.cos(angle) * length;
+    const y2 = y1 + Math.sin(angle) * length;
+
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.quadraticCurveTo(x1 + (x2 - x1) * 0.5 + (Math.random() - 0.5) * 10, y1 + (y2 - y1) * 0.5, x2, y2);
+    ctx.strokeStyle = depth > 1 ? '#3d2820' : '#2b1b17';
+    ctx.lineWidth = width;
+    ctx.stroke();
+
+    drawBranch(x2, y2, angle - 0.35, length * 0.72, width * 0.68, depth + 1);
+    drawBranch(x2, y2, angle + 0.35, length * 0.72, width * 0.68, depth + 1);
+  };
+
+  drawBranch(256, 325, -Math.PI / 2 - 0.35, 80, 11, 1);
+  drawBranch(256, 290, -Math.PI / 2 + 0.35, 85, 12, 1);
+
+  // Leaves
+  const leafColors = ['#1b5e20', '#2e7d32', '#388e3c', '#4caf50', '#66bb6a', '#81c784'];
+  for (let i = 0; i < 1100; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const dist = Math.pow(Math.random(), 0.6) * 190;
+    const lx = 256 + Math.cos(angle) * dist * 0.95;
+    const ly = 190 + Math.sin(angle) * dist * 0.75;
+
+    const rx = 3.5 + Math.random() * 5.0;
+    const ry = 7.0 + Math.random() * 10.0;
+    const rot = (Math.random() - 0.5) * Math.PI;
+
+    ctx.save();
+    ctx.translate(lx, ly);
+    ctx.rotate(rot);
+
+    ctx.beginPath();
+    ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+    ctx.fillStyle = leafColors[i % leafColors.length];
+    ctx.globalAlpha = 0.9;
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  cachedTreeTexture = new THREE.CanvasTexture(canvas);
+  cachedTreeTexture.colorSpace = THREE.SRGBColorSpace;
+  return cachedTreeTexture;
+};
+
 export default function RealEstate3DGrassHero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -15,7 +88,13 @@ export default function RealEstate3DGrassHero() {
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    // 1. Scene & Pure White Atmosphere Setup
+    // Mobile Adaptive Performance Mode
+    const isMobile = width < 768 || (typeof navigator !== 'undefined' && /Mobi|Android|iPhone/i.test(navigator.userAgent));
+    const BLADE_COUNT = isMobile ? 38000 : 120000;
+    const bladeWidth = isMobile ? 0.045 : 0.034;
+    const pixelRatio = isMobile ? 1.0 : Math.min(window.devicePixelRatio, 1.5);
+
+    // 1. Scene Setup
     const scene = new THREE.Scene();
     scene.background = new THREE.Color('#ffffff');
     scene.fog = new THREE.FogExp2('#ffffff', 0.006);
@@ -25,16 +104,16 @@ export default function RealEstate3DGrassHero() {
     camera.position.set(0, 2.6, 12);
     camera.lookAt(0, 0.6, -8);
 
-    // 3. High-Performance WebGL Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: 'high-performance' });
+    // 3. WebGL Renderer
+    const renderer = new THREE.WebGLRenderer({ antialias: !isMobile, powerPreference: 'high-performance' });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+    renderer.setPixelRatio(pixelRatio);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.25;
     container.appendChild(renderer.domElement);
 
-    // 4. Pure White Sky Dome
-    const skyGeo = new THREE.SphereGeometry(220, 16, 16);
+    // 4. White Sky Dome
+    const skyGeo = new THREE.SphereGeometry(220, isMobile ? 8 : 16, isMobile ? 8 : 16);
     const skyMat = new THREE.ShaderMaterial({
       side: THREE.BackSide,
       uniforms: {
@@ -66,7 +145,7 @@ export default function RealEstate3DGrassHero() {
     const sky = new THREE.Mesh(skyGeo, skyMat);
     scene.add(sky);
 
-    // 5. Sun & Atmosphere Lighting
+    // 5. Lighting
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.0);
     scene.add(ambientLight);
 
@@ -77,8 +156,8 @@ export default function RealEstate3DGrassHero() {
     const hemiLight = new THREE.HemisphereLight(0xffffff, 0x1b5e20, 1.15);
     scene.add(hemiLight);
 
-    // 6. 3D Procedural Rolling Terrain Mesh
-    const terrainGeo = new THREE.PlaneGeometry(160, 160, 80, 80);
+    // 6. Terrain Mesh
+    const terrainGeo = new THREE.PlaneGeometry(160, 160, isMobile ? 40 : 80, isMobile ? 40 : 80);
     terrainGeo.rotateX(-Math.PI / 2);
 
     const getTerrainHeight = (x: number, z: number) => {
@@ -104,140 +183,49 @@ export default function RealEstate3DGrassHero() {
     const terrain = new THREE.Mesh(terrainGeo, terrainMat);
     scene.add(terrain);
 
-    // 7. Ultra-Photorealistic Tree Canvas Generator (High-Res 1024x1024 Real Tree Texture Map)
-    const createRealTreeTexture = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = 1024;
-      canvas.height = 1024;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) return null;
+    // 7. Photorealistic Trees (Cached Texture)
+    const treeTex = getCachedRealTreeTexture();
+    if (treeTex) {
+      const treeCardMat = new THREE.MeshStandardMaterial({
+        map: treeTex,
+        transparent: true,
+        alphaTest: 0.18,
+        side: THREE.DoubleSide,
+        roughness: 0.7,
+        metalness: 0.02,
+      });
 
-      ctx.clearRect(0, 0, 1024, 1024);
+      const treeCardGeo = new THREE.PlaneGeometry(6.5, 9.5);
+      treeCardGeo.translate(0, 4.75, 0);
 
-      // Organic Curved Wooden Trunk & Root Base
-      ctx.beginPath();
-      ctx.moveTo(512, 1020);
-      ctx.quadraticCurveTo(490, 750, 512, 450);
-      ctx.strokeStyle = '#2b1b17';
-      ctx.lineWidth = 42;
-      ctx.stroke();
+      const treesGroup = new THREE.Group();
+      const treePositions = isMobile
+        ? [{ x: -32, z: -48 }, { x: 6, z: -46 }, { x: 44, z: -60 }, { x: -22, z: -74 }]
+        : [
+            { x: -48, z: -38 }, { x: -32, z: -48 }, { x: -14, z: -40 }, { x: 6, z: -46 }, { x: 26, z: -38 }, { x: 50, z: -44 },
+            { x: -58, z: -58 }, { x: -38, z: -64 }, { x: -6, z: -60 }, { x: 16, z: -66 }, { x: 44, z: -60 }, { x: 64, z: -54 },
+            { x: -22, z: -74 }, { x: 32, z: -78 }
+          ];
 
-      // Secondary Wood Boughs & Fine Twigs
-      const drawBranch = (x1: number, y1: number, angle: number, length: number, width: number, depth: number) => {
-        if (depth > 4) return;
-        const x2 = x1 + Math.cos(angle) * length;
-        const y2 = y1 + Math.sin(angle) * length;
+      treePositions.forEach(p => {
+        const treeGroup = new THREE.Group();
+        const ty = getTerrainHeight(p.x, p.z);
+        treeGroup.position.set(p.x, ty, p.z);
 
-        ctx.beginPath();
-        ctx.moveTo(x1, y1);
-        ctx.quadraticCurveTo(x1 + (x2 - x1) * 0.5 + (Math.random() - 0.5) * 20, y1 + (y2 - y1) * 0.5, x2, y2);
-        ctx.strokeStyle = depth > 2 ? '#3d2820' : '#2b1b17';
-        ctx.lineWidth = width;
-        ctx.stroke();
+        const p1 = new THREE.Mesh(treeCardGeo, treeCardMat);
+        treeGroup.add(p1);
+        const p2 = new THREE.Mesh(treeCardGeo, treeCardMat);
+        p2.rotation.y = Math.PI / 2;
+        treeGroup.add(p2);
 
-        // Branch out
-        drawBranch(x2, y2, angle - 0.35 + (Math.random() - 0.5) * 0.3, length * 0.72, width * 0.68, depth + 1);
-        drawBranch(x2, y2, angle + 0.35 + (Math.random() - 0.5) * 0.3, length * 0.72, width * 0.68, depth + 1);
-      };
+        treesGroup.add(treeGroup);
+      });
+      scene.add(treesGroup);
+    }
 
-      drawBranch(512, 650, -Math.PI / 2 - 0.35, 160, 22, 1);
-      drawBranch(512, 580, -Math.PI / 2 + 0.35, 170, 24, 1);
-      drawBranch(512, 480, -Math.PI / 2 - 0.15, 140, 18, 1);
-      drawBranch(512, 480, -Math.PI / 2 + 0.15, 140, 18, 1);
-
-      // Over 2,200 Micro Leaves forming a rich, dense, organic tree canopy
-      const leafColors = ['#1b5e20', '#2e7d32', '#388e3c', '#4caf50', '#66bb6a', '#81c784', '#aeea00'];
-
-      for (let i = 0; i < 2200; i++) {
-        // Spherical organic canopy cluster distribution
-        const angle = Math.random() * Math.PI * 2;
-        const dist = Math.pow(Math.random(), 0.6) * 380;
-        const lx = 512 + Math.cos(angle) * dist * 0.95;
-        const ly = 380 + Math.sin(angle) * dist * 0.75;
-
-        const rx = 6.0 + Math.random() * 9.0;
-        const ry = 12.0 + Math.random() * 18.0;
-        const rot = (Math.random() - 0.5) * Math.PI;
-
-        ctx.save();
-        ctx.translate(lx, ly);
-        ctx.rotate(rot);
-
-        ctx.beginPath();
-        ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
-        ctx.fillStyle = leafColors[i % leafColors.length];
-        ctx.globalAlpha = 0.85 + Math.random() * 0.15;
-        ctx.fill();
-
-        ctx.restore();
-      }
-
-      const tex = new THREE.CanvasTexture(canvas);
-      tex.colorSpace = THREE.SRGBColorSpace;
-      return tex;
-    };
-
-    const realTreeTexture = createRealTreeTexture();
-
-    const treeCardMat = new THREE.MeshStandardMaterial({
-      map: realTreeTexture,
-      transparent: true,
-      alphaTest: 0.18,
-      side: THREE.DoubleSide,
-      roughness: 0.7,
-      metalness: 0.02,
-    });
-
-    // Cross-Plane Photorealistic Tree Geometry (6.5m wide x 9.5m tall)
-    const treeCardGeo = new THREE.PlaneGeometry(6.5, 9.5);
-    treeCardGeo.translate(0, 4.75, 0);
-
-    const createRealisticTree = (tx: number, tz: number, scale = 1) => {
-      const treeGroup = new THREE.Group();
-      const ty = getTerrainHeight(tx, tz);
-      treeGroup.position.set(tx, ty, tz);
-      treeGroup.scale.setScalar(scale);
-
-      // Plane 1 (Front-facing)
-      const p1 = new THREE.Mesh(treeCardGeo, treeCardMat);
-      treeGroup.add(p1);
-
-      // Plane 2 (Cross 90 degrees for 3D volume)
-      const p2 = new THREE.Mesh(treeCardGeo, treeCardMat);
-      p2.rotation.y = Math.PI / 2;
-      treeGroup.add(p2);
-
-      // Plane 3 (Cross 45 degrees for extra lush density)
-      const p3 = new THREE.Mesh(treeCardGeo, treeCardMat);
-      p3.rotation.y = Math.PI / 4;
-      treeGroup.add(p3);
-
-      return treeGroup;
-    };
-
-    // Scatter 16 Photorealistic Trees across distant background hills
-    const treesGroup = new THREE.Group();
-    const treesList: THREE.Group[] = [];
-    const treePositions = [
-      { x: -48, z: -38 }, { x: -32, z: -48 }, { x: -14, z: -40 }, { x: 6, z: -46 }, { x: 26, z: -38 }, { x: 50, z: -44 },
-      { x: -58, z: -58 }, { x: -38, z: -64 }, { x: -6, z: -60 }, { x: 16, z: -66 }, { x: 44, z: -60 }, { x: 64, z: -54 },
-      { x: -22, z: -74 }, { x: 32, z: -78 }, { x: -65, z: -42 }, { x: 68, z: -40 }
-    ];
-
-    treePositions.forEach(p => {
-      const scale = 0.9 + Math.random() * 0.45;
-      const tree = createRealisticTree(p.x, p.z, scale);
-      treesGroup.add(tree);
-      treesList.push(tree);
-    });
-    scene.add(treesGroup);
-
-    // 8. Light & Smooth 3D Grass Meadow (2,400,000 Instanced Blades - 120 FPS)
-    const BLADE_COUNT = 2400000;
-
-    const bladeWidth = 0.016;
+    // 8. Mobile-Adaptive Instanced Grass Meadow
     const bladeHeight = 0.72;
-    const bladeGeo = new THREE.PlaneGeometry(bladeWidth, bladeHeight, 1, 3);
+    const bladeGeo = new THREE.PlaneGeometry(bladeWidth, bladeHeight, 1, 2);
     bladeGeo.translate(0, bladeHeight / 2, 0);
 
     const pos = bladeGeo.attributes.position;
@@ -264,7 +252,7 @@ export default function RealEstate3DGrassHero() {
     }
     bladeGeo.setAttribute('color', new THREE.InstancedBufferAttribute(colors, 3));
 
-    // Custom GPU Wind & Cursor Physics Vertex Shader (Zero CPU Overhead)
+    // Custom GPU Wind & Cursor Physics Vertex Shader
     const grassMat = new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
@@ -288,7 +276,6 @@ export default function RealEstate3DGrassHero() {
           float heightRatio = clamp(position.y / 0.72, 0.0, 1.0);
           float bendFactor = pow(heightRatio, 1.7);
 
-          // Smooth GPU Wind Wave Math
           float windX = sin(uTime * 2.2 + wx * 0.4 + wz * 0.25) * 0.16 * bendFactor;
           float windZ = cos(uTime * 1.8 + wx * 0.25 + wz * 0.4) * 0.16 * bendFactor;
 
@@ -346,7 +333,7 @@ export default function RealEstate3DGrassHero() {
 
     setIsLoaded(true);
 
-    // 9. Instant Mathematical Ground Plane Projection (0ms Raycast Lag)
+    // 9. Instant Ground Plane Projection
     const mouse = new THREE.Vector2(-999, -999);
     const mouseWorld = new THREE.Vector3(-999, -999, -999);
 
@@ -354,7 +341,6 @@ export default function RealEstate3DGrassHero() {
       const rect = container.getBoundingClientRect();
       mouse.x = ((e.clientX - rect.left) / container.clientWidth) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / container.clientHeight) * 2 + 1;
-      
       mouseWorld.set(mouse.x * 22, 0, -mouse.y * 12);
     };
 
@@ -366,25 +352,16 @@ export default function RealEstate3DGrassHero() {
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('mouseleave', handleMouseLeave);
 
-    // 10. Ultra-Smooth Animation Loop
+    // 10. Animation Loop
     let clock = new THREE.Clock();
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
       const time = clock.getElapsedTime();
 
-      // Pass GPU uniforms for grass
       grassMat.uniforms.uTime.value = time;
       grassMat.uniforms.uMouse.value.copy(mouseWorld);
 
-      // Organic Tree Swaying in Wind
-      treesList.forEach((tree, idx) => {
-        const swayTime = time * 1.2 + idx * 0.4;
-        tree.rotation.z = Math.sin(swayTime) * 0.015;
-        tree.rotation.x = Math.cos(swayTime * 0.7) * 0.01;
-      });
-
-      // Camera Easing
       if (mouse.x !== -999) {
         camera.position.x += (mouse.x * 2.8 - camera.position.x) * 0.03;
         camera.position.y += (2.6 + mouse.y * 1.0 - camera.position.y) * 0.03;
@@ -427,12 +404,12 @@ export default function RealEstate3DGrassHero() {
       right: '50%',
       marginLeft: '-50vw',
       marginRight: '-50vw',
-      height: 'clamp(580px, 68vw, 880px)',
+      height: 'clamp(480px, 60vw, 880px)',
       backgroundColor: '#ffffff',
       overflow: 'hidden',
       fontFamily: 'Inter, system-ui, sans-serif',
     }}>
-      {/* Ultra-Smooth 120 FPS WebGL Canvas */}
+      {/* 120 FPS Mobile-Adaptive WebGL Canvas */}
       <div ref={containerRef} style={{ width: '100%', height: '100%', cursor: 'pointer' }} />
 
       {/* Loading Overlay */}
@@ -449,16 +426,16 @@ export default function RealEstate3DGrassHero() {
           zIndex: 10,
         }}>
           <div style={{
-            width: '48px',
-            height: '48px',
+            width: '40px',
+            height: '40px',
             border: '3px solid rgba(0,0,0,0.1)',
             borderTopColor: '#388e3c',
             borderRadius: '50%',
             animation: 'spin 0.8s linear infinite',
             marginBottom: '1rem',
           }} />
-          <p style={{ fontSize: '0.95rem', letterSpacing: '0.05em', fontWeight: 500 }}>
-            Initializing Photorealistic 3D Landscape...
+          <p style={{ fontSize: '0.9rem', letterSpacing: '0.05em', fontWeight: 500 }}>
+            Loading 3D Landscape...
           </p>
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>

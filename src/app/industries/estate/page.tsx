@@ -1,5 +1,14 @@
 import { Metadata } from 'next';
-import RealEstate3DGrassHero from '@/components/RealEstate3DGrassHero';
+import dynamic from 'next/dynamic';
+
+const RealEstate3DGrassHero = dynamic(() => import('@/components/RealEstate3DGrassHero'), {
+  ssr: false,
+  loading: () => (
+    <div style={{ height: '580px', backgroundColor: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ fontSize: '0.9rem', color: '#6b7280', fontWeight: 500 }}>Loading 3D Environment...</div>
+    </div>
+  ),
+});
 
 export const metadata: Metadata = {
   title: "Real Estate & PropTech Solutions — Zawr Industries Bangalore",

@@ -1,11 +1,13 @@
 import { Metadata } from 'next';
 import React from 'react';
-import { InteractiveTruckXray } from '@/components/InteractiveTruckXray';
-import { AgvScrollSection } from '@/components/AgvScrollSection';
+import dynamic from 'next/dynamic';
 import { MaritimeFreightSection } from '@/components/MaritimeFreightSection';
 import { RailFreightSection } from '@/components/RailFreightSection';
 import { AirFreightSection } from '@/components/AirFreightSection';
-import { Capabilities3DGrid } from '@/components/Capabilities3DGrid';
+
+const InteractiveTruckXray = dynamic(() => import('@/components/InteractiveTruckXray').then(m => m.InteractiveTruckXray), { ssr: false });
+const AgvScrollSection = dynamic(() => import('@/components/AgvScrollSection').then(m => m.AgvScrollSection), { ssr: false });
+const Capabilities3DGrid = dynamic(() => import('@/components/Capabilities3DGrid').then(m => m.Capabilities3DGrid), { ssr: false });
 
 export const metadata: Metadata = {
   title: "Trade & Logistics Solutions — Zawr Industries India",
