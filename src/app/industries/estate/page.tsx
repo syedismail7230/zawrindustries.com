@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import ScrollTextReveal from '@/components/ScrollTextReveal';
 import EstateAnimationScrollGrid from '@/components/EstateAnimationScrollGrid';
+import EstateLifestyleHorizontalScroll from '@/components/EstateLifestyleHorizontalScroll';
 
 const RealEstate3DGrassHero = dynamic(() => import('@/components/RealEstate3DGrassHero'), {
   loading: () => (
@@ -28,6 +29,8 @@ export default function RealEstatePage() {
       {/* 3. Staggered Architectural Portfolio Scroll Grid */}
       <EstateAnimationScrollGrid />
 
+      {/* 4. Horizontal Lifestyle Cards Section */}
+      <EstateLifestyleHorizontalScroll />
     </div>
   );
 }
