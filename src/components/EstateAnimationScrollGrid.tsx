@@ -75,22 +75,12 @@ export default function EstateAnimationScrollGrid() {
         backgroundColor: '#ffffff',
         paddingBottom: '1.5rem',
       }}>
-        <div style={{
-          fontSize: '0.78rem',
-          fontWeight: 700,
-          textTransform: 'uppercase',
-          letterSpacing: '0.14em',
-          color: '#15803d',
-          marginBottom: '0.75rem',
-        }}>
-          Architectural Portfolio & PropTech Visions
-        </div>
         <h2 style={{
-          fontSize: 'clamp(2rem, 3.8vw, 3.2rem)',
-          fontWeight: 800,
+          fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+          fontWeight: 400,
           color: '#0f172a',
-          letterSpacing: '-0.025em',
-          lineHeight: 1.2,
+          letterSpacing: '-0.02em',
+          lineHeight: 1.25,
         }}>
           Curated Spaces Built Across Global Growth Corridors
         </h2>
