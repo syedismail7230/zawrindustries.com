@@ -11,42 +11,57 @@ interface EstateImageItem {
   row?: number;
 }
 
-// Vertical Checkerboard Grid Items (Rows 1 to 4)
-const verticalRows: EstateImageItem[] = [
-  { id: 1, src: '/assets/estate-animation/image (1).png', tag: 'Parametric Pavilion', category: 'Fluid Future Architecture', col: 1, row: 1 },
-  { id: 2, src: '/assets/estate-animation/image (2).png', tag: 'Pop Brutalism', category: 'Color Gradient Facades', col: 3, row: 1 },
-  { id: 3, src: '/assets/estate-animation/image (3).png', tag: 'Organic Bio-Villa', category: 'Canopy Forest Sanctuary', col: 5, row: 1 },
-  { id: 4, src: '/assets/estate-animation/image (4).png', tag: 'Heritage Palace', category: 'Lakeside Waterfront Estate', col: 2, row: 2 },
-  { id: 5, src: '/assets/estate-animation/image (5).png', tag: 'Cliffside Cave Estate', category: 'Rock Carved Living Suites', col: 4, row: 2 },
-  { id: 6, src: '/assets/estate-animation/image (6).png', tag: 'Subterranean Luxury', category: 'Eco Mountain Retreat', col: 1, row: 3 },
-  { id: 7, src: '/assets/estate-animation/image (7).png', tag: 'Biophilic High-Rise', category: 'Vertical Forest Towers', col: 3, row: 3 },
-  { id: 8, src: '/assets/estate-animation/image (8).png', tag: 'Classical Palatial Mansion', category: 'Baroque Heritage Design', col: 5, row: 3 },
-  { id: 9, src: '/assets/estate-animation/image (9).png', tag: 'Futuristic Glass Residence', category: 'Modern Structural Steel', col: 2, row: 4 },
-  { id: 10, src: '/assets/estate-animation/image (10).png', tag: 'Eco Mountain Sanctuary', category: 'Sustainable Alpine Haven', col: 4, row: 4 },
+// Vertical Checkerboard Grid Items (Rows 1 to 3)
+const verticalRowsTop: EstateImageItem[] = [
+  { id: 3, src: '/assets/estate-animation/image (3).png', tag: 'Organic Bio-Villa', category: 'Canopy Forest Sanctuary', col: 1, row: 1 },
+  { id: 4, src: '/assets/estate-animation/image (4).png', tag: 'Heritage Palace', category: 'Lakeside Waterfront Estate', col: 3, row: 1 },
+  { id: 5, src: '/assets/estate-animation/image (5).png', tag: 'Cliffside Cave Estate', category: 'Rock Carved Living Suites', col: 5, row: 1 },
+  { id: 6, src: '/assets/estate-animation/image (6).png', tag: 'Subterranean Luxury', category: 'Eco Mountain Retreat', col: 2, row: 2 },
+  { id: 7, src: '/assets/estate-animation/image (7).png', tag: 'Biophilic High-Rise', category: 'Vertical Forest Towers', col: 4, row: 2 },
+  { id: 8, src: '/assets/estate-animation/image (8).png', tag: 'Classical Palatial Mansion', category: 'Baroque Heritage Design', col: 1, row: 3 },
+  { id: 9, src: '/assets/estate-animation/image (9).png', tag: 'Futuristic Glass Residence', category: 'Modern Structural Steel', col: 3, row: 3 },
+  { id: 10, src: '/assets/estate-animation/image (10).png', tag: 'Eco Mountain Sanctuary', category: 'Sustainable Alpine Haven', col: 5, row: 3 },
 ];
 
-// Row 5: Interleaved Horizontal Track Cards (3 Animation + 6 Lifestyle Cards)
+// Row 4 Items (Sunlit Promenade & Infinity Horizon Deck - The Last Second Row)
+const row4Items: EstateImageItem[] = [
+  { id: 11, src: '/assets/estate-animation/image (11).png', tag: 'Sunlit Promenade', category: 'Outdoor Terrace Living', col: 2, row: 4 },
+  { id: 12, src: '/assets/estate-animation/image (12).png', tag: 'Infinity Horizon Deck', category: 'Aquatic Sanctuary', col: 4, row: 4 },
+];
+
+// Row 5: Exact 6 Lifestyle Items in Exact Order Specified by User:
+// 1. golf -> Golf Fairways
+// 2. pool -> Infinity Pool
+// 3. rooftop -> Skyline Rooftop
+// 4. beach -> Private Beach
+// 5. boat -> Private Superyacht
+// 6. fireside -> Fireside Hearth
 const row5HorizontalItems: EstateImageItem[] = [
-  // Col 1: Animation 11
-  { id: 11, src: '/assets/estate-animation/image (11).png', tag: 'Sunlit Architectural Promenade', category: 'Outdoor Terrace Living' },
-  // Col 2: Lifestyle 1 (Fades in at Col 2 when last row vertical scroll ends)
-  { id: 14, src: '/assets/estate-lifestyle/image (1).png', tag: 'Private Cliffside Lounge', category: 'Panoramic Vista Suites' },
-  // Col 3: Animation 12
-  { id: 12, src: '/assets/estate-animation/image (12).png', tag: 'Infinity Pool & Horizon Deck', category: 'Aquatic Sanctuary' },
-  // Col 4: Lifestyle 2 (Fades in at Col 4 when last row vertical scroll ends)
-  { id: 15, src: '/assets/estate-lifestyle/image (2).png', tag: 'Lakeside Wellness Pavilion', category: 'Hydrotherapy & Spa' },
-  // Col 5: Animation 13
+  // Col 1 (Animation 1)
+  { id: 1, src: '/assets/estate-animation/image (1).png', tag: 'Parametric Pavilion', category: 'Fluid Future Architecture' },
+  
+  // Col 2 (1. golf)
+  { id: 14, src: '/assets/estate-lifestyle/image (1).png', tag: 'Golf Fairways', category: 'Championship Greens' },
+  
+  // Col 3 (Animation 2 - Color stairs)
+  { id: 2, src: '/assets/estate-animation/image (2).png', tag: 'Pop Brutalism', category: 'Color Gradient Facades' },
+  
+  // Col 4 (2. pool)
+  { id: 15, src: '/assets/estate-lifestyle/image (2).png', tag: 'Infinity Pool', category: 'Aquatic Sanctuary' },
+  
+  // Col 5 (Animation 13 - Dark green moss building)
   { id: 13, src: '/assets/estate-animation/image (13).png', tag: 'Biophilic Garden Atrium', category: 'Nature-Integrated Spaces' },
 
-  // Remaining Lifestyle Cards that scroll into view horizontally after the small pause
-  { id: 16, src: '/assets/estate-lifestyle/image (3).png', tag: 'Zen Courtyard Gardens', category: 'Botanical Reflection Hub' },
-  { id: 17, src: '/assets/estate-lifestyle/image (4).png', tag: 'Penthouse Sky Terrace', category: 'High-Altitude Hospitality' },
-  { id: 18, src: '/assets/estate-lifestyle/image (5).png', tag: 'Subterranean Private Cellar', category: 'Bespoke Wine Cave' },
-  { id: 19, src: '/assets/estate-lifestyle/image (6).png', tag: 'Sunset Amphitheater', category: 'Open-Air Cultural Space' },
+  // Remaining Lifestyle Cards in exact order: 3. rooftop, 4. beach, 5. boat, 6. fireside
+  { id: 16, src: '/assets/estate-lifestyle/image (3).png', tag: 'Skyline Rooftop', category: 'High-Altitude Lounge' },
+  { id: 17, src: '/assets/estate-lifestyle/image (4).png', tag: 'Private Beach', category: 'Oceanfront Shoreline' },
+  { id: 18, src: '/assets/estate-lifestyle/image (5).png', tag: 'Private Superyacht', category: 'Maritime Charter' },
+  { id: 19, src: '/assets/estate-lifestyle/image (6).png', tag: 'Fireside Hearth', category: 'Subterranean Lounge' },
 ];
 
 export default function EstateAnimationScrollGrid() {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const row4Ref = useRef<HTMLDivElement>(null);
   const [scrollY, setScrollY] = useState(0);
   const [horizontalProgress, setHorizontalProgress] = useState(0);
   const [showLifestyle, setShowLifestyle] = useState(false);
@@ -62,7 +77,7 @@ export default function EstateAnimationScrollGrid() {
       const windowHeight = window.innerHeight;
       const navOffset = 96;
 
-      // Section Pinning logic
+      // Section Pinning state: Stays pinned until horizontal scroll has completely finished gliding all 9 cards
       if (rect.top <= navOffset && rect.bottom > windowHeight) {
         setIsPinned(true);
         setIsUnpinnedBottom(false);
@@ -79,13 +94,20 @@ export default function EstateAnimationScrollGrid() {
         const totalHeight = rect.height - windowHeight;
         const scrollRatio = Math.max(0, Math.min(1, scrolledIn / totalHeight));
 
-        // STEP 1 & 2: Last row (Row 5) reaches end at 0.48 -> lifestyle images appear immediately
-        const isLifestyleVisible = scrollRatio >= 0.48;
+        // Strict DOM check: Row 4 (the last second row) MUST be completely off-screen above the sticky header
+        let isRow4Past = false;
+        if (row4Ref.current) {
+          const r4Rect = row4Ref.current.getBoundingClientRect();
+          isRow4Past = r4Rect.bottom <= navOffset + 80;
+        } else {
+          isRow4Past = scrollRatio >= 0.65;
+        }
 
-        // STEP 3 & 4: Small pause between 0.48 and 0.65 (horizontal progress stays 0.0)
-        // Horizontal scroll glides left at 0.65+
-        const horizontalStartRatio = 0.65;
-        const rawHorizProgress = Math.max(0, scrollRatio - horizontalStartRatio) / (1 - horizontalStartRatio);
+        const isLifestyleVisible = isRow4Past;
+
+        // Horizontal scroll starts at 0.78 and completes smoothly at 0.98, ensuring Card 9 (Fireside Hearth) is 100% fully visible before unpinning
+        const horizontalStartRatio = 0.78;
+        const rawHorizProgress = Math.max(0, scrollRatio - horizontalStartRatio) / (0.98 - horizontalStartRatio);
         const clampedHorizontalProgress = Math.max(0, Math.min(1, rawHorizProgress));
 
         rafId = requestAnimationFrame(() => {
@@ -107,6 +129,9 @@ export default function EstateAnimationScrollGrid() {
     };
   }, []);
 
+  const isHorizontalActive = horizontalProgress > 0.01;
+  const isFadeVisible = !showLifestyle;
+
   return (
     <section
       ref={sectionRef}
@@ -117,7 +142,7 @@ export default function EstateAnimationScrollGrid() {
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        minHeight: '400vh',
+        minHeight: '620vh',
       }}
     >
       {/* Invisible Spacer when heading is pinned */}
@@ -132,15 +157,17 @@ export default function EstateAnimationScrollGrid() {
           left: 0,
           right: 0,
           width: '100%',
-          zIndex: 40, // Below site navbar zIndex 100
+          zIndex: 40,
           backgroundColor: '#ffffff',
-          paddingTop: isPinned ? '6.5rem' : '2rem', // Sits cleanly below site navbar
+          paddingTop: isPinned ? '6.5rem' : '2rem',
           paddingBottom: '2.5rem',
           textAlign: 'center',
-          boxShadow: isPinned ? '0 20px 30px rgba(255,255,255,1)' : 'none',
+          boxShadow: isPinned && isFadeVisible ? '0 20px 30px rgba(255,255,255,1)' : 'none',
+          transition: 'box-shadow 0.4s ease',
         }}
       >
-        <div style={{ maxWidth: '850px', margin: '0 auto', padding: '0 1rem' }}>
+        <div style={{ maxWidth: '850px', margin: '0 auto', padding: '0 1rem', position: 'relative' }}>
+          {/* Heading 1: Curated Spaces Built Across Global Growth Corridors */}
           <h2
             style={{
               fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
@@ -148,13 +175,43 @@ export default function EstateAnimationScrollGrid() {
               color: '#0f172a',
               letterSpacing: '-0.02em',
               lineHeight: 1.25,
+              opacity: isHorizontalActive ? 0 : 1,
+              filter: isHorizontalActive ? 'blur(14px)' : 'blur(0px)',
+              transform: isHorizontalActive ? 'scale(0.95)' : 'scale(1.0)',
+              transition:
+                'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
             Curated Spaces Built Across Global Growth Corridors
           </h2>
+
+          {/* Heading 2: The Art of Living — Curated Estate Lifestyle */}
+          <h2
+            style={{
+              fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+              fontWeight: 400,
+              color: '#0f172a',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.25,
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              margin: '0 auto',
+              padding: '0 1rem',
+              opacity: isHorizontalActive ? 1 : 0,
+              filter: isHorizontalActive ? 'blur(0px)' : 'blur(14px)',
+              transform: isHorizontalActive ? 'scale(1.0)' : 'scale(1.05)',
+              pointerEvents: isHorizontalActive ? 'auto' : 'none',
+              transition:
+                'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+            }}
+          >
+            The Art of Living — Curated Estate Lifestyle
+          </h2>
         </div>
 
-        {/* Dense White Fade Bar Extending Below Heading */}
+        {/* Soft White Fade Bar Below Heading */}
         <div
           style={{
             position: 'absolute',
@@ -165,13 +222,15 @@ export default function EstateAnimationScrollGrid() {
             background:
               'linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0.98) 40%, rgba(255,255,255,0.7) 70%, rgba(255,255,255,0) 100%)',
             pointerEvents: 'none',
+            opacity: isFadeVisible ? 1 : 0,
+            transition: 'opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
         />
       </div>
 
       {/* MAIN CONTENT CONTAINER */}
       <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 4vw' }}>
-        {/* PHASE 1: Vertical Grid (Rows 1 to 4) */}
+        {/* Rows 1 to 3: Checkerboard Grid */}
         <div
           className="checkerboard-grid"
           style={{
@@ -180,8 +239,8 @@ export default function EstateAnimationScrollGrid() {
             marginTop: isPinned ? '0' : '2rem',
           }}
         >
-          {verticalRows.map((item) => {
-            const parallaxMult = (item.col || 1) % 2 === 0 ? 0.10 : 0.05;
+          {verticalRowsTop.map((item) => {
+            const parallaxMult = (item.col || 1) % 2 === 0 ? 0.08 : 0.04;
             const parallaxOffset = scrollY * parallaxMult;
             const isRow1 = item.row === 1;
             const row1TopPadding = isRow1 ? '7.5rem' : '0px';
@@ -205,36 +264,56 @@ export default function EstateAnimationScrollGrid() {
           })}
         </div>
 
-        {/* PHASE 2: Row 5 (Locked at viewport center when last row reaches end) */}
+        {/* Row 4: Tracked with row4Ref (The Last Second Row) */}
+        <div
+          ref={row4Ref}
+          className="checkerboard-grid"
+          style={{
+            position: 'relative',
+            zIndex: 1,
+            marginTop: '10rem',
+          }}
+        >
+          {row4Items.map((item) => (
+            <div
+              key={item.id}
+              className={`checker-item col-${item.col}`}
+              style={{
+                gridColumn: item.col,
+              }}
+            >
+              <EstateCard item={item} />
+            </div>
+          ))}
+        </div>
+
+        {/* Row 5: Pinned position: fixed at top 17.5rem during horizontal scroll so IT CANNOT MOVE VERTICALLY UP */}
         <div
           style={{
             position: isPinned && showLifestyle ? 'fixed' : 'relative',
             top: isPinned && showLifestyle ? '17.5rem' : 'auto',
             left: isPinned && showLifestyle ? '4vw' : 'auto',
             right: isPinned && showLifestyle ? '4vw' : 'auto',
-            zIndex: 10,
-            width: '100%',
+            zIndex: 30,
+            width: isPinned && showLifestyle ? 'calc(100vw - 8vw)' : '100%',
             overflow: 'hidden',
             padding: '1rem 0 4rem',
-            marginTop: isPinned && showLifestyle ? '0' : '8rem',
+            marginTop: isPinned && showLifestyle ? '0' : '10rem',
+            backgroundColor: '#ffffff',
           }}
         >
-          {/* Row 5 Interleaved Horizontal Track */}
+          {/* Row 5 Track */}
           <div
             style={{
               display: 'flex',
               gap: '2.5vw',
-              transform: `translate3d(-${horizontalProgress * 70}%, 0, 0)`,
+              transform: `translate3d(-${horizontalProgress * 80}%, 0, 0)`,
               willChange: 'transform, opacity',
               transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
             {row5HorizontalItems.map((item) => {
               const isLifestyleCard = item.id >= 14;
-              // STEP 1: Last row reaches end -> showLifestyle is true
-              // STEP 2: Lifestyle cards fade in IMMEDIATELY (opacity: 1)
-              // STEP 3: Small pause buffer while horizontalProgress is 0
-              // STEP 4: Horizontal scroll glides left when horizontalProgress > 0
               const cardOpacity = isLifestyleCard ? (showLifestyle ? 1 : 0) : 1;
 
               return (
