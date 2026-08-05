@@ -7,7 +7,7 @@ interface ScrollTextRevealProps {
 }
 
 export default function ScrollTextReveal({
-  text = "We're here to build something meaningful together, turning ideas into impactful real estate experiences that create lasting value and drive real growth."
+  text = "Every piece of land has its own character and story. We build thoughtful spaces that feel natural to live in, blending clean modern design with enduring quality. Places built not just to impress today, but to last for generations."
 }: ScrollTextRevealProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -20,22 +20,24 @@ export default function ScrollTextReveal({
       const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Start revealing when container top reaches 75% of viewport
-      // Complete reveal when container reaches 35% of viewport
-      // Start revealing when container top reaches 90% of viewport
-      // Complete 100% reveal when container reaches 45% of viewport
-      const start = windowHeight * 0.90;
-      const end = windowHeight * 0.45;
+      // Start revealing as soon as top enters 95% of viewport
+      // Complete 100% unblur for ALL words when top reaches 50% (center of screen)
+      const startY = windowHeight * 0.95;
+      const endY = windowHeight * 0.50;
 
-      const progress = (start - rect.top) / (start - end);
+      const progress = (startY - rect.top) / (startY - endY);
       const clamped = Math.max(0, Math.min(1, progress));
       setScrollProgress(clamped);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
     handleScroll();
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
   }, []);
 
   return (
@@ -48,7 +50,7 @@ export default function ScrollTextReveal({
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        minHeight: '40vh',
+        minHeight: '35vh',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}
     >
@@ -61,13 +63,9 @@ export default function ScrollTextReveal({
           wordWrap: 'break-word',
         }}>
           {words.map((word, index) => {
-            const wordProgress = index / Math.max(1, words.length - 1);
-            const isRevealed = scrollProgress >= wordProgress;
-
-            // Compute crisp transition to 100% black opacity and 0px blur
-            const diff = scrollProgress - wordProgress;
-            const opacity = isRevealed ? Math.min(1, 0.25 + diff * 10) : 0.15;
-            const blurAmount = isRevealed ? Math.max(0, 4 - diff * 32) : 4;
+            // Distribute word thresholds up to 0.85 so the entire sentence is 100% sharp by 85% progress
+            const wordThreshold = (index / Math.max(1, words.length - 1)) * 0.85;
+            const isRevealed = scrollProgress >= wordThreshold;
 
             return (
               <span
@@ -76,10 +74,10 @@ export default function ScrollTextReveal({
                   display: 'inline-block',
                   marginRight: '0.3em',
                   color: '#000000',
-                  opacity: opacity,
-                  filter: `blur(${blurAmount}px)`,
-                  transition: 'opacity 0.25s ease-out, filter 0.25s ease-out, transform 0.25s ease-out',
-                  transform: isRevealed ? 'translateY(0px)' : 'translateY(4px)',
+                  opacity: isRevealed ? 1.0 : 0.15,
+                  filter: isRevealed ? 'blur(0px)' : 'blur(4px)',
+                  transform: isRevealed ? 'translateY(0px)' : 'translateY(3px)',
+                  transition: 'opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
                   willChange: 'opacity, filter, transform',
                 }}
               >
