@@ -2,57 +2,27 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 
-interface LifestyleCard {
+interface LifestyleCardItem {
   id: number;
   src: string;
   tag: string;
   category: string;
-  description: string;
+  source: 'animation' | 'lifestyle';
 }
 
-const lifestyleItems: LifestyleCard[] = [
-  {
-    id: 1,
-    src: '/assets/estate-lifestyle/image (1).png',
-    tag: 'Infinity Deck & Private Oasis',
-    category: 'Zen Solitude',
-    description: 'Panoramic open-air living spaces designed for serene reflection and uncompromised privacy.',
-  },
-  {
-    id: 2,
-    src: '/assets/estate-lifestyle/image (2).png',
-    tag: 'Biophilic Wellness Sanctuary',
-    category: 'Holistic Living',
-    description: 'Indoor thermal springs, circadian lighting, and oxygenated conservatory lounges.',
-  },
-  {
-    id: 3,
-    src: '/assets/estate-lifestyle/image (3).png',
-    tag: 'Skyline Social Club',
-    category: 'Curated Gathering',
-    description: 'Exclusive private dining rooms, sommelier tasting vaults, and rooftop amphitheaters.',
-  },
-  {
-    id: 4,
-    src: '/assets/estate-lifestyle/image (4).png',
-    tag: 'Subterranean Spa & Cellar',
-    category: 'Indulgent Comfort',
-    description: 'Temperature-controlled vintage vaults integrated with stone-hewn hydrotherapy pools.',
-  },
-  {
-    id: 5,
-    src: '/assets/estate-lifestyle/image (5).png',
-    tag: 'Canopy Nature Trail',
-    category: 'Eco Living',
-    description: 'Private botanical preserves, organic hydroponic farms, and elevated canopy walks.',
-  },
-  {
-    id: 6,
-    src: '/assets/estate-lifestyle/image (6).png',
-    tag: 'Coastal Dock & Heli-Pad',
-    category: 'Seamless Mobility',
-    description: 'Direct maritime access and private aviation lounge facilities integrated on site.',
-  },
+const lifestyleItems: LifestyleCardItem[] = [
+  // 3 Transition Cards from estate-animation
+  { id: 11, src: '/assets/estate-animation/image (11).png', tag: 'Sunlit Architectural Promenade', category: 'Outdoor Terrace Living', source: 'animation' },
+  { id: 12, src: '/assets/estate-animation/image (12).png', tag: 'Infinity Pool & Horizon Deck', category: 'Aquatic Sanctuary', source: 'animation' },
+  { id: 13, src: '/assets/estate-animation/image (13).png', tag: 'Biophilic Garden Atrium', category: 'Nature-Integrated Spaces', source: 'animation' },
+
+  // 6 Cards from estate-lifestyle
+  { id: 1, src: '/assets/estate-lifestyle/image (1).png', tag: 'Private Cliffside Lounge', category: 'Panoramic Vista Suites', source: 'lifestyle' },
+  { id: 2, src: '/assets/estate-lifestyle/image (2).png', tag: 'Lakeside Wellness Pavilion', category: 'Hydrotherapy & Spa', source: 'lifestyle' },
+  { id: 3, src: '/assets/estate-lifestyle/image (3).png', tag: 'Zen Courtyard Gardens', category: 'Botanical Reflection Hub', source: 'lifestyle' },
+  { id: 4, src: '/assets/estate-lifestyle/image (4).png', tag: 'Penthouse Sky Terrace', category: 'High-Altitude Hospitality', source: 'lifestyle' },
+  { id: 5, src: '/assets/estate-lifestyle/image (5).png', tag: 'Subterranean Private Cellar', category: 'Bespoke Wine Cave', source: 'lifestyle' },
+  { id: 6, src: '/assets/estate-lifestyle/image (6).png', tag: 'Sunset Amphitheater', category: 'Open-Air Cultural Space', source: 'lifestyle' },
 ];
 
 export default function EstateLifestyleHorizontalScroll() {
@@ -68,10 +38,12 @@ export default function EstateLifestyleHorizontalScroll() {
       const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Calculate progress through 300vh container
-      const totalScrollable = rect.height - windowHeight;
+      // Calculate progress (0 to 1) while container scrolls through viewport
+      const totalScrollableDistance = rect.height - windowHeight;
+      if (totalScrollableDistance <= 0) return;
+
       const currentScroll = -rect.top;
-      const progress = Math.max(0, Math.min(1, currentScroll / totalScrollable));
+      const progress = Math.max(0, Math.min(1, currentScroll / totalScrollableDistance));
 
       rafId = requestAnimationFrame(() => {
         setScrollProgress(progress);
@@ -79,143 +51,77 @@ export default function EstateLifestyleHorizontalScroll() {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
     handleScroll();
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
       if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
-
-  // Calculate total width to translate track horizontally
-  // 6 cards of 380px + gap = ~2500px total track width
-  const maxTranslatePercentage = 75; // Translates track up to 75% left
 
   return (
     <section
       ref={containerRef}
       style={{
+        backgroundColor: '#ffffff',
+        height: '350vh', // Tall scroll track to give smooth horizontal scroll pace
         position: 'relative',
-        height: '280vh',
-        backgroundColor: '#0a0f0d',
-        color: '#ffffff',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}
     >
-      {/* Pinned Viewport Container */}
+      {/* Sticky Viewport Frame pinned at top: 5.5rem */}
       <div
         style={{
           position: 'sticky',
-          top: 0,
-          height: '100vh',
-          width: '100%',
+          top: '5.5rem',
+          height: 'calc(100vh - 5.5rem)',
           overflow: 'hidden',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
+          backgroundColor: '#ffffff',
         }}
       >
         {/* Section Header */}
-        <div
-          style={{
-            padding: '3.5rem 5% 2rem',
-            maxWidth: '1400px',
-            width: '100%',
-            margin: '0 auto',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            flexWrap: 'wrap',
-            gap: '1.5rem',
-            zIndex: 10,
-          }}
-        >
-          <div>
-            <div
-              style={{
-                fontSize: '0.8rem',
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                letterSpacing: '0.16em',
-                color: '#52b788',
-                marginBottom: '0.5rem',
-              }}
-            >
-              Curated Lifestyle & Wellness
-            </div>
-            <h2
-              style={{
-                fontSize: 'clamp(2rem, 3.8vw, 3.2rem)',
-                fontWeight: 300,
-                color: '#f8fafc',
-                letterSpacing: '-0.025em',
-                lineHeight: 1.15,
-              }}
-            >
-              Architecture Designed for How You Live
-            </h2>
-          </div>
+        <div style={{ textAlign: 'center', maxWidth: '850px', margin: '0 auto 3rem', padding: '0 1rem' }}>
+          <h2 style={{
+            fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+            fontWeight: 400,
+            color: '#0f172a',
+            letterSpacing: '-0.02em',
+            lineHeight: 1.25,
+          }}>
+            The Art of Living — Curated Estate Lifestyle
+          </h2>
+        </div>
 
+        {/* Horizontal Track Wrapper */}
+        <div style={{ width: '100%', overflow: 'hidden', padding: '1rem 0 3rem' }}>
           <div
+            ref={trackRef}
             style={{
-              fontSize: '0.9rem',
-              color: '#94a3b8',
-              maxWidth: '360px',
-              lineHeight: 1.6,
+              display: 'flex',
+              gap: '3.5rem',
+              paddingLeft: '6vw',
+              paddingRight: '12vw',
+              transform: `translate3d(-${scrollProgress * 72}%, 0, 0)`,
+              willChange: 'transform',
+              transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
-            Scroll down to explore private amenities, biophilic spaces, and master-planned lifestyle retreats.
+            {lifestyleItems.map((item) => (
+              <LifestyleCard key={`${item.source}-${item.id}`} item={item} />
+            ))}
           </div>
-        </div>
-
-        {/* Horizontal Card Track */}
-        <div
-          ref={trackRef}
-          style={{
-            display: 'flex',
-            gap: '2.5rem',
-            paddingLeft: '5%',
-            paddingRight: '10%',
-            width: 'max-content',
-            transform: `translate3d(-${scrollProgress * maxTranslatePercentage}%, 0, 0)`,
-            willChange: 'transform',
-            transition: 'transform 0.1s cubic-bezier(0, 0, 0.2, 1)',
-          }}
-        >
-          {lifestyleItems.map((item) => (
-            <LifestyleCardItem key={item.id} item={item} />
-          ))}
-        </div>
-
-        {/* Bottom Horizontal Scroll Progress Bar */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '2.5rem',
-            left: '5%',
-            right: '5%',
-            height: '2px',
-            backgroundColor: 'rgba(255, 255, 255, 0.15)',
-            borderRadius: '2px',
-            overflow: 'hidden',
-          }}
-        >
-          <div
-            style={{
-              height: '100%',
-              width: `${Math.max(8, scrollProgress * 100)}%`,
-              backgroundColor: '#52b788',
-              borderRadius: '2px',
-              transition: 'width 0.1s ease',
-            }}
-          />
         </div>
       </div>
     </section>
   );
 }
 
-function LifestyleCardItem({ item }: { item: LifestyleCard }) {
+function LifestyleCard({ item }: { item: LifestyleCardItem }) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
@@ -224,28 +130,24 @@ function LifestyleCardItem({ item }: { item: LifestyleCard }) {
       onMouseLeave={() => setIsHovered(false)}
       style={{
         flexShrink: 0,
-        width: '380px',
+        width: '260px',
         display: 'flex',
         flexDirection: 'column',
-        gap: '1.2rem',
+        gap: '0.75rem',
         cursor: 'pointer',
       }}
     >
-      {/* Image Frame */}
-      <div
-        style={{
-          position: 'relative',
-          width: '100%',
-          height: '460px',
-          borderRadius: '22px',
-          overflow: 'hidden',
-          backgroundColor: '#1e293b',
-          boxShadow: isHovered
-            ? '0 25px 50px rgba(0,0,0,0.5)'
-            : '0 12px 30px rgba(0,0,0,0.3)',
-          transition: 'box-shadow 0.4s ease, transform 0.4s ease',
-        }}
-      >
+      {/* Image Container with Hover Scale */}
+      <div style={{
+        position: 'relative',
+        width: '100%',
+        borderRadius: '16px',
+        overflow: 'hidden',
+        boxShadow: isHovered ? '0 20px 40px rgba(0,0,0,0.12)' : '0 6px 18px rgba(0,0,0,0.04)',
+        backgroundColor: '#f1f5f9',
+        aspectRatio: '3.1 / 4',
+        transition: 'box-shadow 0.35s ease, transform 0.35s ease',
+      }}>
         <img
           src={item.src}
           alt={item.tag}
@@ -254,54 +156,31 @@ function LifestyleCardItem({ item }: { item: LifestyleCard }) {
             height: '100%',
             objectFit: 'cover',
             display: 'block',
-            transform: isHovered ? 'scale(1.07)' : 'scale(1.0)',
-            transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+            transform: isHovered ? 'scale(1.06)' : 'scale(1.0)',
+            transition: 'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
           loading="lazy"
         />
-
-        {/* Category Pill Overlay */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '1.25rem',
-            left: '1.25rem',
-            backgroundColor: 'rgba(10, 15, 13, 0.75)',
-            backdropFilter: 'blur(12px)',
-            color: '#74c69d',
-            fontSize: '0.78rem',
-            fontWeight: 600,
-            padding: '0.4rem 0.9rem',
-            borderRadius: '100px',
-            border: '1px solid rgba(116, 198, 157, 0.3)',
-          }}
-        >
-          {item.category}
-        </div>
       </div>
 
-      {/* Card Info & Description */}
-      <div style={{ paddingLeft: '0.2rem' }}>
-        <h3
-          style={{
-            fontSize: '1.25rem',
-            fontWeight: 600,
-            color: '#f8fafc',
-            letterSpacing: '-0.015em',
-            marginBottom: '0.4rem',
-          }}
-        >
+      {/* Clean Tag & Subtitle Label Below */}
+      <div style={{ paddingLeft: '0.1rem' }}>
+        <div style={{
+          fontSize: '0.94rem',
+          fontWeight: 600,
+          color: '#0f172a',
+          letterSpacing: '-0.01em',
+        }}>
           {item.tag}
-        </h3>
-        <p
-          style={{
-            fontSize: '0.88rem',
-            color: '#94a3b8',
-            lineHeight: 1.5,
-          }}
-        >
-          {item.description}
-        </p>
+        </div>
+        <div style={{
+          fontSize: '0.78rem',
+          color: '#64748b',
+          fontWeight: 400,
+          marginTop: '0.1rem',
+        }}>
+          {item.category}
+        </div>
       </div>
     </div>
   );

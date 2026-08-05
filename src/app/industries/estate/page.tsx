@@ -29,7 +29,7 @@ export default function RealEstatePage() {
       {/* 3. Staggered Architectural Portfolio Scroll Grid */}
       <EstateAnimationScrollGrid />
 
-      {/* 4. Horizontal Lifestyle Cards Section */}
+      {/* 4. Horizontal Scroll Lifestyle Showcase */}
       <EstateLifestyleHorizontalScroll />
     </div>
   );
