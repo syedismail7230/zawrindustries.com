@@ -282,11 +282,11 @@ export default function RealEstate3DGrassHero() {
     }
     scene.add(treeGroup);
 
-    // 8. Universal 3D Instanced Grass Meadow Covering ENTIRE Terrain (320,000 Blades)
-    const BLADE_COUNT = 320000;
+    // 8. Universal 3D Instanced Grass Meadow Covering 100% of Terrain (450,000 Blades)
+    const BLADE_COUNT = 450000;
 
-    const bladeWidth = 0.010;
-    const bladeHeight = 0.58;
+    const bladeWidth = 0.011;
+    const bladeHeight = 0.60;
     const bladeGeo = new THREE.PlaneGeometry(bladeWidth, bladeHeight, 1, 5);
     bladeGeo.translate(0, bladeHeight / 2, 0);
 
@@ -328,10 +328,10 @@ export default function RealEstate3DGrassHero() {
     const dummy = new THREE.Object3D();
     const bladeData: { x: number; y: number; z: number; rotY: number; scaleY: number; currentBendX: number; currentBendZ: number }[] = [];
 
-    // Distribute 320,000 grass blades across 100% of terrain (surrounding all trees)
+    // Distribute 450,000 grass blades across 100% of terrain (covers all hills & around all trees)
     for (let i = 0; i < BLADE_COUNT; i++) {
-      const x = (Math.random() - 0.5) * 140;
-      const z = Math.random() * 52 - 34; // Covers full depth from far hill trees to camera
+      const x = (Math.random() - 0.5) * 160;
+      const z = Math.random() * 102 - 82; // Spans from z = -82 (far horizon trees) to z = +20 (camera)
       const y = getTerrainHeight(x, z);
 
       const rotY = Math.random() * Math.PI;
@@ -411,9 +411,6 @@ export default function RealEstate3DGrassHero() {
 
       for (let i = 0; i < BLADE_COUNT; i++) {
         const b = bladeData[i];
-
-        // Skip distant blades calculation optimization
-        if (b.z < -12) continue;
 
         const windX = Math.sin(time * 2.2 + b.x * 0.5 + b.z * 0.3) * 0.14;
         const windZ = Math.cos(time * 1.8 + b.x * 0.3 + b.z * 0.5) * 0.14;
