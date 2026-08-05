@@ -306,42 +306,16 @@ export default function RealEstate3DGrassHero() {
         </div>
       )}
 
-      {/* Top Header & Title Overlay (White Typography with High Contrast Glow) */}
+      {/* Top Title Overlay */}
       <div style={{
         position: 'absolute',
-        top: '2.5rem',
+        top: '3.5rem',
         left: '5%',
         right: '5%',
         zIndex: 5,
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between',
-        alignItems: 'flex-start',
-        gap: '1.5rem',
         pointerEvents: 'none',
       }}>
-        <div style={{ pointerEvents: 'auto', maxWidth: '660px' }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            padding: '0.45rem 1.1rem',
-            backgroundColor: 'rgba(10, 29, 8, 0.75)',
-            backdropFilter: 'blur(12px)',
-            borderRadius: '9999px',
-            border: '1px solid rgba(163, 230, 53, 0.4)',
-            color: '#d9f99d',
-            fontSize: '0.82rem',
-            fontWeight: 700,
-            letterSpacing: '0.08em',
-            textTransform: 'uppercase',
-            marginBottom: '1.25rem',
-            boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
-          }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#a3e635', boxShadow: '0 0 12px #a3e635' }} />
-            Interactive 3D Meadow • Hover Cursor to Bend & Sway Grass
-          </div>
-
+        <div style={{ pointerEvents: 'auto', maxWidth: '680px' }}>
           <h1 style={{
             fontSize: 'clamp(2.5rem, 5.5vw, 4.4rem)',
             fontWeight: 800,
@@ -362,119 +336,9 @@ export default function RealEstate3DGrassHero() {
             maxWidth: '580px',
             textShadow: '0 2px 14px rgba(0, 0, 0, 0.8)',
           }}>
-            Combining sustainable land development with intelligent PropTech assets across India and the UAE. Hover your cursor over the grass to feel real-time physics.
+            Combining sustainable land development with intelligent PropTech assets across India and the UAE.
           </p>
         </div>
-
-        {/* Real Estate Telemetry Cards */}
-        <div style={{
-          pointerEvents: 'auto',
-          display: 'grid',
-          gridTemplateColumns: 'repeat(2, 1fr)',
-          gap: '0.75rem',
-          minWidth: '290px',
-        }}>
-          <div style={{
-            backgroundColor: 'rgba(10, 29, 8, 0.75)',
-            backdropFilter: 'blur(16px)',
-            padding: '1.1rem 1.25rem',
-            borderRadius: '18px',
-            border: '1px solid rgba(163, 230, 53, 0.3)',
-            boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
-          }}>
-            <div style={{ fontSize: '0.75rem', color: '#a3e635', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-              Managed Land
-            </div>
-            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ffffff', marginTop: '0.2rem' }}>
-              14,500+ <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#d9f99d' }}>Acres</span>
-            </div>
-          </div>
-
-          <div style={{
-            backgroundColor: 'rgba(10, 29, 8, 0.75)',
-            backdropFilter: 'blur(16px)',
-            padding: '1.1rem 1.25rem',
-            borderRadius: '18px',
-            border: '1px solid rgba(163, 230, 53, 0.3)',
-            boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
-          }}>
-            <div style={{ fontSize: '0.75rem', color: '#a3e635', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-              Asset Portfolio
-            </div>
-            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ffffff', marginTop: '0.2rem' }}>
-              $1.8B+ <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#d9f99d' }}>AUM</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom Interactive Navigation Dock */}
-      <div style={{
-        position: 'absolute',
-        bottom: '2rem',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        zIndex: 5,
-        display: 'flex',
-        alignItems: 'center',
-        gap: '0.75rem',
-        backgroundColor: 'rgba(10, 29, 8, 0.85)',
-        backdropFilter: 'blur(16px)',
-        padding: '0.6rem 0.85rem',
-        borderRadius: '9999px',
-        border: '1px solid rgba(163, 230, 53, 0.35)',
-        boxShadow: '0 16px 40px rgba(0,0,0,0.4)',
-      }}>
-        <button
-          onClick={() => setActiveTab('overview')}
-          style={{
-            padding: '0.6rem 1.25rem',
-            borderRadius: '9999px',
-            border: 'none',
-            backgroundColor: activeTab === 'overview' ? '#a3e635' : 'transparent',
-            color: activeTab === 'overview' ? '#0a1d08' : '#f0fdf4',
-            fontSize: '0.88rem',
-            fontWeight: 700,
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-          }}
-        >
-          🌿 Land & Development
-        </button>
-
-        <button
-          onClick={() => setActiveTab('proptech')}
-          style={{
-            padding: '0.6rem 1.25rem',
-            borderRadius: '9999px',
-            border: 'none',
-            backgroundColor: activeTab === 'proptech' ? '#a3e635' : 'transparent',
-            color: activeTab === 'proptech' ? '#0a1d08' : '#f0fdf4',
-            fontSize: '0.88rem',
-            fontWeight: 700,
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-          }}
-        >
-          🏢 PropTech Platforms
-        </button>
-
-        <button
-          onClick={() => setActiveTab('estates')}
-          style={{
-            padding: '0.6rem 1.25rem',
-            borderRadius: '9999px',
-            border: 'none',
-            backgroundColor: activeTab === 'estates' ? '#a3e635' : 'transparent',
-            color: activeTab === 'estates' ? '#0a1d08' : '#f0fdf4',
-            fontSize: '0.88rem',
-            fontWeight: 700,
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
-          }}
-        >
-          🌐 Smart City Infrastructure
-        </button>
       </div>
     </section>
   );
