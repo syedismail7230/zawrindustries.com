@@ -32,7 +32,7 @@ const row5HorizontalItems: EstateImageItem[] = [
   { id: 12, src: '/assets/estate-animation/image (12).png', tag: 'Infinity Pool & Horizon Deck', category: 'Aquatic Sanctuary' },
   { id: 13, src: '/assets/estate-animation/image (13).png', tag: 'Biophilic Garden Atrium', category: 'Nature-Integrated Spaces' },
 
-  // 6 Lifestyle Cards that appear in Row 5 after vertical scroll animation finishes
+  // 6 Lifestyle Cards (Hidden until vertical scroll animation ends, then reveal & scroll horizontally)
   { id: 14, src: '/assets/estate-lifestyle/image (1).png', tag: 'Private Cliffside Lounge', category: 'Panoramic Vista Suites' },
   { id: 15, src: '/assets/estate-lifestyle/image (2).png', tag: 'Lakeside Wellness Pavilion', category: 'Hydrotherapy & Spa' },
   { id: 16, src: '/assets/estate-lifestyle/image (3).png', tag: 'Zen Courtyard Gardens', category: 'Botanical Reflection Hub' },
@@ -105,7 +105,7 @@ export default function EstateAnimationScrollGrid() {
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        minHeight: '400vh', // Extended scroll space so horizontal glide triggers after vertical scroll completes
+        minHeight: '400vh',
       }}
     >
       {/* Invisible Spacer when heading is pinned */}
@@ -193,7 +193,7 @@ export default function EstateAnimationScrollGrid() {
           })}
         </div>
 
-        {/* Row 5: The Last Row of the Grid. Starts horizontal scroll ONLY AFTER vertical scroll animation finishes */}
+        {/* Row 5: The Last Row of the Grid */}
         <div
           style={{
             marginTop: '8rem',
@@ -210,15 +210,34 @@ export default function EstateAnimationScrollGrid() {
               display: 'flex',
               gap: '3.5rem',
               transform: `translate3d(-${horizontalProgress * 68}%, 0, 0)`,
-              willChange: 'transform',
+              willChange: 'transform, opacity',
               transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
-            {row5HorizontalItems.map((item) => (
-              <div key={item.id} style={{ flexShrink: 0, width: '255px' }}>
-                <EstateCard item={item} />
-              </div>
-            ))}
+            {row5HorizontalItems.map((item, index) => {
+              const isLifestyleCard = index >= 3;
+              // Lifestyle cards stay HIDDEN until vertical scroll animation completes (horizontalProgress > 0)
+              const lifestyleOpacity = isLifestyleCard
+                ? horizontalProgress > 0.01
+                  ? Math.min(1, horizontalProgress * 6)
+                  : 0
+                : 1;
+
+              return (
+                <div
+                  key={item.id}
+                  style={{
+                    flexShrink: 0,
+                    width: '255px',
+                    opacity: isLifestyleCard ? lifestyleOpacity : 1,
+                    transition: isLifestyleCard ? 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)' : 'none',
+                    pointerEvents: isLifestyleCard && lifestyleOpacity < 0.5 ? 'none' : 'auto',
+                  }}
+                >
+                  <EstateCard item={item} />
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
