@@ -12,7 +12,7 @@ interface EstateImageItem {
 }
 
 const estateItems: EstateImageItem[] = [
-  // Row 1: Columns 1, 3, 5
+  // Row 1: Columns 1, 3, 5 (First 3 Images - will have top padding)
   { id: 1, src: '/assets/estate-animation/image (1).png', tag: 'Parametric Pavilion', category: 'Fluid Future Architecture', col: 1, row: 1 },
   { id: 2, src: '/assets/estate-animation/image (2).png', tag: 'Pop Brutalism', category: 'Color Gradient Facades', col: 3, row: 1 },
   { id: 3, src: '/assets/estate-animation/image (3).png', tag: 'Organic Bio-Villa', category: 'Canopy Forest Sanctuary', col: 5, row: 1 },
@@ -42,11 +42,9 @@ export default function EstateAnimationScrollGrid() {
       const rect = sectionRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Only begin parallax scroll lift after the section header enters the active viewport zone
-      const triggerStart = windowHeight * 0.5;
-      const currentOffset = windowHeight - rect.top;
-      const effectiveScroll = Math.max(0, currentOffset - triggerStart);
-      setScrollY(effectiveScroll);
+      if (rect.top < windowHeight && rect.bottom > 0) {
+        setScrollY(windowHeight - rect.top);
+      }
 
       // Pin header when top of section reaches 6rem (96px) from window top
       const targetTop = 96;
@@ -71,7 +69,7 @@ export default function EstateAnimationScrollGrid() {
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '4rem 4vw 20rem',
+        padding: '3rem 4vw 20rem',
         width: '100%',
         maxWidth: '1600px',
         margin: '0 auto',
@@ -83,7 +81,7 @@ export default function EstateAnimationScrollGrid() {
       {/* Invisible Spacer when header is fixed to prevent layout shift */}
       {headerState === 'fixed' && <div style={{ height: '180px' }} />}
 
-      {/* Solid White Fixed Header Container with Soft Bottom Fade */}
+      {/* Solid White Fixed Header Container with Dense Bottom Fade */}
       <div style={{
         position: headerState === 'fixed' ? 'fixed' : headerState === 'bottom' ? 'absolute' : 'relative',
         top: headerState === 'fixed' ? 0 : 'auto',
@@ -110,7 +108,7 @@ export default function EstateAnimationScrollGrid() {
           </h2>
         </div>
 
-        {/* Soft White Fade Bar Extending Below Heading */}
+        {/* Dense Soft White Fade Bar Extending Below Heading */}
         <div style={{
           position: 'absolute',
           bottom: '-6rem',
@@ -122,19 +120,23 @@ export default function EstateAnimationScrollGrid() {
         }} />
       </div>
 
-      {/* 5-Column Checkerboard Grid Container with Generous Initial Margin Top */}
+      {/* 5-Column Checkerboard Grid Container */}
       <div
         className="checkerboard-grid"
         style={{
           position: 'relative',
           zIndex: 1,
-          marginTop: '6.5rem',
+          marginTop: headerState === 'fixed' ? '0' : '2.5rem',
         }}
       >
         {estateItems.map((item) => {
           // Parallax lift on scroll
           const parallaxMult = item.col % 2 === 0 ? 0.12 : 0.06;
           const parallaxOffset = scrollY * parallaxMult;
+
+          // Add extra top padding specifically for the first 3 images (Row 1)
+          const isRow1 = item.row === 1;
+          const row1TopPadding = isRow1 ? '5rem' : '0px';
 
           return (
             <div
@@ -143,6 +145,7 @@ export default function EstateAnimationScrollGrid() {
               style={{
                 gridColumn: item.col,
                 gridRow: item.row,
+                marginTop: row1TopPadding,
                 transform: `translateY(-${parallaxOffset}px)`,
                 transition: 'transform 0.1s cubic-bezier(0, 0, 0.2, 1)',
               }}
@@ -170,6 +173,7 @@ export default function EstateAnimationScrollGrid() {
             grid-column: auto !important;
             grid-row: auto !important;
             transform: none !important;
+            margin-top: 0 !important;
           }
         }
         @media (max-width: 640px) {
