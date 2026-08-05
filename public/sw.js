@@ -120,7 +120,7 @@ async function cacheFirst(request, cacheName, maxAgeSeconds) {
 
   try {
     const response = await fetch(request);
-    if (response.ok) {
+    if (response.ok || response.type === 'opaque') {
       cache.put(request, response.clone());
     }
     return response;

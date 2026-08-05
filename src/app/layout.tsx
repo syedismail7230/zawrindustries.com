@@ -2,12 +2,14 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Script from 'next/script';
+import dynamic from 'next/dynamic';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import CookieBanner from '@/components/CookieBanner';
-import SupportWidget from '@/components/SupportWidget';
-import Preloader from '@/components/Preloader';
-import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar';
+
+const CookieBanner = dynamic(() => import('@/components/CookieBanner'), { ssr: false });
+const SupportWidget = dynamic(() => import('@/components/SupportWidget'), { ssr: false });
+const Preloader = dynamic(() => import('@/components/Preloader'), { ssr: false });
+const ServiceWorkerRegistrar = dynamic(() => import('@/components/ServiceWorkerRegistrar'), { ssr: false });
 
 const inter = Inter({ subsets: ['latin'] });
 
