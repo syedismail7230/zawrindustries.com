@@ -11,8 +11,8 @@ interface EstateImageItem {
   row?: number;
 }
 
-// Vertical Checkerboard Grid Items (Rows 1 to 4)
-const verticalItems: EstateImageItem[] = [
+// Vertical Rows 1 to 4 (Items 1 - 10)
+const verticalRows: EstateImageItem[] = [
   { id: 1, src: '/assets/estate-animation/image (1).png', tag: 'Parametric Pavilion', category: 'Fluid Future Architecture', col: 1, row: 1 },
   { id: 2, src: '/assets/estate-animation/image (2).png', tag: 'Pop Brutalism', category: 'Color Gradient Facades', col: 3, row: 1 },
   { id: 3, src: '/assets/estate-animation/image (3).png', tag: 'Organic Bio-Villa', category: 'Canopy Forest Sanctuary', col: 5, row: 1 },
@@ -25,14 +25,14 @@ const verticalItems: EstateImageItem[] = [
   { id: 10, src: '/assets/estate-animation/image (10).png', tag: 'Eco Mountain Sanctuary', category: 'Sustainable Alpine Haven', col: 4, row: 4 },
 ];
 
-// Row 5 Cards (Images 11, 12, 13) + 6 Lifestyle Cards
-const horizontalItems: EstateImageItem[] = [
-  // Last 3 of estate-animation (Row 5 - as shown in user screenshot)
+// Row 5: Last Row of Grid (Items 11, 12, 13 + 6 Lifestyle Cards)
+const row5HorizontalItems: EstateImageItem[] = [
+  // 3 Animation Cards (Row 5 initial view)
   { id: 11, src: '/assets/estate-animation/image (11).png', tag: 'Sunlit Architectural Promenade', category: 'Outdoor Terrace Living' },
   { id: 12, src: '/assets/estate-animation/image (12).png', tag: 'Infinity Pool & Horizon Deck', category: 'Aquatic Sanctuary' },
   { id: 13, src: '/assets/estate-animation/image (13).png', tag: 'Biophilic Garden Atrium', category: 'Nature-Integrated Spaces' },
 
-  // 6 Lifestyle Cards that scroll into view next to Row 5
+  // 6 Lifestyle Cards that appear in Row 5 during horizontal scroll
   { id: 14, src: '/assets/estate-lifestyle/image (1).png', tag: 'Private Cliffside Lounge', category: 'Panoramic Vista Suites' },
   { id: 15, src: '/assets/estate-lifestyle/image (2).png', tag: 'Lakeside Wellness Pavilion', category: 'Hydrotherapy & Spa' },
   { id: 16, src: '/assets/estate-lifestyle/image (3).png', tag: 'Zen Courtyard Gardens', category: 'Botanical Reflection Hub' },
@@ -57,7 +57,6 @@ export default function EstateAnimationScrollGrid() {
       const windowHeight = window.innerHeight;
       const navOffset = 96;
 
-      // Pin header when top of section reaches 96px
       if (rect.top <= navOffset && rect.bottom > navOffset + 300) {
         setIsPinned(true);
         setIsUnpinnedBottom(false);
@@ -73,8 +72,8 @@ export default function EstateAnimationScrollGrid() {
         const scrolledIn = windowHeight - rect.top;
         const totalHeight = rect.height - windowHeight;
 
-        // Calculate progress for horizontal transition phase (starts when Row 5 arrives)
-        const horizontalStartRatio = 0.50;
+        // Progress threshold for horizontal scroll of Row 5
+        const horizontalStartRatio = 0.52;
         const rawProgress = Math.max(0, scrolledIn / totalHeight - horizontalStartRatio) / (1 - horizontalStartRatio);
         const clampedHorizontalProgress = Math.max(0, Math.min(1, rawProgress));
 
@@ -158,9 +157,9 @@ export default function EstateAnimationScrollGrid() {
         />
       </div>
 
-      {/* MAIN CONTAINER */}
+      {/* MAIN CONTENT CONTAINER */}
       <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 4vw' }}>
-        {/* PHASE 1: 5-Column Checkerboard Grid Container (Rows 1 - 4) */}
+        {/* Rows 1 to 4 (Vertical Grid Phase) */}
         <div
           className="checkerboard-grid"
           style={{
@@ -169,7 +168,7 @@ export default function EstateAnimationScrollGrid() {
             marginTop: isPinned ? '0' : '2rem',
           }}
         >
-          {verticalItems.map((item) => {
+          {verticalRows.map((item) => {
             const parallaxMult = (item.col || 1) % 2 === 0 ? 0.10 : 0.05;
             const parallaxOffset = scrollY * parallaxMult;
             const isRow1 = item.row === 1;
@@ -194,7 +193,7 @@ export default function EstateAnimationScrollGrid() {
           })}
         </div>
 
-        {/* PHASE 2: Row 5 + Lifestyle Horizontal Scroll Track */}
+        {/* Row 5: The Last Row of the Grid that horizontally glides Lifestyle Cards */}
         <div
           style={{
             marginTop: '8rem',
@@ -202,10 +201,10 @@ export default function EstateAnimationScrollGrid() {
             zIndex: 2,
             width: '100%',
             overflow: 'hidden',
-            padding: '2rem 0 4rem',
+            padding: '1rem 0 4rem',
           }}
         >
-          {/* Horizontal Track: Starts centered at Row 5 items, then glides lifestyle items from right */}
+          {/* Row 5 Horizontal Track */}
           <div
             style={{
               display: 'flex',
@@ -215,7 +214,7 @@ export default function EstateAnimationScrollGrid() {
               transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
-            {horizontalItems.map((item) => (
+            {row5HorizontalItems.map((item) => (
               <div key={item.id} style={{ flexShrink: 0, width: '255px' }}>
                 <EstateCard item={item} />
               </div>
