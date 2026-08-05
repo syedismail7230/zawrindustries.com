@@ -50,8 +50,6 @@ export default function EstateAnimationScrollGrid() {
   const [scrollY, setScrollY] = useState(0);
   const [horizontalProgress, setHorizontalProgress] = useState(0);
   const [showLifestyle, setShowLifestyle] = useState(false);
-  const [isPinned, setIsPinned] = useState(false);
-  const [isUnpinnedBottom, setIsUnpinnedBottom] = useState(false);
 
   useEffect(() => {
     let rafId: number;
@@ -60,31 +58,18 @@ export default function EstateAnimationScrollGrid() {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-      const navOffset = 96;
-
-      // Sticky viewport pinning state
-      if (rect.top <= navOffset && rect.bottom > navOffset + 350) {
-        setIsPinned(true);
-        setIsUnpinnedBottom(false);
-      } else if (rect.bottom <= navOffset + 350) {
-        setIsPinned(false);
-        setIsUnpinnedBottom(true);
-      } else {
-        setIsPinned(false);
-        setIsUnpinnedBottom(false);
-      }
 
       if (rect.top < windowHeight && rect.bottom > 0) {
         const scrolledIn = windowHeight - rect.top;
         const totalHeight = rect.height - windowHeight;
         const scrollRatio = scrolledIn / totalHeight;
 
-        // STEP 1 & 2: Last row reaches end -> lifestyle images appear immediately at 55%
-        const lifestyleAppearRatio = 0.55;
+        // STEP 1 & 2: Last row reaches end -> lifestyle images appear immediately at 50%
+        const lifestyleAppearRatio = 0.50;
         const isLifestyleVisible = scrollRatio >= lifestyleAppearRatio;
 
-        // STEP 3 & 4: Small pause between 55% and 72%, then horizontal scroll starts at 72%
-        const horizontalStartRatio = 0.72;
+        // STEP 3 & 4: Small pause between 50% and 68%, then horizontal scroll starts at 68%
+        const horizontalStartRatio = 0.68;
         const rawProgress = Math.max(0, scrollRatio - horizontalStartRatio) / (1 - horizontalStartRatio);
         const clampedHorizontalProgress = Math.max(0, Math.min(1, rawProgress));
 
@@ -112,32 +97,28 @@ export default function EstateAnimationScrollGrid() {
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '2rem 0 10rem',
+        padding: '0 0 10rem',
         width: '100%',
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        minHeight: '440vh',
+        minHeight: '400vh',
       }}
     >
-      {/* Invisible Spacer when heading is pinned */}
-      {isPinned && <div style={{ height: '160px' }} />}
-
-      {/* Single Unified Sticky Fixed Heading Container with Top Mask */}
+      {/* Permanent Solid White Top Header Mask & Pinned Heading */}
       <div
         style={{
-          position: isPinned ? 'fixed' : isUnpinnedBottom ? 'absolute' : 'relative',
-          top: isPinned ? 0 : 'auto',
-          bottom: isUnpinnedBottom ? '3rem' : 'auto',
+          position: 'sticky',
+          top: 0,
           left: 0,
           right: 0,
           width: '100%',
-          zIndex: 50,
+          zIndex: 100,
           backgroundColor: '#ffffff',
-          paddingTop: isPinned ? '5.8rem' : '1.5rem',
-          paddingBottom: '2.5rem',
+          paddingTop: '5.8rem',
+          paddingBottom: '2.2rem',
           textAlign: 'center',
-          boxShadow: isPinned ? '0 25px 45px rgba(255,255,255,1)' : 'none',
+          borderBottom: '1px solid rgba(241, 245, 249, 0.8)',
         }}
       >
         <div style={{ maxWidth: '850px', margin: '0 auto', padding: '0 1rem' }}>
@@ -154,7 +135,7 @@ export default function EstateAnimationScrollGrid() {
           </h2>
         </div>
 
-        {/* Ultra-Dense Soft White Fade Bar Extending Below Heading */}
+        {/* Ultra-Dense Soft White Fade Bar Below Heading */}
         <div
           style={{
             position: 'absolute',
@@ -170,23 +151,20 @@ export default function EstateAnimationScrollGrid() {
       </div>
 
       {/* MAIN CONTENT CONTAINER */}
-      <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 4vw' }}>
-        {/* PHASE 1: Vertical Grid (Rows 1 to 4) - Scrolls vertically into view */}
+      <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '3rem 4vw 0' }}>
+        {/* PHASE 1: Vertical Grid (Rows 1 to 4) - Pure natural scroll, NO overlap */}
         <div
           className="checkerboard-grid"
           style={{
             position: 'relative',
             zIndex: 1,
-            marginTop: isPinned ? '0' : '2rem',
-            transform: `translate3d(0, -${Math.min(scrollY, 550)}px, 0)`,
-            transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
           }}
         >
           {verticalRows.map((item) => {
-            const parallaxMult = (item.col || 1) % 2 === 0 ? 0.10 : 0.05;
+            const parallaxMult = (item.col || 1) % 2 === 0 ? 0.08 : 0.04;
             const parallaxOffset = scrollY * parallaxMult;
             const isRow1 = item.row === 1;
-            const row1TopPadding = isRow1 ? '7.5rem' : '0px';
+            const row1TopPadding = isRow1 ? '3rem' : '0px';
 
             return (
               <div
@@ -207,18 +185,15 @@ export default function EstateAnimationScrollGrid() {
           })}
         </div>
 
-        {/* PHASE 2: Row 5 Viewport Lock */}
+        {/* PHASE 2: Row 5 (Natural Flow below Row 4, horizontal scroll glides after pause) */}
         <div
           style={{
-            position: isPinned && showLifestyle ? 'fixed' : 'relative',
-            top: isPinned && showLifestyle ? '16.5rem' : 'auto',
-            left: isPinned && showLifestyle ? '4vw' : 'auto',
-            right: isPinned && showLifestyle ? '4vw' : 'auto',
+            marginTop: '10rem',
+            position: 'relative',
             zIndex: 10,
             width: '100%',
             overflow: 'hidden',
             padding: '1rem 0 4rem',
-            marginTop: isPinned && showLifestyle ? '0' : '8rem',
           }}
         >
           {/* Row 5 Interleaved Horizontal Track */}
@@ -233,8 +208,9 @@ export default function EstateAnimationScrollGrid() {
           >
             {row5HorizontalItems.map((item) => {
               const isLifestyleCard = item.id >= 14;
-              // Lifestyle cards appear (fade in) immediately when last row reaches end (showLifestyle is true),
-              // then pause during 55% -> 72%, then horizontal scroll starts at 72%+
+              // STEP 2: Lifestyle cards fade in IMMEDIATELY when last row reaches end (showLifestyle is true)
+              // STEP 3: Pause deadzone between 50% & 68%
+              // STEP 4: Horizontal scroll starts at 68%+
               const cardOpacity = isLifestyleCard ? (showLifestyle ? 1 : 0) : 1;
 
               return (
