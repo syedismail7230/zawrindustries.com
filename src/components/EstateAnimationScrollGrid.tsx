@@ -11,8 +11,8 @@ interface EstateImageItem {
   row?: number;
 }
 
-// Vertical Checkerboard Grid Items (10 Items)
-const verticalItems: EstateImageItem[] = [
+// Vertical Rows 1 to 3 (8 Items)
+const verticalRows: EstateImageItem[] = [
   { id: 1, src: '/assets/estate-animation/image (1).png', tag: 'Parametric Pavilion', category: 'Fluid Future Architecture', col: 1, row: 1 },
   { id: 2, src: '/assets/estate-animation/image (2).png', tag: 'Pop Brutalism', category: 'Color Gradient Facades', col: 3, row: 1 },
   { id: 3, src: '/assets/estate-animation/image (3).png', tag: 'Organic Bio-Villa', category: 'Canopy Forest Sanctuary', col: 5, row: 1 },
@@ -21,18 +21,20 @@ const verticalItems: EstateImageItem[] = [
   { id: 6, src: '/assets/estate-animation/image (6).png', tag: 'Subterranean Luxury', category: 'Eco Mountain Retreat', col: 1, row: 3 },
   { id: 7, src: '/assets/estate-animation/image (7).png', tag: 'Biophilic High-Rise', category: 'Vertical Forest Towers', col: 3, row: 3 },
   { id: 8, src: '/assets/estate-animation/image (8).png', tag: 'Classical Palatial Mansion', category: 'Baroque Heritage Design', col: 5, row: 3 },
-  { id: 9, src: '/assets/estate-animation/image (9).png', tag: 'Futuristic Glass Residence', category: 'Modern Structural Steel', col: 2, row: 4 },
-  { id: 10, src: '/assets/estate-animation/image (10).png', tag: 'Eco Mountain Sanctuary', category: 'Sustainable Alpine Haven', col: 4, row: 4 },
 ];
 
-// Horizontal Scroll Items (Last 3 from estate-animation + 6 from estate-lifestyle)
-const horizontalItems: EstateImageItem[] = [
-  // Last 3 of estate-animation that transform into horizontal scroll
+// Horizontal Scroll Sequence (Row 4 + Remaining 3 Animation + 6 Lifestyle = 11 Cards)
+const horizontalSequence: EstateImageItem[] = [
+  // Row 4 Cards (Futuristic Glass Residence & Eco Mountain Sanctuary)
+  { id: 9, src: '/assets/estate-animation/image (9).png', tag: 'Futuristic Glass Residence', category: 'Modern Structural Steel' },
+  { id: 10, src: '/assets/estate-animation/image (10).png', tag: 'Eco Mountain Sanctuary', category: 'Sustainable Alpine Haven' },
+
+  // Remaining 3 estate-animation cards
   { id: 11, src: '/assets/estate-animation/image (11).png', tag: 'Sunlit Architectural Promenade', category: 'Outdoor Terrace Living' },
   { id: 12, src: '/assets/estate-animation/image (12).png', tag: 'Infinity Pool & Horizon Deck', category: 'Aquatic Sanctuary' },
   { id: 13, src: '/assets/estate-animation/image (13).png', tag: 'Biophilic Garden Atrium', category: 'Nature-Integrated Spaces' },
 
-  // 6 from estate-lifestyle
+  // 6 estate-lifestyle cards
   { id: 14, src: '/assets/estate-lifestyle/image (1).png', tag: 'Private Cliffside Lounge', category: 'Panoramic Vista Suites' },
   { id: 15, src: '/assets/estate-lifestyle/image (2).png', tag: 'Lakeside Wellness Pavilion', category: 'Hydrotherapy & Spa' },
   { id: 16, src: '/assets/estate-lifestyle/image (3).png', tag: 'Zen Courtyard Gardens', category: 'Botanical Reflection Hub' },
@@ -57,11 +59,11 @@ export default function EstateAnimationScrollGrid() {
       const windowHeight = window.innerHeight;
       const navOffset = 96;
 
-      // Pin header when top of section reaches 96px
-      if (rect.top <= navOffset && rect.bottom > navOffset + 300) {
+      // Pin container when section reaches viewport top
+      if (rect.top <= navOffset && rect.bottom > navOffset + 400) {
         setIsPinned(true);
         setIsUnpinnedBottom(false);
-      } else if (rect.bottom <= navOffset + 300) {
+      } else if (rect.bottom <= navOffset + 400) {
         setIsPinned(false);
         setIsUnpinnedBottom(true);
       } else {
@@ -71,17 +73,23 @@ export default function EstateAnimationScrollGrid() {
 
       if (rect.top < windowHeight && rect.bottom > 0) {
         const scrolledIn = windowHeight - rect.top;
-        const totalHeight = rect.height - windowHeight;
+        const totalScrollable = rect.height - windowHeight;
 
-        // Calculate progress for horizontal transition phase (starts after vertical grid)
-        const horizontalStartRatio = 0.45;
-        const rawProgress = Math.max(0, scrolledIn / totalHeight - horizontalStartRatio) / (1 - horizontalStartRatio);
-        const clampedHorizontalProgress = Math.max(0, Math.min(1, rawProgress));
+        if (totalScrollable > 0) {
+          const currentScroll = Math.max(0, -rect.top + navOffset);
+          const overallProgress = Math.max(0, Math.min(1, currentScroll / totalScrollable));
 
-        rafId = requestAnimationFrame(() => {
-          setScrollY(scrolledIn);
-          setHorizontalProgress(clampedHorizontalProgress);
-        });
+          // Phase 1 (0 to 0.32): Vertical checkerboard scroll
+          const vertProgress = Math.min(1, overallProgress / 0.32);
+
+          // Phase 2 (0.32 to 1.0): Pause vertical scroll at Row 4 & glide horizontal track
+          const horizProgress = Math.max(0, (overallProgress - 0.32) / 0.68);
+
+          rafId = requestAnimationFrame(() => {
+            setScrollY(vertProgress * 500);
+            setHorizontalProgress(horizProgress);
+          });
+        }
       }
     };
 
@@ -101,12 +109,12 @@ export default function EstateAnimationScrollGrid() {
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '2rem 0 10rem',
+        padding: '2rem 0 12rem',
         width: '100%',
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        minHeight: '380vh', // Extended scroll height for combined vertical + horizontal sequence
+        minHeight: '480vh', // Extended scroll depth to lock vertical scroll & drive smooth horizontal glide
       }}
     >
       {/* Invisible Spacer when heading is pinned */}
@@ -158,20 +166,22 @@ export default function EstateAnimationScrollGrid() {
         />
       </div>
 
-      {/* MAIN CONTAINER */}
+      {/* MAIN CONTENT AREA */}
       <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 4vw' }}>
-        {/* PHASE 1: 5-Column Checkerboard Grid Container */}
+        {/* PHASE 1: Vertical Rows 1 to 3 (Fades smoothly as Row 4 reaches center) */}
         <div
           className="checkerboard-grid"
           style={{
             position: 'relative',
             zIndex: 1,
             marginTop: isPinned ? '0' : '2rem',
+            opacity: Math.max(0, 1 - horizontalProgress * 2.5),
+            transform: `translate3d(0, -${scrollY}px, 0)`,
+            transition: 'opacity 0.3s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+            pointerEvents: horizontalProgress > 0.3 ? 'none' : 'auto',
           }}
         >
-          {verticalItems.map((item) => {
-            const parallaxMult = (item.col || 1) % 2 === 0 ? 0.10 : 0.05;
-            const parallaxOffset = scrollY * parallaxMult;
+          {verticalRows.map((item) => {
             const isRow1 = item.row === 1;
             const row1TopPadding = isRow1 ? '7.5rem' : '0px';
 
@@ -183,9 +193,6 @@ export default function EstateAnimationScrollGrid() {
                   gridColumn: item.col,
                   gridRow: item.row,
                   marginTop: row1TopPadding,
-                  transform: `translate3d(0, -${parallaxOffset}px, 0)`,
-                  willChange: 'transform',
-                  transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
                 }}
               >
                 <EstateCard item={item} />
@@ -194,28 +201,31 @@ export default function EstateAnimationScrollGrid() {
           })}
         </div>
 
-        {/* PHASE 2: Seamless Horizontal Transformation Track */}
+        {/* PHASE 2: Pinned Horizontal Scroll Track (Starts at Row 4 & glides remaining cards) */}
         <div
           style={{
-            marginTop: '8rem',
-            position: 'relative',
-            zIndex: 2,
+            position: isPinned ? 'fixed' : 'relative',
+            top: isPinned ? '16rem' : 'auto',
+            left: isPinned ? '4vw' : 'auto',
+            right: isPinned ? '4vw' : 'auto',
+            zIndex: 10,
             width: '100%',
             overflow: 'hidden',
             padding: '2rem 0 4rem',
+            marginTop: isPinned ? '0' : '4rem',
           }}
         >
           {/* Horizontal Track Gliding Smoothly */}
           <div
             style={{
               display: 'flex',
-              gap: '3.5rem',
-              transform: `translate3d(-${horizontalProgress * 78}%, 0, 0)`,
+              gap: '4rem',
+              transform: `translate3d(-${horizontalProgress * 82}%, 0, 0)`,
               willChange: 'transform',
               transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
-            {horizontalItems.map((item) => (
+            {horizontalSequence.map((item) => (
               <div key={item.id} style={{ flexShrink: 0, width: '255px' }}>
                 <EstateCard item={item} />
               </div>
