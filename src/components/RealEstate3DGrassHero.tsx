@@ -74,7 +74,7 @@ export default function RealEstate3DGrassHero() {
     sunLight.position.set(-35, 50, 35);
     scene.add(sunLight);
 
-    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x388e3c, 1.15);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x1b5e20, 1.15);
     scene.add(hemiLight);
 
     // 6. 3D Procedural Rolling Terrain Mesh
@@ -104,7 +104,169 @@ export default function RealEstate3DGrassHero() {
     const terrain = new THREE.Mesh(terrainGeo, terrainMat);
     scene.add(terrain);
 
-    // 7. Ultra-Smooth 3D Grass Meadow (2,400,000 Instanced Blades - 120 FPS)
+    // 7. Photorealistic Micro-Leaf Tree Generator
+    const createMicroLeafTexture = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 512;
+      canvas.height = 512;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return null;
+
+      ctx.clearRect(0, 0, 512, 512);
+
+      const leafPalette = ['#1b5e20', '#2e7d32', '#388e3c', '#4caf50', '#66bb6a', '#aeea00'];
+
+      // Central stem
+      ctx.beginPath();
+      ctx.moveTo(256, 490);
+      ctx.quadraticCurveTo(260, 256, 256, 20);
+      ctx.strokeStyle = '#3e2723';
+      ctx.lineWidth = 14;
+      ctx.stroke();
+
+      // Branchlets
+      for (let b = 0; b < 12; b++) {
+        const by = 80 + b * 34;
+        const dir = b % 2 === 0 ? 1 : -1;
+        ctx.beginPath();
+        ctx.moveTo(256, by);
+        ctx.quadraticCurveTo(256 + dir * 60, by - 20, 256 + dir * 140, by - 50);
+        ctx.strokeStyle = '#4e342e';
+        ctx.lineWidth = 6;
+        ctx.stroke();
+      }
+
+      // 160 Micro Leaves per sprig card
+      for (let i = 0; i < 160; i++) {
+        const lx = 256 + (Math.random() - 0.5) * 360;
+        const ly = 50 + Math.random() * 420;
+        const rx = 3.2 + Math.random() * 5.0;
+        const ry = 7.5 + Math.random() * 11.0;
+        const rot = (Math.random() - 0.5) * Math.PI;
+
+        ctx.save();
+        ctx.translate(lx, ly);
+        ctx.rotate(rot);
+
+        ctx.beginPath();
+        ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+        ctx.fillStyle = leafPalette[i % leafPalette.length];
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(0, -ry * 0.85);
+        ctx.lineTo(0, ry * 0.85);
+        ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+        ctx.lineWidth = 0.8;
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    };
+
+    const microLeafTex = createMicroLeafTexture();
+
+    const trunkMat = new THREE.MeshStandardMaterial({
+      color: 0x2d1e18,
+      roughness: 0.92,
+      metalness: 0.03,
+    });
+
+    const microLeafMat = new THREE.MeshStandardMaterial({
+      map: microLeafTex,
+      transparent: true,
+      alphaTest: 0.22,
+      side: THREE.DoubleSide,
+      roughness: 0.45,
+      metalness: 0.03,
+    });
+
+    const microBranchGeo = new THREE.PlaneGeometry(0.65, 0.65);
+
+    const createHyperRealisticTree = (tx: number, tz: number, scale = 1) => {
+      const tree = new THREE.Group();
+      const ty = getTerrainHeight(tx, tz);
+      tree.position.set(tx, ty, tz);
+      tree.scale.setScalar(scale);
+
+      // Tapered Wooden Trunk
+      const trunkGeo = new THREE.CylinderGeometry(0.16, 0.48, 4.6, 12);
+      trunkGeo.translate(0, 2.3, 0);
+      const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+      tree.add(trunk);
+
+      // 5 Spreading Branch boughs
+      const branchAngles = [-0.6, 0.5, -0.3, 0.4, 0];
+      const branchHeights = [3.0, 3.3, 3.8, 4.0, 4.4];
+      const branchDirs = [
+        { x: -0.75, z: 0.25 },
+        { x: 0.65, z: -0.35 },
+        { x: -0.35, z: -0.65 },
+        { x: 0.45, z: 0.55 },
+        { x: 0, z: 0 },
+      ];
+
+      branchAngles.forEach((ang, idx) => {
+        const bGeo = new THREE.CylinderGeometry(0.05, 0.14, 2.2, 8);
+        bGeo.rotateZ(ang);
+        bGeo.translate(branchDirs[idx].x, branchHeights[idx], branchDirs[idx].z);
+        const bMesh = new THREE.Mesh(bGeo, trunkMat);
+        tree.add(bMesh);
+      });
+
+      // 90 Micro-Leaf Sprig Cards forming dense, soft foliage canopy
+      const leafCluster = new THREE.Group();
+      leafCluster.position.set(0, 4.2, 0);
+
+      for (let i = 0; i < 90; i++) {
+        const sprig = new THREE.Mesh(microBranchGeo, microLeafMat);
+        
+        const u = Math.random();
+        const v = Math.random();
+        const theta = u * 2.0 * Math.PI;
+        const phi = Math.acos(2.0 * v - 1.0);
+        const r = 0.4 + Math.pow(Math.random(), 0.7) * 2.0;
+
+        const rx = r * Math.sin(phi) * Math.cos(theta);
+        const ry = (r * Math.cos(phi)) * 0.85 + 0.3;
+        const rz = r * Math.sin(phi) * Math.sin(theta);
+
+        sprig.position.set(rx, ry, rz);
+        sprig.rotation.set(
+          Math.random() * Math.PI,
+          Math.random() * Math.PI,
+          Math.random() * Math.PI
+        );
+        sprig.scale.setScalar(0.75 + Math.random() * 0.5);
+        leafCluster.add(sprig);
+      }
+      tree.add(leafCluster);
+
+      return tree;
+    };
+
+    // Scatter 14 Photorealistic Trees tastefully across distant background hills
+    const treeGroup = new THREE.Group();
+    const treesList: THREE.Group[] = [];
+    const treePositions = [
+      { x: -45, z: -35 }, { x: -28, z: -48 }, { x: -12, z: -38 }, { x: 8, z: -45 }, { x: 28, z: -36 }, { x: 48, z: -42 },
+      { x: -55, z: -55 }, { x: -35, z: -62 }, { x: -5, z: -58 }, { x: 18, z: -65 }, { x: 42, z: -58 }, { x: 60, z: -52 },
+      { x: -20, z: -72 }, { x: 30, z: -75 }
+    ];
+
+    treePositions.forEach(p => {
+      const scale = 0.95 + Math.random() * 0.45;
+      const tree = createHyperRealisticTree(p.x, p.z, scale);
+      treeGroup.add(tree);
+      treesList.push(tree);
+    });
+    scene.add(treeGroup);
+
+    // 8. Light & Smooth 3D Grass Meadow (2,400,000 Instanced Blades - 120 FPS)
     const BLADE_COUNT = 2400000;
 
     const bladeWidth = 0.016;
@@ -218,7 +380,7 @@ export default function RealEstate3DGrassHero() {
 
     setIsLoaded(true);
 
-    // 8. Instant Mathematical Ground Plane Projection (0ms Raycast Lag)
+    // 9. Instant Mathematical Ground Plane Projection (0ms Raycast Lag)
     const mouse = new THREE.Vector2(-999, -999);
     const mouseWorld = new THREE.Vector3(-999, -999, -999);
 
@@ -227,7 +389,6 @@ export default function RealEstate3DGrassHero() {
       mouse.x = ((e.clientX - rect.left) / container.clientWidth) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / container.clientHeight) * 2 + 1;
       
-      // Fast mathematical projection to ground plane (0ms overhead)
       mouseWorld.set(mouse.x * 22, 0, -mouse.y * 12);
     };
 
@@ -239,16 +400,23 @@ export default function RealEstate3DGrassHero() {
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('mouseleave', handleMouseLeave);
 
-    // 9. Ultra-Smooth Animation Loop
+    // 10. Ultra-Smooth Animation Loop
     let clock = new THREE.Clock();
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
       const time = clock.getElapsedTime();
 
-      // Pass GPU uniforms
+      // Pass GPU uniforms for grass
       grassMat.uniforms.uTime.value = time;
       grassMat.uniforms.uMouse.value.copy(mouseWorld);
+
+      // Organic Tree Swaying in Wind
+      treesList.forEach((tree, idx) => {
+        const swayTime = time * 1.2 + idx * 0.4;
+        tree.rotation.z = Math.sin(swayTime) * 0.015;
+        tree.rotation.x = Math.cos(swayTime * 0.7) * 0.01;
+      });
 
       // Camera Easing
       if (mouse.x !== -999) {
@@ -262,7 +430,7 @@ export default function RealEstate3DGrassHero() {
 
     animate();
 
-    // 10. Resize Handler
+    // 11. Resize Handler
     const handleResize = () => {
       if (!containerRef.current) return;
       const w = containerRef.current.clientWidth;
@@ -324,7 +492,7 @@ export default function RealEstate3DGrassHero() {
             marginBottom: '1rem',
           }} />
           <p style={{ fontSize: '0.95rem', letterSpacing: '0.05em', fontWeight: 500 }}>
-            Initializing Ultra-Smooth 3D Grass Meadow...
+            Initializing Photorealistic 3D Landscape...
           </p>
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
