@@ -32,7 +32,7 @@ const row5HorizontalItems: EstateImageItem[] = [
   { id: 12, src: '/assets/estate-animation/image (12).png', tag: 'Infinity Pool & Horizon Deck', category: 'Aquatic Sanctuary' },
   { id: 13, src: '/assets/estate-animation/image (13).png', tag: 'Biophilic Garden Atrium', category: 'Nature-Integrated Spaces' },
 
-  // 6 Lifestyle Cards (Hidden until vertical scroll animation ends, then reveal & scroll horizontally)
+  // 6 Lifestyle Cards (Strictly hidden until entire vertical grid scroll ends)
   { id: 14, src: '/assets/estate-lifestyle/image (1).png', tag: 'Private Cliffside Lounge', category: 'Panoramic Vista Suites' },
   { id: 15, src: '/assets/estate-lifestyle/image (2).png', tag: 'Lakeside Wellness Pavilion', category: 'Hydrotherapy & Spa' },
   { id: 16, src: '/assets/estate-lifestyle/image (3).png', tag: 'Zen Courtyard Gardens', category: 'Botanical Reflection Hub' },
@@ -72,8 +72,8 @@ export default function EstateAnimationScrollGrid() {
         const scrolledIn = windowHeight - rect.top;
         const totalHeight = rect.height - windowHeight;
 
-        // Progress threshold: horizontal scroll triggers ONLY AFTER Row 5 vertical scroll finishes settling (at 68%)
-        const horizontalStartRatio = 0.68;
+        // Horizontal scroll triggers strictly AFTER entire vertical grid scroll ends (at 85% of section)
+        const horizontalStartRatio = 0.85;
         const rawProgress = Math.max(0, scrolledIn / totalHeight - horizontalStartRatio) / (1 - horizontalStartRatio);
         const clampedHorizontalProgress = Math.max(0, Math.min(1, rawProgress));
 
@@ -105,7 +105,7 @@ export default function EstateAnimationScrollGrid() {
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        minHeight: '400vh',
+        minHeight: '450vh', // Ample vertical scroll distance ensuring vertical grid finishes 100% before lifestyle cards appear
       }}
     >
       {/* Invisible Spacer when heading is pinned */}
@@ -193,7 +193,7 @@ export default function EstateAnimationScrollGrid() {
           })}
         </div>
 
-        {/* Row 5: The Last Row of the Grid */}
+        {/* Row 5: The Last Row of the Grid. Lifestyle cards appear ONLY AFTER vertical scroll completely ends */}
         <div
           style={{
             marginTop: '8rem',
@@ -216,10 +216,10 @@ export default function EstateAnimationScrollGrid() {
           >
             {row5HorizontalItems.map((item, index) => {
               const isLifestyleCard = index >= 3;
-              // Lifestyle cards stay HIDDEN until vertical scroll animation completes (horizontalProgress > 0)
+              // Lifestyle cards MUST NOT appear at all until vertical scroll reaches the end (horizontalProgress > 0)
               const lifestyleOpacity = isLifestyleCard
-                ? horizontalProgress > 0.01
-                  ? Math.min(1, horizontalProgress * 6)
+                ? horizontalProgress > 0.02
+                  ? Math.min(1, (horizontalProgress - 0.02) * 8)
                   : 0
                 : 1;
 
@@ -230,7 +230,8 @@ export default function EstateAnimationScrollGrid() {
                     flexShrink: 0,
                     width: '255px',
                     opacity: isLifestyleCard ? lifestyleOpacity : 1,
-                    transition: isLifestyleCard ? 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1)' : 'none',
+                    visibility: isLifestyleCard && lifestyleOpacity === 0 ? 'hidden' : 'visible',
+                    transition: isLifestyleCard ? 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease' : 'none',
                     pointerEvents: isLifestyleCard && lifestyleOpacity < 0.5 ? 'none' : 'auto',
                   }}
                 >
