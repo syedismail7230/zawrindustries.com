@@ -77,11 +77,11 @@ export default function RealEstate3DGrassHero() {
     ground.position.set(0, -0.6, 2);
     scene.add(ground);
 
-    // 6. Hyper-Realistic Instanced 3D Grass Blades (Ultra-Dense Carpet)
-    const BLADE_COUNT = 75000;
+    // 6. Hyper-Realistic Instanced 3D Grass Blades (300k Ultra-Dense Carpet)
+    const BLADE_COUNT = 300000;
 
-    // Curved Ribbon Blade Geometry (Ultra-Slim & Delicate)
-    const bladeWidth = 0.016;
+    // Curved Ribbon Blade Geometry (0.008 Ultra-Slim Filaments)
+    const bladeWidth = 0.008;
     const bladeHeight = 1.15;
     const bladeGeo = new THREE.PlaneGeometry(bladeWidth, bladeHeight, 1, 5);
     bladeGeo.translate(0, bladeHeight / 2, 0);
