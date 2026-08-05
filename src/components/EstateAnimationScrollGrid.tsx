@@ -42,9 +42,11 @@ export default function EstateAnimationScrollGrid() {
       const rect = sectionRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      if (rect.top < windowHeight && rect.bottom > 0) {
-        setScrollY(windowHeight - rect.top);
-      }
+      // Only begin parallax scroll lift after the section header enters the active viewport zone
+      const triggerStart = windowHeight * 0.5;
+      const currentOffset = windowHeight - rect.top;
+      const effectiveScroll = Math.max(0, currentOffset - triggerStart);
+      setScrollY(effectiveScroll);
 
       // Pin header when top of section reaches 6rem (96px) from window top
       const targetTop = 96;
@@ -69,7 +71,7 @@ export default function EstateAnimationScrollGrid() {
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '3rem 4vw 20rem',
+        padding: '4rem 4vw 20rem',
         width: '100%',
         maxWidth: '1600px',
         margin: '0 auto',
@@ -81,7 +83,7 @@ export default function EstateAnimationScrollGrid() {
       {/* Invisible Spacer when header is fixed to prevent layout shift */}
       {headerState === 'fixed' && <div style={{ height: '180px' }} />}
 
-      {/* Solid White Fixed Header Container with Dense Bottom Fade */}
+      {/* Solid White Fixed Header Container with Soft Bottom Fade */}
       <div style={{
         position: headerState === 'fixed' ? 'fixed' : headerState === 'bottom' ? 'absolute' : 'relative',
         top: headerState === 'fixed' ? 0 : 'auto',
@@ -108,7 +110,7 @@ export default function EstateAnimationScrollGrid() {
           </h2>
         </div>
 
-        {/* Dense Soft White Fade Bar Extending Below Heading */}
+        {/* Soft White Fade Bar Extending Below Heading */}
         <div style={{
           position: 'absolute',
           bottom: '-6rem',
@@ -120,13 +122,13 @@ export default function EstateAnimationScrollGrid() {
         }} />
       </div>
 
-      {/* 5-Column Checkerboard Grid Container */}
+      {/* 5-Column Checkerboard Grid Container with Generous Initial Margin Top */}
       <div
         className="checkerboard-grid"
         style={{
           position: 'relative',
           zIndex: 1,
-          marginTop: headerState === 'fixed' ? '0' : '2rem',
+          marginTop: '6.5rem',
         }}
       >
         {estateItems.map((item) => {
