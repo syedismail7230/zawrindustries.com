@@ -34,6 +34,8 @@ const estateItems: EstateImageItem[] = [
 export default function EstateAnimationScrollGrid() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [scrollY, setScrollY] = useState(0);
+  const [isPinned, setIsPinned] = useState(false);
+  const [isUnpinnedBottom, setIsUnpinnedBottom] = useState(false);
 
   useEffect(() => {
     let rafId: number;
@@ -47,6 +49,21 @@ export default function EstateAnimationScrollGrid() {
         rafId = requestAnimationFrame(() => {
           setScrollY(windowHeight - rect.top);
         });
+      }
+
+      // Pin header when top of section reaches 96px (below main navbar)
+      const targetTop = 96;
+      const endOffset = 300;
+
+      if (rect.top <= targetTop && rect.bottom > targetTop + endOffset) {
+        setIsPinned(true);
+        setIsUnpinnedBottom(false);
+      } else if (rect.bottom <= targetTop + endOffset) {
+        setIsPinned(false);
+        setIsUnpinnedBottom(true);
+      } else {
+        setIsPinned(false);
+        setIsUnpinnedBottom(false);
       }
     };
 
@@ -64,26 +81,33 @@ export default function EstateAnimationScrollGrid() {
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '2rem 4vw 16rem',
+        padding: '2rem 4vw 22rem',
         width: '100%',
         maxWidth: '1600px',
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
+        minHeight: '220vh',
       }}
     >
-      {/* 100% Silk-Smooth GPU Compositor Sticky Heading Container */}
+      {/* Invisible Spacer when heading is pinned to prevent layout jump */}
+      {isPinned && <div style={{ height: '140px' }} />}
+
+      {/* Bulletproof Sticky Fixed Heading Container */}
       <div
         style={{
-          position: 'sticky',
-          top: '5.8rem',
+          position: isPinned ? 'fixed' : isUnpinnedBottom ? 'absolute' : 'relative',
+          top: isPinned ? 0 : 'auto',
+          bottom: isUnpinnedBottom ? '3rem' : 'auto',
+          left: 0,
+          right: 0,
+          width: '100%',
           zIndex: 50,
           backgroundColor: '#ffffff',
-          paddingTop: '2rem',
-          paddingBottom: '2.5rem',
+          paddingTop: isPinned ? '5.8rem' : '1.5rem',
+          paddingBottom: '2.2rem',
           textAlign: 'center',
-          width: '100%',
-          willChange: 'transform',
+          boxShadow: isPinned ? '0 20px 40px rgba(255,255,255,1)' : 'none',
         }}
       >
         <div style={{ maxWidth: '850px', margin: '0 auto', padding: '0 1rem' }}>
@@ -121,7 +145,7 @@ export default function EstateAnimationScrollGrid() {
         style={{
           position: 'relative',
           zIndex: 1,
-          marginTop: '1.5rem',
+          marginTop: isPinned ? '0' : '2rem',
         }}
       >
         {estateItems.map((item) => {
@@ -131,7 +155,7 @@ export default function EstateAnimationScrollGrid() {
 
           // Top padding for Row 1 (First 3 Images)
           const isRow1 = item.row === 1;
-          const row1TopPadding = isRow1 ? '5rem' : '0px';
+          const row1TopPadding = isRow1 ? '5.5rem' : '0px';
 
           return (
             <div

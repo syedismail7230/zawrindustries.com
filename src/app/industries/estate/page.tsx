@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 
 export default function RealEstatePage() {
   return (
-    <div style={{ backgroundColor: '#ffffff', color: '#111111', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#ffffff', color: '#111111', minHeight: '100vh', overflowX: 'clip' }}>
       {/* 1. Hero Image Section */}
       <RealEstate3DGrassHero />
 
