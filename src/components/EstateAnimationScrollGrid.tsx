@@ -53,7 +53,7 @@ export default function EstateAnimationScrollGrid() {
 
       // Pin header when top of section reaches 96px (below main navbar)
       const targetTop = 96;
-      const endOffset = 300;
+      const endOffset = 380;
 
       if (rect.top <= targetTop && rect.bottom > targetTop + endOffset) {
         setIsPinned(true);
@@ -81,17 +81,17 @@ export default function EstateAnimationScrollGrid() {
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '2rem 4vw 22rem',
+        padding: '2rem 4vw 28rem',
         width: '100%',
         maxWidth: '1600px',
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        minHeight: '220vh',
+        minHeight: '260vh',
       }}
     >
       {/* Invisible Spacer when heading is pinned to prevent layout jump */}
-      {isPinned && <div style={{ height: '140px' }} />}
+      {isPinned && <div style={{ height: '160px' }} />}
 
       {/* Bulletproof Sticky Fixed Heading Container */}
       <div
@@ -105,9 +105,9 @@ export default function EstateAnimationScrollGrid() {
           zIndex: 50,
           backgroundColor: '#ffffff',
           paddingTop: isPinned ? '5.8rem' : '1.5rem',
-          paddingBottom: '2.2rem',
+          paddingBottom: '2.5rem',
           textAlign: 'center',
-          boxShadow: isPinned ? '0 20px 40px rgba(255,255,255,1)' : 'none',
+          boxShadow: isPinned ? '0 25px 45px rgba(255,255,255,1)' : 'none',
         }}
       >
         <div style={{ maxWidth: '850px', margin: '0 auto', padding: '0 1rem' }}>
@@ -128,10 +128,10 @@ export default function EstateAnimationScrollGrid() {
         <div
           style={{
             position: 'absolute',
-            bottom: '-6rem',
+            bottom: '-6.5rem',
             left: 0,
             right: 0,
-            height: '6.5rem',
+            height: '7rem',
             background:
               'linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0.98) 40%, rgba(255,255,255,0.7) 70%, rgba(255,255,255,0) 100%)',
             pointerEvents: 'none',
@@ -139,7 +139,7 @@ export default function EstateAnimationScrollGrid() {
         />
       </div>
 
-      {/* 5-Column Checkerboard Grid Container */}
+      {/* 5-Column Checkerboard Grid Container with Expanded 12rem Vertical Row Gaps */}
       <div
         className="checkerboard-grid"
         style={{
@@ -155,7 +155,7 @@ export default function EstateAnimationScrollGrid() {
 
           // Top padding for Row 1 (First 3 Images)
           const isRow1 = item.row === 1;
-          const row1TopPadding = isRow1 ? '5.5rem' : '0px';
+          const row1TopPadding = isRow1 ? '7.5rem' : '0px';
 
           return (
             <div
@@ -180,14 +180,14 @@ export default function EstateAnimationScrollGrid() {
         .checkerboard-grid {
           display: grid;
           grid-template-columns: repeat(5, 1fr);
-          gap: 6rem 2vw;
+          gap: 12rem 2.5vw;
           align-items: start;
           width: 100%;
         }
         @media (max-width: 1100px) {
           .checkerboard-grid {
             grid-template-columns: repeat(3, 1fr);
-            gap: 4.5rem 2vw;
+            gap: 7rem 2vw;
           }
           .checker-item {
             grid-column: auto !important;
@@ -199,7 +199,7 @@ export default function EstateAnimationScrollGrid() {
         @media (max-width: 640px) {
           .checkerboard-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 3.5rem 1.5rem;
+            gap: 5rem 1.5rem;
           }
         }
       `}</style>
