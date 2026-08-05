@@ -306,40 +306,6 @@ export default function RealEstate3DGrassHero() {
         </div>
       )}
 
-      {/* Top Title Overlay */}
-      <div style={{
-        position: 'absolute',
-        top: '3.5rem',
-        left: '5%',
-        right: '5%',
-        zIndex: 5,
-        pointerEvents: 'none',
-      }}>
-        <div style={{ pointerEvents: 'auto', maxWidth: '680px' }}>
-          <h1 style={{
-            fontSize: 'clamp(2.5rem, 5.5vw, 4.4rem)',
-            fontWeight: 800,
-            color: '#ffffff',
-            lineHeight: 1.08,
-            letterSpacing: '-0.03em',
-            marginBottom: '1rem',
-            textShadow: '0 4px 24px rgba(0, 0, 0, 0.75)',
-          }}>
-            Real Estate & PropTech Solutions
-          </h1>
-
-          <p style={{
-            fontSize: 'clamp(1rem, 1.8vw, 1.25rem)',
-            color: '#f0fdf4',
-            fontWeight: 500,
-            lineHeight: 1.6,
-            maxWidth: '580px',
-            textShadow: '0 2px 14px rgba(0, 0, 0, 0.8)',
-          }}>
-            Combining sustainable land development with intelligent PropTech assets across India and the UAE.
-          </p>
-        </div>
-      </div>
     </section>
   );
 }
