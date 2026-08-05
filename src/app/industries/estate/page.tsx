@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
+import ScrollTextReveal from '@/components/ScrollTextReveal';
 
 const RealEstate3DGrassHero = dynamic(() => import('@/components/RealEstate3DGrassHero'), {
   loading: () => (
@@ -17,8 +18,11 @@ export const metadata: Metadata = {
 export default function RealEstatePage() {
   return (
     <div style={{ backgroundColor: '#ffffff', color: '#111111', minHeight: '100vh', overflowX: 'hidden' }}>
-      {/* 1. Hyperrealistic Interactive 3D Meadow Hero Section */}
+      {/* 1. Hero Image Section */}
       <RealEstate3DGrassHero />
+
+      {/* 2. Scroll-Driven Word Reveal Statement Section */}
+      <ScrollTextReveal text="We're here to build something meaningful together, turning ideas into impactful real estate experiences that create lasting value and drive real growth." />
 
       {/* 2. Core Capabilities & PropTech Matrix */}
       <section style={{ padding: '6rem 5%', maxWidth: '1300px', margin: '0 auto' }}>
