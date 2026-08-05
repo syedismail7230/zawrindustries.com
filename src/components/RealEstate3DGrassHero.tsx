@@ -86,12 +86,12 @@ export default function RealEstate3DGrassHero() {
       return Math.sin(x * 0.12) * Math.cos(z * 0.12) * 1.4 + Math.sin(x * 0.05) * 0.8;
     };
 
-    // 5. Instanced 3D Grass Blades Generation
-    const BLADE_COUNT = 16000;
+    // 5. Instanced 3D Grass Blades Generation (Ultra-Dense Carpet)
+    const BLADE_COUNT = 45000;
     
-    // Custom Tapered Blade Geometry
-    const bladeGeo = new THREE.PlaneGeometry(0.12, 1.3, 1, 4);
-    bladeGeo.translate(0, 0.65, 0); // Origin at blade base
+    // Custom Slim Tapered Blade Geometry
+    const bladeGeo = new THREE.PlaneGeometry(0.045, 1.35, 1, 4);
+    bladeGeo.translate(0, 0.675, 0); // Origin at blade base
 
     // Colors gradient (Emerald base to Sunlit Yellow-Green tip)
     const baseColor = new THREE.Color('#1b4332');
