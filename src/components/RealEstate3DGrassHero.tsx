@@ -17,8 +17,8 @@ export default function RealEstate3DGrassHero() {
 
     // 1. Scene & Atmosphere Fog Setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#64b5f6');
-    scene.fog = new THREE.FogExp2('#b3e5fc', 0.009); // Realistic distance haze
+    scene.background = new THREE.Color('#ffffff');
+    scene.fog = new THREE.FogExp2('#ffffff', 0.006); // Pure crisp white distance haze
 
     // 2. Camera Setup (Cinematic Meadow Angle)
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 300);
@@ -35,13 +35,13 @@ export default function RealEstate3DGrassHero() {
     renderer.toneMappingExposure = 1.25;
     container.appendChild(renderer.domElement);
 
-    // 4. Procedural Sky Dome Gradient (Azure Blue -> Golden Horizon)
+    // 4. Procedural Sky Dome Gradient (Pure White Sky)
     const skyGeo = new THREE.SphereGeometry(220, 32, 16);
     const skyMat = new THREE.ShaderMaterial({
       side: THREE.BackSide,
       uniforms: {
-        topColor: { value: new THREE.Color('#1565c0') },
-        bottomColor: { value: new THREE.Color('#e0f7fa') },
+        topColor: { value: new THREE.Color('#ffffff') },
+        bottomColor: { value: new THREE.Color('#f8fafc') },
         offset: { value: 12 },
         exponent: { value: 0.5 },
       },
