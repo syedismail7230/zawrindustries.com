@@ -56,24 +56,26 @@ export default function EstateAnimationScrollGrid() {
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '5rem 4vw 11rem',
+        padding: '3rem 4vw 11rem',
         width: '100%',
         maxWidth: '1600px',
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        overflow: 'hidden',
       }}
     >
-      {/* Header Section with Solid Background & Z-Index to Prevent Image Overlap */}
+      {/* Sticky Header Section: Pins to top (5rem) while scrolling through the grid */}
       <div style={{
-        textAlign: 'center',
-        maxWidth: '750px',
-        margin: '0 auto 4rem',
-        position: 'relative',
-        zIndex: 10,
+        position: 'sticky',
+        top: '5rem',
+        zIndex: 50,
         backgroundColor: '#ffffff',
-        paddingBottom: '1.5rem',
+        paddingTop: '2rem',
+        paddingBottom: '2rem',
+        textAlign: 'center',
+        maxWidth: '800px',
+        margin: '0 auto',
+        boxShadow: '0 10px 30px rgba(255,255,255,0.95)',
       }}>
         <h2 style={{
           fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
@@ -86,32 +88,19 @@ export default function EstateAnimationScrollGrid() {
         </h2>
       </div>
 
-      {/* Top Soft Fade Gradient Mask below Header */}
-      <div style={{
-        position: 'absolute',
-        top: '16.5rem',
-        left: 0,
-        right: 0,
-        height: '4rem',
-        background: 'linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0) 100%)',
-        zIndex: 5,
-        pointerEvents: 'none',
-      }} />
-
-      {/* 5-Column Checkerboard Grid Container with Clamped Lift & Bottom Fade */}
+      {/* 5-Column Checkerboard Grid Container */}
       <div
         className="checkerboard-grid"
         style={{
           position: 'relative',
           zIndex: 1,
-          WebkitMaskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%)',
-          maskImage: 'linear-gradient(to bottom, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 85%, rgba(0,0,0,0) 100%)',
+          marginTop: '2rem',
         }}
       >
         {estateItems.map((item) => {
-          // Clamped Parallax offset based on column position (Max 55px upward lift to prevent overlap)
-          const parallaxMult = item.col % 2 === 0 ? 0.08 : 0.04;
-          const parallaxOffset = Math.min(55, scrollY * parallaxMult);
+          // Parallax lift on scroll
+          const parallaxMult = item.col % 2 === 0 ? 0.12 : 0.06;
+          const parallaxOffset = scrollY * parallaxMult;
 
           return (
             <div
@@ -129,18 +118,6 @@ export default function EstateAnimationScrollGrid() {
           );
         })}
       </div>
-
-      {/* Bottom Soft Fade Gradient */}
-      <div style={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: '6rem',
-        background: 'linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0) 100%)',
-        zIndex: 5,
-        pointerEvents: 'none',
-      }} />
 
       <style>{`
         .checkerboard-grid {
@@ -189,7 +166,7 @@ function EstateCard({ item }: { item: EstateImageItem }) {
         margin: '0 auto',
       }}
     >
-      {/* Small Compact Image Container matching user mockup */}
+      {/* Small Compact Image Container */}
       <div style={{
         position: 'relative',
         width: '100%',
@@ -215,7 +192,7 @@ function EstateCard({ item }: { item: EstateImageItem }) {
         />
       </div>
 
-      {/* Tag Label Directly Below */}
+      {/* Tag Label Below */}
       <div style={{ paddingLeft: '0.1rem' }}>
         <div style={{
           fontSize: '0.92rem',
