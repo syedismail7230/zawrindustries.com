@@ -29,16 +29,16 @@ const verticalRows: EstateImageItem[] = [
 const row5HorizontalItems: EstateImageItem[] = [
   // Col 1: Animation 11
   { id: 11, src: '/assets/estate-animation/image (11).png', tag: 'Sunlit Architectural Promenade', category: 'Outdoor Terrace Living' },
-  // Col 2: Lifestyle 1 (Fades in at Col 2 after pause ends)
+  // Col 2: Lifestyle 1 (Fades in at Col 2 when last row vertical scroll ends)
   { id: 14, src: '/assets/estate-lifestyle/image (1).png', tag: 'Private Cliffside Lounge', category: 'Panoramic Vista Suites' },
   // Col 3: Animation 12
   { id: 12, src: '/assets/estate-animation/image (12).png', tag: 'Infinity Pool & Horizon Deck', category: 'Aquatic Sanctuary' },
-  // Col 4: Lifestyle 2 (Fades in at Col 4 after pause ends)
+  // Col 4: Lifestyle 2 (Fades in at Col 4 when last row vertical scroll ends)
   { id: 15, src: '/assets/estate-lifestyle/image (2).png', tag: 'Lakeside Wellness Pavilion', category: 'Hydrotherapy & Spa' },
   // Col 5: Animation 13
   { id: 13, src: '/assets/estate-animation/image (13).png', tag: 'Biophilic Garden Atrium', category: 'Nature-Integrated Spaces' },
 
-  // Remaining Lifestyle Cards that scroll into view horizontally
+  // Remaining Lifestyle Cards that scroll into view horizontally after the small pause
   { id: 16, src: '/assets/estate-lifestyle/image (3).png', tag: 'Zen Courtyard Gardens', category: 'Botanical Reflection Hub' },
   { id: 17, src: '/assets/estate-lifestyle/image (4).png', tag: 'Penthouse Sky Terrace', category: 'High-Altitude Hospitality' },
   { id: 18, src: '/assets/estate-lifestyle/image (5).png', tag: 'Subterranean Private Cellar', category: 'Bespoke Wine Cave' },
@@ -49,6 +49,7 @@ export default function EstateAnimationScrollGrid() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const [scrollY, setScrollY] = useState(0);
   const [horizontalProgress, setHorizontalProgress] = useState(0);
+  const [showLifestyle, setShowLifestyle] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
   const [isUnpinnedBottom, setIsUnpinnedBottom] = useState(false);
 
@@ -76,17 +77,20 @@ export default function EstateAnimationScrollGrid() {
       if (rect.top < windowHeight && rect.bottom > 0) {
         const scrolledIn = windowHeight - rect.top;
         const totalHeight = rect.height - windowHeight;
+        const scrollRatio = scrolledIn / totalHeight;
 
-        // Sequence:
-        // 0% -> 55%: Vertical scroll settles Row 5 on screen
-        // 55% -> 70%: DEDICATED PAUSE DEADZONE (screen is still, no vertical or horizontal motion)
-        // 70% -> 100%: Horizontal scroll activates & glides lifestyle cards across Row 5
-        const horizontalStartRatio = 0.70;
-        const rawProgress = Math.max(0, scrolledIn / totalHeight - horizontalStartRatio) / (1 - horizontalStartRatio);
+        // STEP 1 & 2: Last row reaches end -> lifestyle images appear immediately at 55%
+        const lifestyleAppearRatio = 0.55;
+        const isLifestyleVisible = scrollRatio >= lifestyleAppearRatio;
+
+        // STEP 3 & 4: Small pause between 55% and 72%, then horizontal scroll starts at 72%
+        const horizontalStartRatio = 0.72;
+        const rawProgress = Math.max(0, scrollRatio - horizontalStartRatio) / (1 - horizontalStartRatio);
         const clampedHorizontalProgress = Math.max(0, Math.min(1, rawProgress));
 
         rafId = requestAnimationFrame(() => {
           setScrollY(scrolledIn);
+          setShowLifestyle(isLifestyleVisible);
           setHorizontalProgress(clampedHorizontalProgress);
         });
       }
@@ -113,7 +117,7 @@ export default function EstateAnimationScrollGrid() {
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        minHeight: '440vh', // Extended scroll container creating an ample pause buffer between vertical and horizontal scroll
+        minHeight: '440vh',
       }}
     >
       {/* Invisible Spacer when heading is pinned */}
@@ -203,39 +207,35 @@ export default function EstateAnimationScrollGrid() {
           })}
         </div>
 
-        {/* PHASE 2: Row 5 Viewport Lock - Frozen Vertically on Screen while Horizontal Scroll Glides after Pause */}
+        {/* PHASE 2: Row 5 Viewport Lock */}
         <div
           style={{
-            position: isPinned && horizontalProgress > 0 ? 'fixed' : 'relative',
-            top: isPinned && horizontalProgress > 0 ? '16.5rem' : 'auto',
-            left: isPinned && horizontalProgress > 0 ? '4vw' : 'auto',
-            right: isPinned && horizontalProgress > 0 ? '4vw' : 'auto',
+            position: isPinned && showLifestyle ? 'fixed' : 'relative',
+            top: isPinned && showLifestyle ? '16.5rem' : 'auto',
+            left: isPinned && showLifestyle ? '4vw' : 'auto',
+            right: isPinned && showLifestyle ? '4vw' : 'auto',
             zIndex: 10,
             width: '100%',
             overflow: 'hidden',
             padding: '1rem 0 4rem',
-            marginTop: isPinned && horizontalProgress > 0 ? '0' : '8rem',
+            marginTop: isPinned && showLifestyle ? '0' : '8rem',
           }}
         >
-          {/* Row 5 Horizontal Track */}
+          {/* Row 5 Interleaved Horizontal Track */}
           <div
             style={{
               display: 'flex',
               gap: '2.5vw',
               transform: `translate3d(-${horizontalProgress * 70}%, 0, 0)`,
               willChange: 'transform, opacity',
-              transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+              transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
             {row5HorizontalItems.map((item) => {
               const isLifestyleCard = item.id >= 14;
-              // Lifestyle cards remain 100% HIDDEN during vertical scroll & pause deadzone,
-              // and ONLY FADE IN when horizontal scroll phase begins (horizontalProgress > 0)
-              const lifestyleOpacity = isLifestyleCard
-                ? horizontalProgress > 0.02
-                  ? Math.min(1, (horizontalProgress - 0.02) * 6)
-                  : 0
-                : 1;
+              // Lifestyle cards appear (fade in) immediately when last row reaches end (showLifestyle is true),
+              // then pause during 55% -> 72%, then horizontal scroll starts at 72%+
+              const cardOpacity = isLifestyleCard ? (showLifestyle ? 1 : 0) : 1;
 
               return (
                 <div
@@ -243,10 +243,10 @@ export default function EstateAnimationScrollGrid() {
                   style={{
                     flexShrink: 0,
                     width: 'calc((100vw - 8vw - 10vw) / 5)',
-                    opacity: isLifestyleCard ? lifestyleOpacity : 1,
-                    visibility: isLifestyleCard && lifestyleOpacity === 0 ? 'hidden' : 'visible',
+                    opacity: cardOpacity,
+                    visibility: isLifestyleCard && !showLifestyle ? 'hidden' : 'visible',
                     transition: isLifestyleCard ? 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease' : 'none',
-                    pointerEvents: isLifestyleCard && lifestyleOpacity < 0.5 ? 'none' : 'auto',
+                    pointerEvents: isLifestyleCard && !showLifestyle ? 'none' : 'auto',
                   }}
                 >
                   <EstateCard item={item} />
