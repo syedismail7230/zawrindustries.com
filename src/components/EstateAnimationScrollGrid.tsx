@@ -56,7 +56,7 @@ export default function EstateAnimationScrollGrid() {
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '3rem 4vw 11rem',
+        padding: '0 4vw 11rem',
         width: '100%',
         maxWidth: '1600px',
         margin: '0 auto',
@@ -64,28 +64,28 @@ export default function EstateAnimationScrollGrid() {
         position: 'relative',
       }}
     >
-      {/* Sticky Header Section: Pins to top (5rem) while scrolling through the grid */}
+      {/* Sticky Header Container: Locks cleanly below the navbar (top: 5.5rem) throughout the grid scroll */}
       <div style={{
         position: 'sticky',
-        top: '5rem',
-        zIndex: 50,
+        top: '5.5rem',
+        zIndex: 40,
         backgroundColor: '#ffffff',
-        paddingTop: '2rem',
-        paddingBottom: '2rem',
+        paddingTop: '2.5rem',
+        paddingBottom: '2.5rem',
         textAlign: 'center',
-        maxWidth: '800px',
-        margin: '0 auto',
-        boxShadow: '0 10px 30px rgba(255,255,255,0.95)',
+        width: '100%',
       }}>
-        <h2 style={{
-          fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
-          fontWeight: 400,
-          color: '#0f172a',
-          letterSpacing: '-0.02em',
-          lineHeight: 1.25,
-        }}>
-          Curated Spaces Built Across Global Growth Corridors
-        </h2>
+        <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+          <h2 style={{
+            fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+            fontWeight: 400,
+            color: '#0f172a',
+            letterSpacing: '-0.02em',
+            lineHeight: 1.25,
+          }}>
+            Curated Spaces Built Across Global Growth Corridors
+          </h2>
+        </div>
       </div>
 
       {/* 5-Column Checkerboard Grid Container */}
@@ -94,7 +94,7 @@ export default function EstateAnimationScrollGrid() {
         style={{
           position: 'relative',
           zIndex: 1,
-          marginTop: '2rem',
+          marginTop: '1rem',
         }}
       >
         {estateItems.map((item) => {
