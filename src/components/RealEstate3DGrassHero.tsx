@@ -69,8 +69,8 @@ export default function RealEstate3DGrassHero() {
     groundGeo.computeVertexNormals();
 
     const groundMat = new THREE.MeshStandardMaterial({
-      color: new THREE.Color('#254d19'),
-      roughness: 0.9,
+      color: new THREE.Color('#4c8b25'),
+      roughness: 0.85,
       metalness: 0.05,
     });
     const ground = new THREE.Mesh(groundGeo, groundMat);
@@ -97,16 +97,15 @@ export default function RealEstate3DGrassHero() {
     }
     bladeGeo.computeVertexNormals();
 
-    // Color attribute for gradient (Sunlit Lime Tip -> Deep Forest Emerald Base)
-    const baseColor = new THREE.Color('#143811');
-    const midColor = new THREE.Color('#4d7c0f');
-    const tipColor = new THREE.Color('#a3e635');
+    // Color attribute matched 100% to background photo grass colors (Lime & Yellow-Green)
+    const tipColor = new THREE.Color('#9ef01a');
     const sunlitColor = new THREE.Color('#d9f99d');
+    const goldenColor = new THREE.Color('#ccff00');
 
     const colors = new Float32Array(BLADE_COUNT * 3);
     for (let i = 0; i < BLADE_COUNT; i++) {
-      const isSunlit = Math.random() > 0.75;
-      const c = isSunlit ? sunlitColor : tipColor;
+      const rand = Math.random();
+      const c = rand > 0.8 ? goldenColor : rand > 0.4 ? sunlitColor : tipColor;
       colors[i * 3] = c.r;
       colors[i * 3 + 1] = c.g;
       colors[i * 3 + 2] = c.b;
@@ -114,9 +113,9 @@ export default function RealEstate3DGrassHero() {
     bladeGeo.setAttribute('color', new THREE.InstancedBufferAttribute(colors, 3));
 
     const bladeMat = new THREE.MeshStandardMaterial({
-      color: new THREE.Color('#65a30d'),
-      roughness: 0.45,
-      metalness: 0.08,
+      color: new THREE.Color('#7cb342'),
+      roughness: 0.4,
+      metalness: 0.05,
       side: THREE.DoubleSide,
     });
 
@@ -125,14 +124,18 @@ export default function RealEstate3DGrassHero() {
     const dummy = new THREE.Object3D();
     const bladeData: { x: number; y: number; z: number; rotY: number; scaleY: number; currentBendX: number; currentBendZ: number }[] = [];
 
-    // Distribute grass blades across foreground meadow
+    // Distribute grass blades across foreground meadow with distance height feathering
     for (let i = 0; i < BLADE_COUNT; i++) {
-      const x = (Math.random() - 0.5) * 22;
-      const z = Math.random() * 10 - 2.5; // Concentrated in foreground
+      const x = (Math.random() - 0.5) * 24;
+      const z = Math.random() * 9.5 - 2.2;
       const y = -0.6 + (Math.sin(x * 0.15) * 0.18 + Math.cos(z * 0.2) * 0.12);
 
       const rotY = Math.random() * Math.PI;
-      const scaleY = 0.75 + Math.random() * 0.5;
+
+      // Distance height feathering: Taper blade height towards the back edge (z -> -2.2) to blend seamlessly into background photo
+      const distToBack = (z - (-2.2)) / 9.5; // 0 at back, 1 at front
+      const distanceFactor = Math.min(1, Math.max(0.12, Math.pow(distToBack, 0.6)));
+      const scaleY = (0.35 + Math.random() * 0.75) * distanceFactor;
 
       dummy.position.set(x, y, z);
       dummy.rotation.set(0, rotY, 0);
