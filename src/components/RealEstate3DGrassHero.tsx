@@ -6,7 +6,6 @@ import * as THREE from 'three';
 export default function RealEstate3DGrassHero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [grassDensity, setGrassDensity] = useState<'Ultra' | 'High' | 'Balanced'>('High');
   const [activeTab, setActiveTab] = useState<'overview' | 'proptech' | 'estates'>('overview');
 
   useEffect(() => {
@@ -14,94 +13,100 @@ export default function RealEstate3DGrassHero() {
     const container = containerRef.current;
     let animationFrameId: number;
 
-    // 1. Scene & Camera Setup
     const width = container.clientWidth;
     const height = container.clientHeight;
 
+    // 1. Scene & Camera Setup
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color('#94d2bd');
-    scene.fog = new THREE.FogExp2('#94d2bd', 0.018);
 
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 200);
-    camera.position.set(0, 4.5, 18);
-    camera.lookAt(0, 1.2, 0);
+    const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 200);
+    camera.position.set(0, 1.4, 9.5);
+    camera.lookAt(0, 0.2, 0);
 
     // 2. WebGL Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: 'high-performance' });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
+    renderer.toneMappingExposure = 1.15;
     container.appendChild(renderer.domElement);
 
-    // 3. Lighting Setup
-    const ambientLight = new THREE.AmbientLight(0xdff4d7, 1.4);
+    // 3. Photorealistic Background Texture Plane (Matches Reference Meadow Photo)
+    const textureLoader = new THREE.TextureLoader();
+    const bgTexture = textureLoader.load('/assets/estate_hero_3d_landscape.png', () => {
+      setIsLoaded(true);
+    });
+    bgTexture.colorSpace = THREE.SRGBColorSpace;
+
+    const bgGeo = new THREE.PlaneGeometry(36, 18);
+    const bgMat = new THREE.MeshBasicMaterial({ map: bgTexture, depthWrite: false });
+    const bgMesh = new THREE.Mesh(bgGeo, bgMat);
+    bgMesh.position.set(0, 3.2, -14);
+    scene.add(bgMesh);
+
+    // 4. Photorealistic Lighting Matching Golden Sun & Azure Sky
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
     scene.add(ambientLight);
 
-    const sunLight = new THREE.DirectionalLight(0xfff3d1, 2.5);
-    sunLight.position.set(20, 30, 15);
-    sunLight.castShadow = true;
-    sunLight.shadow.mapSize.width = 2048;
-    sunLight.shadow.mapSize.height = 2048;
-    sunLight.shadow.camera.near = 0.5;
-    sunLight.shadow.camera.far = 100;
-    sunLight.shadow.camera.left = -25;
-    sunLight.shadow.camera.right = 25;
-    sunLight.shadow.camera.top = 25;
-    sunLight.shadow.camera.bottom = -25;
+    const sunLight = new THREE.DirectionalLight(0xfffaed, 2.8);
+    sunLight.position.set(-15, 25, 12);
     scene.add(sunLight);
 
-    const hemisphereLight = new THREE.HemisphereLight(0xb1e5fb, 0x2d6a4f, 0.8);
-    scene.add(hemisphereLight);
+    const hemiLight = new THREE.HemisphereLight(0x7dd3fc, 0x365314, 1.0);
+    scene.add(hemiLight);
 
-    // 4. Ground Mesh with Rolling Hills Geometry
-    const terrainGeo = new THREE.PlaneGeometry(60, 60, 64, 64);
-    terrainGeo.rotateX(-Math.PI / 2);
+    // 5. Foreground Ground Base Texture Matching Photo Soil/Grass
+    const groundGeo = new THREE.PlaneGeometry(24, 16, 32, 32);
+    groundGeo.rotateX(-Math.PI / 2);
 
-    const posAttr = terrainGeo.attributes.position;
+    // Subtle gentle contour
+    const posAttr = groundGeo.attributes.position;
     for (let i = 0; i < posAttr.count; i++) {
       const x = posAttr.getX(i);
       const z = posAttr.getZ(i);
-      // Gentle rolling hill elevation
-      const y = Math.sin(x * 0.12) * Math.cos(z * 0.12) * 1.4 + Math.sin(x * 0.05) * 0.8;
-      posAttr.setY(i, y);
+      posAttr.setY(i, Math.sin(x * 0.15) * 0.18 + Math.cos(z * 0.2) * 0.12);
     }
-    terrainGeo.computeVertexNormals();
+    groundGeo.computeVertexNormals();
 
-    const terrainMat = new THREE.MeshStandardMaterial({
-      color: new THREE.Color('#2d6a4f'),
-      roughness: 0.85,
+    const groundMat = new THREE.MeshStandardMaterial({
+      color: new THREE.Color('#254d19'),
+      roughness: 0.9,
       metalness: 0.05,
-      flatShading: false,
     });
+    const ground = new THREE.Mesh(groundGeo, groundMat);
+    ground.position.set(0, -0.6, 2);
+    scene.add(ground);
 
-    const terrain = new THREE.Mesh(terrainGeo, terrainMat);
-    terrain.receiveShadow = true;
-    scene.add(terrain);
+    // 6. Hyper-Realistic Instanced 3D Grass Blades
+    const BLADE_COUNT = 32000;
 
-    // Helper function to get elevation at (x, z)
-    const getTerrainHeight = (x: number, z: number) => {
-      return Math.sin(x * 0.12) * Math.cos(z * 0.12) * 1.4 + Math.sin(x * 0.05) * 0.8;
-    };
+    // Curved Ribbon Blade Geometry
+    const bladeWidth = 0.038;
+    const bladeHeight = 1.1;
+    const bladeGeo = new THREE.PlaneGeometry(bladeWidth, bladeHeight, 1, 5);
+    bladeGeo.translate(0, bladeHeight / 2, 0);
 
-    // 5. Instanced 3D Grass Blades Generation (Ultra-Dense Carpet)
-    const BLADE_COUNT = 45000;
-    
-    // Custom Slim Tapered Blade Geometry
-    const bladeGeo = new THREE.PlaneGeometry(0.045, 1.35, 1, 4);
-    bladeGeo.translate(0, 0.675, 0); // Origin at blade base
+    // Curve geometry points slightly forward to catch sunlight
+    const pos = bladeGeo.attributes.position;
+    for (let i = 0; i < pos.count; i++) {
+      const yRatio = pos.getY(i) / bladeHeight;
+      const zCurve = Math.pow(yRatio, 2) * 0.15; // Natural arc curve forward
+      const xTaper = 1 - Math.pow(yRatio, 1.5) * 0.75; // Taper to needle tip
+      pos.setZ(i, zCurve);
+      pos.setX(i, pos.getX(i) * xTaper);
+    }
+    bladeGeo.computeVertexNormals();
 
-    // Colors gradient (Emerald base to Sunlit Yellow-Green tip)
-    const baseColor = new THREE.Color('#1b4332');
-    const tipColor = new THREE.Color('#74c69d');
-    const accentTip = new THREE.Color('#b7e4c7');
+    // Color attribute for gradient (Sunlit Lime Tip -> Deep Forest Emerald Base)
+    const baseColor = new THREE.Color('#143811');
+    const midColor = new THREE.Color('#4d7c0f');
+    const tipColor = new THREE.Color('#a3e635');
+    const sunlitColor = new THREE.Color('#d9f99d');
 
     const colors = new Float32Array(BLADE_COUNT * 3);
     for (let i = 0; i < BLADE_COUNT; i++) {
-      const isGolden = Math.random() > 0.85;
-      const c = isGolden ? accentTip : tipColor;
+      const isSunlit = Math.random() > 0.75;
+      const c = isSunlit ? sunlitColor : tipColor;
       colors[i * 3] = c.r;
       colors[i * 3 + 1] = c.g;
       colors[i * 3 + 2] = c.b;
@@ -109,29 +114,25 @@ export default function RealEstate3DGrassHero() {
     bladeGeo.setAttribute('color', new THREE.InstancedBufferAttribute(colors, 3));
 
     const bladeMat = new THREE.MeshStandardMaterial({
-      color: new THREE.Color('#40916c'),
-      roughness: 0.6,
-      metalness: 0.1,
+      color: new THREE.Color('#65a30d'),
+      roughness: 0.45,
+      metalness: 0.08,
       side: THREE.DoubleSide,
     });
 
     const grassMesh = new THREE.InstancedMesh(bladeGeo, bladeMat, BLADE_COUNT);
-    grassMesh.castShadow = true;
-    grassMesh.receiveShadow = true;
 
-    // Store base positions & rotations for physics displacement
     const dummy = new THREE.Object3D();
     const bladeData: { x: number; y: number; z: number; rotY: number; scaleY: number; currentBendX: number; currentBendZ: number }[] = [];
 
+    // Distribute grass blades across foreground meadow
     for (let i = 0; i < BLADE_COUNT; i++) {
-      const radius = 22 * Math.sqrt(Math.random());
-      const theta = Math.random() * Math.PI * 2;
-      const x = radius * Math.cos(theta);
-      const z = radius * Math.sin(theta);
-      const y = getTerrainHeight(x, z);
+      const x = (Math.random() - 0.5) * 22;
+      const z = Math.random() * 10 - 2.5; // Concentrated in foreground
+      const y = -0.6 + (Math.sin(x * 0.15) * 0.18 + Math.cos(z * 0.2) * 0.12);
 
       const rotY = Math.random() * Math.PI;
-      const scaleY = 0.7 + Math.random() * 0.6;
+      const scaleY = 0.75 + Math.random() * 0.5;
 
       dummy.position.set(x, y, z);
       dummy.rotation.set(0, rotY, 0);
@@ -153,51 +154,11 @@ export default function RealEstate3DGrassHero() {
     grassMesh.instanceMatrix.needsUpdate = true;
     scene.add(grassMesh);
 
-    // 6. Horizon Trees (3D Low-Poly Trees)
-    const treeGroup = new THREE.Group();
-    const treeTrunkMat = new THREE.MeshStandardMaterial({ color: 0x4a3728, roughness: 0.9 });
-    const treeFoliageMat = new THREE.MeshStandardMaterial({ color: 0x1b4332, roughness: 0.7 });
-
-    const createTree = (tx: number, tz: number, scale = 1) => {
-      const tree = new THREE.Group();
-      const ty = getTerrainHeight(tx, tz);
-      tree.position.set(tx, ty, tz);
-      tree.scale.setScalar(scale);
-
-      const trunkGeo = new THREE.CylinderGeometry(0.2, 0.35, 2.5, 6);
-      trunkGeo.translate(0, 1.25, 0);
-      const trunk = new THREE.Mesh(trunkGeo, treeTrunkMat);
-      trunk.castShadow = true;
-      tree.add(trunk);
-
-      const foliageGeo1 = new THREE.ConeGeometry(1.6, 3, 6);
-      foliageGeo1.translate(0, 3.2, 0);
-      const foliage1 = new THREE.Mesh(foliageGeo1, treeFoliageMat);
-      foliage1.castShadow = true;
-      tree.add(foliage1);
-
-      const foliageGeo2 = new THREE.ConeGeometry(1.2, 2.4, 6);
-      foliageGeo2.translate(0, 4.4, 0);
-      const foliage2 = new THREE.Mesh(foliageGeo2, treeFoliageMat);
-      foliage2.castShadow = true;
-      tree.add(foliage2);
-
-      return tree;
-    };
-
-    // Cluster of trees on background hill
-    const treePositions = [
-      [-14, -8, 1.2], [-16, -10, 1.4], [-12, -12, 1.1], [-18, -6, 1.3],
-      [-15, -14, 1.0], [16, -12, 1.3], [18, -14, 1.5], [14, -16, 1.1]
-    ];
-    treePositions.forEach(([tx, tz, s]) => treeGroup.add(createTree(tx, tz, s)));
-    scene.add(treeGroup);
-
-    // 7. Interactive Mouse / Raycaster Grass Displacement
+    // 7. Interactive Cursor Raycasting & Mouse Displacement Physics
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2(-999, -999);
     const mouseWorld = new THREE.Vector3(-999, -999, -999);
-    const planeIntersection = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+    const planeIntersection = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0.6);
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = container.getBoundingClientRect();
@@ -205,9 +166,8 @@ export default function RealEstate3DGrassHero() {
       mouse.y = -((e.clientY - rect.top) / container.clientHeight) * 2 + 1;
 
       raycaster.setFromCamera(mouse, camera);
-      const ray = raycaster.ray;
       const targetPos = new THREE.Vector3();
-      if (ray.intersectPlane(planeIntersection, targetPos)) {
+      if (raycaster.ray.intersectPlane(planeIntersection, targetPos)) {
         mouseWorld.copy(targetPos);
       }
     };
@@ -220,34 +180,32 @@ export default function RealEstate3DGrassHero() {
     window.addEventListener('mousemove', handleMouseMove);
     container.addEventListener('mouseleave', handleMouseLeave);
 
-    // 8. Animation Loop
+    // 8. Animation & Physics Loop
     let clock = new THREE.Clock();
-    setIsLoaded(true);
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
-
       const time = clock.getElapsedTime();
 
-      // Gentle camera parallax movement based on mouse
+      // Smooth camera parallax matching mouse
       if (mouse.x !== -999) {
-        camera.position.x += (mouse.x * 2.5 - camera.position.x) * 0.03;
-        camera.position.y += (4.5 + mouse.y * 1.2 - camera.position.y) * 0.03;
-        camera.lookAt(0, 1.2, 0);
+        camera.position.x += (mouse.x * 1.5 - camera.position.x) * 0.035;
+        camera.position.y += (1.4 + mouse.y * 0.6 - camera.position.y) * 0.035;
+        camera.lookAt(0, 0.2, 0);
       }
 
-      // Update Grass Blades Physics
-      const DISPLACEMENT_RADIUS = 3.5;
-      const MAX_BEND = 0.75;
+      // Physics: Grass Sway + Real-time Cursor Ripple Displacement
+      const DISPLACEMENT_RADIUS = 3.2;
+      const BEND_FORCE = 0.85;
 
       for (let i = 0; i < BLADE_COUNT; i++) {
         const b = bladeData[i];
 
-        // 1. Natural Wind Wave
-        const windX = Math.sin(time * 2.2 + b.x * 0.5 + b.z * 0.3) * 0.12;
-        const windZ = Math.cos(time * 1.8 + b.x * 0.3 + b.z * 0.5) * 0.12;
+        // Natural Wind Waves
+        const windX = Math.sin(time * 2.4 + b.x * 0.6 + b.z * 0.4) * 0.14;
+        const windZ = Math.cos(time * 2.0 + b.x * 0.4 + b.z * 0.6) * 0.14;
 
-        // 2. Cursor Hover Displacement
+        // Interactive Cursor Hover Force
         let targetBendX = 0;
         let targetBendZ = 0;
 
@@ -257,17 +215,16 @@ export default function RealEstate3DGrassHero() {
           const dist = Math.sqrt(dx * dx + dz * dz);
 
           if (dist < DISPLACEMENT_RADIUS && dist > 0.001) {
-            const force = (1 - dist / DISPLACEMENT_RADIUS) * MAX_BEND;
+            const force = (1 - dist / DISPLACEMENT_RADIUS) * BEND_FORCE;
             targetBendX = (dx / dist) * force;
             targetBendZ = (dz / dist) * force;
           }
         }
 
-        // Smooth physics spring interpolation
-        b.currentBendX += (targetBendX - b.currentBendX) * 0.15;
-        b.currentBendZ += (targetBendZ - b.currentBendZ) * 0.15;
+        // Spring Dampening Interpolation
+        b.currentBendX += (targetBendX - b.currentBendX) * 0.18;
+        b.currentBendZ += (targetBendZ - b.currentBendZ) * 0.18;
 
-        // Total rotation
         const finalRotX = windX + b.currentBendZ;
         const finalRotZ = windZ - b.currentBendX;
 
@@ -285,7 +242,7 @@ export default function RealEstate3DGrassHero() {
 
     animate();
 
-    // 9. Window Resize Handling
+    // 9. Resize Handling
     const handleResize = () => {
       if (!containerRef.current) return;
       const w = containerRef.current.clientWidth;
@@ -312,20 +269,20 @@ export default function RealEstate3DGrassHero() {
     <section style={{
       position: 'relative',
       width: '100%',
-      height: 'clamp(580px, 72vw, 880px)',
-      backgroundColor: '#94d2bd',
+      height: 'clamp(620px, 78vw, 920px)',
+      backgroundColor: '#1a3a14',
       overflow: 'hidden',
       fontFamily: 'Inter, system-ui, sans-serif',
     }}>
-      {/* 3D WebGL Canvas Container */}
-      <div ref={containerRef} style={{ width: '100%', height: '100%', cursor: 'grab' }} />
+      {/* 3D WebGL Canvas */}
+      <div ref={containerRef} style={{ width: '100%', height: '100%', cursor: 'pointer' }} />
 
       {/* Loading Overlay */}
       {!isLoaded && (
         <div style={{
           position: 'absolute',
           inset: 0,
-          backgroundColor: '#1b4332',
+          backgroundColor: '#0a1d08',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -337,19 +294,19 @@ export default function RealEstate3DGrassHero() {
             width: '48px',
             height: '48px',
             border: '3px solid rgba(255,255,255,0.2)',
-            borderTopColor: '#74c69d',
+            borderTopColor: '#a3e635',
             borderRadius: '50%',
             animation: 'spin 0.8s linear infinite',
             marginBottom: '1rem',
           }} />
           <p style={{ fontSize: '0.95rem', letterSpacing: '0.05em', fontWeight: 500 }}>
-            Initializing Hyperrealistic 3D Environment...
+            Loading Photorealistic 3D Meadow Environment...
           </p>
           <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
         </div>
       )}
 
-      {/* Top Glassmorphic Header & Title Banner */}
+      {/* Top Header & Title Overlay (White Typography with High Contrast Glow) */}
       <div style={{
         position: 'absolute',
         top: '2.5rem',
@@ -363,46 +320,47 @@ export default function RealEstate3DGrassHero() {
         gap: '1.5rem',
         pointerEvents: 'none',
       }}>
-        <div style={{ pointerEvents: 'auto', maxWidth: '640px' }}>
+        <div style={{ pointerEvents: 'auto', maxWidth: '660px' }}>
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem',
-            padding: '0.4rem 1rem',
-            backgroundColor: 'rgba(27, 67, 50, 0.75)',
+            padding: '0.45rem 1.1rem',
+            backgroundColor: 'rgba(10, 29, 8, 0.75)',
             backdropFilter: 'blur(12px)',
             borderRadius: '9999px',
-            border: '1px solid rgba(116, 198, 157, 0.4)',
-            color: '#b7e4c7',
+            border: '1px solid rgba(163, 230, 53, 0.4)',
+            color: '#d9f99d',
             fontSize: '0.82rem',
-            fontWeight: 600,
+            fontWeight: 700,
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
-            marginBottom: '1rem',
+            marginBottom: '1.25rem',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
           }}>
-            <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#52b788', boxShadow: '0 0 10px #52b788' }} />
-            Interactive 3D Meadow Environment • Move Cursor to Sway Grass
+            <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#a3e635', boxShadow: '0 0 12px #a3e635' }} />
+            Interactive 3D Meadow • Hover Cursor to Bend & Sway Grass
           </div>
 
           <h1 style={{
-            fontSize: 'clamp(2.4rem, 5.2vw, 4.2rem)',
+            fontSize: 'clamp(2.5rem, 5.5vw, 4.4rem)',
             fontWeight: 800,
-            color: '#081c15',
+            color: '#ffffff',
             lineHeight: 1.08,
             letterSpacing: '-0.03em',
             marginBottom: '1rem',
-            textShadow: '0 2px 20px rgba(255,255,255,0.6)',
+            textShadow: '0 4px 24px rgba(0, 0, 0, 0.75)',
           }}>
             Real Estate & PropTech Solutions
           </h1>
 
           <p style={{
-            fontSize: 'clamp(1rem, 1.8vw, 1.2rem)',
-            color: '#1b4332',
+            fontSize: 'clamp(1rem, 1.8vw, 1.25rem)',
+            color: '#f0fdf4',
             fontWeight: 500,
             lineHeight: 1.6,
-            maxWidth: '560px',
-            textShadow: '0 1px 8px rgba(255,255,255,0.7)',
+            maxWidth: '580px',
+            textShadow: '0 2px 14px rgba(0, 0, 0, 0.8)',
           }}>
             Combining sustainable land development with intelligent PropTech assets across India and the UAE. Hover your cursor over the grass to feel real-time physics.
           </p>
@@ -414,37 +372,37 @@ export default function RealEstate3DGrassHero() {
           display: 'grid',
           gridTemplateColumns: 'repeat(2, 1fr)',
           gap: '0.75rem',
-          minWidth: '280px',
+          minWidth: '290px',
         }}>
           <div style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.85)',
+            backgroundColor: 'rgba(10, 29, 8, 0.75)',
             backdropFilter: 'blur(16px)',
             padding: '1.1rem 1.25rem',
-            borderRadius: '16px',
-            border: '1px solid rgba(255,255,255,0.9)',
-            boxShadow: '0 12px 32px rgba(0,0,0,0.08)',
+            borderRadius: '18px',
+            border: '1px solid rgba(163, 230, 53, 0.3)',
+            boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
           }}>
-            <div style={{ fontSize: '0.75rem', color: '#52b788', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <div style={{ fontSize: '0.75rem', color: '#a3e635', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Managed Land
             </div>
-            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#081c15', marginTop: '0.2rem' }}>
-              14,500+ <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#2d6a4f' }}>Acres</span>
+            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ffffff', marginTop: '0.2rem' }}>
+              14,500+ <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#d9f99d' }}>Acres</span>
             </div>
           </div>
 
           <div style={{
-            backgroundColor: 'rgba(255, 255, 255, 0.85)',
+            backgroundColor: 'rgba(10, 29, 8, 0.75)',
             backdropFilter: 'blur(16px)',
             padding: '1.1rem 1.25rem',
-            borderRadius: '16px',
-            border: '1px solid rgba(255,255,255,0.9)',
-            boxShadow: '0 12px 32px rgba(0,0,0,0.08)',
+            borderRadius: '18px',
+            border: '1px solid rgba(163, 230, 53, 0.3)',
+            boxShadow: '0 12px 32px rgba(0,0,0,0.35)',
           }}>
-            <div style={{ fontSize: '0.75rem', color: '#52b788', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
+            <div style={{ fontSize: '0.75rem', color: '#a3e635', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em' }}>
               Asset Portfolio
             </div>
-            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#081c15', marginTop: '0.2rem' }}>
-              $1.8B+ <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#2d6a4f' }}>AUM</span>
+            <div style={{ fontSize: '1.6rem', fontWeight: 800, color: '#ffffff', marginTop: '0.2rem' }}>
+              $1.8B+ <span style={{ fontSize: '0.85rem', fontWeight: 600, color: '#d9f99d' }}>AUM</span>
             </div>
           </div>
         </div>
@@ -460,12 +418,12 @@ export default function RealEstate3DGrassHero() {
         display: 'flex',
         alignItems: 'center',
         gap: '0.75rem',
-        backgroundColor: 'rgba(8, 28, 21, 0.85)',
+        backgroundColor: 'rgba(10, 29, 8, 0.85)',
         backdropFilter: 'blur(16px)',
-        padding: '0.6rem 0.8rem',
+        padding: '0.6rem 0.85rem',
         borderRadius: '9999px',
-        border: '1px solid rgba(116, 198, 157, 0.3)',
-        boxShadow: '0 16px 40px rgba(0,0,0,0.25)',
+        border: '1px solid rgba(163, 230, 53, 0.35)',
+        boxShadow: '0 16px 40px rgba(0,0,0,0.4)',
       }}>
         <button
           onClick={() => setActiveTab('overview')}
@@ -473,8 +431,8 @@ export default function RealEstate3DGrassHero() {
             padding: '0.6rem 1.25rem',
             borderRadius: '9999px',
             border: 'none',
-            backgroundColor: activeTab === 'overview' ? '#52b788' : 'transparent',
-            color: activeTab === 'overview' ? '#081c15' : '#e9d8a6',
+            backgroundColor: activeTab === 'overview' ? '#a3e635' : 'transparent',
+            color: activeTab === 'overview' ? '#0a1d08' : '#f0fdf4',
             fontSize: '0.88rem',
             fontWeight: 700,
             cursor: 'pointer',
@@ -490,8 +448,8 @@ export default function RealEstate3DGrassHero() {
             padding: '0.6rem 1.25rem',
             borderRadius: '9999px',
             border: 'none',
-            backgroundColor: activeTab === 'proptech' ? '#52b788' : 'transparent',
-            color: activeTab === 'proptech' ? '#081c15' : '#e9d8a6',
+            backgroundColor: activeTab === 'proptech' ? '#a3e635' : 'transparent',
+            color: activeTab === 'proptech' ? '#0a1d08' : '#f0fdf4',
             fontSize: '0.88rem',
             fontWeight: 700,
             cursor: 'pointer',
@@ -507,8 +465,8 @@ export default function RealEstate3DGrassHero() {
             padding: '0.6rem 1.25rem',
             borderRadius: '9999px',
             border: 'none',
-            backgroundColor: activeTab === 'estates' ? '#52b788' : 'transparent',
-            color: activeTab === 'estates' ? '#081c15' : '#e9d8a6',
+            backgroundColor: activeTab === 'estates' ? '#a3e635' : 'transparent',
+            color: activeTab === 'estates' ? '#0a1d08' : '#f0fdf4',
             fontSize: '0.88rem',
             fontWeight: 700,
             cursor: 'pointer',
