@@ -104,10 +104,10 @@ export default function RealEstate3DGrassHero() {
     const terrain = new THREE.Mesh(terrainGeo, terrainMat);
     scene.add(terrain);
 
-    // 7. Ultra-Smooth 3D Grass Meadow (1,600,000 Instanced Blades - 120 FPS)
-    const BLADE_COUNT = 1600000;
+    // 7. Ultra-Smooth 3D Grass Meadow (2,400,000 Instanced Blades - 120 FPS)
+    const BLADE_COUNT = 2400000;
 
-    const bladeWidth = 0.018;
+    const bladeWidth = 0.016;
     const bladeHeight = 0.72;
     const bladeGeo = new THREE.PlaneGeometry(bladeWidth, bladeHeight, 1, 3);
     bladeGeo.translate(0, bladeHeight / 2, 0);
