@@ -77,12 +77,12 @@ export default function RealEstate3DGrassHero() {
     ground.position.set(0, -0.6, 2);
     scene.add(ground);
 
-    // 6. Hyper-Realistic Instanced 3D Grass Blades (300k Ultra-Dense Carpet)
-    const BLADE_COUNT = 300000;
+    // 6. Hyper-Realistic Instanced 3D Grass Blades (3x Ultra-Dense Lawn)
+    const BLADE_COUNT = 225000;
 
-    // Curved Ribbon Blade Geometry (0.008 Ultra-Slim Filaments)
+    // Curved Ribbon Blade Geometry (Ultra-Slim 0.008 & Half Height 0.55)
     const bladeWidth = 0.008;
-    const bladeHeight = 1.15;
+    const bladeHeight = 0.55;
     const bladeGeo = new THREE.PlaneGeometry(bladeWidth, bladeHeight, 1, 5);
     bladeGeo.translate(0, bladeHeight / 2, 0);
 
@@ -90,7 +90,7 @@ export default function RealEstate3DGrassHero() {
     const pos = bladeGeo.attributes.position;
     for (let i = 0; i < pos.count; i++) {
       const yRatio = pos.getY(i) / bladeHeight;
-      const zCurve = Math.pow(yRatio, 2) * 0.15; // Natural arc curve forward
+      const zCurve = Math.pow(yRatio, 2) * 0.08; // Natural arc curve forward for short lawn
       const xTaper = 1 - Math.pow(yRatio, 1.5) * 0.75; // Taper to needle tip
       pos.setZ(i, zCurve);
       pos.setX(i, pos.getX(i) * xTaper);
