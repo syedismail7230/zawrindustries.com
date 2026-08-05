@@ -2,9 +2,9 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
-const ManufacturingHeroClient = dynamic(() => import('@/components/ManufacturingHeroClient'), { ssr: false });
-const Capabilities3DGrid = dynamic(() => import('@/components/Capabilities3DGrid').then(m => m.Capabilities3DGrid), { ssr: false });
-const FactoryDashboardInteractive = dynamic(() => import('@/components/FactoryDashboardInteractive'), { ssr: false });
+const ManufacturingHeroClient = dynamic(() => import('@/components/ManufacturingHeroClient'));
+const Capabilities3DGrid = dynamic(() => import('@/components/Capabilities3DGrid').then(m => m.Capabilities3DGrid));
+const FactoryDashboardInteractive = dynamic(() => import('@/components/FactoryDashboardInteractive'));
 
 export const metadata: Metadata = {
   title: "AI Powered Precision Manufacturing — Zawr Industries",
