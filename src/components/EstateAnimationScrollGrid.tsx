@@ -42,24 +42,25 @@ export default function EstateAnimationScrollGrid() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Split items into 3 columns for staggered masonry layout
-  const col1 = [estateItems[0], estateItems[3], estateItems[6], estateItems[9]];
-  const col2 = [estateItems[1], estateItems[4], estateItems[7]];
-  const col3 = [estateItems[2], estateItems[5], estateItems[8]];
+  // Split into 4 columns for a true Criss-Cross / Diagonal Zig-Zag pattern
+  const col1 = [estateItems[0], estateItems[4], estateItems[8]];
+  const col2 = [estateItems[2], estateItems[6]];
+  const col3 = [estateItems[1], estateItems[5], estateItems[9]];
+  const col4 = [estateItems[3], estateItems[7]];
 
   return (
     <section
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '5rem 6% 9rem',
-        maxWidth: '1150px',
+        padding: '6rem 4% 11rem',
+        maxWidth: '1280px',
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}
     >
       {/* Header Section */}
-      <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 5.5rem' }}>
+      <div style={{ textAlign: 'center', maxWidth: '680px', margin: '0 auto 6rem' }}>
         <div style={{
           fontSize: '0.78rem',
           fontWeight: 700,
@@ -81,20 +82,20 @@ export default function EstateAnimationScrollGrid() {
         </h2>
       </div>
 
-      {/* Staggered Grid with Small Image Cards & Large Spacing Gaps (Matching Design Idea) */}
+      {/* Criss-Cross Staggered 4-Column Diagonal Grid with Large Spacing Gaps */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-        gap: '7.5rem 5.5rem',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+        gap: '8rem 4rem',
         alignItems: 'start',
         justifyContent: 'center',
       }}>
-        {/* Column 1 (Speed Multiplier 0.08) */}
+        {/* Column 1 (Left - Offset 0px) */}
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '7rem',
-          transform: `translateY(-${scrollY * 0.08}px)`,
+          gap: '9.5rem',
+          transform: `translateY(-${scrollY * 0.07}px)`,
           transition: 'transform 0.1s cubic-bezier(0, 0, 0.2, 1)',
         }}>
           {col1.map((item) => (
@@ -102,13 +103,13 @@ export default function EstateAnimationScrollGrid() {
           ))}
         </div>
 
-        {/* Column 2 (Speed Multiplier 0.14 - Staggered Offset Top) */}
+        {/* Column 2 (Center-Left - Criss-Cross Offset 140px) */}
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '7rem',
-          marginTop: '6rem',
-          transform: `translateY(-${scrollY * 0.14}px)`,
+          gap: '9.5rem',
+          marginTop: '8.5rem',
+          transform: `translateY(-${scrollY * 0.15}px)`,
           transition: 'transform 0.1s cubic-bezier(0, 0, 0.2, 1)',
         }}>
           {col2.map((item) => (
@@ -116,16 +117,30 @@ export default function EstateAnimationScrollGrid() {
           ))}
         </div>
 
-        {/* Column 3 (Speed Multiplier 0.06 - Staggered Offset Top) */}
+        {/* Column 3 (Center-Right - Criss-Cross Offset 70px) */}
         <div style={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '7rem',
-          marginTop: '11rem',
-          transform: `translateY(-${scrollY * 0.06}px)`,
+          gap: '9.5rem',
+          marginTop: '4rem',
+          transform: `translateY(-${scrollY * 0.10}px)`,
           transition: 'transform 0.1s cubic-bezier(0, 0, 0.2, 1)',
         }}>
           {col3.map((item) => (
+            <EstateCard key={item.id} item={item} />
+          ))}
+        </div>
+
+        {/* Column 4 (Far Right - Criss-Cross Offset 210px) */}
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '9.5rem',
+          marginTop: '13rem',
+          transform: `translateY(-${scrollY * 0.18}px)`,
+          transition: 'transform 0.1s cubic-bezier(0, 0, 0.2, 1)',
+        }}>
+          {col4.map((item) => (
             <EstateCard key={item.id} item={item} />
           ))}
         </div>
@@ -147,11 +162,11 @@ function EstateCard({ item }: { item: EstateImageItem }) {
         gap: '0.75rem',
         cursor: 'pointer',
         width: '100%',
-        maxWidth: '215px',
+        maxWidth: '200px',
         margin: '0 auto',
       }}
     >
-      {/* Small Compact Image Container with Hover Effect */}
+      {/* Small Compact Image Container with Hover Scale */}
       <div style={{
         position: 'relative',
         width: '100%',
@@ -177,10 +192,10 @@ function EstateCard({ item }: { item: EstateImageItem }) {
         />
       </div>
 
-      {/* Tag Label Directly Below (Matching Design Idea Screenshot) */}
-      <div style={{ paddingLeft: '0.15rem' }}>
+      {/* Left-Aligned Tag & Category Block */}
+      <div style={{ paddingLeft: '0.1rem' }}>
         <div style={{
-          fontSize: '0.92rem',
+          fontSize: '0.9rem',
           fontWeight: 600,
           color: '#0f172a',
           letterSpacing: '-0.01em',
@@ -188,7 +203,7 @@ function EstateCard({ item }: { item: EstateImageItem }) {
           {item.tag}
         </div>
         <div style={{
-          fontSize: '0.8rem',
+          fontSize: '0.78rem',
           color: '#64748b',
           fontWeight: 400,
           marginTop: '0.1rem',
