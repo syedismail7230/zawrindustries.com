@@ -46,9 +46,9 @@ export default function EstateAnimationScrollGrid() {
         setScrollY(windowHeight - rect.top);
       }
 
-      // Pin header when top of section reaches 6.5rem (104px) from window top
-      const targetTop = 104;
-      const endOffset = 220;
+      // Pin header when top of section reaches 6rem (96px) from window top
+      const targetTop = 96;
+      const endOffset = 260;
 
       if (rect.top <= targetTop && rect.bottom > targetTop + endOffset) {
         setHeaderState('fixed');
@@ -79,22 +79,22 @@ export default function EstateAnimationScrollGrid() {
       }}
     >
       {/* Invisible Spacer when header is fixed to prevent layout shift */}
-      {headerState === 'fixed' && <div style={{ height: '110px' }} />}
+      {headerState === 'fixed' && <div style={{ height: '160px' }} />}
 
-      {/* Rock-Solid Fixed Heading Container */}
+      {/* Solid White Fixed Header Container covering top region to hide upward scrolling images */}
       <div style={{
         position: headerState === 'fixed' ? 'fixed' : headerState === 'bottom' ? 'absolute' : 'relative',
-        top: headerState === 'fixed' ? '6.5rem' : 'auto',
+        top: headerState === 'fixed' ? 0 : 'auto',
         bottom: headerState === 'bottom' ? '2rem' : 'auto',
         left: 0,
         right: 0,
         width: '100%',
         zIndex: 50,
         backgroundColor: '#ffffff',
-        paddingTop: '1.5rem',
+        paddingTop: headerState === 'fixed' ? '5.8rem' : '1.5rem',
         paddingBottom: '1.5rem',
         textAlign: 'center',
-        boxShadow: headerState === 'fixed' ? '0 10px 30px rgba(255,255,255,0.98)' : 'none',
+        boxShadow: headerState === 'fixed' ? '0 15px 35px rgba(255,255,255,1)' : 'none',
       }}>
         <div style={{ maxWidth: '850px', margin: '0 auto', padding: '0 1rem' }}>
           <h2 style={{
