@@ -31,17 +31,17 @@ export default function RealEstate3DGrassHero() {
     renderer.toneMappingExposure = 1.15;
     container.appendChild(renderer.domElement);
 
-    // 3. Photorealistic Background Texture Plane (Matches Reference Meadow Photo)
+    // 3. Ultra-Wide Photorealistic Landscape Background (Matches Uploaded Meadow Photo)
     const textureLoader = new THREE.TextureLoader();
-    const bgTexture = textureLoader.load('/assets/estate_hero_3d_landscape.png', () => {
+    const bgTexture = textureLoader.load('/assets/estate_hero_landscape_wide.jpg', () => {
       setIsLoaded(true);
     });
     bgTexture.colorSpace = THREE.SRGBColorSpace;
 
-    const bgGeo = new THREE.PlaneGeometry(36, 18);
+    const bgGeo = new THREE.PlaneGeometry(42, 21);
     const bgMat = new THREE.MeshBasicMaterial({ map: bgTexture, depthWrite: false });
     const bgMesh = new THREE.Mesh(bgGeo, bgMat);
-    bgMesh.position.set(0, 3.2, -14);
+    bgMesh.position.set(0, 3.6, -14);
     scene.add(bgMesh);
 
     // 4. Photorealistic Lighting Matching Golden Sun & Azure Sky
@@ -97,15 +97,15 @@ export default function RealEstate3DGrassHero() {
     }
     bladeGeo.computeVertexNormals();
 
-    // Color attribute for gradient matching vibrant new background landscape photo
-    const baseColor = new THREE.Color('#1b4332');
-    const midColor = new THREE.Color('#2d6a4f');
-    const tipColor = new THREE.Color('#74c69d');
-    const sunlitColor = new THREE.Color('#b7e4c7');
+    // Color attribute for gradient (Sunlit Lime Tip -> Deep Forest Emerald Base)
+    const baseColor = new THREE.Color('#143811');
+    const midColor = new THREE.Color('#4d7c0f');
+    const tipColor = new THREE.Color('#a3e635');
+    const sunlitColor = new THREE.Color('#d9f99d');
 
     const colors = new Float32Array(BLADE_COUNT * 3);
     for (let i = 0; i < BLADE_COUNT; i++) {
-      const isSunlit = Math.random() > 0.7;
+      const isSunlit = Math.random() > 0.75;
       const c = isSunlit ? sunlitColor : tipColor;
       colors[i * 3] = c.r;
       colors[i * 3 + 1] = c.g;
@@ -114,9 +114,9 @@ export default function RealEstate3DGrassHero() {
     bladeGeo.setAttribute('color', new THREE.InstancedBufferAttribute(colors, 3));
 
     const bladeMat = new THREE.MeshStandardMaterial({
-      color: new THREE.Color('#40916c'),
-      roughness: 0.5,
-      metalness: 0.05,
+      color: new THREE.Color('#65a30d'),
+      roughness: 0.45,
+      metalness: 0.08,
       side: THREE.DoubleSide,
     });
 
@@ -268,8 +268,12 @@ export default function RealEstate3DGrassHero() {
   return (
     <section style={{
       position: 'relative',
-      width: '100%',
-      height: 'clamp(620px, 78vw, 920px)',
+      width: '100vw',
+      left: '50%',
+      right: '50%',
+      marginLeft: '-50vw',
+      marginRight: '-50vw',
+      height: 'clamp(540px, 64vw, 840px)',
       backgroundColor: '#1a3a14',
       overflow: 'hidden',
       fontFamily: 'Inter, system-ui, sans-serif',
