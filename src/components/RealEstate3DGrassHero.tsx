@@ -118,145 +118,133 @@ export default function RealEstate3DGrassHero() {
     terrain.receiveShadow = true;
     scene.add(terrain);
 
-    // 7. Hyper-Realistic Organic 3D Trees (Deciduous Oak, Maple & Fir Groves)
+    // 7. AAA Photorealistic 3D Trees with High-Res Leaf-Branch Alpha Sprites & Smooth Shading
     const treeGroup = new THREE.Group();
 
-    // Bark & Foliage Materials with Multi-Tonal Sunlit Colors
+    // Procedural Leaf Branch Canvas Texture Map
+    const createLeafTexture = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 256;
+      canvas.height = 256;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return null;
+
+      ctx.clearRect(0, 0, 256, 256);
+      const colors = ['#388e3c', '#4caf50', '#76ff03', '#2e7d32', '#1b5e20', '#aeea00'];
+
+      // Draw 40 detailed overlapping leaves with veins and soft edges
+      for (let i = 0; i < 42; i++) {
+        const lx = 128 + (Math.random() - 0.5) * 170;
+        const ly = 128 + (Math.random() - 0.5) * 170;
+        const rx = 12 + Math.random() * 20;
+        const ry = 22 + Math.random() * 30;
+        const rot = Math.random() * Math.PI * 2;
+
+        ctx.save();
+        ctx.translate(lx, ly);
+        ctx.rotate(rot);
+
+        ctx.beginPath();
+        ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
+        ctx.fillStyle = colors[i % colors.length];
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.moveTo(0, -ry * 0.8);
+        ctx.lineTo(0, ry * 0.8);
+        ctx.strokeStyle = 'rgba(255,255,255,0.4)';
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        ctx.restore();
+      }
+
+      const tex = new THREE.CanvasTexture(canvas);
+      tex.colorSpace = THREE.SRGBColorSpace;
+      return tex;
+    };
+
+    const leafTex = createLeafTexture();
+
     const trunkMat = new THREE.MeshStandardMaterial({
-      color: 0x382415,
-      roughness: 0.92,
+      color: 0x3d2719,
+      roughness: 0.88,
       metalness: 0.05,
     });
 
-    const leafMaterials = [
-      new THREE.MeshStandardMaterial({ color: 0x55a630, roughness: 0.65, flatShading: true }), // Vibrant Oak Green
-      new THREE.MeshStandardMaterial({ color: 0x2b9348, roughness: 0.70, flatShading: true }), // Deep Forest Green
-      new THREE.MeshStandardMaterial({ color: 0x80b918, roughness: 0.60, flatShading: true }), // Sunlit Lime Highlight
-      new THREE.MeshStandardMaterial({ color: 0x1b4332, roughness: 0.75, flatShading: true }), // Deep Emerald Shadow
-    ];
+    const leafMat = new THREE.MeshStandardMaterial({
+      map: leafTex,
+      transparent: true,
+      alphaTest: 0.2,
+      side: THREE.DoubleSide,
+      roughness: 0.45,
+      metalness: 0.04,
+    });
 
-    // Helper: Create vertex-deformed organic leaf puff cluster
-    const createLeafClusterGeo = (radius: number) => {
-      const geo = new THREE.IcosahedronGeometry(radius, 2);
-      const pos = geo.attributes.position;
-      for (let i = 0; i < pos.count; i++) {
-        const vx = pos.getX(i);
-        const vy = pos.getY(i);
-        const vz = pos.getZ(i);
-        // Organic noise displacement per vertex
-        const noise = 1 + (Math.sin(vx * 3.5) * Math.cos(vy * 3.5) * Math.sin(vz * 3.5)) * 0.22;
-        pos.setXYZ(i, vx * noise, vy * noise, vz * noise);
-      }
-      geo.computeVertexNormals();
-      return geo;
-    };
+    // Smooth High-Poly Branch Plane Geometry
+    const branchGeo = new THREE.PlaneGeometry(3.2, 3.2);
 
-    // Pre-created organic cluster geometries for performance
-    const clusterGeos = [
-      createLeafClusterGeo(1.8),
-      createLeafClusterGeo(1.4),
-      createLeafClusterGeo(1.1),
-      createLeafClusterGeo(0.85),
-    ];
-
-    const createHyperRealisticTree = (tx: number, tz: number, scale = 1, type = 'broadleaf') => {
+    const createHyperRealisticTree = (tx: number, tz: number, scale = 1) => {
       const tree = new THREE.Group();
       const ty = getTerrainHeight(tx, tz);
       tree.position.set(tx, ty, tz);
       tree.scale.setScalar(scale);
 
-      if (type === 'broadleaf') {
-        // Gnarled Tapered Main Trunk
-        const trunkGeo = new THREE.CylinderGeometry(0.22, 0.55, 3.8, 8);
-        trunkGeo.translate(0, 1.9, 0);
-        const trunk = new THREE.Mesh(trunkGeo, trunkMat);
-        trunk.castShadow = true;
-        tree.add(trunk);
+      // Smooth Tapered Wood Trunk
+      const trunkGeo = new THREE.CylinderGeometry(0.18, 0.48, 4.2, 12);
+      trunkGeo.translate(0, 2.1, 0);
+      const trunk = new THREE.Mesh(trunkGeo, trunkMat);
+      trunk.castShadow = true;
+      tree.add(trunk);
 
-        // Branching Arms
-        const b1Geo = new THREE.CylinderGeometry(0.12, 0.22, 2.2, 6);
-        b1Geo.rotateZ(-0.45);
-        b1Geo.translate(-0.6, 2.8, 0);
-        const b1 = new THREE.Mesh(b1Geo, trunkMat);
-        b1.castShadow = true;
-        tree.add(b1);
+      // Secondary Wood Branches
+      const b1Geo = new THREE.CylinderGeometry(0.08, 0.18, 2.4, 8);
+      b1Geo.rotateZ(-0.5);
+      b1Geo.translate(-0.7, 3.2, 0);
+      const b1 = new THREE.Mesh(b1Geo, trunkMat);
+      b1.castShadow = true;
+      tree.add(b1);
 
-        const b2Geo = new THREE.CylinderGeometry(0.1, 0.2, 1.9, 6);
-        b2Geo.rotateZ(0.42);
-        b2Geo.translate(0.5, 3.0, 0.2);
-        const b2 = new THREE.Mesh(b2Geo, trunkMat);
-        b2.castShadow = true;
-        tree.add(b2);
+      const b2Geo = new THREE.CylinderGeometry(0.07, 0.16, 2.2, 8);
+      b2Geo.rotateZ(0.48);
+      b2Geo.translate(0.6, 3.4, 0.2);
+      const b2 = new THREE.Mesh(b2Geo, trunkMat);
+      b2.castShadow = true;
+      tree.add(b2);
 
-        // Multi-Cluster Billowing Leaf Canopy (7 Overlapping Puffs)
-        const clusterOffsets = [
-          { x: 0, y: 4.6, z: 0, geoIdx: 0, matIdx: 0 },
-          { x: -1.2, y: 3.8, z: 0.4, geoIdx: 1, matIdx: 1 },
-          { x: 1.3, y: 4.1, z: -0.3, geoIdx: 1, matIdx: 2 },
-          { x: 0.4, y: 5.4, z: -0.5, geoIdx: 2, matIdx: 0 },
-          { x: -0.7, y: 4.9, z: -0.8, geoIdx: 2, matIdx: 3 },
-          { x: 0.9, y: 3.5, z: 0.9, geoIdx: 2, matIdx: 1 },
-          { x: 0, y: 6.1, z: 0.2, geoIdx: 3, matIdx: 2 },
-        ];
+      // Dense Intersecting Leaf-Branch Planes (22 Planes forming realistic billowing canopy)
+      const leafCluster = new THREE.Group();
+      leafCluster.position.set(0, 4.2, 0);
 
-        clusterOffsets.forEach((c) => {
-          const mesh = new THREE.Mesh(clusterGeos[c.geoIdx], leafMaterials[c.matIdx]);
-          mesh.position.set(c.x, c.y, c.z);
-          mesh.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, 0);
-          mesh.castShadow = true;
-          mesh.receiveShadow = true;
-          tree.add(mesh);
-        });
+      for (let i = 0; i < 22; i++) {
+        const leafMesh = new THREE.Mesh(branchGeo, leafMat);
+        const rx = (Math.random() - 0.5) * 1.8;
+        const ry = (Math.random() - 0.5) * 1.8;
+        const rz = (Math.random() - 0.5) * 1.8;
+        leafMesh.position.set(rx, ry, rz);
 
-      } else {
-        // Detailed Tiered Conifer / Pine Tree
-        const trunkGeo = new THREE.CylinderGeometry(0.18, 0.42, 4.5, 8);
-        trunkGeo.translate(0, 2.25, 0);
-        const trunk = new THREE.Mesh(trunkGeo, trunkMat);
-        trunk.castShadow = true;
-        tree.add(trunk);
-
-        // 4 Tiered Foliage Clusters with Vertex Jitter
-        const tiers = [
-          { y: 3.2, r: 2.2, h: 2.8, matIdx: 1 },
-          { y: 4.6, r: 1.7, h: 2.5, matIdx: 0 },
-          { y: 5.8, r: 1.2, h: 2.1, matIdx: 2 },
-          { y: 6.8, r: 0.7, h: 1.6, matIdx: 2 },
-        ];
-
-        tiers.forEach((t) => {
-          const coneGeo = new THREE.ConeGeometry(t.r, t.h, 8);
-          coneGeo.translate(0, t.y, 0);
-
-          // Jitter cone vertices for organic needle tiers
-          const p = coneGeo.attributes.position;
-          for (let k = 0; k < p.count; k++) {
-            const vx = p.getX(k);
-            const vy = p.getY(k);
-            const vz = p.getZ(k);
-            const n = 1 + Math.sin(vx * 4.0) * 0.14;
-            p.setXYZ(k, vx * n, vy, vz * n);
-          }
-          coneGeo.computeVertexNormals();
-
-          const mesh = new THREE.Mesh(coneGeo, leafMaterials[t.matIdx]);
-          mesh.castShadow = true;
-          mesh.receiveShadow = true;
-          tree.add(mesh);
-        });
+        leafMesh.rotation.set(
+          Math.random() * Math.PI,
+          Math.random() * Math.PI,
+          Math.random() * Math.PI
+        );
+        leafMesh.scale.setScalar(0.85 + Math.random() * 0.5);
+        leafMesh.castShadow = true;
+        leafMesh.receiveShadow = true;
+        leafCluster.add(leafMesh);
       }
+      tree.add(leafCluster);
 
       return tree;
     };
 
-    // Scatter 55 Hyper-Realistic Trees across the rolling hills
+    // Scatter 48 Photorealistic Trees along rolling hill ridges
     const treesList: THREE.Group[] = [];
-    for (let i = 0; i < 55; i++) {
-      const tx = (Math.random() - 0.5) * 125;
-      const tz = -12 - Math.random() * 60;
-      const scale = 0.85 + Math.random() * 1.1;
-      const type = Math.random() > 0.35 ? 'broadleaf' : 'conifer';
-      const tree = createHyperRealisticTree(tx, tz, scale, type);
+    for (let i = 0; i < 48; i++) {
+      const tx = (Math.random() - 0.5) * 130;
+      const tz = -16 - Math.random() * 65;
+      const scale = 0.9 + Math.random() * 1.2;
+      const tree = createHyperRealisticTree(tx, tz, scale);
       treeGroup.add(tree);
       treesList.push(tree);
     }
