@@ -2,7 +2,6 @@ import { Metadata } from 'next';
 import dynamic from 'next/dynamic';
 import ScrollTextReveal from '@/components/ScrollTextReveal';
 import EstateAnimationScrollGrid from '@/components/EstateAnimationScrollGrid';
-import EstateLifestyleHorizontalScroll from '@/components/EstateLifestyleHorizontalScroll';
 
 const RealEstate3DGrassHero = dynamic(() => import('@/components/RealEstate3DGrassHero'), {
   loading: () => (
@@ -26,11 +25,8 @@ export default function RealEstatePage() {
       {/* 2. Scroll-Driven Word Reveal Statement Section */}
       <ScrollTextReveal text="Every piece of land has its own character and story. We build thoughtful spaces that feel natural to live in, blending clean modern design with enduring quality. Places built not just to impress today, but to last for generations." />
 
-      {/* 3. Staggered Architectural Portfolio Vertical Scroll Grid */}
+      {/* 3. Staggered Architectural Portfolio & Horizontal Lifestyle Transition Grid */}
       <EstateAnimationScrollGrid />
-
-      {/* 4. Horizontal Scroll Lifestyle Showcase */}
-      <EstateLifestyleHorizontalScroll />
     </div>
   );
 }
