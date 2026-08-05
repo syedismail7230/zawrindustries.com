@@ -55,34 +55,12 @@ export default function RealEstate3DGrassHero() {
     const hemiLight = new THREE.HemisphereLight(0x7dd3fc, 0x365314, 1.0);
     scene.add(hemiLight);
 
-    // 5. Foreground Ground Base Texture Matching Photo Soil/Grass
-    const groundGeo = new THREE.PlaneGeometry(24, 16, 32, 32);
-    groundGeo.rotateX(-Math.PI / 2);
+    // 5. Instanced 3D Grass Blades (Blends Directly onto Photo Landscape, No Solid Ground Shelf)
+    const BLADE_COUNT = 180000;
 
-    // Subtle gentle contour
-    const posAttr = groundGeo.attributes.position;
-    for (let i = 0; i < posAttr.count; i++) {
-      const x = posAttr.getX(i);
-      const z = posAttr.getZ(i);
-      posAttr.setY(i, Math.sin(x * 0.15) * 0.18 + Math.cos(z * 0.2) * 0.12);
-    }
-    groundGeo.computeVertexNormals();
-
-    const groundMat = new THREE.MeshStandardMaterial({
-      color: new THREE.Color('#4c8b25'),
-      roughness: 0.85,
-      metalness: 0.05,
-    });
-    const ground = new THREE.Mesh(groundGeo, groundMat);
-    ground.position.set(0, -0.6, 2);
-    scene.add(ground);
-
-    // 6. Hyper-Realistic Instanced 3D Grass Blades (3x Ultra-Dense Lawn)
-    const BLADE_COUNT = 225000;
-
-    // Curved Ribbon Blade Geometry (Ultra-Slim 0.008 & Half Height 0.55)
-    const bladeWidth = 0.008;
-    const bladeHeight = 0.55;
+    // Curved Ribbon Blade Geometry
+    const bladeWidth = 0.007;
+    const bladeHeight = 0.45;
     const bladeGeo = new THREE.PlaneGeometry(bladeWidth, bladeHeight, 1, 5);
     bladeGeo.translate(0, bladeHeight / 2, 0);
 
@@ -90,22 +68,22 @@ export default function RealEstate3DGrassHero() {
     const pos = bladeGeo.attributes.position;
     for (let i = 0; i < pos.count; i++) {
       const yRatio = pos.getY(i) / bladeHeight;
-      const zCurve = Math.pow(yRatio, 2) * 0.08; // Natural arc curve forward for short lawn
-      const xTaper = 1 - Math.pow(yRatio, 1.5) * 0.75; // Taper to needle tip
+      const zCurve = Math.pow(yRatio, 2) * 0.06;
+      const xTaper = 1 - Math.pow(yRatio, 1.5) * 0.75;
       pos.setZ(i, zCurve);
       pos.setX(i, pos.getX(i) * xTaper);
     }
     bladeGeo.computeVertexNormals();
 
-    // Color attribute matched 100% to background photo grass colors (Lime & Yellow-Green)
-    const tipColor = new THREE.Color('#9ef01a');
-    const sunlitColor = new THREE.Color('#d9f99d');
-    const goldenColor = new THREE.Color('#ccff00');
+    // Color attribute sampled directly from meadow photo (Lush Sunlit Lime & Meadow Green)
+    const tipColor = new THREE.Color('#a8eb34');
+    const sunlitColor = new THREE.Color('#d4fc79');
+    const baseGreen = new THREE.Color('#589e1a');
 
     const colors = new Float32Array(BLADE_COUNT * 3);
     for (let i = 0; i < BLADE_COUNT; i++) {
       const rand = Math.random();
-      const c = rand > 0.8 ? goldenColor : rand > 0.4 ? sunlitColor : tipColor;
+      const c = rand > 0.75 ? sunlitColor : rand > 0.35 ? tipColor : baseGreen;
       colors[i * 3] = c.r;
       colors[i * 3 + 1] = c.g;
       colors[i * 3 + 2] = c.b;
@@ -113,9 +91,9 @@ export default function RealEstate3DGrassHero() {
     bladeGeo.setAttribute('color', new THREE.InstancedBufferAttribute(colors, 3));
 
     const bladeMat = new THREE.MeshStandardMaterial({
-      color: new THREE.Color('#7cb342'),
-      roughness: 0.4,
-      metalness: 0.05,
+      color: new THREE.Color('#6db322'),
+      roughness: 0.35,
+      metalness: 0.04,
       side: THREE.DoubleSide,
     });
 
@@ -124,18 +102,20 @@ export default function RealEstate3DGrassHero() {
     const dummy = new THREE.Object3D();
     const bladeData: { x: number; y: number; z: number; rotY: number; scaleY: number; currentBendX: number; currentBendZ: number }[] = [];
 
-    // Distribute grass blades across foreground meadow with distance height feathering
+    // Distribute 3D grass blades smoothly across the photo meadow foreground with zero hard edges
     for (let i = 0; i < BLADE_COUNT; i++) {
-      const x = (Math.random() - 0.5) * 24;
-      const z = Math.random() * 9.5 - 2.2;
-      const y = -0.6 + (Math.sin(x * 0.15) * 0.18 + Math.cos(z * 0.2) * 0.12);
+      const x = (Math.random() - 0.5) * 26;
+      const z = Math.random() * 8.5 - 3.2; // Foreground meadow region
+      
+      // Gentle subtle curve matching the hills in photo
+      const y = -1.2 + Math.sin(x * 0.1) * 0.12 + (z + 3.2) * 0.08;
 
       const rotY = Math.random() * Math.PI;
 
-      // Distance height feathering: Taper blade height towards the back edge (z -> -2.2) to blend seamlessly into background photo
-      const distToBack = (z - (-2.2)) / 9.5; // 0 at back, 1 at front
-      const distanceFactor = Math.min(1, Math.max(0.12, Math.pow(distToBack, 0.6)));
-      const scaleY = (0.35 + Math.random() * 0.75) * distanceFactor;
+      // Distance height feathering: Blades scale smoothly to zero as z approaches back horizon (-3.2)
+      const distRatio = Math.max(0, (z - (-3.2)) / 8.5); // 0 at back, 1 at front
+      const distanceFactor = Math.pow(distRatio, 0.85); // Smooth quadratic fade
+      const scaleY = (0.2 + Math.random() * 0.8) * distanceFactor;
 
       dummy.position.set(x, y, z);
       dummy.rotation.set(0, rotY, 0);
