@@ -329,7 +329,7 @@ export default function RealEstate3DGrassHero() {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          justify-content: 'center',
+          justifyContent: 'center',
           color: '#ffffff',
           zIndex: 10,
         }}>
