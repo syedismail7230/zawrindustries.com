@@ -12,7 +12,7 @@ interface EstateImageItem {
 }
 
 const estateItems: EstateImageItem[] = [
-  // Row 1: Columns 1, 3, 5 (First 3 Images with spacious top padding)
+  // Row 1: Columns 1, 3, 5
   { id: 1, src: '/assets/estate-animation/image (1).png', tag: 'Parametric Pavilion', category: 'Fluid Future Architecture', col: 1, row: 1 },
   { id: 2, src: '/assets/estate-animation/image (2).png', tag: 'Pop Brutalism', category: 'Color Gradient Facades', col: 3, row: 1 },
   { id: 3, src: '/assets/estate-animation/image (3).png', tag: 'Organic Bio-Villa', category: 'Canopy Forest Sanctuary', col: 5, row: 1 },
@@ -53,7 +53,7 @@ export default function EstateAnimationScrollGrid() {
 
       // Pin header when top of section reaches 96px (below main navbar)
       const targetTop = 96;
-      const endOffset = 380;
+      const endOffset = 280;
 
       if (rect.top <= targetTop && rect.bottom > targetTop + endOffset) {
         setIsPinned(true);
@@ -81,13 +81,12 @@ export default function EstateAnimationScrollGrid() {
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '2rem 4vw 28rem',
+        padding: '2rem 4vw 6rem',
         width: '100%',
         maxWidth: '1600px',
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        minHeight: '260vh',
       }}
     >
       {/* Invisible Spacer when heading is pinned to prevent layout jump */}
@@ -139,7 +138,7 @@ export default function EstateAnimationScrollGrid() {
         />
       </div>
 
-      {/* 5-Column Checkerboard Grid Container with Expanded 12rem Vertical Row Gaps */}
+      {/* 5-Column Checkerboard Grid Container */}
       <div
         className="checkerboard-grid"
         style={{
@@ -180,14 +179,14 @@ export default function EstateAnimationScrollGrid() {
         .checkerboard-grid {
           display: grid;
           grid-template-columns: repeat(5, 1fr);
-          gap: 12rem 2.5vw;
+          gap: 10rem 2.5vw;
           align-items: start;
           width: 100%;
         }
         @media (max-width: 1100px) {
           .checkerboard-grid {
             grid-template-columns: repeat(3, 1fr);
-            gap: 7rem 2vw;
+            gap: 6rem 2vw;
           }
           .checker-item {
             grid-column: auto !important;
@@ -199,7 +198,7 @@ export default function EstateAnimationScrollGrid() {
         @media (max-width: 640px) {
           .checkerboard-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 5rem 1.5rem;
+            gap: 4rem 1.5rem;
           }
         }
       `}</style>
