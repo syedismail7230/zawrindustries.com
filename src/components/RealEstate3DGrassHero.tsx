@@ -117,11 +117,11 @@ export default function RealEstate3DGrassHero() {
     terrain.receiveShadow = true;
     scene.add(terrain);
 
-    // 7. Pure 3D Instanced Grass Meadow (4x Density - 1.8 Million Blades)
-    const BLADE_COUNT = 1800000;
+    // 7. Pure 3D Instanced Grass Meadow (3.6 Million Ultra-Dense Blades)
+    const BLADE_COUNT = 3600000;
 
-    const bladeWidth = 0.007;
-    const bladeHeight = 0.52;
+    const bladeWidth = 0.014;
+    const bladeHeight = 0.54;
     const bladeGeo = new THREE.PlaneGeometry(bladeWidth, bladeHeight, 1, 5);
     bladeGeo.translate(0, bladeHeight / 2, 0);
 
