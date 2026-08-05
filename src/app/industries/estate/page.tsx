@@ -22,7 +22,7 @@ export default function RealEstatePage() {
       <RealEstate3DGrassHero />
 
       {/* 2. Scroll-Driven Word Reveal Statement Section */}
-      <ScrollTextReveal text="We're here to build something meaningful together, turning ideas into impactful real estate experiences that create lasting value and drive real growth." />
+      <ScrollTextReveal text="We don't just develop land; we honor the earth. Every structure we shape is a living sanctuary—where architecture meets silence, spaces breathe with intent, and generations find a place to belong." />
 
       {/* 2. Core Capabilities & PropTech Matrix */}
       <section style={{ padding: '6rem 5%', maxWidth: '1300px', margin: '0 auto' }}>
