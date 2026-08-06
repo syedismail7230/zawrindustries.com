@@ -51,7 +51,7 @@ export default function AboutBoard() {
           </h2>
         </div>
 
-        {/* ROW 1: Managing Director */}
+        {/* TOP ROW: Sitting MD Image (Left) + Office of MD Governance Box (Right) */}
         <div
           style={{
             display: 'grid',
@@ -61,7 +61,7 @@ export default function AboutBoard() {
             marginBottom: 'clamp(4rem, 7vw, 7rem)',
           }}
         >
-          {/* MD Portrait */}
+          {/* Sitting MD Image */}
           <div
             style={{
               gridColumn: 'span 5',
@@ -75,43 +75,21 @@ export default function AboutBoard() {
               style={{
                 width: '100%',
                 maxWidth: '460px',
-                aspectRatio: '3 / 4',
+                aspectRatio: '3.2 / 4',
                 position: 'relative',
               }}
             >
               <img
-                src="/assets/md-portrait.png"
-                alt="Managing Director - Mohammed Ahmed"
+                src="/assets/MD-office.png"
+                alt="Office of the Managing Director - Zawr Industries"
                 style={{
                   width: '100%',
                   height: '100%',
                   objectFit: 'contain',
-                  objectPosition: 'bottom center',
+                  objectPosition: 'center',
                   display: 'block',
                 }}
               />
-            </div>
-            <div style={{ marginTop: '1.25rem' }}>
-              <div
-                style={{
-                  fontSize: '1.08rem',
-                  fontWeight: 400,
-                  color: '#334155',
-                  marginBottom: '0.25rem',
-                }}
-              >
-                Managing Director
-              </div>
-              <div
-                style={{
-                  fontSize: '1.4rem',
-                  fontWeight: 500,
-                  color: '#0f172a',
-                  letterSpacing: '-0.01em',
-                }}
-              >
-                Mohammed Ahmed
-              </div>
             </div>
           </div>
 
@@ -168,76 +146,78 @@ export default function AboutBoard() {
           </div>
         </div>
 
-        {/* ROW 2: CEO */}
+        {/* BOTTOM ROW: Executive Portraits (MD Left, CEO Right) */}
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(12, 1fr)',
             gap: 'clamp(2rem, 4vw, 4rem)',
-            alignItems: 'center',
+            alignItems: 'start',
           }}
         >
-          {/* CEO Governance Box */}
+          {/* MD Standing Portrait */}
           <div
             style={{
-              gridColumn: 'span 7',
-              backgroundColor: '#f8fafc',
-              padding: 'clamp(2rem, 3.5vw, 3.5rem)',
-              borderRadius: '16px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1.25rem',
-            }}
-            className="board-row-col ceo-box"
-          >
-            <h3
-              style={{
-                fontSize: 'clamp(1.3rem, 2.2vw, 1.6rem)',
-                fontWeight: 500,
-                color: '#0f172a',
-                letterSpacing: '-0.02em',
-                margin: 0,
-              }}
-            >
-              Office of the Chief Executive Officer
-            </h3>
-
-            <p style={{ fontSize: '0.98rem', color: '#475569', lineHeight: 1.75, margin: 0, fontWeight: 400 }}>
-              Led by visionary technology leadership, executive management directs company-wide software innovation, product architecture, and enterprise AI transformation across international markets.
-            </p>
-
-            <p style={{ fontSize: '0.98rem', color: '#475569', lineHeight: 1.75, margin: 0, fontWeight: 400 }}>
-              Ensuring operational excellence across software engineering, digital platforms, and client delivery while scaling high-impact technology solutions globally.
-            </p>
-
-            <div style={{ paddingTop: '1.25rem', borderTop: '1px solid #e2e8f0', marginTop: '0.5rem' }}>
-              <div
-                style={{
-                  fontSize: '0.78rem',
-                  fontWeight: 600,
-                  color: '#0f172a',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.14em',
-                  marginBottom: '0.4rem',
-                }}
-              >
-                EXECUTIVE LEADERSHIP COMMITTEES
-              </div>
-              <div style={{ fontSize: '0.88rem', color: '#64748b', lineHeight: 1.6 }}>
-                Product Architecture • Software Engineering • Enterprise AI • Global Delivery
-              </div>
-            </div>
-          </div>
-
-          {/* CEO Portrait */}
-          <div
-            style={{
-              gridColumn: 'span 5',
+              gridColumn: 'span 6',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'flex-start',
             }}
-            className="board-row-col ceo-portrait"
+            className="board-row-col"
+          >
+            <div
+              style={{
+                width: '100%',
+                maxWidth: '460px',
+                aspectRatio: '3 / 4',
+                position: 'relative',
+              }}
+            >
+              <img
+                src="/assets/md-portrait.png"
+                alt="Managing Director - Mohammed Ahmed"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  objectPosition: 'bottom center',
+                  display: 'block',
+                }}
+              />
+            </div>
+            <div style={{ marginTop: '1.25rem' }}>
+              <div
+                style={{
+                  fontSize: '1.08rem',
+                  fontWeight: 400,
+                  color: '#334155',
+                  marginBottom: '0.25rem',
+                }}
+              >
+                Managing Director
+              </div>
+              <div
+                style={{
+                  fontSize: '1.4rem',
+                  fontWeight: 500,
+                  color: '#0f172a',
+                  letterSpacing: '-0.01em',
+                }}
+              >
+                Mohammed Ahmed
+              </div>
+            </div>
+          </div>
+
+          {/* CEO Standing Portrait */}
+          <div
+            style={{
+              gridColumn: 'span 6',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+            }}
+            className="board-row-col"
           >
             <div
               style={{
@@ -291,17 +271,12 @@ export default function AboutBoard() {
           .board-row-col {
             grid-column: span 12 !important;
           }
-          .ceo-box {
-            order: 2;
-          }
-          .ceo-portrait {
-            order: 1;
-          }
         }
       `}</style>
     </section>
   );
 }
+
 
 
 
