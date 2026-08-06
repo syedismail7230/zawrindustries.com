@@ -184,17 +184,17 @@ export default function Footer() {
         <div className="footer-col">
           <h4>About</h4>
           <ul className="footer-links">
-            <li><Link href="/about/history">Our History</Link></li>
-            <li><Link href="/about/board">Board of directors</Link></li>
-            <li><Link href="/about/awards">Awards</Link></li>
-            <li><Link href="/about/impact">Our Impact</Link></li>
-            <li><Link href="/about/blog">BLOG</Link></li>
-            <li><Link href="/about/values">Values</Link></li>
-            <li><Link href="/about/vision">Vision</Link></li>
-            <li><Link href="/about/mission">Mission</Link></li>
-            <li><Link href="/about/csr">CSR</Link></li>
-            <li><Link href="/about/innovation">Innovation</Link></li>
-            <li><Link href="/about/code-of-conduct">Code of conduct</Link></li>
+            <li><Link href="/about#history">Our History</Link></li>
+            <li><Link href="/about#board">Board of directors</Link></li>
+            <li><Link href="/about#awards">Awards</Link></li>
+            <li><Link href="/about#impact">Our Impact</Link></li>
+            <li><Link href="/about#blog">Blog</Link></li>
+            <li><Link href="/about#values">Values</Link></li>
+            <li><Link href="/about#vision">Vision</Link></li>
+            <li><Link href="/about#mission">Mission</Link></li>
+            <li><Link href="/about#csr">CSR</Link></li>
+            <li><Link href="/about#innovation">Innovation</Link></li>
+            <li><Link href="/about#code-of-conduct">Code of conduct</Link></li>
           </ul>
         </div>
 
