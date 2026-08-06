@@ -30,18 +30,6 @@ export default function AboutImpact() {
       >
         {/* Header */}
         <div style={{ maxWidth: '750px', marginBottom: 'clamp(3rem, 5vw, 4.5rem)' }}>
-          <div
-            style={{
-              fontSize: '0.78rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.22em',
-              color: '#60a5fa',
-              fontWeight: 600,
-              marginBottom: '0.75rem',
-            }}
-          >
-            SECTION 04
-          </div>
           <h2
             style={{
               fontSize: 'clamp(1.8rem, 3.8vw, 3rem)',

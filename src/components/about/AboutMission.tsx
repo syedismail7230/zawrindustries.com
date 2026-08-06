@@ -26,18 +26,6 @@ export default function AboutMission() {
         }}
       >
         <div style={{ gridColumn: 'span 4' }} className="mission-col">
-          <div
-            style={{
-              fontSize: '0.78rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.22em',
-              color: '#60a5fa',
-              fontWeight: 600,
-              marginBottom: '0.75rem',
-            }}
-          >
-            SECTION 08
-          </div>
           <h2
             style={{
               fontSize: 'clamp(2rem, 4vw, 3.2rem)',

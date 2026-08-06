@@ -26,18 +26,6 @@ export default function AboutVision() {
         }}
       >
         <div style={{ gridColumn: 'span 4' }} className="vision-col">
-          <div
-            style={{
-              fontSize: '0.78rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.22em',
-              color: '#3b82f6',
-              fontWeight: 600,
-              marginBottom: '0.75rem',
-            }}
-          >
-            SECTION 07
-          </div>
           <h2
             style={{
               fontSize: 'clamp(2rem, 4vw, 3.2rem)',

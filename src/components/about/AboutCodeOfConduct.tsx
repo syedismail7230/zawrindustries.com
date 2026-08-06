@@ -31,18 +31,6 @@ export default function AboutCodeOfConduct() {
       >
         {/* Header */}
         <div style={{ maxWidth: '750px', marginBottom: 'clamp(3rem, 5vw, 4.5rem)' }}>
-          <div
-            style={{
-              fontSize: '0.78rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.22em',
-              color: '#3b82f6',
-              fontWeight: 600,
-              marginBottom: '0.75rem',
-            }}
-          >
-            SECTION 11
-          </div>
           <h2
             style={{
               fontSize: 'clamp(1.8rem, 3.8vw, 3rem)',

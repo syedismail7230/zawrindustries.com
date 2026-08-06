@@ -23,21 +23,9 @@ export default function AboutBoard() {
           margin: '0 auto',
         }}
       >
-        {/* Section Header */}
-        <div style={{ maxWidth: '750px', marginBottom: 'clamp(3rem, 5vw, 5rem)' }}>
-          <div
-            style={{
-              fontSize: '0.78rem',
-              textTransform: 'uppercase',
-              letterSpacing: '0.22em',
-              color: '#64748b',
-              fontWeight: 600,
-              marginBottom: '0.75rem',
-            }}
-          >
-            SECTION 02
-          </div>
-          <h2
+          {/* Section Header */}
+          <div style={{ maxWidth: '750px', marginBottom: 'clamp(3rem, 5vw, 5rem)' }}>
+            <h2
             style={{
               fontSize: 'clamp(2rem, 4vw, 3.2rem)',
               fontWeight: 300,
