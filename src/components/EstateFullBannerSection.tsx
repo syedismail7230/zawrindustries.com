@@ -42,9 +42,9 @@ export default function EstateFullBannerSection() {
             bottom: 0,
             left: 0,
             right: 0,
-            height: '65%',
+            height: '55%',
             background:
-              'linear-gradient(to top, rgba(15, 23, 42, 0.85) 0%, rgba(15, 23, 42, 0.4) 60%, rgba(15, 23, 42, 0) 100%)',
+              'linear-gradient(to top, rgba(15, 23, 42, 0.75) 0%, rgba(15, 23, 42, 0.35) 60%, rgba(15, 23, 42, 0) 100%)',
             pointerEvents: 'none',
           }}
         />
@@ -63,27 +63,16 @@ export default function EstateFullBannerSection() {
         >
           <h3
             style={{
-              fontSize: 'clamp(1.35rem, 4vw, 2.75rem)',
+              fontSize: 'clamp(1.4rem, 4vw, 2.75rem)',
               fontWeight: 300,
               letterSpacing: '-0.025em',
               lineHeight: 1.2,
-              margin: '0 0 0.6rem 0',
+              margin: 0,
               color: '#ffffff',
             }}
           >
             Shaping Landscapes into Generational Legacy
           </h3>
-          <p
-            style={{
-              fontSize: 'clamp(0.85rem, 2.2vw, 0.98rem)',
-              color: 'rgba(255, 255, 255, 0.85)',
-              lineHeight: 1.5,
-              fontWeight: 400,
-              margin: 0,
-            }}
-          >
-            Integrating sustainable master-planning with dramatic coastal topographies across prime international destinations.
-          </p>
         </div>
       </div>
     </section>

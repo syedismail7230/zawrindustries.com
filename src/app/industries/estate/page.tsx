@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import ScrollTextReveal from '@/components/ScrollTextReveal';
 import EstateAnimationScrollGrid from '@/components/EstateAnimationScrollGrid';
 import EstateComfortOfHomeSection from '@/components/EstateComfortOfHomeSection';
+import EstateServicesSection from '@/components/EstateServicesSection';
 import EstateFullBannerSection from '@/components/EstateFullBannerSection';
 
 const RealEstate3DGrassHero = dynamic(() => import('@/components/RealEstate3DGrassHero'), {
@@ -33,7 +34,10 @@ export default function RealEstatePage() {
       {/* 4. Comfort of Having Your Own Home Section (coffee-estate.png) */}
       <EstateComfortOfHomeSection />
 
-      {/* 5. Full-Width Edge-to-Edge Banner Section (last-estate.png) */}
+      {/* 5. What We Do Capabilities Section (Real Estate Investments, Construction, Property Management) */}
+      <EstateServicesSection />
+
+      {/* 6. Full-Width Edge-to-Edge Banner Section (last-estate.png) */}
       <EstateFullBannerSection />
     </div>
   );
