@@ -179,10 +179,15 @@ export default function Header() {
           </div>
           <div className={`dropdown ${activeMobileSubmenu === 'about' ? 'mobile-submenu-open' : ''}`}>
             <Link href="/about" onClick={closeMobileMenu}>About Us</Link>
-            <Link href="/about/blog" onClick={closeMobileMenu}>Blog</Link>
-            <Link href="/about/values" onClick={closeMobileMenu}>Values</Link>
-            <Link href="/about/vision" onClick={closeMobileMenu}>Vision</Link>
-            <Link href="/about/mission" onClick={closeMobileMenu}>Mission</Link>
+            <Link href="/about#history" onClick={closeMobileMenu}>Our History</Link>
+            <Link href="/about#board" onClick={closeMobileMenu}>Board of Directors</Link>
+            <Link href="/about#impact" onClick={closeMobileMenu}>Our Impact</Link>
+            <Link href="/about#blog" onClick={closeMobileMenu}>Blog</Link>
+            <Link href="/about#values" onClick={closeMobileMenu}>Values</Link>
+            <Link href="/about#vision" onClick={closeMobileMenu}>Vision</Link>
+            <Link href="/about#mission" onClick={closeMobileMenu}>Mission</Link>
+            <Link href="/about#innovation" onClick={closeMobileMenu}>Innovation</Link>
+            <Link href="/about#code-of-conduct" onClick={closeMobileMenu}>Code of Conduct</Link>
           </div>
         </div>
 
