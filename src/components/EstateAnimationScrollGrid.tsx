@@ -29,30 +29,13 @@ const row4Items: EstateImageItem[] = [
   { id: 12, src: '/assets/estate-animation/image (12).png', tag: 'Infinity Horizon Deck', category: 'Aquatic Sanctuary', col: 4, row: 4 },
 ];
 
-// Row 5: Exact 6 Lifestyle Items in Exact Order Specified by User:
-// 1. golf -> Golf Fairways
-// 2. pool -> Infinity Pool
-// 3. rooftop -> Skyline Rooftop
-// 4. beach -> Private Beach
-// 5. boat -> Private Superyacht
-// 6. fireside -> Fireside Hearth
+// Row 5: Exact 6 Lifestyle Items in Exact Order Specified by User
 const row5HorizontalItems: EstateImageItem[] = [
-  // Col 1 (Animation 1)
   { id: 1, src: '/assets/estate-animation/image (1).png', tag: 'Parametric Pavilion', category: 'Fluid Future Architecture' },
-  
-  // Col 2 (1. golf)
   { id: 14, src: '/assets/estate-lifestyle/image (1).png', tag: 'Golf Fairways', category: 'Championship Greens' },
-  
-  // Col 3 (Animation 2 - Color stairs)
   { id: 2, src: '/assets/estate-animation/image (2).png', tag: 'Pop Brutalism', category: 'Color Gradient Facades' },
-  
-  // Col 4 (2. pool)
   { id: 15, src: '/assets/estate-lifestyle/image (2).png', tag: 'Infinity Pool', category: 'Aquatic Sanctuary' },
-  
-  // Col 5 (Animation 13 - Dark green moss building)
   { id: 13, src: '/assets/estate-animation/image (13).png', tag: 'Biophilic Garden Atrium', category: 'Nature-Integrated Spaces' },
-
-  // Remaining Lifestyle Cards in exact order: 3. rooftop, 4. beach, 5. boat, 6. fireside
   { id: 16, src: '/assets/estate-lifestyle/image (3).png', tag: 'Skyline Rooftop', category: 'High-Altitude Lounge' },
   { id: 17, src: '/assets/estate-lifestyle/image (4).png', tag: 'Private Beach', category: 'Oceanfront Shoreline' },
   { id: 18, src: '/assets/estate-lifestyle/image (5).png', tag: 'Private Superyacht', category: 'Maritime Charter' },
@@ -67,17 +50,22 @@ export default function EstateAnimationScrollGrid() {
   const [showLifestyle, setShowLifestyle] = useState(false);
   const [isPinned, setIsPinned] = useState(false);
   const [isUnpinnedBottom, setIsUnpinnedBottom] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     let rafId: number;
+
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
 
     const handleScroll = () => {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-      const navOffset = 96;
+      const navOffset = window.innerWidth < 768 ? 70 : 96;
 
-      // Section Pinning state: Stays pinned until horizontal scroll has completely finished gliding all 9 cards
+      // Section Pinning state
       if (rect.top <= navOffset && rect.bottom > windowHeight) {
         setIsPinned(true);
         setIsUnpinnedBottom(false);
@@ -94,20 +82,18 @@ export default function EstateAnimationScrollGrid() {
         const totalHeight = rect.height - windowHeight;
         const scrollRatio = Math.max(0, Math.min(1, scrolledIn / totalHeight));
 
-        // Strict DOM check: Row 4 (the last second row) MUST be completely off-screen above the sticky header
         let isRow4Past = false;
         if (row4Ref.current) {
           const r4Rect = row4Ref.current.getBoundingClientRect();
-          isRow4Past = r4Rect.bottom <= navOffset + 80;
+          isRow4Past = r4Rect.bottom <= navOffset + (isMobile ? 40 : 80);
         } else {
-          isRow4Past = scrollRatio >= 0.65;
+          isRow4Past = scrollRatio >= 0.50;
         }
 
         const isLifestyleVisible = isRow4Past;
 
-        // Horizontal scroll starts at 0.78 and completes smoothly at 0.98, ensuring Card 9 (Fireside Hearth) is 100% fully visible before unpinning
-        const horizontalStartRatio = 0.78;
-        const rawHorizProgress = Math.max(0, scrollRatio - horizontalStartRatio) / (0.98 - horizontalStartRatio);
+        const horizontalStartRatio = 0.55;
+        const rawHorizProgress = Math.max(0, scrollRatio - horizontalStartRatio) / (1 - horizontalStartRatio);
         const clampedHorizontalProgress = Math.max(0, Math.min(1, rawHorizProgress));
 
         rafId = requestAnimationFrame(() => {
@@ -118,8 +104,12 @@ export default function EstateAnimationScrollGrid() {
       }
     };
 
+    checkMobile();
     window.addEventListener('scroll', handleScroll, { passive: true });
-    window.addEventListener('resize', handleScroll, { passive: true });
+    window.addEventListener('resize', () => {
+      checkMobile();
+      handleScroll();
+    }, { passive: true });
     handleScroll();
 
     return () => {
@@ -127,50 +117,53 @@ export default function EstateAnimationScrollGrid() {
       window.removeEventListener('resize', handleScroll);
       if (rafId) cancelAnimationFrame(rafId);
     };
-  }, []);
+  }, [isMobile]);
 
   const isHorizontalActive = horizontalProgress > 0.01;
   const isFadeVisible = !showLifestyle;
+  const maxSlidePercent = isMobile ? 84 : 80;
 
   return (
     <section
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '2rem 0 10rem',
+        padding: isMobile ? '1rem 0 0' : '2rem 0 0',
         width: '100%',
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        minHeight: '620vh',
+        minHeight: isMobile ? '380vh' : '520vh',
       }}
     >
       {/* Invisible Spacer when heading is pinned */}
-      {isPinned && <div style={{ height: '180px' }} />}
+      {isPinned && <div style={{ height: isMobile ? '130px' : '180px' }} />}
 
       {/* STICKY HEADING CONTAINER WITH CLEARANCE BELOW NAVBAR */}
       <div
         style={{
           position: isPinned ? 'fixed' : isUnpinnedBottom ? 'absolute' : 'relative',
-          top: isPinned ? 0 : 'auto',
-          bottom: isUnpinnedBottom ? '2rem' : 'auto',
+          top: isPinned ? 0 : isUnpinnedBottom ? 'calc(100% - 100vh)' : 'auto',
+          bottom: 'auto',
           left: 0,
           right: 0,
           width: '100%',
           zIndex: 40,
           backgroundColor: '#ffffff',
-          paddingTop: isPinned ? '6.5rem' : '2rem',
-          paddingBottom: '2.5rem',
+          paddingTop: isPinned ? (isMobile ? '4.5rem' : '6.5rem') : '1.5rem',
+          paddingBottom: isMobile ? '1.5rem' : '2.5rem',
           textAlign: 'center',
           boxShadow: isPinned && isFadeVisible ? '0 20px 30px rgba(255,255,255,1)' : 'none',
-          transition: 'box-shadow 0.4s ease',
+          opacity: isUnpinnedBottom ? 0 : 1,
+          pointerEvents: isUnpinnedBottom ? 'none' : 'auto',
+          transition: 'box-shadow 0.4s ease, opacity 0.3s ease',
         }}
       >
         <div style={{ maxWidth: '850px', margin: '0 auto', padding: '0 1rem', position: 'relative' }}>
           {/* Heading 1: Curated Spaces Built Across Global Growth Corridors */}
           <h2
             style={{
-              fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+              fontSize: 'clamp(1.4rem, 4.5vw, 2.8rem)',
               fontWeight: 400,
               color: '#0f172a',
               letterSpacing: '-0.02em',
@@ -179,7 +172,7 @@ export default function EstateAnimationScrollGrid() {
               filter: isHorizontalActive ? 'blur(14px)' : 'blur(0px)',
               transform: isHorizontalActive ? 'scale(0.95)' : 'scale(1.0)',
               transition:
-                'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+                'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
             Curated Spaces Built Across Global Growth Corridors
@@ -188,7 +181,7 @@ export default function EstateAnimationScrollGrid() {
           {/* Heading 2: The Art of Living — Curated Estate Lifestyle */}
           <h2
             style={{
-              fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+              fontSize: 'clamp(1.4rem, 4.5vw, 2.8rem)',
               fontWeight: 400,
               color: '#0f172a',
               letterSpacing: '-0.02em',
@@ -204,7 +197,7 @@ export default function EstateAnimationScrollGrid() {
               transform: isHorizontalActive ? 'scale(1.0)' : 'scale(1.05)',
               pointerEvents: isHorizontalActive ? 'auto' : 'none',
               transition:
-                'opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), filter 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+                'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
             The Art of Living — Curated Estate Lifestyle
@@ -215,10 +208,10 @@ export default function EstateAnimationScrollGrid() {
         <div
           style={{
             position: 'absolute',
-            bottom: '-6.5rem',
+            bottom: isMobile ? '-4rem' : '-6.5rem',
             left: 0,
             right: 0,
-            height: '7rem',
+            height: isMobile ? '4.5rem' : '7rem',
             background:
               'linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0.98) 40%, rgba(255,255,255,0.7) 70%, rgba(255,255,255,0) 100%)',
             pointerEvents: 'none',
@@ -229,29 +222,29 @@ export default function EstateAnimationScrollGrid() {
       </div>
 
       {/* MAIN CONTENT CONTAINER */}
-      <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 4vw' }}>
+      <div style={{ maxWidth: '1600px', margin: '0 auto', padding: isMobile ? '0 1rem' : '0 4vw' }}>
         {/* Rows 1 to 3: Checkerboard Grid */}
         <div
           className="checkerboard-grid"
           style={{
             position: 'relative',
             zIndex: 1,
-            marginTop: isPinned ? '0' : '2rem',
+            marginTop: isPinned ? '0' : '1.5rem',
           }}
         >
           {verticalRowsTop.map((item) => {
             const parallaxMult = (item.col || 1) % 2 === 0 ? 0.08 : 0.04;
-            const parallaxOffset = scrollY * parallaxMult;
+            const parallaxOffset = isMobile ? 0 : scrollY * parallaxMult;
             const isRow1 = item.row === 1;
-            const row1TopPadding = isRow1 ? '7.5rem' : '0px';
+            const row1TopPadding = isRow1 ? (isMobile ? '4rem' : '7.5rem') : '0px';
 
             return (
               <div
                 key={item.id}
                 className={`checker-item col-${item.col} row-${item.row}`}
                 style={{
-                  gridColumn: item.col,
-                  gridRow: item.row,
+                  gridColumn: isMobile ? 'auto' : item.col,
+                  gridRow: isMobile ? 'auto' : item.row,
                   marginTop: row1TopPadding,
                   transform: `translate3d(0, -${parallaxOffset}px, 0)`,
                   willChange: 'transform',
@@ -264,14 +257,14 @@ export default function EstateAnimationScrollGrid() {
           })}
         </div>
 
-        {/* Row 4: Tracked with row4Ref (The Last Second Row) */}
+        {/* Row 4: Tracked with row4Ref */}
         <div
           ref={row4Ref}
           className="checkerboard-grid"
           style={{
             position: 'relative',
             zIndex: 1,
-            marginTop: '10rem',
+            marginTop: isMobile ? '4rem' : '10rem',
           }}
         >
           {row4Items.map((item) => (
@@ -279,7 +272,7 @@ export default function EstateAnimationScrollGrid() {
               key={item.id}
               className={`checker-item col-${item.col}`}
               style={{
-                gridColumn: item.col,
+                gridColumn: isMobile ? 'auto' : item.col,
               }}
             >
               <EstateCard item={item} />
@@ -287,18 +280,19 @@ export default function EstateAnimationScrollGrid() {
           ))}
         </div>
 
-        {/* Row 5: Pinned position: fixed at top 17.5rem during horizontal scroll so IT CANNOT MOVE VERTICALLY UP */}
+        {/* Row 5: Mobile-Responsive Horizontal Track */}
         <div
           style={{
-            position: isPinned && showLifestyle ? 'fixed' : 'relative',
-            top: isPinned && showLifestyle ? '17.5rem' : 'auto',
-            left: isPinned && showLifestyle ? '4vw' : 'auto',
-            right: isPinned && showLifestyle ? '4vw' : 'auto',
+            position: isPinned && showLifestyle ? 'fixed' : isUnpinnedBottom && showLifestyle ? 'absolute' : 'relative',
+            top: isPinned && showLifestyle ? (isMobile ? '12.5rem' : '17.5rem') : isUnpinnedBottom && showLifestyle ? `calc(100% - 100vh + ${isMobile ? '12.5rem' : '17.5rem'})` : 'auto',
+            bottom: 'auto',
+            left: isPinned && showLifestyle ? (isMobile ? '1rem' : '4vw') : isUnpinnedBottom && showLifestyle ? (isMobile ? '1rem' : '4vw') : 'auto',
+            right: isPinned && showLifestyle ? (isMobile ? '1rem' : '4vw') : isUnpinnedBottom && showLifestyle ? (isMobile ? '1rem' : '4vw') : 'auto',
             zIndex: 30,
-            width: isPinned && showLifestyle ? 'calc(100vw - 8vw)' : '100%',
+            width: isPinned && showLifestyle ? (isMobile ? 'calc(100vw - 2rem)' : 'calc(100vw - 8vw)') : isUnpinnedBottom && showLifestyle ? (isMobile ? 'calc(100vw - 2rem)' : 'calc(100vw - 8vw)') : '100%',
             overflow: 'hidden',
-            padding: '1rem 0 4rem',
-            marginTop: isPinned && showLifestyle ? '0' : '10rem',
+            padding: '1rem 0 2rem',
+            marginTop: isPinned && showLifestyle ? '0' : (isMobile ? '4rem' : '10rem'),
             backgroundColor: '#ffffff',
           }}
         >
@@ -306,10 +300,10 @@ export default function EstateAnimationScrollGrid() {
           <div
             style={{
               display: 'flex',
-              gap: '2.5vw',
-              transform: `translate3d(-${horizontalProgress * 80}%, 0, 0)`,
-              willChange: 'transform, opacity',
-              transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+              gap: isMobile ? '1rem' : '2.5vw',
+              transform: `translate3d(-${horizontalProgress * maxSlidePercent}%, 0, 0)`,
+              willChange: 'transform',
+              transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
           >
             {row5HorizontalItems.map((item) => {
@@ -321,7 +315,7 @@ export default function EstateAnimationScrollGrid() {
                   key={item.id}
                   style={{
                     flexShrink: 0,
-                    width: 'calc((100vw - 8vw - 10vw) / 5)',
+                    width: isMobile ? 'calc(75vw - 1rem)' : 'calc((100vw - 8vw - 10vw) / 5)',
                     opacity: cardOpacity,
                     visibility: isLifestyleCard && !showLifestyle ? 'hidden' : 'visible',
                     transition: isLifestyleCard ? 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease' : 'none',
@@ -344,10 +338,10 @@ export default function EstateAnimationScrollGrid() {
           align-items: start;
           width: 100%;
         }
-        @media (max-width: 1100px) {
+        @media (max-width: 1024px) {
           .checkerboard-grid {
             grid-template-columns: repeat(3, 1fr);
-            gap: 6rem 2vw;
+            gap: 5rem 2vw;
           }
           .checker-item {
             grid-column: auto !important;
@@ -359,7 +353,7 @@ export default function EstateAnimationScrollGrid() {
         @media (max-width: 640px) {
           .checkerboard-grid {
             grid-template-columns: repeat(2, 1fr);
-            gap: 4rem 1.5rem;
+            gap: 2.5rem 1rem;
           }
         }
       `}</style>
@@ -377,7 +371,7 @@ function EstateCard({ item }: { item: EstateImageItem }) {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        gap: '0.75rem',
+        gap: '0.6rem',
         cursor: 'pointer',
         width: '100%',
         maxWidth: '215px',
@@ -416,7 +410,7 @@ function EstateCard({ item }: { item: EstateImageItem }) {
       <div style={{ paddingLeft: '0.1rem' }}>
         <div
           style={{
-            fontSize: '0.92rem',
+            fontSize: 'clamp(0.82rem, 2.5vw, 0.92rem)',
             fontWeight: 600,
             color: '#0f172a',
             letterSpacing: '-0.01em',
@@ -426,7 +420,7 @@ function EstateCard({ item }: { item: EstateImageItem }) {
         </div>
         <div
           style={{
-            fontSize: '0.78rem',
+            fontSize: 'clamp(0.72rem, 2vw, 0.78rem)',
             color: '#64748b',
             fontWeight: 400,
             marginTop: '0.1rem',
