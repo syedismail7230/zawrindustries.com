@@ -163,14 +163,22 @@ export default function Header() {
         <div className="nav-item">
           <div 
             style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
-            onClick={() => toggleMobileSubmenu('about')}
           >
-            <span>About</span>
-            <span style={{ display: isMobileMenuOpen ? 'inline-flex' : 'none', alignItems: 'center' }}>
+            <Link href="/about" onClick={closeMobileMenu} style={{ color: 'inherit', textDecoration: 'none', flexGrow: 1 }}>
+              About
+            </Link>
+            <span 
+              style={{ display: isMobileMenuOpen ? 'inline-flex' : 'none', alignItems: 'center', paddingLeft: '0.5rem' }}
+              onClick={(e) => {
+                e.stopPropagation();
+                toggleMobileSubmenu('about');
+              }}
+            >
               <ChevronDownIcon isOpen={activeMobileSubmenu === 'about'} />
             </span>
           </div>
           <div className={`dropdown ${activeMobileSubmenu === 'about' ? 'mobile-submenu-open' : ''}`}>
+            <Link href="/about" onClick={closeMobileMenu}>About Us</Link>
             <Link href="/about/blog" onClick={closeMobileMenu}>Blog</Link>
             <Link href="/about/values" onClick={closeMobileMenu}>Values</Link>
             <Link href="/about/vision" onClick={closeMobileMenu}>Vision</Link>

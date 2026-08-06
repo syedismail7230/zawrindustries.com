@@ -15,19 +15,24 @@ export default function ScrollTextReveal({
   const words = text.split(' ');
 
   useEffect(() => {
+    let rafId: number;
+
     const handleScroll = () => {
       if (!containerRef.current) return;
       const rect = containerRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
 
-      // Start revealing as soon as top enters 95% of viewport
-      // Complete 100% unblur for ALL words when top reaches 50% (center of screen)
-      const startY = windowHeight * 0.95;
-      const endY = windowHeight * 0.50;
+      // Start reveal when top enters 85% of viewport
+      // Complete reveal when top reaches 25% of viewport (works smoothly on Mobile & Desktop)
+      const startY = windowHeight * 0.85;
+      const endY = windowHeight * 0.25;
 
       const progress = (startY - rect.top) / (startY - endY);
       const clamped = Math.max(0, Math.min(1, progress));
-      setScrollProgress(clamped);
+
+      rafId = requestAnimationFrame(() => {
+        setScrollProgress(clamped);
+      });
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -37,6 +42,7 @@ export default function ScrollTextReveal({
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
+      if (rafId) cancelAnimationFrame(rafId);
     };
   }, []);
 
@@ -45,26 +51,29 @@ export default function ScrollTextReveal({
       ref={containerRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: '5rem 6% 6rem',
+        padding: 'clamp(4rem, 8vw, 7rem) 1.5rem',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        minHeight: '35vh',
+        minHeight: '40vh',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}
     >
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-        <p style={{
-          fontSize: 'clamp(1.35rem, 2.5vw, 2.1rem)',
-          fontWeight: 400,
-          lineHeight: 1.5,
-          letterSpacing: '-0.015em',
-          wordWrap: 'break-word',
-        }}>
+        <p
+          style={{
+            fontSize: 'clamp(1.35rem, 4vw, 2.2rem)',
+            fontWeight: 400,
+            lineHeight: 1.55,
+            letterSpacing: '-0.015em',
+            wordWrap: 'break-word',
+            margin: 0,
+          }}
+        >
           {words.map((word, index) => {
-            // Distribute word thresholds up to 0.85 so the entire sentence is 100% sharp by 85% progress
-            const wordThreshold = (index / Math.max(1, words.length - 1)) * 0.85;
+            // Distribute word thresholds evenly from 0.0 to 0.90
+            const wordThreshold = (index / Math.max(1, words.length - 1)) * 0.90;
             const isRevealed = scrollProgress >= wordThreshold;
 
             return (
@@ -74,10 +83,11 @@ export default function ScrollTextReveal({
                   display: 'inline-block',
                   marginRight: '0.3em',
                   color: '#000000',
-                  opacity: isRevealed ? 1.0 : 0.15,
-                  filter: isRevealed ? 'blur(0px)' : 'blur(4px)',
-                  transform: isRevealed ? 'translateY(0px)' : 'translateY(3px)',
-                  transition: 'opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), filter 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+                  opacity: isRevealed ? 1.0 : 0.12,
+                  filter: isRevealed ? 'blur(0px)' : 'blur(5px)',
+                  transform: isRevealed ? 'translateY(0px)' : 'translateY(4px)',
+                  transition:
+                    'opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s cubic-bezier(0.16, 1, 0.3, 1), transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
                   willChange: 'opacity, filter, transform',
                 }}
               >

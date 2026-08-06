@@ -23,7 +23,7 @@ const verticalRowsTop: EstateImageItem[] = [
   { id: 10, src: '/assets/estate-animation/image (10).png', tag: 'Eco Mountain Sanctuary', category: 'Sustainable Alpine Haven', col: 5, row: 3 },
 ];
 
-// Row 4 Items (Sunlit Promenade & Infinity Horizon Deck - The Last Second Row)
+// Row 4 Items
 const row4Items: EstateImageItem[] = [
   { id: 11, src: '/assets/estate-animation/image (11).png', tag: 'Sunlit Promenade', category: 'Outdoor Terrace Living', col: 2, row: 4 },
   { id: 12, src: '/assets/estate-animation/image (12).png', tag: 'Infinity Horizon Deck', category: 'Aquatic Sanctuary', col: 4, row: 4 },
@@ -56,16 +56,18 @@ export default function EstateAnimationScrollGrid() {
     let rafId: number;
 
     const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+      setIsMobile(window.innerWidth < 1024);
     };
 
     const handleScroll = () => {
       if (!sectionRef.current) return;
       const rect = sectionRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
-      const navOffset = window.innerWidth < 768 ? 70 : 96;
+      const navOffset = 96;
 
-      // Section Pinning state
+      if (window.innerWidth < 1024) return; // Mobile uses native touch swipe
+
+      // Desktop Pinning state
       if (rect.top <= navOffset && rect.bottom > windowHeight) {
         setIsPinned(true);
         setIsUnpinnedBottom(false);
@@ -85,13 +87,12 @@ export default function EstateAnimationScrollGrid() {
         let isRow4Past = false;
         if (row4Ref.current) {
           const r4Rect = row4Ref.current.getBoundingClientRect();
-          isRow4Past = r4Rect.bottom <= navOffset + (isMobile ? 40 : 80);
+          isRow4Past = r4Rect.bottom <= navOffset + 80;
         } else {
           isRow4Past = scrollRatio >= 0.50;
         }
 
         const isLifestyleVisible = isRow4Past;
-
         const horizontalStartRatio = 0.55;
         const rawHorizProgress = Math.max(0, scrollRatio - horizontalStartRatio) / (1 - horizontalStartRatio);
         const clampedHorizontalProgress = Math.max(0, Math.min(1, rawHorizProgress));
@@ -117,27 +118,142 @@ export default function EstateAnimationScrollGrid() {
       window.removeEventListener('resize', handleScroll);
       if (rafId) cancelAnimationFrame(rafId);
     };
-  }, [isMobile]);
+  }, []);
 
   const isHorizontalActive = horizontalProgress > 0.01;
   const isFadeVisible = !showLifestyle;
-  const maxSlidePercent = isMobile ? 84 : 80;
 
+  // -------------------------------------------------------------
+  // MOBILE LAYOUT (< 1024px): Clean Native Staggered Grid + Swipe Carousel
+  // -------------------------------------------------------------
+  if (isMobile) {
+    return (
+      <section
+        style={{
+          backgroundColor: '#ffffff',
+          padding: '3rem 0 4rem',
+          width: '100%',
+          fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        }}
+      >
+        <div style={{ padding: '0 1.25rem', marginBottom: '2.5rem', textAlign: 'center' }}>
+          <h2
+            style={{
+              fontSize: 'clamp(1.5rem, 5vw, 2.2rem)',
+              fontWeight: 400,
+              color: '#0f172a',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.25,
+              margin: 0,
+            }}
+          >
+            Curated Spaces Built Across Global Growth Corridors
+          </h2>
+        </div>
+
+        {/* Mobile 2-Column Staggered Checkerboard Grid */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '2.5rem 1.25rem',
+            padding: '0 1.25rem',
+            marginBottom: '5rem',
+          }}
+        >
+          {[...verticalRowsTop, ...row4Items].map((item, index) => {
+            const isOddIndex = index % 2 === 1;
+            return (
+              <div
+                key={item.id}
+                style={{
+                  marginTop: isOddIndex ? '2.5rem' : '0px',
+                }}
+              >
+                <EstateCard item={item} />
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Mobile Lifestyle Section Title */}
+        <div style={{ padding: '0 1.25rem', marginBottom: '1.75rem', textAlign: 'center' }}>
+          <h2
+            style={{
+              fontSize: 'clamp(1.5rem, 5vw, 2.2rem)',
+              fontWeight: 400,
+              color: '#0f172a',
+              letterSpacing: '-0.02em',
+              lineHeight: 1.25,
+              margin: 0,
+            }}
+          >
+            The Art of Living — Curated Estate Lifestyle
+          </h2>
+        </div>
+
+        {/* Mobile Smooth Touch Horizontal Swipe Track */}
+        <div
+          style={{
+            width: '100%',
+            overflowX: 'auto',
+            WebkitOverflowScrolling: 'touch',
+            padding: '0.5rem 1.25rem 2rem',
+            display: 'flex',
+            gap: '1.25rem',
+            scrollSnapType: 'x mandatory',
+          }}
+          className="mobile-horizontal-track"
+        >
+          {row5HorizontalItems.map((item) => (
+            <div
+              key={item.id}
+              style={{
+                flexShrink: 0,
+                width: 'calc(78vw - 1rem)',
+                scrollSnapAlign: 'start',
+              }}
+            >
+              <EstateCard item={item} />
+            </div>
+          ))}
+        </div>
+
+        <style>{`
+          .mobile-horizontal-track::-webkit-scrollbar {
+            height: 4px;
+          }
+          .mobile-horizontal-track::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
+          }
+          .mobile-horizontal-track::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+          }
+        `}</style>
+      </section>
+    );
+  }
+
+  // -------------------------------------------------------------
+  // DESKTOP LAYOUT (>= 1024px): Full 520vh Pinning & Horizontal Track
+  // -------------------------------------------------------------
   return (
     <section
       ref={sectionRef}
       style={{
         backgroundColor: '#ffffff',
-        padding: isMobile ? '1rem 0 0' : '2rem 0 0',
+        padding: '2rem 0 0',
         width: '100%',
         margin: '0 auto',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        minHeight: isMobile ? '380vh' : '520vh',
+        minHeight: '520vh',
       }}
     >
       {/* Invisible Spacer when heading is pinned */}
-      {isPinned && <div style={{ height: isMobile ? '130px' : '180px' }} />}
+      {isPinned && <div style={{ height: '180px' }} />}
 
       {/* STICKY HEADING CONTAINER WITH CLEARANCE BELOW NAVBAR */}
       <div
@@ -150,8 +266,8 @@ export default function EstateAnimationScrollGrid() {
           width: '100%',
           zIndex: 40,
           backgroundColor: '#ffffff',
-          paddingTop: isPinned ? (isMobile ? '4.5rem' : '6.5rem') : '1.5rem',
-          paddingBottom: isMobile ? '1.5rem' : '2.5rem',
+          paddingTop: isPinned ? '6.5rem' : '1.5rem',
+          paddingBottom: '2.5rem',
           textAlign: 'center',
           boxShadow: isPinned && isFadeVisible ? '0 20px 30px rgba(255,255,255,1)' : 'none',
           opacity: isUnpinnedBottom ? 0 : 1,
@@ -160,10 +276,9 @@ export default function EstateAnimationScrollGrid() {
         }}
       >
         <div style={{ maxWidth: '850px', margin: '0 auto', padding: '0 1rem', position: 'relative' }}>
-          {/* Heading 1: Curated Spaces Built Across Global Growth Corridors */}
           <h2
             style={{
-              fontSize: 'clamp(1.4rem, 4.5vw, 2.8rem)',
+              fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
               fontWeight: 400,
               color: '#0f172a',
               letterSpacing: '-0.02em',
@@ -178,10 +293,9 @@ export default function EstateAnimationScrollGrid() {
             Curated Spaces Built Across Global Growth Corridors
           </h2>
 
-          {/* Heading 2: The Art of Living — Curated Estate Lifestyle */}
           <h2
             style={{
-              fontSize: 'clamp(1.4rem, 4.5vw, 2.8rem)',
+              fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
               fontWeight: 400,
               color: '#0f172a',
               letterSpacing: '-0.02em',
@@ -204,14 +318,13 @@ export default function EstateAnimationScrollGrid() {
           </h2>
         </div>
 
-        {/* Soft White Fade Bar Below Heading */}
         <div
           style={{
             position: 'absolute',
-            bottom: isMobile ? '-4rem' : '-6.5rem',
+            bottom: '-6.5rem',
             left: 0,
             right: 0,
-            height: isMobile ? '4.5rem' : '7rem',
+            height: '7rem',
             background:
               'linear-gradient(to bottom, #ffffff 0%, rgba(255,255,255,0.98) 40%, rgba(255,255,255,0.7) 70%, rgba(255,255,255,0) 100%)',
             pointerEvents: 'none',
@@ -222,8 +335,7 @@ export default function EstateAnimationScrollGrid() {
       </div>
 
       {/* MAIN CONTENT CONTAINER */}
-      <div style={{ maxWidth: '1600px', margin: '0 auto', padding: isMobile ? '0 1rem' : '0 4vw' }}>
-        {/* Rows 1 to 3: Checkerboard Grid */}
+      <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 4vw' }}>
         <div
           className="checkerboard-grid"
           style={{
@@ -234,18 +346,17 @@ export default function EstateAnimationScrollGrid() {
         >
           {verticalRowsTop.map((item) => {
             const parallaxMult = (item.col || 1) % 2 === 0 ? 0.08 : 0.04;
-            const parallaxOffset = isMobile ? 0 : scrollY * parallaxMult;
+            const parallaxOffset = scrollY * parallaxMult;
             const isRow1 = item.row === 1;
-            const row1TopPadding = isRow1 ? (isMobile ? '4rem' : '7.5rem') : '0px';
 
             return (
               <div
                 key={item.id}
                 className={`checker-item col-${item.col} row-${item.row}`}
                 style={{
-                  gridColumn: isMobile ? 'auto' : item.col,
-                  gridRow: isMobile ? 'auto' : item.row,
-                  marginTop: row1TopPadding,
+                  gridColumn: item.col,
+                  gridRow: item.row,
+                  marginTop: isRow1 ? '7.5rem' : '0px',
                   transform: `translate3d(0, -${parallaxOffset}px, 0)`,
                   willChange: 'transform',
                   transition: 'transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
@@ -257,14 +368,13 @@ export default function EstateAnimationScrollGrid() {
           })}
         </div>
 
-        {/* Row 4: Tracked with row4Ref */}
         <div
           ref={row4Ref}
           className="checkerboard-grid"
           style={{
             position: 'relative',
             zIndex: 1,
-            marginTop: isMobile ? '4rem' : '10rem',
+            marginTop: '10rem',
           }}
         >
           {row4Items.map((item) => (
@@ -272,7 +382,7 @@ export default function EstateAnimationScrollGrid() {
               key={item.id}
               className={`checker-item col-${item.col}`}
               style={{
-                gridColumn: isMobile ? 'auto' : item.col,
+                gridColumn: item.col,
               }}
             >
               <EstateCard item={item} />
@@ -280,28 +390,26 @@ export default function EstateAnimationScrollGrid() {
           ))}
         </div>
 
-        {/* Row 5: Mobile-Responsive Horizontal Track */}
         <div
           style={{
             position: isPinned && showLifestyle ? 'fixed' : isUnpinnedBottom && showLifestyle ? 'absolute' : 'relative',
-            top: isPinned && showLifestyle ? (isMobile ? '12.5rem' : '17.5rem') : isUnpinnedBottom && showLifestyle ? `calc(100% - 100vh + ${isMobile ? '12.5rem' : '17.5rem'})` : 'auto',
+            top: isPinned && showLifestyle ? '17.5rem' : isUnpinnedBottom && showLifestyle ? 'calc(100% - 100vh + 17.5rem)' : 'auto',
             bottom: 'auto',
-            left: isPinned && showLifestyle ? (isMobile ? '1rem' : '4vw') : isUnpinnedBottom && showLifestyle ? (isMobile ? '1rem' : '4vw') : 'auto',
-            right: isPinned && showLifestyle ? (isMobile ? '1rem' : '4vw') : isUnpinnedBottom && showLifestyle ? (isMobile ? '1rem' : '4vw') : 'auto',
+            left: isPinned && showLifestyle ? '4vw' : isUnpinnedBottom && showLifestyle ? '4vw' : 'auto',
+            right: isPinned && showLifestyle ? '4vw' : isUnpinnedBottom && showLifestyle ? '4vw' : 'auto',
             zIndex: 30,
-            width: isPinned && showLifestyle ? (isMobile ? 'calc(100vw - 2rem)' : 'calc(100vw - 8vw)') : isUnpinnedBottom && showLifestyle ? (isMobile ? 'calc(100vw - 2rem)' : 'calc(100vw - 8vw)') : '100%',
+            width: isPinned && showLifestyle ? 'calc(100vw - 8vw)' : isUnpinnedBottom && showLifestyle ? 'calc(100vw - 8vw)' : '100%',
             overflow: 'hidden',
             padding: '1rem 0 2rem',
-            marginTop: isPinned && showLifestyle ? '0' : (isMobile ? '4rem' : '10rem'),
+            marginTop: isPinned && showLifestyle ? '0' : '10rem',
             backgroundColor: '#ffffff',
           }}
         >
-          {/* Row 5 Track */}
           <div
             style={{
               display: 'flex',
-              gap: isMobile ? '1rem' : '2.5vw',
-              transform: `translate3d(-${horizontalProgress * maxSlidePercent}%, 0, 0)`,
+              gap: '2.5vw',
+              transform: `translate3d(-${horizontalProgress * 80}%, 0, 0)`,
               willChange: 'transform',
               transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
@@ -315,7 +423,7 @@ export default function EstateAnimationScrollGrid() {
                   key={item.id}
                   style={{
                     flexShrink: 0,
-                    width: isMobile ? 'calc(75vw - 1rem)' : 'calc((100vw - 8vw - 10vw) / 5)',
+                    width: 'calc((100vw - 8vw - 10vw) / 5)',
                     opacity: cardOpacity,
                     visibility: isLifestyleCard && !showLifestyle ? 'hidden' : 'visible',
                     transition: isLifestyleCard ? 'opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.4s ease' : 'none',
@@ -337,24 +445,6 @@ export default function EstateAnimationScrollGrid() {
           gap: 10rem 2.5vw;
           align-items: start;
           width: 100%;
-        }
-        @media (max-width: 1024px) {
-          .checkerboard-grid {
-            grid-template-columns: repeat(3, 1fr);
-            gap: 5rem 2vw;
-          }
-          .checker-item {
-            grid-column: auto !important;
-            grid-row: auto !important;
-            transform: none !important;
-            margin-top: 0 !important;
-          }
-        }
-        @media (max-width: 640px) {
-          .checkerboard-grid {
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2.5rem 1rem;
-          }
         }
       `}</style>
     </section>
@@ -378,7 +468,6 @@ function EstateCard({ item }: { item: EstateImageItem }) {
         margin: '0 auto',
       }}
     >
-      {/* Small Compact Image Container */}
       <div
         style={{
           position: 'relative',
@@ -406,7 +495,6 @@ function EstateCard({ item }: { item: EstateImageItem }) {
         />
       </div>
 
-      {/* Tag Label Below */}
       <div style={{ paddingLeft: '0.1rem' }}>
         <div
           style={{
