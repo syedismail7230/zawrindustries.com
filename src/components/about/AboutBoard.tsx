@@ -7,14 +7,13 @@ export default function AboutBoard() {
     <section
       id="board"
       style={{
-        backgroundColor: '#f8fafc',
+        backgroundColor: '#ffffff',
         color: '#0f172a',
-        padding: 'clamp(5rem, 8vw, 8rem) 1.5rem',
+        padding: 'clamp(4rem, 7vw, 7rem) 1.5rem',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
         zIndex: 20,
-        borderTop: '1px solid #e2e8f0',
-        borderBottom: '1px solid #e2e8f0',
+        borderTop: '1px solid #f1f5f9',
         scrollMarginTop: '80px',
       }}
     >
@@ -24,8 +23,8 @@ export default function AboutBoard() {
           margin: '0 auto',
         }}
       >
-        {/* Header */}
-        <div style={{ maxWidth: '750px', marginBottom: 'clamp(3rem, 5vw, 4.5rem)' }}>
+        {/* Section Header */}
+        <div style={{ maxWidth: '750px', marginBottom: 'clamp(3rem, 5vw, 5rem)' }}>
           <div
             style={{
               fontSize: '0.78rem',
@@ -40,7 +39,7 @@ export default function AboutBoard() {
           </div>
           <h2
             style={{
-              fontSize: 'clamp(1.8rem, 3.8vw, 3rem)',
+              fontSize: 'clamp(2rem, 4vw, 3.2rem)',
               fontWeight: 300,
               color: '#0f172a',
               letterSpacing: '-0.03em',
@@ -52,83 +51,257 @@ export default function AboutBoard() {
           </h2>
         </div>
 
-        {/* Board Showcase */}
+        {/* ROW 1: Managing Director */}
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(12, 1fr)',
-            gap: 'clamp(3rem, 6vw, 6rem)',
+            gap: 'clamp(2rem, 4vw, 4rem)',
             alignItems: 'center',
+            marginBottom: 'clamp(4rem, 7vw, 7rem)',
           }}
         >
+          {/* MD Portrait */}
           <div
             style={{
               gridColumn: 'span 5',
-              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
             }}
-            className="board-col"
+            className="board-row-col"
           >
             <div
               style={{
+                width: '100%',
+                maxWidth: '460px',
+                aspectRatio: '3 / 4',
                 position: 'relative',
-                borderRadius: '20px',
-                overflow: 'hidden',
-                boxShadow: '0 25px 50px rgba(0,0,0,0.1)',
-                backgroundColor: '#e2e8f0',
-                aspectRatio: '3.2 / 4',
               }}
             >
               <img
                 src="/assets/md-portrait.png"
-                alt="Managing Director - Zawr Industries"
+                alt="Managing Director - Mohammed Ahmed"
                 style={{
                   width: '100%',
                   height: '100%',
-                  objectFit: 'cover',
+                  objectFit: 'contain',
+                  objectPosition: 'bottom center',
                   display: 'block',
                 }}
               />
             </div>
+            <div style={{ marginTop: '1.25rem' }}>
+              <div
+                style={{
+                  fontSize: '1.08rem',
+                  fontWeight: 400,
+                  color: '#334155',
+                  marginBottom: '0.25rem',
+                }}
+              >
+                Managing Director
+              </div>
+              <div
+                style={{
+                  fontSize: '1.4rem',
+                  fontWeight: 500,
+                  color: '#0f172a',
+                  letterSpacing: '-0.01em',
+                }}
+              >
+                Mohammed Ahmed
+              </div>
+            </div>
           </div>
 
+          {/* MD Governance Box */}
           <div
             style={{
               gridColumn: 'span 7',
+              backgroundColor: '#f8fafc',
+              padding: 'clamp(2rem, 3.5vw, 3.5rem)',
+              borderRadius: '16px',
               display: 'flex',
               flexDirection: 'column',
-              gap: '1.5rem',
+              gap: '1.25rem',
             }}
-            className="board-col"
+            className="board-row-col"
           >
-            <div style={{ fontSize: '1.5rem', fontWeight: 500, color: '#0f172a', letterSpacing: '-0.02em' }}>
+            <h3
+              style={{
+                fontSize: 'clamp(1.3rem, 2.2vw, 1.6rem)',
+                fontWeight: 500,
+                color: '#0f172a',
+                letterSpacing: '-0.02em',
+                margin: 0,
+              }}
+            >
               Office of the Managing Director
-            </div>
-            <p style={{ fontSize: '1.05rem', color: '#475569', lineHeight: 1.8, margin: 0, fontWeight: 400 }}>
+            </h3>
+
+            <p style={{ fontSize: '0.98rem', color: '#475569', lineHeight: 1.75, margin: 0, fontWeight: 400 }}>
               Guided by experienced technology pioneers and industrial strategists, the Board of Directors at Zawr Industries LLP governs corporate governance, capital allocation, global expansion, and multi-sector strategy.
             </p>
-            <p style={{ fontSize: '1.05rem', color: '#475569', lineHeight: 1.8, margin: 0, fontWeight: 400 }}>
+
+            <p style={{ fontSize: '0.98rem', color: '#475569', lineHeight: 1.75, margin: 0, fontWeight: 400 }}>
               Our executive board ensures that every initiative across software, robotics, and real estate adheres to strict ethical standards, financial discipline, and zero-compromise engineering quality.
             </p>
 
-            <div style={{ paddingTop: '1.5rem', borderTop: '1px solid #cbd5e1' }}>
-              <div style={{ fontSize: '0.88rem', fontWeight: 600, color: '#0f172a', textTransform: 'uppercase', letterSpacing: '0.12em' }}>
+            <div style={{ paddingTop: '1.25rem', borderTop: '1px solid #e2e8f0', marginTop: '0.5rem' }}>
+              <div
+                style={{
+                  fontSize: '0.78rem',
+                  fontWeight: 600,
+                  color: '#0f172a',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.14em',
+                  marginBottom: '0.4rem',
+                }}
+              >
                 CORPORATE GOVERNANCE COMMITTEES
               </div>
-              <div style={{ fontSize: '0.94rem', color: '#64748b', marginTop: '0.5rem', lineHeight: 1.6 }}>
+              <div style={{ fontSize: '0.88rem', color: '#64748b', lineHeight: 1.6 }}>
                 Audit & Compliance • Risk & Cybersecurity • Technology & R&D • Global Strategy
               </div>
             </div>
           </div>
         </div>
+
+        {/* ROW 2: CEO */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(12, 1fr)',
+            gap: 'clamp(2rem, 4vw, 4rem)',
+            alignItems: 'center',
+          }}
+        >
+          {/* CEO Governance Box */}
+          <div
+            style={{
+              gridColumn: 'span 7',
+              backgroundColor: '#f8fafc',
+              padding: 'clamp(2rem, 3.5vw, 3.5rem)',
+              borderRadius: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '1.25rem',
+            }}
+            className="board-row-col ceo-box"
+          >
+            <h3
+              style={{
+                fontSize: 'clamp(1.3rem, 2.2vw, 1.6rem)',
+                fontWeight: 500,
+                color: '#0f172a',
+                letterSpacing: '-0.02em',
+                margin: 0,
+              }}
+            >
+              Office of the Chief Executive Officer
+            </h3>
+
+            <p style={{ fontSize: '0.98rem', color: '#475569', lineHeight: 1.75, margin: 0, fontWeight: 400 }}>
+              Led by visionary technology leadership, executive management directs company-wide software innovation, product architecture, and enterprise AI transformation across international markets.
+            </p>
+
+            <p style={{ fontSize: '0.98rem', color: '#475569', lineHeight: 1.75, margin: 0, fontWeight: 400 }}>
+              Ensuring operational excellence across software engineering, digital platforms, and client delivery while scaling high-impact technology solutions globally.
+            </p>
+
+            <div style={{ paddingTop: '1.25rem', borderTop: '1px solid #e2e8f0', marginTop: '0.5rem' }}>
+              <div
+                style={{
+                  fontSize: '0.78rem',
+                  fontWeight: 600,
+                  color: '#0f172a',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.14em',
+                  marginBottom: '0.4rem',
+                }}
+              >
+                EXECUTIVE LEADERSHIP COMMITTEES
+              </div>
+              <div style={{ fontSize: '0.88rem', color: '#64748b', lineHeight: 1.6 }}>
+                Product Architecture • Software Engineering • Enterprise AI • Global Delivery
+              </div>
+            </div>
+          </div>
+
+          {/* CEO Portrait */}
+          <div
+            style={{
+              gridColumn: 'span 5',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-start',
+            }}
+            className="board-row-col ceo-portrait"
+          >
+            <div
+              style={{
+                width: '100%',
+                maxWidth: '460px',
+                aspectRatio: '3 / 4',
+                position: 'relative',
+              }}
+            >
+              <img
+                src="/assets/CEO.png"
+                alt="CEO - Syed Ismail Zabiulla"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'contain',
+                  objectPosition: 'bottom center',
+                  display: 'block',
+                }}
+              />
+            </div>
+            <div style={{ marginTop: '1.25rem' }}>
+              <div
+                style={{
+                  fontSize: '1.08rem',
+                  fontWeight: 400,
+                  color: '#334155',
+                  marginBottom: '0.25rem',
+                }}
+              >
+                CEO
+              </div>
+              <div
+                style={{
+                  fontSize: '1.4rem',
+                  fontWeight: 500,
+                  color: '#0f172a',
+                  letterSpacing: '-0.01em',
+                }}
+              >
+                Syed Ismail Zabiulla
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
 
       <style>{`
-        @media (max-width: 960px) {
-          .board-col {
+        @media (max-width: 900px) {
+          .board-row-col {
             grid-column: span 12 !important;
+          }
+          .ceo-box {
+            order: 2;
+          }
+          .ceo-portrait {
+            order: 1;
           }
         }
       `}</style>
     </section>
   );
 }
+
+
+
