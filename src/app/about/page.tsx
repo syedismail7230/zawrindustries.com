@@ -1,21 +1,28 @@
 import { Metadata } from 'next';
 import AboutHero from '@/components/about/AboutHero';
 import AboutStatement from '@/components/about/AboutStatement';
-import AboutLeadership from '@/components/about/AboutLeadership';
-import AboutPillars from '@/components/about/AboutPillars';
-import AboutCulture from '@/components/about/AboutCulture';
-import AboutGlobalImpact from '@/components/about/AboutGlobalImpact';
+import AboutHistory from '@/components/about/AboutHistory';
+import AboutBoard from '@/components/about/AboutBoard';
+import AboutAwards from '@/components/about/AboutAwards';
+import AboutImpact from '@/components/about/AboutImpact';
+import AboutBlog from '@/components/about/AboutBlog';
+import AboutValues from '@/components/about/AboutValues';
+import AboutVision from '@/components/about/AboutVision';
+import AboutMission from '@/components/about/AboutMission';
+import AboutCSR from '@/components/about/AboutCSR';
+import AboutInnovation from '@/components/about/AboutInnovation';
+import AboutCodeOfConduct from '@/components/about/AboutCodeOfConduct';
 
 export const metadata: Metadata = {
-  title: 'About Zawr Industries LLP — Corporate Profile & Multi-Sector Expertise',
-  description: 'Zawr Industries LLP is an India-based technology, software engineering, and business transformation conglomerate delivering enterprise software, AI/ML, industrial autonomy, and real estate solutions.',
+  title: 'About Zawr Industries LLP — Corporate Profile & 11 Governance Pillars',
+  description: 'Explore Zawr Industries LLP corporate history, Board of Directors, awards, global impact, technology blog, core values, vision, mission, CSR, innovation, and code of conduct.',
   keywords: [
     'Zawr Industries LLP',
     'About Zawr Industries',
-    'Software engineering company India',
-    'Enterprise technology partner Bangalore',
-    'AI and machine learning integrations',
-    'Custom software development'
+    'Board of Directors Zawr',
+    'Corporate history Bangalore',
+    'Enterprise technology partner India',
+    'CSR and corporate governance'
   ],
   alternates: {
     canonical: 'https://zawrindustries.com/about',
@@ -31,35 +38,7 @@ export default function AboutPage() {
     'legalName': 'Zawr Industries LLP',
     'url': 'https://zawrindustries.com',
     'logo': 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png',
-    'description': 'Zawr Industries LLP is a leading Indian technology, software engineering, and business transformation company headquartered in Bangalore. The company delivers enterprise custom software development, AI/ML integrations, cloud solutions, logistics automation, and business consulting services globally.',
-    'address': {
-      '@type': 'PostalAddress',
-      'streetAddress': 'Old Airport Rd, HAL',
-      'addressLocality': 'Bangalore',
-      'addressRegion': 'Karnataka',
-      'postalCode': '560017',
-      'addressCountry': 'IN'
-    },
-    'slogan': 'Empowering organizations through innovative technology and strategic digital solutions.',
-  };
-
-  const breadcrumbJsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'BreadcrumbList',
-    'itemListElement': [
-      {
-        '@type': 'ListItem',
-        'position': 1,
-        'name': 'Home',
-        'item': 'https://zawrindustries.com'
-      },
-      {
-        '@type': 'ListItem',
-        'position': 2,
-        'name': 'About Us',
-        'item': 'https://zawrindustries.com/about'
-      }
-    ]
+    'description': 'Zawr Industries LLP is a leading Indian technology, software engineering, and business transformation company headquartered in Bangalore.',
   };
 
   return (
@@ -68,29 +47,46 @@ export default function AboutPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
 
       <main style={{ backgroundColor: '#ffffff', minHeight: '100vh', overflowX: 'clip' }}>
-        {/* 1. Dark Mode Architectural Hero */}
+        {/* Master Hero Banner */}
         <AboutHero />
 
-        {/* 2. Scroll-Driven Reveal Statement */}
+        {/* Scroll-Driven Statement Reveal */}
         <AboutStatement />
 
-        {/* 3. Executive Leadership & Vision (md-portrait.png) */}
-        <AboutLeadership />
+        {/* Section 01: Our History */}
+        <AboutHistory />
 
-        {/* 4. Multi-Sector Business Divisions */}
-        <AboutPillars />
+        {/* Section 02: Board of Directors */}
+        <AboutBoard />
 
-        {/* 5. Culture & Philosophy (life-at-zawr.png & respect-to-talent.png) */}
-        <AboutCulture />
+        {/* Section 03: Awards */}
+        <AboutAwards />
 
-        {/* 6. Global Reach & Enterprise Impact (world-map.svg) */}
-        <AboutGlobalImpact />
+        {/* Section 04: Our Impact */}
+        <AboutImpact />
+
+        {/* Section 05: Blog */}
+        <AboutBlog />
+
+        {/* Section 06: Values */}
+        <AboutValues />
+
+        {/* Section 07: Vision */}
+        <AboutVision />
+
+        {/* Section 08: Mission */}
+        <AboutMission />
+
+        {/* Section 09: CSR */}
+        <AboutCSR />
+
+        {/* Section 10: Innovation */}
+        <AboutInnovation />
+
+        {/* Section 11: Code of Conduct */}
+        <AboutCodeOfConduct />
       </main>
     </>
   );
