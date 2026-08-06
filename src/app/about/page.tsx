@@ -48,7 +48,7 @@ export default function AboutPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <main style={{ backgroundColor: '#ffffff', minHeight: '100vh', overflowX: 'clip' }}>
+      <main style={{ backgroundColor: '#ffffff', minHeight: '100vh' }}>
         {/* Master Hero Banner */}
         <AboutHero />
 

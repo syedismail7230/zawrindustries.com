@@ -12,6 +12,7 @@ export default function AboutBoard() {
         padding: 'clamp(5rem, 8vw, 8rem) 1.5rem',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
+        zIndex: 20,
         borderTop: '1px solid #e2e8f0',
         borderBottom: '1px solid #e2e8f0',
         scrollMarginTop: '80px',
