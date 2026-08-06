@@ -115,10 +115,10 @@ export default function AboutHistory() {
                   position: 'absolute',
                   inset: 0,
                   backgroundColor: '#ffffff',
-                  padding: 'clamp(2rem, 3.5vw, 3rem)',
+                  padding: 'clamp(1.5rem, 3.5vw, 3rem)',
                   display: 'grid',
                   gridTemplateColumns: '7fr 5fr',
-                  gap: 'clamp(1.5rem, 3vw, 3rem)',
+                  gap: 'clamp(1rem, 3vw, 3rem)',
                   alignItems: 'center',
                   zIndex: index + 1,
                   opacity: isPending ? 0 : 1,
@@ -127,13 +127,14 @@ export default function AboutHistory() {
                   willChange: 'transform, opacity',
                   transition: 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease',
                 }}
+                className="history-card-item"
               >
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
-                  <div style={{ fontSize: 'clamp(1.2rem, 2vw, 1.5rem)', fontWeight: 400, color: '#94a3b8' }}>{item.year}</div>
-                  <h3 style={{ fontSize: 'clamp(1.5rem, 2.8vw, 2.2rem)', fontWeight: 400, color: '#0f172a', letterSpacing: '-0.03em', margin: '0 0 0.5rem 0', lineHeight: 1.15 }}>{item.title}</h3>
-                  <p style={{ fontSize: 'clamp(0.85rem, 1.35vw, 0.95rem)', color: '#475569', lineHeight: 1.72, margin: 0 }}>{item.description}</p>
+                  <div style={{ fontSize: 'clamp(1.1rem, 2vw, 1.5rem)', fontWeight: 400, color: '#94a3b8' }}>{item.year}</div>
+                  <h3 style={{ fontSize: 'clamp(1.3rem, 2.8vw, 2.2rem)', fontWeight: 400, color: '#0f172a', letterSpacing: '-0.03em', margin: '0 0 0.5rem 0', lineHeight: 1.15 }}>{item.title}</h3>
+                  <p style={{ fontSize: 'clamp(0.85rem, 1.35vw, 0.95rem)', color: '#475569', lineHeight: 1.65, margin: 0 }}>{item.description}</p>
                 </div>
-                <div style={{ width: '100%', aspectRatio: '4 / 3', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#f1f5f9' }}>
+                <div className="history-img-wrapper" style={{ width: '100%', aspectRatio: '4 / 3', borderRadius: '12px', overflow: 'hidden', backgroundColor: '#f1f5f9' }}>
                   <img
                     src={item.image}
                     alt={item.title}
@@ -145,8 +146,21 @@ export default function AboutHistory() {
           })}
         </div>
 
-
       </div>
+
+      <style>{`
+        @media (max-width: 768px) {
+          .history-card-item {
+            grid-template-columns: 1fr !important;
+            align-content: center !important;
+            gap: 1rem !important;
+          }
+          .history-img-wrapper {
+            max-height: 180px !important;
+            aspect-ratio: 16 / 9 !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

@@ -20,7 +20,7 @@ const faqs = [
   {
     question: "What industries do you operate in?",
     answer: "We operate across 5 core sectors: IT Services, Transport & Logistics, Manufacturing, Real Estate, and Healthcare, providing end-to-end enterprise solutions.",
-    icon: <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    icon: <><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></>
   },
   {
     question: "How can we partner with you?",
@@ -55,7 +55,7 @@ const faqs = [
   {
     question: "What makes Zawr Industries different from other IT companies?",
     answer: "Zawr Industries combines the agility of a modern technology company with the strategic vision of a multi-sector conglomerate. Rather than offering isolated development services, the company focuses on building integrated ecosystems that align technology, operations, scalability, automation, and business growth under a unified framework. Our approach emphasizes innovation, execution capability, intellectual property development, and sustainable long-term value creation.",
-    icon: <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    icon: <><circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" /></>
   }
 ];
 
