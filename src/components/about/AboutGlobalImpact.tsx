@@ -34,7 +34,7 @@ export default function AboutGlobalImpact() {
               fontSize: '0.78rem',
               textTransform: 'uppercase',
               letterSpacing: '0.22em',
-              color: '#3b82f6',
+              color: '#64748b',
               fontWeight: 600,
               marginBottom: '0.75rem',
             }}

@@ -27,7 +27,7 @@ export default function AboutCulture() {
               fontSize: '0.78rem',
               textTransform: 'uppercase',
               letterSpacing: '0.22em',
-              color: '#60a5fa',
+              color: '#475569',
               fontWeight: 600,
               marginBottom: '0.75rem',
             }}

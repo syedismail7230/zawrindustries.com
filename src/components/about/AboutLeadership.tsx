@@ -71,7 +71,7 @@ export default function AboutLeadership() {
               fontSize: '0.78rem',
               textTransform: 'uppercase',
               letterSpacing: '0.22em',
-              color: '#3b82f6',
+              color: '#64748b',
               fontWeight: 600,
             }}
           >
@@ -88,7 +88,7 @@ export default function AboutLeadership() {
               margin: 0,
             }}
           >
-            "Technology is not merely a tool—it is the structural foundation of modern enterprise value."
+            "Technology is not merely a toolâ€”it is the structural foundation of modern enterprise value."
           </h2>
 
           <div
@@ -116,7 +116,7 @@ export default function AboutLeadership() {
               Office of the Managing Director
             </div>
             <div style={{ fontSize: '0.88rem', color: '#64748b', marginTop: '0.2rem', fontWeight: 400 }}>
-              Zawr Industries LLP — Global Executive Operations
+              Zawr Industries LLP â€” Global Executive Operations
             </div>
           </div>
         </div>
