@@ -2,17 +2,26 @@
 
 import React from 'react';
 
+const missionPoints = [
+  'Deliver high-quality, reliable, and cost-efficient solutions across all business segments.',
+  'Foster continuous innovation through technology adoption and data-driven decision-making.',
+  'Build resilient infrastructure and operational frameworks capable of supporting large-scale growth.',
+  'Ensure optimal utilization of resources to generate consistent and measurable returns.',
+  'Maintain transparency, accountability, and integrity in all corporate dealings.',
+];
+
 export default function AboutMission() {
   return (
     <section
       id="mission"
       style={{
-        backgroundColor: '#090d16',
-        color: '#ffffff',
+        backgroundColor: '#ffffff',
+        color: '#0f172a',
         padding: 'clamp(5rem, 8vw, 8rem) 1.5rem',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
         scrollMarginTop: '80px',
+        borderTop: '1px solid #f1f5f9',
       }}
     >
       <div
@@ -30,7 +39,7 @@ export default function AboutMission() {
             style={{
               fontSize: 'clamp(2rem, 4vw, 3.2rem)',
               fontWeight: 300,
-              color: '#ffffff',
+              color: '#0f172a',
               letterSpacing: '-0.03em',
               lineHeight: 1.15,
               margin: 0,
@@ -43,67 +52,71 @@ export default function AboutMission() {
         <div style={{ gridColumn: 'span 8' }} className="mission-col">
           <p
             style={{
-              fontSize: 'clamp(1.2rem, 2.3vw, 1.55rem)',
+              fontSize: 'clamp(1rem, 1.8vw, 1.15rem)',
               fontWeight: 300,
-              color: '#ffffff',
-              lineHeight: 1.6,
-              margin: '0 0 2rem 0',
+              color: '#334155',
+              lineHeight: 1.75,
+              margin: '0 0 1.5rem 0',
             }}
           >
-            To engineer high-performance software ecosystems, autonomous robotics, and strategic capital assets that drive compounding growth, operational resilience, and measurable economic value for global industry leaders.
+            Zawr Industries is committed to designing, developing, and operating scalable business solutions across its core verticals by leveraging advanced technology, optimized industrial processes, and efficient supply chain systems. The organization endeavors to maximize asset value, enhance enterprise productivity, and create employment opportunities while maintaining strict adherence to regulatory compliance, ethical governance, and sustainable business practices.
           </p>
 
-          {/* Key Mission Pillars */}
-          <div
+          <p
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '1.5rem',
-              paddingTop: '2rem',
-              borderTop: '1px solid rgba(255, 255, 255, 0.12)',
+              fontSize: '1.05rem',
+              fontWeight: 600,
+              color: '#0f172a',
+              margin: '0 0 1.25rem 0',
             }}
-            className="mission-pillars-grid"
           >
-            <div>
-              <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#ffffff', marginBottom: '0.35rem' }}>
-                Engineering Precision
-              </div>
-              <div style={{ fontSize: '0.88rem', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.55, fontWeight: 400 }}>
-                Building Zero-Trust, high-frequency enterprise software architectures.
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#ffffff', marginBottom: '0.35rem' }}>
-                Operational Value
-              </div>
-              <div style={{ fontSize: '0.88rem', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.55, fontWeight: 400 }}>
-                Maximizing throughput and eliminating downtime via autonomous telemetry.
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#ffffff', marginBottom: '0.35rem' }}>
-                Societal Progress
-              </div>
-              <div style={{ fontSize: '0.88rem', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.55, fontWeight: 400 }}>
-                Fostering workforce development, regional job creation, and economic growth.
-              </div>
-            </div>
-          </div>
+            The company further undertakes to:
+          </p>
+
+          <ul
+            style={{
+              margin: '0 0 2rem 0',
+              paddingLeft: '1.25rem',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '0.85rem',
+              color: '#475569',
+              fontSize: '0.98rem',
+              lineHeight: 1.65,
+              fontWeight: 400,
+            }}
+          >
+            {missionPoints.map((point, index) => (
+              <li key={index} style={{ paddingLeft: '0.25rem' }}>
+                {point}
+              </li>
+            ))}
+          </ul>
+
+          <p
+            style={{
+              fontSize: 'clamp(1rem, 1.8vw, 1.12rem)',
+              fontWeight: 300,
+              color: '#334155',
+              lineHeight: 1.75,
+              margin: 0,
+            }}
+          >
+            Through this structured approach, Zawr Industries positions itself as a comprehensive business enabler, capable of driving economic impact while maintaining long-term strategic stability.
+          </p>
         </div>
       </div>
+
 
       <style>{`
         @media (max-width: 900px) {
           .mission-col {
             grid-column: span 12 !important;
           }
-          .mission-pillars-grid {
-            grid-template-columns: 1fr !important;
-            gap: 1.25rem !important;
-          }
         }
       `}</style>
     </section>
   );
 }
+
 

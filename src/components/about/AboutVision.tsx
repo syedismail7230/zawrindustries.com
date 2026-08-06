@@ -43,52 +43,15 @@ export default function AboutVision() {
         <div style={{ gridColumn: 'span 8' }} className="vision-col">
           <p
             style={{
-              fontSize: 'clamp(1.2rem, 2.3vw, 1.55rem)',
+              fontSize: 'clamp(1.15rem, 2vw, 1.4rem)',
               fontWeight: 300,
               color: '#0f172a',
-              lineHeight: 1.6,
-              margin: '0 0 2rem 0',
+              lineHeight: 1.7,
+              margin: 0,
             }}
           >
-            To pioneer the next era of industrial autonomy, digital transformation, and sustainable infrastructure—setting the global benchmark for multi-sector enterprise excellence.
+            To establish Zawr Industries as a globally recognized, multi-sector conglomerate that integrates technology, manufacturing, logistics, and asset management into a unified, innovation-driven ecosystem, delivering sustainable growth, operational excellence, and long-term stakeholder value across international markets.
           </p>
-
-          {/* Key Strategic Pillars */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(3, 1fr)',
-              gap: '1.5rem',
-              paddingTop: '2rem',
-              borderTop: '1px solid #e2e8f0',
-            }}
-            className="vision-pillars-grid"
-          >
-            <div>
-              <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#0f172a', marginBottom: '0.35rem' }}>
-                Global Leadership
-              </div>
-              <div style={{ fontSize: '0.88rem', color: '#64748b', lineHeight: 1.55, fontWeight: 400 }}>
-                Architecting borderless software platforms & strategic capital portfolios.
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#0f172a', marginBottom: '0.35rem' }}>
-                Autonomous Scale
-              </div>
-              <div style={{ fontSize: '0.88rem', color: '#64748b', lineHeight: 1.55, fontWeight: 400 }}>
-                Deploying self-optimizing robotics & smart industrial ecosystems.
-              </div>
-            </div>
-            <div>
-              <div style={{ fontSize: '0.95rem', fontWeight: 600, color: '#0f172a', marginBottom: '0.35rem' }}>
-                Sustainable Impact
-              </div>
-              <div style={{ fontSize: '0.88rem', color: '#64748b', lineHeight: 1.55, fontWeight: 400 }}>
-                Building carbon-neutral real estate corridors & clean energy frameworks.
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
@@ -97,13 +60,10 @@ export default function AboutVision() {
           .vision-col {
             grid-column: span 12 !important;
           }
-          .vision-pillars-grid {
-            grid-template-columns: 1fr !important;
-            gap: 1.25rem !important;
-          }
         }
       `}</style>
     </section>
   );
 }
+
 

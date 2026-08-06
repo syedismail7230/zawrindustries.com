@@ -19,7 +19,7 @@ export default function AboutCodeOfConduct() {
         padding: 'clamp(5rem, 8vw, 8rem) 1.5rem',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
-        borderTop: '1px solid #e2e8f0',
+        borderTop: '1px solid #f1f5f9',
         scrollMarginTop: '80px',
       }}
     >
@@ -45,47 +45,64 @@ export default function AboutCodeOfConduct() {
           </h2>
         </div>
 
-        {/* Ethics Grid */}
+        {/* Ethics Grid with In-Between Divider Lines */}
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(12, 1fr)',
-            gap: '2rem',
           }}
         >
-          {ethicsPrinciples.map((item, index) => (
-            <div
-              key={index}
-              style={{
-                gridColumn: 'span 6',
-                padding: '2.25rem 2rem',
-                backgroundColor: '#fafafa',
-                borderRadius: '18px',
-                border: '1px solid rgba(15, 23, 42, 0.08)',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '0.75rem',
-              }}
-              className="ethics-card"
-            >
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 500, color: '#0f172a', margin: 0, letterSpacing: '-0.01em' }}>
-                {item.title}
-              </h3>
-              <p style={{ fontSize: '0.94rem', color: '#64748b', lineHeight: 1.6, margin: 0, fontWeight: 400 }}>
-                {item.desc}
-              </p>
-            </div>
-          ))}
+          {ethicsPrinciples.map((item, index) => {
+            const isLeftCol = index % 2 === 0;
+            const isTopRow = index < 2;
+
+            return (
+              <div
+                key={index}
+                style={{
+                  gridColumn: 'span 6',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.65rem',
+                  paddingLeft: isLeftCol ? 0 : 'clamp(1.5rem, 3.5vw, 3.5rem)',
+                  paddingRight: isLeftCol ? 'clamp(1.5rem, 3.5vw, 3.5rem)' : 0,
+                  paddingTop: isTopRow ? 0 : 'clamp(1.5rem, 3vw, 2.5rem)',
+                  paddingBottom: isTopRow ? 'clamp(1.5rem, 3vw, 2.5rem)' : 0,
+                  borderRight: isLeftCol ? '1px solid #e2e8f0' : 'none',
+                  borderBottom: isTopRow ? '1px solid #e2e8f0' : 'none',
+                }}
+                className={`ethics-item ${isLeftCol ? 'ethics-item-left' : ''} ${isTopRow ? 'ethics-item-top' : ''}`}
+              >
+                <h3 style={{ fontSize: '1.2rem', fontWeight: 500, color: '#0f172a', margin: 0, letterSpacing: '-0.01em' }}>
+                  {item.title}
+                </h3>
+                <p style={{ fontSize: '0.94rem', color: '#64748b', lineHeight: 1.65, margin: 0, fontWeight: 400 }}>
+                  {item.desc}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
 
       <style>{`
         @media (max-width: 768px) {
-          .ethics-card {
+          .ethics-item {
             grid-column: span 12 !important;
+            border-right: none !important;
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            border-bottom: 1px solid #e2e8f0 !important;
+            padding-top: 1.5rem !important;
+            padding-bottom: 1.5rem !important;
+          }
+          .ethics-item:last-child {
+            border-bottom: none !important;
           }
         }
       `}</style>
     </section>
   );
 }
+
+

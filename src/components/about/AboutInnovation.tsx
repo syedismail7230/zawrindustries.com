@@ -7,11 +7,12 @@ export default function AboutInnovation() {
     <section
       id="innovation"
       style={{
-        backgroundColor: '#090d16',
-        color: '#ffffff',
+        backgroundColor: '#ffffff',
+        color: '#0f172a',
         padding: 'clamp(5rem, 8vw, 8rem) 1.5rem',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
         position: 'relative',
+        borderTop: '1px solid #f1f5f9',
         scrollMarginTop: '80px',
       }}
     >
@@ -19,65 +20,81 @@ export default function AboutInnovation() {
         style={{
           maxWidth: '1280px',
           margin: '0 auto',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(12, 1fr)',
+          gap: 'clamp(2rem, 4vw, 4rem)',
+          alignItems: 'center',
         }}
       >
-        {/* Header */}
-        <div style={{ maxWidth: '750px', marginBottom: 'clamp(3rem, 5vw, 4.5rem)' }}>
+        {/* Left Column: Unified Header & Copy */}
+        <div
+          style={{
+            gridColumn: 'span 6',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1.25rem',
+          }}
+          className="innov-col"
+        >
           <h2
             style={{
-              fontSize: 'clamp(1.8rem, 3.8vw, 3rem)',
+              fontSize: 'clamp(2rem, 3.8vw, 3rem)',
               fontWeight: 300,
-              color: '#ffffff',
+              color: '#0f172a',
               letterSpacing: '-0.03em',
-              lineHeight: 1.2,
+              lineHeight: 1.15,
               margin: 0,
             }}
           >
             Innovation & Advanced R&D
           </h2>
+
+          <h3
+            style={{
+              fontSize: '1.25rem',
+              fontWeight: 600,
+              color: '#0f172a',
+              lineHeight: 1.35,
+              margin: 0,
+            }}
+          >
+            Pioneering Enterprise AI & Industrial Robotics
+          </h3>
+
+          <p
+            style={{
+              fontSize: '1rem',
+              color: '#475569',
+              lineHeight: 1.7,
+              margin: 0,
+              fontWeight: 400,
+            }}
+          >
+            Our dedicated R&D labs continuously engineer next-generation artificial intelligence algorithms, generative workflow tools, computer vision for AGV navigation, and microservices cloud infrastructure designed for enterprise scalability.
+          </p>
         </div>
 
-        {/* Innovation Content Grid */}
+        {/* Right Column: Robo-Dog Image */}
         <div
           style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(12, 1fr)',
-            gap: '3rem',
+            gridColumn: 'span 6',
+            display: 'flex',
+            justifyContent: 'center',
             alignItems: 'center',
           }}
+          className="innov-col"
         >
-          <div style={{ gridColumn: 'span 6' }} className="innov-col">
-            <h3 style={{ fontSize: '1.5rem', fontWeight: 400, color: '#ffffff', marginBottom: '1rem' }}>
-              Pioneering Enterprise AI & Industrial Robotics
-            </h3>
-            <p style={{ fontSize: '1.02rem', color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.75, margin: 0, fontWeight: 300 }}>
-              Our dedicated R&D labs continuously engineer next-generation artificial intelligence algorithms, generative workflow tools, computer vision for AGV navigation, and microservices cloud infrastructure designed for enterprise scalability.
-            </p>
-          </div>
-
-          <div style={{ gridColumn: 'span 6' }} className="innov-col">
-            <div
-              style={{
-                position: 'relative',
-                borderRadius: '20px',
-                overflow: 'hidden',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                backgroundColor: '#121827',
-                aspectRatio: '16 / 10',
-              }}
-            >
-              <img
-                src="/assets/emp-innovation.png"
-                alt="Innovation at Zawr"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  display: 'block',
-                }}
-              />
-            </div>
-          </div>
+          <img
+            src="/assets/robo-dog.png"
+            alt="Industrial Robotics at Zawr"
+            style={{
+              width: '100%',
+              maxWidth: '560px',
+              height: 'auto',
+              display: 'block',
+              objectFit: 'contain',
+            }}
+          />
         </div>
       </div>
 
@@ -91,3 +108,5 @@ export default function AboutInnovation() {
     </section>
   );
 }
+
+
