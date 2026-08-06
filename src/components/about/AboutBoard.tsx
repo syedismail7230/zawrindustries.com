@@ -30,7 +30,7 @@ export default function AboutBoard() {
               fontSize: '0.78rem',
               textTransform: 'uppercase',
               letterSpacing: '0.22em',
-              color: '#3b82f6',
+              color: '#64748b',
               fontWeight: 600,
               marginBottom: '0.75rem',
             }}
@@ -146,7 +146,7 @@ export default function AboutBoard() {
           </div>
         </div>
 
-        {/* BOTTOM ROW: Executive Portraits (MD Left, CEO Right) */}
+        {/* BOTTOM ROW: Executive Portraits & Bios (MD Left, CEO Right) */}
         <div
           style={{
             display: 'grid',
@@ -155,7 +155,7 @@ export default function AboutBoard() {
             alignItems: 'start',
           }}
         >
-          {/* MD Standing Portrait */}
+          {/* MD Standing Profile Card */}
           <div
             style={{
               gridColumn: 'span 6',
@@ -185,12 +185,14 @@ export default function AboutBoard() {
                 }}
               />
             </div>
-            <div style={{ marginTop: '1.25rem' }}>
+            <div style={{ marginTop: '1.25rem', maxWidth: '460px' }}>
               <div
                 style={{
-                  fontSize: '1.08rem',
-                  fontWeight: 400,
-                  color: '#334155',
+                  fontSize: '0.9rem',
+                  fontWeight: 500,
+                  color: '#475569',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
                   marginBottom: '0.25rem',
                 }}
               >
@@ -202,14 +204,37 @@ export default function AboutBoard() {
                   fontWeight: 500,
                   color: '#0f172a',
                   letterSpacing: '-0.01em',
+                  marginBottom: '0.6rem',
                 }}
               >
                 Mohammed Ahmed
               </div>
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  color: '#475569',
+                  lineHeight: 1.65,
+                  margin: '0 0 1rem 0',
+                  fontWeight: 400,
+                }}
+              >
+                Co-founder and Managing Director. Directs multi-sector growth, corporate governance, capital strategy, and international partnership portfolios across technology and industrial sectors.
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <span style={{ fontSize: '0.78rem', backgroundColor: '#f1f5f9', color: '#334155', padding: '0.3rem 0.75rem', borderRadius: '20px', fontWeight: 500 }}>
+                  Corporate Strategy
+                </span>
+                <span style={{ fontSize: '0.78rem', backgroundColor: '#f1f5f9', color: '#334155', padding: '0.3rem 0.75rem', borderRadius: '20px', fontWeight: 500 }}>
+                  Capital Allocation
+                </span>
+                <span style={{ fontSize: '0.78rem', backgroundColor: '#f1f5f9', color: '#334155', padding: '0.3rem 0.75rem', borderRadius: '20px', fontWeight: 500 }}>
+                  Global Expansion
+                </span>
+              </div>
             </div>
           </div>
 
-          {/* CEO Standing Portrait */}
+          {/* CEO Standing Profile Card */}
           <div
             style={{
               gridColumn: 'span 6',
@@ -239,16 +264,18 @@ export default function AboutBoard() {
                 }}
               />
             </div>
-            <div style={{ marginTop: '1.25rem' }}>
+            <div style={{ marginTop: '1.25rem', maxWidth: '460px' }}>
               <div
                 style={{
-                  fontSize: '1.08rem',
-                  fontWeight: 400,
-                  color: '#334155',
+                  fontSize: '0.9rem',
+                  fontWeight: 500,
+                  color: '#475569',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.08em',
                   marginBottom: '0.25rem',
                 }}
               >
-                CEO
+                CEO & Co-Founder
               </div>
               <div
                 style={{
@@ -256,13 +283,37 @@ export default function AboutBoard() {
                   fontWeight: 500,
                   color: '#0f172a',
                   letterSpacing: '-0.01em',
+                  marginBottom: '0.6rem',
                 }}
               >
                 Syed Ismail Zabiulla
               </div>
+              <p
+                style={{
+                  fontSize: '0.95rem',
+                  color: '#475569',
+                  lineHeight: 1.65,
+                  margin: '0 0 1rem 0',
+                  fontWeight: 400,
+                }}
+              >
+                Co-founder and Chief Executive Officer. Spearheads enterprise AI technology development, proprietary product engineering, and global operational execution across international markets.
+              </p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <span style={{ fontSize: '0.78rem', backgroundColor: '#f1f5f9', color: '#334155', padding: '0.3rem 0.75rem', borderRadius: '20px', fontWeight: 500 }}>
+                  Technology & AI
+                </span>
+                <span style={{ fontSize: '0.78rem', backgroundColor: '#f1f5f9', color: '#334155', padding: '0.3rem 0.75rem', borderRadius: '20px', fontWeight: 500 }}>
+                  Product Architecture
+                </span>
+                <span style={{ fontSize: '0.78rem', backgroundColor: '#f1f5f9', color: '#334155', padding: '0.3rem 0.75rem', borderRadius: '20px', fontWeight: 500 }}>
+                  Global Delivery
+                </span>
+              </div>
             </div>
           </div>
         </div>
+
 
       </div>
 
