@@ -636,15 +636,16 @@ export default function CareersPage() {
         >
           <div
             style={{
-              backgroundColor: '#ffffff',
-              color: '#0f172a',
+              backgroundColor: '#0a0a0a',
+              color: '#ffffff',
               borderRadius: '20px',
+              border: '1px solid #27272a',
               padding: '2.25rem',
               maxWidth: '560px',
               width: '100%',
               maxHeight: '90vh',
               overflowY: 'auto',
-              boxShadow: '0 25px 50px -12px rgba(0,0,0,0.3)',
+              boxShadow: '0 25px 50px -12px rgba(0,0,0,0.8)',
               position: 'relative',
             }}
             onClick={(e) => e.stopPropagation()}
@@ -656,8 +657,8 @@ export default function CareersPage() {
                 position: 'absolute',
                 top: '1.25rem',
                 right: '1.25rem',
-                backgroundColor: '#f1f5f9',
-                border: 'none',
+                backgroundColor: '#18181b',
+                border: '1px solid #27272a',
                 borderRadius: '50%',
                 width: '36px',
                 height: '36px',
@@ -665,7 +666,7 @@ export default function CareersPage() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 cursor: 'pointer',
-                color: '#64748b',
+                color: '#a1a1aa',
               }}
             >
               ✕
@@ -673,20 +674,20 @@ export default function CareersPage() {
 
             {freelanceSuccess ? (
               <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
-                <div style={{ width: '56px', height: '56px', borderRadius: '50%', backgroundColor: '#dcfce7', color: '#166534', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem', fontSize: '1.5rem' }}>
+                <div style={{ width: '56px', height: '56px', borderRadius: '50%', backgroundColor: '#ffffff', color: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.25rem', fontSize: '1.5rem', fontWeight: 'bold' }}>
                   ✓
                 </div>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#0f172a', marginBottom: '0.75rem' }}>Application Submitted!</h3>
-                <p style={{ fontSize: '0.95rem', color: '#475467', lineHeight: 1.6, marginBottom: '2rem' }}>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#ffffff', marginBottom: '0.75rem' }}>Application Submitted!</h3>
+                <p style={{ fontSize: '0.95rem', color: '#9ca3af', lineHeight: 1.6, marginBottom: '2rem' }}>
                   Your freelance application has been sent directly to <strong>hr@zawrindustries.com</strong>. Our HR team will review your profile and reach out for suitable project opportunities.
                 </p>
                 <button
                   onClick={() => setIsFreelanceModalOpen(false)}
                   style={{
                     padding: '0.75rem 1.75rem',
-                    backgroundColor: '#000000',
-                    color: '#ffffff',
-                    borderRadius: '8px',
+                    backgroundColor: '#ffffff',
+                    color: '#000000',
+                    borderRadius: '9999px',
                     fontWeight: 600,
                     border: 'none',
                     cursor: 'pointer',
@@ -697,22 +698,22 @@ export default function CareersPage() {
               </div>
             ) : (
               <div>
-                <h3 style={{ fontSize: '1.6rem', fontWeight: 600, color: '#0f172a', marginBottom: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.6rem', fontWeight: 600, color: '#ffffff', marginBottom: '0.5rem' }}>
                   Apply for Freelance Projects
                 </h3>
-                <p style={{ fontSize: '0.88rem', color: '#64748b', marginBottom: '1.75rem' }}>
+                <p style={{ fontSize: '0.88rem', color: '#9ca3af', marginBottom: '1.75rem' }}>
                   Submissions are delivered directly to <strong>hr@zawrindustries.com</strong> for project evaluation.
                 </p>
 
                 {freelanceError && (
-                  <div style={{ backgroundColor: '#fef2f2', border: '1px solid #fecaca', color: '#991b1b', padding: '0.75rem 1rem', borderRadius: '8px', fontSize: '0.85rem', marginBottom: '1.25rem' }}>
+                  <div style={{ backgroundColor: '#450a0a', border: '1px solid #7f1d1d', color: '#fca5a5', padding: '0.75rem 1rem', borderRadius: '8px', fontSize: '0.85rem', marginBottom: '1.25rem' }}>
                     {freelanceError}
                   </div>
                 )}
 
                 <form onSubmit={handleFreelanceSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#e5e7eb', marginBottom: '0.35rem' }}>
                       Full Name *
                     </label>
                     <input
@@ -721,13 +722,13 @@ export default function CareersPage() {
                       placeholder="e.g. Alex Morgan"
                       value={freelanceForm.fullName}
                       onChange={(e) => setFreelanceForm({ ...freelanceForm, fullName: e.target.value })}
-                      style={{ width: '100%', padding: '0.65rem 0.85rem', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '0.9rem', outline: 'none' }}
+                      style={{ width: '100%', padding: '0.65rem 0.85rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', color: '#ffffff' }}
                     />
                   </div>
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#e5e7eb', marginBottom: '0.35rem' }}>
                         Email Address *
                       </label>
                       <input
@@ -736,11 +737,11 @@ export default function CareersPage() {
                         placeholder="alex@example.com"
                         value={freelanceForm.email}
                         onChange={(e) => setFreelanceForm({ ...freelanceForm, email: e.target.value })}
-                        style={{ width: '100%', padding: '0.65rem 0.85rem', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '0.9rem', outline: 'none' }}
+                        style={{ width: '100%', padding: '0.65rem 0.85rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', color: '#ffffff' }}
                       />
                     </div>
                     <div>
-                      <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
+                      <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#e5e7eb', marginBottom: '0.35rem' }}>
                         Phone / WhatsApp
                       </label>
                       <input
@@ -748,13 +749,13 @@ export default function CareersPage() {
                         placeholder="+91 9876543210"
                         value={freelanceForm.phone}
                         onChange={(e) => setFreelanceForm({ ...freelanceForm, phone: e.target.value })}
-                        style={{ width: '100%', padding: '0.65rem 0.85rem', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '0.9rem', outline: 'none' }}
+                        style={{ width: '100%', padding: '0.65rem 0.85rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', color: '#ffffff' }}
                       />
                     </div>
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#e5e7eb', marginBottom: '0.35rem' }}>
                       Primary Skill / Expertise Domain *
                     </label>
                     <input
@@ -763,12 +764,12 @@ export default function CareersPage() {
                       placeholder="e.g. Full Stack React/Node, UI/UX Design, DevOps, AI Engineer"
                       value={freelanceForm.skill}
                       onChange={(e) => setFreelanceForm({ ...freelanceForm, skill: e.target.value })}
-                      style={{ width: '100%', padding: '0.65rem 0.85rem', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '0.9rem', outline: 'none' }}
+                      style={{ width: '100%', padding: '0.65rem 0.85rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', color: '#ffffff' }}
                     />
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#e5e7eb', marginBottom: '0.35rem' }}>
                       Portfolio / GitHub / LinkedIn Link
                     </label>
                     <input
@@ -776,24 +777,95 @@ export default function CareersPage() {
                       placeholder="https://github.com/alex"
                       value={freelanceForm.portfolio}
                       onChange={(e) => setFreelanceForm({ ...freelanceForm, portfolio: e.target.value })}
-                      style={{ width: '100%', padding: '0.65rem 0.85rem', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '0.9rem', outline: 'none' }}
+                      style={{ width: '100%', padding: '0.65rem 0.85rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', color: '#ffffff' }}
                     />
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#e5e7eb', marginBottom: '0.35rem' }}>
                       Resume / CV File (PDF / Word, Max 5MB)
                     </label>
-                    <input
-                      type="file"
-                      accept=".pdf,.doc,.docx,.txt"
-                      onChange={(e) => setFreelanceResume(e.target.files ? e.target.files[0] : null)}
-                      style={{ width: '100%', padding: '0.4rem 0.5rem', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '0.85rem', outline: 'none' }}
-                    />
+                    <div
+                      onClick={() => document.getElementById('freelance-resume-file-input')?.click()}
+                      onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                          setFreelanceResume(e.dataTransfer.files[0]);
+                        }
+                      }}
+                      style={{
+                        border: '1.5px dashed #3f3f46',
+                        borderRadius: '10px',
+                        backgroundColor: '#000000',
+                        padding: '1.25rem 1rem',
+                        textAlign: 'center',
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.5rem',
+                      }}
+                      className="file-dropzone-hover"
+                    >
+                      <input
+                        id="freelance-resume-file-input"
+                        type="file"
+                        accept=".pdf,.doc,.docx,.txt"
+                        onChange={(e) => setFreelanceResume(e.target.files ? e.target.files[0] : null)}
+                        style={{ display: 'none' }}
+                      />
+
+                      {freelanceResume ? (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', backgroundColor: '#18181b', border: '1px solid #27272a', padding: '0.5rem 0.75rem', borderRadius: '6px', width: '100%', justifyContent: 'space-between' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', overflow: 'hidden' }}>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                              <polyline points="14 2 14 8 20 8"/>
+                            </svg>
+                            <div style={{ textAlign: 'left', overflow: 'hidden' }}>
+                              <p style={{ fontSize: '0.82rem', fontWeight: 600, color: '#ffffff', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{freelanceResume.name}</p>
+                              <p style={{ fontSize: '0.72rem', color: '#71717a', margin: 0 }}>{(freelanceResume.size / (1024 * 1024)).toFixed(2)} MB</p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setFreelanceResume(null);
+                            }}
+                            style={{ backgroundColor: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '0.9rem' }}
+                          >
+                            ✕
+                          </button>
+                        </div>
+                      ) : (
+                        <>
+                          <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#18181b', border: '1px solid #27272a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff' }}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                              <polyline points="17 8 12 3 7 8"/>
+                              <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                          </div>
+                          <div>
+                            <p style={{ fontSize: '0.85rem', fontWeight: 600, color: '#ffffff', margin: '0 0 0.15rem 0' }}>
+                              Click to upload <span style={{ fontWeight: 400, color: '#71717a' }}>or drag and drop</span>
+                            </p>
+                            <p style={{ fontSize: '0.72rem', color: '#71717a', margin: 0 }}>
+                              PDF, DOC, DOCX up to 5MB
+                            </p>
+                          </div>
+                        </>
+                      )}
+                    </div>
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#334155', marginBottom: '0.35rem' }}>
+                    <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#e5e7eb', marginBottom: '0.35rem' }}>
                       Brief Introduction / Key Highlights
                     </label>
                     <textarea
@@ -801,7 +873,7 @@ export default function CareersPage() {
                       placeholder="Tell us about your experience and availability..."
                       value={freelanceForm.coverLetter}
                       onChange={(e) => setFreelanceForm({ ...freelanceForm, coverLetter: e.target.value })}
-                      style={{ width: '100%', padding: '0.65rem 0.85rem', border: '1px solid #cbd5e1', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', resize: 'vertical' }}
+                      style={{ width: '100%', padding: '0.65rem 0.85rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', resize: 'vertical', color: '#ffffff' }}
                     />
                   </div>
 
@@ -811,9 +883,9 @@ export default function CareersPage() {
                     style={{
                       marginTop: '0.5rem',
                       padding: '0.85rem',
-                      backgroundColor: '#000000',
-                      color: '#ffffff',
-                      borderRadius: '8px',
+                      backgroundColor: '#ffffff',
+                      color: '#000000',
+                      borderRadius: '9999px',
                       fontWeight: 600,
                       fontSize: '0.92rem',
                       border: 'none',
@@ -842,8 +914,9 @@ export default function CareersPage() {
           width: fit-content;
           animation: scrollLeft 40s linear infinite;
         }
-        .marquee-horizontal:hover {
-          animation-play-state: paused;
+        .file-dropzone-hover:hover {
+          border-color: #71717a !important;
+          background-color: #121215 !important;
         }
       `}} />
     </div>

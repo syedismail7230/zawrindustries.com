@@ -218,47 +218,124 @@ export default function JobDetailPage() {
           <hr style={{ borderColor: '#1f2937' }} />
 
           {/* Application Form Section */}
-          <div style={{ backgroundColor: '#0f0f0f', padding: '3rem', borderRadius: '1.5rem', border: '1px solid #1f2937' }}>
-            <h2 style={{ fontSize: '2rem', fontWeight: 700, marginBottom: '0.5rem' }}>Submit your application</h2>
-            <p style={{ color: '#9ca3af', marginBottom: '2.5rem' }}>Please fill out the form below and attach your resume/CV.</p>
+          <div style={{ backgroundColor: 'transparent', padding: '1rem 0' }}>
+            <h2 style={{ fontSize: '2.25rem', fontWeight: 600, marginBottom: '0.5rem', color: '#ffffff' }}>Submit your application</h2>
+            <p style={{ color: '#9ca3af', marginBottom: '3rem', fontSize: '1rem' }}>Please fill out the form below and attach your resume/CV.</p>
             
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem' }}>
               
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#d1d5db' }}>First name *</label>
-                  <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} required style={{ width: '100%', padding: '1rem', backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: '0.75rem', color: '#ffffff', outline: 'none' }} />
+                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#e5e7eb' }}>First name *</label>
+                  <input type="text" name="firstName" value={formData.firstName} onChange={handleInputChange} required style={{ width: '100%', padding: '0.875rem 1rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', color: '#ffffff', outline: 'none', fontSize: '0.95rem' }} className="clean-dark-input" />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#d1d5db' }}>Last name</label>
-                  <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} style={{ width: '100%', padding: '1rem', backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: '0.75rem', color: '#ffffff', outline: 'none' }} />
+                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#e5e7eb' }}>Last name</label>
+                  <input type="text" name="lastName" value={formData.lastName} onChange={handleInputChange} style={{ width: '100%', padding: '0.875rem 1rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', color: '#ffffff', outline: 'none', fontSize: '0.95rem' }} className="clean-dark-input" />
                 </div>
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#d1d5db' }}>Email *</label>
-                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} required style={{ width: '100%', padding: '1rem', backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: '0.75rem', color: '#ffffff', outline: 'none' }} />
+                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#e5e7eb' }}>Email *</label>
+                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} required style={{ width: '100%', padding: '0.875rem 1rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', color: '#ffffff', outline: 'none', fontSize: '0.95rem' }} className="clean-dark-input" />
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#d1d5db' }}>Phone number</label>
-                  <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} style={{ width: '100%', padding: '1rem', backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: '0.75rem', color: '#ffffff', outline: 'none' }} />
+                  <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#e5e7eb' }}>Phone number</label>
+                  <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} style={{ width: '100%', padding: '0.875rem 1rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', color: '#ffffff', outline: 'none', fontSize: '0.95rem' }} className="clean-dark-input" />
                 </div>
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#d1d5db' }}>LinkedIn / Portfolio URL</label>
-                <input type="url" name="portfolio" value={formData.portfolio} onChange={handleInputChange} placeholder="https://" style={{ width: '100%', padding: '1rem', backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: '0.75rem', color: '#ffffff', outline: 'none' }} />
+                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#e5e7eb' }}>LinkedIn / Portfolio URL</label>
+                <input type="url" name="portfolio" value={formData.portfolio} onChange={handleInputChange} placeholder="https://" style={{ width: '100%', padding: '0.875rem 1rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', color: '#ffffff', outline: 'none', fontSize: '0.95rem' }} className="clean-dark-input" />
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#d1d5db' }}>What makes you the best fit for this role? *</label>
-                <textarea name="coverLetter" value={formData.coverLetter} onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })} required rows={5} placeholder="Tell us about your experience and why you'd be a great addition to the team..." style={{ width: '100%', padding: '1rem', backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: '0.75rem', color: '#ffffff', outline: 'none', resize: 'vertical' }} />
+                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#e5e7eb' }}>What makes you the best fit for this role? *</label>
+                <textarea name="coverLetter" value={formData.coverLetter} onChange={(e) => setFormData({ ...formData, coverLetter: e.target.value })} required rows={5} placeholder="Tell us about your experience and why you'd be a great addition to the team..." style={{ width: '100%', padding: '0.875rem 1rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', color: '#ffffff', outline: 'none', resize: 'vertical', fontSize: '0.95rem' }} className="clean-dark-input" />
               </div>
 
               <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#d1d5db' }}>Resume/CV *</label>
-                <input type="file" accept=".pdf,.doc,.docx" onChange={handleFileChange} required style={{ width: '100%', padding: '1rem', backgroundColor: '#1f2937', border: '1px solid #374151', borderRadius: '0.75rem', color: '#9ca3af', outline: 'none', cursor: 'pointer' }} />
+                <label style={{ fontSize: '0.875rem', fontWeight: 600, color: '#e5e7eb' }}>Resume/CV *</label>
+                <div
+                  onClick={() => document.getElementById('role-resume-file-input')?.click()}
+                  onDragOver={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                      setResume(e.dataTransfer.files[0]);
+                    }
+                  }}
+                  style={{
+                    border: '1.5px dashed #3f3f46',
+                    borderRadius: '12px',
+                    backgroundColor: '#09090b',
+                    padding: '1.75rem 1.5rem',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.625rem',
+                  }}
+                  className="file-dropzone-hover"
+                >
+                  <input
+                    id="role-resume-file-input"
+                    type="file"
+                    accept=".pdf,.doc,.docx"
+                    onChange={handleFileChange}
+                    required={!resume}
+                    style={{ display: 'none' }}
+                  />
+
+                  {resume ? (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', backgroundColor: '#18181b', border: '1px solid #27272a', padding: '0.625rem 1rem', borderRadius: '8px', width: '100%', maxWidth: '420px', justifyContent: 'space-between' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.625rem', overflow: 'hidden' }}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a1a1aa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                          <polyline points="14 2 14 8 20 8"/>
+                        </svg>
+                        <div style={{ textAlign: 'left', overflow: 'hidden' }}>
+                          <p style={{ fontSize: '0.875rem', fontWeight: 600, color: '#ffffff', margin: 0, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{resume.name}</p>
+                          <p style={{ fontSize: '0.75rem', color: '#71717a', margin: 0 }}>{(resume.size / (1024 * 1024)).toFixed(2)} MB</p>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setResume(null);
+                        }}
+                        style={{ backgroundColor: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '1rem', padding: '0.25rem' }}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ) : (
+                    <>
+                      <div style={{ width: '42px', height: '42px', borderRadius: '50%', backgroundColor: '#18181b', border: '1px solid #27272a', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#ffffff' }}>
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                          <polyline points="17 8 12 3 7 8"/>
+                          <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <p style={{ fontSize: '0.925rem', fontWeight: 600, color: '#ffffff', margin: '0 0 0.25rem 0' }}>
+                          Click to upload <span style={{ fontWeight: 400, color: '#71717a' }}>or drag and drop</span>
+                        </p>
+                        <p style={{ fontSize: '0.78rem', color: '#71717a', margin: 0 }}>
+                          PDF, DOC, or DOCX (Max 5MB)
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
 
               <button 
@@ -267,28 +344,34 @@ export default function JobDetailPage() {
                 style={{ 
                   marginTop: '1rem',
                   width: '100%', 
-                  backgroundColor: status === 'success' ? '#10b981' : '#ffffff', 
+                  backgroundColor: '#ffffff', 
                   color: '#000000', 
-                  padding: '1.125rem', 
-                  borderRadius: '0.75rem', 
-                  fontSize: '1.125rem', 
+                  padding: '1rem 1.5rem', 
+                  borderRadius: '9999px', 
+                  fontSize: '1rem', 
                   fontWeight: 600, 
                   border: 'none', 
                   cursor: status === 'loading' ? 'not-allowed' : 'pointer',
                   opacity: status === 'loading' ? 0.7 : 1,
-                  transition: 'all 0.2s',
+                  transition: 'all 0.2s ease',
                   display: 'flex',
                   justifyContent: 'center',
                   alignItems: 'center'
                 }}
               >
-                {status === 'loading' ? 'Submitting...' : status === 'success' ? 'Application Received!' : 'Submit Application'}
+                {status === 'loading' ? 'Submitting...' : status === 'success' ? 'Application Received ✓' : 'Submit Application'}
               </button>
 
               {status === 'error' && (
                 <p style={{ color: '#ef4444', textAlign: 'center', marginTop: '0.5rem', fontSize: '0.875rem' }}>Failed to submit application. Please try again.</p>
               )}
             </form>
+
+            <style>{`
+              .clean-dark-input:focus {
+                border-color: #52525b !important;
+              }
+            `}</style>
           </div>
 
         </div>
