@@ -55,10 +55,10 @@ export async function POST(req: Request) {
       },
     });
 
-    // Email to HR Team
     const hrMailOptions = {
-      from: `"Zawr Careers" <noreply@zawrindustries.com>`,
-      to: 'hr@zawrindustries.com', // As requested by user
+      from: process.env.GMAIL_FROM || `"Zawr Careers" <${process.env.GMAIL_USER}>`,
+      replyTo: email || 'noreply@zawrindustries.com',
+      to: 'hr@zawrindustries.com',
       subject: `New Job Application: ${firstName} ${lastName || ''} for ${jobTitle}`,
       text: `
 A new candidate has applied for the ${jobTitle} position.

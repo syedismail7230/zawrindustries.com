@@ -21,9 +21,9 @@ export async function POST(request: Request) {
       },
     });
 
-    // Construct the email
     const mailOptions = {
-      from: `"Zawr PR" <noreply@zawrindustries.com>`, 
+      from: process.env.GMAIL_FROM || `"Zawr PR" <${process.env.GMAIL_USER}>`,
+      replyTo: email || 'public-relations@zawrindustries.com',
       to: 'public-relations@zawrindustries.com', 
       subject: `🚨 New PR Inquiry from ${firstName} ${lastName}`,
       text: `You have received a new Public Relations inquiry.\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nPhone: ${phone}\n\nMessage:\n${message}`,

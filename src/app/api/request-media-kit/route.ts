@@ -23,9 +23,9 @@ export async function POST(request: Request) {
 
     const resourcesList = Array.isArray(resources) ? resources.join(', ') : 'Not specified';
 
-    // Construct the email to media@zawrindustries.com
     const mailOptions = {
-      from: `"Zawr Media" <noreply@zawrindustries.com>`, 
+      from: process.env.GMAIL_FROM || `"Zawr Media" <${process.env.GMAIL_USER}>`,
+      replyTo: email || 'media@zawrindustries.com',
       to: 'media@zawrindustries.com', 
       subject: `🚨 Media Kit Resource Request: ${companyName} - ${name}`,
       text: `You have received a new Media Kit Resource Request.\n\nTarget Brand: ${companyName}\nRequester Name: ${name}\nEmail: ${email}\nOrganization: ${organization || 'Not provided'}\nRequested Resources: ${resourcesList}\n\nPurpose:\n${purpose}`,

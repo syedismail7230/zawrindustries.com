@@ -160,9 +160,9 @@ Collaboration Goals: ${r.collaborationGoals}`;
       },
     });
 
-    // Construct the email
     const mailOptions = {
-      from: `"Zawr Partnerships" <noreply@zawrindustries.com>`, 
+      from: process.env.GMAIL_FROM || `"Zawr Partnerships" <${process.env.GMAIL_USER}>`,
+      replyTo: email || 'partnership@zawrindustries.com',
       to: 'partnership@zawrindustries.com', 
       subject: `🤝 New Strategic Partnership Inquiry: ${company}`,
       text: `You have received a new Strategic Partnership Inquiry.\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nPhone: ${phone || 'Not provided'}\nCompany: ${company}\nPartnership Type: ${partnershipType}\n\nProposal Details:\n${message}`,

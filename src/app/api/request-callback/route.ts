@@ -21,10 +21,10 @@ export async function POST(request: Request) {
       },
     });
 
-    // Construct the email
     const mailOptions = {
-      from: `"Zawr Client Relations" <noreply@zawrindustries.com>`, // Sender address
-      to: 'client-relations@zawrindustries.com', // Where you want to receive the notifications
+      from: process.env.GMAIL_FROM || `"Zawr Client Relations" <${process.env.GMAIL_USER}>`,
+      replyTo: 'client-relations@zawrindustries.com',
+      to: 'client-relations@zawrindustries.com',
       subject: `🚨 New Call Back Request: Priority [${priority.toUpperCase()}]`,
       text: `You have received a new callback request.\n\nClient ID: ${clientId}\nPriority: ${priority}\n\nPlease reach out to this client as soon as possible.`,
       html: `

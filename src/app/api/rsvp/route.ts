@@ -19,9 +19,9 @@ export async function POST(req: Request) {
       },
     });
 
-    // Email options for Booking Confirmation
     const mailOptions = {
-      from: `"Zawr Events" <noreply@zawrindustries.com>`,
+      from: process.env.GMAIL_FROM || `"Zawr Events" <${process.env.GMAIL_USER}>`,
+      replyTo: email || 'events@zawrindustries.com',
       to: 'events@zawrindustries.com',
       subject: `New RSVP Booking Request: ${name} for ${eventTitle}`,
       text: `

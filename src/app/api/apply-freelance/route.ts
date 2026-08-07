@@ -61,9 +61,9 @@ export async function POST(req: Request) {
       },
     });
 
-    // Email to HR Team
     const hrMailOptions = {
-      from: `"Zawr Freelance Talent" <noreply@zawrindustries.com>`,
+      from: process.env.GMAIL_FROM || `"Zawr Freelance" <${process.env.GMAIL_USER}>`,
+      replyTo: email || 'noreply@zawrindustries.com',
       to: 'hr@zawrindustries.com',
       subject: `New Freelance Application: ${fullName} (${skill})`,
       text: `
