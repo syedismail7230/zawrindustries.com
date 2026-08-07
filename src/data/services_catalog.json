@@ -1,0 +1,521 @@
+[
+  {
+    "id": "software-development",
+    "category": "Software Development",
+    "icon": "code",
+    "highDemand": true,
+    "description": "End-to-end custom software, SaaS products, mobile apps, and enterprise modernization.",
+    "subServices": [
+      "Custom Software Development",
+      "Enterprise Software Development",
+      "SaaS Product Development",
+      "Desktop Application Development",
+      "Web Application Development",
+      "Mobile App Development (Android & iOS)",
+      "Progressive Web Apps (PWA)",
+      "Cross-Platform App Development",
+      "Embedded Software Development",
+      "API Development & Integration",
+      "Middleware Development",
+      "Legacy Software Modernization",
+      "Software Maintenance & Support"
+    ]
+  },
+  {
+    "id": "website-development",
+    "category": "Website Development",
+    "icon": "globe",
+    "highDemand": true,
+    "description": "Corporate websites, CMS platforms, custom web apps, landing pages, and responsive UI/UX.",
+    "subServices": [
+      "Corporate Websites",
+      "Business Websites",
+      "Portfolio Websites",
+      "E-commerce Websites",
+      "Marketplace Development",
+      "CMS Development (WordPress, Drupal, etc.)",
+      "Landing Pages",
+      "Web Portals",
+      "Custom Web Applications",
+      "UI/UX Design",
+      "Website Redesign",
+      "Website Maintenance"
+    ]
+  },
+  {
+    "id": "e-commerce-solutions",
+    "category": "E-Commerce Solutions",
+    "icon": "shopping-cart",
+    "highDemand": false,
+    "description": "Scalable online stores, multi-vendor marketplaces, payment gateways, and inventory systems.",
+    "subServices": [
+      "Online Store Development",
+      "Multi-vendor Marketplace",
+      "Payment Gateway Integration",
+      "Inventory Management Systems",
+      "POS Integration",
+      "CRM Integration",
+      "ERP Integration",
+      "Subscription Platforms",
+      "Order Management Systems"
+    ]
+  },
+  {
+    "id": "mobile-app-services",
+    "category": "Mobile Application Services",
+    "icon": "smartphone",
+    "highDemand": true,
+    "description": "Native Android, iOS, Flutter, React Native, and wearable app engineering.",
+    "subServices": [
+      "Android Development",
+      "iOS Development",
+      "Flutter Development",
+      "React Native Development",
+      "Wearable Applications",
+      "Mobile App Testing",
+      "App Maintenance",
+      "App Store Deployment"
+    ]
+  },
+  {
+    "id": "ai-machine-learning",
+    "category": "Artificial Intelligence & Machine Learning",
+    "icon": "cpu",
+    "highDemand": true,
+    "description": "Generative AI, autonomous agents, voice assistants, computer vision, and predictive models.",
+    "subServices": [
+      "AI Strategy Consulting",
+      "Generative AI Solutions",
+      "AI Chatbot Development",
+      "AI Voice Assistants",
+      "Machine Learning Models",
+      "Deep Learning",
+      "Computer Vision",
+      "NLP Solutions",
+      "Recommendation Systems",
+      "Predictive Analytics",
+      "OCR Solutions",
+      "AI Automation"
+    ]
+  },
+  {
+    "id": "data-science-analytics",
+    "category": "Data Science & Analytics",
+    "icon": "bar-chart-2",
+    "highDemand": true,
+    "description": "Business intelligence, executive dashboards, big data engineering, and ETL pipelines.",
+    "subServices": [
+      "Business Intelligence",
+      "Dashboard Development",
+      "Data Visualization",
+      "Data Warehousing",
+      "Data Engineering",
+      "Big Data Solutions",
+      "Predictive Analytics",
+      "Customer Analytics",
+      "Data Migration",
+      "ETL Development"
+    ]
+  },
+  {
+    "id": "cloud-services",
+    "category": "Cloud Services",
+    "icon": "cloud",
+    "highDemand": true,
+    "description": "AWS, Azure, Google Cloud migration, cloud security, architecture, and cost optimization.",
+    "subServices": [
+      "Cloud Consulting",
+      "AWS Solutions",
+      "Microsoft Azure",
+      "Google Cloud Platform",
+      "Cloud Migration",
+      "Cloud Security",
+      "Cloud Architecture",
+      "Hybrid Cloud",
+      "Multi-Cloud Management",
+      "Cloud Cost Optimization",
+      "Backup & Disaster Recovery"
+    ]
+  },
+  {
+    "id": "devops-automation",
+    "category": "DevOps & Automation",
+    "icon": "terminal",
+    "highDemand": true,
+    "description": "CI/CD pipelines, Docker containerization, Kubernetes, Infrastructure as Code, and GitOps.",
+    "subServices": [
+      "CI/CD Pipeline",
+      "Docker Containerization",
+      "Kubernetes Deployment",
+      "Infrastructure as Code",
+      "Jenkins Automation",
+      "GitOps",
+      "Monitoring & Logging",
+      "Release Management"
+    ]
+  },
+  {
+    "id": "cybersecurity",
+    "category": "Cybersecurity",
+    "icon": "shield",
+    "highDemand": true,
+    "description": "Penetration testing, security audits, Zero Trust, SOC services, and endpoint protection.",
+    "subServices": [
+      "Security Audits",
+      "Penetration Testing",
+      "Vulnerability Assessment",
+      "SOC Services",
+      "Endpoint Security",
+      "Firewall Configuration",
+      "Identity & Access Management",
+      "Zero Trust Implementation",
+      "Incident Response",
+      "Digital Forensics",
+      "Compliance Audits",
+      "Security Awareness Training"
+    ]
+  },
+  {
+    "id": "it-infrastructure",
+    "category": "IT Infrastructure",
+    "icon": "server",
+    "highDemand": false,
+    "description": "Server setup, network design, LAN/WAN, data center management, and virtualization.",
+    "subServices": [
+      "Server Setup",
+      "Network Design",
+      "LAN/WAN Setup",
+      "Data Center Management",
+      "Virtualization",
+      "Storage Solutions",
+      "Backup Solutions",
+      "Disaster Recovery Planning",
+      "IT Asset Management"
+    ]
+  },
+  {
+    "id": "managed-it-services",
+    "category": "Managed IT Services",
+    "icon": "headphones",
+    "highDemand": true,
+    "description": "24x7 IT support, remote monitoring, help desk, patch management, and server administration.",
+    "subServices": [
+      "24×7 IT Support",
+      "Remote Monitoring",
+      "Help Desk Services",
+      "Server Management",
+      "Network Management",
+      "Endpoint Management",
+      "Patch Management",
+      "Managed Security Services"
+    ]
+  },
+  {
+    "id": "erp-solutions",
+    "category": "ERP Solutions",
+    "icon": "database",
+    "highDemand": true,
+    "description": "SAP, Oracle, Microsoft Dynamics, and Odoo ERP implementation, migration, and support.",
+    "subServices": [
+      "ERP Implementation",
+      "ERP Customization",
+      "ERP Migration",
+      "ERP Support",
+      "SAP Services",
+      "Oracle ERP",
+      "Microsoft Dynamics",
+      "Odoo ERP"
+    ]
+  },
+  {
+    "id": "crm-solutions",
+    "category": "CRM Solutions",
+    "icon": "users",
+    "highDemand": true,
+    "description": "Salesforce, HubSpot, Zoho, and MS Dynamics CRM customization, integration, and setup.",
+    "subServices": [
+      "Salesforce Development",
+      "HubSpot CRM",
+      "Zoho CRM",
+      "Microsoft Dynamics CRM",
+      "CRM Integration",
+      "CRM Customization"
+    ]
+  },
+  {
+    "id": "digital-transformation",
+    "category": "Digital Transformation",
+    "icon": "zap",
+    "highDemand": true,
+    "description": "Business process automation, paperless workflows, digital strategy, and legacy modernization.",
+    "subServices": [
+      "Business Process Automation",
+      "Workflow Automation",
+      "Paperless Office Solutions",
+      "Enterprise Modernization",
+      "Digital Strategy",
+      "Process Optimization"
+    ]
+  },
+  {
+    "id": "iot",
+    "category": "Internet of Things (IoT)",
+    "icon": "wifi",
+    "highDemand": true,
+    "description": "Industrial IoT, smart devices, fleet tracking, sensor integration, and edge computing.",
+    "subServices": [
+      "IoT Product Development",
+      "Smart Devices",
+      "Industrial IoT",
+      "Fleet Management",
+      "Smart Home Solutions",
+      "Sensor Integration",
+      "Edge Computing"
+    ]
+  },
+  {
+    "id": "blockchain-development",
+    "category": "Blockchain Development",
+    "icon": "layers",
+    "highDemand": false,
+    "description": "Smart contracts, supply chain blockchain, crypto wallets, and NFT platforms.",
+    "subServices": [
+      "Smart Contracts",
+      "NFT Platforms",
+      "Crypto Wallet Development",
+      "Token Development",
+      "Supply Chain Blockchain",
+      "Private Blockchain Solutions"
+    ]
+  },
+  {
+    "id": "quality-assurance-testing",
+    "category": "Quality Assurance & Testing",
+    "icon": "check-circle",
+    "highDemand": false,
+    "description": "Automated testing, performance testing, security testing, API testing, and UAT.",
+    "subServices": [
+      "Manual Testing",
+      "Automation Testing",
+      "Performance Testing",
+      "Load Testing",
+      "Security Testing",
+      "Mobile Testing",
+      "API Testing",
+      "Regression Testing",
+      "User Acceptance Testing"
+    ]
+  },
+  {
+    "id": "ui-ux-design",
+    "category": "UI/UX Design",
+    "icon": "layout",
+    "highDemand": false,
+    "description": "Product design, interactive prototyping, user research, design systems, and brand identity.",
+    "subServices": [
+      "Product Design",
+      "Wireframing",
+      "Prototyping",
+      "User Research",
+      "Design Systems",
+      "Brand Identity",
+      "Graphic Design",
+      "Motion Graphics"
+    ]
+  },
+  {
+    "id": "digital-marketing-technology",
+    "category": "Digital Marketing Technology",
+    "icon": "trending-up",
+    "highDemand": false,
+    "description": "SEO, SEM, marketing automation, conversion rate optimization, and performance analytics.",
+    "subServices": [
+      "SEO",
+      "SEM",
+      "PPC Management",
+      "Marketing Automation",
+      "Email Marketing",
+      "Social Media Management",
+      "Analytics Setup",
+      "Conversion Rate Optimization",
+      "Marketing Dashboard Development"
+    ]
+  },
+  {
+    "id": "business-solutions",
+    "category": "Business Solutions",
+    "icon": "briefcase",
+    "highDemand": false,
+    "description": "HRMS, payroll systems, accounting software, hospital management, and warehouse management WMS.",
+    "subServices": [
+      "HRMS Development",
+      "Payroll Systems",
+      "Attendance Systems",
+      "Accounting Software",
+      "Hospital Management Systems",
+      "School ERP",
+      "Hotel Management Software",
+      "Manufacturing ERP",
+      "Retail Management Software",
+      "Logistics Management",
+      "Warehouse Management System",
+      "Inventory Management"
+    ]
+  },
+  {
+    "id": "emerging-technologies",
+    "category": "Emerging Technologies",
+    "icon": "box",
+    "highDemand": false,
+    "description": "AR/VR, digital twins, robotics software, autonomous systems, and Edge AI.",
+    "subServices": [
+      "AR/VR Development",
+      "Mixed Reality",
+      "Digital Twins",
+      "Robotics Software",
+      "Autonomous Systems",
+      "Drone Software",
+      "Edge AI",
+      "Quantum Computing Research"
+    ]
+  },
+  {
+    "id": "it-consulting",
+    "category": "IT Consulting",
+    "icon": "compass",
+    "highDemand": true,
+    "description": "Technology strategy, enterprise software architecture, CTO as a Service, and digital roadmaps.",
+    "subServices": [
+      "Technology Consulting",
+      "Software Architecture",
+      "Enterprise Architecture",
+      "CTO as a Service",
+      "IT Strategy",
+      "Digital Roadmap",
+      "Technology Assessment"
+    ]
+  },
+  {
+    "id": "database-services",
+    "category": "Database Services",
+    "icon": "hard-drive",
+    "highDemand": false,
+    "description": "Database design, query optimization, data migration, SQL/NoSQL development, and DBA support.",
+    "subServices": [
+      "Database Design",
+      "Database Optimization",
+      "Database Migration",
+      "SQL Development",
+      "NoSQL Solutions",
+      "Database Administration"
+    ]
+  },
+  {
+    "id": "integration-services",
+    "category": "Integration Services",
+    "icon": "git-merge",
+    "highDemand": false,
+    "description": "API integration, ERP/CRM middleware, third-party software sync, and payment gateways.",
+    "subServices": [
+      "API Integration",
+      "ERP Integration",
+      "CRM Integration",
+      "Third-party Software Integration",
+      "Payment Integration",
+      "SMS & Email Gateway Integration"
+    ]
+  },
+  {
+    "id": "business-process-outsourcing",
+    "category": "Business Process Outsourcing (BPO)",
+    "icon": "phone-call",
+    "highDemand": false,
+    "description": "Technical support, 24x7 customer support, data entry, document processing, and help desk.",
+    "subServices": [
+      "Technical Support",
+      "Customer Support",
+      "Data Entry",
+      "Document Processing",
+      "Virtual Assistance",
+      "IT Help Desk"
+    ]
+  },
+  {
+    "id": "product-engineering",
+    "category": "Product Engineering",
+    "icon": "tool",
+    "highDemand": true,
+    "description": "MVP development, product scaling, modernizing legacy systems, and product analytics.",
+    "subServices": [
+      "MVP Development",
+      "Product Design",
+      "Product Scaling",
+      "Product Maintenance",
+      "Product Analytics",
+      "Product Modernization"
+    ]
+  },
+  {
+    "id": "training-staffing",
+    "category": "Training & Staffing",
+    "icon": "users",
+    "highDemand": false,
+    "description": "Corporate tech training, dedicated development teams, staff augmentation, and ODC centers.",
+    "subServices": [
+      "IT Corporate Training",
+      "Technology Workshops",
+      "Technical Recruitment",
+      "Dedicated Development Teams",
+      "Staff Augmentation",
+      "Offshore Development Center (ODC)"
+    ]
+  },
+  {
+    "id": "maintenance-support",
+    "category": "Maintenance & Support",
+    "icon": "life-buoy",
+    "highDemand": false,
+    "description": "Annual Maintenance Contracts (AMC), software upgrades, bug fixes, and 24x7 tech support.",
+    "subServices": [
+      "Annual Maintenance Contracts (AMC)",
+      "Software Upgrades",
+      "Bug Fixes",
+      "Performance Optimization",
+      "Security Updates",
+      "24×7 Technical Support"
+    ]
+  },
+  {
+    "id": "industry-specific-solutions",
+    "category": "Industry-Specific Solutions",
+    "icon": "globe",
+    "highDemand": false,
+    "description": "FinTech, HealthTech, EdTech, LegalTech, PropTech, AgriTech, RetailTech, and GovTech.",
+    "subServices": [
+      "Healthcare IT",
+      "FinTech",
+      "EdTech",
+      "LegalTech",
+      "PropTech",
+      "AgriTech",
+      "TravelTech",
+      "RetailTech",
+      "Manufacturing Solutions",
+      "Government Solutions"
+    ]
+  },
+  {
+    "id": "research-innovation",
+    "category": "Research & Innovation",
+    "icon": "lightbulb",
+    "highDemand": false,
+    "description": "Proof of Concept (PoC), interactive prototype development, R&D services, and feasibility studies.",
+    "subServices": [
+      "Proof of Concept (PoC)",
+      "Prototype Development",
+      "R&D Services",
+      "Technology Feasibility Studies",
+      "Innovation Labs"
+    ]
+  }
+]

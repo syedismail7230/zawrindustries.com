@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Poppins } from 'next/font/google';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import ISO6391 from 'iso-639-1';
 
@@ -43,6 +43,8 @@ export default function Header() {
   const [searchError, setSearchError] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
 
+  const langDropdownRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     setIsMounted(true);
   }, []);
@@ -55,6 +57,21 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isMobileMenuOpen]);
+
+  // Close dropdown on click outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
+        setIsLangDropdownOpen(false);
+      }
+    };
+    if (isLangDropdownOpen) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [isLangDropdownOpen]);
 
   // Close mobile menu and reset scroll state on route change
   useEffect(() => {
@@ -281,11 +298,11 @@ export default function Header() {
         </button>
 
         {/* Language Button & Dropdown */}
-        <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+        <div ref={langDropdownRef} style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
           <button 
             className="icon-btn" 
             aria-label="Language" 
-            onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)} 
+            onClick={() => setIsLangDropdownOpen(prev => !prev)} 
             suppressHydrationWarning
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -295,18 +312,29 @@ export default function Header() {
             </svg>
           </button>
           
-          {(isLangDropdownOpen || !isMobileMenuOpen) && (
-            <div className="dropdown lang-dropdown" style={{
-              position: 'absolute',
-              top: '100%',
-              left: isMobileMenuOpen ? '0' : 'auto',
-              right: isMobileMenuOpen ? 'auto' : '-1rem',
-              minWidth: '180px',
-              paddingTop: '1.5rem',
-              display: isLangDropdownOpen ? 'flex' : undefined,
-              flexDirection: 'column',
-              zIndex: 100,
-            }}>
+          {isLangDropdownOpen && (
+            <div 
+              className="dropdown lang-dropdown" 
+              style={{
+                position: 'absolute',
+                top: 'calc(100% + 0.75rem)',
+                right: isMobileMenuOpen ? 'auto' : 0,
+                left: isMobileMenuOpen ? 0 : 'auto',
+                minWidth: '200px',
+                padding: '1rem',
+                display: 'flex',
+                flexDirection: 'column',
+                opacity: 1,
+                visibility: 'visible',
+                pointerEvents: 'auto',
+                transform: 'translateY(0)',
+                zIndex: 1000,
+                backgroundColor: 'var(--primary-color, #0f172a)',
+                borderRadius: '8px',
+                boxShadow: '0 10px 30px rgba(0, 0, 0, 0.3)',
+                border: '1px solid rgba(255, 255, 255, 0.12)',
+              }}
+            >
               <div style={{ marginBottom: '10px' }}>
                 <input 
                   suppressHydrationWarning
@@ -315,15 +343,16 @@ export default function Header() {
                   value={langQuery}
                   onChange={(e) => setLangQuery(e.target.value)}
                   onClick={(e) => e.stopPropagation()}
-                  style={{ width: '100%', padding: '0.6rem', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.2)', backgroundColor: 'var(--primary-color)', color: 'var(--bg-white)', outline: 'none', fontSize: '0.85rem' }}
+                  style={{ width: '100%', padding: '0.6rem', borderRadius: '4px', border: '1px solid rgba(255,255,255,0.2)', backgroundColor: 'rgba(255,255,255,0.08)', color: '#ffffff', outline: 'none', fontSize: '0.85rem' }}
                 />
               </div>
-              <div className="custom-scrollbar" style={{ maxHeight: '250px', overflowY: 'auto', paddingRight: '5px', display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+              <div className="custom-scrollbar" style={{ maxHeight: '250px', overflowY: 'auto', paddingRight: '5px', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
                 {filteredLangs.map((code) => (
                   <a 
                     key={code} 
                     href="#" 
                     onClick={(e) => { e.preventDefault(); handleLanguageSwitch(code); closeMobileMenu(); }}
+                    style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.9rem', padding: '0.2rem 0', transition: 'color 0.2s' }}
                   >
                     {ISO6391.getNativeName(code)}
                   </a>

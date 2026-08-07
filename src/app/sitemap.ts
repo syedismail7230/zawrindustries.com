@@ -6,6 +6,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Base routes that always exist
   const routes = [
     '',
+    '/about',
     '/about/history',
     '/about/board',
     '/about/awards',
@@ -49,37 +50,54 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/industries/manufacturing',
     '/industries/estate',
     '/industries/healthcare',
+    '/industries/fmcg',
+    '/platforms',
+    '/careers',
     '/careers/working-at-zawr',
     '/careers/equal-opportunity',
-    '/careers',
-    '/newsroom/news-media',
+    '/newsroom',
     '/newsroom/press-release',
     '/newsroom/notifications',
     '/newsroom/media-kit',
     '/newsroom/events',
-    '/investors/financial-reporting',
+    '/contact',
+    '/contact/client-relations',
+    '/contact/partner',
+    '/contact/public-relations',
+    '/contact/sponsorship',
+    '/customer-relations',
+    '/investors',
+    '/investors/financial-report',
+    '/investors/interest',
     '/investors/shares',
-    '/investors/events',
     '/investors/subsidiaries',
     '/investors/shareholders-info',
     '/investors/resource-centre',
     '/investors/notice-of-forfeiture',
-    '/contact/client-relations',
-    '/contact/sponsorship',
-    '/contact/public-relations',
+    '/privacy-policy',
+    '/legal-disclaimer',
+    '/notices',
+    '/fraud-alert',
+    '/sitemap',
     '/legal/privacy-policy',
     '/legal/terms',
     '/legal/cookie-policy',
     '/legal/disclaimer',
     '/legal/refund-policy',
-  ].map((route) => ({
-    url: `${baseUrl}${route}`,
-    lastModified: new Date(),
-    changeFrequency: 'weekly' as const,
-    priority: route === '' ? 1 : 0.8,
-  }));
+  ].map((route) => {
+    let priority = 0.8;
+    if (route === '') priority = 1.0;
+    else if (['/about', '/industries/it-service', '/industries/transport-and-logistics', '/industries/manufacturing', '/industries/estate', '/industries/healthcare', '/platforms', '/newsroom', '/contact', '/investors', '/careers'].includes(route)) priority = 0.9;
+    
+    return {
+      url: `${baseUrl}${route}`,
+      lastModified: new Date(),
+      changeFrequency: 'weekly' as const,
+      priority,
+    };
+  });
 
-  // Dynamically append blog, press release, and notification articles
+  // Dynamically append blog, press release, notification, and notice articles
   let dynamicRoutes: any[] = [];
   try {
     const fs = require('fs');
@@ -94,7 +112,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         url: `${baseUrl}/about/blog/${b.slug}`,
         lastModified: new Date(),
         changeFrequency: 'weekly' as const,
-        priority: 0.6,
+        priority: 0.7,
       }))];
     }
 
@@ -124,9 +142,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
       }))];
     }
 
+    // 4. Appending public notices
+    const noticesPath = path.join(process.cwd(), 'public/data/notices.json');
+    if (fs.existsSync(noticesPath)) {
+      const fileData = fs.readFileSync(noticesPath, 'utf8');
+      const notices = JSON.parse(fileData);
+      dynamicRoutes = [...dynamicRoutes, ...notices.map((n: any) => ({
+        url: `${baseUrl}/notices/${n.slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'weekly' as const,
+        priority: 0.6,
+      }))];
+    }
+
   } catch (e) {
     console.error('Error appending dynamic routes to sitemap:', e);
   }
 
   return [...routes, ...dynamicRoutes];
 }
+

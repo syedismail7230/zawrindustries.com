@@ -4,14 +4,19 @@ export default function robots(): MetadataRoute.Robots {
   return {
     rules: [
       {
-        userAgent: ['*', 'GPTBot', 'ClaudeBot', 'Google-Extended', 'PerplexityBot', 'Applebot-Extended', 'cohere-ai'],
+        userAgent: '*',
         allow: '/',
-        disallow: ['/private/', '/api/'],
+        disallow: ['/api/', '/_next/', '/private/'],
+      },
+      {
+        userAgent: ['Googlebot', 'Bingbot', 'Yandex', 'Baiduspider', 'DuckDuckBot', 'Slurp'],
+        allow: '/',
       }
     ],
     sitemap: [
       'https://zawrindustries.com/sitemap.xml',
-      'https://zawrindustries.com/sitemap-news.xml'
     ],
+    host: 'https://zawrindustries.com',
   };
 }
+

@@ -3,7 +3,48 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Zawr Industries — Technology, Manufacturing & Logistics Conglomerate | Bangalore',
-  description: "Zawr Industries is India's multi-sector conglomerate delivering IT services, AI platforms, logistics, manufacturing, and real estate solutions across India, UAE, USA and UK.",
+  description: "Zawr Industries LLP is a multi-sector industrial conglomerate delivering IT services, AI platforms, logistics, manufacturing, and real estate solutions across India, UAE, USA, and international markets.",
+  keywords: [
+    'Zawr Industries LLP',
+    'Zawr Industries Bangalore',
+    'IT Services India',
+    'Enterprise AI Platforms',
+    'Automated Supply Chain Logistics',
+    'Precision Manufacturing India',
+    'Real Estate Development Bangalore',
+    'Firm AI',
+    'VelocityOS'
+  ],
+  alternates: {
+    canonical: 'https://zawrindustries.com',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    title: 'Zawr Industries — Technology, Manufacturing & Logistics Conglomerate',
+    description: "Zawr Industries LLP is a multi-sector industrial conglomerate delivering IT services, AI platforms, logistics, manufacturing, and real estate solutions.",
+    url: 'https://zawrindustries.com',
+    siteName: 'Zawr Industries LLP',
+    images: [
+      {
+        url: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710570/zawr/assets/zawr-logo.png',
+        width: 1200,
+        height: 630,
+        alt: 'Zawr Industries LLP Corporate Logo',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
 };
 
 export default function Home() {
