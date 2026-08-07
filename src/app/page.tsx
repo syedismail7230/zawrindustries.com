@@ -54,8 +54,8 @@ export default function Home() {
       <section className="hero-section" style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
         <div className="hero-bg" style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0, zIndex: 0 }}>
           <img
-            src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1000,c_limit,dpr_auto/v1783710572/zawr/images/hero-bg.png"
-            srcSet="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_600,c_limit,dpr_auto/v1783710572/zawr/images/hero-bg.png 600w, https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1000,c_limit,dpr_auto/v1783710572/zawr/images/hero-bg.png 1000w, https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710572/zawr/images/hero-bg.png 1600w"
+            src="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710572/zawr/images/hero-bg.png"
+            srcSet="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_480,c_limit/v1783710572/zawr/images/hero-bg.png 480w, https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710572/zawr/images/hero-bg.png 800w, https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1400,c_limit/v1783710572/zawr/images/hero-bg.png 1400w"
             sizes="100vw"
             alt="Zawr Industries Technology Background"
             width="1600"

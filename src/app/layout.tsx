@@ -100,8 +100,8 @@ export default function RootLayout({
         <link
           rel="preload"
           as="image"
-          href="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_800,c_limit,dpr_auto/v1783710572/zawr/images/hero-bg.png"
-          imageSrcSet="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_600,c_limit,dpr_auto/v1783710572/zawr/images/hero-bg.png 600w, https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1000,c_limit,dpr_auto/v1783710572/zawr/images/hero-bg.png 1000w, https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710572/zawr/images/hero-bg.png 1600w"
+          href="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710572/zawr/images/hero-bg.png"
+          imageSrcSet="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_480,c_limit/v1783710572/zawr/images/hero-bg.png 480w, https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710572/zawr/images/hero-bg.png 800w, https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1400,c_limit/v1783710572/zawr/images/hero-bg.png 1400w"
           fetchPriority="high"
         />
       </head>
