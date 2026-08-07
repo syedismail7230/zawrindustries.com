@@ -3,20 +3,93 @@
 import Link from 'next/link';
 import { useState } from 'react';
 
-const faqs = [
+const emailCategories = [
+  {
+    title: 'Industry Divisions',
+    subtitle: 'Sector-specific enterprise operations',
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>,
+    emails: [
+      { role: 'Logistics & Supply Chain', email: 'logistics@zawrindustries.com' },
+      { role: 'Real Estate & Infrastructure', email: 'realestate@zawrindustries.com' },
+      { role: 'Healthcare & Life Sciences', email: 'healthcare@zawrindustries.com' },
+      { role: 'Industrial Manufacturing', email: 'manufacturing@zawrindustries.com' },
+    ],
+  },
+  {
+    title: 'Business & Growth Partnerships',
+    subtitle: 'Commercial, leads, & strategic alliances',
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>,
+    emails: [
+      { role: 'Global Business Inquiries', email: 'business@zawrindustries.com' },
+      { role: 'Enterprise Sales & Leads', email: 'leads@zawrindustries.com' },
+      { role: 'Client Relations Desk', email: 'client-relations@zawrindustries.com' },
+    ],
+  },
+  {
+    title: 'Technology & Cloud Solutions',
+    subtitle: 'Engineering, IT services, and architecture',
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>,
+    emails: [
+      { role: 'Engineering & Technology', email: 'tech@zawrindustries.com' },
+      { role: 'IT Services & Infrastructure', email: 'it@zawrindustries.com' },
+      { role: 'Cloud & Infrastructure', email: 'cloud@zawrindustries.com' },
+    ],
+  },
+  {
+    title: 'Procurement & Financial Operations',
+    subtitle: 'Vendors, invoicing, & accounts payable',
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>,
+    emails: [
+      { role: 'Vendor Bids & Procurement', email: 'procurement@zawrindustries.com' },
+      { role: 'Billing & Client Statements', email: 'billing@zawrindustries.com' },
+      { role: 'Finance & Accounts', email: 'accounts@zawrindustries.com' },
+    ],
+  },
+  {
+    title: 'Careers & Talent Acquisition',
+    subtitle: 'Job applications, internships, and hiring',
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
+    emails: [
+      { role: 'Careers & Job Applications', email: 'careers@zawrindustries.com' },
+      { role: 'Talent Acquisition Team', email: 'hiring@zawrindustries.com' },
+      { role: 'University & Internships', email: 'internships@zawrindustries.com' },
+    ],
+  },
+  {
+    title: 'Compliance, Privacy & Governance',
+    subtitle: 'Investor relations, legal, GDPR, & security',
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+    emails: [
+      { role: 'GDPR & Privacy Desk', email: 'privacy@zawrindustries.com' },
+      { role: 'Legal & Compliance', email: 'legal@zawrindustries.com' },
+      { role: 'Security Vulnerability Desk', email: 'security@zawrindustries.com' },
+      { role: 'Investor Relations Desk', email: 'investors@zawrindustries.com' },
+    ],
+  },
+  {
+    title: 'CSR, Media & Alliances',
+    subtitle: 'ESG, press releases, creator alliances, marketing',
+    icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 11a9 9 0 0 1 9 9"/><path d="M4 4a16 16 0 0 1 16 16"/><circle cx="5" cy="19" r="1"/></svg>,
+    emails: [
+      { role: 'CSR & Environmental Desk', email: 'sustainability@zawrindustries.com' },
+      { role: 'Press & Public Relations', email: 'public-relations@zawrindustries.com' },
+      { role: 'Creator & Brand Alliance', email: 'creator-alliance@zawrindustries.com' },
+      { role: 'Global Brand Marketing', email: 'marketing@zawrindustries.com' },
+    ],
+  },
+];
 
+const faqs = [
   {
     question: "Can I change my plan later?",
     answer: "Of course. Our pricing scales with your company. Chat to our friendly team to find a solution that works for you as you grow.",
     icon: <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zM4 10h16" />
   },
-
   {
     question: "Can other info be added to an invoice?",
     answer: "At the moment, the only way to add additional information to invoices is to add the information to the workspace's name manually.",
     icon: <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M16 13H8M16 17H8M10 9H8" />
   },
-
   {
     question: "What industries do you operate in?",
     answer: "We operate across 5 core sectors: IT Services, Transport & Logistics, Manufacturing, Real Estate, and Healthcare, providing end-to-end enterprise solutions.",
@@ -62,6 +135,7 @@ const faqs = [
 export default function ContactPage() {
   const [visibleFaqs, setVisibleFaqs] = useState(6);
   const [activePin, setActivePin] = useState<string | null>('india');
+  const [isDirectoryOpen, setIsDirectoryOpen] = useState(false);
 
   const locations = [
     { id: 'usa', title: 'New York, USA', top: '24%', left: '25%', line1: '123 Business Rd', line2: 'New York, NY 10001' },
@@ -78,7 +152,6 @@ export default function ContactPage() {
 
   const handleOpenChat = (e: React.MouseEvent) => {
     e.preventDefault();
-    // Assuming standard Tawk.to or similar chat widget API
     if (typeof window !== 'undefined' && (window as any).Tawk_API) {
       (window as any).Tawk_API.toggle();
     } else {
@@ -121,8 +194,6 @@ export default function ContactPage() {
 
         {/* World Map Area */}
         <div style={{ position: 'relative', width: '100%', maxWidth: '1000px', aspectRatio: '4378 / 2434', margin: '0 auto', zIndex: 1, borderBottom: '1px solid transparent' }}>
-          
-          {/* Dotted World Map Graphic */}
           <div style={{ 
             position: 'absolute', inset: 0,
             backgroundImage: 'radial-gradient(#98a2b3 2px, transparent 2px)', 
@@ -138,7 +209,6 @@ export default function ContactPage() {
             opacity: 0.8
           }} />
           
-          {/* Interactive Map Pins */}
           {locations.map((loc) => {
             const isActive = activePin === loc.id;
             return (
@@ -156,7 +226,6 @@ export default function ContactPage() {
                 }} 
                 title={loc.title}
               >
-                {/* The Tooltip */}
                 {isActive && (
                   <div 
                     style={{ 
@@ -193,13 +262,12 @@ export default function ContactPage() {
       </section>
 
       {/* Contact Cards Grid */}
-      <section style={{ padding: '0 5%', maxWidth: '1200px', margin: '40px auto 6rem', position: 'relative', zIndex: 2 }}>
+      <section style={{ padding: '0 5%', maxWidth: '1200px', margin: '40px auto 4rem', position: 'relative', zIndex: 2 }}>
         <div style={{ 
           display: 'grid', 
           gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
           gap: '1.5rem' 
         }}>
-          
           {/* Card 1 */}
           <div style={{ backgroundColor: '#ffffff', border: '1px solid #EAECF0', borderRadius: '12px', padding: '1.5rem', display: 'flex', flexDirection: 'column', boxShadow: '0 12px 24px -4px rgba(16,24,40,0.08)' }}>
             <div style={{ width: '40px', height: '40px', borderRadius: '10px', border: '1px solid #EAECF0', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem', color: '#475467', boxShadow: '0 1px 2px rgba(16,24,40,0.05)' }}>
@@ -247,9 +315,167 @@ export default function ContactPage() {
               +91 9880464078
             </a>
           </div>
+        </div>
 
+        {/* Toggle Button for Email Directory */}
+        <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+          <button
+            suppressHydrationWarning
+            onClick={() => setIsDirectoryOpen(!isDirectoryOpen)}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.65rem',
+              padding: '0.85rem 1.75rem',
+              backgroundColor: '#0f172a',
+              color: '#ffffff',
+              border: 'none',
+              borderRadius: '12px',
+              fontWeight: 600,
+              fontSize: '0.95rem',
+              cursor: 'pointer',
+              boxShadow: '0 4px 14px rgba(15,23,42,0.15)',
+              transition: 'all 0.25s ease',
+            }}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <span>{isDirectoryOpen ? 'Hide Department Email Directory' : 'Explore Full Department Email Directory (25 Desks)'}</span>
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              style={{
+                transform: isDirectoryOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                transition: 'transform 0.3s ease',
+              }}
+            >
+              <polyline points="6 9 12 15 18 9" />
+            </svg>
+          </button>
         </div>
       </section>
+
+      {/* Official Email Directory Section (Collapsible) */}
+      {isDirectoryOpen && (
+        <section style={{ padding: '0 5% 5rem', maxWidth: '1200px', margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
+            <p style={{ fontWeight: 600, fontSize: '0.875rem', color: '#000000', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              Official Communication Channels
+            </p>
+            <h2 style={{ fontSize: '2.25rem', fontWeight: 600, letterSpacing: '-0.02em', color: '#101828', margin: '0 0 1rem 0' }}>
+              Department Email Directory
+            </h2>
+            <p style={{ color: '#475467', fontSize: '1rem', maxWidth: '600px', margin: '0 auto' }}>
+              Direct email channels for specialized corporate departments, enterprise partnerships, and leadership desks.
+            </p>
+          </div>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))',
+          gap: '1.5rem',
+        }}>
+          {emailCategories.map((cat, idx) => (
+            <div
+              key={idx}
+              style={{
+                backgroundColor: '#ffffff',
+                border: '1px solid #EAECF0',
+                borderRadius: '16px',
+                padding: '1.75rem',
+                boxShadow: '0 4px 12px -2px rgba(16,24,40,0.04)',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.25rem',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '10px',
+                  backgroundColor: '#f8fafc',
+                  border: '1px solid #e2e8f0',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#0f172a',
+                  flexShrink: 0,
+                }}>
+                  {cat.icon}
+                </div>
+                <div>
+                  <h3 style={{ fontSize: '1.1rem', fontWeight: 600, color: '#101828', margin: 0 }}>{cat.title}</h3>
+                  <p style={{ fontSize: '0.82rem', color: '#64748b', margin: '0.1rem 0 0 0' }}>{cat.subtitle}</p>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                {cat.emails.map((item, iIdx) => (
+                  <div
+                    key={iIdx}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      padding: '0.75rem 1rem',
+                      backgroundColor: '#f8fafc',
+                      borderRadius: '10px',
+                      border: '1px solid #f1f5f9',
+                    }}
+                  >
+                    <div style={{ minWidth: 0, flex: 1, paddingRight: '0.5rem' }}>
+                      <span style={{ display: 'block', fontSize: '0.75rem', fontWeight: 600, color: '#475467', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                        {item.role}
+                      </span>
+                      <a
+                        href={`mailto:${item.email}`}
+                        style={{ fontSize: '0.86rem', fontWeight: 600, color: '#0f172a', textDecoration: 'none', wordBreak: 'break-all' }}
+                      >
+                        {item.email}
+                      </a>
+                    </div>
+                    <a
+                      href={`mailto:${item.email}`}
+                      style={{
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.4rem',
+                        padding: '0.4rem 0.75rem',
+                        backgroundColor: '#ffffff',
+                        border: '1px solid #cbd5e1',
+                        borderRadius: '6px',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        color: '#0f172a',
+                        textDecoration: 'none',
+                        transition: 'all 0.2s',
+                        whiteSpace: 'nowrap',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <span>Email</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                      </svg>
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+      )}
 
       {/* FAQ Section */}
       <section style={{ padding: '0 5% 4rem', maxWidth: '1000px', margin: '0 auto' }}>
@@ -287,9 +513,8 @@ export default function ContactPage() {
         <div style={{ backgroundColor: '#ffffff', border: '1px solid #EAECF0', borderRadius: '16px', padding: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem', boxShadow: '0 4px 6px -1px rgba(16,24,40,0.05)' }}>
           
           <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-            {/* Single Avatar */}
             <div style={{ width: '56px', height: '56px', borderRadius: '50%', backgroundColor: '#f2f4f7', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&h=150" alt="Support Staff" style={{ width: '100%', height: '100%', objectFit: 'cover' }}  loading="lazy" decoding="async" />
+              <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&h=150" alt="Support Staff" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" decoding="async" />
             </div>
             
             <div>
