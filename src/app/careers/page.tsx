@@ -8,7 +8,10 @@ export default function CareersPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTeam, setSelectedTeam] = useState("All");
-  const [selectedLocation, setSelectedLocation] = useState("All");
+  const [selectedWorkMode, setSelectedWorkMode] = useState("All");
+  const [countryQuery, setCountryQuery] = useState("");
+  const [stateQuery, setStateQuery] = useState("");
+  const [cityQuery, setCityQuery] = useState("");
   
   const [dbJobs, setDbJobs] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -41,25 +44,144 @@ export default function CareersPage() {
     fetchJobs();
   }, []);
 
-  const uniqueLocations = useMemo(() => {
-    const locations = new Set<string>();
-    dbJobs.forEach(j => locations.add(j.location));
-    return Array.from(locations).sort();
+  // Discriminator helpers to prevent Cities & Work Setups from bleeding into State suggestions
+  const KNOWN_CITIES = useMemo(() => new Set([
+    'bangalore', 'bengaluru', 'mumbai', 'delhi', 'new delhi', 'dubai', 'abu dhabi',
+    'london', 'san francisco', 'new york', 'singapore', 'toronto', 'riyadh',
+    'berlin', 'tokyo', 'sydney', 'chicago', 'seattle', 'boston', 'austin'
+  ]), []);
+
+  const isWorkSetup = (val: string) => {
+    if (!val) return true;
+    const l = val.toLowerCase().trim();
+    return /^(field|hybrid|field\s*[\/\-]\s*hybrid|on-site|onsite|on-site\s*[\/\-]\s*hybrid|remote|remote\s*[\/\-]\s*hybrid|full-time|contract|part-time|internship)$/i.test(l);
+  };
+
+  const parsedJobs = useMemo(() => {
+    return dbJobs.map(job => {
+      const raw = (job.location || '').trim();
+      const typeRaw = (job.type || '').trim();
+
+      // Detect work mode (On-site, Hybrid, Remote, Field)
+      let workMode = 'Full-time';
+      const combo = `${typeRaw} ${raw}`.toLowerCase();
+      if (combo.includes('remote')) workMode = 'Remote';
+      else if (combo.includes('hybrid')) workMode = 'Hybrid';
+      else if (combo.includes('field')) workMode = 'Field';
+      else if (combo.includes('on-site') || combo.includes('onsite') || combo.includes('office')) workMode = 'On-site';
+      else if (typeRaw) workMode = typeRaw;
+
+      let city = '';
+      let state = '';
+      let country = '';
+
+      if (!isWorkSetup(raw)) {
+        const parts = raw.split(',').map((s: string) => s.trim()).filter(Boolean);
+        if (parts.length >= 3) {
+          city = parts[0];
+          state = parts[1];
+          country = parts[parts.length - 1];
+        } else if (parts.length === 2) {
+          city = parts[0];
+          // Only assign to state if parts[0] is not a known city
+          if (!KNOWN_CITIES.has(parts[0].toLowerCase())) {
+            state = parts[0];
+          }
+          country = parts[1];
+        } else if (parts.length === 1 && !isWorkSetup(parts[0])) {
+          if (KNOWN_CITIES.has(parts[0].toLowerCase())) {
+            city = parts[0];
+          } else {
+            country = parts[0];
+          }
+        }
+      }
+
+      return {
+        ...job,
+        parsedLoc: { city, state, country, workMode, raw }
+      };
+    });
+  }, [dbJobs, KNOWN_CITIES]);
+
+  const uniqueTeams = useMemo(() => {
+    const teams = new Set<string>();
+    dbJobs.forEach(j => {
+      const teamVal = j.team || j.department || j.category;
+      if (teamVal) teams.add(teamVal.trim());
+    });
+    return Array.from(teams).sort();
   }, [dbJobs]);
 
-  const uniqueTeams = ["All"]; 
+  const uniqueWorkModes = useMemo(() => {
+    const modes = new Set<string>();
+    parsedJobs.forEach(j => {
+      if (j.parsedLoc.workMode) modes.add(j.parsedLoc.workMode);
+    });
+    return Array.from(modes).sort();
+  }, [parsedJobs]);
+
+  // Clean, strictly validated location suggestions for autocomplete
+  const globalCountries = useMemo(() => {
+    const setC = new Set<string>(['Australia', 'Canada', 'Germany', 'India', 'Saudi Arabia', 'Singapore', 'United Arab Emirates', 'United Kingdom', 'United States']);
+    parsedJobs.forEach(j => {
+      if (j.parsedLoc.country && !isWorkSetup(j.parsedLoc.country) && !KNOWN_CITIES.has(j.parsedLoc.country.toLowerCase())) {
+        setC.add(j.parsedLoc.country);
+      }
+    });
+    return Array.from(setC).sort();
+  }, [parsedJobs, KNOWN_CITIES]);
+
+  const globalStates = useMemo(() => {
+    const setS = new Set<string>(['California', 'Dubai', 'Greater London', 'Karnataka', 'Maharashtra', 'New York State', 'Ontario', 'Riyadh Region', 'Texas']);
+    parsedJobs.forEach(j => {
+      if (j.parsedLoc.state && !isWorkSetup(j.parsedLoc.state) && !KNOWN_CITIES.has(j.parsedLoc.state.toLowerCase())) {
+        setS.add(j.parsedLoc.state);
+      }
+    });
+    return Array.from(setS).sort();
+  }, [parsedJobs, KNOWN_CITIES]);
+
+  const globalCities = useMemo(() => {
+    const setCt = new Set<string>(['Abu Dhabi', 'Bangalore', 'Delhi', 'Dubai', 'London', 'Mumbai', 'New York', 'Riyadh', 'San Francisco', 'Singapore', 'Toronto']);
+    parsedJobs.forEach(j => {
+      if (j.parsedLoc.city && !isWorkSetup(j.parsedLoc.city)) {
+        setCt.add(j.parsedLoc.city);
+      }
+    });
+    return Array.from(setCt).sort();
+  }, [parsedJobs]);
 
   const filteredJobs = useMemo(() => {
-    return dbJobs.filter(job => {
-      const matchSearch = job.title.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchLocation = selectedLocation === "All" || job.location === selectedLocation;
-      return matchSearch && matchLocation;
+    return parsedJobs.filter(job => {
+      const query = searchQuery.toLowerCase().trim();
+      const matchSearch = !query || 
+        (job.title && job.title.toLowerCase().includes(query)) ||
+        (job.type && job.type.toLowerCase().includes(query)) ||
+        (job.location && job.location.toLowerCase().includes(query)) ||
+        (job.role && job.role.toLowerCase().includes(query));
+
+      const jobTeam = (job.team || job.department || job.category || '').trim();
+      const matchTeam = selectedTeam === 'All' || jobTeam.toLowerCase() === selectedTeam.toLowerCase();
+
+      const matchWorkMode = selectedWorkMode === 'All' || job.parsedLoc.workMode.toLowerCase().includes(selectedWorkMode.toLowerCase());
+      
+      const cQ = countryQuery.toLowerCase().trim();
+      const matchCountry = !cQ || (job.location && job.location.toLowerCase().includes(cQ)) || job.parsedLoc.country.toLowerCase().includes(cQ);
+
+      const sQ = stateQuery.toLowerCase().trim();
+      const matchState = !sQ || (job.location && job.location.toLowerCase().includes(sQ)) || job.parsedLoc.state.toLowerCase().includes(sQ);
+
+      const ctQ = cityQuery.toLowerCase().trim();
+      const matchCity = !ctQ || (job.location && job.location.toLowerCase().includes(ctQ)) || job.parsedLoc.city.toLowerCase().includes(ctQ);
+
+      return matchSearch && matchTeam && matchWorkMode && matchCountry && matchState && matchCity;
     });
-  }, [dbJobs, searchQuery, selectedLocation]);
+  }, [parsedJobs, searchQuery, selectedTeam, selectedWorkMode, countryQuery, stateQuery, cityQuery]);
 
   React.useEffect(() => {
     setCurrentPage(1);
-  }, [searchQuery, selectedTeam, selectedLocation]);
+  }, [searchQuery, selectedTeam, selectedWorkMode, countryQuery, stateQuery, cityQuery]);
 
   const totalPages = Math.ceil(filteredJobs.length / jobsPerPage) || 1;
   
@@ -131,14 +253,25 @@ export default function CareersPage() {
           Work alongside experienced leaders, visionary innovators,<br/>
           creative builders, and passionate professionals.
         </p>
-        <button 
-          onClick={() => document.getElementById('open-positions')?.scrollIntoView({ behavior: 'smooth' })}
-          style={{ padding: '0.75rem 1.5rem', backgroundColor: '#ffffff', color: '#000000', borderRadius: '9999px', fontSize: '0.875rem', fontWeight: 600, border: 'none', cursor: 'pointer', transition: 'transform 0.2s', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
-          onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
-          onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
-        >
-          See Open Positions
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+          <button 
+            onClick={() => document.getElementById('open-positions')?.scrollIntoView({ behavior: 'smooth' })}
+            style={{ padding: '0.75rem 1.5rem', backgroundColor: '#ffffff', color: '#000000', borderRadius: '9999px', fontSize: '0.875rem', fontWeight: 600, border: 'none', cursor: 'pointer', transition: 'transform 0.2s', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
+            onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+            onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
+          >
+            See Open Positions
+          </button>
+
+          <button 
+            onClick={() => document.getElementById('freelance-section')?.scrollIntoView({ behavior: 'smooth' })}
+            style={{ padding: '0.75rem 1.5rem', backgroundColor: 'transparent', color: '#ffffff', border: '1px solid #3f3f46', borderRadius: '9999px', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s ease' }}
+            onMouseOver={(e) => { e.currentTarget.style.borderColor = '#ffffff'; e.currentTarget.style.backgroundColor = '#18181b'; e.currentTarget.style.transform = 'scale(1.05)'; }}
+            onMouseOut={(e) => { e.currentTarget.style.borderColor = '#3f3f46'; e.currentTarget.style.backgroundColor = 'transparent'; e.currentTarget.style.transform = 'scale(1)'; }}
+          >
+            Join as Freelance
+          </button>
+        </div>
       </div>
 
       {/* Horizontal Marquee Photo Grid */}
@@ -381,54 +514,145 @@ export default function CareersPage() {
           <span style={{ fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#9ca3af' }}>Openings</span>
           <h2 style={{ fontSize: '2.5rem', fontWeight: 700, marginTop: '0.5rem', marginBottom: '2.5rem' }}>Open Positions</h2>
           
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.5rem', width: '100%', maxWidth: '495px' }}>
-              <label style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Search</label>
+          {/* Filters & Search */}
+          <div style={{ maxWidth: '100%', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            
+            {/* Top Row: Search Input */}
+            <div style={{ width: '100%' }}>
               <div style={{ position: 'relative', width: '100%' }}>
                 <input 
                   type="text" 
-                  placeholder="Search for a role..." 
+                  placeholder="Search for a role, skill, or keyword..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{ width: '100%', backgroundColor: 'transparent', border: '1px solid #374151', color: '#ffffff', padding: '0.75rem 1rem 0.75rem 2.5rem', borderRadius: '0.375rem', outline: 'none', fontSize: '0.875rem' }} 
+                  style={{ width: '100%', backgroundColor: '#000000', border: '1px solid #27272a', color: '#ffffff', padding: '0.85rem 1rem 0.85rem 2.75rem', borderRadius: '8px', outline: 'none', fontSize: '0.925rem' }} 
                 />
-                <svg style={{ position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <svg style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.5rem' }}>
-              <label style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Team</label>
-              <div style={{ position: 'relative' }}>
-                <select 
-                  value={selectedTeam}
-                  onChange={(e) => setSelectedTeam(e.target.value)}
-                  style={{ backgroundColor: '#000000', border: '1px solid #374151', color: '#ffffff', padding: '0.75rem 2.5rem 0.75rem 1rem', borderRadius: '0.375rem', width: '240px', appearance: 'none', outline: 'none', fontSize: '0.875rem' }}
-                >
-                  <option value="All">All Teams</option>
-                  {uniqueTeams.map(team => (
-                    <option key={team} value={team}>{team}</option>
-                  ))}
-                </select>
-                <svg style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            {/* Bottom Row: 5 Distinct Dropdowns */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem', alignItems: 'end' }}>
+              
+              {/* 1. Team Dropdown */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.4rem', width: '100%' }}>
+                <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#9ca3af', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Team</label>
+                <div style={{ position: 'relative', width: '100%' }}>
+                  <select 
+                    value={selectedTeam}
+                    onChange={(e) => setSelectedTeam(e.target.value)}
+                    style={{ backgroundColor: '#000000', border: '1px solid #27272a', color: '#ffffff', padding: '0.7rem 2.25rem 0.7rem 0.85rem', borderRadius: '8px', width: '100%', appearance: 'none', outline: 'none', fontSize: '0.85rem', cursor: 'pointer' }}
+                  >
+                    <option value="All">All Teams</option>
+                    {uniqueTeams.map(team => (
+                      <option key={team} value={team}>{team}</option>
+                    ))}
+                  </select>
+                  <svg style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
               </div>
+
+              {/* 2. Work Setup Dropdown */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.4rem', width: '100%' }}>
+                <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#9ca3af', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Work Setup</label>
+                <div style={{ position: 'relative', width: '100%' }}>
+                  <select 
+                    value={selectedWorkMode}
+                    onChange={(e) => setSelectedWorkMode(e.target.value)}
+                    style={{ backgroundColor: '#000000', border: '1px solid #27272a', color: '#ffffff', padding: '0.7rem 2.25rem 0.7rem 0.85rem', borderRadius: '8px', width: '100%', appearance: 'none', outline: 'none', fontSize: '0.85rem', cursor: 'pointer' }}
+                  >
+                    <option value="All">All Setups</option>
+                    {uniqueWorkModes.map(mode => (
+                      <option key={mode} value={mode}>{mode}</option>
+                    ))}
+                  </select>
+                  <svg style={{ position: 'absolute', right: '0.85rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </div>
+              </div>
+
+              {/* 3. Country Typeable Input */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.4rem', width: '100%' }}>
+                <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#9ca3af', letterSpacing: '0.05em', textTransform: 'uppercase' }}>Country</label>
+                <div style={{ position: 'relative', width: '100%' }}>
+                  <input 
+                    type="text" 
+                    list="country-suggestions"
+                    placeholder="e.g. India, UAE, USA..." 
+                    value={countryQuery}
+                    onChange={(e) => setCountryQuery(e.target.value)}
+                    style={{ backgroundColor: '#000000', border: '1px solid #27272a', color: '#ffffff', padding: '0.7rem 0.85rem', borderRadius: '8px', width: '100%', outline: 'none', fontSize: '0.85rem' }} 
+                  />
+                  <datalist id="country-suggestions">
+                    {globalCountries.map(c => (
+                      <option key={c} value={c} />
+                    ))}
+                  </datalist>
+                </div>
+              </div>
+
+              {/* 4. State / Region Typeable Input */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.4rem', width: '100%' }}>
+                <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#9ca3af', letterSpacing: '0.05em', textTransform: 'uppercase' }}>State / Region</label>
+                <div style={{ position: 'relative', width: '100%' }}>
+                  <input 
+                    type="text" 
+                    list="state-suggestions"
+                    placeholder="e.g. Karnataka, Dubai..." 
+                    value={stateQuery}
+                    onChange={(e) => setStateQuery(e.target.value)}
+                    style={{ backgroundColor: '#000000', border: '1px solid #27272a', color: '#ffffff', padding: '0.7rem 0.85rem', borderRadius: '8px', width: '100%', outline: 'none', fontSize: '0.85rem' }} 
+                  />
+                  <datalist id="state-suggestions">
+                    {globalStates.map(s => (
+                      <option key={s} value={s} />
+                    ))}
+                  </datalist>
+                </div>
+              </div>
+
+              {/* 5. City Typeable Input */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.4rem', width: '100%' }}>
+                <label style={{ fontSize: '0.72rem', fontWeight: 600, color: '#9ca3af', letterSpacing: '0.05em', textTransform: 'uppercase' }}>City</label>
+                <div style={{ position: 'relative', width: '100%' }}>
+                  <input 
+                    type="text" 
+                    list="city-suggestions"
+                    placeholder="e.g. Bangalore, London..." 
+                    value={cityQuery}
+                    onChange={(e) => setCityQuery(e.target.value)}
+                    style={{ backgroundColor: '#000000', border: '1px solid #27272a', color: '#ffffff', padding: '0.7rem 0.85rem', borderRadius: '8px', width: '100%', outline: 'none', fontSize: '0.85rem' }} 
+                  />
+                  <datalist id="city-suggestions">
+                    {globalCities.map(ct => (
+                      <option key={ct} value={ct} />
+                    ))}
+                  </datalist>
+                </div>
+              </div>
+
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '0.5rem' }}>
-              <label style={{ fontSize: '0.75rem', color: '#9ca3af' }}>Location</label>
-              <div style={{ position: 'relative' }}>
-                <select 
-                  value={selectedLocation}
-                  onChange={(e) => setSelectedLocation(e.target.value)}
-                  style={{ backgroundColor: '#000000', border: '1px solid #374151', color: '#ffffff', padding: '0.75rem 2.5rem 0.75rem 1rem', borderRadius: '0.375rem', width: '240px', appearance: 'none', outline: 'none', fontSize: '0.875rem' }}
+            {/* Clear Active Filters Bar if active */}
+            {(searchQuery !== '' || selectedTeam !== 'All' || selectedWorkMode !== 'All' || countryQuery !== '' || stateQuery !== '' || cityQuery !== '') && (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingTop: '0.5rem' }}>
+                <span style={{ fontSize: '0.82rem', color: '#9ca3af' }}>
+                  Showing <strong>{filteredJobs.length}</strong> {filteredJobs.length === 1 ? 'position' : 'positions'}
+                </span>
+                <button
+                  onClick={() => {
+                    setSearchQuery('');
+                    setSelectedTeam('All');
+                    setSelectedWorkMode('All');
+                    setCountryQuery('');
+                    setStateQuery('');
+                    setCityQuery('');
+                  }}
+                  style={{ backgroundColor: 'transparent', border: 'none', color: '#ffffff', textDecoration: 'underline', fontSize: '0.82rem', cursor: 'pointer' }}
                 >
-                  <option value="All">All Locations</option>
-                  {uniqueLocations.map(loc => (
-                    <option key={loc} value={loc}>{loc}</option>
-                  ))}
-                </select>
-                <svg style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                  Clear all filters ✕
+                </button>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -524,6 +748,7 @@ export default function CareersPage() {
 
       {/* ── Looking for Freelance Section (At the very end of Careers page) ── */}
       <section
+        id="freelance-section"
         style={{
           backgroundColor: '#000000',
           color: '#ffffff',
