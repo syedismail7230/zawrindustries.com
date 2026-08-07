@@ -199,7 +199,7 @@ export default function Header() {
             <Link href="/about#history" onClick={closeMobileMenu}>Our History</Link>
             <Link href="/about#board" onClick={closeMobileMenu}>Board of Directors</Link>
             <Link href="/about#impact" onClick={closeMobileMenu}>Our Impact</Link>
-            <Link href="/about#blog" onClick={closeMobileMenu}>Blog</Link>
+            <Link href="/about/blog" onClick={closeMobileMenu}>Blog</Link>
             <Link href="/about#values" onClick={closeMobileMenu}>Values</Link>
             <Link href="/about#vision" onClick={closeMobileMenu}>Vision</Link>
             <Link href="/about#mission" onClick={closeMobileMenu}>Mission</Link>

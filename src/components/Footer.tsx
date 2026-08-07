@@ -188,7 +188,7 @@ export default function Footer() {
             <li><Link href="/about#board">Board of directors</Link></li>
             <li><Link href="/about#awards">Awards</Link></li>
             <li><Link href="/about#impact">Our Impact</Link></li>
-            <li><Link href="/about#blog">Blog</Link></li>
+            <li><Link href="/about/blog">Blog</Link></li>
             <li><Link href="/about#values">Values</Link></li>
             <li><Link href="/about#vision">Vision</Link></li>
             <li><Link href="/about#mission">Mission</Link></li>
