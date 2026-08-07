@@ -27,9 +27,10 @@ const emailCategories = [
   },
   {
     title: 'Technology & Cloud Solutions',
-    subtitle: 'Engineering, IT services, and architecture',
+    subtitle: 'AI, engineering, IT services, and architecture',
     icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>,
     emails: [
+      { role: 'AI & Machine Learning Desk', email: 'ai@zawrindustries.com' },
       { role: 'Engineering & Technology', email: 'tech@zawrindustries.com' },
       { role: 'IT Services & Infrastructure', email: 'it@zawrindustries.com' },
       { role: 'Cloud & Infrastructure', email: 'cloud@zawrindustries.com' },
@@ -342,7 +343,7 @@ export default function ContactPage() {
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
               <polyline points="22,6 12,13 2,6"/>
             </svg>
-            <span>{isDirectoryOpen ? 'Hide Department Email Directory' : 'Explore Full Department Email Directory (25 Desks)'}</span>
+            <span>{isDirectoryOpen ? 'Hide Department Email Directory' : 'Explore Full Department Email Directory (26 Desks)'}</span>
             <svg
               width="16"
               height="16"
