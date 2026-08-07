@@ -2,39 +2,50 @@
 
 import { useState, useEffect, useRef } from 'react';
 
+type WidgetMode = 'closed' | 'floating' | 'modal';
+
 export default function SupportWidget() {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [mode, setMode] = useState<WidgetMode>('closed');
   const iframeRef = useRef<HTMLIFrameElement>(null);
 
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      if (event.data === 'widget-open') {
-        setIsExpanded(true);
-      } else if (event.data === 'widget-close') {
-        setIsExpanded(false);
+      if (!event.data) return;
+
+      const data = event.data;
+      const isExpand = data === 'widget-expand' || (data.type === 'widget-expand' && data.isExpanded);
+      const isCompress = data === 'widget-compress' || (data.type === 'widget-expand' && !data.isExpanded);
+
+      if (isExpand) {
+        setMode('modal');
+      } else if (isCompress) {
+        setMode('floating');
+      } else if (data === 'widget-open') {
+        setMode('floating');
+      } else if (data === 'widget-close') {
+        setMode('closed');
       }
     };
+
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
   }, []);
 
-  // Re-send page context whenever the widget is opened so the AI always
-  // has the current page URL/title (fixes timing race on initial load)
+  // Re-send page context whenever the widget is opened or mode changes
   useEffect(() => {
-    if (!isExpanded) return;
-    // Small delay to ensure the iframe's React listener is mounted
+    if (mode === 'closed') return;
     const timer = setTimeout(() => sendPageContext(), 300);
     return () => clearTimeout(timer);
-  }, [isExpanded]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [mode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Keep context fresh on Next.js client-side navigation
   useEffect(() => {
     const onRouteChange = () => {
-      if (isExpanded) sendPageContext();
+      if (mode !== 'closed') sendPageContext();
     };
     window.addEventListener('popstate', onRouteChange);
     return () => window.removeEventListener('popstate', onRouteChange);
-  }, [isExpanded]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [mode]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const sendPageContext = () => {
     if (!iframeRef.current?.contentWindow) return;
@@ -46,85 +57,149 @@ export default function SupportWidget() {
       .map(h => (h as HTMLElement).innerText.trim())
       .filter(Boolean);
     if (headings.length > 0) snippet += 'Headings: ' + headings.join(' | ');
+
     iframeRef.current.contentWindow.postMessage({
       type: 'page-context',
       url: window.location.href,
       title: document.title,
-      snippet: snippet.substring(0, 500)
+      snippet: snippet.substring(0, 500) || (document.body.innerText ? document.body.innerText.substring(0, 300) : '')
     }, '*');
   };
 
-  return (
-    <div
-      style={{
+  // Dynamic CSS properties depending on active widget mode
+  const getContainerStyle = (): React.CSSProperties => {
+    if (mode === 'modal') {
+      return {
         position: 'fixed',
-        bottom: isExpanded ? '24px' : '20px',
-        right: isExpanded ? '24px' : '20px',
-        width: isExpanded ? '380px' : '64px',
-        height: isExpanded ? '560px' : '64px',
+        top: '50%',
+        left: '50%',
+        bottom: 'auto',
+        right: 'auto',
+        transform: 'translate(-50%, -50%)',
+        width: '90vw',
+        height: '85vh',
+        maxWidth: '920px',
+        maxHeight: '780px',
         zIndex: 999999,
-        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-        borderRadius: isExpanded ? '16px' : '50%',
+        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        borderRadius: '20px',
         overflow: 'hidden',
         background: '#121214',
-        boxShadow: isExpanded
-          ? '0 8px 32px rgba(0,0,0,0.4)'
-          : '0 4px 16px rgba(0,0,0,0.25)',
-      }}
-    >
-      {/* Iframe — always mounted to preserve chat state */}
-      <iframe
-        ref={iframeRef}
-        src="https://crm.zawrindustries.com/widget/support"
-        style={{
-          width: '100%',
-          height: '100%',
-          border: 'none',
-          background: 'transparent',
-          colorScheme: 'dark',
-          display: 'block',
-          // Block all interaction when collapsed so clicks don't go into the iframe
-          pointerEvents: isExpanded ? 'auto' : 'none',
-        }}
-        onLoad={sendPageContext}
-        title="Zawr Support"
-      />
+        boxShadow: '0 30px 80px rgba(0,0,0,0.8)',
+      };
+    }
 
-      {/* Bubble button overlay — only visible when collapsed */}
-      {!isExpanded && (
-        <button
-          suppressHydrationWarning
-          onClick={() => setIsExpanded(true)}
-          aria-label="Open support chat"
+    if (mode === 'floating') {
+      return {
+        position: 'fixed',
+        bottom: '16px',
+        right: '16px',
+        top: 'auto',
+        left: 'auto',
+        transform: 'none',
+        width: '380px',
+        height: '560px',
+        maxWidth: 'calc(100vw - 32px)',
+        maxHeight: 'calc(100vh - 32px)',
+        zIndex: 999999,
+        transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+        borderRadius: '16px',
+        overflow: 'hidden',
+        background: '#121214',
+        boxShadow: '0 20px 50px rgba(0,0,0,0.5)',
+      };
+    }
+
+    // Closed mode (Bubble Button)
+    return {
+      position: 'fixed',
+      bottom: '20px',
+      right: '20px',
+      top: 'auto',
+      left: 'auto',
+      transform: 'none',
+      width: '64px',
+      height: '64px',
+      zIndex: 999999,
+      transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+      borderRadius: '50%',
+      overflow: 'hidden',
+      background: '#121214',
+      boxShadow: '0 4px 16px rgba(0,0,0,0.25)',
+    };
+  };
+
+  return (
+    <>
+      {/* Modal Dark Backdrop Overlay when in pop-up modal mode */}
+      {mode === 'modal' && (
+        <div
+          onClick={() => setMode('floating')}
           style={{
-            position: 'absolute',
+            position: 'fixed',
             inset: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.65)',
+            backdropFilter: 'blur(4px)',
+            zIndex: 999998,
+            transition: 'opacity 0.3s ease',
+          }}
+        />
+      )}
+
+      <div style={getContainerStyle()}>
+        {/* Iframe — always mounted to preserve chat state */}
+        <iframe
+          ref={iframeRef}
+          src="https://crm.zawrindustries.com/widget/support"
+          style={{
             width: '100%',
             height: '100%',
-            background: '#000',
             border: 'none',
-            borderRadius: '50%',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            background: 'transparent',
+            colorScheme: 'dark',
+            display: 'block',
+            pointerEvents: mode !== 'closed' ? 'auto' : 'none',
           }}
-        >
-          {/* Chat bubble SVG icon */}
-          <svg
-            width="28"
-            height="28"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="white"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
+          onLoad={sendPageContext}
+          title="Zawr Support"
+        />
+
+        {/* Bubble button overlay — only visible when collapsed */}
+        {mode === 'closed' && (
+          <button
+            suppressHydrationWarning
+            onClick={() => setMode('floating')}
+            aria-label="Open support chat"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              background: '#000',
+              border: 'none',
+              borderRadius: '50%',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
           >
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-          </svg>
-        </button>
-      )}
-    </div>
+            {/* Chat bubble SVG icon */}
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="white"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+          </button>
+        )}
+      </div>
+    </>
   );
 }
