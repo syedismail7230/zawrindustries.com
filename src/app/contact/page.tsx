@@ -513,8 +513,8 @@ export default function ContactPage() {
       <section style={{ padding: '0 5%', maxWidth: '1000px', margin: '2rem auto 0' }}>
         <div style={{ backgroundColor: '#ffffff', border: '1px solid #EAECF0', borderRadius: '16px', padding: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem', boxShadow: '0 4px 6px -1px rgba(16,24,40,0.05)' }}>
           
-          <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center' }}>
-            <div style={{ width: '56px', height: '56px', borderRadius: '50%', backgroundColor: '#f2f4f7', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
+            <div style={{ width: '56px', height: '56px', minWidth: '56px', minHeight: '56px', flexShrink: 0, aspectRatio: '1 / 1', borderRadius: '50%', backgroundColor: '#f2f4f7', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&h=150" alt="Support Staff" style={{ width: '100%', height: '100%', objectFit: 'cover' }} loading="lazy" decoding="async" />
             </div>
             
