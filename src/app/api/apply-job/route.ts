@@ -56,7 +56,7 @@ export async function POST(req: Request) {
     });
 
     const hrMailOptions = {
-      from: process.env.GMAIL_FROM || `"Zawr Careers" <${process.env.GMAIL_USER}>`,
+      from: process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`,
       replyTo: email || 'noreply@zawrindustries.com',
       to: 'hr@zawrindustries.com',
       subject: `New Job Application: ${firstName} ${lastName || ''} for ${jobTitle}`,

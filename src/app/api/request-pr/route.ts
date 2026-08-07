@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     });
 
     const mailOptions = {
-      from: process.env.GMAIL_FROM || `"Zawr PR" <${process.env.GMAIL_USER}>`,
+      from: process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`,
       replyTo: email || 'public-relations@zawrindustries.com',
       to: 'public-relations@zawrindustries.com', 
       subject: `🚨 New PR Inquiry from ${firstName} ${lastName}`,

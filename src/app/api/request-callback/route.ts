@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     });
 
     const mailOptions = {
-      from: process.env.GMAIL_FROM || `"Zawr Client Relations" <${process.env.GMAIL_USER}>`,
+      from: process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`,
       replyTo: 'client-relations@zawrindustries.com',
       to: 'client-relations@zawrindustries.com',
       subject: `🚨 New Call Back Request: Priority [${priority.toUpperCase()}]`,

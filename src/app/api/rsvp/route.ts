@@ -20,7 +20,7 @@ export async function POST(req: Request) {
     });
 
     const mailOptions = {
-      from: process.env.GMAIL_FROM || `"Zawr Events" <${process.env.GMAIL_USER}>`,
+      from: process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`,
       replyTo: email || 'events@zawrindustries.com',
       to: 'events@zawrindustries.com',
       subject: `New RSVP Booking Request: ${name} for ${eventTitle}`,

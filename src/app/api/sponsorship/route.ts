@@ -54,7 +54,7 @@ export async function POST(req: Request) {
     }
 
     const marketingMailOptions = {
-      from: process.env.GMAIL_FROM || `"Zawr Sponsorship" <${process.env.GMAIL_USER}>`,
+      from: process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`,
       replyTo: fields.email || 'marketing@zawrindustries.com',
       to: 'marketing@zawrindustries.com', 
       subject: `New Sponsorship Request from ${fields.companyName} - ${fields.sponsorshipType}`,

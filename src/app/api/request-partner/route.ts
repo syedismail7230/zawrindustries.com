@@ -161,7 +161,7 @@ Collaboration Goals: ${r.collaborationGoals}`;
     });
 
     const mailOptions = {
-      from: process.env.GMAIL_FROM || `"Zawr Partnerships" <${process.env.GMAIL_USER}>`,
+      from: process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`,
       replyTo: email || 'partnership@zawrindustries.com',
       to: 'partnership@zawrindustries.com', 
       subject: `🤝 New Strategic Partnership Inquiry: ${company}`,
