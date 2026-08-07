@@ -37,7 +37,7 @@ export default function AboutPage() {
     'alternateName': 'Zawr Industries',
     'legalName': 'Zawr Industries LLP',
     'url': 'https://zawrindustries.com',
-    'logo': 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png',
+    'logo': 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png',
     'description': 'Zawr Industries LLP is a leading Indian technology, software engineering, and business transformation company headquartered in Bangalore.',
   };
 

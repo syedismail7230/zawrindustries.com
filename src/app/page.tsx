@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     siteName: 'Zawr Industries LLP',
     images: [
       {
-        url: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710570/zawr/assets/zawr-logo.png',
+        url: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1200,c_limit/v1783710570/zawr/assets/zawr-logo.png',
         width: 1200,
         height: 630,
         alt: 'Zawr Industries LLP Corporate Logo',
@@ -85,7 +85,7 @@ export default function Home() {
           {/* Left Column: Construction Illustration */}
           <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
             <img 
-              src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_600,c_limit,dpr_auto/v1783710573/zawr/images/reconstruction.png" 
+              src="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_600,c_limit,dpr_auto/v1783710573/zawr/images/reconstruction.png" 
               alt="Website Under Reconstruction" 
               width="460"
               height="316"

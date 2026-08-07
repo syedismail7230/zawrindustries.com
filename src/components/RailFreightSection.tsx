@@ -60,7 +60,7 @@ export function RailFreightSection() {
         {/* Top Image Frame with train.png matching reference screenshot */}
         <div className="rail-image-frame">
           <img
-            src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1785807651/zawr/assets/train.png"
+            src="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1785807651/zawr/assets/train.png"
             alt="Zawr Industries Intermodal Rail Freight Telemetry"
             style={{
               width: '100%',

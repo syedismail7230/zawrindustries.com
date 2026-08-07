@@ -54,7 +54,7 @@ export const metadata: Metadata = {
     siteName: 'Zawr Industries LLP',
     images: [
       {
-        url: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png',
+        url: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png',
         width: 1200,
         height: 630,
         alt: 'Zawr Industries Corporate Profile',
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Zawr Industries LLP',
     description: 'Multi-sector conglomerate engineering AI platforms, automated logistics, and industrial technology.',
-    images: ['https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png'],
+    images: ['https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png'],
   },
   icons: {
     icon: [
@@ -120,8 +120,8 @@ export default function RootLayout({
                   "legalName": "Zawr Industries LLP",
                   "alternateName": ["Zawr", "Zawr Industries", "Zawr Group"],
                   "url": "https://zawrindustries.com",
-                  "logo": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png",
-                  "image": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png",
+                  "logo": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png",
+                  "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png",
                   "description": "Zawr Industries LLP is an Indian multi-sector industrial conglomerate headquartered in Bengaluru. The company delivers enterprise software, artificial intelligence platforms, cloud solutions, automated supply chain logistics, precision manufacturing, real estate, and healthcare technology globally.",
                   "foundingDate": "2024-01-12",
                   "founders": [

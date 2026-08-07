@@ -42,7 +42,7 @@ export default function MediaKitPage() {
       category: 'Corporate',
       color: '#000000',
       borderColor: '#e5e7eb',
-      logoUrl: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png',
+      logoUrl: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png',
       svgIcon: (
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '50%', height: '50%' }}>
           <path d="M15 20H85L30 80H85" stroke="#000000" strokeWidth="12" strokeLinecap="round" strokeLinejoin="round"/>
@@ -57,7 +57,7 @@ export default function MediaKitPage() {
       category: 'Platform',
       color: '#10b981',
       borderColor: '#a7f3d0',
-      logoUrl: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710560/zawr/assets/velocityos.png',
+      logoUrl: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1200,c_limit/v1783710560/zawr/assets/velocityos.png',
       svgIcon: (
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '50%', height: '50%' }}>
           <rect x="15" y="15" width="70" height="70" rx="12" stroke="#10b981" strokeWidth="8"/>
@@ -73,7 +73,7 @@ export default function MediaKitPage() {
       category: 'Creative Suite',
       color: '#ec4899',
       borderColor: '#fbcfe8',
-      logoUrl: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710550/zawr/assets/sketchstudio.png',
+      logoUrl: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1200,c_limit/v1783710550/zawr/assets/sketchstudio.png',
       svgIcon: (
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '50%', height: '50%' }}>
           <path d="M30 20L70 20L85 45L50 85L15 45L30 20Z" stroke="#ec4899" strokeWidth="8" strokeLinejoin="round"/>
@@ -89,7 +89,7 @@ export default function MediaKitPage() {
       category: 'Analytics',
       color: '#3b82f6',
       borderColor: '#bfdbfe',
-      logoUrl: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710483/zawr/assets/firm-ai.png',
+      logoUrl: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1200,c_limit/v1783710483/zawr/assets/firm-ai.png',
       svgIcon: (
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '50%', height: '50%' }}>
           <rect x="20" y="55" width="12" height="25" rx="2" fill="#3b82f6"/>
@@ -106,7 +106,7 @@ export default function MediaKitPage() {
       category: 'Intelligence',
       color: '#8b5cf6',
       borderColor: '#ddd6fe',
-      logoUrl: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710568/zawr/assets/zawr-ai.png',
+      logoUrl: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1200,c_limit/v1783710568/zawr/assets/zawr-ai.png',
       svgIcon: (
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '50%', height: '50%' }}>
           <path d="M50 15L80 32.5V67.5L50 85L20 67.5V32.5L50 15Z" stroke="#8b5cf6" strokeWidth="8" strokeLinejoin="round"/>
@@ -122,7 +122,7 @@ export default function MediaKitPage() {
       category: 'Enterprise CRM',
       color: '#f59e0b',
       borderColor: '#fde68a',
-      logoUrl: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710546/zawr/assets/quick-dial.png',
+      logoUrl: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1200,c_limit/v1783710546/zawr/assets/quick-dial.png',
       svgIcon: (
         <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: '50%', height: '50%' }}>
           <circle cx="50" cy="50" r="35" stroke="#f59e0b" strokeWidth="8"/>

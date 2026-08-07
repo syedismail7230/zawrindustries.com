@@ -215,7 +215,7 @@ export default function ITServicesPageClient() {
           position: 'relative',
           width: '100%',
           height: '100vh',
-          backgroundImage: 'url("https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710520/zawr/assets/it-services-hero.png")',
+          backgroundImage: 'url("https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710520/zawr/assets/it-services-hero.png")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           display: 'flex',
@@ -548,12 +548,12 @@ export default function ITServicesPageClient() {
                 <div key={proj.id} className="project-folder-card" onClick={(e) => handleProjectClick(e, proj)}>
                   <div className="folder-img-container">
                     <img 
-                      src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710489/zawr/assets/folder.png" 
+                      src="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1200,c_limit/v1783710489/zawr/assets/folder.png" 
                       alt="Closed Folder" 
                       className="folder-img closed-img"
                      loading="lazy" decoding="async" />
                     <img 
-                      src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit/v1783710488/zawr/assets/folder-open.png" 
+                      src="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1200,c_limit/v1783710488/zawr/assets/folder-open.png" 
                       alt="Open Folder" 
                       className="folder-img open-img"
                      loading="lazy" decoding="async" />
@@ -585,18 +585,18 @@ export default function ITServicesPageClient() {
             </h2>
             <div className="partners-grid">
               {[
-                { name: 'Salesforce', src: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710537/zawr/assets/partner/salesforce-removebg-preview.png' },
-                { name: 'Razorpay', src: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710536/zawr/assets/partner/razorpay-removebg-preview.png' },
-                { name: 'Nvidia', src: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710535/zawr/assets/partner/nvidia-removebg-preview.png' },
-                { name: 'Google', src: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710531/zawr/assets/partner/google-removebg-preview.png' },
-                { name: 'Microsoft', src: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710534/zawr/assets/partner/microsoft-removebg-preview.png' },
-                { name: 'AWS', src: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710530/zawr/assets/partner/aws-removebg-preview.png' },
-                { name: 'Anthropic', src: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710528/zawr/assets/partner/anthropic-removebg-preview.png' },
-                { name: 'Apple', src: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710529/zawr/assets/partner/apple-removebg-preview.png' },
-                { name: 'Intel', src: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710532/zawr/assets/partner/intel-removebg-preview.png' },
-                { name: 'Meta', src: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710533/zawr/assets/partner/meta-removebg-preview.png' },
-                { name: 'Shopify', src: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710538/zawr/assets/partner/shopify-removebg-preview.png' },
-                { name: 'Zoho', src: 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710539/zawr/assets/partner/zoho-removebg-preview.png' },
+                { name: 'Salesforce', src: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710537/zawr/assets/partner/salesforce-removebg-preview.png' },
+                { name: 'Razorpay', src: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710536/zawr/assets/partner/razorpay-removebg-preview.png' },
+                { name: 'Nvidia', src: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710535/zawr/assets/partner/nvidia-removebg-preview.png' },
+                { name: 'Google', src: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710531/zawr/assets/partner/google-removebg-preview.png' },
+                { name: 'Microsoft', src: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710534/zawr/assets/partner/microsoft-removebg-preview.png' },
+                { name: 'AWS', src: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710530/zawr/assets/partner/aws-removebg-preview.png' },
+                { name: 'Anthropic', src: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710528/zawr/assets/partner/anthropic-removebg-preview.png' },
+                { name: 'Apple', src: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710529/zawr/assets/partner/apple-removebg-preview.png' },
+                { name: 'Intel', src: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710532/zawr/assets/partner/intel-removebg-preview.png' },
+                { name: 'Meta', src: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710533/zawr/assets/partner/meta-removebg-preview.png' },
+                { name: 'Shopify', src: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710538/zawr/assets/partner/shopify-removebg-preview.png' },
+                { name: 'Zoho', src: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710539/zawr/assets/partner/zoho-removebg-preview.png' },
               ].map((partner) => (
                 <div 
                   key={partner.name}

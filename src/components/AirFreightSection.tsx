@@ -161,7 +161,7 @@ export function AirFreightSection() {
         {/* Right Column: plane.png flush against the right edge */}
         <div className="air-freight-right-img-wrapper">
           <img
-            src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1785808162/zawr/assets/plane.png"
+            src="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1785808162/zawr/assets/plane.png"
             alt="Zawr Industries Global Air Freighter Fleet Telemetry"
           />
         </div>

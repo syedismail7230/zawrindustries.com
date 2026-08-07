@@ -122,7 +122,7 @@ export function InteractiveTruckXray() {
       >
         {/* Layer 1: Closed Container Truck (truck-container.png) */}
         <img
-          src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1785802031/zawr/assets/truck-container.png"
+          src="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1785802031/zawr/assets/truck-container.png"
           alt="ZAWR Logistics Closed Container Truck"
           style={{
             position: 'absolute',
@@ -136,7 +136,7 @@ export function InteractiveTruckXray() {
 
         {/* Layer 2: Inner Cargo Truck (truck-container-naked.png) clipped with dynamic cursor circle */}
         <img
-          src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1785802032/zawr/assets/truck-container-naked.png"
+          src="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1785802032/zawr/assets/truck-container-naked.png"
           alt="ZAWR Logistics Inner Cargo Stowage"
           style={{
             position: 'absolute',

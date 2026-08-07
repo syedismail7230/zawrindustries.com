@@ -12,7 +12,7 @@
       { "label": "Enterprise IT Platform", "url": "https://zawrindustries.com/industries/it-service" }
     ],
     "archived": false,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710544/zawr/assets/public-relations-hero.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710544/zawr/assets/public-relations-hero.png"
   },
   {
     "id": "PR-017",
@@ -27,7 +27,7 @@
       { "label": "Visit Sketch Studio", "url": "https://sketchstudio.dev" }
     ],
     "archived": false,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710521/zawr/assets/life-at-zawr.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710521/zawr/assets/life-at-zawr.png"
   },
   {
     "id": "PR-016",
@@ -42,7 +42,7 @@
       { "label": "Sustainability Page", "url": "https://zawrindustries.com/sustainability/environment" }
     ],
     "archived": false,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710557/zawr/assets/this-is-zawr.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710557/zawr/assets/this-is-zawr.png"
   },
   {
     "id": "PR-015",
@@ -57,7 +57,7 @@
       { "label": "Logistics Platform", "url": "https://zawrindustries.com/industries/transport-and-logistics" }
     ],
     "archived": false,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710436/zawr/assets/careers-1.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710436/zawr/assets/careers-1.png"
   },
   {
     "id": "PR-014",
@@ -72,7 +72,7 @@
       { "label": "Explore Firm AI", "url": "https://www.firm.expert" }
     ],
     "archived": false,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710484/zawr/assets/firmai-dashboard.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710484/zawr/assets/firmai-dashboard.png"
   },
   {
     "id": "PR-013",
@@ -87,7 +87,7 @@
       { "label": "Financial Reports Portal", "url": "https://zawrindustries.com/investors/financial-report" }
     ],
     "archived": false,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710482/zawr/assets/financial-chart.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710482/zawr/assets/financial-chart.png"
   },
   {
     "id": "PR-012",
@@ -102,7 +102,7 @@
       { "label": "Sustainability Page", "url": "https://zawrindustries.com/sustainability/environment" }
     ],
     "archived": false,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710441/zawr/assets/careers-2.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710441/zawr/assets/careers-2.png"
   },
   {
     "id": "PR-011",
@@ -117,7 +117,7 @@
       { "label": "Launch Sketch Studio", "url": "https://sketchstudio.dev" }
     ],
     "archived": false,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710443/zawr/assets/careers-3.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710443/zawr/assets/careers-3.png"
   },
   {
     "id": "PR-010",
@@ -132,7 +132,7 @@
       { "label": "Investors Portal", "url": "https://zawrindustries.com/investors" }
     ],
     "archived": false,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710445/zawr/assets/careers-4.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710445/zawr/assets/careers-4.png"
   },
   {
     "id": "PR-009",
@@ -147,7 +147,7 @@
       { "label": "About the Company", "url": "https://zawrindustries.com/about" }
     ],
     "archived": false,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710446/zawr/assets/careers-5.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710446/zawr/assets/careers-5.png"
   },
   {
     "id": "PR-008",
@@ -162,7 +162,7 @@
       { "label": "VelocityOS Platform", "url": "https://velocityos.in" }
     ],
     "archived": false,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710447/zawr/assets/careers-6.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710447/zawr/assets/careers-6.png"
   },
   {
     "id": "PR-007",
@@ -177,7 +177,7 @@
       { "label": "Newsroom Hub", "url": "https://zawrindustries.com/newsroom" }
     ],
     "archived": false,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710480/zawr/assets/event-speaker.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710480/zawr/assets/event-speaker.png"
   },
   {
     "id": "PR-006",
@@ -192,7 +192,7 @@
       { "label": "Logistics Network", "url": "https://zawrindustries.com/industries/transport-and-logistics" }
     ],
     "archived": false,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710448/zawr/assets/careers-7.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710448/zawr/assets/careers-7.png"
   },
   {
     "id": "PR-005",
@@ -207,7 +207,7 @@
       { "label": "Explore Zawr AI", "url": "https://ai.zawrindustries.com" }
     ],
     "archived": false,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710449/zawr/assets/careers-8.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710449/zawr/assets/careers-8.png"
   },
   {
     "id": "PR-004",
@@ -222,7 +222,7 @@
       { "label": "Real Estate Division", "url": "https://zawrindustries.com/industries/estate" }
     ],
     "archived": false,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710450/zawr/assets/careers-9.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710450/zawr/assets/careers-9.png"
   },
   {
     "id": "PR-003-ARC",
@@ -237,7 +237,7 @@
       { "label": "Equal Opportunity Policy", "url": "https://zawrindustries.com/careers/equal-opportunity" }
     ],
     "archived": true,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710476/zawr/assets/equal-growth.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710476/zawr/assets/equal-growth.png"
   },
   {
     "id": "PR-002-ARC",
@@ -252,7 +252,7 @@
       { "label": "Investors Center", "url": "https://zawrindustries.com/investors" }
     ],
     "archived": true,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710437/zawr/assets/careers-10.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710437/zawr/assets/careers-10.png"
   },
   {
     "id": "PR-001-ARC",
@@ -267,6 +267,6 @@
       { "label": "Logistics Page", "url": "https://zawrindustries.com/industries/transport-and-logistics" }
     ],
     "archived": true,
-    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710438/zawr/assets/careers-11.png"
+    "banner": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710438/zawr/assets/careers-11.png"
   }
 ]

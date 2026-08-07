@@ -143,7 +143,7 @@ export function AgvScrollSection() {
           }}
         >
           <img
-            src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1200,c_limit,dpr_auto/v1785803597/zawr/assets/AGV.png"
+            src="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1200,c_limit,dpr_auto/v1785803597/zawr/assets/AGV.png"
             alt="ZAWR Automated Guided Vehicle AGV Robot"
             className="agv-vehicle-img"
             style={{

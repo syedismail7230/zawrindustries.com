@@ -94,9 +94,9 @@ export default function ClientRelationsPage() {
 
           {/* Right Image */}
           <div style={{ width: '100%', position: 'relative', minHeight: '350px' }} className="hero-right">
-            {/* The image will be pulled from publichttps://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710459/zawr/assets/customer-hero.png */}
+            {/* The image will be pulled from publichttps://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710459/zawr/assets/customer-hero.png */}
             <img 
-              src="https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710459/zawr/assets/customer-hero.png" 
+              src="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710459/zawr/assets/customer-hero.png" 
               alt="Client Relations" 
               style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, width: '100%', height: '100%', objectFit: 'cover' }}
              loading="lazy" decoding="async" />

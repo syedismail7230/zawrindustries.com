@@ -51,7 +51,7 @@ export default function LogisticsPage() {
         width: '100%',
         height: '100vh',
         minHeight: '100vh',
-        backgroundImage: 'url("https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1785797723/zawr/assets/logistics-hero.png"), url("/assets/logistics-hero.png")',
+        backgroundImage: 'url("https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1785797723/zawr/assets/logistics-hero.png"), url("/assets/logistics-hero.png")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         display: 'flex',

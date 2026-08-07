@@ -24,7 +24,7 @@ const fallbackBlogs: Blog[] = [
     date: "18 June 2026",
     category: "Technology",
     summary: "Enterprise cloud migrations require robust security, high availability, and containerized microservices. Explore scalable architectures.",
-    image: "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710431/zawr/assets/blogs/blog-BLOG-9-laptop_on_cloud_with_ERP_dashboard_in_light_gradient__color_theme___000714_and__13578c__1_.jpg",
+    image: "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco/v1783710431/zawr/assets/blogs/blog-BLOG-9-laptop_on_cloud_with_ERP_dashboard_in_light_gradient__color_theme___000714_and__13578c__1_.jpg",
     readTime: "6 min read"
   },
   {
@@ -35,7 +35,7 @@ const fallbackBlogs: Blog[] = [
     date: "15 June 2026",
     category: "Corporate",
     summary: "Mining operations are undergoing a digital transformation. Zawr Metals & Mining utilizes automated machinery and real-time safety telemetry.",
-    image: "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710430/zawr/assets/blogs/blog-BLOG-8-pexels-gunshe-5125104.jpg",
+    image: "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco/v1783710430/zawr/assets/blogs/blog-BLOG-8-pexels-gunshe-5125104.jpg",
     readTime: "8 min read"
   },
   {
@@ -46,7 +46,7 @@ const fallbackBlogs: Blog[] = [
     date: "11 June 2026",
     category: "Opinion",
     summary: "The physical workspace plays an essential role in employee productivity and well-being. Discover ergonomic theories driving office design.",
-    image: "https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto/v1783710428/zawr/assets/blogs/blog-BLOG-7-pexels-huy-phan-316220-27436633.jpg",
+    image: "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco/v1783710428/zawr/assets/blogs/blog-BLOG-7-pexels-huy-phan-316220-27436633.jpg",
     readTime: "5 min read"
   }
 ];
