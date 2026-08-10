@@ -50,31 +50,12 @@ export const metadata: Metadata = {
 export default function Home() {
   return (
     <>
-      {/* Section 1: Hero Background */}
-      <section className="hero-section" style={{ minHeight: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
-        <div className="hero-bg" style={{ position: 'absolute', width: '100%', height: '100%', top: 0, left: 0, zIndex: 0 }}>
-          <img
-            src="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710572/zawr/images/hero-bg.png"
-            srcSet="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_480,c_limit/v1783710572/zawr/images/hero-bg.png 480w, https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit/v1783710572/zawr/images/hero-bg.png 800w, https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1400,c_limit/v1783710572/zawr/images/hero-bg.png 1400w"
-            sizes="100vw"
-            alt="Zawr Industries Technology Background"
-            width="1600"
-            height="900"
-            style={{ position: 'absolute', width: '100%', height: '100%', objectFit: 'cover', top: 0, left: 0 }}
-            loading="eager" 
-            fetchPriority="high" 
-          />
-          <div className="hero-overlay" style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%)' }}></div>
-        </div>
-        
-        {/* Subtle Hero Branding */}
-        <div style={{ position: 'relative', zIndex: 2, textAlign: 'center', padding: '0 2rem' }}>
-          <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', fontWeight: 700, color: '#ffffff', letterSpacing: '-0.03em', marginBottom: '1rem', lineHeight: 1.1 }}>
-            ZAWR INDUSTRIES
+      {/* Section 1: Hero Section */}
+      <section className="hero-section" style={{ backgroundColor: '#ffffff', minHeight: 'calc(100vh - 90px)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
+        <div style={{ textAlign: 'center' }}>
+          <h1 style={{ fontSize: 'clamp(2.5rem, 6vw, 4.5rem)', color: '#000000', letterSpacing: '0.02em', lineHeight: 1.2 }}>
+            <span style={{ fontWeight: 800 }}>ZAWR</span> <span style={{ fontWeight: 400 }}>INDUSTRIES</span>
           </h1>
-          <p style={{ fontSize: 'clamp(1rem, 2vw, 1.25rem)', color: 'rgba(255,255,255,0.8)', fontWeight: 300, maxWidth: '600px', margin: '0 auto' }}>
-            Innovating the future of enterprise technology, manufacturing, and global logistics.
-          </p>
         </div>
       </section>
 

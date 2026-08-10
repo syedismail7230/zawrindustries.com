@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Poppins } from 'next/font/google';
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import ISO6391 from 'iso-639-1';
 
@@ -10,14 +10,14 @@ const poppins = Poppins({ subsets: ['latin'], weight: ['400', '700'] });
 
 function ChevronDownIcon({ isOpen }: { isOpen: boolean }) {
   return (
-    <svg 
-      width="16" 
-      height="16" 
-      viewBox="0 0 24 24" 
-      fill="none" 
-      stroke="currentColor" 
-      strokeWidth="2" 
-      strokeLinecap="round" 
+    <svg
+      width="16"
+      height="16"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
       strokeLinejoin="round"
       style={{
         transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
@@ -91,8 +91,8 @@ export default function Header() {
     setActiveMobileSubmenu(prev => prev === menuName ? null : menuName);
   };
 
-  const filteredLangs = ISO6391.getAllCodes().filter(code => 
-    ISO6391.getNativeName(code).toLowerCase().includes(langQuery.toLowerCase()) || 
+  const filteredLangs = ISO6391.getAllCodes().filter(code =>
+    ISO6391.getNativeName(code).toLowerCase().includes(langQuery.toLowerCase()) ||
     ISO6391.getName(code).toLowerCase().includes(langQuery.toLowerCase())
   );
 
@@ -107,141 +107,57 @@ export default function Header() {
     window.location.reload();
   };
 
-const SEARCH_INDEX = [
-  // Platforms
-  { title: 'Firm AI', category: 'Platform', description: 'Autonomous Enterprise AI Agents & Workflow Automation', url: 'https://www.firm.expert/', external: true, keywords: ['firm', 'ai', 'agents', 'automation', 'enterprise'] },
-  { title: 'Sketch Studio', category: 'Platform', description: 'AI-Powered Web & App Design Studio', url: 'https://sketchstudio.dev/', external: true, keywords: ['sketch', 'studio', 'design', 'web', 'app', 'ui', 'ux'] },
-  { title: 'Zawr AI Desk', category: 'Platform', description: 'Generative Intelligence & Machine Learning Desk', url: 'https://ai.zawrindustries.com/', external: true, keywords: ['zawr ai', 'machine learning', 'llm', 'generative ai', 'ai desk'] },
-  { title: 'Quick Dial CRM', category: 'Platform', description: 'AI CRM, Voice Telephony & Customer Desk', url: 'https://crm.zawrindustries.com/', external: true, keywords: ['quick dial', 'crm', 'telephony', 'voice', 'sales'] },
-  { title: 'VelocityOS', category: 'Platform', description: 'Enterprise Cloud Operating System', url: 'https://velocityos.in/', external: true, keywords: ['velocity', 'velocityos', 'cloud os', 'operating platform'] },
-
-  // Industries
-  { title: 'IT Services & Cloud Solutions', category: 'Industry', description: 'Enterprise software, Cloud infrastructure & Cyber security', url: '/industries/it-service', external: false, keywords: ['it', 'services', 'cloud', 'software', 'technology', 'cyber security', 'devops'] },
-  { title: 'Transport & Logistics', category: 'Industry', description: 'Global freight, supply chain & fleet operations', url: '/industries/transport-and-logistics', external: false, keywords: ['transport', 'logistics', 'freight', 'supply chain', 'cargo', 'shipping'] },
-  { title: 'Advanced Manufacturing', category: 'Industry', description: 'Smart manufacturing, robotics & industrial systems', url: '/industries/manufacturing', external: false, keywords: ['manufacturing', 'industrial', 'robotics', 'factory', 'production'] },
-  { title: 'Real Estate & Infrastructure', category: 'Industry', description: 'Commercial real estate & smart infrastructure development', url: '/industries/estate', external: false, keywords: ['real estate', 'estate', 'property', 'infrastructure', 'building'] },
-
-  // Company / About
-  { title: 'About Zawr Industries', category: 'Company', description: 'Learn about our history, board, and global vision', url: '/about', external: false, keywords: ['about', 'company', 'history', 'who we are', 'zawr'] },
-  { title: 'Board of Directors', category: 'Governance', description: 'Executive leadership team and directors', url: '/about#board', external: false, keywords: ['board', 'directors', 'leadership', 'executives', 'management'] },
-  { title: 'Our History', category: 'Company', description: 'Our origins and milestone journey', url: '/about#history', external: false, keywords: ['history', 'origins', 'milestones', 'timeline'] },
-  { title: 'Our Impact & CSR', category: 'Impact', description: 'Corporate social responsibility & community initiatives', url: '/about#impact', external: false, keywords: ['impact', 'csr', 'social responsibility', 'community'] },
-  { title: 'Zawr Blog & Insights', category: 'Publications', description: 'Latest articles, insights, and tech leadership stories', url: '/about/blog', external: false, keywords: ['blog', 'articles', 'insights', 'news', 'stories', 'publications'] },
-  { title: 'Vision & Mission', category: 'Company', description: 'Our core philosophy and long-term vision', url: '/about#vision', external: false, keywords: ['vision', 'mission', 'values', 'philosophy'] },
-  { title: 'Code of Conduct', category: 'Governance', description: 'Ethical guidelines and enterprise policies', url: '/about#code-of-conduct', external: false, keywords: ['code of conduct', 'ethics', 'compliance', 'governance'] },
-
-  // Careers & Jobs
-  { title: 'Careers & Open Positions', category: 'Careers', description: 'Explore open job listings and join our team', url: '/careers', external: false, keywords: ['careers', 'jobs', 'hiring', 'work', 'openings', 'vacancies', 'apply', 'roles'] },
-  { title: 'Working at Zawr', category: 'Culture', description: 'Life, benefits, and culture at Zawr Industries', url: '/careers/working-at-zawr', external: false, keywords: ['working at zawr', 'culture', 'benefits', 'life at zawr'] },
-  { title: 'Equal Opportunity Policy', category: 'Careers', description: 'Our commitment to diversity, equity & inclusion', url: '/careers/equal-opportunity', external: false, keywords: ['equal opportunity', 'diversity', 'inclusion', 'equity'] },
-  { title: 'Freelance Talent Network', category: 'Careers', description: 'Join our global freelance and consultant roster', url: '/careers#freelance-section', external: false, keywords: ['freelance', 'contractor', 'consultant', 'gig', 'freelancer'] },
-
-  // Newsroom
-  { title: 'Newsroom & Press Releases', category: 'Newsroom', description: 'Official announcements and corporate news', url: '/newsroom/press-release', external: false, keywords: ['newsroom', 'press', 'announcements', 'media'] },
-  { title: 'Corporate Notifications', category: 'Newsroom', description: 'Official corporate updates and circulars', url: '/newsroom/notifications', external: false, keywords: ['notifications', 'updates', 'circulars', 'notices'] },
-  { title: 'Media Kit', category: 'Newsroom', description: 'Brand assets, logos, and executive photos', url: '/newsroom/media-kit', external: false, keywords: ['media kit', 'logo', 'brand assets', 'photos', 'press kit'] },
-
-  // Investors
-  { title: 'Investor Relations', category: 'Investors', description: 'Financial performance, governance & disclosures', url: '/investors', external: false, keywords: ['investors', 'financials', 'stocks', 'shareholders', 'reports', 'finance'] },
-
-  // Sustainability
-  { title: 'Empowerment & Women Leadership', category: 'Sustainability', description: 'Empowerment programs and leadership initiatives', url: '/sustainability/empowerment', external: false, keywords: ['empowerment', 'women', 'sustainability', 'esg'] },
-  { title: 'Healthcare Access Program', category: 'Sustainability', description: 'Global healthcare initiatives & community wellness', url: '/sustainability/health', external: false, keywords: ['health', 'healthcare', 'wellness', 'medical'] },
-  { title: 'Education & Skill Upliftment', category: 'Sustainability', description: 'Educational scholarships & technical skill building', url: '/sustainability/education', external: false, keywords: ['education', 'skills', 'scholarships', 'training'] },
-
-  // Contact
-  { title: 'Contact & Global Directory', category: 'Contact', description: 'Get in touch with department desks around the world', url: '/contact', external: false, keywords: ['contact', 'email', 'phone', 'reach us', 'support', 'help', 'address'] },
-  { title: 'Client Relations Desk', category: 'Contact', description: 'Dedicated support for enterprise clients', url: '/contact/client-relations', external: false, keywords: ['client relations', 'client support', 'customer service'] },
-  { title: 'Public Relations Desk', category: 'Contact', description: 'Media inquiries & communications desk', url: '/contact/public-relations', external: false, keywords: ['public relations', 'pr', 'media contact'] },
-  { title: 'Partner & Creator Network', category: 'Contact', description: 'Partner with Zawr Industries ecosystem', url: '/contact/partner', external: false, keywords: ['partner', 'creators', 'affiliate', 'collaboration'] },
-];
-
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [selectedIndex, setSelectedIndex] = useState<number>(0);
-
-  // Global Ctrl+K / Cmd+K listener
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
-        e.preventDefault();
-        setIsSearchOpen(prev => !prev);
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
-
-  const categoriesList = ['All', 'Platform', 'Industry', 'Careers', 'Newsroom', 'Contact', 'Company'];
-
-  const filteredIndex = useMemo(() => {
-    let items = SEARCH_INDEX;
-    if (selectedCategory !== 'All') {
-      items = items.filter(i => {
-        if (selectedCategory === 'Company') {
-          return i.category === 'Company' || i.category === 'Governance' || i.category === 'Impact' || i.category === 'Publications';
-        }
-        return i.category === selectedCategory;
-      });
-    }
-
-    const q = searchQuery.toLowerCase().trim();
-    if (!q) return items;
-
-    return items.filter(item => {
-      return item.title.toLowerCase().includes(q) ||
-        item.category.toLowerCase().includes(q) ||
-        item.description.toLowerCase().includes(q) ||
-        item.keywords.some(k => k.includes(q) || q.includes(k));
-    });
-  }, [searchQuery, selectedCategory]);
-
-  useEffect(() => {
-    setSelectedIndex(0);
-  }, [searchQuery, selectedCategory]);
-
-  const groupedSections = useMemo(() => {
-    const map = new Map<string, typeof SEARCH_INDEX>();
-    filteredIndex.forEach(item => {
-      let label = item.category;
-      if (label === 'Governance' || label === 'Impact' || label === 'Publications') label = 'Company';
-      if (!map.has(label)) map.set(label, []);
-      map.get(label)!.push(item);
-    });
-    return map;
-  }, [filteredIndex]);
-
-  const navigateToResult = (item: typeof SEARCH_INDEX[0]) => {
-    if (item.external) {
-      window.open(item.url, '_blank', 'noopener,noreferrer');
-    } else {
-      router.push(item.url);
-    }
-    setIsSearchOpen(false);
-    setSearchQuery('');
-    setSearchError('');
-  };
-
-  const handleKeyDownInSearch = (e: React.KeyboardEvent) => {
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      setSelectedIndex(prev => (prev + 1) % Math.max(1, filteredIndex.length));
-    } else if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      setSelectedIndex(prev => (prev - 1 + filteredIndex.length) % Math.max(1, filteredIndex.length));
-    } else if (e.key === 'Enter') {
-      e.preventDefault();
-      if (filteredIndex[selectedIndex]) {
-        navigateToResult(filteredIndex[selectedIndex]);
-      }
-    } else if (e.key === 'Escape') {
-      setIsSearchOpen(false);
-    }
-  };
-
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (filteredIndex[selectedIndex]) {
-      navigateToResult(filteredIndex[selectedIndex]);
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return;
+
+    // Smart navigation dictionary
+    const routes: Record<string, string> = {
+      'firm': 'https://www.firm.expert/',
+      'firm ai': 'https://www.firm.expert/',
+      'sketch': 'https://sketchstudio.dev/',
+      'sketch studio': 'https://sketchstudio.dev/',
+      'zawr ai': 'https://ai.zawrindustries.com/',
+      'ai': 'https://ai.zawrindustries.com/',
+      'quick dial': 'https://crm.zawrindustries.com/',
+      'crm': 'https://crm.zawrindustries.com/',
+      'velocity': 'https://velocityos.in/',
+      'velocityos': 'https://velocityos.in/',
+      'about': '/#about',
+      'contact': '/#contact',
+      'industries': '/#industries',
+      'platforms': '/#platforms',
+      'newsroom': '/#newsroom',
+      'news': '/#newsroom',
+      'investors': '/#investors',
+      'home': '/'
+    };
+
+    let matchedRoute = '';
+
+    if (routes[q]) {
+      matchedRoute = routes[q];
+    } else {
+      for (const [key, route] of Object.entries(routes)) {
+        if (key.includes(q) || q.includes(key)) {
+          matchedRoute = route;
+          break;
+        }
+      }
+    }
+
+    if (matchedRoute) {
+      if (matchedRoute.startsWith('http')) {
+        window.open(matchedRoute, '_blank', 'noopener,noreferrer');
+      } else {
+        router.push(matchedRoute);
+      }
+      setIsSearchOpen(false);
+      setSearchQuery('');
+      setSearchError('');
+    } else {
+      setSearchError(`We could not find any exact matches for "${searchQuery.trim()}". As our platform is expanding, please try navigating via the header menu.`);
     }
   };
 
@@ -259,16 +175,16 @@ const SEARCH_INDEX = [
 
       <nav className={`nav-links ${isMobileMenuOpen ? 'mobile-active' : ''}`}>
         <Link href="/" className="nav-item" onClick={closeMobileMenu}>Home</Link>
-        
+
         {/* About */}
         <div className="nav-item">
-          <div 
+          <div
             style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
           >
             <Link href="/about" onClick={closeMobileMenu} style={{ color: 'inherit', textDecoration: 'none', flexGrow: 1 }}>
               About
             </Link>
-            <span 
+            <span
               style={{ display: isMobileMenuOpen ? 'inline-flex' : 'none', alignItems: 'center', paddingLeft: '0.5rem' }}
               onClick={(e) => {
                 e.stopPropagation();
@@ -294,7 +210,7 @@ const SEARCH_INDEX = [
 
         {/* Industries */}
         <div className="nav-item">
-          <div 
+          <div
             style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
             onClick={() => toggleMobileSubmenu('industries')}
           >
@@ -313,7 +229,7 @@ const SEARCH_INDEX = [
 
         {/* Platforms */}
         <div className="nav-item">
-          <div 
+          <div
             style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
             onClick={() => toggleMobileSubmenu('platforms')}
           >
@@ -333,7 +249,7 @@ const SEARCH_INDEX = [
 
         {/* Newsroom */}
         <div className="nav-item">
-          <div 
+          <div
             style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
             onClick={() => toggleMobileSubmenu('newsroom')}
           >
@@ -354,7 +270,7 @@ const SEARCH_INDEX = [
 
         {/* Contact */}
         <div className="nav-item">
-          <div 
+          <div
             style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer' }}
             onClick={() => toggleMobileSubmenu('contact')}
           >
@@ -383,10 +299,10 @@ const SEARCH_INDEX = [
 
         {/* Language Button & Dropdown */}
         <div ref={langDropdownRef} style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-          <button 
-            className="icon-btn" 
-            aria-label="Language" 
-            onClick={() => setIsLangDropdownOpen(prev => !prev)} 
+          <button
+            className="icon-btn"
+            aria-label="Language"
+            onClick={() => setIsLangDropdownOpen(prev => !prev)}
             suppressHydrationWarning
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -395,10 +311,10 @@ const SEARCH_INDEX = [
               <path d="M2 12h20"></path>
             </svg>
           </button>
-          
+
           {isLangDropdownOpen && (
-            <div 
-              className="dropdown lang-dropdown" 
+            <div
+              className="dropdown lang-dropdown"
               style={{
                 position: 'absolute',
                 top: 'calc(100% + 0.75rem)',
@@ -420,10 +336,10 @@ const SEARCH_INDEX = [
               }}
             >
               <div style={{ marginBottom: '10px' }}>
-                <input 
+                <input
                   suppressHydrationWarning
-                  type="text" 
-                  placeholder="Search language..." 
+                  type="text"
+                  placeholder="Search language..."
                   value={langQuery}
                   onChange={(e) => setLangQuery(e.target.value)}
                   onClick={(e) => e.stopPropagation()}
@@ -432,9 +348,9 @@ const SEARCH_INDEX = [
               </div>
               <div className="custom-scrollbar" style={{ maxHeight: '250px', overflowY: 'auto', paddingRight: '5px', display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
                 {filteredLangs.map((code) => (
-                  <a 
-                    key={code} 
-                    href="#" 
+                  <a
+                    key={code}
+                    href="#"
                     onClick={(e) => { e.preventDefault(); handleLanguageSwitch(code); closeMobileMenu(); }}
                     style={{ color: 'rgba(255,255,255,0.85)', textDecoration: 'none', fontSize: '0.9rem', padding: '0.2rem 0', transition: 'color 0.2s' }}
                   >
@@ -458,172 +374,26 @@ const SEARCH_INDEX = [
         {isMobileMenuOpen ? '✕' : '☰'}
       </button>
 
-      {/* Full Screen Search Overlay with Previous UI/UX + Categorized Structured Results */}
+      {/* Full Screen Search Overlay */}
       {isSearchOpen && (
-        <div className="search-overlay" onClick={() => setIsSearchOpen(false)}>
+        <div className="search-overlay">
           <button className="search-close" onClick={() => { setIsSearchOpen(false); setSearchError(''); }}>×</button>
-          
-          <div 
-            onClick={(e) => e.stopPropagation()}
-            onKeyDown={handleKeyDownInSearch}
-            style={{ 
-              width: '90%', 
-              maxWidth: '850px', 
-              display: 'flex', 
-              flexDirection: 'column', 
-              gap: '1.5rem', 
-              maxHeight: '88vh',
-              position: 'relative'
-            }}
-          >
-            {/* Original Large Underlined Search Input */}
-            <form className="search-form" onSubmit={handleSearchSubmit} style={{ position: 'relative', width: '100%', borderBottom: '2px solid #ffffff', display: 'flex', alignItems: 'center' }}>
-              <input 
-                suppressHydrationWarning
-                type="text" 
-                placeholder="Search Zawr Industries..." 
-                value={searchQuery}
-                onChange={(e) => { setSearchQuery(e.target.value); setSearchError(''); }}
-                autoFocus
-                style={{ flex: 1, background: 'transparent', border: 'none', color: '#ffffff', fontSize: 'clamp(1.5rem, 3.5vw, 2.25rem)', padding: '1rem 0', outline: 'none', fontWeight: 300 }}
-              />
-              <button 
-                suppressHydrationWarning 
-                type="submit" 
-                style={{ background: 'transparent', border: 'none', color: '#ffffff', cursor: 'pointer', fontSize: '1.125rem', fontWeight: 600, padding: '0 1rem' }}
-              >
-                Search
-              </button>
-            </form>
-
-            {/* Filter Tags ("SEARCHING FOR") */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.625rem', alignItems: 'center' }}>
-              <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#a1a1aa', marginRight: '0.25rem' }}>
-                Searching For:
-              </span>
-              {categoriesList.map(cat => {
-                const isActive = selectedCategory === cat;
-                return (
-                  <button
-                    key={cat}
-                    onClick={() => setSelectedCategory(cat)}
-                    style={{
-                      padding: '0.35rem 0.95rem',
-                      borderRadius: '9999px',
-                      fontSize: '0.825rem',
-                      fontWeight: isActive ? 600 : 400,
-                      backgroundColor: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.08)',
-                      color: isActive ? '#000000' : '#d4d4d8',
-                      border: '1px solid',
-                      borderColor: isActive ? '#ffffff' : 'rgba(255, 255, 255, 0.15)',
-                      cursor: 'pointer',
-                      transition: 'all 0.15s ease'
-                    }}
-                  >
-                    {cat}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Scrollable Results Section (Clean minimal rows: NO cards, NO outlines, NO emojis) */}
-            <div className="custom-scrollbar" style={{ maxHeight: '55vh', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '2rem', paddingRight: '0.5rem' }}>
-              {filteredIndex.length === 0 ? (
-                <div style={{ padding: '3rem 1rem', textAlign: 'center', color: '#71717a', fontSize: '0.95rem' }}>
-                  No results found matching &quot;{searchQuery}&quot;.
-                </div>
-              ) : (
-                Array.from(groupedSections.entries()).map(([sectionLabel, sectionItems]) => (
-                  <div key={sectionLabel} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                    {/* Section Header - Plain uppercase text, NO emojis */}
-                    <div style={{ fontSize: '0.75rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.08em', color: '#71717a', marginBottom: '0.25rem' }}>
-                      {sectionLabel === 'Platform' && 'Platforms & Products'}
-                      {sectionLabel === 'Industry' && 'Industries & Solutions'}
-                      {sectionLabel === 'Careers' && 'Careers & Talent'}
-                      {sectionLabel === 'Newsroom' && 'Newsroom & Publications'}
-                      {sectionLabel === 'Contact' && 'Contact & Directory'}
-                      {sectionLabel === 'Company' && 'Governance & Company'}
-                      {sectionLabel === 'Investors' && 'Investors'}
-                      {sectionLabel === 'Sustainability' && 'Sustainability'}
-                    </div>
-
-                    {/* Section Item Rows - NO cards, NO outlines */}
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      {sectionItems.map(item => {
-                        const itemGlobalIdx = filteredIndex.indexOf(item);
-                        const isSelected = itemGlobalIdx === selectedIndex;
-
-                        return (
-                          <div
-                            key={item.title}
-                            onClick={() => navigateToResult(item)}
-                            onMouseEnter={() => setSelectedIndex(itemGlobalIdx)}
-                            style={{
-                              padding: '0.85rem 0',
-                              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-                              cursor: 'pointer',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'space-between',
-                              gap: '1rem',
-                              transition: 'opacity 0.15s ease',
-                              opacity: isSelected ? 1 : 0.75
-                            }}
-                          >
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.2rem' }}>
-                              <div style={{ fontSize: '1.05rem', fontWeight: 500, color: '#ffffff' }}>
-                                {item.title}
-                              </div>
-                              <div style={{ fontSize: '0.85rem', color: '#a1a1aa' }}>
-                                {item.description}
-                              </div>
-                            </div>
-
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', flexShrink: 0, color: '#ffffff', fontSize: '0.85rem', fontWeight: 500, opacity: isSelected ? 1 : 0.45, transition: 'all 0.2s' }}>
-                              <span>{item.external ? 'External' : 'Navigate'}</span>
-                              <svg 
-                                width="18" 
-                                height="18" 
-                                viewBox="0 0 24 24" 
-                                fill="none" 
-                                stroke="currentColor" 
-                                strokeWidth="1.6" 
-                                strokeLinecap="square" 
-                                strokeLinejoin="miter"
-                                style={{ transform: isSelected ? 'translate(2px, -2px)' : 'none', transition: 'transform 0.2s' }}
-                              >
-                                <line x1="6" y1="18" x2="18" y2="6"></line>
-                                <polyline points="7 6 18 6 18 17"></polyline>
-                              </svg>
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-
-            {/* Keyboard Shortcut Footer */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '0.75rem', color: '#a1a1aa', padding: '0 0.5rem' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                  <kbd style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.2)', borderRadius: '4px', padding: '0.1rem 0.4rem', color: '#ffffff' }}>↓</kbd>
-                  <kbd style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.2)', borderRadius: '4px', padding: '0.1rem 0.4rem', color: '#ffffff' }}>↑</kbd>
-                  <span>Move</span>
-                </span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                  <kbd style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.2)', borderRadius: '4px', padding: '0.1rem 0.4rem', color: '#ffffff' }}>↵</kbd>
-                  <span>Select</span>
-                </span>
-                <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-                  <kbd style={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', border: '1px solid rgba(255, 255, 255, 0.2)', borderRadius: '4px', padding: '0.1rem 0.4rem', color: '#ffffff' }}>ESC</kbd>
-                  <span>Quit</span>
-                </span>
+          <form className="search-form" onSubmit={handleSearchSubmit} style={{ position: 'relative' }}>
+            <input
+              suppressHydrationWarning
+              type="text"
+              placeholder="Search Zawr Industries..."
+              value={searchQuery}
+              onChange={(e) => { setSearchQuery(e.target.value); setSearchError(''); }}
+              autoFocus
+            />
+            <button suppressHydrationWarning type="submit">Search</button>
+            {searchError && (
+              <div style={{ position: 'absolute', top: 'calc(100% + 2rem)', left: 0, right: 0, textAlign: 'center', color: 'var(--bg-white)', opacity: 0.9, fontSize: '1rem', fontWeight: 300 }}>
+                {searchError}
               </div>
-            </div>
-          </div>
+            )}
+          </form>
         </div>
       )}
     </header>
