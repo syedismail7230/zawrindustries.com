@@ -16,7 +16,7 @@ const STEPS: ProcessStep[] = [
     title: 'Perspective',
     subtitle: 'Seeing through your vision',
     description: 'We align deeply with your business goals, market dynamics, and user needs to build a clear strategic blueprint before execution begins.',
-    image: '/assets/perspective.png',
+    image: '/assets/perspective-img.png',
   },
   {
     number: '02',
@@ -52,7 +52,6 @@ export default function OurProcessSection() {
       if (!trackRef.current) return;
       const trackWidth = trackRef.current.scrollWidth;
       const viewportWidth = window.innerWidth;
-      // Extra 950px offset ensures 4th card (Launch) translates fully into the center of the screen
       const maxScroll = Math.max(0, trackWidth - viewportWidth + (viewportWidth > 768 ? 950 : 400));
       setMaxTranslateX(maxScroll);
     };
@@ -72,13 +71,12 @@ export default function OurProcessSection() {
     let rafId: number;
     const handleScroll = () => {
       rafId = requestAnimationFrame(() => {
-        if (!sectionRef.current) return;
+        if (!sectionRef.current || window.innerWidth <= 768) return;
         const rect = sectionRef.current.getBoundingClientRect();
         const scrollableDistance = rect.height - window.innerHeight;
 
         if (scrollableDistance <= 0) return;
 
-        // Multiply denominator by 0.65 so 100% horizontal scroll completes EARLY before page bottom!
         let progress = -rect.top / (scrollableDistance * 0.65);
         progress = Math.min(1, Math.max(0, progress));
         setScrollProgress(progress);
@@ -104,7 +102,7 @@ export default function OurProcessSection() {
       className="horizontal-scroll-process-section"
       style={{
         position: 'relative',
-        height: '360vh', // Generous scroll track height
+        height: '360vh',
         backgroundColor: '#ffffff',
         width: '100%',
         paddingBottom: '6rem',
@@ -112,6 +110,7 @@ export default function OurProcessSection() {
     >
       {/* Sticky Viewport Stage */}
       <div
+        className="process-viewport-stage"
         style={{
           position: 'sticky',
           top: 0,
@@ -134,7 +133,7 @@ export default function OurProcessSection() {
         >
           <h2
             style={{
-              fontSize: 'clamp(2.4rem, 4.5vw, 3.8rem)',
+              fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)',
               fontWeight: 400,
               color: '#111111',
               letterSpacing: '-0.02em',
@@ -150,6 +149,7 @@ export default function OurProcessSection() {
         {/* Horizontal Card Track */}
         <div
           ref={trackRef}
+          className="process-track-container"
           style={{
             display: 'flex',
             gap: 'clamp(2rem, 4vw, 3.5rem)',
@@ -163,6 +163,7 @@ export default function OurProcessSection() {
           {STEPS.map((step) => (
             <div
               key={step.number}
+              className="process-card-item"
               style={{
                 flexShrink: 0,
                 width: 'clamp(640px, 66vw, 1080px)',
@@ -189,6 +190,7 @@ export default function OurProcessSection() {
 
               {/* Bottom Gradient Overlay */}
               <div
+                className="process-card-overlay"
                 style={{
                   position: 'absolute',
                   inset: 0,
@@ -201,6 +203,7 @@ export default function OurProcessSection() {
                 }}
               >
                 <h3
+                  className="process-card-title"
                   style={{
                     fontSize: 'clamp(2.4rem, 3.8vw, 3.8rem)',
                     fontWeight: 400,
@@ -215,6 +218,7 @@ export default function OurProcessSection() {
                 </h3>
 
                 <p
+                  className="process-card-subtitle"
                   style={{
                     fontSize: 'clamp(1.15rem, 1.6vw, 1.5rem)',
                     fontWeight: 400,
@@ -233,24 +237,45 @@ export default function OurProcessSection() {
       </div>
 
       <style jsx>{`
+        .process-track-container::-webkit-scrollbar {
+          display: none;
+        }
         @media (max-width: 768px) {
           .horizontal-scroll-process-section {
             height: auto !important;
+            padding-bottom: 3rem !important;
           }
-          .horizontal-scroll-process-section > div {
+          .process-viewport-stage {
             position: relative !important;
             height: auto !important;
-            padding: 4rem 0 !important;
+            padding: 3rem 0 !important;
           }
-          .horizontal-scroll-process-section div[ref="trackRef"] {
+          .process-track-container {
             overflow-x: auto !important;
+            scroll-snap-type: x mandatory !important;
+            -webkit-overflow-scrolling: touch !important;
             padding-left: 1.25rem !important;
             padding-right: 1.25rem !important;
+            gap: 1.25rem !important;
             transform: none !important;
+            scrollbar-width: none !important;
+            -ms-overflow-style: none !important;
           }
-          .horizontal-scroll-process-section div[style*="flexShrink: 0"] {
-            width: 88vw !important;
-            height: 400px !important;
+          .process-card-item {
+            width: 84vw !important;
+            max-width: 360px !important;
+            height: 480px !important;
+            scroll-snap-align: center !important;
+            border-radius: 24px !important;
+          }
+          .process-card-overlay {
+            padding: 1.75rem !important;
+          }
+          .process-card-title {
+            font-size: 1.9rem !important;
+          }
+          .process-card-subtitle {
+            font-size: 1rem !important;
           }
         }
       `}</style>
