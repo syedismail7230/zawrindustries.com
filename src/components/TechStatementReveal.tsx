@@ -26,7 +26,7 @@ export default function TechStatementReveal() {
       style={{
         backgroundColor: '#ffffff',
         width: '100%',
-        padding: '6rem 2rem',
+        padding: '3rem 2rem 1.5rem 2rem',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -71,7 +71,7 @@ export default function TechStatementReveal() {
       <style jsx>{`
         @media (max-width: 768px) {
           .tech-statement-section {
-            padding: 4rem 1.5rem !important;
+            padding: 2.5rem 1.5rem 1rem 1.5rem !important;
           }
           .tech-statement-text {
             font-size: clamp(1.8rem, 5.5vw, 2.8rem) !important;
@@ -82,7 +82,7 @@ export default function TechStatementReveal() {
         }
         @media (max-width: 480px) {
           .tech-statement-section {
-            padding: 3.5rem 1.2rem !important;
+            padding: 2rem 1.2rem 1rem 1.2rem !important;
           }
           .tech-statement-text {
             font-size: clamp(1.85rem, 6.8vw, 2.6rem) !important;

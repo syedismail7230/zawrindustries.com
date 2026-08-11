@@ -56,23 +56,23 @@ export default function ITServiceSoftwareSection() {
       className="it-service-software-section"
       style={{
         position: 'relative',
-        height: '240vh', // Pinned scroll track length
+        height: '180vh', // Tight, snappy scroll track
         backgroundColor: '#ffffff',
         width: '100%',
       }}
     >
-      {/* Sticky Inner Container: Centered in Viewport */}
+      {/* Sticky Inner Container */}
       <div
         className="it-service-sticky-wrapper"
         style={{
           position: 'sticky',
-          top: 0,
-          height: '100vh',
+          top: '85px',
+          height: 'calc(100vh - 85px)',
           width: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          padding: '0 2rem',
+          padding: '1rem 2rem 2rem 2rem',
           boxSizing: 'border-box',
         }}
       >
