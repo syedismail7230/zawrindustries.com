@@ -3,10 +3,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const impactStats = [
-  { value: '50+', label: 'Enterprise Clients Worldwide' },
+  { value: '500+', label: 'Enterprise Clients Worldwide' },
   { value: '12+', label: 'Proprietary Tech & Industry Platforms' },
   { value: '99.9%', label: 'Platform Reliability & Uptime SLA' },
-  { value: '3', label: 'Global Delivery & Innovation Hubs' },
+  { value: '7', label: 'Global Delivery & Innovation Hubs' },
 ];
 
 function CountUpNumber({ targetValue }: { targetValue: string }) {

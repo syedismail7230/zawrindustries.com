@@ -3,10 +3,10 @@
 import React from 'react';
 
 const impactStats = [
-  { value: '50+', label: 'Enterprise Clients Globally' },
+  { value: '500+', label: 'Enterprise Clients Globally' },
   { value: '12+', label: 'Core Tech & Industry Platforms' },
   { value: '99.9%', label: 'Platform Uptime & Reliability SLA' },
-  { value: '3', label: 'Global Delivery & Tech Hubs' },
+  { value: '7', label: 'Global Delivery & Tech Hubs' },
 ];
 
 export default function AboutGlobalImpact() {
