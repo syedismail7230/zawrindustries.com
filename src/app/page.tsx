@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import TechStatementReveal from '@/components/TechStatementReveal';
+import ITServiceSoftwareSection from '@/components/ITServiceSoftwareSection';
 
 export const metadata: Metadata = {
   title: 'Zawr Industries — Technology, Manufacturing & Logistics Conglomerate | Bangalore',
@@ -79,6 +80,9 @@ export default function Home() {
 
       {/* Section 2: Animated Tech Statement Reveal */}
       <TechStatementReveal />
+
+      {/* Section 3: IT Service & Software Conglomerate Overview */}
+      <ITServiceSoftwareSection />
 
       <style dangerouslySetInnerHTML={{__html: `
         @media (max-width: 768px) {
