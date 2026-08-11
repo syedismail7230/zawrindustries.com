@@ -1,16 +1,8 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
-interface ProcessStep {
-  number: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  image: string;
-}
-
-const STEPS: ProcessStep[] = [
+const STEPS = [
   {
     number: '01',
     title: 'Perspective',
@@ -41,244 +33,170 @@ const STEPS: ProcessStep[] = [
   },
 ];
 
+type PinState = 'before' | 'pinned' | 'after';
+
 export default function OurProcessSection() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [maxTranslateX, setMaxTranslateX] = useState(0);
+  const spacerRef = useRef<HTMLDivElement>(null);
+  const [pinState, setPinState] = useState<PinState>('before');
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    const updateDimensions = () => {
-      if (!trackRef.current) return;
-      const trackWidth = trackRef.current.scrollWidth;
-      const viewportWidth = window.innerWidth;
-      const maxScroll = Math.max(0, trackWidth - viewportWidth + (viewportWidth > 768 ? 950 : 400));
-      setMaxTranslateX(maxScroll);
+    const onScroll = () => {
+      const spacer = spacerRef.current;
+      if (!spacer) return;
+
+      const scrollY = window.scrollY;
+      const vh = window.innerHeight;
+      const top = spacer.offsetTop;
+      const height = spacer.offsetHeight;
+
+      const pinStart = top;
+      const pinEnd = top + height - vh;
+
+      if (scrollY <= pinStart) {
+        setPinState('before');
+        setProgress(0);
+      } else if (scrollY >= pinEnd) {
+        setPinState('after');
+        setProgress(1);
+      } else {
+        setPinState('pinned');
+        setProgress((scrollY - pinStart) / (pinEnd - pinStart));
+      }
     };
 
-    updateDimensions();
-
-    const resizeObserver = new ResizeObserver(() => {
-      updateDimensions();
-    });
-
-    if (trackRef.current) {
-      resizeObserver.observe(trackRef.current);
-    }
-
-    window.addEventListener('resize', updateDimensions);
-
-    let rafId: number;
-    const handleScroll = () => {
-      rafId = requestAnimationFrame(() => {
-        if (!sectionRef.current || window.innerWidth <= 768) return;
-        const rect = sectionRef.current.getBoundingClientRect();
-        const scrollableDistance = rect.height - window.innerHeight;
-
-        if (scrollableDistance <= 0) return;
-
-        let progress = -rect.top / (scrollableDistance * 0.65);
-        progress = Math.min(1, Math.max(0, progress));
-        setScrollProgress(progress);
-      });
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll();
-
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener('resize', updateDimensions);
-      window.removeEventListener('scroll', handleScroll);
-      cancelAnimationFrame(rafId);
-    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const translateX = scrollProgress * maxTranslateX;
+  const sliceSize = 1 / STEPS.length;
+  const activeIndex = Math.min(STEPS.length - 1, Math.floor(progress / sliceSize));
+  const sliceStart = activeIndex * sliceSize;
+  const activeCardProgress = progress >= 1 ? 1 : Math.min(1, (progress - sliceStart) / sliceSize);
+
+  const innerStyle: React.CSSProperties =
+    pinState === 'pinned'
+      ? { position: 'fixed', top: 0, left: 0, right: 0, height: '100vh', zIndex: 10, backgroundColor: '#ffffff' }
+      : pinState === 'after'
+      ? { position: 'absolute', bottom: 0, left: 0, right: 0, height: '100vh', zIndex: 1, backgroundColor: '#ffffff' }
+      : { position: 'absolute', top: 0, left: 0, right: 0, height: '100vh', zIndex: 1, backgroundColor: '#ffffff' };
 
   return (
     <section
-      ref={sectionRef}
-      className="horizontal-scroll-process-section"
+      ref={spacerRef}
       style={{
         position: 'relative',
-        height: '360vh',
+        height: `${STEPS.length * 120 + 20}vh`,
         backgroundColor: '#ffffff',
-        width: '100%',
-        paddingBottom: '6rem',
+        fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
       }}
     >
-      {/* Sticky Viewport Stage */}
-      <div
-        className="process-viewport-stage"
-        style={{
-          position: 'sticky',
-          top: 0,
-          height: '100vh',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          overflow: 'hidden',
-          backgroundColor: '#ffffff',
-        }}
-      >
-        {/* Header Title (Centered) */}
-        <div
-          style={{
-            textAlign: 'center',
-            marginBottom: 'clamp(1.5rem, 2.5vw, 2.5rem)',
-            padding: '0 1.5rem',
-          }}
-        >
-          <h2
-            style={{
-              fontSize: 'clamp(2.2rem, 4.5vw, 3.8rem)',
-              fontWeight: 400,
-              color: '#111111',
-              letterSpacing: '-0.02em',
-              lineHeight: 1.12,
-              margin: 0,
-              fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
-            }}
-          >
+      <div style={innerStyle}>
+        {/* Section Header */}
+        <div style={{ position: 'absolute', top: 'clamp(3rem, 5.5vh, 4.5rem)', left: 0, right: 0, textAlign: 'center', zIndex: 10 }}>
+          <h2 style={{ fontSize: 'clamp(2.2rem, 4.5vw, 3.6rem)', fontWeight: 400, color: '#0f172a', letterSpacing: '-0.03em', margin: 0 }}>
             Our Process
           </h2>
         </div>
 
-        {/* Horizontal Card Track */}
+        {/* Stacked Full-Image Cards Stage */}
         <div
-          ref={trackRef}
-          className="process-track-container"
           style={{
-            display: 'flex',
-            gap: 'clamp(2rem, 4vw, 3.5rem)',
-            paddingLeft: 'clamp(2rem, 8vw, 12vw)',
-            paddingRight: 'clamp(12rem, 26vw, 38vw)',
-            transform: `translateX(-${translateX}px)`,
-            transition: 'transform 0.12s cubic-bezier(0.1, 1, 0.3, 1)',
-            willChange: 'transform',
+            position: 'absolute',
+            top: '52%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: '90%',
+            maxWidth: '1020px',
+            height: 'clamp(380px, 58vh, 600px)',
           }}
         >
-          {STEPS.map((step) => (
-            <div
-              key={step.number}
-              className="process-card-item"
-              style={{
-                flexShrink: 0,
-                width: 'clamp(640px, 66vw, 1080px)',
-                height: 'clamp(460px, 67vh, 750px)',
-                borderRadius: '32px',
-                overflow: 'hidden',
-                position: 'relative',
-                backgroundColor: '#f5f5f7',
-                boxShadow: '0 28px 70px -15px rgba(0, 0, 0, 0.14), 0 12px 30px -10px rgba(0, 0, 0, 0.06)',
-                cursor: 'pointer',
-              }}
-            >
-              {/* Card Image */}
-              <img
-                src={step.image}
-                alt={step.title}
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  display: 'block',
-                }}
-              />
+          {STEPS.map((item, index) => {
+            const isActive = index === activeIndex;
+            const hasLanded = index < activeIndex;
+            const isPending = index > activeIndex;
+            const cardsOnTop = activeIndex - index;
 
-              {/* Bottom Gradient Overlay */}
+            const translateY = isActive ? (1 - activeCardProgress) * 100 : isPending ? 100 : 0;
+            const scale = hasLanded ? Math.max(0.88, 1 - cardsOnTop * 0.034) : 1;
+            const stackShift = hasLanded ? -cardsOnTop * 14 : 0;
+
+            return (
               <div
-                className="process-card-overlay"
+                key={item.number}
                 style={{
                   position: 'absolute',
                   inset: 0,
-                  background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0) 100%)',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'flex-end',
-                  padding: 'clamp(2.25rem, 4.5vw, 4rem)',
-                  boxSizing: 'border-box',
+                  borderRadius: '28px',
+                  overflow: 'hidden',
+                  backgroundColor: '#111111',
+                  zIndex: index + 1,
+                  opacity: isPending ? 0 : 1,
+                  transform: `translateY(calc(${translateY}% + ${stackShift}px)) scale(${scale})`,
+                  transformOrigin: 'center bottom',
+                  willChange: 'transform, opacity',
+                  transition: 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease',
+                  boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.18)',
                 }}
               >
-                <h3
-                  className="process-card-title"
+                {/* Full Card Image */}
+                <img
+                  src={item.image}
+                  alt={item.title}
                   style={{
-                    fontSize: 'clamp(2.4rem, 3.8vw, 3.8rem)',
-                    fontWeight: 400,
-                    color: '#ffffff',
-                    letterSpacing: '-0.02em',
-                    margin: 0,
-                    marginBottom: '0.35rem',
-                    fontFamily: 'Inter, -apple-system, sans-serif',
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
                   }}
-                >
-                  {step.title}
-                </h3>
+                />
 
-                <p
-                  className="process-card-subtitle"
+                {/* Bottom Gradient & Text Overlay (Matching Screenshot) */}
+                <div
                   style={{
-                    fontSize: 'clamp(1.15rem, 1.6vw, 1.5rem)',
-                    fontWeight: 400,
-                    fontStyle: 'italic',
-                    color: 'rgba(255, 255, 255, 0.9)',
-                    margin: 0,
-                    fontFamily: 'Inter, -apple-system, sans-serif',
+                    position: 'absolute',
+                    inset: 0,
+                    background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0) 100%)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'flex-end',
+                    padding: 'clamp(2rem, 4vw, 3.5rem)',
+                    boxSizing: 'border-box',
                   }}
                 >
-                  {step.subtitle}
-                </p>
+                  <h3
+                    style={{
+                      fontSize: 'clamp(2.2rem, 3.8vw, 3.6rem)',
+                      fontWeight: 400,
+                      color: '#ffffff',
+                      letterSpacing: '-0.02em',
+                      margin: 0,
+                      marginBottom: '0.35rem',
+                      fontFamily: 'Inter, -apple-system, sans-serif',
+                    }}
+                  >
+                    {item.title}
+                  </h3>
+
+                  <p
+                    style={{
+                      fontSize: 'clamp(1.1rem, 1.6vw, 1.45rem)',
+                      fontWeight: 400,
+                      fontStyle: 'italic',
+                      color: 'rgba(255, 255, 255, 0.9)',
+                      margin: 0,
+                      fontFamily: 'Inter, -apple-system, sans-serif',
+                    }}
+                  >
+                    {item.subtitle}
+                  </p>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
-
-      <style jsx>{`
-        .process-track-container::-webkit-scrollbar {
-          display: none;
-        }
-        @media (max-width: 768px) {
-          .horizontal-scroll-process-section {
-            height: auto !important;
-            padding-bottom: 3rem !important;
-          }
-          .process-viewport-stage {
-            position: relative !important;
-            height: auto !important;
-            padding: 3rem 0 !important;
-          }
-          .process-track-container {
-            overflow-x: auto !important;
-            scroll-snap-type: x mandatory !important;
-            -webkit-overflow-scrolling: touch !important;
-            padding-left: 1.25rem !important;
-            padding-right: 1.25rem !important;
-            gap: 1.25rem !important;
-            transform: none !important;
-            scrollbar-width: none !important;
-            -ms-overflow-style: none !important;
-          }
-          .process-card-item {
-            width: 84vw !important;
-            max-width: 360px !important;
-            height: 480px !important;
-            scroll-snap-align: center !important;
-            border-radius: 24px !important;
-          }
-          .process-card-overlay {
-            padding: 1.75rem !important;
-          }
-          .process-card-title {
-            font-size: 1.9rem !important;
-          }
-          .process-card-subtitle {
-            font-size: 1rem !important;
-          }
-        }
-      `}</style>
     </section>
   );
 }
