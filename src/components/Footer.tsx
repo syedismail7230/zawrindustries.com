@@ -54,30 +54,22 @@ export default function Footer() {
     setStatus('idle');
 
     try {
-      // Check if email already exists
-      const { data: existing, error: checkError } = await supabase
-        .from('newsletters')
-        .select('id')
-        .eq('email', email.trim().toLowerCase())
-        .maybeSingle();
+      const res = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim().toLowerCase() }),
+      });
 
-      if (checkError) throw checkError;
+      const data = await res.json();
 
-      if (existing) {
+      if (data.status === 'already') {
         setStatus('already');
-        setSubmitting(false);
-        return;
+      } else if (res.ok) {
+        setStatus('success');
+        setEmail('');
+      } else {
+        setStatus('error');
       }
-
-      // Insert new subscriber
-      const { error: insertError } = await supabase
-        .from('newsletters')
-        .insert([{ email: email.trim().toLowerCase(), status: 'Active' }]);
-
-      if (insertError) throw insertError;
-
-      setStatus('success');
-      setEmail('');
     } catch (err) {
       console.error('Subscription error:', err);
       setStatus('error');

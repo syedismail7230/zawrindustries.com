@@ -708,65 +708,13 @@ Zawr Industries
   return { subject, html, text };
 }
 
-// 8. Client Relations Callback Confirmation
-export function generateCallbackConfirmationEmail(params: {
-  fullName: string;
-  email: string;
-  phone?: string;
-  service?: string;
-}): { subject: string; html: string; text: string } {
-  const subject = `Callback Request Logged — Zawr Industries`;
-
-  const text = `
-ZAWR INDUSTRIES
-Client Solutions & Relations
-
-Dear ${params.fullName},
-
-Thank you for requesting a client consultation with Zawr Industries.
-
-Client: ${params.fullName}
-Email: ${params.email}
-Phone: ${params.phone || 'Not provided'}
-Inquiry Focus: ${params.service || 'General Business Inquiry'}
-
-A dedicated client relations manager will reach out at your requested contact details.
-
-Warm regards,
-Client Solutions & Relations
-Zawr Industries
-  `.trim();
-
-  const tableRows = [
-    { label: 'Client', value: params.fullName, isBold: true },
-    { label: 'Email', value: params.email },
-    ...(params.phone ? [{ label: 'Contact Phone', value: params.phone }] : []),
-    ...(params.service ? [{ label: 'Service Focus', value: params.service }] : []),
-    { label: 'Status', value: 'Callback Scheduled', isBold: true },
-  ];
-
-  const html = renderEmailShell({
-    category: 'CLIENT RELATIONS',
-    title: subject,
-    heading: 'Callback Request Received',
-    recipientName: params.fullName,
-    introParagraph: `Thank you for requesting a business consultation with Zawr Industries. We have received your contact request and area of interest.`,
-    tableRows,
-    noticeTitle: 'Dedicated Account Specialist',
-    noticeText:
-      'A member of our client relations team will contact you directly via phone or email within standard business hours to discuss your requirements.',
-    signoffTeam: 'Client Solutions & Relations',
-  });
-
-  return { subject, html, text };
-}
-
-// 9. Partner Integration Request Confirmation
+// 8. Partner Integration Request Confirmation (For All Partner Pages & Creator Track)
 export function generatePartnerConfirmationEmail(params: {
   fullName: string;
   email: string;
   company: string;
   partnerType?: string;
+  phone?: string;
 }): { subject: string; html: string; text: string } {
   const subject = `Partnership Application: ${params.company} — Zawr Industries`;
 
@@ -778,9 +726,10 @@ Dear ${params.fullName},
 
 Thank you for submitting your partnership integration request for ${params.company}.
 
-Company: ${params.company}
+Company / Brand: ${params.company}
 Contact Person: ${params.fullName}
-Program: ${params.partnerType || 'Corporate Partner'}
+Track: ${params.partnerType || 'Strategic Corporate Partner'}
+Email: ${params.email}
 
 Our ecosystem alliance team will review your integration profile and connect with next steps.
 
@@ -790,24 +739,71 @@ Zawr Industries
   `.trim();
 
   const tableRows = [
-    { label: 'Company', value: params.company, isBold: true },
+    { label: 'Partner / Brand', value: params.company, isBold: true },
     { label: 'Contact Person', value: params.fullName },
     { label: 'Email', value: params.email },
-    ...(params.partnerType ? [{ label: 'Program Track', value: params.partnerType }] : []),
+    ...(params.phone ? [{ label: 'Phone', value: params.phone }] : []),
+    ...(params.partnerType ? [{ label: 'Program Track', value: params.partnerType, isBold: true }] : []),
     { label: 'Status', value: 'Application In Review', isBold: true },
   ];
 
   const html = renderEmailShell({
     category: 'PARTNERSHIPS',
     title: subject,
-    heading: 'Partnership Request Received',
+    heading: 'Partnership Application Received',
     recipientName: params.fullName,
-    introParagraph: `Thank you for submitting your partnership application on behalf of <strong style="color: #000000;">${params.company}</strong> to join the Zawr Industries Partner Network.`,
+    introParagraph: `Thank you for submitting a partnership application on behalf of <strong style="color: #000000;">${params.company}</strong> to join the Zawr Industries Partner & Creator Ecosystem.`,
     tableRows,
-    noticeTitle: 'Alliance Review',
+    noticeTitle: 'Alliance Evaluation & Next Steps',
     noticeText:
-      'Our alliance directors are evaluating your profile against ecosystem opportunities. We will reach out to discuss joint value creation and technical/commercial integration.',
+      'Our ecosystem directors and technical alliance team are reviewing your submission against our portfolio initiatives. A representative will contact you directly to discuss integration scope, timelines, and collaboration agreements.',
     signoffTeam: 'Ecosystem & Strategic Growth',
+  });
+
+  return { subject, html, text };
+}
+
+// 9. Newsletter & News Alerts Subscription Confirmation
+export function generateNewsletterConfirmationEmail(params: {
+  email: string;
+}): { subject: string; html: string; text: string } {
+  const subject = `News Alerts Subscription Confirmed — Zawr Industries`;
+
+  const text = `
+ZAWR INDUSTRIES
+Corporate Newsroom & Press Alerts
+
+Welcome to Zawr Industries News Alerts.
+
+Your subscription for ${params.email} is now confirmed. You will receive official corporate announcements, financial statements, major product releases, and executive briefings directly to this address.
+
+Subscriber: ${params.email}
+Frequency: Real-time & Weekly Highlights
+Status: Active
+
+Warm regards,
+Corporate Communications & Newsroom
+Zawr Industries
+  `.trim();
+
+  const tableRows = [
+    { label: 'Subscriber Email', value: params.email, isBold: true },
+    { label: 'Subscription Type', value: 'Corporate News & Press Alerts' },
+    { label: 'Delivery', value: 'Direct to Inbox' },
+    { label: 'Status', value: 'Active Subscription', isBold: true },
+  ];
+
+  const html = renderEmailShell({
+    category: 'NEWS ALERTS',
+    title: subject,
+    heading: 'Subscription Confirmed',
+    recipientName: 'Valued Subscriber',
+    introParagraph: `You have successfully subscribed to the <strong style="color: #000000;">Zawr Industries Corporate News & Press Alerts</strong> network.`,
+    tableRows,
+    noticeTitle: 'What You Will Receive',
+    noticeText:
+      'As a verified subscriber, you will receive real-time press releases, financial disclosures, shareholder notices, and strategic venture announcements as they are published by our global newsroom.',
+    signoffTeam: 'Corporate Communications & Newsroom',
   });
 
   return { subject, html, text };
