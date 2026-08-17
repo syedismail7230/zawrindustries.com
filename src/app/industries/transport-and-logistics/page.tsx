@@ -9,12 +9,59 @@ const InteractiveTruckXray = dynamic(() => import('@/components/InteractiveTruck
 const AgvScrollSection = dynamic(() => import('@/components/AgvScrollSection').then(m => m.AgvScrollSection));
 const Capabilities3DGrid = dynamic(() => import('@/components/Capabilities3DGrid').then(m => m.Capabilities3DGrid));
 
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
+
 export const metadata: Metadata = {
   title: "Trade & Logistics Solutions — Zawr Industries India",
-  description: "Zawr Industries offers technology-enabled trade and logistics solutions across India and international markets — supply chain management, freight, and smart mobility platforms.",
+  description: "Zawr Industries offers technology-enabled trade and logistics solutions across India and international markets — automated supply chain, multi-modal freight, AGV warehousing, and smart mobility platforms.",
+  alternates: {
+    canonical: 'https://zawrindustries.com/industries/transport-and-logistics',
+  },
+  openGraph: {
+    title: "Transport & Logistics Automation — Zawr Industries",
+    description: "Multi-modal freight, smart fleet telematics, AGV warehousing, and automated supply chain routing.",
+    url: "https://zawrindustries.com/industries/transport-and-logistics",
+    type: "website",
+  }
 };
 
 export default function LogisticsPage() {
+  const serviceJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    'name': 'Zawr Transport & Logistics Automation Services',
+    'provider': {
+      '@type': 'Corporation',
+      '@id': 'https://zawrindustries.com/#corporation',
+      'name': 'Zawr Industries LLP',
+      'url': 'https://zawrindustries.com'
+    },
+    'serviceType': 'Supply Chain Logistics, Fleet Telematics & Multi-Modal Freight',
+    'areaServed': ['India', 'United Arab Emirates', 'United States', 'Global'],
+  };
+
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': [
+      {
+        '@type': 'Question',
+        'name': 'What logistics automation solutions does Zawr Industries offer?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'Zawr Industries provides AI-driven multi-modal freight dispatch, automated guided vehicle (AGV) warehouse routing, real-time fleet telematics, cold chain environmental monitoring, and digital supply chain visibility.'
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'How does Zawr optimize supply chain transit times?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'By utilizing predictive route optimization algorithms that dynamically analyze traffic patterns, customs clearances, and weather telemetry in sub-3-second computation cycles.'
+        }
+      }
+    ]
+  };
   const capabilities = [
     {
       title: "Smart Fleet Telemetry",
@@ -44,6 +91,21 @@ export default function LogisticsPage() {
 
   return (
     <div style={{ backgroundColor: '#ffffff', color: '#000000', minHeight: '100vh', fontFamily: 'Inter, sans-serif', overflowX: 'hidden' }}>
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', item: '/' },
+          { name: 'Industries', item: '/industries/transport-and-logistics' },
+          { name: 'Transport & Logistics', item: '/industries/transport-and-logistics' }
+        ]}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       
       {/* ── HERO BANNER EXTENDING FULL 100VH DOWN THE SCREEN ── */}
       <div style={{

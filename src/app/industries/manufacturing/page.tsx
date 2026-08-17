@@ -6,9 +6,20 @@ const ManufacturingHeroClient = dynamic(() => import('@/components/Manufacturing
 const Capabilities3DGrid = dynamic(() => import('@/components/Capabilities3DGrid').then(m => m.Capabilities3DGrid));
 const FactoryDashboardInteractive = dynamic(() => import('@/components/FactoryDashboardInteractive'));
 
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
+
 export const metadata: Metadata = {
   title: "AI Powered Precision Manufacturing — Zawr Industries",
-  description: "Zawr Industries delivers AI-powered precision manufacturing, 3D robotics, contract production, and advanced engineering solutions under Make in India.",
+  description: "Zawr Industries delivers AI-powered precision manufacturing, 3D robotics, CNC metallurgy, and turnkey industrial production under Make in India.",
+  alternates: {
+    canonical: 'https://zawrindustries.com/industries/manufacturing',
+  },
+  openGraph: {
+    title: "Precision Manufacturing & Industrial Autonomy — Zawr Industries",
+    description: "Multi-axis CNC milling, robotic automation, and AI defect detection for aerospace and industrial engineering.",
+    url: "https://zawrindustries.com/industries/manufacturing",
+    type: "website",
+  }
 };
 
 const manufacturingCapabilities = [
@@ -88,8 +99,60 @@ function ArchitecturalGridBadge({ metric, label }: MetricBadgeProps) {
 }
 
 export default function ManufacturingPage() {
+  const serviceJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    'name': 'Zawr Precision Manufacturing & Industrial Robotics',
+    'provider': {
+      '@type': 'Corporation',
+      '@id': 'https://zawrindustries.com/#corporation',
+      'name': 'Zawr Industries LLP',
+      'url': 'https://zawrindustries.com'
+    },
+    'serviceType': 'Precision CNC Machining, Industrial Robotics & Contract Production',
+    'areaServed': ['India', 'United Arab Emirates', 'United States', 'Global'],
+  };
+
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': [
+      {
+        '@type': 'Question',
+        'name': 'What precision manufacturing capabilities does Zawr Industries operate?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'Zawr Industries operates multi-axis CNC milling and turning with ±0.005 mm tolerance, articulated robotic assembly cells, computer-vision AI defect detection, and turnkey contract manufacturing under Make in India.'
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'What industries do Zawr manufacturing facilities serve?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'Aerospace, defense, automotive, renewable energy, and heavy industrial machinery sectors across domestic and global markets.'
+        }
+      }
+    ]
+  };
+
   return (
     <div style={{ backgroundColor: '#ffffff', color: '#111111', minHeight: '100vh', overflowX: 'hidden' }}>
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', item: '/' },
+          { name: 'Industries', item: '/industries/manufacturing' },
+          { name: 'Precision Manufacturing', item: '/industries/manufacturing' }
+        ]}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       
       {/* Responsive styles injected via a style tag */}
       <style>{`

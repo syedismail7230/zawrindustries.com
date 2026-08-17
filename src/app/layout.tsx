@@ -173,6 +173,12 @@ export default function RootLayout({
                     "Real Estate Development",
                     "Healthcare Technology"
                   ],
+                  "areaServed": [
+                    { "@type": "Country", "name": "India" },
+                    { "@type": "Country", "name": "United Arab Emirates" },
+                    { "@type": "Country", "name": "United States" },
+                    { "@type": "AdministrativeArea", "name": "Global" }
+                  ],
                   "hasOfferCatalog": {
                     "@type": "OfferCatalog",
                     "name": "Zawr Industries Products & Services",
@@ -262,6 +268,36 @@ export default function RootLayout({
                   }
                 },
                 {
+                  "@type": "LocalBusiness",
+                  "@id": "https://zawrindustries.com/#localbusiness",
+                  "name": "Zawr Industries LLP — Global Headquarters",
+                  "url": "https://zawrindustries.com",
+                  "telephone": "+91-9880464078",
+                  "email": "info@zawrindustries.com",
+                  "priceRange": "$$$$",
+                  "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "Old Airport Rd, HAL",
+                    "addressLocality": "Bengaluru",
+                    "addressRegion": "Karnataka",
+                    "postalCode": "560008",
+                    "addressCountry": "IN"
+                  },
+                  "geo": {
+                    "@type": "GeoCoordinates",
+                    "latitude": 12.9600,
+                    "longitude": 77.6433
+                  },
+                  "openingHoursSpecification": [
+                    {
+                      "@type": "OpeningHoursSpecification",
+                      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+                      "opens": "09:00",
+                      "closes": "18:00"
+                    }
+                  ]
+                },
+                {
                   "@type": "WebSite",
                   "@id": "https://zawrindustries.com/#website",
                   "name": "Zawr Industries LLP",
@@ -284,31 +320,47 @@ export default function RootLayout({
                       "name": "What is Zawr Industries LLP?",
                       "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Zawr Industries LLP is an Indian multi-sector conglomerate headquartered in Bengaluru, delivering enterprise software, AI platforms, automated logistics, precision manufacturing, real estate, and healthcare technology solutions across international markets."
+                        "text": "Zawr Industries LLP is a leading Indian multi-sector industrial conglomerate headquartered in Bengaluru, Karnataka. The company engineers enterprise software, AI platforms, automated logistics, precision manufacturing, real estate, and healthcare technology solutions for clients worldwide."
                       }
                     },
                     {
                       "@type": "Question",
-                      "name": "Who are the executive leaders of Zawr Industries?",
+                      "name": "Where is the global headquarters of Zawr Industries located?",
                       "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Zawr Industries was officially registered on 12 January 2024 by Mr. Syed Ismail Zabiulla (Chief Executive Officer) and Mr. Mohammed Ahmed (Managing Director)."
+                        "text": "Zawr Industries is headquartered at HAL Old Airport Road, Bengaluru, Karnataka 560008, India, with international operations extending across the UAE, USA, and global enterprise markets."
                       }
                     },
                     {
                       "@type": "Question",
-                      "name": "What proprietary platforms does Zawr Industries develop?",
+                      "name": "Who founded Zawr Industries?",
                       "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Zawr Industries develops proprietary enterprise software platforms including Firm AI, VelocityOS, Sketch Studio, Zawr AI, and Quick Dial CRM."
+                        "text": "Zawr Industries was founded by Mr. Syed Ismail Zabiulla (Chief Executive Officer) and Mr. Mohammed Ahmed (Managing Director), officially registered on January 12, 2024."
                       }
                     },
                     {
                       "@type": "Question",
-                      "name": "What core industries does Zawr Industries operate in?",
+                      "name": "What proprietary platforms are developed by Zawr Industries?",
                       "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Zawr Industries operates across five core business sectors: IT Services & AI Engineering, Transport & Logistics, Precision Manufacturing, Real Estate Development, and Healthcare Technology."
+                        "text": "Zawr Industries develops proprietary enterprise platforms including Firm AI (Decision Intelligence), VelocityOS (Cloud Operating System), Sketch Studio (UI/UX Design), Zawr AI (Autonomous Agent Engine), and Quick Dial (Sales CRM)."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "What industrial sectors does Zawr Industries operate across?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Zawr Industries operates across five core divisions: IT Services & AI Engineering, Transport & Logistics Automation, Precision Manufacturing & Robotics, Real Estate Development, and Healthcare Technology."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "How can businesses and candidates engage with Zawr Industries?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Businesses can submit partnership or client inquiries through the public relations desk, while professionals can apply for full-time engineering careers or join the freelance creator network directly on the Zawr careers portal."
                       }
                     }
                   ]

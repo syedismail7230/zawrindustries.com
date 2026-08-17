@@ -4,6 +4,8 @@ import React from 'react';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
+
 const PitchDeckViewer = dynamic(() => import('./PitchDeckViewer'), {
   ssr: false,
   loading: () => <div style={{ color: '#fff', fontSize: '1.25rem' }}>Loading Pitch Deck...</div>
@@ -11,6 +13,43 @@ const PitchDeckViewer = dynamic(() => import('./PitchDeckViewer'), {
 
 // Main Page Component
 export default function InvestorsPage() {
+  const investorJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': 'https://zawrindustries.com/investors#webpage',
+    'url': 'https://zawrindustries.com/investors',
+    'name': 'Investor Relations & Capital Governance — Zawr Industries',
+    'description': 'Investor relations, audited financial reports, shareholder governance, and corporate disclosures for Zawr Industries LLP.',
+    'publisher': {
+      '@type': 'Corporation',
+      '@id': 'https://zawrindustries.com/#corporation',
+      'name': 'Zawr Industries LLP',
+      'url': 'https://zawrindustries.com'
+    }
+  };
+
+  const faqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': [
+      {
+        '@type': 'Question',
+        'name': 'How can institutional investors participate in Zawr Industries equity rounds?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'Accredited institutional investors and family offices can submit inquiries via the official Investor Interest portal at /investors/interest.'
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'Where are Zawr Industries financial statements and annual reports published?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'Audited financial disclosures, balance sheets, and quarterly reports are available directly in the Financial Reports archive at /investors/financial-report.'
+        }
+      }
+    ]
+  };
   const [isPitchDeckOpen, setIsPitchDeckOpen] = React.useState(false);
   const [hasPitchDeck, setHasPitchDeck] = React.useState(true);
   const [reports, setReports] = React.useState<any[]>([]);
@@ -79,6 +118,20 @@ export default function InvestorsPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', fontFamily: 'sans-serif' }}>
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', item: '/' },
+          { name: 'Investors', item: '/investors' }
+        ]}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(investorJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       
       {/* 2D Redesigned Hero Section */}
       <div style={{ 

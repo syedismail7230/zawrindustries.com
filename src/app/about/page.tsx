@@ -32,13 +32,44 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   const jsonLd = {
     '@context': 'https://schema.org',
-    '@type': 'Corporation',
-    'name': 'Zawr Industries LLP',
-    'alternateName': 'Zawr Industries',
-    'legalName': 'Zawr Industries LLP',
-    'url': 'https://zawrindustries.com',
-    'logo': 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png',
-    'description': 'Zawr Industries LLP is a leading Indian technology, software engineering, and business transformation company headquartered in Bangalore.',
+    '@type': 'AboutPage',
+    '@id': 'https://zawrindustries.com/about#webpage',
+    'url': 'https://zawrindustries.com/about',
+    'name': 'About Zawr Industries LLP — Corporate Profile & Governance',
+    'description': 'Corporate overview of Zawr Industries LLP, including company history, executive leadership, core values, sustainability, and technological innovation.',
+    'mainEntity': {
+      '@type': 'Corporation',
+      '@id': 'https://zawrindustries.com/#corporation',
+      'name': 'Zawr Industries LLP',
+      'url': 'https://zawrindustries.com',
+      'logo': 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png',
+      'foundingDate': '2024-01-12',
+      'address': {
+        '@type': 'PostalAddress',
+        'streetAddress': 'Old Airport Rd, HAL',
+        'addressLocality': 'Bengaluru',
+        'addressRegion': 'Karnataka',
+        'postalCode': '560008',
+        'addressCountry': 'IN'
+      }
+    },
+    'breadcrumb': {
+      '@type': 'BreadcrumbList',
+      'itemListElement': [
+        {
+          '@type': 'ListItem',
+          'position': 1,
+          'name': 'Home',
+          'item': 'https://zawrindustries.com'
+        },
+        {
+          '@type': 'ListItem',
+          'position': 2,
+          'name': 'About',
+          'item': 'https://zawrindustries.com/about'
+        }
+      ]
+    }
   };
 
   return (

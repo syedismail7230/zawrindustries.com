@@ -9,9 +9,38 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ['/api/', '/_next/', '/private/'],
       },
       {
-        userAgent: ['Googlebot', 'Bingbot', 'Yandex', 'Baiduspider', 'DuckDuckBot', 'Slurp'],
+        // Traditional Search Engine Crawlers
+        userAgent: [
+          'Googlebot',
+          'Bingbot',
+          'Applebot',
+          'Yandex',
+          'Baiduspider',
+          'DuckDuckBot',
+          'Slurp',
+          'facebookexternalhit',
+          'LinkedInBot',
+        ],
         allow: '/',
-      }
+        disallow: ['/api/', '/_next/', '/private/'],
+      },
+      {
+        // Generative Engine & AI LLM Crawlers (GEO / AEO)
+        userAgent: [
+          'GPTBot',
+          'ChatGPT-User',
+          'PerplexityBot',
+          'ClaudeBot',
+          'anthropic-ai',
+          'Google-Extended',
+          'Amazonbot',
+          'Cohere-ai',
+          'Meta-ExternalAgent',
+          'Bytespider',
+        ],
+        allow: '/',
+        disallow: ['/api/', '/_next/', '/private/'],
+      },
     ],
     sitemap: [
       'https://zawrindustries.com/sitemap.xml',
@@ -19,4 +48,3 @@ export default function robots(): MetadataRoute.Robots {
     host: 'https://zawrindustries.com',
   };
 }
-

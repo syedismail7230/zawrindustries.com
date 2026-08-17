@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { supabase } from '@/lib/supabase';
+import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 
 export default function CareersPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -241,8 +242,41 @@ export default function CareersPage() {
     'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1200,c_limit/v1783710440/zawr/assets/careers-13.png'
   ];
 
+  const careersFaqJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    'mainEntity': [
+      {
+        '@type': 'Question',
+        'name': 'How do I apply for jobs at Zawr Industries?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'Explore current openings on the Careers portal at /careers, select your role, and submit your resume and profile details directly through the application portal.'
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'Can I join Zawr Industries as a freelance engineer or designer?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'Yes, Zawr operates a global Freelance Network for contract engineers, UI/UX designers, and AI specialists. Submit your portfolio via the Join as Freelance modal on /careers.'
+        }
+      }
+    ]
+  };
+
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', paddingTop: '8rem', overflow: 'hidden', fontFamily: 'sans-serif' }}>
+      <BreadcrumbJsonLd
+        items={[
+          { name: 'Home', item: '/' },
+          { name: 'Careers', item: '/careers' }
+        ]}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(careersFaqJsonLd) }}
+      />
       
       {/* Top Header Section */}
       <div style={{ textAlign: 'center', padding: '0 1.5rem', marginBottom: '4rem', zIndex: 10, position: 'relative' }}>
