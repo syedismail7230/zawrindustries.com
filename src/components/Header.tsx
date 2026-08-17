@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import ISO6391 from 'iso-639-1';
 
-const poppins = Poppins({ subsets: ['latin'], weight: ['400', '700'] });
+const poppins = Poppins({ subsets: ['latin'], weight: ['400', '700'], display: 'swap' });
 
 function ChevronDownIcon({ isOpen }: { isOpen: boolean }) {
   return (

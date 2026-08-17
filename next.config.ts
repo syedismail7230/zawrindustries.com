@@ -9,6 +9,9 @@ const nextConfig: NextConfig = {
   },
 
 
+  // Strict URL canonicalization: enforce non-trailing slash across all pages
+  trailingSlash: false,
+
   // Enable Brotli / Gzip compression of text assets
   compress: true,
 

@@ -6,7 +6,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ClientWidgets from '@/components/ClientWidgets';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
 export const metadata: Metadata = {
   title: 'Zawr Industries — Multi-Sector Technology, Manufacturing & Logistics Conglomerate',
