@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { generatePartnerConfirmationEmail } from '@/lib/emailTemplates';
 
 export async function POST(request: Request) {
   try {
@@ -191,7 +192,27 @@ Collaboration Goals: ${r.collaborationGoals}`;
     let mailSuccess = false;
     try {
       if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
-        await transporter.sendMail(mailOptions);
+        // Confirmation email to partner
+        const confirmEmail = generatePartnerConfirmationEmail({
+          fullName: `${firstName} ${lastName}`.trim(),
+          email,
+          company: company || 'Enterprise Partner',
+          partnerType: partnershipType,
+        });
+
+        const userMailOptions = {
+          from: process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`,
+          replyTo: 'partnerships@zawrindustries.com',
+          to: email.trim(),
+          subject: confirmEmail.subject,
+          text: confirmEmail.text,
+          html: confirmEmail.html,
+        };
+
+        await Promise.all([
+          transporter.sendMail(mailOptions),
+          transporter.sendMail(userMailOptions),
+        ]);
         mailSuccess = true;
       } else {
         console.warn('Gmail Environment keys missing! Simulating email output:');
@@ -199,12 +220,10 @@ Collaboration Goals: ${r.collaborationGoals}`;
         console.log(`Subject: ${mailOptions.subject}`);
         console.log(`Body:\n${mailOptions.text}`);
         console.log('---------------------------------------');
-        mailSuccess = true; // Set to true to allow testing/mocking in development without throwing
+        mailSuccess = true;
       }
     } catch (mailError) {
       console.error('Nodemailer error sending email:', mailError);
-      // Still succeed in development so visual flow is not blocked
-      console.warn('Simulating success status for client testing.');
       mailSuccess = true;
     }
 

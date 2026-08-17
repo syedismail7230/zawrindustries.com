@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { generateRSVPConfirmationEmail } from '@/lib/emailTemplates';
 
 export async function POST(req: Request) {
   try {
@@ -10,47 +11,60 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    // Setup Nodemailer transporter using Gmail SMTP
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
-    });
+    if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.GMAIL_USER,
+          pass: process.env.GMAIL_APP_PASSWORD,
+        },
+      });
 
-    const mailOptions = {
-      from: process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`,
-      replyTo: email || 'events@zawrindustries.com',
-      to: 'events@zawrindustries.com',
-      subject: `New RSVP Booking Request: ${name} for ${eventTitle}`,
-      text: `
-Hello Zawr Events Management,
+      const senderFrom = process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`;
 
-A new corporate guest has requested an RSVP booking confirmation.
+      // 1. Internal Notification
+      const internalMailOptions = {
+        from: senderFrom,
+        replyTo: email || 'events@zawrindustries.com',
+        to: 'events@zawrindustries.com',
+        subject: `[RSVP Request] ${name} — ${eventTitle}`,
+        text: `New RSVP Access Pass Request:\n\nEvent: ${eventTitle}\nGuest: ${name}\nEmail: ${email}\nPhone: ${phone || 'N/A'}\nCompany: ${company || 'N/A'}\nDesignation: ${designation || 'N/A'}`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; padding: 24px; border: 1px solid #eee; border-radius: 10px;">
+            <h2 style="color: #000; margin-top: 0;">New Event Access Pass Request</h2>
+            <p><strong>Event:</strong> ${eventTitle}</p>
+            <p><strong>Guest Name:</strong> ${name}</p>
+            <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+            <p><strong>Phone:</strong> ${phone || 'Not provided'}</p>
+            <p><strong>Company:</strong> ${company || 'Not provided'}</p>
+            <p><strong>Designation:</strong> ${designation || 'Not provided'}</p>
+          </div>
+        `,
+      };
 
-Event Requested:
---------------------------------------------------
-- Event Title: ${eventTitle}
-- Event ID: ${eventId || 'N/A'}
+      // 2. User Confirmation Email
+      const confirmEmail = generateRSVPConfirmationEmail({
+        name,
+        email,
+        eventTitle,
+        company,
+        designation,
+      });
 
-Attendee Personal & Corporate Details:
---------------------------------------------------
-- Full Name: ${name}
-- Email Address: ${email}
-- Phone Number: ${phone || 'N/A'}
-- Company: ${company || 'N/A'}
-- Designation / Title: ${designation || 'N/A'}
+      const userMailOptions = {
+        from: senderFrom,
+        replyTo: 'events@zawrindustries.com',
+        to: email.trim(),
+        subject: confirmEmail.subject,
+        text: confirmEmail.text,
+        html: confirmEmail.html,
+      };
 
-Please review this booking and issue a confirmation or e-tickets accordingly.
-
-Best regards,
-Zawr Webmaster System
-      `,
-    };
-
-    // Dispatch email
-    await transporter.sendMail(mailOptions);
+      await Promise.all([
+        transporter.sendMail(internalMailOptions),
+        transporter.sendMail(userMailOptions),
+      ]);
+    }
 
     return NextResponse.json({ success: true, message: 'RSVP booking request logged successfully' });
 

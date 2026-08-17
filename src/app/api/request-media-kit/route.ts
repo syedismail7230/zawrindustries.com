@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { generateMediaKitConfirmationEmail } from '@/lib/emailTemplates';
 
 export async function POST(request: Request) {
   try {
@@ -12,54 +13,68 @@ export async function POST(request: Request) {
       );
     }
 
-    // Configure the transporter with Gmail SMTP using env vars
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.GMAIL_USER, 
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
-    });
+    if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+          user: process.env.GMAIL_USER, 
+          pass: process.env.GMAIL_APP_PASSWORD,
+        },
+      });
 
-    const resourcesList = Array.isArray(resources) ? resources.join(', ') : 'Not specified';
+      const senderFrom = process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`;
+      const resourcesList = Array.isArray(resources) ? resources.join(', ') : 'Not specified';
 
-    const mailOptions = {
-      from: process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`,
-      replyTo: email || 'media@zawrindustries.com',
-      to: 'media@zawrindustries.com', 
-      subject: `🚨 Media Kit Resource Request: ${companyName} - ${name}`,
-      text: `You have received a new Media Kit Resource Request.\n\nTarget Brand: ${companyName}\nRequester Name: ${name}\nEmail: ${email}\nOrganization: ${organization || 'Not provided'}\nRequested Resources: ${resourcesList}\n\nPurpose:\n${purpose}`,
-      html: `
-        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
-          <h2 style="color: #000; border-bottom: 2px solid #eaeaea; padding-bottom: 10px;">Media Kit Asset Request</h2>
-          <p style="color: #555; font-size: 16px;">A media partner has submitted a resource request for <strong>${companyName}</strong>.</p>
-          
-          <div style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin-top: 20px;">
-            <p style="margin: 0 0 10px 0;"><strong>Target Company:</strong> <span style="font-size: 1.1rem; color: #1d4ed8; font-weight: bold;">${companyName}</span></p>
-            <p style="margin: 0 0 10px 0;"><strong>Name:</strong> ${name}</p>
-            <p style="margin: 0 0 10px 0;"><strong>Organization:</strong> ${organization || 'Not provided'}</p>
-            <p style="margin: 0 0 10px 0;"><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-            <p style="margin: 0 0 10px 0;"><strong>Requested Assets:</strong> ${resourcesList}</p>
+      // 1. Internal notification
+      const internalMailOptions = {
+        from: senderFrom,
+        replyTo: email,
+        to: 'media@zawrindustries.com', 
+        subject: `[Media Kit Request] ${companyName} — ${name}`,
+        text: `New Media Kit Resource Request:\n\nBrand: ${companyName}\nRequester: ${name}\nEmail: ${email}\nOrganization: ${organization || 'N/A'}\nRequested Resources: ${resourcesList}\n\nPurpose:\n${purpose}`,
+        html: `
+          <div style="font-family: sans-serif; max-width: 600px; padding: 24px; border: 1px solid #eee; border-radius: 10px;">
+            <h2 style="color: #000; margin-top: 0;">Media Kit Resource Request</h2>
+            <p><strong>Target Brand:</strong> ${companyName}</p>
+            <p><strong>Requester Name:</strong> ${name}</p>
+            <p><strong>Organization / Agency:</strong> ${organization || 'N/A'}</p>
+            <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+            <p><strong>Requested Assets:</strong> ${resourcesList}</p>
+            <h3 style="margin-top: 20px;">Intended Purpose:</h3>
+            <div style="background: #f9f9f9; padding: 15px; border-left: 4px solid #000; white-space: pre-wrap;">${purpose}</div>
           </div>
+        `,
+      };
 
-          <h3 style="margin-top: 25px; color: #333;">Purpose / Intended Use:</h3>
-          <div style="background-color: #ffffff; padding: 15px; border-left: 4px solid #f59e0b; color: #444; line-height: 1.6; border: 1px solid #f3f4f6; border-radius: 4px;">
-            ${purpose.replace(/\n/g, '<br/>')}
-          </div>
+      // 2. User Confirmation Email
+      const confirmEmail = generateMediaKitConfirmationEmail({
+        name,
+        email,
+        companyName,
+        organization,
+        resources: resources || [],
+      });
 
-          <p style="margin-top: 30px; font-size: 12px; color: #999;">Automated message from Zawr Industries Website (Media Kit Portal)</p>
-        </div>
-      `,
-    };
+      const userMailOptions = {
+        from: senderFrom,
+        replyTo: 'media@zawrindustries.com',
+        to: email.trim(),
+        subject: confirmEmail.subject,
+        text: confirmEmail.text,
+        html: confirmEmail.html,
+      };
 
-    // Send the email
-    await transporter.sendMail(mailOptions);
+      await Promise.all([
+        transporter.sendMail(internalMailOptions),
+        transporter.sendMail(userMailOptions),
+      ]);
+    }
 
     return NextResponse.json({ success: true, message: 'Resource request submitted successfully' }, { status: 200 });
   } catch (error) {
     console.error('Error sending media kit request:', error);
     return NextResponse.json(
-      { error: 'Failed to submit resource request' },
+      { error: 'Failed to send email' },
       { status: 500 }
     );
   }

@@ -21,10 +21,28 @@ export default function InvestorInterestPage() {
     e.preventDefault();
     setStatus('loading');
     
-    // Simulating API call
-    setTimeout(() => {
-      setStatus('success');
-    }, 1500);
+    try {
+      const res = await fetch('/api/request-investor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          organization: formData.organization,
+          investmentSize: formData.investmentSize,
+          inquiry: formData.inquiry,
+        }),
+      });
+
+      if (res.ok) {
+        setStatus('success');
+      } else {
+        setStatus('error');
+      }
+    } catch (err) {
+      console.error(err);
+      setStatus('error');
+    }
   };
 
   return (
