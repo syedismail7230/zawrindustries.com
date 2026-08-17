@@ -1,5 +1,6 @@
 /**
- * Black & White Minimalist Email Templates matching Zawr Industries Brand Aesthetics.
+ * Clean, Card-free Black & White Minimalist Email Templates for Zawr Industries
+ * Using exact Poppins brand typography (ZAWR bold, INDUSTRIES regular).
  */
 
 export function generateCandidateJobConfirmationEmail(params: {
@@ -22,19 +23,20 @@ Thank you for applying for the ${params.jobTitle} position at Zawr Industries.
 
 We have successfully received your application, resume, and profile details. Our hiring team is currently reviewing submissions.
 
-Application Overview:
+Application Summary:
 - Position: ${params.jobTitle}
 - Candidate: ${fullName}
 - Email: ${params.email}
 - Contact: ${params.phone || 'Not provided'}
 - Status: Under Review
 
-What to expect:
-Our hiring managers will review your profile against role benchmarks. If your qualifications match our requirements, our People & Talent team will reach out directly to schedule the next steps.
+What happens next?
+Our hiring managers and technical leads will review your portfolio and experience against role criteria. If your qualifications align with our requirements, our Talent Acquisition team will reach out directly to schedule the next steps.
 
+Warm regards,
+Talent Acquisition & People Team
 Zawr Industries
-Bengaluru, India
-https://zawrindustries.com · hr@zawrindustries.com
+Bengaluru, India · https://zawrindustries.com · hr@zawrindustries.com
   `.trim();
 
   const html = `
@@ -44,26 +46,32 @@ https://zawrindustries.com · hr@zawrindustries.com
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${subject}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+    body, table, td, p, a, h1, h2, h3, span, strong {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+    }
+  </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #f7f7f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #111111; -webkit-font-smoothing: antialiased;">
-  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f7f7f8; padding: 48px 16px;">
+<body style="margin: 0; padding: 0; background-color: #ffffff; color: #111111; -webkit-font-smoothing: antialiased;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; padding: 40px 20px;">
     <tr>
       <td align="center">
-        <!-- Main Card -->
-        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 580px; background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 580px; text-align: left;">
           
-          <!-- Brand Header -->
+          <!-- Header -->
           <tr>
-            <td style="padding: 36px 40px 24px 40px; border-bottom: 1px solid #f0f0f2;">
+            <td style="padding-bottom: 24px; border-bottom: 1px solid #eeeeee;">
               <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                   <td>
-                    <span style="font-size: 14px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #000000; display: block;">
-                      ZAWR INDUSTRIES
+                    <!-- Logo: ZAWR bold, INDUSTRIES regular -->
+                    <span style="font-family: 'Poppins', sans-serif; font-size: 20px; color: #000000; display: inline-block; line-height: 1;">
+                      <strong style="font-weight: 800; letter-spacing: 0.02em;">ZAWR</strong> <span style="font-weight: 400; letter-spacing: 0.08em;">INDUSTRIES</span>
                     </span>
                   </td>
-                  <td align="right">
-                    <span style="display: inline-block; padding: 4px 12px; background-color: #000000; color: #ffffff; border-radius: 9999px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em;">
+                  <td align="right" valign="middle">
+                    <span style="font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #666666;">
                       CAREERS
                     </span>
                   </td>
@@ -72,93 +80,88 @@ https://zawrindustries.com · hr@zawrindustries.com
             </td>
           </tr>
 
-          <!-- Content Body -->
+          <!-- Main Heading -->
           <tr>
-            <td style="padding: 40px 40px 32px 40px;">
-              <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background-color: #f4f4f5; border-radius: 9999px; margin-bottom: 20px;">
-                <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background-color: #000000;"></span>
-                <span style="font-size: 12px; font-weight: 600; color: #18181b; letter-spacing: 0.02em;">Application Under Review</span>
-              </div>
-
-              <h1 style="margin: 0 0 16px 0; font-size: 26px; font-weight: 600; color: #000000; letter-spacing: -0.03em; line-height: 1.25;">
-                We’ve received your application
+            <td style="padding-top: 32px; padding-bottom: 16px;">
+              <h1 style="margin: 0; font-size: 24px; font-weight: 600; color: #000000; letter-spacing: -0.02em; line-height: 1.3;">
+                Application Received
               </h1>
+            </td>
+          </tr>
 
-              <p style="margin: 0 0 18px 0; font-size: 15px; line-height: 1.6; color: #3f3f46;">
+          <!-- Greeting & Description -->
+          <tr>
+            <td style="padding-bottom: 24px;">
+              <p style="margin: 0 0 14px 0; font-size: 15px; line-height: 1.6; color: #333333;">
                 Dear <strong style="color: #000000;">${fullName}</strong>,
               </p>
-
-              <p style="margin: 0 0 28px 0; font-size: 15px; line-height: 1.65; color: #52525b;">
-                Thank you for applying for the <strong style="color: #000000;">${params.jobTitle}</strong> role. We have securely received your resume and application credentials.
-              </p>
-
-              <!-- Clean Monochrome Data Card -->
-              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #fafafa; border: 1px solid #e4e4e7; border-radius: 12px; margin-bottom: 28px;">
-                <tr>
-                  <td style="padding: 22px 24px;">
-                    <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #71717a; margin-bottom: 14px;">
-                      Application Summary
-                    </div>
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #71717a;" width="36%">Position</td>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #000000; font-weight: 600;">${params.jobTitle}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #71717a;">Candidate</td>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #000000;">${fullName}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #71717a;">Email</td>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #000000;">${params.email}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #71717a;">Status</td>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #000000; font-weight: 600;">● Active Review</td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-
-              <!-- Next Steps Notice -->
-              <div style="border-left: 2px solid #000000; padding: 14px 18px; background-color: #fafafa; border-radius: 0 10px 10px 0; margin-bottom: 32px;">
-                <p style="margin: 0 0 4px 0; font-size: 13.5px; font-weight: 600; color: #000000;">
-                  Next Steps in Evaluation
-                </p>
-                <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #52525b;">
-                  Our hiring committee and technical leads will review your portfolio and qualifications. If there is a mutual fit, our talent acquisition team will contact you directly to schedule an introductory interview.
-                </p>
-              </div>
-
-              <!-- Button to Website -->
-              <table border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 32px;">
-                <tr>
-                  <td>
-                    <a href="https://zawrindustries.com/careers" style="display: inline-block; padding: 12px 24px; background-color: #000000; color: #ffffff; text-decoration: none; border-radius: 9999px; font-size: 13px; font-weight: 600; letter-spacing: 0.02em;">
-                      Explore Zawr Careers →
-                    </a>
-                  </td>
-                </tr>
-              </table>
-
-              <p style="margin: 0 0 4px 0; font-size: 14px; color: #71717a;">
-                Warm regards,
-              </p>
-              <p style="margin: 0; font-size: 14px; font-weight: 600; color: #000000;">
-                Talent Acquisition & People Team<br/>
-                <span style="font-weight: 400; color: #71717a;">Zawr Industries</span>
+              <p style="margin: 0; font-size: 15px; line-height: 1.65; color: #555555;">
+                Thank you for applying for the <strong style="color: #000000;">${params.jobTitle}</strong> position. We have securely received your application, resume, and profile details.
               </p>
             </td>
           </tr>
 
-          <!-- Minimalist Footer -->
+          <!-- Details Table (Clean Seamless Lines) -->
           <tr>
-            <td style="padding: 24px 40px; background-color: #fafafa; border-top: 1px solid #f0f0f2; text-align: center;">
-              <p style="margin: 0 0 6px 0; font-size: 12px; color: #71717a; font-weight: 500;">
+            <td>
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee; margin-bottom: 28px;">
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777;" width="36%">Position</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; font-weight: 600;">${params.jobTitle}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Candidate</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5; font-weight: 500;">${fullName}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Email</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5;">${params.email}</td>
+                </tr>
+                ${params.phone ? `
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Contact</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5;">${params.phone}</td>
+                </tr>` : ''}
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Status</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5; font-weight: 600;">Under Review</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Next Steps -->
+          <tr>
+            <td style="padding-bottom: 32px;">
+              <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #000000;">
+                Next Steps in Evaluation
+              </p>
+              <p style="margin: 0; font-size: 14px; line-height: 1.65; color: #555555;">
+                Our Talent Acquisition team & engineering leadership are reviewing your profile. If your qualifications match the role requirements, our team will reach out directly to schedule the next steps in our hiring process.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Sign-off -->
+          <tr>
+            <td style="padding-bottom: 40px;">
+              <p style="margin: 0 0 4px 0; font-size: 14px; color: #777777;">
+                Warm regards,
+              </p>
+              <p style="margin: 0; font-size: 14.5px; font-weight: 600; color: #000000;">
+                Talent Acquisition & People Team<br/>
+                <span style="font-weight: 400; color: #777777;">Zawr Industries</span>
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding-top: 24px; border-top: 1px solid #eeeeee; text-align: center;">
+              <p style="margin: 0 0 6px 0; font-size: 12px; color: #888888;">
                 © ${new Date().getFullYear()} Zawr Industries. All rights reserved.
               </p>
-              <p style="margin: 0; font-size: 11.5px; color: #a1a1aa;">
+              <p style="margin: 0; font-size: 12px; color: #aaaaaa;">
                 Bengaluru, India · <a href="https://zawrindustries.com" style="color: #000000; text-decoration: underline;">zawrindustries.com</a> · <a href="mailto:hr@zawrindustries.com" style="color: #000000; text-decoration: underline;">hr@zawrindustries.com</a>
               </p>
             </td>
@@ -201,14 +204,15 @@ Submission Overview:
 - Email: ${params.email}
 - Contact: ${params.phone || 'Not provided'}
 - Portfolio: ${params.portfolio || 'Not provided'}
-- Resume / CV: ${params.hasResume ? 'Attached & Recorded' : 'Not attached'}
+- Resume / CV: ${params.hasResume ? 'Attached' : 'Not attached'}
 
-Project Allocation & Review:
-Our technical project directors evaluate freelance profiles against current contract pipelines and client deliverables. If your skillset aligns with an active project, our team will get in touch with you directly with project specifications and terms.
+Project Review & Eligibility:
+Our technical project directors evaluate freelance profiles against active contract pipelines and client deliverables. If your skillset aligns with an upcoming project, our team will get in touch with you directly to discuss scope and timelines.
 
+Warm regards,
+Freelance & Creator Ecosystem
 Zawr Industries
-Bengaluru, India
-https://zawrindustries.com · hr@zawrindustries.com
+Bengaluru, India · https://zawrindustries.com · hr@zawrindustries.com
   `.trim();
 
   const html = `
@@ -218,26 +222,32 @@ https://zawrindustries.com · hr@zawrindustries.com
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>${subject}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+    body, table, td, p, a, h1, h2, h3, span, strong {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+    }
+  </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #f7f7f8; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color: #111111; -webkit-font-smoothing: antialiased;">
-  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #f7f7f8; padding: 48px 16px;">
+<body style="margin: 0; padding: 0; background-color: #ffffff; color: #111111; -webkit-font-smoothing: antialiased;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; padding: 40px 20px;">
     <tr>
       <td align="center">
-        <!-- Main Card -->
-        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 580px; background-color: #ffffff; border: 1px solid #e4e4e7; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 580px; text-align: left;">
           
-          <!-- Brand Header -->
+          <!-- Header -->
           <tr>
-            <td style="padding: 36px 40px 24px 40px; border-bottom: 1px solid #f0f0f2;">
+            <td style="padding-bottom: 24px; border-bottom: 1px solid #eeeeee;">
               <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                   <td>
-                    <span style="font-size: 14px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #000000; display: block;">
-                      ZAWR INDUSTRIES
+                    <!-- Logo: ZAWR bold, INDUSTRIES regular -->
+                    <span style="font-family: 'Poppins', sans-serif; font-size: 20px; color: #000000; display: inline-block; line-height: 1;">
+                      <strong style="font-weight: 800; letter-spacing: 0.02em;">ZAWR</strong> <span style="font-weight: 400; letter-spacing: 0.08em;">INDUSTRIES</span>
                     </span>
                   </td>
-                  <td align="right">
-                    <span style="display: inline-block; padding: 4px 12px; background-color: #000000; color: #ffffff; border-radius: 9999px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em;">
+                  <td align="right" valign="middle">
+                    <span style="font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #666666;">
                       FREELANCE
                     </span>
                   </td>
@@ -246,100 +256,90 @@ https://zawrindustries.com · hr@zawrindustries.com
             </td>
           </tr>
 
-          <!-- Content Body -->
+          <!-- Main Heading -->
           <tr>
-            <td style="padding: 40px 40px 32px 40px;">
-              <div style="display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; background-color: #f4f4f5; border-radius: 9999px; margin-bottom: 20px;">
-                <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background-color: #000000;"></span>
-                <span style="font-size: 12px; font-weight: 600; color: #18181b; letter-spacing: 0.02em;">Profile In Review</span>
-              </div>
-
-              <h1 style="margin: 0 0 16px 0; font-size: 26px; font-weight: 600; color: #000000; letter-spacing: -0.03em; line-height: 1.25;">
+            <td style="padding-top: 32px; padding-bottom: 16px;">
+              <h1 style="margin: 0; font-size: 24px; font-weight: 600; color: #000000; letter-spacing: -0.02em; line-height: 1.3;">
                 Freelance Application Received
               </h1>
+            </td>
+          </tr>
 
-              <p style="margin: 0 0 18px 0; font-size: 15px; line-height: 1.6; color: #3f3f46;">
+          <!-- Greeting & Description -->
+          <tr>
+            <td style="padding-bottom: 24px;">
+              <p style="margin: 0 0 14px 0; font-size: 15px; line-height: 1.6; color: #333333;">
                 Dear <strong style="color: #000000;">${params.fullName}</strong>,
               </p>
-
-              <p style="margin: 0 0 28px 0; font-size: 15px; line-height: 1.65; color: #52525b;">
-                Thank you for submitting your profile to the Zawr Industries Freelance & Partner Ecosystem. We have successfully logged your expertise in <strong style="color: #000000;">${params.skill}</strong>.
-              </p>
-
-              <!-- Clean Monochrome Data Card -->
-              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #fafafa; border: 1px solid #e4e4e7; border-radius: 12px; margin-bottom: 28px;">
-                <tr>
-                  <td style="padding: 22px 24px;">
-                    <div style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #71717a; margin-bottom: 14px;">
-                      Submission Details
-                    </div>
-                    <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                      <tr>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #71717a;" width="36%">Specialization</td>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #000000; font-weight: 600;">${params.skill}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #71717a;">Applicant</td>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #000000;">${params.fullName}</td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #71717a;">Email</td>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #000000;">${params.email}</td>
-                      </tr>
-                      ${params.phone ? `
-                      <tr>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #71717a;">Contact</td>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #000000;">${params.phone}</td>
-                      </tr>` : ''}
-                      <tr>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #71717a;">Resume / CV</td>
-                        <td style="padding: 6px 0; font-size: 13.5px; color: #000000; font-weight: 600;">
-                          ${params.hasResume ? '● Attached' : 'Not attached'}
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-
-              <!-- Review Notice Box -->
-              <div style="border-left: 2px solid #000000; padding: 14px 18px; background-color: #fafafa; border-radius: 0 10px 10px 0; margin-bottom: 32px;">
-                <p style="margin: 0 0 4px 0; font-size: 13.5px; font-weight: 600; color: #000000;">
-                  Project Review & Eligibility Notice
-                </p>
-                <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #52525b;">
-                  Our technical project directors evaluate freelance profiles based on current contract pipelines. If you are eligible for any upcoming project or specialized deliverable, our team will get in touch with you directly to discuss scope and timelines.
-                </p>
-              </div>
-
-              <!-- Button to Website -->
-              <table border="0" cellspacing="0" cellpadding="0" style="margin-bottom: 32px;">
-                <tr>
-                  <td>
-                    <a href="https://zawrindustries.com" style="display: inline-block; padding: 12px 24px; background-color: #000000; color: #ffffff; text-decoration: none; border-radius: 9999px; font-size: 13px; font-weight: 600; letter-spacing: 0.02em;">
-                      Visit Zawr Industries →
-                    </a>
-                  </td>
-                </tr>
-              </table>
-
-              <p style="margin: 0 0 4px 0; font-size: 14px; color: #71717a;">
-                Warm regards,
-              </p>
-              <p style="margin: 0; font-size: 14px; font-weight: 600; color: #000000;">
-                Freelance & Creator Ecosystem<br/>
-                <span style="font-weight: 400; color: #71717a;">Zawr Industries</span>
+              <p style="margin: 0; font-size: 15px; line-height: 1.65; color: #555555;">
+                Thank you for submitting your freelance project application to Zawr Industries. We have successfully logged your expertise in <strong style="color: #000000;">${params.skill}</strong>.
               </p>
             </td>
           </tr>
 
-          <!-- Minimalist Footer -->
+          <!-- Details Table (Clean Seamless Lines) -->
           <tr>
-            <td style="padding: 24px 40px; background-color: #fafafa; border-top: 1px solid #f0f0f2; text-align: center;">
-              <p style="margin: 0 0 6px 0; font-size: 12px; color: #71717a; font-weight: 500;">
+            <td>
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee; margin-bottom: 28px;">
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777;" width="36%">Specialization</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; font-weight: 600;">${params.skill}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Applicant</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5; font-weight: 500;">${params.fullName}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Email</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5;">${params.email}</td>
+                </tr>
+                ${params.phone ? `
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Contact</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5;">${params.phone}</td>
+                </tr>` : ''}
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Resume / CV</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5; font-weight: 500;">
+                    ${params.hasResume ? 'Attached' : 'Not attached'}
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Next Steps -->
+          <tr>
+            <td style="padding-bottom: 32px;">
+              <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #000000;">
+                Project Review & Eligibility Notice
+              </p>
+              <p style="margin: 0; font-size: 14px; line-height: 1.65; color: #555555;">
+                Our technical project evaluation team will review your profile and credentials. If you are eligible for any upcoming project or specialized deliverable, our team will get in touch with you directly to discuss scope and timelines.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Sign-off -->
+          <tr>
+            <td style="padding-bottom: 40px;">
+              <p style="margin: 0 0 4px 0; font-size: 14px; color: #777777;">
+                Warm regards,
+              </p>
+              <p style="margin: 0; font-size: 14.5px; font-weight: 600; color: #000000;">
+                Freelance & Creator Ecosystem<br/>
+                <span style="font-weight: 400; color: #777777;">Zawr Industries</span>
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding-top: 24px; border-top: 1px solid #eeeeee; text-align: center;">
+              <p style="margin: 0 0 6px 0; font-size: 12px; color: #888888;">
                 © ${new Date().getFullYear()} Zawr Industries. All rights reserved.
               </p>
-              <p style="margin: 0; font-size: 11.5px; color: #a1a1aa;">
+              <p style="margin: 0; font-size: 12px; color: #aaaaaa;">
                 Bengaluru, India · <a href="https://zawrindustries.com" style="color: #000000; text-decoration: underline;">zawrindustries.com</a> · <a href="mailto:hr@zawrindustries.com" style="color: #000000; text-decoration: underline;">hr@zawrindustries.com</a>
               </p>
             </td>
@@ -389,25 +389,50 @@ Candidate's Resume/CV is attached to this email.
   const html = `
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="utf-8"></head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f7f7f8; padding: 32px 16px; color: #111111;">
-  <div style="max-width: 580px; margin: 0 auto; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 14px; overflow: hidden; padding: 32px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
-    <div style="font-size: 13px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #000000; margin-bottom: 20px;">
-      ZAWR INDUSTRIES HR
+<head>
+  <meta charset="utf-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+    body, table, td, p, a, h1, h2, h3, span, strong {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    }
+  </style>
+</head>
+<body style="margin: 0; padding: 32px 16px; background-color: #ffffff; color: #111111;">
+  <div style="max-width: 580px; margin: 0 auto; text-align: left;">
+    <div style="padding-bottom: 16px; border-bottom: 1px solid #eeeeee; margin-bottom: 24px;">
+      <span style="font-family: 'Poppins', sans-serif; font-size: 18px; color: #000000; line-height: 1;">
+        <strong style="font-weight: 800; letter-spacing: 0.02em;">ZAWR</strong> <span style="font-weight: 400; letter-spacing: 0.08em;">INDUSTRIES</span>
+      </span>
     </div>
-    <h2 style="margin: 0 0 16px 0; color: #000000; font-size: 22px; font-weight: 600; letter-spacing: -0.02em;">
+    <h2 style="margin: 0 0 16px 0; color: #000000; font-size: 20px; font-weight: 600;">
       New Job Application: ${params.jobTitle}
     </h2>
-    <div style="background: #fafafa; border: 1px solid #e4e4e7; padding: 18px 20px; border-radius: 10px; margin-bottom: 22px;">
-      <p style="margin: 5px 0; font-size: 14px;"><strong style="color: #71717a;">Candidate:</strong> <span style="color: #000000; font-weight: 600;">${fullName}</span></p>
-      <p style="margin: 5px 0; font-size: 14px;"><strong style="color: #71717a;">Role:</strong> <span style="color: #000000;">${params.jobTitle}</span></p>
-      <p style="margin: 5px 0; font-size: 14px;"><strong style="color: #71717a;">Email:</strong> <a href="mailto:${params.email}" style="color: #000000; text-decoration: underline;">${params.email}</a></p>
-      <p style="margin: 5px 0; font-size: 14px;"><strong style="color: #71717a;">Phone:</strong> <span style="color: #000000;">${params.phone || 'N/A'}</span></p>
-      <p style="margin: 5px 0; font-size: 14px;"><strong style="color: #71717a;">Portfolio / LinkedIn:</strong> ${params.portfolio ? `<a href="${params.portfolio}" style="color: #000000; text-decoration: underline;">${params.portfolio}</a>` : 'N/A'}</p>
-    </div>
-    <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 8px 0; color: #000000;">Cover Letter / Candidate Statement:</h3>
-    <div style="background: #fafafa; border: 1px solid #e4e4e7; padding: 16px; border-radius: 8px; font-size: 13.5px; line-height: 1.6; white-space: pre-wrap; color: #3f3f46; margin-bottom: 22px;">${params.coverLetter || 'No cover letter provided.'}</div>
-    <p style="font-size: 12.5px; color: #71717a; margin: 0;">Resume/CV is attached to this email.</p>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee; margin-bottom: 24px;">
+      <tr>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #777777;" width="35%">Candidate</td>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #000000; font-weight: 600;">${fullName}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Role</td>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5;">${params.jobTitle}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Email</td>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5;"><a href="mailto:${params.email}" style="color: #000000;">${params.email}</a></td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Phone</td>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5;">${params.phone || 'N/A'}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Portfolio</td>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5;">${params.portfolio ? `<a href="${params.portfolio}" style="color: #000000;">${params.portfolio}</a>` : 'N/A'}</td>
+      </tr>
+    </table>
+    <h3 style="font-size: 13.5px; font-weight: 600; margin: 0 0 8px 0; color: #000000;">Cover Letter:</h3>
+    <div style="font-size: 13.5px; line-height: 1.6; white-space: pre-wrap; color: #444444; margin-bottom: 24px;">${params.coverLetter || 'No cover letter provided.'}</div>
+    <p style="font-size: 12px; color: #888888; margin: 0;">Resume/CV is attached to this email.</p>
   </div>
 </body>
 </html>
@@ -448,25 +473,50 @@ Resume: ${params.hasResume ? 'Attached' : 'Not attached'}
   const html = `
 <!DOCTYPE html>
 <html lang="en">
-<head><meta charset="utf-8"></head>
-<body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f7f7f8; padding: 32px 16px; color: #111111;">
-  <div style="max-width: 580px; margin: 0 auto; background: #ffffff; border: 1px solid #e4e4e7; border-radius: 14px; overflow: hidden; padding: 32px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);">
-    <div style="font-size: 13px; font-weight: 800; letter-spacing: 0.16em; text-transform: uppercase; color: #000000; margin-bottom: 20px;">
-      ZAWR INDUSTRIES FREELANCE
+<head>
+  <meta charset="utf-8">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+    body, table, td, p, a, h1, h2, h3, span, strong {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    }
+  </style>
+</head>
+<body style="margin: 0; padding: 32px 16px; background-color: #ffffff; color: #111111;">
+  <div style="max-width: 580px; margin: 0 auto; text-align: left;">
+    <div style="padding-bottom: 16px; border-bottom: 1px solid #eeeeee; margin-bottom: 24px;">
+      <span style="font-family: 'Poppins', sans-serif; font-size: 18px; color: #000000; line-height: 1;">
+        <strong style="font-weight: 800; letter-spacing: 0.02em;">ZAWR</strong> <span style="font-weight: 400; letter-spacing: 0.08em;">INDUSTRIES</span>
+      </span>
     </div>
-    <h2 style="margin: 0 0 16px 0; color: #000000; font-size: 22px; font-weight: 600; letter-spacing: -0.02em;">
+    <h2 style="margin: 0 0 16px 0; color: #000000; font-size: 20px; font-weight: 600;">
       New Freelance Application: ${params.skill}
     </h2>
-    <div style="background: #fafafa; border: 1px solid #e4e4e7; padding: 18px 20px; border-radius: 10px; margin-bottom: 22px;">
-      <p style="margin: 5px 0; font-size: 14px;"><strong style="color: #71717a;">Applicant:</strong> <span style="color: #000000; font-weight: 600;">${params.fullName}</span></p>
-      <p style="margin: 5px 0; font-size: 14px;"><strong style="color: #71717a;">Specialization:</strong> <span style="color: #000000;">${params.skill}</span></p>
-      <p style="margin: 5px 0; font-size: 14px;"><strong style="color: #71717a;">Email:</strong> <a href="mailto:${params.email}" style="color: #000000; text-decoration: underline;">${params.email}</a></p>
-      <p style="margin: 5px 0; font-size: 14px;"><strong style="color: #71717a;">Phone:</strong> <span style="color: #000000;">${params.phone || 'N/A'}</span></p>
-      <p style="margin: 5px 0; font-size: 14px;"><strong style="color: #71717a;">Portfolio / LinkedIn:</strong> ${params.portfolio ? `<a href="${params.portfolio}" style="color: #000000; text-decoration: underline;">${params.portfolio}</a>` : 'N/A'}</p>
-    </div>
-    <h3 style="font-size: 14px; font-weight: 600; margin: 0 0 8px 0; color: #000000;">Experience & Background:</h3>
-    <div style="background: #fafafa; border: 1px solid #e4e4e7; padding: 16px; border-radius: 8px; font-size: 13.5px; line-height: 1.6; white-space: pre-wrap; color: #3f3f46; margin-bottom: 22px;">${params.coverLetter || 'No notes provided.'}</div>
-    <p style="font-size: 12.5px; color: #71717a; margin: 0;">${params.hasResume ? 'Resume/CV is attached to this email.' : 'No resume file attached.'}</p>
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee; margin-bottom: 24px;">
+      <tr>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #777777;" width="35%">Applicant</td>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #000000; font-weight: 600;">${params.fullName}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Specialization</td>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5;">${params.skill}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Email</td>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5;"><a href="mailto:${params.email}" style="color: #000000;">${params.email}</a></td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Phone</td>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5;">${params.phone || 'N/A'}</td>
+      </tr>
+      <tr>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #777777; border-top: 1px solid #f5f5f5;">Portfolio</td>
+        <td style="padding: 10px 0; font-size: 13.5px; color: #000000; border-top: 1px solid #f5f5f5;">${params.portfolio ? `<a href="${params.portfolio}" style="color: #000000;">${params.portfolio}</a>` : 'N/A'}</td>
+      </tr>
+    </table>
+    <h3 style="font-size: 13.5px; font-weight: 600; margin: 0 0 8px 0; color: #000000;">Experience & Notes:</h3>
+    <div style="font-size: 13.5px; line-height: 1.6; white-space: pre-wrap; color: #444444; margin-bottom: 24px;">${params.coverLetter || 'No notes provided.'}</div>
+    <p style="font-size: 12px; color: #888888; margin: 0;">${params.hasResume ? 'Resume/CV is attached to this email.' : 'No resume file attached.'}</p>
   </div>
 </body>
 </html>
