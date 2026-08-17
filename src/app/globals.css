@@ -171,33 +171,46 @@ button, input {
   stroke: #ffffff !important;
 }
 
-/* Light Page Header */
+/* Light Page Header (including Home Page) */
 .header.light-page-header {
-  color: #111111 !important;
+  color: #000000 !important;
   background-color: transparent !important;
 }
+.header.light-page-header .nav-item,
+.header.light-page-header .dropdown a,
+.header.light-page-header .logo-container a,
+.header.light-page-header .logo-bold,
+.header.light-page-header .logo-regular {
+  color: #000000 !important;
+}
+.header.light-page-header .icon-btn svg,
+.header.light-page-header svg {
+  stroke: #000000 !important;
+}
 .header.light-page-header.scrolled {
-  background-color: rgba(255, 255, 255, 0.85) !important;
+  background-color: rgba(255, 255, 255, 0.92) !important;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 .header.light-page-header .mobile-menu-btn {
-  color: #111111 !important;
+  color: #000000 !important;
 }
 .header.light-page-header:hover {
-  background-color: #ffffff !important;
-  color: #111111 !important;
-}
-.header.light-page-header svg {
-  stroke: #111111 !important;
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  color: #000000 !important;
 }
 .header.light-page-header .dropdown {
   background-color: #ffffff !important;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
+  border: 1px solid #eeeeee;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08) !important;
 }
 .header.light-page-header .dropdown a {
   color: #111111 !important;
+}
+.header.light-page-header .dropdown a:hover {
+  background-color: #f5f5f5 !important;
+  color: #000000 !important;
 }
 
 .logo-container {
