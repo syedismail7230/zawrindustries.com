@@ -923,12 +923,9 @@ export default function CareersPage() {
               </div>
             ) : (
               <div>
-                <h3 style={{ fontSize: '1.6rem', fontWeight: 600, color: '#ffffff', marginBottom: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.6rem', fontWeight: 600, color: '#ffffff', marginBottom: '1.5rem' }}>
                   Apply for Freelance Projects
                 </h3>
-                <p style={{ fontSize: '0.88rem', color: '#9ca3af', marginBottom: '1.75rem' }}>
-                  Submissions are delivered directly to <strong>hr@zawrindustries.com</strong> for project evaluation.
-                </p>
 
                 {freelanceError && (
                   <div style={{ backgroundColor: '#450a0a', border: '1px solid #7f1d1d', color: '#fca5a5', padding: '0.75rem 1rem', borderRadius: '8px', fontSize: '0.85rem', marginBottom: '1.25rem' }}>
