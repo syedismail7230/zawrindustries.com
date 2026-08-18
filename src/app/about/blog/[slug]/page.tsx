@@ -84,10 +84,23 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
     notFound();
   }
   
-  let blog;
+  let blog: any = null;
+  let relatedBlogs: any[] = [];
+  let prevBlog: any = null;
+  let nextBlog: any = null;
+
   try {
     const blogs = JSON.parse(fs.readFileSync(blogsPath, 'utf8'));
-    blog = blogs.find((b: any) => b.slug === slug);
+    const idx = blogs.findIndex((b: any) => b.slug === slug);
+    if (idx !== -1) {
+      blog = blogs[idx];
+      prevBlog = idx > 0 ? blogs[idx - 1] : null;
+      nextBlog = idx < blogs.length - 1 ? blogs[idx + 1] : null;
+      relatedBlogs = blogs
+        .filter((b: any) => b.slug !== slug)
+        .sort((a: any, b: any) => (a.category === blog.category ? -1 : 1))
+        .slice(0, 3);
+    }
   } catch (e) {
     console.error('Error parsing blogs JSON:', e);
   }
@@ -98,7 +111,12 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
 
   return (
     <>
-      <BlogClient blog={blog} />
+      <BlogClient
+        blog={blog}
+        relatedBlogs={relatedBlogs}
+        prevBlog={prevBlog}
+        nextBlog={nextBlog}
+      />
 
       {/* Schema.org BlogPosting markup for AI & Search Engines */}
       <script
