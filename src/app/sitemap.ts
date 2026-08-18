@@ -85,14 +85,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/legal/disclaimer',
     '/legal/refund-policy',
   ].map((route) => {
-    let priority = 0.8;
-    if (route === '') priority = 1.0;
-    else if (['/about', '/industries/it-service', '/industries/transport-and-logistics', '/industries/manufacturing', '/industries/estate', '/industries/healthcare', '/platforms', '/newsroom', '/contact', '/investors', '/careers'].includes(route)) priority = 0.9;
+    let priority = 0.7;
+    let changeFrequency: 'daily' | 'weekly' | 'monthly' = 'weekly';
+
+    if (route === '') {
+      priority = 1.0;
+      changeFrequency = 'daily';
+    } else if (['/industries/it-service', '/industries/transport-and-logistics', '/industries/manufacturing', '/industries/estate', '/investors', '/careers', '/contact'].includes(route)) {
+      priority = 0.95;
+      changeFrequency = 'daily';
+    } else if (['/about', '/platforms', '/newsroom'].includes(route)) {
+      priority = 0.85;
+      changeFrequency = 'weekly';
+    } else if (['/sustainability/empowerment', '/newsroom/media-kit', '/fraud-alert', '/notices'].includes(route)) {
+      priority = 0.3;
+      changeFrequency = 'monthly';
+    }
     
     return {
       url: `${baseUrl}${route}`,
       lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
+      changeFrequency,
       priority,
     };
   });
