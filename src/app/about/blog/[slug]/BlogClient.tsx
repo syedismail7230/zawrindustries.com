@@ -38,11 +38,43 @@ export default function BlogClient({
   const [activeSection, setActiveSection] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [copied, setCopied] = useState(false);
+  const [fontSizeMultiplier, setFontSizeMultiplier] = useState(1);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [feedback, setFeedback] = useState<'yes' | 'no' | null>(null);
 
   // Newsletter State
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [newsletterMsg, setNewsletterMsg] = useState('');
+
+  // Check bookmark status on mount
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('zawr_saved_articles') || '[]');
+      if (saved.includes(blog.slug)) {
+        setIsBookmarked(true);
+      }
+    } catch {
+      // ignore
+    }
+  }, [blog.slug]);
+
+  const toggleBookmark = () => {
+    try {
+      const saved: string[] = JSON.parse(localStorage.getItem('zawr_saved_articles') || '[]');
+      let updated: string[];
+      if (saved.includes(blog.slug)) {
+        updated = saved.filter(s => s !== blog.slug);
+        setIsBookmarked(false);
+      } else {
+        updated = [...saved, blog.slug];
+        setIsBookmarked(true);
+      }
+      localStorage.setItem('zawr_saved_articles', JSON.stringify(updated));
+    } catch {
+      // ignore
+    }
+  };
 
   // Track active section and reading progress bar
   useEffect(() => {
@@ -238,7 +270,7 @@ export default function BlogClient({
           height: fit-content;
           display: flex;
           flex-direction: column;
-          gap: 2.25rem;
+          gap: 2rem;
         }
 
         .sidebar-section-title {
@@ -290,6 +322,37 @@ export default function BlogClient({
           border-radius: 6px;
           white-space: nowrap;
           box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        /* Reading Utilities Card (Font Size, Bookmark, Print) */
+        .util-bar {
+          display: flex;
+          gap: 0.5rem;
+          align-items: center;
+        }
+        .util-btn {
+          padding: 0.35rem 0.75rem;
+          border-radius: 8px;
+          border: 1px solid #e5e7eb;
+          background-color: #ffffff;
+          font-size: 0.8rem;
+          font-weight: 500;
+          cursor: pointer;
+          color: #4b5563;
+          transition: all 0.2s ease;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+        }
+        .util-btn:hover {
+          background-color: #f3f4f6;
+          color: #000000;
+          border-color: #000000;
+        }
+        .util-btn.active {
+          background-color: #000000;
+          color: #ffffff;
+          border-color: #000000;
         }
 
         /* Table of Contents Card */
@@ -380,11 +443,73 @@ export default function BlogClient({
           color: #000000;
           letter-spacing: -0.015em;
         }
-        .reading-section p {
-          font-size: 1.125rem;
+        .reading-paragraph {
+          font-size: calc(1.125rem * var(--font-multiplier, 1));
           color: #374151;
           line-height: 1.9;
           margin: 0 0 1.5rem 0;
+        }
+
+        /* Tags Strip */
+        .tags-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin-top: 2rem;
+          margin-bottom: 3rem;
+          align-items: center;
+        }
+        .tag-pill {
+          padding: 0.35rem 0.85rem;
+          border-radius: 9999px;
+          background-color: #f3f4f6;
+          color: #4b5563;
+          font-size: 0.8rem;
+          font-weight: 500;
+          text-decoration: none;
+          transition: all 0.2s ease;
+        }
+        .tag-pill:hover {
+          background-color: #000000;
+          color: #ffffff;
+        }
+
+        /* Article Feedback Widget */
+        .feedback-box {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 1.25rem 1.75rem;
+          background-color: #fcfcfc;
+          border: 1px solid #f0f0f0;
+          border-radius: 16px;
+          margin-bottom: 3.5rem;
+        }
+        .feedback-prompt {
+          font-size: 0.92rem;
+          font-weight: 500;
+          color: #1f2937;
+        }
+        .feedback-actions {
+          display: flex;
+          gap: 0.5rem;
+        }
+        .feedback-btn {
+          padding: 0.4rem 0.9rem;
+          border-radius: 9999px;
+          border: 1px solid #e5e7eb;
+          background-color: #ffffff;
+          font-size: 0.85rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+        }
+        .feedback-btn:hover {
+          border-color: #000000;
+        }
+        .feedback-btn.active {
+          background-color: #000000;
+          color: #ffffff;
+          border-color: #000000;
         }
 
         /* Author Credentials Footer Box */
@@ -396,7 +521,7 @@ export default function BlogClient({
           background-color: #fafaf9;
           border-radius: 20px;
           border: 1px solid #f1f1ee;
-          margin-top: 4rem;
+          margin-top: 3rem;
           margin-bottom: 4rem;
         }
         .author-card-img {
@@ -562,6 +687,19 @@ export default function BlogClient({
           margin: 0;
         }
 
+        /* Print Media Styling */
+        @media print {
+          .sidebar-left, .article-nav-row, .related-section, .article-newsletter, .feedback-box, .breadcrumbs, .util-bar {
+            display: none !important;
+          }
+          .article-grid {
+            display: block !important;
+          }
+          .reading-flow {
+            max-width: 100% !important;
+          }
+        }
+
         /* Responsive Layout */
         @media (max-width: 968px) {
           .hero-split {
@@ -609,7 +747,7 @@ export default function BlogClient({
         }
       `}} />
 
-      <div className="blog-wrapper">
+      <div className="blog-wrapper" style={{ '--font-multiplier': fontSizeMultiplier } as React.CSSProperties}>
         {/* Breadcrumb Navigation */}
         <div className="breadcrumbs">
           <Link href="/">Home</Link>
@@ -688,6 +826,41 @@ export default function BlogClient({
               </div>
             </div>
 
+            {/* Reading Utilities (Font Adjust, Bookmark, Print) */}
+            <div>
+              <h4 className="sidebar-section-title">Reading Tools</h4>
+              <div className="util-bar">
+                <button
+                  className={`util-btn ${isBookmarked ? 'active' : ''}`}
+                  onClick={toggleBookmark}
+                  aria-label="Bookmark article"
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill={isBookmarked ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
+                  </svg>
+                  {isBookmarked ? 'Saved' : 'Save'}
+                </button>
+                <button
+                  className="util-btn"
+                  onClick={() => setFontSizeMultiplier(prev => (prev === 1.15 ? 0.95 : prev === 0.95 ? 1 : 1.15))}
+                  title="Adjust font size"
+                >
+                  Aa
+                </button>
+                <button
+                  className="util-btn"
+                  onClick={() => typeof window !== 'undefined' && window.print()}
+                  title="Print / Save PDF"
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <polyline points="6 9 6 2 18 2 18 9" />
+                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2" />
+                    <rect x="6" y="14" width="12" height="8" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+
             {blog.sections && blog.sections.length > 0 && (
               <div className="toc-card">
                 <h4 className="sidebar-section-title">Table of Contents</h4>
@@ -729,13 +902,48 @@ export default function BlogClient({
               </div>
             )}
 
-            {/* Render Sections */}
-            {blog.sections && blog.sections.map((sect, i) => (
-              <div key={i} id={`section-${i}`} className="reading-section">
-                <h2>{sect.title}</h2>
-                <p>{sect.body}</p>
+            {/* Render Sections with Multi-Paragraph Support */}
+            {blog.sections && blog.sections.map((sect, i) => {
+              const paragraphs = sect.body ? sect.body.split(/\n\n|\n/).filter(p => p.trim()) : [];
+              return (
+                <div key={i} id={`section-${i}`} className="reading-section">
+                  <h2>{sect.title}</h2>
+                  {paragraphs.map((para, pIdx) => (
+                    <p key={pIdx} className="reading-paragraph">{para}</p>
+                  ))}
+                </div>
+              );
+            })}
+
+            {/* Article Topics & Tags Strip */}
+            <div className="tags-row">
+              <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#6b7280', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                Topics:
+              </span>
+              <span className="tag-pill">#{blog.category || 'Insights'}</span>
+              <span className="tag-pill">#ZawrIndustries</span>
+              <span className="tag-pill">#EnterpriseEngineering</span>
+              <span className="tag-pill">#GlobalStrategy</span>
+            </div>
+
+            {/* Interactive Reader Feedback */}
+            <div className="feedback-box">
+              <span className="feedback-prompt">Was this insight helpful?</span>
+              <div className="feedback-actions">
+                <button
+                  className={`feedback-btn ${feedback === 'yes' ? 'active' : ''}`}
+                  onClick={() => setFeedback('yes')}
+                >
+                  👍 Yes, valuable
+                </button>
+                <button
+                  className={`feedback-btn ${feedback === 'no' ? 'active' : ''}`}
+                  onClick={() => setFeedback('no')}
+                >
+                  👎 Not really
+                </button>
               </div>
-            ))}
+            </div>
 
             {/* Author Credentials & Verification Box */}
             <div className="author-card-box">
