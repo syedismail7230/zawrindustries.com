@@ -31,6 +31,33 @@ export default function CareersPage() {
     coverLetter: '',
   });
   const [freelanceResume, setFreelanceResume] = useState<File | null>(null);
+  const [copiedJobId, setCopiedJobId] = useState<string | null>(null);
+
+  const handleShareJob = (job: any, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const url = typeof window !== 'undefined' ? `${window.location.origin}/careers/${job.id}` : `https://zawrindustries.com/careers/${job.id}`;
+    const text = `Zawr Industries is hiring: ${job.title} (${job.location})`;
+
+    if (typeof navigator !== 'undefined' && navigator.share) {
+      navigator.share({
+        title: `Career at Zawr: ${job.title}`,
+        text: text,
+        url: url,
+      }).catch(() => {
+        // Fallback to clipboard copy
+        if (navigator.clipboard) {
+          navigator.clipboard.writeText(url);
+          setCopiedJobId(job.id);
+          setTimeout(() => setCopiedJobId(null), 2500);
+        }
+      });
+    } else if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(url);
+      setCopiedJobId(job.id);
+      setTimeout(() => setCopiedJobId(null), 2500);
+    }
+  };
 
   const jobsPerPage = 20;
 
@@ -719,7 +746,37 @@ export default function CareersPage() {
                   <div style={{ fontSize: '0.875rem', color: '#9ca3af' }}>{job.type}</div>
                 </div>
                 <span style={{ fontSize: '0.875rem', color: '#9ca3af', flex: 1, textAlign: 'center' }}>{job.location}</span>
-                <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
+                <div style={{ flex: 1, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '0.75rem' }}>
+                  <button
+                    onClick={(e) => handleShareJob(job, e)}
+                    title="Share / Copy Job Link"
+                    style={{
+                      padding: '0.35rem 0.75rem',
+                      borderRadius: '9999px',
+                      backgroundColor: copiedJobId === job.id ? '#ffffff' : '#18181b',
+                      color: copiedJobId === job.id ? '#000000' : '#d1d5db',
+                      border: '1px solid #27272a',
+                      fontSize: '0.75rem',
+                      fontWeight: 600,
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s ease',
+                      zIndex: 2,
+                    }}
+                    className="job-share-btn"
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <circle cx="18" cy="5" r="3"></circle>
+                      <circle cx="6" cy="12" r="3"></circle>
+                      <circle cx="18" cy="19" r="3"></circle>
+                      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg>
+                    {copiedJobId === job.id ? 'Copied!' : 'Share'}
+                  </button>
+
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="1.4" strokeLinecap="square" strokeLinejoin="miter" style={{ transition: 'transform 0.2s', flexShrink: 0 }} className="job-row-arrow">
                     <line x1="6" y1="18" x2="18" y2="6"></line>
                     <polyline points="7 6 18 6 18 17"></polyline>
