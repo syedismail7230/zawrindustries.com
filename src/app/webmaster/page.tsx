@@ -3136,6 +3136,7 @@ function WebmasterDashboard() {
             <LiveSitePreview
               activeTab={activeTab}
               theme={theme}
+              onClose={() => setShowLivePreview(false)}
               data={{
                 // Jobs
                 newJob,

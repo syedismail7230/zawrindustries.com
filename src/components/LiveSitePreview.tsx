@@ -12,6 +12,7 @@ interface LiveSitePreviewProps {
     muted: string;
     inputBg: string;
   };
+  onClose?: () => void;
   data: {
     // Jobs
     newJob?: {
@@ -72,10 +73,27 @@ interface LiveSitePreviewProps {
   };
 }
 
-export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePreviewProps) {
+export default function LiveSitePreview({ activeTab, theme, data, onClose }: LiveSitePreviewProps) {
   const [deviceMode, setDeviceMode] = useState<'desktop' | 'mobile'>('desktop');
   const [viewMode, setViewMode] = useState<'draft' | 'iframe'>('draft');
   const [copied, setCopied] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [hoveredDot, setHoveredDot] = useState<'red' | 'yellow' | 'green' | null>(null);
+
+  // Handle ESC key to exit fullscreen or close mirror
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (isFullscreen) {
+          setIsFullscreen(false);
+        } else if (onClose) {
+          onClose();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isFullscreen, onClose]);
 
   // Compute mock URL for address bar
   const getSiteRoute = () => {
@@ -517,36 +535,157 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
   };
 
   return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%',
-        backgroundColor: '#09090b',
-        borderLeft: `1px solid ${theme.border}`,
-        position: 'relative',
-        userSelect: 'none',
-      }}
-    >
-      {/* Browser Chrome Top Header */}
+    <>
+      {isFullscreen && (
+        <div
+          onClick={() => setIsFullscreen(false)}
+          style={{
+            position: 'fixed',
+            inset: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            backdropFilter: 'blur(8px)',
+            zIndex: 999998,
+          }}
+        />
+      )}
       <div
-        style={{
-          padding: '0.5rem 0.85rem',
-          backgroundColor: '#121215',
-          borderBottom: `1px solid ${theme.border}`,
+        style={isFullscreen ? {
+          position: 'fixed',
+          top: '2rem',
+          left: '2rem',
+          right: '2rem',
+          bottom: '2rem',
+          zIndex: 999999,
           display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '0.75rem',
-          flexShrink: 0,
+          flexDirection: 'column',
+          backgroundColor: '#09090b',
+          border: '1px solid #38bdf8',
+          borderRadius: '16px',
+          overflow: 'hidden',
+          boxShadow: '0 25px 80px rgba(0, 0, 0, 0.95)',
+          userSelect: 'none',
+        } : {
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          backgroundColor: '#09090b',
+          borderLeft: `1px solid ${theme.border}`,
+          position: 'relative',
+          userSelect: 'none',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-          <div style={{ display: 'flex', gap: '0.3rem' }}>
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ef4444' }} />
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#f59e0b' }} />
-            <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#10b981' }} />
-          </div>
+        {/* Browser Chrome Top Header */}
+        <div
+          style={{
+            padding: '0.5rem 0.85rem',
+            backgroundColor: '#121215',
+            borderBottom: `1px solid ${theme.border}`,
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            gap: '0.75rem',
+            flexShrink: 0,
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+            {/* Functional 3 macOS-style Dots */}
+            <div
+              style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}
+              onMouseLeave={() => setHoveredDot(null)}
+            >
+              {/* Red Dot: Close / Hide Mirror */}
+              <button
+                type="button"
+                onClick={() => {
+                  if (isFullscreen) {
+                    setIsFullscreen(false);
+                  } else if (onClose) {
+                    onClose();
+                  }
+                }}
+                onMouseEnter={() => setHoveredDot('red')}
+                title={isFullscreen ? "Exit Fullscreen (Esc)" : "Close Browser Mirror"}
+                style={{
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  backgroundColor: '#ef4444',
+                  border: '1px solid #dc2626',
+                  padding: 0,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '8px',
+                  lineHeight: 1,
+                  color: '#450a0a',
+                  fontWeight: 900,
+                  transition: 'transform 0.15s ease, filter 0.15s ease',
+                  transform: hoveredDot === 'red' ? 'scale(1.15)' : 'scale(1)',
+                  boxShadow: hoveredDot === 'red' ? '0 0 6px rgba(239, 68, 68, 0.6)' : 'none'
+                }}
+              >
+                {hoveredDot ? '✕' : ''}
+              </button>
+
+              {/* Yellow Dot: Minimize / Toggle Viewport (Desktop <-> Mobile) */}
+              <button
+                type="button"
+                onClick={() => setDeviceMode(deviceMode === 'desktop' ? 'mobile' : 'desktop')}
+                onMouseEnter={() => setHoveredDot('yellow')}
+                title={deviceMode === 'desktop' ? "Switch to Mobile Viewport (375px)" : "Switch to Desktop Viewport"}
+                style={{
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  backgroundColor: '#f59e0b',
+                  border: '1px solid #d97706',
+                  padding: 0,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '9px',
+                  lineHeight: 1,
+                  color: '#451a03',
+                  fontWeight: 900,
+                  transition: 'transform 0.15s ease, filter 0.15s ease',
+                  transform: hoveredDot === 'yellow' ? 'scale(1.15)' : 'scale(1)',
+                  boxShadow: hoveredDot === 'yellow' ? '0 0 6px rgba(245, 158, 11, 0.6)' : 'none'
+                }}
+              >
+                {hoveredDot ? '−' : ''}
+              </button>
+
+              {/* Green Dot: Maximize / Fullscreen */}
+              <button
+                type="button"
+                onClick={() => setIsFullscreen(!isFullscreen)}
+                onMouseEnter={() => setHoveredDot('green')}
+                title={isFullscreen ? "Exit Fullscreen (Esc)" : "Expand Fullscreen Mirror"}
+                style={{
+                  width: '12px',
+                  height: '12px',
+                  borderRadius: '50%',
+                  backgroundColor: '#10b981',
+                  border: '1px solid #059669',
+                  padding: 0,
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '8px',
+                  lineHeight: 1,
+                  color: '#022c22',
+                  fontWeight: 900,
+                  transition: 'transform 0.15s ease, filter 0.15s ease',
+                  transform: hoveredDot === 'green' ? 'scale(1.15)' : 'scale(1)',
+                  boxShadow: hoveredDot === 'green' ? '0 0 6px rgba(16, 185, 129, 0.6)' : 'none'
+                }}
+              >
+                {hoveredDot ? (isFullscreen ? '⤡' : '⤢') : ''}
+              </button>
+            </div>
 
           {/* Mode Switcher: Keystroke Draft vs Real Live Route */}
           <div style={{ display: 'flex', backgroundColor: '#18181b', padding: '0.15rem', borderRadius: '6px', border: '1px solid #27272a' }}>
@@ -722,5 +861,6 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
         </div>
       </div>
     </div>
+    </>
   );
 }
