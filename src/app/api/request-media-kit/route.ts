@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { generateMediaKitConfirmationEmail } from '@/lib/emailTemplates';
 
+export async function GET() {
+  return NextResponse.json({ status: 'healthy', service: 'request-media-kit', timestamp: new Date().toISOString() });
+}
+
 export async function POST(request: Request) {
   try {
     const { companyName, name, email, organization, purpose, resources } = await request.json();

@@ -3,6 +3,10 @@ import nodemailer from 'nodemailer';
 import { generateInvestorConfirmationEmail } from '@/lib/emailTemplates';
 import { logEmailDispatch } from '@/lib/analytics-tracker';
 
+export async function GET() {
+  return NextResponse.json({ status: 'healthy', service: 'request-investor', timestamp: new Date().toISOString() });
+}
+
 export async function POST(req: Request) {
   try {
     const { name, email, organization, investmentSize, inquiry } = await req.json();

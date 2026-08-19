@@ -3,6 +3,10 @@ import nodemailer from 'nodemailer';
 import { generateRSVPConfirmationEmail } from '@/lib/emailTemplates';
 import { logEmailDispatch } from '@/lib/analytics-tracker';
 
+export async function GET() {
+  return NextResponse.json({ status: 'healthy', service: 'rsvp', timestamp: new Date().toISOString() });
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();

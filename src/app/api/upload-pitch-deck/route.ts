@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import { writeFile } from 'fs/promises';
 import path from 'path';
 
+export async function GET() {
+  return NextResponse.json({ status: 'healthy', service: 'upload-pitch-deck', timestamp: new Date().toISOString() });
+}
+
 export async function POST(request: Request) {
   try {
     const data = await request.formData();

@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { generateSponsorshipConfirmationEmail } from '@/lib/emailTemplates';
 
+export async function GET() {
+  return NextResponse.json({ status: 'healthy', service: 'sponsorship', timestamp: new Date().toISOString() });
+}
+
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();

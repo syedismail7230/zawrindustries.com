@@ -31,6 +31,10 @@ const SECURITY_QUESTIONS = [
   }
 ];
 
+export async function GET() {
+  return NextResponse.json({ status: 'healthy', service: 'webmaster-auth', timestamp: new Date().toISOString() });
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
