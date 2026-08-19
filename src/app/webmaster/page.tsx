@@ -435,8 +435,28 @@ function WebmasterDashboard() {
     if (error) console.log("Routing table might not exist, but UI updated.");
   };
 
-  // Theme
-  const theme = { bg: '#000000', fg: '#ffffff', border: '#222222', hover: '#111111', inputBg: '#0a0a0a', muted: '#888888' };
+  // Theme & Modal States
+  const [isDarkMode, setIsDarkMode] = useState(true);
+  const [showSettingsModal, setShowSettingsModal] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
+  const theme = isDarkMode ? {
+    bg: '#000000',
+    fg: '#ffffff',
+    border: '#222222',
+    hover: '#111111',
+    inputBg: '#0a0a0a',
+    muted: '#888888',
+    sidebarBg: '#08080a',
+  } : {
+    bg: '#ffffff',
+    fg: '#09090b',
+    border: '#e4e4e7',
+    hover: '#f4f4f5',
+    inputBg: '#f8fafc',
+    muted: '#64748b',
+    sidebarBg: '#f1f5f9',
+  };
 
   if (!isAuthenticated) {
     const handleAccessKeySubmit = (e: React.FormEvent) => {
@@ -3064,29 +3084,163 @@ function WebmasterDashboard() {
       <style dangerouslySetInnerHTML={{__html: `header, footer, .support-widget, .cookie-banner { display: none !important; } body { overflow: hidden !important; margin: 0; }`}} />
 
       {/* Sidebar */}
-      <div style={{ width: '280px', borderRight: `1px solid ${theme.border}`, display: 'flex', flexDirection: 'column', flexShrink: 0 }}>
-        <div style={{ padding: '2rem', borderBottom: `1px solid ${theme.border}` }}>
-          <h1 style={{ fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <span style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%', display: 'inline-block' }}></span>
-            WEBMASTER
-          </h1>
-          <div style={{ fontSize: '0.75rem', color: theme.muted, marginTop: '0.25rem' }}>Supabase Realtime Synced</div>
+      <div style={{ width: '280px', borderRight: `1px solid ${theme.border}`, display: 'flex', flexDirection: 'column', flexShrink: 0, backgroundColor: theme.sidebarBg || theme.bg }}>
+        {/* Sidebar Header with Company Logo */}
+        <div style={{ padding: '1.5rem 1.75rem', borderBottom: `1px solid ${theme.border}` }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.65rem' }}>
+            <img
+              src={isDarkMode ? "/assets/logo-white.png" : "/assets/logo-black.png"}
+              alt="Zawr Industries"
+              style={{ height: '28px', width: 'auto', maxWidth: '170px', objectFit: 'contain', display: 'block' }}
+            />
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.72rem', color: theme.muted }}>
+            <span style={{ width: '7px', height: '7px', backgroundColor: '#10b981', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 8px rgba(16, 185, 129, 0.6)' }} />
+            <span style={{ fontWeight: 600 }}>Webmaster • Live Synced</span>
+          </div>
         </div>
         
-        <nav style={{ flex: 1, padding: '1rem 0' }}>
+        <nav style={{ flex: 1, padding: '1rem 0', overflowY: 'auto' }}>
           {navItems.map(item => (
             <button
               key={item.id}
               onClick={() => setActiveTab(item.id)}
-              style={{ width: '100%', textAlign: 'left', padding: '1rem 2rem', backgroundColor: activeTab === item.id ? theme.hover : 'transparent', border: 'none', color: activeTab === item.id ? theme.fg : theme.muted, fontWeight: activeTab === item.id ? 600 : 400, cursor: 'pointer', transition: 'all 0.2s' }}
+              style={{
+                width: '100%',
+                textAlign: 'left',
+                padding: '0.75rem 1.75rem',
+                backgroundColor: activeTab === item.id ? theme.hover : 'transparent',
+                border: 'none',
+                color: activeTab === item.id ? theme.fg : theme.muted,
+                fontWeight: activeTab === item.id ? 700 : 400,
+                fontSize: '0.875rem',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
             >
-              {item.label}
+              <span>{item.label}</span>
+              {activeTab === item.id && (
+                <span style={{ width: '5px', height: '5px', backgroundColor: '#38bdf8', borderRadius: '50%' }} />
+              )}
             </button>
           ))}
         </nav>
 
-        <div style={{ padding: '2rem', borderTop: `1px solid ${theme.border}` }}>
-          <button onClick={() => { setIsAuthenticated(false); router.push('/'); }} style={{ width: '100%', padding: '0.75rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}>Logout / Exit</button>
+        {/* Sidebar Footer: Profile, Theme, Settings, and Logout Button */}
+        <div style={{ padding: '1.25rem 1.5rem', borderTop: `1px solid ${theme.border}`, display: 'flex', flexDirection: 'column', gap: '0.75rem', backgroundColor: theme.sidebarBg || theme.bg }}>
+          
+          {/* Quick Utility Icon Bar: Profile, Theme Switcher, Settings */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.4rem', backgroundColor: theme.inputBg, padding: '0.35rem', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
+            
+            {/* Profile Icon Button */}
+            <button
+              type="button"
+              onClick={() => setShowProfileModal(true)}
+              title="Admin Profile & Security Credentials"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.2rem',
+                padding: '0.45rem 0.2rem',
+                backgroundColor: showProfileModal ? theme.hover : 'transparent',
+                color: theme.fg,
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '0.68rem',
+                fontWeight: 600,
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              Profile
+            </button>
+
+            {/* Theme Toggle Icon Button */}
+            <button
+              type="button"
+              onClick={() => setIsDarkMode(!isDarkMode)}
+              title={isDarkMode ? "Switch to Light Theme" : "Switch to Dark Theme"}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.2rem',
+                padding: '0.45rem 0.2rem',
+                backgroundColor: 'transparent',
+                color: isDarkMode ? '#f59e0b' : '#3b82f6',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '0.68rem',
+                fontWeight: 600,
+                transition: 'all 0.15s ease'
+              }}
+            >
+              {isDarkMode ? (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              ) : (
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              )}
+              {isDarkMode ? 'Light' : 'Dark'}
+            </button>
+
+            {/* Settings Icon Button */}
+            <button
+              type="button"
+              onClick={() => setShowSettingsModal(true)}
+              title="Webmaster System Settings"
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '0.2rem',
+                padding: '0.45rem 0.2rem',
+                backgroundColor: showSettingsModal ? theme.hover : 'transparent',
+                color: theme.fg,
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+                fontSize: '0.68rem',
+                fontWeight: 600,
+                transition: 'all 0.15s ease'
+              }}
+            >
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+              Settings
+            </button>
+          </div>
+
+          {/* Logout Button */}
+          <button
+            onClick={() => { setIsAuthenticated(false); router.push('/'); }}
+            style={{
+              width: '100%',
+              padding: '0.65rem',
+              backgroundColor: 'transparent',
+              color: '#ef4444',
+              border: `1px solid ${theme.border}`,
+              borderRadius: '6px',
+              cursor: 'pointer',
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.45rem',
+              transition: 'all 0.15s ease'
+            }}
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Logout / Exit
+          </button>
         </div>
       </div>
 
@@ -3193,6 +3347,230 @@ function WebmasterDashboard() {
         )}
 
       </div>
+
+      {/* ───────────────────────────────────────────────────────────── */}
+      {/* WEBMASTER PROFILE MODAL */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      {showProfileModal && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.75)',
+          backdropFilter: 'blur(6px)',
+          zIndex: 99999,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '1.5rem'
+        }}>
+          <div style={{
+            width: '100%',
+            maxWidth: '520px',
+            backgroundColor: theme.bg,
+            border: `1px solid ${theme.border}`,
+            borderRadius: '16px',
+            overflow: 'hidden',
+            boxShadow: '0 25px 60px rgba(0,0,0,0.85)'
+          }}>
+            <div style={{ padding: '1.25rem 1.5rem', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: theme.inputBg }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#38bdf8', color: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1rem' }}>
+                  Z
+                </div>
+                <div>
+                  <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: theme.fg }}>Administrator Profile</h3>
+                  <span style={{ fontSize: '0.72rem', color: theme.muted }}>Zawr Master Administrator Credentials</span>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowProfileModal(false)}
+                style={{ background: 'none', border: 'none', color: theme.muted, cursor: 'pointer', fontSize: '1.25rem', padding: '0.25rem' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div style={{ padding: '1rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                  <span style={{ fontSize: '0.75rem', color: theme.muted }}>Access Level</span>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.6rem', borderRadius: '20px' }}>Superadmin (Tier 1)</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                  <span style={{ fontSize: '0.75rem', color: theme.muted }}>Primary Authority</span>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 700, color: theme.fg }}>admin@zawrindustries.com</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
+                  <span style={{ fontSize: '0.75rem', color: theme.muted }}>Authentication Protocol</span>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 700, color: theme.fg }}>Offline Challenge Verification</span>
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <span style={{ fontSize: '0.75rem', color: theme.muted }}>Active Session Status</span>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#38bdf8' }}>Verified &amp; Edge Encrypted</span>
+                </div>
+              </div>
+
+              <div>
+                <h4 style={{ fontSize: '0.8rem', fontWeight: 700, color: theme.muted, textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.5rem 0' }}>Assigned Master Permissions</h4>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', fontSize: '0.75rem' }}>
+                  <div style={{ padding: '0.45rem 0.6rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <span style={{ color: '#10b981' }}>✓</span> Supabase Live Tables
+                  </div>
+                  <div style={{ padding: '0.45rem 0.6rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <span style={{ color: '#10b981' }}>✓</span> Realtime Analytics
+                  </div>
+                  <div style={{ padding: '0.45rem 0.6rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <span style={{ color: '#10b981' }}>✓</span> SMTP Mail Relay
+                  </div>
+                  <div style={{ padding: '0.45rem 0.6rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                    <span style={{ color: '#10b981' }}>✓</span> Edge Security Controls
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '0.5rem' }}>
+                <button
+                  onClick={() => setShowProfileModal(false)}
+                  style={{
+                    padding: '0.55rem 1.25rem',
+                    backgroundColor: theme.fg,
+                    color: theme.bg,
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Close Profile
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ───────────────────────────────────────────────────────────── */}
+      {/* WEBMASTER SETTINGS MODAL */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      {showSettingsModal && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.75)',
+          backdropFilter: 'blur(6px)',
+          zIndex: 99999,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '1.5rem'
+        }}>
+          <div style={{
+            width: '100%',
+            maxWidth: '540px',
+            backgroundColor: theme.bg,
+            border: `1px solid ${theme.border}`,
+            borderRadius: '16px',
+            overflow: 'hidden',
+            boxShadow: '0 25px 60px rgba(0,0,0,0.85)'
+          }}>
+            <div style={{ padding: '1.25rem 1.5rem', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: theme.inputBg }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: theme.fg }}>System &amp; Console Settings</h3>
+                <span style={{ fontSize: '0.72rem', color: theme.muted }}>Configure webmaster environment preferences</span>
+              </div>
+              <button
+                onClick={() => setShowSettingsModal(false)}
+                style={{ background: 'none', border: 'none', color: theme.muted, cursor: 'pointer', fontSize: '1.25rem', padding: '0.25rem' }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              
+              {/* Theme Preference */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 1rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '8px' }}>
+                <div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: theme.fg }}>Dashboard Theme</div>
+                  <div style={{ fontSize: '0.72rem', color: theme.muted }}>Current interface theme: {isDarkMode ? 'Dark Stealth' : 'Light Clean'}</div>
+                </div>
+                <button
+                  onClick={() => setIsDarkMode(!isDarkMode)}
+                  style={{
+                    padding: '0.4rem 0.9rem',
+                    backgroundColor: theme.hover,
+                    color: theme.fg,
+                    border: `1px solid ${theme.border}`,
+                    borderRadius: '6px',
+                    fontSize: '0.78rem',
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Switch to {isDarkMode ? 'Light' : 'Dark'}
+                </button>
+              </div>
+
+              {/* Database Status */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 1rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '8px' }}>
+                <div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: theme.fg }}>Supabase Realtime Database</div>
+                  <div style={{ fontSize: '0.72rem', color: theme.muted }}>PostgreSQL engine with edge socket listener</div>
+                </div>
+                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', padding: '0.25rem 0.65rem', borderRadius: '20px' }}>Connected</span>
+              </div>
+
+              {/* Mail Gateway */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 1rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '8px' }}>
+                <div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: theme.fg }}>Gmail SMTP Dispatch Relay</div>
+                  <div style={{ fontSize: '0.72rem', color: theme.muted }}>SSL Transport via smtp.gmail.com:465</div>
+                </div>
+                <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#38bdf8', backgroundColor: 'rgba(56,189,248,0.1)', padding: '0.25rem 0.65rem', borderRadius: '20px' }}>Active</span>
+              </div>
+
+              {/* Actions */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
+                <button
+                  onClick={() => {
+                    sessionStorage.removeItem('webmaster_logged_in');
+                    alert('Session cache cleared. You will be prompted for security key upon next reload.');
+                  }}
+                  style={{
+                    padding: '0.55rem 1rem',
+                    backgroundColor: 'transparent',
+                    color: theme.muted,
+                    border: `1px solid ${theme.border}`,
+                    borderRadius: '8px',
+                    fontSize: '0.78rem',
+                    fontWeight: 600,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Clear Session Cache
+                </button>
+                <button
+                  onClick={() => setShowSettingsModal(false)}
+                  style={{
+                    padding: '0.55rem 1.25rem',
+                    backgroundColor: theme.fg,
+                    color: theme.bg,
+                    border: 'none',
+                    borderRadius: '8px',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    cursor: 'pointer'
+                  }}
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
