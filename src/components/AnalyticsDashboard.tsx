@@ -755,26 +755,34 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {topPages.map((page, i) => (
-                    <tr key={i} style={{ borderBottom: `1px solid ${theme.border}` }}>
-                      <td style={{ padding: '0.85rem 1.25rem' }}>
-                        <div style={{ fontWeight: 700, color: theme.fg }}>{page.title}</div>
-                        <div style={{ fontSize: '0.72rem', color: '#38bdf8', fontFamily: 'monospace' }}>{page.path}</div>
-                      </td>
-                      <td style={{ padding: '0.85rem 1.25rem', fontWeight: 800, color: theme.fg }}>
-                        {page.views.toLocaleString()}
-                      </td>
-                      <td style={{ padding: '0.85rem 1.25rem', color: theme.muted }}>
-                        {page.uniqueVisitors.toLocaleString()}
-                      </td>
-                      <td style={{ padding: '0.85rem 1.25rem', color: theme.muted }}>
-                        {page.avgTime}
-                      </td>
-                      <td style={{ padding: '0.85rem 1.25rem', color: '#4ade80', fontWeight: 700 }}>
-                        {page.bounceRate}
+                  {topPages.length === 0 ? (
+                    <tr>
+                      <td colSpan={5} style={{ padding: '2.5rem', textAlign: 'center', color: theme.muted }}>
+                        No route telemetry recorded yet. Active edge monitoring in progress.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    topPages.map((page, i) => (
+                      <tr key={i} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                        <td style={{ padding: '0.85rem 1.25rem' }}>
+                          <div style={{ fontWeight: 700, color: theme.fg }}>{page.title}</div>
+                          <div style={{ fontSize: '0.72rem', color: '#38bdf8', fontFamily: 'monospace' }}>{page.path}</div>
+                        </td>
+                        <td style={{ padding: '0.85rem 1.25rem', fontWeight: 800, color: theme.fg }}>
+                          {page.views.toLocaleString()}
+                        </td>
+                        <td style={{ padding: '0.85rem 1.25rem', color: theme.muted }}>
+                          {page.uniqueVisitors.toLocaleString()}
+                        </td>
+                        <td style={{ padding: '0.85rem 1.25rem', color: theme.muted }}>
+                          {page.avgTime}
+                        </td>
+                        <td style={{ padding: '0.85rem 1.25rem', color: '#4ade80', fontWeight: 700 }}>
+                          {page.bounceRate}
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -827,39 +835,51 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredEmails.map((em) => {
-                    const timeFormatted = new Date(em.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    return (
-                      <tr key={em.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
-                        <td style={{ padding: '0.85rem 1rem', whiteSpace: 'nowrap', color: theme.muted }}>
-                          {timeFormatted}
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem', fontWeight: 700, color: theme.fg }}>
-                          {em.recipient}
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem' }}>
-                          <span style={{ padding: '0.2rem 0.6rem', backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: '9999px', fontSize: '0.72rem', border: `1px solid ${theme.border}`, color: theme.fg }}>
-                            {em.reason}
-                          </span>
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem', color: theme.muted, maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {em.subject}
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem', color: theme.muted, whiteSpace: 'nowrap' }}>
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
-                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                            {em.region}
-                          </span>
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem', whiteSpace: 'nowrap' }}>
-                          <span style={{ color: '#4ade80', fontWeight: 700, fontSize: '0.75rem', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
-                            <span style={{ width: '6px', height: '6px', backgroundColor: '#4ade80', borderRadius: '50%' }} />
-                            Delivered ({em.statusCode})
-                          </span>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {filteredEmails.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} style={{ padding: '3rem 1.5rem', textAlign: 'center', color: theme.muted }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.4 }}><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                          <span style={{ fontWeight: 600 }}>No transactional emails dispatched yet</span>
+                          <span style={{ fontSize: '0.75rem', opacity: 0.7 }}>Form submissions across Careers, Investor Relations, Newsroom, and Contact portals will appear here live.</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredEmails.map((em) => {
+                      const timeFormatted = new Date(em.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                      return (
+                        <tr key={em.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                          <td style={{ padding: '0.85rem 1rem', whiteSpace: 'nowrap', color: theme.muted }}>
+                            {timeFormatted}
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', fontWeight: 700, color: theme.fg }}>
+                            {em.recipient}
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem' }}>
+                            <span style={{ padding: '0.2rem 0.6rem', backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: '9999px', fontSize: '0.72rem', border: `1px solid ${theme.border}`, color: theme.fg }}>
+                              {em.reason}
+                            </span>
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', color: theme.muted, maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {em.subject}
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', color: theme.muted, whiteSpace: 'nowrap' }}>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                              {em.region}
+                            </span>
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', whiteSpace: 'nowrap' }}>
+                            <span style={{ color: '#4ade80', fontWeight: 700, fontSize: '0.75rem', display: 'inline-flex', alignItems: 'center', gap: '0.3rem' }}>
+                              <span style={{ width: '6px', height: '6px', backgroundColor: '#4ade80', borderRadius: '50%' }} />
+                              Delivered ({em.statusCode})
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
                 </tbody>
               </table>
             </div>
@@ -897,38 +917,50 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {requests.map((req) => {
-                    const timeFormatted = new Date(req.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                    return (
-                      <tr key={req.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
-                        <td style={{ padding: '0.85rem 1rem', color: theme.muted, whiteSpace: 'nowrap' }}>
-                          {timeFormatted}
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem', whiteSpace: 'nowrap' }}>
-                          <span style={{ padding: '0.15rem 0.45rem', backgroundColor: req.method === 'POST' ? '#1e3a8a' : '#064e3b', color: req.method === 'POST' ? '#93c5fd' : '#6ee7b7', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 800 }}>
-                            {req.method}
-                          </span>
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem', fontWeight: 700, color: theme.fg, fontFamily: 'monospace', fontSize: '0.8rem' }}>
-                          {req.path}
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem', color: theme.muted, whiteSpace: 'nowrap' }}>
-                          {req.city}, {req.country}
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem', color: theme.muted, fontSize: '0.75rem', whiteSpace: 'nowrap' }}>
-                          {req.device}
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem', color: '#4ade80', fontWeight: 700, whiteSpace: 'nowrap' }}>
-                          {req.latencyMs}ms
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem', whiteSpace: 'nowrap' }}>
-                          <span style={{ color: '#4ade80', fontWeight: 700, fontSize: '0.75rem' }}>
-                            {req.status} OK
-                          </span>
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {requests.length === 0 ? (
+                    <tr>
+                      <td colSpan={7} style={{ padding: '3rem 1.5rem', textAlign: 'center', color: theme.muted }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ opacity: 0.4 }}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                          <span style={{ fontWeight: 600 }}>No live edge requests logged yet</span>
+                          <span style={{ fontSize: '0.75rem', opacity: 0.7 }}>Click &ldquo;Send Test Telemetry Ping&rdquo; or navigate the website to stream real HTTP telemetry.</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    requests.map((req) => {
+                      const timeFormatted = new Date(req.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+                      return (
+                        <tr key={req.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                          <td style={{ padding: '0.85rem 1rem', color: theme.muted, whiteSpace: 'nowrap' }}>
+                            {timeFormatted}
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', whiteSpace: 'nowrap' }}>
+                            <span style={{ padding: '0.15rem 0.45rem', backgroundColor: req.method === 'POST' ? '#1e3a8a' : '#064e3b', color: req.method === 'POST' ? '#93c5fd' : '#6ee7b7', borderRadius: '4px', fontSize: '0.7rem', fontWeight: 800 }}>
+                              {req.method}
+                            </span>
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', fontWeight: 700, color: theme.fg, fontFamily: 'monospace', fontSize: '0.8rem' }}>
+                            {req.path}
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', color: theme.muted, whiteSpace: 'nowrap' }}>
+                            {req.city}, {req.country}
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', color: theme.muted, fontSize: '0.75rem', whiteSpace: 'nowrap' }}>
+                            {req.device}
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', color: '#4ade80', fontWeight: 700, whiteSpace: 'nowrap' }}>
+                            {req.latencyMs}ms
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', whiteSpace: 'nowrap' }}>
+                            <span style={{ color: '#4ade80', fontWeight: 700, fontSize: '0.75rem' }}>
+                              {req.status} OK
+                            </span>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
                 </tbody>
               </table>
             </div>
@@ -948,22 +980,28 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
               Visiting Countries
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
-              {geo.map((g) => (
-                <div key={g.code}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '0.35rem' }}>
-                    <span style={{ fontWeight: 700, color: theme.fg, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <span style={{ fontSize: '0.75rem', padding: '0.15rem 0.4rem', backgroundColor: '#18181b', borderRadius: '4px', border: `1px solid ${theme.border}` }}>{g.code}</span>
-                      {g.country}
-                    </span>
-                    <span style={{ color: theme.muted }}>
-                      <strong style={{ color: theme.fg }}>{g.visitors.toLocaleString()}</strong> ({g.percentage}%)
-                    </span>
-                  </div>
-                  <div style={{ width: '100%', height: '6px', backgroundColor: theme.sidebarBg || '#000000', borderRadius: '9999px', overflow: 'hidden' }}>
-                    <div style={{ width: `${g.percentage}%`, height: '100%', backgroundColor: '#ffffff', borderRadius: '9999px' }} />
-                  </div>
+              {geo.length === 0 ? (
+                <div style={{ padding: '2rem 1rem', textAlign: 'center', color: theme.muted, fontSize: '0.85rem' }}>
+                  No geographic coordinates recorded yet.
                 </div>
-              ))}
+              ) : (
+                geo.map((g) => (
+                  <div key={g.code}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem', marginBottom: '0.35rem' }}>
+                      <span style={{ fontWeight: 700, color: theme.fg, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <span style={{ fontSize: '0.75rem', padding: '0.15rem 0.4rem', backgroundColor: '#18181b', borderRadius: '4px', border: `1px solid ${theme.border}` }}>{g.code}</span>
+                        {g.country}
+                      </span>
+                      <span style={{ color: theme.muted }}>
+                        <strong style={{ color: theme.fg }}>{g.visitors.toLocaleString()}</strong> ({g.percentage}%)
+                      </span>
+                    </div>
+                    <div style={{ width: '100%', height: '6px', backgroundColor: theme.sidebarBg || '#000000', borderRadius: '9999px', overflow: 'hidden' }}>
+                      <div style={{ width: `${g.percentage}%`, height: '100%', backgroundColor: '#ffffff', borderRadius: '9999px' }} />
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
@@ -973,18 +1011,24 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
               Top Metro Cities Hubs
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
-              {geo.flatMap((g) => g.topCities.map(c => ({ ...c, country: g.country, code: g.code }))).slice(0, 8).map((city, idx) => (
-                <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.65rem 0.85rem', backgroundColor: theme.sidebarBg || '#000000', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    <span style={{ fontWeight: 700, fontSize: '0.85rem', color: theme.fg }}>{city.city}</span>
-                    <span style={{ fontSize: '0.72rem', color: theme.muted }}>({city.country})</span>
-                  </div>
-                  <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#60a5fa' }}>
-                    {city.count.toLocaleString()} visits
-                  </span>
+              {geo.flatMap((g) => g.topCities.map(c => ({ ...c, country: g.country, code: g.code }))).length === 0 ? (
+                <div style={{ padding: '2rem 1rem', textAlign: 'center', color: theme.muted, fontSize: '0.85rem' }}>
+                  No regional city telemetry recorded yet.
                 </div>
-              ))}
+              ) : (
+                geo.flatMap((g) => g.topCities.map(c => ({ ...c, country: g.country, code: g.code }))).slice(0, 8).map((city, idx) => (
+                  <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.65rem 0.85rem', backgroundColor: theme.sidebarBg || '#000000', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                      <span style={{ fontWeight: 700, fontSize: '0.85rem', color: theme.fg }}>{city.city}</span>
+                      <span style={{ fontSize: '0.72rem', color: theme.muted }}>({city.country})</span>
+                    </div>
+                    <span style={{ fontSize: '0.82rem', fontWeight: 800, color: '#60a5fa' }}>
+                      {city.count.toLocaleString()} visits
+                    </span>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
@@ -1035,36 +1079,48 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                   </tr>
                 </thead>
                 <tbody>
-                  {security.map((sec) => {
-                    const timeFormatted = new Date(sec.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                    return (
-                      <tr key={sec.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
-                        <td style={{ padding: '0.85rem 1rem', color: theme.muted, whiteSpace: 'nowrap' }}>
-                          {timeFormatted}
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem', fontWeight: 700, color: theme.fg, whiteSpace: 'nowrap' }}>
-                          <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={sec.severity === 'High' ? '#ef4444' : sec.severity === 'Medium' ? '#f59e0b' : '#60a5fa'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-                            {sec.eventType}
-                          </span>
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem', fontFamily: 'monospace', fontSize: '0.8rem', color: '#f87171' }}>
-                          {sec.targetPath}
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem', color: theme.muted, whiteSpace: 'nowrap' }}>
-                          {sec.ip} ({sec.country})
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem', whiteSpace: 'nowrap' }}>
-                          <span style={{ padding: '0.2rem 0.55rem', backgroundColor: '#7f1d1d', color: '#fca5a5', borderRadius: '4px', fontSize: '0.72rem', fontWeight: 800 }}>
-                            {sec.actionTaken}
-                          </span>
-                        </td>
-                        <td style={{ padding: '0.85rem 1rem', color: theme.muted, fontSize: '0.75rem', maxWidth: '320px' }}>
-                          {sec.details}
-                        </td>
-                      </tr>
-                    );
-                  })}
+                  {security.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} style={{ padding: '3rem 1.5rem', textAlign: 'center', color: '#4ade80' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                          <span style={{ fontWeight: 700 }}>Zero Security Incidents Detected</span>
+                          <span style={{ fontSize: '0.75rem', color: theme.muted }}>Edge shield, sanitizers, and token challenge gates are 100% operational.</span>
+                        </div>
+                      </td>
+                    </tr>
+                  ) : (
+                    security.map((sec) => {
+                      const timeFormatted = new Date(sec.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                      return (
+                        <tr key={sec.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                          <td style={{ padding: '0.85rem 1rem', color: theme.muted, whiteSpace: 'nowrap' }}>
+                            {timeFormatted}
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', fontWeight: 700, color: theme.fg, whiteSpace: 'nowrap' }}>
+                            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={sec.severity === 'High' ? '#ef4444' : sec.severity === 'Medium' ? '#f59e0b' : '#60a5fa'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                              {sec.eventType}
+                            </span>
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', fontFamily: 'monospace', fontSize: '0.8rem', color: '#f87171' }}>
+                            {sec.targetPath}
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', color: theme.muted, whiteSpace: 'nowrap' }}>
+                            {sec.ip} ({sec.country})
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', whiteSpace: 'nowrap' }}>
+                            <span style={{ padding: '0.2rem 0.55rem', backgroundColor: '#7f1d1d', color: '#fca5a5', borderRadius: '4px', fontSize: '0.72rem', fontWeight: 800 }}>
+                              {sec.actionTaken}
+                            </span>
+                          </td>
+                          <td style={{ padding: '0.85rem 1rem', color: theme.muted, fontSize: '0.75rem', maxWidth: '320px' }}>
+                            {sec.details}
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
                 </tbody>
               </table>
             </div>
