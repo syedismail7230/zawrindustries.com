@@ -6,6 +6,7 @@ import { supabase } from '@/lib/supabase';
 import RichTextEditor from '@/components/RichTextEditor';
 import LiveSitePreview from '@/components/LiveSitePreview';
 import AnalyticsDashboard from '@/components/AnalyticsDashboard';
+import ApiMonitoringDashboard from '@/components/ApiMonitoringDashboard';
 
 export default function WebmasterDashboardPage() {
   return (
@@ -560,6 +561,9 @@ function WebmasterDashboard() {
     switch (activeTab) {
       case 'analytics':
         return <AnalyticsDashboard theme={theme} />;
+      
+      case 'api-monitoring':
+        return <ApiMonitoringDashboard theme={theme} />;
       
       case 'mail-credentials':
         return (
@@ -3040,6 +3044,7 @@ function WebmasterDashboard() {
 
   const navItems = [
     { id: 'analytics', label: 'Analytics' },
+    { id: 'api-monitoring', label: 'API Monitoring' },
     { id: 'mail-credentials', label: 'Mail Settings' },
     { id: 'email-routing', label: 'Email Routing' },
     { id: 'jobs', label: 'Manage Jobs' },

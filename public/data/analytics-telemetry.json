@@ -1,6 +1,19 @@
 {
   "requests": [
     {
+      "id": "req-286949",
+      "timestamp": "2026-08-19T15:44:46.949Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "latencyMs": 18,
+      "ip": "::1",
+      "country": "India",
+      "city": "Bengaluru",
+      "device": "Mobile",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
+    },
+    {
       "id": "req-956048",
       "timestamp": "2026-08-19T15:39:16.048Z",
       "path": "/webmaster/live-ping",
