@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { SystemHealthReport, EndpointHealth } from '@/app/api/monitoring/health/route';
 
 interface ApiMonitoringDashboardProps {
@@ -15,7 +15,7 @@ interface ApiMonitoringDashboardProps {
   };
 }
 
-interface LiveCheckSlot {
+export interface LiveCheckSlot {
   status: 'pending' | 'operational' | 'degraded' | 'down';
   latencyMs: number;
   statusCode: number;
@@ -25,22 +25,40 @@ interface LiveCheckSlot {
 
 const TOTAL_SLOTS = 24;
 
-// Helper to create initial buffer: first check active, remaining 23 are grey pending
-function createInitialSlots(baseLatency: number): LiveCheckSlot[] {
+// Determine status based on HTTP code, status string, and latency threshold
+export function evaluateSlotStatus(
+  statusString: string,
+  statusCode: number,
+  latencyMs: number
+): 'operational' | 'degraded' | 'down' {
+  if (statusString === 'Down' || statusCode >= 500 || statusCode === 0) {
+    return 'down'; // Red
+  }
+  if (statusString === 'Degraded' || latencyMs > 200 || (statusCode >= 400 && statusCode < 500)) {
+    return 'degraded'; // Yellow
+  }
+  return 'operational'; // Green
+}
+
+// Get the visual color for a status slot
+export function getSlotColor(status: LiveCheckSlot['status'], isHovered = false): string {
+  switch (status) {
+    case 'operational':
+      return isHovered ? '#34d399' : '#10b981'; // Green
+    case 'degraded':
+      return isHovered ? '#fde047' : '#f59e0b'; // Yellow / Amber
+    case 'down':
+      return isHovered ? '#f87171' : '#ef4444'; // Red
+    case 'pending':
+    default:
+      return isHovered ? '#3f3f46' : '#27272a'; // Grey
+  }
+}
+
+// Helper to create initial buffer: ALL 24 SLOTS ARE 100% GREY PENDING
+function createAllGreySlots(): LiveCheckSlot[] {
   const slots: LiveCheckSlot[] = [];
-  const now = new Date();
-
-  // Slot 0: Initial verification on load
-  slots.push({
-    status: 'operational',
-    latencyMs: baseLatency,
-    statusCode: 200,
-    timestamp: now.toLocaleTimeString(),
-    checkNumber: 1
-  });
-
-  // Slots 1 to 23: Grey pending slots that turn green every 15s
-  for (let i = 1; i < TOTAL_SLOTS; i++) {
+  for (let i = 0; i < TOTAL_SLOTS; i++) {
     slots.push({
       status: 'pending',
       latencyMs: 0,
@@ -49,7 +67,6 @@ function createInitialSlots(baseLatency: number): LiveCheckSlot[] {
       checkNumber: i + 1
     });
   }
-
   return slots;
 }
 
@@ -74,13 +91,14 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   
-  // 15-second timer
+  // 15-second countdown timer
   const [countdown, setCountdown] = useState(15);
+  const isExecutingRef = useRef<boolean>(false);
+  const checkCounterRef = useRef<number>(0);
   
-  // Dynamic 24-slot live history buffers per service (all start grey except slot 0, then turn green every 15s)
+  // Dynamic 24-slot live history buffers per service: ALL START 100% GREY
   const [endpointBuffers, setEndpointBuffers] = useState<Record<string, LiveCheckSlot[]>>({});
   const [infraBuffers, setInfraBuffers] = useState<Record<string, LiveCheckSlot[]>>({});
-  const checkCounterRef = useRef<number>(1);
 
   // Modals & Inspection
   const [inspectingEndpoint, setInspectingEndpoint] = useState<EndpointHealth | null>(null);
@@ -89,26 +107,25 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
   const [probeResult, setProbeResult] = useState<ProbeInspectionData | null>(null);
   const [isProbing, setIsProbing] = useState(false);
   const [copiedCurl, setCopiedCurl] = useState(false);
-  const [hoveredSlot, setHoveredSlot] = useState<{ slot: LiveCheckSlot; name: string; x: number; y: number } | null>(null);
 
-  // Initial Data Fetch & Buffer Setup
-  const initFetch = async () => {
+  // Initial metadata load (leaves all 24 lines grey)
+  const initLoad = async () => {
     try {
       const res = await fetch('/api/monitoring/health', { cache: 'no-store' });
       if (res.ok) {
         const data: SystemHealthReport = await res.json();
         setReport(data);
 
-        // Initialize buffers: Slot 0 green, Slots 1-23 grey
+        // Initialize ALL slots as 100% GREY
         const initialEpBuffers: Record<string, LiveCheckSlot[]> = {};
         data.endpoints.forEach((ep) => {
-          initialEpBuffers[ep.id] = createInitialSlots(ep.latencyMs);
+          initialEpBuffers[ep.id] = createAllGreySlots();
         });
         setEndpointBuffers(initialEpBuffers);
 
         const initialInfraBuffers: Record<string, LiveCheckSlot[]> = {};
         data.infrastructure.forEach((inf) => {
-          initialInfraBuffers[inf.id] = createInitialSlots(inf.latencyMs);
+          initialInfraBuffers[inf.id] = createAllGreySlots();
         });
         setInfraBuffers(initialInfraBuffers);
       }
@@ -119,13 +136,12 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
     }
   };
 
-  useEffect(() => {
-    initFetch();
-  }, []);
-
-  // Execute a live 15-second tick check across all services: turns the next grey line into green!
-  const execute15sLiveCheck = async () => {
+  // Turn EXACTLY ONE line green (or yellow / red) across all services
+  const advanceOneSlot = useCallback(async () => {
+    if (isExecutingRef.current) return;
+    isExecutingRef.current = true;
     setIsRefreshing(true);
+
     checkCounterRef.current += 1;
     const currentCheckNum = checkCounterRef.current;
     const nowStr = new Date().toLocaleTimeString();
@@ -136,15 +152,16 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
         const data: SystemHealthReport = await res.json();
         setReport(data);
 
-        // Update each endpoint's buffer: advance next grey line to green
+        // Advance EXACTLY ONE slot for each endpoint
         setEndpointBuffers((prev) => {
-          const nextState: Record<string, LiveCheckSlot[]> = { ...prev };
+          const nextState: Record<string, LiveCheckSlot[]> = {};
           data.endpoints.forEach((ep) => {
-            const currentSlots = prev[ep.id] ? [...prev[ep.id]] : createInitialSlots(ep.latencyMs);
+            const currentSlots = prev[ep.id] ? [...prev[ep.id]] : createAllGreySlots();
             const firstPendingIdx = currentSlots.findIndex((s) => s.status === 'pending');
+            const slotStatus = evaluateSlotStatus(ep.status, ep.statusCode, ep.latencyMs);
 
             const newSlot: LiveCheckSlot = {
-              status: ep.status === 'Operational' ? 'operational' : 'degraded',
+              status: slotStatus,
               latencyMs: ep.latencyMs,
               statusCode: ep.statusCode,
               timestamp: nowStr,
@@ -152,10 +169,10 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
             };
 
             if (firstPendingIdx !== -1) {
-              // Replace the next grey slot with green
+              // Replace ONLY the single next grey slot with green/yellow/red
               currentSlots[firstPendingIdx] = newSlot;
             } else {
-              // All 24 slots are full: shift left (FIFO queue) and append the newest green check on right
+              // If all 24 are filled, roll FIFO: shift oldest off left, append newest on right
               currentSlots.shift();
               currentSlots.push(newSlot);
             }
@@ -164,15 +181,16 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
           return nextState;
         });
 
-        // Update infrastructure buffers
+        // Advance EXACTLY ONE slot for each infrastructure service
         setInfraBuffers((prev) => {
-          const nextState: Record<string, LiveCheckSlot[]> = { ...prev };
+          const nextState: Record<string, LiveCheckSlot[]> = {};
           data.infrastructure.forEach((inf) => {
-            const currentSlots = prev[inf.id] ? [...prev[inf.id]] : createInitialSlots(inf.latencyMs);
+            const currentSlots = prev[inf.id] ? [...prev[inf.id]] : createAllGreySlots();
             const firstPendingIdx = currentSlots.findIndex((s) => s.status === 'pending');
+            const slotStatus = evaluateSlotStatus(inf.status, 200, inf.latencyMs);
 
             const newSlot: LiveCheckSlot = {
-              status: inf.status === 'Operational' ? 'operational' : 'degraded',
+              status: slotStatus,
               latencyMs: inf.latencyMs,
               statusCode: 200,
               timestamp: nowStr,
@@ -191,26 +209,29 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
         });
       }
     } catch (e) {
-      console.error('15s probe cycle error:', e);
+      console.error('15s check cycle error:', e);
     } finally {
       setIsRefreshing(false);
-      setCountdown(15);
+      isExecutingRef.current = false;
     }
-  };
+  }, []);
 
-  // 15-second Interval Countdown Timer
+  // Set up Initial Load & Master 15s Timer
   useEffect(() => {
+    initLoad();
+
     const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
-          execute15sLiveCheck();
+          advanceOneSlot();
           return 15;
         }
         return prev - 1;
       });
     }, 1000);
+
     return () => clearInterval(timer);
-  }, []);
+  }, [advanceOneSlot]);
 
   // Manual Test of a specific endpoint
   const handleOpenInspector = async (endpoint: EndpointHealth) => {
@@ -232,16 +253,22 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
         const data: ProbeInspectionData = await res.json();
         setProbeResult(data);
 
-        // Turn next grey bar green for this specific endpoint on test!
+        const slotStatus = evaluateSlotStatus(
+          data.statusCode < 400 ? 'Operational' : data.statusCode < 500 ? 'Degraded' : 'Down',
+          data.statusCode,
+          data.latencyMs
+        );
+
+        // Turn EXACTLY ONE grey line into green/yellow/red for this endpoint on manual test
         setEndpointBuffers((prev) => {
-          const currentSlots = prev[endpoint.id] ? [...prev[endpoint.id]] : createInitialSlots(endpoint.latencyMs);
+          const currentSlots = prev[endpoint.id] ? [...prev[endpoint.id]] : createAllGreySlots();
           const firstPendingIdx = currentSlots.findIndex((s) => s.status === 'pending');
           const newSlot: LiveCheckSlot = {
-            status: 'operational',
+            status: slotStatus,
             latencyMs: data.latencyMs,
             statusCode: data.statusCode,
             timestamp: new Date().toLocaleTimeString(),
-            checkNumber: checkCounterRef.current
+            checkNumber: checkCounterRef.current + 1
           };
 
           if (firstPendingIdx !== -1) {
@@ -298,7 +325,7 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '380px', gap: '1rem', color: theme.muted }}>
         <div style={{ width: '36px', height: '36px', border: `3px solid ${theme.border}`, borderTopColor: '#10b981', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
         <style dangerouslySetInnerHTML={{ __html: `@keyframes spin { to { transform: rotate(360deg); } }` }} />
-        <p style={{ fontSize: '0.9rem', margin: 0 }}>Initializing Real-Time Health Probes...</p>
+        <p style={{ fontSize: '0.9rem', margin: 0 }}>Initializing API Monitoring Dashboard...</p>
       </div>
     );
   }
@@ -347,7 +374,7 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
 
         {/* Header Right Actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
-          {/* Live countdown badge (Every 15s, a grey line becomes green) */}
+          {/* Live countdown badge (Every 15s, 1 grey line illuminates) */}
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
@@ -388,7 +415,7 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
 
           {/* Ping All Button */}
           <button
-            onClick={execute15sLiveCheck}
+            onClick={advanceOneSlot}
             disabled={isRefreshing}
             style={{
               padding: '0.45rem 0.95rem',
@@ -471,7 +498,7 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0, color: theme.fg }}>
             External Services &amp; Infrastructure
           </h3>
-          <span style={{ fontSize: '0.78rem', color: theme.muted }}>— Grey bars turn green every 15s interval as live pings succeed</span>
+          <span style={{ fontSize: '0.78rem', color: theme.muted }}>— All lines start grey; exactly 1 line illuminates green/yellow/red every 15s</span>
         </div>
 
         {/* Group Box: Infrastructure */}
@@ -489,7 +516,7 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', padding: '1.25rem' }}>
             {infrastructure.map((inf, idx) => {
-              const slots = infraBuffers[inf.id] || createInitialSlots(inf.latencyMs);
+              const slots = infraBuffers[inf.id] || createAllGreySlots();
 
               return (
                 <div
@@ -542,11 +569,10 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
                     </span>
                   </div>
 
-                  {/* Bottom: 24-slot Live Dynamic Bar (Grey to Green every 15s) */}
+                  {/* Bottom: 24-slot Live Dynamic Bar with Green / Yellow / Red / Grey states */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '3px', height: '18px', position: 'relative' }}>
                     {slots.map((slot, sIdx) => {
-                      const isOper = slot.status === 'operational';
-                      const isPending = slot.status === 'pending';
+                      const slotColor = getSlotColor(slot.status);
 
                       return (
                         <div
@@ -563,14 +589,22 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
                               minWidth: '3px',
                               maxWidth: '3px',
                               height: '18px',
-                              backgroundColor: isOper ? '#10b981' : '#27272a',
+                              backgroundColor: slotColor,
                               borderRadius: '9999px',
                               cursor: 'pointer',
                               flexShrink: 0,
-                              boxShadow: isOper ? '0 0 4px rgba(16, 185, 129, 0.4)' : 'none',
+                              boxShadow: slot.status !== 'pending' ? `0 0 5px ${slotColor}` : 'none',
                               transition: 'background-color 0.4s ease, transform 0.15s ease'
                             }}
-                            title={isOper ? `Check #${slot.checkNumber} • 100% OK (${slot.latencyMs}ms at ${slot.timestamp})` : `Check #${slot.checkNumber} • Pending next 15s interval`}
+                            title={
+                              slot.status === 'operational'
+                                ? `Check #${slot.checkNumber} • 100% OK (${slot.latencyMs}ms at ${slot.timestamp})`
+                                : slot.status === 'degraded'
+                                ? `Check #${slot.checkNumber} • Degraded (${slot.latencyMs}ms at ${slot.timestamp})`
+                                : slot.status === 'down'
+                                ? `Check #${slot.checkNumber} • Down (${slot.statusCode})`
+                                : `Check #${slot.checkNumber} • Pending 15s interval`
+                            }
                           />
                         </div>
                       );
@@ -585,7 +619,7 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
       </div>
 
       {/* ───────────────────────────────────────────────────────────── */}
-      {/* 4. INTERNAL API ENDPOINTS (Grey to Green every 15s) */}
+      {/* 4. INTERNAL API ENDPOINTS */}
       {/* ───────────────────────────────────────────────────────────── */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', width: '100%' }}>
         
@@ -648,11 +682,14 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
         {/* Endpoints List Rows */}
         <div style={{ border: `1px solid ${theme.border}`, borderRadius: '14px', backgroundColor: theme.inputBg, overflow: 'hidden' }}>
           {filteredEndpoints.map((ep, idx) => {
-            const slots = endpointBuffers[ep.id] || createInitialSlots(ep.latencyMs);
+            const slots = endpointBuffers[ep.id] || createAllGreySlots();
             const tagStyle = getCategoryTagColor(ep.category);
 
             // Latest completed check in this buffer
-            const lastCompletedSlot = [...slots].reverse().find(s => s.status !== 'pending') || slots[0];
+            const lastCompletedSlot = [...slots].reverse().find(s => s.status !== 'pending') || null;
+            const isOperational = lastCompletedSlot ? lastCompletedSlot.status === 'operational' : true;
+            const isDegraded = lastCompletedSlot ? lastCompletedSlot.status === 'degraded' : false;
+            const isDown = lastCompletedSlot ? lastCompletedSlot.status === 'down' : false;
 
             return (
               <div
@@ -678,8 +715,8 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
                     width: '24px',
                     height: '24px',
                     borderRadius: '50%',
-                    border: '2px solid #10b981',
-                    color: '#10b981',
+                    border: `2px solid ${isOperational ? '#10b981' : isDegraded ? '#f59e0b' : '#ef4444'}`,
+                    color: isOperational ? '#10b981' : isDegraded ? '#f59e0b' : '#ef4444',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -688,7 +725,7 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
                     marginTop: '2px',
                     flexShrink: 0
                   }}>
-                    ✓
+                    {isDown ? '✕' : isDegraded ? '!' : '✓'}
                   </div>
 
                   <div>
@@ -714,10 +751,10 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
                   </div>
                 </div>
 
-                {/* Right Side: Test Button, Operational Badge, Latency, HTTP Code, Progressive 15s Vertical Lines */}
+                {/* Right Side: Test Button, Status Badge, Latency, HTTP Code, Progressive 15s Vertical Lines */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem' }}>
                   
-                  {/* Row 1: Test Button & Operational Badge */}
+                  {/* Row 1: Test Button & Status Badge */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <button
                       onClick={(e) => {
@@ -742,9 +779,21 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
                       Test
                     </button>
 
-                    <span style={{ color: '#10b981', fontWeight: 700, fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
-                      <span style={{ width: '6px', height: '6px', backgroundColor: '#10b981', borderRadius: '50%' }} />
-                      Operational
+                    <span style={{
+                      color: isOperational ? '#10b981' : isDegraded ? '#fbbf24' : '#ef4444',
+                      fontWeight: 700,
+                      fontSize: '0.78rem',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '0.35rem'
+                    }}>
+                      <span style={{
+                        width: '6px',
+                        height: '6px',
+                        backgroundColor: isOperational ? '#10b981' : isDegraded ? '#fbbf24' : '#ef4444',
+                        borderRadius: '50%'
+                      }} />
+                      {isOperational ? 'Operational' : isDegraded ? 'Degraded' : 'Down'}
                     </span>
                   </div>
 
@@ -752,25 +801,33 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                       <div style={{ width: '50px', height: '3px', backgroundColor: '#27272a', borderRadius: '9999px', overflow: 'hidden' }}>
-                        <div style={{ width: `${Math.min(100, (lastCompletedSlot.latencyMs / 80) * 100)}%`, height: '100%', backgroundColor: '#10b981' }} />
+                        <div style={{
+                          width: `${Math.min(100, ((lastCompletedSlot?.latencyMs || ep.latencyMs) / 100) * 100)}%`,
+                          height: '100%',
+                          backgroundColor: isOperational ? '#10b981' : isDegraded ? '#fbbf24' : '#ef4444'
+                        }} />
                       </div>
                       <span style={{ fontSize: '0.72rem', color: theme.muted }}>
-                        {lastCompletedSlot.latencyMs}ms
+                        {lastCompletedSlot ? `${lastCompletedSlot.latencyMs}ms` : `${ep.latencyMs}ms`}
                       </span>
                     </div>
 
-                    <span style={{ fontSize: '0.72rem', fontWeight: 700, color: lastCompletedSlot.statusCode < 400 ? '#10b981' : '#60a5fa' }}>
-                      HTTP {lastCompletedSlot.statusCode || 200}
+                    <span style={{
+                      fontSize: '0.72rem',
+                      fontWeight: 700,
+                      color: isOperational ? '#10b981' : isDegraded ? '#fbbf24' : '#ef4444'
+                    }}>
+                      HTTP {lastCompletedSlot ? lastCompletedSlot.statusCode || 200 : ep.statusCode}
                     </span>
                   </div>
 
-                  {/* Row 3: 24-slot Live Progressive Lines (Grey to Green every 15s) */}
+                  {/* Row 3: 24-slot Live Progressive Lines (All start Grey -> 1 turns Green/Yellow/Red every 15s) */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                     
                     <div style={{ display: 'flex', alignItems: 'center', gap: '3px', height: '16px' }}>
                       {slots.map((slot, sIdx) => {
-                        const isOper = slot.status === 'operational';
+                        const slotColor = getSlotColor(slot.status);
 
                         return (
                           <div
@@ -784,14 +841,22 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
                               minWidth: '3px',
                               maxWidth: '3px',
                               height: '16px',
-                              backgroundColor: isOper ? '#10b981' : '#27272a',
+                              backgroundColor: slotColor,
                               borderRadius: '9999px',
                               cursor: 'pointer',
                               flexShrink: 0,
-                              boxShadow: isOper ? '0 0 4px rgba(16, 185, 129, 0.4)' : 'none',
+                              boxShadow: slot.status !== 'pending' ? `0 0 5px ${slotColor}` : 'none',
                               transition: 'background-color 0.4s ease, transform 0.15s ease'
                             }}
-                            title={isOper ? `Check #${slot.checkNumber} • 100% OK (${slot.latencyMs}ms at ${slot.timestamp})` : `Check #${slot.checkNumber} • Pending next 15s interval`}
+                            title={
+                              slot.status === 'operational'
+                                ? `Check #${slot.checkNumber} • 100% OK (${slot.latencyMs}ms at ${slot.timestamp})`
+                                : slot.status === 'degraded'
+                                ? `Check #${slot.checkNumber} • Degraded (${slot.latencyMs}ms at ${slot.timestamp})`
+                                : slot.status === 'down'
+                                ? `Check #${slot.checkNumber} • Down (${slot.statusCode})`
+                                : `Check #${slot.checkNumber} • Pending 15s interval`
+                            }
                           />
                         );
                       })}
@@ -942,28 +1007,6 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
                 </button>
               </div>
 
-              {/* Sample Request Payload (if POST) */}
-              {inspectingEndpoint.samplePayload && (
-                <div>
-                  <div style={{ fontSize: '0.78rem', fontWeight: 700, color: theme.fg, marginBottom: '0.4rem' }}>
-                    Sample Request Payload (JSON)
-                  </div>
-                  <pre style={{
-                    margin: 0,
-                    padding: '0.85rem 1rem',
-                    backgroundColor: '#050507',
-                    border: `1px solid ${theme.border}`,
-                    borderRadius: '8px',
-                    color: '#93c5fd',
-                    fontSize: '0.78rem',
-                    fontFamily: 'monospace',
-                    overflowX: 'auto'
-                  }}>
-                    {JSON.stringify(inspectingEndpoint.samplePayload, null, 2)}
-                  </pre>
-                </div>
-              )}
-
               {/* Live Server Response Payload */}
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.4rem' }}>
@@ -1082,7 +1125,7 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
             width: '100%',
             maxWidth: '480px',
             backgroundColor: '#0c0c0e',
-            border: `1px solid ${selectedSlotData.slot.status === 'operational' ? '#10b981' : '#52525b'}`,
+            border: `1px solid ${getSlotColor(selectedSlotData.slot.status)}`,
             borderRadius: '16px',
             padding: '1.5rem',
             display: 'flex',
@@ -1092,11 +1135,11 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div>
-                <h4 style={{ margin: '0 0 0.2rem 0', fontSize: '1rem', fontWeight: 800, color: selectedSlotData.slot.status === 'operational' ? '#10b981' : '#a1a1aa' }}>
+                <h4 style={{ margin: '0 0 0.2rem 0', fontSize: '1rem', fontWeight: 800, color: getSlotColor(selectedSlotData.slot.status) }}>
                   {selectedSlotData.name}
                 </h4>
                 <span style={{ fontSize: '0.75rem', color: theme.muted }}>
-                  {selectedSlotData.slot.status === 'operational'
+                  {selectedSlotData.slot.status !== 'pending'
                     ? `Live Telemetry Check #${selectedSlotData.slot.checkNumber} • ${selectedSlotData.slot.timestamp}`
                     : `Check Slot #${selectedSlotData.slot.checkNumber} (Pending 15s Interval)`}
                 </span>
@@ -1112,14 +1155,25 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
               <div style={{ padding: '0.75rem', backgroundColor: '#141418', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
                 <div style={{ fontSize: '0.7rem', color: theme.muted }}>Check Status</div>
-                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: selectedSlotData.slot.status === 'operational' ? '#10b981' : '#71717a', marginTop: '0.2rem' }}>
-                  {selectedSlotData.slot.status === 'operational' ? '100% OK' : 'Pending'}
+                <div style={{
+                  fontSize: '1.1rem',
+                  fontWeight: 800,
+                  color: getSlotColor(selectedSlotData.slot.status),
+                  marginTop: '0.2rem'
+                }}>
+                  {selectedSlotData.slot.status === 'operational'
+                    ? '100% OK'
+                    : selectedSlotData.slot.status === 'degraded'
+                    ? 'Degraded'
+                    : selectedSlotData.slot.status === 'down'
+                    ? 'Down'
+                    : 'Pending'}
                 </div>
               </div>
               <div style={{ padding: '0.75rem', backgroundColor: '#141418', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
                 <div style={{ fontSize: '0.7rem', color: theme.muted }}>Response Latency</div>
-                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: selectedSlotData.slot.status === 'operational' ? '#38bdf8' : '#71717a', marginTop: '0.2rem' }}>
-                  {selectedSlotData.slot.status === 'operational' ? `${selectedSlotData.slot.latencyMs} ms` : '—'}
+                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#38bdf8', marginTop: '0.2rem' }}>
+                  {selectedSlotData.slot.status !== 'pending' ? `${selectedSlotData.slot.latencyMs} ms` : '—'}
                 </div>
               </div>
             </div>
@@ -1127,24 +1181,16 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
             <div style={{ padding: '0.75rem', backgroundColor: '#141418', borderRadius: '8px', border: `1px solid ${theme.border}`, display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.75rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ color: theme.muted }}>HTTP Response Code</span>
-                <span style={{ color: selectedSlotData.slot.status === 'operational' ? '#10b981' : '#a1a1aa', fontWeight: 700 }}>
-                  {selectedSlotData.slot.status === 'operational' ? `HTTP ${selectedSlotData.slot.statusCode}` : 'Awaiting Interval'}
+                <span style={{ color: getSlotColor(selectedSlotData.slot.status), fontWeight: 700 }}>
+                  {selectedSlotData.slot.status !== 'pending' ? `HTTP ${selectedSlotData.slot.statusCode || 200}` : 'Awaiting Interval'}
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ color: theme.muted }}>Downtime Incidents</span>
-                <span style={{ color: '#10b981', fontWeight: 700 }}>0 incidents</span>
+                <span style={{ color: theme.muted }}>Color Indicator</span>
+                <span style={{ color: getSlotColor(selectedSlotData.slot.status), fontWeight: 700 }}>
+                  {selectedSlotData.slot.status === 'operational' ? '🟢 Green (Healthy)' : selectedSlotData.slot.status === 'degraded' ? '🟡 Yellow (Degraded)' : selectedSlotData.slot.status === 'down' ? '🔴 Red (Down)' : '⚪ Grey (Pending)'}
+                </span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ color: theme.muted }}>Handshake Encryption</span>
-                <span style={{ color: theme.fg, fontWeight: 700 }}>TLS 1.3 Verified</span>
-              </div>
-            </div>
-
-            <div style={{ fontSize: '0.75rem', color: theme.muted }}>
-              {selectedSlotData.slot.status === 'operational'
-                ? '✓ Live health probe succeeded and verified operational across all edge CDN nodes.'
-                : '⏳ This grey line will automatically turn green when the 15-second countdown timer fires next.'}
             </div>
           </div>
         </div>
