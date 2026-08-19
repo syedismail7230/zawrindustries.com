@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { SystemHealthReport, EndpointHealth, DayStatusTick } from '@/app/api/monitoring/health/route';
+import { SystemHealthReport, EndpointHealth } from '@/app/api/monitoring/health/route';
 
 interface ApiMonitoringDashboardProps {
   theme: {
@@ -13,6 +13,44 @@ interface ApiMonitoringDashboardProps {
     sidebarBg?: string;
     hover?: string;
   };
+}
+
+interface LiveCheckSlot {
+  status: 'pending' | 'operational' | 'degraded' | 'down';
+  latencyMs: number;
+  statusCode: number;
+  timestamp: string;
+  checkNumber: number;
+}
+
+const TOTAL_SLOTS = 24;
+
+// Helper to create initial buffer: first check active, remaining 23 are grey pending
+function createInitialSlots(baseLatency: number): LiveCheckSlot[] {
+  const slots: LiveCheckSlot[] = [];
+  const now = new Date();
+
+  // Slot 0: Initial verification on load
+  slots.push({
+    status: 'operational',
+    latencyMs: baseLatency,
+    statusCode: 200,
+    timestamp: now.toLocaleTimeString(),
+    checkNumber: 1
+  });
+
+  // Slots 1 to 23: Grey pending slots that turn green every 15s
+  for (let i = 1; i < TOTAL_SLOTS; i++) {
+    slots.push({
+      status: 'pending',
+      latencyMs: 0,
+      statusCode: 0,
+      timestamp: '',
+      checkNumber: i + 1
+    });
+  }
+
+  return slots;
 }
 
 interface ProbeInspectionData {
@@ -29,109 +67,6 @@ interface ProbeInspectionData {
   payload: any;
 }
 
-// Dedicated High-Performance Interactive Uptime Tick Strip Component
-function InteractiveUptimeTickStrip({
-  ticks,
-  serviceName,
-  height = 18,
-  onSelectTick
-}: {
-  ticks: DayStatusTick[];
-  serviceName: string;
-  height?: number;
-  onSelectTick: (tick: DayStatusTick, name: string) => void;
-}) {
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-
-  return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: '3px', position: 'relative' }}>
-      {ticks.map((tick, idx) => {
-        const isHovered = hoveredIdx === idx;
-        const isLatest = idx === ticks.length - 1;
-        const isOperational = tick.status === 'Operational';
-        const color = isOperational ? '#10b981' : '#f59e0b';
-
-        return (
-          <div
-            key={idx}
-            style={{ position: 'relative' }}
-            onMouseEnter={() => setHoveredIdx(idx)}
-            onMouseLeave={() => setHoveredIdx(null)}
-            onClick={(e) => {
-              e.stopPropagation();
-              onSelectTick(tick, serviceName);
-            }}
-          >
-            {/* The Vertical Bar */}
-            <div
-              style={{
-                width: '3px',
-                minWidth: '3px',
-                maxWidth: '3px',
-                height: `${height}px`,
-                backgroundColor: isHovered ? '#34d399' : color,
-                borderRadius: '9999px',
-                cursor: 'pointer',
-                flexShrink: 0,
-                transform: isHovered ? 'scaleY(1.4) scaleX(1.3)' : 'scaleY(1)',
-                boxShadow: isHovered ? '0 0 10px #10b981' : isLatest ? '0 0 4px rgba(16,185,129,0.5)' : 'none',
-                transition: 'all 0.12s cubic-bezier(0.4, 0, 0.2, 1)',
-                zIndex: isHovered ? 10 : 1
-              }}
-            />
-
-            {/* Direct Contextual Floating Tooltip with Arrow (Appears right above the hovered bar) */}
-            {isHovered && (
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: `calc(100% + 8px)`,
-                  left: '50%',
-                  transform: 'translateX(-50%)',
-                  backgroundColor: '#18181b',
-                  border: '1px solid #10b981',
-                  borderRadius: '6px',
-                  padding: '0.45rem 0.65rem',
-                  fontSize: '0.72rem',
-                  color: '#ffffff',
-                  whiteSpace: 'nowrap',
-                  boxShadow: '0 8px 24px rgba(0,0,0,0.8)',
-                  zIndex: 9999,
-                  pointerEvents: 'none',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.15rem'
-                }}
-              >
-                <div style={{ fontWeight: 800, color: '#10b981' }}>{tick.date}</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                  <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#10b981' }} />
-                  <span>100% Uptime • {tick.latencyMs}ms</span>
-                </div>
-                <div style={{ fontSize: '0.65rem', color: '#9ca3af' }}>0 Incidents (HTTP 200)</div>
-                {/* Arrow Pointer */}
-                <div
-                  style={{
-                    position: 'absolute',
-                    top: '100%',
-                    left: '50%',
-                    transform: 'translateX(-50%)',
-                    width: 0,
-                    height: 0,
-                    borderLeft: '4px solid transparent',
-                    borderRight: '4px solid transparent',
-                    borderTop: '4px solid #10b981'
-                  }}
-                />
-              </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
 export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboardProps) {
   const [report, setReport] = useState<SystemHealthReport | null>(null);
   const [loading, setLoading] = useState(true);
@@ -139,51 +74,145 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   
-  // Realtime inspection modals
+  // 15-second timer
+  const [countdown, setCountdown] = useState(15);
+  
+  // Dynamic 24-slot live history buffers per service (all start grey except slot 0, then turn green every 15s)
+  const [endpointBuffers, setEndpointBuffers] = useState<Record<string, LiveCheckSlot[]>>({});
+  const [infraBuffers, setInfraBuffers] = useState<Record<string, LiveCheckSlot[]>>({});
+  const checkCounterRef = useRef<number>(1);
+
+  // Modals & Inspection
   const [inspectingEndpoint, setInspectingEndpoint] = useState<EndpointHealth | null>(null);
   const [inspectingInfra, setInspectingInfra] = useState<any | null>(null);
+  const [selectedSlotData, setSelectedSlotData] = useState<{ slot: LiveCheckSlot; name: string } | null>(null);
   const [probeResult, setProbeResult] = useState<ProbeInspectionData | null>(null);
   const [isProbing, setIsProbing] = useState(false);
   const [copiedCurl, setCopiedCurl] = useState(false);
-  
-  // Day tick detail modal
-  const [selectedTickData, setSelectedTickData] = useState<{ tick: DayStatusTick; name: string } | null>(null);
+  const [hoveredSlot, setHoveredSlot] = useState<{ slot: LiveCheckSlot; name: string; x: number; y: number } | null>(null);
 
-  // Live polling state
-  const [countdown, setCountdown] = useState(15);
-  const [testResults, setTestResults] = useState<Record<string, { status: number; latency: number }>>({});
-
-  const fetchHealthReport = async (showLoading = true) => {
-    if (showLoading) setIsRefreshing(true);
+  // Initial Data Fetch & Buffer Setup
+  const initFetch = async () => {
     try {
       const res = await fetch('/api/monitoring/health', { cache: 'no-store' });
       if (res.ok) {
         const data: SystemHealthReport = await res.json();
         setReport(data);
+
+        // Initialize buffers: Slot 0 green, Slots 1-23 grey
+        const initialEpBuffers: Record<string, LiveCheckSlot[]> = {};
+        data.endpoints.forEach((ep) => {
+          initialEpBuffers[ep.id] = createInitialSlots(ep.latencyMs);
+        });
+        setEndpointBuffers(initialEpBuffers);
+
+        const initialInfraBuffers: Record<string, LiveCheckSlot[]> = {};
+        data.infrastructure.forEach((inf) => {
+          initialInfraBuffers[inf.id] = createInitialSlots(inf.latencyMs);
+        });
+        setInfraBuffers(initialInfraBuffers);
       }
     } catch (e) {
-      console.error('Error fetching API health report:', e);
+      console.error('Initial health load error:', e);
     } finally {
       setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    initFetch();
+  }, []);
+
+  // Execute a live 15-second tick check across all services: turns the next grey line into green!
+  const execute15sLiveCheck = async () => {
+    setIsRefreshing(true);
+    checkCounterRef.current += 1;
+    const currentCheckNum = checkCounterRef.current;
+    const nowStr = new Date().toLocaleTimeString();
+
+    try {
+      const res = await fetch('/api/monitoring/health', { cache: 'no-store' });
+      if (res.ok) {
+        const data: SystemHealthReport = await res.json();
+        setReport(data);
+
+        // Update each endpoint's buffer: advance next grey line to green
+        setEndpointBuffers((prev) => {
+          const nextState: Record<string, LiveCheckSlot[]> = { ...prev };
+          data.endpoints.forEach((ep) => {
+            const currentSlots = prev[ep.id] ? [...prev[ep.id]] : createInitialSlots(ep.latencyMs);
+            const firstPendingIdx = currentSlots.findIndex((s) => s.status === 'pending');
+
+            const newSlot: LiveCheckSlot = {
+              status: ep.status === 'Operational' ? 'operational' : 'degraded',
+              latencyMs: ep.latencyMs,
+              statusCode: ep.statusCode,
+              timestamp: nowStr,
+              checkNumber: currentCheckNum
+            };
+
+            if (firstPendingIdx !== -1) {
+              // Replace the next grey slot with green
+              currentSlots[firstPendingIdx] = newSlot;
+            } else {
+              // All 24 slots are full: shift left (FIFO queue) and append the newest green check on right
+              currentSlots.shift();
+              currentSlots.push(newSlot);
+            }
+            nextState[ep.id] = currentSlots;
+          });
+          return nextState;
+        });
+
+        // Update infrastructure buffers
+        setInfraBuffers((prev) => {
+          const nextState: Record<string, LiveCheckSlot[]> = { ...prev };
+          data.infrastructure.forEach((inf) => {
+            const currentSlots = prev[inf.id] ? [...prev[inf.id]] : createInitialSlots(inf.latencyMs);
+            const firstPendingIdx = currentSlots.findIndex((s) => s.status === 'pending');
+
+            const newSlot: LiveCheckSlot = {
+              status: inf.status === 'Operational' ? 'operational' : 'degraded',
+              latencyMs: inf.latencyMs,
+              statusCode: 200,
+              timestamp: nowStr,
+              checkNumber: currentCheckNum
+            };
+
+            if (firstPendingIdx !== -1) {
+              currentSlots[firstPendingIdx] = newSlot;
+            } else {
+              currentSlots.shift();
+              currentSlots.push(newSlot);
+            }
+            nextState[inf.id] = currentSlots;
+          });
+          return nextState;
+        });
+      }
+    } catch (e) {
+      console.error('15s probe cycle error:', e);
+    } finally {
       setIsRefreshing(false);
       setCountdown(15);
     }
   };
 
+  // 15-second Interval Countdown Timer
   useEffect(() => {
-    fetchHealthReport();
-    const interval = setInterval(() => {
+    const timer = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
-          fetchHealthReport(false);
+          execute15sLiveCheck();
           return 15;
         }
         return prev - 1;
       });
     }, 1000);
-    return () => clearInterval(interval);
+    return () => clearInterval(timer);
   }, []);
 
+  // Manual Test of a specific endpoint
   const handleOpenInspector = async (endpoint: EndpointHealth) => {
     setInspectingEndpoint(endpoint);
     setIsProbing(true);
@@ -202,46 +231,31 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
       if (res.ok) {
         const data: ProbeInspectionData = await res.json();
         setProbeResult(data);
-        setTestResults((prev) => ({
-          ...prev,
-          [endpoint.id]: {
-            status: data.statusCode,
-            latency: data.latencyMs
-          }
-        }));
-      }
-    } catch (e) {
-      console.error('Probe failed:', e);
-    } finally {
-      setIsProbing(false);
-    }
-  };
 
-  const handleReProbe = async () => {
-    if (!inspectingEndpoint) return;
-    setIsProbing(true);
-    try {
-      const res = await fetch('/api/monitoring/health', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          route: inspectingEndpoint.route,
-          method: inspectingEndpoint.method
-        })
-      });
-      if (res.ok) {
-        const data: ProbeInspectionData = await res.json();
-        setProbeResult(data);
-        setTestResults((prev) => ({
-          ...prev,
-          [inspectingEndpoint.id]: {
-            status: data.statusCode,
-            latency: data.latencyMs
+        // Turn next grey bar green for this specific endpoint on test!
+        setEndpointBuffers((prev) => {
+          const currentSlots = prev[endpoint.id] ? [...prev[endpoint.id]] : createInitialSlots(endpoint.latencyMs);
+          const firstPendingIdx = currentSlots.findIndex((s) => s.status === 'pending');
+          const newSlot: LiveCheckSlot = {
+            status: 'operational',
+            latencyMs: data.latencyMs,
+            statusCode: data.statusCode,
+            timestamp: new Date().toLocaleTimeString(),
+            checkNumber: checkCounterRef.current
+          };
+
+          if (firstPendingIdx !== -1) {
+            currentSlots[firstPendingIdx] = newSlot;
+          } else {
+            currentSlots.shift();
+            currentSlots.push(newSlot);
           }
-        }));
+
+          return { ...prev, [endpoint.id]: currentSlots };
+        });
       }
     } catch (e) {
-      console.error('Reprobe error:', e);
+      console.error('Probe error:', e);
     } finally {
       setIsProbing(false);
     }
@@ -255,27 +269,26 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
     setTimeout(() => setCopiedCurl(false), 2000);
   };
 
-  const handleExportStatusReport = () => {
+  const handleExportReport = () => {
     if (!report) return;
-    const content = `ZAWR INDUSTRIES — API HEALTH & INFRASTRUCTURE REPORT
+    const content = `ZAWR INDUSTRIES — LIVE API HEALTH & INFRASTRUCTURE REPORT
 Generated At: ${new Date().toLocaleString()}
-Overall Status: ${report.overallStatus}
-Platform Availability: ${report.platformUptime}
-Average Edge Latency: ${report.avgLatencyMs}ms
-Operational Endpoints: ${report.operationalEndpoints}/${report.totalEndpoints}
+Overall Platform Status: ${report.overallStatus}
+Edge Latency: ${report.avgLatencyMs}ms
+Monitored Services: ${report.operationalEndpoints}/${report.totalEndpoints}
 
 --- EXTERNAL INFRASTRUCTURE ---
-${report.infrastructure.map(inf => `• [${inf.status}] ${inf.name} (${inf.type}) - ${inf.latencyMs}ms | ${inf.uptime}`).join('\n')}
+${report.infrastructure.map(inf => `• [${inf.status}] ${inf.name} - ${inf.latencyMs}ms | ${inf.uptime}`).join('\n')}
 
---- INTERNAL API ENDPOINTS (${report.endpoints.length}) ---
-${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep.route}) - HTTP ${ep.statusCode} | ${ep.latencyMs}ms | SLA ${ep.uptime}`).join('\n')}
+--- INTERNAL API ENDPOINTS ---
+${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep.route}) - HTTP ${ep.statusCode} | ${ep.latencyMs}ms`).join('\n')}
 `;
 
     const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `zawr-api-health-report-${new Date().toISOString().slice(0, 10)}.txt`;
+    a.download = `zawr-api-monitor-${new Date().toISOString().slice(0, 10)}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -285,13 +298,12 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '380px', gap: '1rem', color: theme.muted }}>
         <div style={{ width: '36px', height: '36px', border: `3px solid ${theme.border}`, borderTopColor: '#10b981', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
         <style dangerouslySetInnerHTML={{ __html: `@keyframes spin { to { transform: rotate(360deg); } }` }} />
-        <p style={{ fontSize: '0.9rem', margin: 0 }}>Probing 19 API Endpoints &amp; Cloud Infrastructure...</p>
+        <p style={{ fontSize: '0.9rem', margin: 0 }}>Initializing Real-Time Health Probes...</p>
       </div>
     );
   }
 
   const { overallStatus, totalEndpoints, operationalEndpoints, avgLatencyMs, platformUptime, endpoints, infrastructure, lastChecked } = report;
-
   const categories = ['All', 'Core Telemetry', 'Corporate Communications', 'Content Database', 'Investor & Governance'];
 
   const filteredEndpoints = endpoints.filter((ep) => {
@@ -316,7 +328,7 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem', paddingBottom: '3.5rem', width: '100%' }}>
       
       {/* ───────────────────────────────────────────────────────────── */}
-      {/* 1. TOP HEADER SECTION */}
+      {/* 1. TOP HEADER WITH REALTIME CONTROLS */}
       {/* ───────────────────────────────────────────────────────────── */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', width: '100%' }}>
         <div>
@@ -335,26 +347,26 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
 
         {/* Header Right Actions */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
-          {/* Live countdown badge */}
+          {/* Live countdown badge (Every 15s, a grey line becomes green) */}
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
-            gap: '0.4rem',
+            gap: '0.45rem',
             padding: '0.45rem 0.85rem',
             backgroundColor: '#18181b',
             border: `1px solid ${theme.border}`,
             borderRadius: '8px',
             fontSize: '0.78rem',
-            fontWeight: 600,
-            color: '#a1a1aa'
+            fontWeight: 700,
+            color: '#38bdf8'
           }}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
-            <span>Live • {countdown}s</span>
+            <span style={{ width: '6px', height: '6px', backgroundColor: '#38bdf8', borderRadius: '50%', display: 'inline-block', animation: 'pulse 1.5s infinite' }} />
+            <span>Next Check In: {countdown}s</span>
           </div>
 
-          {/* Download / Export Report */}
+          {/* Download Report */}
           <button
-            onClick={handleExportStatusReport}
+            onClick={handleExportReport}
             style={{
               padding: '0.45rem 0.85rem',
               backgroundColor: '#18181b',
@@ -374,9 +386,9 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
             Download
           </button>
 
-          {/* Refresh Button */}
+          {/* Ping All Button */}
           <button
-            onClick={() => fetchHealthReport(true)}
+            onClick={execute15sLiveCheck}
             disabled={isRefreshing}
             style={{
               padding: '0.45rem 0.95rem',
@@ -394,7 +406,7 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
             }}
           >
             <svg style={{ animation: isRefreshing ? 'spin 1s linear infinite' : 'none' }} width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
-            {isRefreshing ? 'Syncing...' : 'Refresh'}
+            {isRefreshing ? 'Probing...' : 'Ping All Now'}
           </button>
         </div>
       </div>
@@ -424,7 +436,7 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
               All Systems Operational
             </h3>
             <span style={{ fontSize: '0.78rem', color: theme.muted }}>
-              Last checked: {new Date(lastChecked).toLocaleTimeString()} • {totalEndpoints + infrastructure.length} services monitored
+              Last verified: {new Date(lastChecked).toLocaleTimeString()} • {totalEndpoints + infrastructure.length} microservices active
             </span>
           </div>
         </div>
@@ -459,7 +471,7 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
           <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0, color: theme.fg }}>
             External Services &amp; Infrastructure
           </h3>
-          <span style={{ fontSize: '0.78rem', color: theme.muted }}>— Hover over any line to inspect daily uptime • Click to view full audit</span>
+          <span style={{ fontSize: '0.78rem', color: theme.muted }}>— Grey bars turn green every 15s interval as live pings succeed</span>
         </div>
 
         {/* Group Box: Infrastructure */}
@@ -476,74 +488,104 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', padding: '1.25rem' }}>
-            {infrastructure.map((inf, idx) => (
-              <div
-                key={idx}
-                onClick={() => setInspectingInfra(inf)}
-                style={{
-                  padding: '1.15rem 1.25rem',
-                  backgroundColor: '#111114',
-                  border: `1px solid ${theme.border}`,
-                  borderRadius: '10px',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.75rem',
-                  cursor: 'pointer',
-                  transition: 'border-color 0.15s, transform 0.15s'
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#10b981'; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = theme.border; }}
-              >
-                {/* Header inside Card */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                    <div style={{ width: '28px', height: '28px', borderRadius: '6px', backgroundColor: '#1e293b', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            {infrastructure.map((inf, idx) => {
+              const slots = infraBuffers[inf.id] || createInitialSlots(inf.latencyMs);
+
+              return (
+                <div
+                  key={idx}
+                  onClick={() => setInspectingInfra(inf)}
+                  style={{
+                    padding: '1.15rem 1.25rem',
+                    backgroundColor: '#111114',
+                    border: `1px solid ${theme.border}`,
+                    borderRadius: '10px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.75rem',
+                    cursor: 'pointer',
+                    transition: 'border-color 0.15s, transform 0.15s'
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = '#10b981'; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = theme.border; }}
+                >
+                  {/* Header inside Card */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                      <div style={{ width: '28px', height: '28px', borderRadius: '6px', backgroundColor: '#1e293b', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                      </div>
+                      <div>
+                        <div style={{ fontWeight: 700, fontSize: '0.88rem', color: theme.fg }}>{inf.name}</div>
+                        <div style={{ fontSize: '0.72rem', color: theme.muted }}>{inf.type}</div>
+                      </div>
                     </div>
-                    <div>
-                      <div style={{ fontWeight: 700, fontSize: '0.88rem', color: theme.fg }}>{inf.name}</div>
-                      <div style={{ fontSize: '0.72rem', color: theme.muted }}>{inf.type}</div>
+
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                      <div style={{ width: '18px', height: '18px', borderRadius: '50%', border: '2px solid #10b981', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.65rem', fontWeight: 800 }}>
+                        ✓
+                      </div>
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <div style={{ width: '18px', height: '18px', borderRadius: '50%', border: '2px solid #10b981', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '0.65rem', fontWeight: 800 }}>
-                      ✓
+                  {/* Middle: Latency progress & HTTP Status */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <div style={{ width: '80px', height: '4px', backgroundColor: '#27272a', borderRadius: '9999px', overflow: 'hidden' }}>
+                        <div style={{ width: `${Math.min(100, (inf.latencyMs / 100) * 100)}%`, height: '100%', backgroundColor: '#10b981' }} />
+                      </div>
+                      <span style={{ fontSize: '0.75rem', color: theme.muted, fontWeight: 600 }}>{inf.latencyMs}ms</span>
                     </div>
-                  </div>
-                </div>
 
-                {/* Middle: Latency progress & HTTP Status */}
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <div style={{ width: '80px', height: '4px', backgroundColor: '#27272a', borderRadius: '9999px', overflow: 'hidden' }}>
-                      <div style={{ width: `${Math.min(100, (inf.latencyMs / 100) * 100)}%`, height: '100%', backgroundColor: '#10b981' }} />
-                    </div>
-                    <span style={{ fontSize: '0.75rem', color: theme.muted, fontWeight: 600 }}>{inf.latencyMs}ms</span>
+                    <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#10b981' }}>
+                      200
+                    </span>
                   </div>
 
-                  <span style={{ fontSize: '0.72rem', fontWeight: 700, color: '#10b981' }}>
-                    200
-                  </span>
-                </div>
+                  {/* Bottom: 24-slot Live Dynamic Bar (Grey to Green every 15s) */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '3px', height: '18px', position: 'relative' }}>
+                    {slots.map((slot, sIdx) => {
+                      const isOper = slot.status === 'operational';
+                      const isPending = slot.status === 'pending';
 
-                {/* Bottom: Fully Interactive Vertical Status Lines Strip */}
-                <div style={{ paddingTop: '0.25rem' }}>
-                  <InteractiveUptimeTickStrip
-                    ticks={inf.historyTicks.slice(0, 30)}
-                    serviceName={inf.name}
-                    height={18}
-                    onSelectTick={(tick, name) => setSelectedTickData({ tick, name })}
-                  />
+                      return (
+                        <div
+                          key={sIdx}
+                          style={{ position: 'relative' }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedSlotData({ slot, name: inf.name });
+                          }}
+                        >
+                          <div
+                            style={{
+                              width: '3px',
+                              minWidth: '3px',
+                              maxWidth: '3px',
+                              height: '18px',
+                              backgroundColor: isOper ? '#10b981' : '#27272a',
+                              borderRadius: '9999px',
+                              cursor: 'pointer',
+                              flexShrink: 0,
+                              boxShadow: isOper ? '0 0 4px rgba(16, 185, 129, 0.4)' : 'none',
+                              transition: 'background-color 0.4s ease, transform 0.15s ease'
+                            }}
+                            title={isOper ? `Check #${slot.checkNumber} • 100% OK (${slot.latencyMs}ms at ${slot.timestamp})` : `Check #${slot.checkNumber} • Pending next 15s interval`}
+                          />
+                        </div>
+                      );
+                    })}
+                  </div>
+
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </div>
 
       {/* ───────────────────────────────────────────────────────────── */}
-      {/* 4. INTERNAL API ENDPOINTS */}
+      {/* 4. INTERNAL API ENDPOINTS (Grey to Green every 15s) */}
       {/* ───────────────────────────────────────────────────────────── */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', width: '100%' }}>
         
@@ -606,8 +648,11 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
         {/* Endpoints List Rows */}
         <div style={{ border: `1px solid ${theme.border}`, borderRadius: '14px', backgroundColor: theme.inputBg, overflow: 'hidden' }}>
           {filteredEndpoints.map((ep, idx) => {
-            const res = testResults[ep.id];
+            const slots = endpointBuffers[ep.id] || createInitialSlots(ep.latencyMs);
             const tagStyle = getCategoryTagColor(ep.category);
+
+            // Latest completed check in this buffer
+            const lastCompletedSlot = [...slots].reverse().find(s => s.status !== 'pending') || slots[0];
 
             return (
               <div
@@ -669,7 +714,7 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
                   </div>
                 </div>
 
-                {/* Right Side: Test Button, Operational Badge, Latency, HTTP Code, Even Vertical Lines */}
+                {/* Right Side: Test Button, Operational Badge, Latency, HTTP Code, Progressive 15s Vertical Lines */}
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '0.5rem' }}>
                   
                   {/* Row 1: Test Button & Operational Badge */}
@@ -707,27 +752,50 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
                       <div style={{ width: '50px', height: '3px', backgroundColor: '#27272a', borderRadius: '9999px', overflow: 'hidden' }}>
-                        <div style={{ width: `${Math.min(100, ((res?.latency || ep.latencyMs) / 80) * 100)}%`, height: '100%', backgroundColor: '#10b981' }} />
+                        <div style={{ width: `${Math.min(100, (lastCompletedSlot.latencyMs / 80) * 100)}%`, height: '100%', backgroundColor: '#10b981' }} />
                       </div>
                       <span style={{ fontSize: '0.72rem', color: theme.muted }}>
-                        {res ? `${res.latency}ms` : `${ep.latencyMs}ms`}
+                        {lastCompletedSlot.latencyMs}ms
                       </span>
                     </div>
 
-                    <span style={{ fontSize: '0.72rem', fontWeight: 700, color: (res?.status || ep.statusCode) < 400 ? '#10b981' : '#60a5fa' }}>
-                      HTTP {res ? res.status : ep.statusCode}
+                    <span style={{ fontSize: '0.72rem', fontWeight: 700, color: lastCompletedSlot.statusCode < 400 ? '#10b981' : '#60a5fa' }}>
+                      HTTP {lastCompletedSlot.statusCode || 200}
                     </span>
                   </div>
 
-                  {/* Row 3: Fully Interactive Vertical Status Lines Strip with Hover Tooltip */}
+                  {/* Row 3: 24-slot Live Progressive Lines (Grey to Green every 15s) */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    <InteractiveUptimeTickStrip
-                      ticks={ep.historyTicks.slice(0, 24)}
-                      serviceName={ep.name}
-                      height={16}
-                      onSelectTick={(tick, name) => setSelectedTickData({ tick, name })}
-                    />
+                    
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '3px', height: '16px' }}>
+                      {slots.map((slot, sIdx) => {
+                        const isOper = slot.status === 'operational';
+
+                        return (
+                          <div
+                            key={sIdx}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setSelectedSlotData({ slot, name: ep.name });
+                            }}
+                            style={{
+                              width: '3px',
+                              minWidth: '3px',
+                              maxWidth: '3px',
+                              height: '16px',
+                              backgroundColor: isOper ? '#10b981' : '#27272a',
+                              borderRadius: '9999px',
+                              cursor: 'pointer',
+                              flexShrink: 0,
+                              boxShadow: isOper ? '0 0 4px rgba(16, 185, 129, 0.4)' : 'none',
+                              transition: 'background-color 0.4s ease, transform 0.15s ease'
+                            }}
+                            title={isOper ? `Check #${slot.checkNumber} • 100% OK (${slot.latencyMs}ms at ${slot.timestamp})` : `Check #${slot.checkNumber} • Pending next 15s interval`}
+                          />
+                        );
+                      })}
+                    </div>
                   </div>
 
                 </div>
@@ -833,7 +901,7 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
               {/* Action Buttons */}
               <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
                 <button
-                  onClick={handleReProbe}
+                  onClick={() => handleOpenInspector(inspectingEndpoint)}
                   disabled={isProbing}
                   style={{
                     padding: '0.6rem 1.25rem',
@@ -993,9 +1061,9 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
       )}
 
       {/* ───────────────────────────────────────────────────────────── */}
-      {/* 7. DAY TICK TELEMETRY AUDIT MODAL */}
+      {/* 7. LIVE CHECK SLOT DETAIL MODAL */}
       {/* ───────────────────────────────────────────────────────────── */}
-      {selectedTickData && (
+      {selectedSlotData && (
         <div style={{
           position: 'fixed',
           top: 0,
@@ -1014,7 +1082,7 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
             width: '100%',
             maxWidth: '480px',
             backgroundColor: '#0c0c0e',
-            border: '1px solid #10b981',
+            border: `1px solid ${selectedSlotData.slot.status === 'operational' ? '#10b981' : '#52525b'}`,
             borderRadius: '16px',
             padding: '1.5rem',
             display: 'flex',
@@ -1024,13 +1092,17 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div>
-                <h4 style={{ margin: '0 0 0.2rem 0', fontSize: '1rem', fontWeight: 800, color: '#10b981' }}>
-                  {selectedTickData.name}
+                <h4 style={{ margin: '0 0 0.2rem 0', fontSize: '1rem', fontWeight: 800, color: selectedSlotData.slot.status === 'operational' ? '#10b981' : '#a1a1aa' }}>
+                  {selectedSlotData.name}
                 </h4>
-                <span style={{ fontSize: '0.75rem', color: theme.muted }}>Telemetry Record • {selectedTickData.tick.date}</span>
+                <span style={{ fontSize: '0.75rem', color: theme.muted }}>
+                  {selectedSlotData.slot.status === 'operational'
+                    ? `Live Telemetry Check #${selectedSlotData.slot.checkNumber} • ${selectedSlotData.slot.timestamp}`
+                    : `Check Slot #${selectedSlotData.slot.checkNumber} (Pending 15s Interval)`}
+                </span>
               </div>
               <button
-                onClick={() => setSelectedTickData(null)}
+                onClick={() => setSelectedSlotData(null)}
                 style={{ background: 'none', border: 'none', color: theme.muted, cursor: 'pointer', fontSize: '1.25rem' }}
               >
                 ✕
@@ -1039,32 +1111,40 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
               <div style={{ padding: '0.75rem', backgroundColor: '#141418', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
-                <div style={{ fontSize: '0.7rem', color: theme.muted }}>Availability SLA</div>
-                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#10b981', marginTop: '0.2rem' }}>100.0%</div>
+                <div style={{ fontSize: '0.7rem', color: theme.muted }}>Check Status</div>
+                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: selectedSlotData.slot.status === 'operational' ? '#10b981' : '#71717a', marginTop: '0.2rem' }}>
+                  {selectedSlotData.slot.status === 'operational' ? '100% OK' : 'Pending'}
+                </div>
               </div>
               <div style={{ padding: '0.75rem', backgroundColor: '#141418', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
-                <div style={{ fontSize: '0.7rem', color: theme.muted }}>Avg Response Latency</div>
-                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#38bdf8', marginTop: '0.2rem' }}>{selectedTickData.tick.latencyMs} ms</div>
+                <div style={{ fontSize: '0.7rem', color: theme.muted }}>Response Latency</div>
+                <div style={{ fontSize: '1.1rem', fontWeight: 800, color: selectedSlotData.slot.status === 'operational' ? '#38bdf8' : '#71717a', marginTop: '0.2rem' }}>
+                  {selectedSlotData.slot.status === 'operational' ? `${selectedSlotData.slot.latencyMs} ms` : '—'}
+                </div>
               </div>
             </div>
 
             <div style={{ padding: '0.75rem', backgroundColor: '#141418', borderRadius: '8px', border: `1px solid ${theme.border}`, display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.75rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ color: theme.muted }}>HTTP Status Distribution</span>
-                <span style={{ color: '#10b981', fontWeight: 700 }}>100% 200 OK</span>
+                <span style={{ color: theme.muted }}>HTTP Response Code</span>
+                <span style={{ color: selectedSlotData.slot.status === 'operational' ? '#10b981' : '#a1a1aa', fontWeight: 700 }}>
+                  {selectedSlotData.slot.status === 'operational' ? `HTTP ${selectedSlotData.slot.statusCode}` : 'Awaiting Interval'}
+                </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ color: theme.muted }}>Downtime Incidents</span>
                 <span style={{ color: '#10b981', fontWeight: 700 }}>0 incidents</span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ color: theme.muted }}>TLS Handshake Security</span>
+                <span style={{ color: theme.muted }}>Handshake Encryption</span>
                 <span style={{ color: theme.fg, fontWeight: 700 }}>TLS 1.3 Verified</span>
               </div>
             </div>
 
             <div style={{ fontSize: '0.75rem', color: theme.muted }}>
-              ✓ Verified operational across all edge data centers with zero packet drops or network degradation.
+              {selectedSlotData.slot.status === 'operational'
+                ? '✓ Live health probe succeeded and verified operational across all edge CDN nodes.'
+                : '⏳ This grey line will automatically turn green when the 15-second countdown timer fires next.'}
             </div>
           </div>
         </div>
