@@ -234,8 +234,9 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
               <div style={{ width: '100%', padding: '0.65rem', backgroundColor: '#09090b', border: '1px solid #27272a', borderRadius: '6px', color: '#52525b', fontSize: '0.8rem' }}>john.doe@example.com</div>
             </div>
 
-            <div style={{ padding: '1.5rem', border: '1px dashed #27272a', borderRadius: '8px', textAlign: 'center', backgroundColor: '#09090b', color: '#9ca3af', fontSize: '0.8rem', marginBottom: '1.5rem' }}>
-              📁 Attach Resume / CV (PDF, DOCX up to 10MB)
+            <div style={{ padding: '1.5rem', border: '1px dashed #27272a', borderRadius: '8px', textAlign: 'center', backgroundColor: '#09090b', color: '#9ca3af', fontSize: '0.8rem', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
+              Attach Resume / CV (PDF, DOCX up to 10MB)
             </div>
 
             <button style={{ width: '100%', padding: '0.75rem', backgroundColor: '#ffffff', color: '#000000', border: 'none', borderRadius: '6px', fontWeight: 600, fontSize: '0.9rem', cursor: 'pointer' }}>
@@ -355,7 +356,8 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
               Documents &amp; Files
             </div>
             <div style={{ padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', color: '#2563eb' }}>
-              📄 {data.noticeAttachmentName || 'Notice Tender Document.pdf'}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              {data.noticeAttachmentName || 'Notice Tender Document.pdf'}
             </div>
           </div>
         </div>
@@ -403,8 +405,9 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
       return (
         <div style={{ backgroundColor: '#09090b', color: '#ffffff', minHeight: '100%', padding: '2rem 1.5rem', fontFamily: 'sans-serif' }}>
           <div style={{ border: '1px solid #27272a', borderRadius: '14px', overflow: 'hidden', backgroundColor: '#000000', padding: '1.75rem' }}>
-            <div style={{ fontSize: '0.75rem', color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>
-              🗓️ {eventStartDate} • {eventVenue}
+            <div style={{ fontSize: '0.75rem', color: '#3b82f6', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              {eventStartDate} • {eventVenue}
             </div>
             <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#ffffff', margin: '0 0 0.4rem 0' }}>
               {eventTitle}
@@ -479,7 +482,8 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
                 Attachments
               </div>
               <div style={{ padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', color: '#2563eb' }}>
-                📄 {data.pressAttachmentName}
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                {data.pressAttachmentName}
               </div>
             </div>
           )}
@@ -488,8 +492,9 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
           {data.pressLinkName && (
             <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginTop: '1rem' }}>
               <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6b7280' }}>Related:</span>
-              <span style={{ padding: '0.3rem 0.8rem', border: '1px solid #e5e7eb', borderRadius: '9999px', fontSize: '0.8rem', color: '#000000', backgroundColor: '#f9fafb' }}>
-                🔗 {data.pressLinkName}
+              <span style={{ padding: '0.3rem 0.8rem', border: '1px solid #e5e7eb', borderRadius: '9999px', fontSize: '0.8rem', color: '#000000', backgroundColor: '#f9fafb', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                {data.pressLinkName}
               </span>
             </div>
           )}
@@ -499,13 +504,13 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
 
     // Default Overview
     return (
-      <div style={{ backgroundColor: '#000000', color: '#ffffff', minHeight: '100%', padding: '3rem 2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: '54px', height: '54px', borderRadius: '50%', backgroundColor: '#18181b', border: '1px solid #27272a', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1.25rem', fontSize: '1.5rem' }}>
-          🌐
+      <div style={{ backgroundColor: '#09090b', color: '#ffffff', minHeight: '100%', padding: '2rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+        <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: '#18181b', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         </div>
-        <h3 style={{ fontSize: '1.2rem', fontWeight: 600, marginBottom: '0.5rem', color: '#ffffff' }}>Realtime Live Browser Mirror</h3>
-        <p style={{ fontSize: '0.85rem', color: '#9ca3af', maxWidth: '340px', lineHeight: 1.5, margin: 0 }}>
-          Select <strong>Manage Jobs</strong>, <strong>Manage Blogs</strong>, <strong>Manage Notices</strong>, or <strong>Manage Events</strong> to watch your formatted text and updates render live as you type.
+        <h3 style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 0.5rem 0' }}>Live Interactive Browser Mirror</h3>
+        <p style={{ fontSize: '0.85rem', color: '#9ca3af', maxWidth: '340px', margin: 0 }}>
+          Select a content module (Careers, Blogs, Notices, Press Releases) on the left sidebar to see keystroke changes rendered in realtime.
         </p>
       </div>
     );
@@ -517,26 +522,25 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
-        backgroundColor: theme.bg,
+        backgroundColor: '#09090b',
         borderLeft: `1px solid ${theme.border}`,
-        overflow: 'hidden',
+        position: 'relative',
+        userSelect: 'none',
       }}
     >
-      {/* Device & Mode Header Bar */}
+      {/* Browser Chrome Top Header */}
       <div
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '0.65rem 1rem',
-          backgroundColor: '#09090b',
+          padding: '0.5rem 0.85rem',
+          backgroundColor: '#121215',
           borderBottom: `1px solid ${theme.border}`,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          gap: '0.75rem',
           flexShrink: 0,
-          gap: '0.5rem',
-          flexWrap: 'wrap',
         }}
       >
-        {/* Browser Traffic Lights & Mode Badge */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
           <div style={{ display: 'flex', gap: '0.3rem' }}>
             <div style={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#ef4444' }} />
@@ -563,7 +567,8 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
                 gap: '0.25rem',
               }}
             >
-              ⚡ Live Keystroke Sync
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              Live Keystroke Sync
             </button>
             <button
               type="button"
@@ -582,7 +587,8 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
                 gap: '0.25rem',
               }}
             >
-              🌐 Real Website (Iframe)
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+              Real Website (Iframe)
             </button>
           </div>
         </div>
@@ -602,9 +608,13 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
               backgroundColor: deviceMode === 'desktop' ? '#ffffff' : 'transparent',
               color: deviceMode === 'desktop' ? '#000000' : '#9ca3af',
               cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.25rem'
             }}
           >
-            🖥️ Desktop
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+            Desktop
           </button>
           <button
             type="button"
@@ -619,9 +629,13 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
               backgroundColor: deviceMode === 'mobile' ? '#ffffff' : 'transparent',
               color: deviceMode === 'mobile' ? '#000000' : '#9ca3af',
               cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.25rem'
             }}
           >
-            📱 Mobile
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+            Mobile
           </button>
         </div>
       </div>
@@ -656,7 +670,7 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
             whiteSpace: 'nowrap',
           }}
         >
-          <span style={{ color: '#10b981' }}>🔒</span>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#10b981" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           {getFullDisplayUrl()}
         </div>
       </div>
@@ -689,14 +703,15 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
         >
           {viewMode === 'iframe' ? (
             <iframe
+              key={`${activeTab}-${getSiteRoute()}`}
               src={getSiteRoute()}
-              title="Live Website Preview"
+              title="Realtime Website Live View"
               style={{
                 width: '100%',
                 height: '100%',
                 border: 'none',
                 backgroundColor: '#000000',
-                flex: 1,
+                display: 'block',
               }}
             />
           ) : (
