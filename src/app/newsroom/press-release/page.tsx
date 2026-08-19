@@ -66,14 +66,25 @@ export default function PressReleasesPage() {
   const paginated = displayed.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', color: '#000000', paddingTop: '8rem', paddingBottom: '6rem', fontFamily: 'Inter, system-ui, sans-serif' }}>
-      <style dangerouslySetInnerHTML={{__html: `
-        @media (min-width: 900px) {
-          .press-releases-grid {
-            grid-template-columns: repeat(3, 1fr) !important;
-          }
+    <div suppressHydrationWarning style={{ minHeight: '100vh', backgroundColor: '#ffffff', color: '#000000', paddingTop: '8rem', paddingBottom: '6rem', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <style dangerouslySetInnerHTML={{ __html: `
+        .press-card {
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        @media (min-width: 600px) and (max-width: 899px) {
+        .press-card:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.15);
+          border-color: #000000 !important;
+        }
+        .press-card:hover .arrow-icon {
+          transform: translate(3px, -3px);
+        }
+        .press-releases-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 2rem;
+        }
+        @media (max-width: 991px) {
           .press-releases-grid {
             grid-template-columns: repeat(2, 1fr) !important;
           }
@@ -108,6 +119,7 @@ export default function PressReleasesPage() {
           {/* Active / Archive Toggle */}
           <div style={{ display: 'flex', gap: '0.75rem' }}>
             <button
+              suppressHydrationWarning
               onClick={() => setShowArchive(false)}
               style={{
                 padding: '0.5rem 1.25rem',
@@ -124,6 +136,7 @@ export default function PressReleasesPage() {
               Active Releases
             </button>
             <button
+              suppressHydrationWarning
               onClick={() => setShowArchive(true)}
               style={{
                 padding: '0.5rem 1.25rem',
@@ -157,6 +170,7 @@ export default function PressReleasesPage() {
                 placeholder="Search releases..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                suppressHydrationWarning
                 style={{
                   width: '100%',
                   padding: '0.45rem 1rem 0.45rem 2.2rem',
@@ -179,6 +193,7 @@ export default function PressReleasesPage() {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as any)}
+                suppressHydrationWarning
                 style={{
                   padding: '0.45rem 1.75rem 0.45rem 0.85rem',
                   borderRadius: '9999px',
@@ -201,7 +216,7 @@ export default function PressReleasesPage() {
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
-                <option value="alphabetical">Title A-Z</option>
+                <option value="alphabetical">Title (A-Z)</option>
               </select>
             </div>
 
@@ -339,6 +354,7 @@ export default function PressReleasesPage() {
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.5rem', marginTop: '3.5rem' }}>
                 {/* Previous Page */}
                 <button
+                  suppressHydrationWarning
                   onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}
                   disabled={currentPage === 1}
                   style={{
@@ -375,6 +391,7 @@ export default function PressReleasesPage() {
                   return (
                     <button
                       key={pageNum}
+                      suppressHydrationWarning
                       onClick={() => setCurrentPage(pageNum)}
                       style={{
                         display: 'flex',
@@ -406,6 +423,7 @@ export default function PressReleasesPage() {
 
                 {/* Next Page */}
                 <button
+                  suppressHydrationWarning
                   onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}
                   disabled={currentPage === totalPages}
                   style={{

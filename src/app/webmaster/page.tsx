@@ -5,6 +5,7 @@ import { useRouter, useSearchParams, notFound } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import RichTextEditor from '@/components/RichTextEditor';
 import LiveSitePreview from '@/components/LiveSitePreview';
+import AnalyticsDashboard from '@/components/AnalyticsDashboard';
 
 export default function WebmasterDashboardPage() {
   return (
@@ -558,23 +559,7 @@ function WebmasterDashboard() {
   const renderContent = () => {
     switch (activeTab) {
       case 'analytics':
-        return (
-          <div>
-            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '2rem', letterSpacing: '-0.02em' }}>Analytics (Live)</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
-              {analytics.map((stat, i) => (
-                <div key={i} style={{ padding: '1.5rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
-                  <div style={{ fontSize: '0.875rem', color: theme.muted, marginBottom: '0.5rem' }}>{stat.label}</div>
-                  <div style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '0.5rem' }}>{stat.value}</div>
-                  <div style={{ fontSize: '0.75rem', color: stat.change.startsWith('+') ? '#ffffff' : theme.muted }}>{stat.change} this week</div>
-                </div>
-              ))}
-            </div>
-            <div style={{ height: '300px', border: `1px dashed ${theme.border}`, borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: theme.muted }}>
-              [ Supabase Realtime Chart Connected ]
-            </div>
-          </div>
-        );
+        return <AnalyticsDashboard theme={theme} />;
       
       case 'mail-credentials':
         return (
@@ -1951,25 +1936,23 @@ function WebmasterDashboard() {
                   </div>
                 </div>
 
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Summary (Short teaser shown in list)</label>
-                  <textarea 
-                    value={pressSummary} 
-                    onChange={(e) => setPressSummary(e.target.value)} 
-                    style={{ width: '100%', height: '60px', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', resize: 'vertical' }} 
-                    placeholder="Short summary of the corporate release..."
-                  />
-                </div>
+                <RichTextEditor
+                  label="Summary (Short teaser shown in list)"
+                  value={pressSummary}
+                  onChange={(val) => setPressSummary(val)}
+                  rows={3}
+                  placeholder="Short summary of the corporate release..."
+                  theme={theme}
+                />
 
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Full Editorial Body</label>
-                  <textarea 
-                    value={pressBody} 
-                    onChange={(e) => setPressBody(e.target.value)} 
-                    style={{ width: '100%', height: '200px', padding: '0.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', resize: 'vertical' }} 
-                    placeholder="Full press release text body..."
-                  />
-                </div>
+                <RichTextEditor
+                  label="Full Editorial Body Content"
+                  value={pressBody}
+                  onChange={(val) => setPressBody(val)}
+                  rows={8}
+                  placeholder="Type the full official press release statement here with headings, quotes, bullet points..."
+                  theme={theme}
+                />
 
                 {/* Upload Attachment */}
                 <div style={{ border: `1px solid ${theme.border}`, padding: '1rem', borderRadius: '6px' }}>
@@ -3133,7 +3116,7 @@ function WebmasterDashboard() {
             </button>
           </div>
 
-          <div style={{ maxWidth: '900px' }}>
+          <div style={{ maxWidth: showLivePreview ? '920px' : '100%', width: '100%', transition: 'max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
             {renderContent()}
           </div>
         </div>
@@ -3185,6 +3168,15 @@ function WebmasterDashboard() {
                 eventTicketsBooked,
                 eventTicketsCapacity,
                 eventImage,
+                // Press Releases
+                pressTitle,
+                pressCategory,
+                pressDate,
+                pressSummary,
+                pressBody,
+                pressAttachmentName: customPressFile ? customPressFile.name : (editingPress ? 'Press Release Document.pdf' : undefined),
+                pressLinkName,
+                pressLinkUrl,
               }}
             />
           </div>

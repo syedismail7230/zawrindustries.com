@@ -5,6 +5,7 @@ import Script from 'next/script';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ClientWidgets from '@/components/ClientWidgets';
+import ClientAnalyticsTracker from '@/components/ClientAnalyticsTracker';
 
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
@@ -485,6 +486,7 @@ export default function RootLayout({
           `}
         </Script>
         <ClientWidgets />
+        <ClientAnalyticsTracker />
         <Header />
         <main style={{ minHeight: 'calc(100vh - 400px)' }}>
           {children}

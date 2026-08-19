@@ -5,6 +5,7 @@ import Script from 'next/script';
 import fs from 'fs';
 import path from 'path';
 import { Metadata } from 'next';
+import FormattedContent from '@/components/FormattedContent';
 
 const getSafeIsoDate = (dateStr: string): string => {
   try {
@@ -183,9 +184,9 @@ export default async function PressReleasePage({ params }: { params: Promise<{ s
 
         {/* Body text */}
         {release.body && (
-          <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.85, marginBottom: '3rem', whiteSpace: 'pre-wrap' }}>
-            {release.body}
-          </p>
+          <div style={{ marginBottom: '3rem' }}>
+            <FormattedContent content={release.body} style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.85 }} />
+          </div>
         )}
 
         {/* Documents Table */}

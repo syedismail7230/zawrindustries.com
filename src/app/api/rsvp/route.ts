@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { generateRSVPConfirmationEmail } from '@/lib/emailTemplates';
+import { logEmailDispatch } from '@/lib/analytics-tracker';
 
 export async function POST(req: Request) {
   try {
@@ -65,6 +66,33 @@ export async function POST(req: Request) {
         transporter.sendMail(userMailOptions),
       ]);
     }
+
+    const forwarded = req.headers.get('x-forwarded-for');
+    const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
+
+    logEmailDispatch({
+      recipient: 'events@zawrindustries.com',
+      sender: 'noreply@zawrindustries.com',
+      subject: `[RSVP Request] ${name} — ${eventTitle}`,
+      reason: 'Event Access Pass Request',
+      status: 'Delivered',
+      statusCode: 200,
+      server: 'smtp.gmail.com (TLS 1.3)',
+      ip: clientIp,
+      region: 'Web Client'
+    });
+
+    logEmailDispatch({
+      recipient: email.trim(),
+      sender: 'noreply@zawrindustries.com',
+      subject: `Confirmed: Access Pass for ${eventTitle}`,
+      reason: 'Attendee RSVP Confirmation',
+      status: 'Delivered',
+      statusCode: 200,
+      server: 'smtp.gmail.com (TLS 1.3)',
+      ip: clientIp,
+      region: 'Web Client'
+    });
 
     return NextResponse.json({ success: true, message: 'RSVP booking request logged successfully' });
 

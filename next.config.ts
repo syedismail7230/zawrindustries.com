@@ -110,6 +110,21 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
+  async redirects() {
+    return [
+      {
+        source: '/newsroom/press-releases',
+        destination: '/newsroom/press-release',
+        permanent: true,
+      },
+      {
+        source: '/newsroom/press-releases/:slug*',
+        destination: '/newsroom/press-release/:slug*',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

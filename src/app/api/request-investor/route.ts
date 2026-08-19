@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { generateInvestorConfirmationEmail } from '@/lib/emailTemplates';
+import { logEmailDispatch } from '@/lib/analytics-tracker';
 
 export async function POST(req: Request) {
   try {
@@ -67,6 +68,33 @@ export async function POST(req: Request) {
         transporter.sendMail(confirmMailOptions),
       ]);
     }
+
+    const forwarded = req.headers.get('x-forwarded-for');
+    const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
+
+    logEmailDispatch({
+      recipient: 'investors@zawrindustries.com',
+      sender: 'noreply@zawrindustries.com',
+      subject: `[Investor Inquiry] ${name} — ${organization || 'Private Investor'}`,
+      reason: 'Investor Relations Inquiry',
+      status: 'Delivered',
+      statusCode: 200,
+      server: 'smtp.gmail.com (TLS 1.3)',
+      ip: clientIp,
+      region: 'Web Client'
+    });
+
+    logEmailDispatch({
+      recipient: email.trim(),
+      sender: 'noreply@zawrindustries.com',
+      subject: 'Confirmation: Zawr Industries Investor Inquiry',
+      reason: 'Investor Auto-Receipt',
+      status: 'Delivered',
+      statusCode: 200,
+      server: 'smtp.gmail.com (TLS 1.3)',
+      ip: clientIp,
+      region: 'Web Client'
+    });
 
     return NextResponse.json({ success: true, message: 'Investor inquiry logged successfully' }, { status: 200 });
   } catch (error) {

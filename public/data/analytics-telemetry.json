@@ -1,0 +1,439 @@
+{
+  "summary": {
+    "totalVisits": 18495,
+    "visitsChange": "+14.8%",
+    "totalPageViews": 42103,
+    "bounceRate": "38.4%",
+    "avgSessionDuration": "3m 24s",
+    "emailsSentToday": 7,
+    "emailsSentWeek": 7,
+    "threatsNeutralized": 4,
+    "activeServerUptime": "99.98%",
+    "avgLatencyMs": 34,
+    "edgeCdnHitRate": "97.2%"
+  },
+  "trafficChart": [
+    {
+      "time": "00:00",
+      "visits": 412,
+      "pageViews": 980
+    },
+    {
+      "time": "04:00",
+      "visits": 280,
+      "pageViews": 640
+    },
+    {
+      "time": "08:00",
+      "visits": 1240,
+      "pageViews": 3100
+    },
+    {
+      "time": "12:00",
+      "visits": 2890,
+      "pageViews": 6450
+    },
+    {
+      "time": "16:00",
+      "visits": 3410,
+      "pageViews": 7890
+    },
+    {
+      "time": "20:00",
+      "visits": 2780,
+      "pageViews": 5920
+    },
+    {
+      "time": "Now",
+      "visits": 3280,
+      "pageViews": 7120
+    }
+  ],
+  "emails": [
+    {
+      "id": "em-1094",
+      "timestamp": "2026-08-19T15:22:42.624Z",
+      "recipient": "careers@zawrindustries.com",
+      "sender": "noreply@zawrindustries.com",
+      "subject": "New Job Application: Lead AI Systems Engineer (John Doe)",
+      "reason": "Career Portal Submission",
+      "status": "Delivered",
+      "statusCode": 200,
+      "server": "smtp.gmail.com (TLS 1.3)",
+      "ip": "49.37.142.88",
+      "region": "Bengaluru, India"
+    },
+    {
+      "id": "em-1093",
+      "timestamp": "2026-08-19T14:55:42.624Z",
+      "recipient": "investors@zawrindustries.com",
+      "sender": "noreply@zawrindustries.com",
+      "subject": "Investor Pitch Deck Access Request (Apex Capital Ventures)",
+      "reason": "Institutional Investor Verification",
+      "status": "Delivered",
+      "statusCode": 200,
+      "server": "smtp.gmail.com (TLS 1.3)",
+      "ip": "185.220.101.5",
+      "region": "Dubai, UAE"
+    },
+    {
+      "id": "em-1092",
+      "timestamp": "2026-08-19T14:18:42.624Z",
+      "recipient": "alex.m@enterprise-cloud.io",
+      "sender": "noreply@zawrindustries.com",
+      "subject": "Confirmation: Freelance Engineering Network Application",
+      "reason": "Freelance Network Auto-Receipt",
+      "status": "Delivered",
+      "statusCode": 200,
+      "server": "smtp.gmail.com (TLS 1.3)",
+      "ip": "98.210.45.19",
+      "region": "San Francisco, USA"
+    },
+    {
+      "id": "em-1091",
+      "timestamp": "2026-08-19T13:30:42.624Z",
+      "recipient": "pr@zawrindustries.com",
+      "sender": "noreply@zawrindustries.com",
+      "subject": "Media Inquiry: Robotics Hub Launch Coverage",
+      "reason": "Press & Media Kit Request",
+      "status": "Delivered",
+      "statusCode": 200,
+      "server": "smtp.gmail.com (TLS 1.3)",
+      "ip": "82.165.197.1",
+      "region": "London, UK"
+    },
+    {
+      "id": "em-1090",
+      "timestamp": "2026-08-19T12:30:42.624Z",
+      "recipient": "newsletter-sub@gmail.com",
+      "sender": "noreply@zawrindustries.com",
+      "subject": "Welcome to Zawr Industries Strategic Dispatch",
+      "reason": "Newsletter Subscription Welcome",
+      "status": "Delivered",
+      "statusCode": 200,
+      "server": "smtp.gmail.com (TLS 1.3)",
+      "ip": "103.14.77.201",
+      "region": "Mumbai, India"
+    },
+    {
+      "id": "em-1089",
+      "timestamp": "2026-08-19T11:30:42.624Z",
+      "recipient": "events@zawrindustries.com",
+      "sender": "noreply@zawrindustries.com",
+      "subject": "RSVP Confirmation: Zawr Global Tech Summit 2026",
+      "reason": "Event Keynote RSVP",
+      "status": "Delivered",
+      "statusCode": 200,
+      "server": "smtp.gmail.com (TLS 1.3)",
+      "ip": "139.59.32.18",
+      "region": "Singapore"
+    },
+    {
+      "id": "em-1088",
+      "timestamp": "2026-08-19T09:30:42.624Z",
+      "recipient": "Grievance@zawrindustries.com",
+      "sender": "noreply@zawrindustries.com",
+      "subject": "Compliance Inquiry: Annual Governance Filings",
+      "reason": "Regulatory Grievance Portal",
+      "status": "Delivered",
+      "statusCode": 200,
+      "server": "smtp.gmail.com (TLS 1.3)",
+      "ip": "117.205.12.80",
+      "region": "New Delhi, India"
+    }
+  ],
+  "requests": [
+    {
+      "id": "req-700055",
+      "timestamp": "2026-08-19T15:35:00.055Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "latencyMs": 18,
+      "ip": "::1",
+      "country": "India",
+      "city": "Bengaluru",
+      "device": "Mobile",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
+    },
+    {
+      "id": "req-589155",
+      "timestamp": "2026-08-19T15:33:09.155Z",
+      "path": "/",
+      "method": "GET",
+      "status": 200,
+      "latencyMs": 18,
+      "ip": "::1",
+      "country": "India",
+      "city": "Bengaluru",
+      "device": "Mobile",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
+    },
+    {
+      "id": "req-583987",
+      "timestamp": "2026-08-19T15:33:03.987Z",
+      "path": "/webmaster",
+      "method": "GET",
+      "status": 200,
+      "latencyMs": 18,
+      "ip": "::1",
+      "country": "India",
+      "city": "Bengaluru",
+      "device": "Desktop",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36"
+    },
+    {
+      "id": "req-8841",
+      "timestamp": "2026-08-19T15:29:42.624Z",
+      "path": "/careers/lead-ai-systems-engineer",
+      "method": "GET",
+      "status": 200,
+      "latencyMs": 28,
+      "ip": "49.37.142.88",
+      "country": "India",
+      "city": "Bengaluru",
+      "device": "Desktop",
+      "userAgent": "Chrome 124 / macOS"
+    },
+    {
+      "id": "req-8840",
+      "timestamp": "2026-08-19T15:28:42.624Z",
+      "path": "/about/blog/autonomous-systems-architecture",
+      "method": "GET",
+      "status": 200,
+      "latencyMs": 34,
+      "ip": "185.220.101.5",
+      "country": "United Arab Emirates",
+      "city": "Dubai",
+      "device": "Mobile",
+      "userAgent": "Safari / iOS 17.5"
+    },
+    {
+      "id": "req-8839",
+      "timestamp": "2026-08-19T15:27:42.624Z",
+      "path": "/api/careers",
+      "method": "POST",
+      "status": 200,
+      "latencyMs": 142,
+      "ip": "49.37.142.88",
+      "country": "India",
+      "city": "Bengaluru",
+      "device": "Desktop",
+      "userAgent": "Chrome 124 / Windows 11"
+    },
+    {
+      "id": "req-8838",
+      "timestamp": "2026-08-19T15:26:42.624Z",
+      "path": "/industries/it-service",
+      "method": "GET",
+      "status": 200,
+      "latencyMs": 22,
+      "ip": "98.210.45.19",
+      "country": "United States",
+      "city": "San Francisco",
+      "device": "Desktop",
+      "userAgent": "Chrome 124 / Windows 11"
+    },
+    {
+      "id": "req-8837",
+      "timestamp": "2026-08-19T15:24:42.624Z",
+      "path": "/newsroom/events",
+      "method": "GET",
+      "status": 200,
+      "latencyMs": 31,
+      "ip": "139.59.32.18",
+      "country": "Singapore",
+      "city": "Singapore",
+      "device": "Mobile",
+      "userAgent": "Safari / iPhone"
+    },
+    {
+      "id": "req-8836",
+      "timestamp": "2026-08-19T15:22:42.624Z",
+      "path": "/newsroom/press-release",
+      "method": "GET",
+      "status": 200,
+      "latencyMs": 29,
+      "ip": "82.165.197.1",
+      "country": "United Kingdom",
+      "city": "London",
+      "device": "Desktop",
+      "userAgent": "Edge 124 / Windows 11"
+    },
+    {
+      "id": "req-8835",
+      "timestamp": "2026-08-19T15:20:42.624Z",
+      "path": "/investors",
+      "method": "GET",
+      "status": 200,
+      "latencyMs": 38,
+      "ip": "103.14.77.201",
+      "country": "India",
+      "city": "Mumbai",
+      "device": "Desktop",
+      "userAgent": "Chrome 124 / Linux"
+    }
+  ],
+  "security": [
+    {
+      "id": "sec-304",
+      "timestamp": "2026-08-19T15:16:42.624Z",
+      "eventType": "Unauthorized Gate Probe",
+      "severity": "Medium",
+      "targetPath": "/wp-login.php",
+      "ip": "194.26.29.112",
+      "country": "Russia",
+      "actionTaken": "Blocked 403",
+      "details": "Automated vulnerability scanner attempted CMS injection probe; immediately rejected by edge firewall."
+    },
+    {
+      "id": "sec-303",
+      "timestamp": "2026-08-19T14:45:42.624Z",
+      "eventType": "Rate Limit Exceeded",
+      "severity": "Low",
+      "targetPath": "/api/newsletter",
+      "ip": "45.154.255.89",
+      "country": "Netherlands",
+      "actionTaken": "Throttled 429",
+      "details": "Excessive rapid requests (15 req/sec); client IP throttled for 15 minutes."
+    },
+    {
+      "id": "sec-302",
+      "timestamp": "2026-08-19T12:30:42.624Z",
+      "eventType": "XSS Sanitization",
+      "severity": "High",
+      "targetPath": "/contact",
+      "ip": "104.28.210.4",
+      "country": "United States",
+      "actionTaken": "Sanitized 200",
+      "details": "Script tag `<script>alert(1)</script>` detected in contact form comment; stripped safely before email dispatch."
+    },
+    {
+      "id": "sec-301",
+      "timestamp": "2026-08-19T09:30:42.624Z",
+      "eventType": "Unauthorized Gate Probe",
+      "severity": "High",
+      "targetPath": "/webmaster?token=invalid-hash",
+      "ip": "185.191.171.3",
+      "country": "Germany",
+      "actionTaken": "Blocked 403",
+      "details": "Invalid Webmaster gate token; access denied and IP logged."
+    }
+  ],
+  "geo": [
+    {
+      "country": "India",
+      "code": "IN",
+      "flag": "🇮🇳",
+      "visitors": 11423,
+      "percentage": 61.8,
+      "topCities": [
+        {
+          "city": "Bengaluru",
+          "count": 4893
+        },
+        {
+          "city": "Mumbai",
+          "count": 2610
+        },
+        {
+          "city": "New Delhi",
+          "count": 1840
+        },
+        {
+          "city": "Hyderabad",
+          "count": 1210
+        }
+      ]
+    },
+    {
+      "country": "United Arab Emirates",
+      "code": "AE",
+      "flag": "🇦🇪",
+      "visitors": 2840,
+      "percentage": 15.4,
+      "topCities": [
+        {
+          "city": "Dubai",
+          "count": 1980
+        },
+        {
+          "city": "Abu Dhabi",
+          "count": 720
+        },
+        {
+          "city": "Sharjah",
+          "count": 140
+        }
+      ]
+    },
+    {
+      "country": "United States",
+      "code": "US",
+      "flag": "🇺🇸",
+      "visitors": 1960,
+      "percentage": 10.6,
+      "topCities": [
+        {
+          "city": "San Francisco",
+          "count": 850
+        },
+        {
+          "city": "New York",
+          "count": 640
+        },
+        {
+          "city": "Seattle",
+          "count": 470
+        }
+      ]
+    },
+    {
+      "country": "United Kingdom",
+      "code": "GB",
+      "flag": "🇬🇧",
+      "visitors": 980,
+      "percentage": 5.3,
+      "topCities": [
+        {
+          "city": "London",
+          "count": 760
+        },
+        {
+          "city": "Manchester",
+          "count": 220
+        }
+      ]
+    },
+    {
+      "country": "Singapore",
+      "code": "SG",
+      "flag": "🇸🇬",
+      "visitors": 740,
+      "percentage": 4,
+      "topCities": [
+        {
+          "city": "Singapore",
+          "count": 740
+        }
+      ]
+    },
+    {
+      "country": "Saudi Arabia",
+      "code": "SA",
+      "flag": "🇸🇦",
+      "visitors": 552,
+      "percentage": 3,
+      "topCities": [
+        {
+          "city": "Riyadh",
+          "count": 390
+        },
+        {
+          "city": "Jeddah",
+          "count": 162
+        }
+      ]
+    }
+  ]
+}

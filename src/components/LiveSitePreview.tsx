@@ -60,6 +60,15 @@ interface LiveSitePreviewProps {
     eventTicketsBooked?: string;
     eventTicketsCapacity?: string;
     eventImage?: string;
+    // Press Releases
+    pressTitle?: string;
+    pressCategory?: string;
+    pressDate?: string;
+    pressSummary?: string;
+    pressBody?: string;
+    pressAttachmentName?: string;
+    pressLinkName?: string;
+    pressLinkUrl?: string;
   };
 }
 
@@ -84,7 +93,7 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
       case 'financial-reports':
         return '/investors';
       case 'press-releases':
-        return '/newsroom/press-releases';
+        return '/newsroom/press-release';
       default:
         return '/';
     }
@@ -427,6 +436,63 @@ export default function LiveSitePreview({ activeTab, theme, data }: LiveSitePrev
               RSVP / Register Attendance
             </button>
           </div>
+        </div>
+      );
+    }
+
+    // ── 6. PRESS RELEASES PREVIEW (Matches src/app/newsroom/press-release/[slug]/page.tsx) ──
+    if (activeTab === 'press-releases') {
+      const pressTitle = data.pressTitle || 'Official announcements, company updates, and strategic developments from Zawr.';
+      const category = data.pressCategory || 'Corporate';
+      const date = data.pressDate || '27th May 2026';
+      const body = data.pressBody || data.pressSummary || 'Official press release full statement and detailed operational disclosures.';
+
+      return (
+        <div style={{ backgroundColor: '#ffffff', color: '#000000', minHeight: '100%', padding: '2rem 1.5rem', fontFamily: 'Inter, sans-serif' }}>
+          {/* Breadcrumb */}
+          <div style={{ marginBottom: '1.5rem' }}>
+            <span style={{ color: '#4b5563', fontSize: '0.8rem', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5"></path><path d="m12 19-7-7 7-7"></path></svg>
+              Back to Press Releases
+            </span>
+          </div>
+
+          <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '1.25rem' }}>
+            <span style={{ backgroundColor: '#f3f4f6', color: '#4b5563', border: '1px solid #e5e7eb', fontSize: '0.65rem', fontWeight: 700, padding: '0.25rem 0.75rem', borderRadius: '9999px', textTransform: 'uppercase' }}>
+              {category}
+            </span>
+            <span style={{ fontSize: '0.8rem', color: '#6b7280' }}>{date}</span>
+          </div>
+
+          <h1 style={{ fontSize: '1.65rem', fontWeight: 700, color: '#000000', margin: '0 0 1.5rem 0', lineHeight: 1.25 }}>
+            {pressTitle}
+          </h1>
+
+          <div style={{ marginBottom: '2.5rem' }}>
+            <FormattedContent content={body} style={{ color: '#374151', fontSize: '0.95rem', lineHeight: 1.8 }} />
+          </div>
+
+          {/* Attachment card */}
+          {data.pressAttachmentName && (
+            <div style={{ border: '1px solid #e5e7eb', borderRadius: '8px', overflow: 'hidden', marginBottom: '1.5rem' }}>
+              <div style={{ backgroundColor: '#000000', color: '#ffffff', padding: '0.75rem 1.25rem', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>
+                Attachments
+              </div>
+              <div style={{ padding: '1rem 1.25rem', display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.85rem', color: '#2563eb' }}>
+                📄 {data.pressAttachmentName}
+              </div>
+            </div>
+          )}
+
+          {/* External Link pill */}
+          {data.pressLinkName && (
+            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginTop: '1rem' }}>
+              <span style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6b7280' }}>Related:</span>
+              <span style={{ padding: '0.3rem 0.8rem', border: '1px solid #e5e7eb', borderRadius: '9999px', fontSize: '0.8rem', color: '#000000', backgroundColor: '#f9fafb' }}>
+                🔗 {data.pressLinkName}
+              </span>
+            </div>
+          )}
         </div>
       );
     }
