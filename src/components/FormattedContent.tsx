@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface FormattedContentProps {
-  content: string | string[];
+  content: string | string[] | undefined | null;
   className?: string;
   style?: React.CSSProperties;
 }
@@ -14,7 +14,7 @@ interface FormattedContentProps {
  * - `code` -> <code>
  * - [text](url) -> <a>
  */
-function parseInline(text: string): React.ReactNode[] {
+export function parseInline(text: string): React.ReactNode[] {
   if (!text) return [];
 
   // Match bold, italic, underline, inline code, and links
@@ -84,116 +84,213 @@ function parseInline(text: string): React.ReactNode[] {
   }).filter(Boolean);
 }
 
+type BlockType = 
+  | { type: 'h2'; text: string }
+  | { type: 'h3'; text: string }
+  | { type: 'h4'; text: string }
+  | { type: 'quote'; lines: string[] }
+  | { type: 'bullet-list'; items: string[] }
+  | { type: 'number-list'; items: string[] }
+  | { type: 'paragraph'; lines: string[] };
+
 /**
  * Universal content formatter supporting headings, lists, quotes, and paragraphs.
  */
 export default function FormattedContent({ content, className = '', style = {} }: FormattedContentProps) {
   if (!content) return null;
 
-  // If array of strings (e.g. key responsibilities), render as clean list
+  // Flatten any array or string into raw lines
+  let rawLines: string[] = [];
   if (Array.isArray(content)) {
-    return (
-      <ul className={className} style={{ margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.5rem', ...style }}>
-        {content.map((item, idx) => (
-          <li key={idx} style={{ lineHeight: 1.65 }}>
-            {parseInline(item.replace(/^[•\-*]\s*/, ''))}
-          </li>
-        ))}
-      </ul>
-    );
+    rawLines = content.flatMap(item => String(item || '').split('\n'));
+  } else {
+    rawLines = String(content || '').split('\n');
   }
 
-  const rawText = String(content);
-  // Split raw text into block units by double newline
-  const blocks = rawText.split(/\n{2,}/);
+  // Filter out excessive trailing empties but preserve paragraph breaks
+  const blocks: BlockType[] = [];
+  let currentParagraph: string[] = [];
+  let currentQuote: string[] = [];
+  let currentBulletList: string[] = [];
+  let currentNumberList: string[] = [];
+
+  const flush = () => {
+    if (currentParagraph.length > 0) {
+      blocks.push({ type: 'paragraph', lines: [...currentParagraph] });
+      currentParagraph = [];
+    }
+    if (currentQuote.length > 0) {
+      blocks.push({ type: 'quote', lines: [...currentQuote] });
+      currentQuote = [];
+    }
+    if (currentBulletList.length > 0) {
+      blocks.push({ type: 'bullet-list', items: [...currentBulletList] });
+      currentBulletList = [];
+    }
+    if (currentNumberList.length > 0) {
+      blocks.push({ type: 'number-list', items: [...currentNumberList] });
+      currentNumberList = [];
+    }
+  };
+
+  for (let i = 0; i < rawLines.length; i++) {
+    const rawLine = rawLines[i];
+    const trimmed = rawLine.trim();
+
+    // Empty line -> paragraph separator
+    if (!trimmed) {
+      flush();
+      continue;
+    }
+
+    // Heading 2: `## Heading`
+    if (/^##\s+/.test(trimmed)) {
+      flush();
+      blocks.push({ type: 'h2', text: trimmed.replace(/^##\s+/, '') });
+      continue;
+    }
+
+    // Heading 3: `### Heading` or `###`
+    if (/^###(?:\s+|$)/.test(trimmed)) {
+      flush();
+      const headingText = trimmed.replace(/^###\s*/, '').trim();
+      if (headingText) {
+        blocks.push({ type: 'h3', text: headingText });
+      }
+      continue;
+    }
+
+    // Heading 4: `#### Heading`
+    if (/^####(?:\s+|$)/.test(trimmed)) {
+      flush();
+      const headingText = trimmed.replace(/^####\s*/, '').trim();
+      if (headingText) {
+        blocks.push({ type: 'h4', text: headingText });
+      }
+      continue;
+    }
+
+    // Blockquote: `> Quote text` or `>`
+    if (/^>(?:\s+|$)/.test(trimmed)) {
+      if (currentParagraph.length > 0) flush();
+      if (currentBulletList.length > 0) flush();
+      if (currentNumberList.length > 0) flush();
+      const quoteText = trimmed.replace(/^>\s*/, '').trim();
+      if (quoteText) {
+        currentQuote.push(quoteText);
+      }
+      continue;
+    }
+
+    // Bullet list item: `- item`, `* item`, `• item`, `+ item`
+    if (/^[•\-*+]\s+/.test(trimmed)) {
+      if (currentParagraph.length > 0) flush();
+      if (currentQuote.length > 0) flush();
+      if (currentNumberList.length > 0) flush();
+      currentBulletList.push(trimmed.replace(/^[•\-*+]\s+/, ''));
+      continue;
+    }
+
+    // Numbered list item: `1. item`, `2. item`
+    if (/^\d+\.\s+/.test(trimmed)) {
+      if (currentParagraph.length > 0) flush();
+      if (currentQuote.length > 0) flush();
+      if (currentBulletList.length > 0) flush();
+      currentNumberList.push(trimmed.replace(/^\d+\.\s+/, ''));
+      continue;
+    }
+
+    // Regular line -> belongs to current active list or paragraph
+    if (currentQuote.length > 0) {
+      currentQuote.push(trimmed);
+    } else if (currentBulletList.length > 0) {
+      // If continuing bullet list item
+      currentBulletList.push(trimmed);
+    } else if (currentNumberList.length > 0) {
+      currentNumberList.push(trimmed);
+    } else {
+      currentParagraph.push(rawLine);
+    }
+  }
+
+  flush();
 
   return (
     <div className={`formatted-content-root ${className}`} style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', ...style }}>
       {blocks.map((block, bIdx) => {
-        const trimmed = block.trim();
-        if (!trimmed) return null;
-
-        const lines = trimmed.split('\n');
-
-        // Heading 2 (## Heading)
-        if (trimmed.startsWith('## ')) {
-          return (
-            <h2 key={bIdx} style={{ fontSize: '1.4rem', fontWeight: 600, marginTop: '1rem', marginBottom: '0.25rem' }}>
-              {parseInline(trimmed.replace(/^##\s+/, ''))}
-            </h2>
-          );
+        switch (block.type) {
+          case 'h2':
+            return (
+              <h2 key={bIdx} style={{ fontSize: '1.35rem', fontWeight: 700, margin: '0.75rem 0 0.25rem 0', color: 'inherit' }}>
+                {parseInline(block.text)}
+              </h2>
+            );
+          case 'h3':
+            return (
+              <h3 key={bIdx} style={{ fontSize: '1.15rem', fontWeight: 600, margin: '0.5rem 0 0.2rem 0', color: 'inherit' }}>
+                {parseInline(block.text)}
+              </h3>
+            );
+          case 'h4':
+            return (
+              <h4 key={bIdx} style={{ fontSize: '1rem', fontWeight: 600, margin: '0.4rem 0 0.15rem 0', color: 'inherit' }}>
+                {parseInline(block.text)}
+              </h4>
+            );
+          case 'quote':
+            return (
+              <blockquote
+                key={bIdx}
+                style={{
+                  margin: '0.5rem 0',
+                  padding: '0.75rem 1.25rem',
+                  borderLeft: '3px solid #3b82f6',
+                  backgroundColor: 'rgba(59, 130, 246, 0.08)',
+                  borderRadius: '0 8px 8px 0',
+                  fontStyle: 'italic',
+                  color: 'inherit',
+                  opacity: 0.95,
+                }}
+              >
+                {block.lines.map((l, lIdx) => (
+                  <p key={lIdx} style={{ margin: 0, lineHeight: 1.6 }}>
+                    {parseInline(l)}
+                  </p>
+                ))}
+              </blockquote>
+            );
+          case 'bullet-list':
+            return (
+              <ul key={bIdx} style={{ margin: 0, paddingLeft: '1.35rem', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                {block.items.map((item, iIdx) => (
+                  <li key={iIdx} style={{ lineHeight: 1.65 }}>
+                    {parseInline(item)}
+                  </li>
+                ))}
+              </ul>
+            );
+          case 'number-list':
+            return (
+              <ol key={bIdx} style={{ margin: 0, paddingLeft: '1.35rem', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                {block.items.map((item, iIdx) => (
+                  <li key={iIdx} style={{ lineHeight: 1.65 }}>
+                    {parseInline(item)}
+                  </li>
+                ))}
+              </ol>
+            );
+          case 'paragraph':
+            return (
+              <p key={bIdx} style={{ margin: 0, lineHeight: 1.7 }}>
+                {block.lines.map((line, lIdx) => (
+                  <React.Fragment key={lIdx}>
+                    {parseInline(line)}
+                    {lIdx < block.lines.length - 1 && <br />}
+                  </React.Fragment>
+                ))}
+              </p>
+            );
         }
-
-        // Heading 3 (### Heading)
-        if (trimmed.startsWith('### ')) {
-          return (
-            <h3 key={bIdx} style={{ fontSize: '1.2rem', fontWeight: 600, marginTop: '0.75rem', marginBottom: '0.25rem' }}>
-              {parseInline(trimmed.replace(/^###\s+/, ''))}
-            </h3>
-          );
-        }
-
-        // Blockquote (> Quote)
-        if (trimmed.startsWith('> ') || lines.every(l => l.startsWith('> '))) {
-          const quoteText = lines.map(l => l.replace(/^>\s*/, '')).join(' ');
-          return (
-            <blockquote
-              key={bIdx}
-              style={{
-                margin: '0.5rem 0',
-                padding: '0.75rem 1.25rem',
-                borderLeft: '3px solid #3b82f6',
-                backgroundColor: 'rgba(59, 130, 246, 0.05)',
-                borderRadius: '0 8px 8px 0',
-                fontStyle: 'italic',
-                color: 'inherit',
-                opacity: 0.95,
-              }}
-            >
-              {parseInline(quoteText)}
-            </blockquote>
-          );
-        }
-
-        // Unordered List (- item or * item or • item)
-        const isBulletList = lines.every(l => /^[•\-*]\s+/.test(l.trim()));
-        if (isBulletList) {
-          return (
-            <ul key={bIdx} style={{ margin: 0, paddingLeft: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              {lines.map((l, lIdx) => (
-                <li key={lIdx} style={{ lineHeight: 1.65 }}>
-                  {parseInline(l.trim().replace(/^[•\-*]\s+/, ''))}
-                </li>
-              ))}
-            </ul>
-          );
-        }
-
-        // Ordered List (1. item, 2. item)
-        const isNumberedList = lines.every(l => /^\d+\.\s+/.test(l.trim()));
-        if (isNumberedList) {
-          return (
-            <ol key={bIdx} style={{ margin: 0, paddingLeft: '1.35rem', display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
-              {lines.map((l, lIdx) => (
-                <li key={lIdx} style={{ lineHeight: 1.65 }}>
-                  {parseInline(l.trim().replace(/^\d+\.\s+/, ''))}
-                </li>
-              ))}
-            </ol>
-          );
-        }
-
-        // Regular Paragraph with inline breaks
-        return (
-          <p key={bIdx} style={{ margin: 0, lineHeight: 1.7 }}>
-            {lines.map((line, lIdx) => (
-              <React.Fragment key={lIdx}>
-                {parseInline(line)}
-                {lIdx < lines.length - 1 && <br />}
-              </React.Fragment>
-            ))}
-          </p>
-        );
       })}
     </div>
   );
