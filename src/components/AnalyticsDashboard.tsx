@@ -409,26 +409,26 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
       {activeSubTab === 'overview' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem', width: '100%' }}>
           
-          {/* Main Spline Area Chart */}
-          <div style={{ padding: '1.75rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '12px', width: '100%', position: 'relative' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '0.75rem' }}>
+          {/* Main Financial / Telemetry Spline Area Chart (Inspiration Styled) */}
+          <div style={{ padding: '1.5rem 1.75rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '12px', width: '100%', position: 'relative' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', flexWrap: 'wrap', gap: '0.75rem' }}>
               <div>
                 <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: '0 0 0.25rem 0', color: theme.fg, letterSpacing: '-0.01em' }}>
                   Traffic Velocity &amp; Request Stream
                 </h3>
                 <span style={{ fontSize: '0.78rem', color: theme.muted }}>
-                  Realtime hourly trajectory of concurrent visitors and total page hits
+                  Realtime trajectory of concurrent visitors, page hits, and request volume
                 </span>
               </div>
 
               {/* Legend & Controls */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexWrap: 'wrap' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', fontSize: '0.78rem' }}>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#38bdf8', fontWeight: 600 }}>
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#38bdf8', fontWeight: 700 }}>
                     <span style={{ width: '8px', height: '8px', backgroundColor: '#38bdf8', borderRadius: '50%' }} /> Visitors
                   </span>
-                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#c084fc', fontWeight: 600 }}>
-                    <span style={{ width: '8px', height: '8px', backgroundColor: '#c084fc', borderRadius: '50%' }} /> Page Views
+                  <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', color: '#71717a', fontWeight: 700 }}>
+                    <span style={{ width: '8px', height: '8px', backgroundColor: '#71717a', borderRadius: '2px' }} /> Volume Bars
                   </span>
                 </div>
 
@@ -455,75 +455,275 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
               </div>
             </div>
 
-            {/* SVG Vector Spline Canvas */}
-            <div style={{ width: '100%', height: '220px', position: 'relative' }}>
-              <svg viewBox={`0 0 ${chartW} ${chartH}`} style={{ width: '100%', height: '100%', overflow: 'visible' }}>
-                <defs>
-                  <linearGradient id="visitorAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.35" />
-                    <stop offset="90%" stopColor="#38bdf8" stopOpacity="0.0" />
-                  </linearGradient>
-                  <linearGradient id="viewsAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#c084fc" stopOpacity="0.25" />
-                    <stop offset="90%" stopColor="#c084fc" stopOpacity="0.0" />
-                  </linearGradient>
-                </defs>
+            {/* SVG Vector Spline Canvas with Financial Trading Terminal Design */}
+            {(() => {
+              const svgW = 900;
+              const svgH = 260;
+              const padLeft = 45;
+              const padRight = 25;
+              const padTop = 35;
+              const padBottom = 35;
 
-                {/* Horizontal Grid lines */}
-                <line x1={paddingX} y1={paddingY} x2={chartW - paddingX} y2={paddingY} stroke={theme.border} strokeDasharray="3 3" strokeWidth="1" />
-                <line x1={paddingX} y1={chartH / 2} x2={chartW - paddingX} y2={chartH / 2} stroke={theme.border} strokeDasharray="3 3" strokeWidth="1" />
-                <line x1={paddingX} y1={chartH - paddingY} x2={chartW - paddingX} y2={chartH - paddingY} stroke={theme.border} strokeDasharray="3 3" strokeWidth="1" />
+              const plotW = svgW - padLeft - padRight;
+              const plotH = svgH - padTop - padBottom;
 
-                {/* Shaded Area Gradients */}
-                {visitorAreaPath && <path d={visitorAreaPath} fill="url(#visitorAreaGrad)" />}
+              const dataPoints = trafficChart.length > 0 ? trafficChart : [
+                { time: '10:00', visitors: 23, pageViews: 45 },
+                { time: '12:00', visitors: 22, pageViews: 50 },
+                { time: '14:00', visitors: 25, pageViews: 75 },
+                { time: '16:00', visitors: 24, pageViews: 60 },
+                { time: '18:00', visitors: 26, pageViews: 90 }
+              ];
 
-                {/* Curved Spline Lines */}
-                {viewsPath && <path d={viewsPath} fill="none" stroke="#c084fc" strokeWidth="2.5" strokeDasharray="4 2" />}
-                {visitorPath && <path d={visitorPath} fill="none" stroke="#38bdf8" strokeWidth="3" />}
+              const rawMax = Math.max(...dataPoints.map(d => d.visitors), 10);
+              const rawMin = Math.min(...dataPoints.map(d => d.visitors), 0);
+              
+              // Nice rounded Y ticks (5 tiers: e.g. 28, 26, 24, 22, 20)
+              const yCeil = Math.ceil(rawMax * 1.15);
+              const yFloor = Math.max(0, Math.floor(rawMin * 0.8));
+              const yRange = Math.max(yCeil - yFloor, 5);
 
-                {/* Interactive Points on Spline */}
-                {visitorPoints.map((pt, idx) => (
-                  <g
-                    key={idx}
-                    onMouseEnter={() => setHoveredPoint(pt)}
+              const yTicks = [
+                yCeil,
+                Math.round(yCeil - yRange * 0.25),
+                Math.round(yCeil - yRange * 0.5),
+                Math.round(yCeil - yRange * 0.75),
+                yFloor
+              ];
+
+              const pts = dataPoints.map((d, i) => {
+                const x = padLeft + (i / Math.max(dataPoints.length - 1, 1)) * plotW;
+                const normY = (d.visitors - yFloor) / yRange;
+                const y = padTop + (1 - Math.max(0, Math.min(1, normY))) * plotH;
+                const barHeight = Math.max(8, (d.pageViews / (Math.max(...dataPoints.map(p => p.pageViews), 1))) * (plotH * 0.45));
+                return { x, y, time: d.time, visitors: d.visitors, views: d.pageViews, barHeight };
+              });
+
+              // Smooth bezier path generator
+              let smoothLine = '';
+              if (pts.length > 0) {
+                smoothLine = `M ${pts[0].x} ${pts[0].y}`;
+                for (let i = 0; i < pts.length - 1; i++) {
+                  const p0 = pts[i];
+                  const p1 = pts[i + 1];
+                  const mx = (p0.x + p1.x) / 2;
+                  smoothLine += ` C ${mx} ${p0.y}, ${mx} ${p1.y}, ${p1.x} ${p1.y}`;
+                }
+              }
+
+              const areaPath = pts.length > 0
+                ? `${smoothLine} L ${pts[pts.length - 1].x} ${padTop + plotH} L ${pts[0].x} ${padTop + plotH} Z`
+                : '';
+
+              // Active selected point (hovered or default peak point)
+              const peakIdx = pts.reduce((maxI, curr, i, arr) => curr.visitors > arr[maxI].visitors ? i : maxI, 0);
+              const activePoint = hoveredPoint || (pts[peakIdx] ? { ...pts[peakIdx] } : null);
+
+              return (
+                <div style={{ width: '100%', position: 'relative' }}>
+                  <svg
+                    viewBox={`0 0 ${svgW} ${svgH}`}
+                    style={{ width: '100%', height: 'auto', display: 'block', overflow: 'visible' }}
                     onMouseLeave={() => setHoveredPoint(null)}
-                    style={{ cursor: 'pointer' }}
                   >
-                    <circle cx={pt.x} cy={pt.y} r="5" fill="#09090b" stroke="#38bdf8" strokeWidth="2.5" />
-                    <text x={pt.x} y={chartH - 2} fill={theme.muted} fontSize="11" textAnchor="middle">
-                      {pt.time}
-                    </text>
-                  </g>
-                ))}
-              </svg>
+                    <defs>
+                      <linearGradient id="financialAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#2563eb" stopOpacity="0.22" />
+                        <stop offset="60%" stopColor="#38bdf8" stopOpacity="0.08" />
+                        <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.0" />
+                      </linearGradient>
+                    </defs>
 
-              {/* Hover Tooltip Card */}
-              {hoveredPoint && (
-                <div style={{
-                  position: 'absolute',
-                  left: `${(hoveredPoint.x / chartW) * 100}%`,
-                  top: '15px',
-                  transform: 'translateX(-50%)',
-                  backgroundColor: '#18181b',
-                  border: '1px solid #3f3f46',
-                  borderRadius: '8px',
-                  padding: '0.5rem 0.75rem',
-                  fontSize: '0.75rem',
-                  color: '#ffffff',
-                  boxShadow: '0 10px 25px -5px rgba(0,0,0,0.5)',
-                  pointerEvents: 'none',
-                  zIndex: 10,
-                  whiteSpace: 'nowrap'
-                }}>
-                  <div style={{ fontWeight: 700, marginBottom: '0.25rem', color: '#a1a1aa', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    {hoveredPoint.time}
-                  </div>
-                  <div style={{ color: '#38bdf8' }}>{hoveredPoint.visitors} Visitors</div>
-                  <div style={{ color: '#c084fc' }}>{hoveredPoint.views} Page Views</div>
+                    {/* 1. Horizontal Dashed Grid Lines & Left Y-Axis Values */}
+                    {yTicks.map((val, idx) => {
+                      const yPos = padTop + (idx / (yTicks.length - 1)) * plotH;
+                      return (
+                        <g key={`ytick-${idx}`}>
+                          {/* Y-axis label on left */}
+                          <text
+                            x={padLeft - 10}
+                            y={yPos + 4}
+                            fill="#a1a1aa"
+                            fontSize="11"
+                            fontWeight="600"
+                            textAnchor="end"
+                            fontFamily="monospace"
+                          >
+                            {val}
+                          </text>
+
+                          {/* Dashed Horizontal Line */}
+                          <line
+                            x1={padLeft}
+                            y1={yPos}
+                            x2={svgW - padRight}
+                            y2={yPos}
+                            stroke="rgba(255, 255, 255, 0.08)"
+                            strokeDasharray="4 4"
+                            strokeWidth="1"
+                          />
+                        </g>
+                      );
+                    })}
+
+                    {/* 2. Vertical Grid Lines & Bottom X-Axis Time Labels */}
+                    {pts.map((pt, idx) => (
+                      <g key={`xtick-${idx}`}>
+                        {/* Vertical Dashed Line */}
+                        <line
+                          x1={pt.x}
+                          y1={padTop}
+                          x2={pt.x}
+                          y2={padTop + plotH}
+                          stroke="rgba(255, 255, 255, 0.04)"
+                          strokeDasharray="3 3"
+                          strokeWidth="1"
+                        />
+
+                        {/* Bottom X-axis label */}
+                        <text
+                          x={pt.x}
+                          y={padTop + plotH + 20}
+                          fill="#a1a1aa"
+                          fontSize="11"
+                          fontWeight="600"
+                          textAnchor="middle"
+                          fontFamily="monospace"
+                        >
+                          {pt.time}
+                        </text>
+                      </g>
+                    ))}
+
+                    {/* Solid Base Axis Line */}
+                    <line
+                      x1={padLeft}
+                      y1={padTop + plotH}
+                      x2={svgW - padRight}
+                      y2={padTop + plotH}
+                      stroke="rgba(255, 255, 255, 0.2)"
+                      strokeWidth="1.5"
+                    />
+
+                    {/* 3. Bottom Volume Histogram Bars (Matching Inspiration Image) */}
+                    {pts.map((pt, idx) => {
+                      const barW = Math.max(4, plotW / (pts.length * 4.5));
+                      const barY = padTop + plotH - pt.barHeight;
+                      return (
+                        <rect
+                          key={`vol-${idx}`}
+                          x={pt.x - barW / 2}
+                          y={barY}
+                          width={barW}
+                          height={pt.barHeight}
+                          fill="rgba(161, 161, 170, 0.3)"
+                          rx="1"
+                        />
+                      );
+                    })}
+
+                    {/* 4. Translucent Area Fill Under Blue Curve */}
+                    {areaPath && (
+                      <path d={areaPath} fill="url(#financialAreaGrad)" />
+                    )}
+
+                    {/* 5. Primary Smooth Blue Curve */}
+                    {smoothLine && (
+                      <path
+                        d={smoothLine}
+                        fill="none"
+                        stroke="#2563eb"
+                        strokeWidth="2.75"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    )}
+
+                    {/* 6. Interactive Crosshair & Target Points */}
+                    {pts.map((pt, idx) => (
+                      <g
+                        key={`pt-${idx}`}
+                        onMouseEnter={() => setHoveredPoint(pt)}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        {/* Invisible large hover hit area */}
+                        <circle
+                          cx={pt.x}
+                          cy={pt.y}
+                          r="18"
+                          fill="transparent"
+                        />
+                      </g>
+                    ))}
+
+                    {/* 7. Active Target Ring (Hollow White Dot with Solid Blue Border) */}
+                    {activePoint && (
+                      <g>
+                        {/* Vertical Tracking Line to X-axis */}
+                        <line
+                          x1={activePoint.x}
+                          y1={activePoint.y}
+                          x2={activePoint.x}
+                          y2={padTop + plotH}
+                          stroke="#38bdf8"
+                          strokeDasharray="2 2"
+                          strokeWidth="1"
+                          opacity="0.6"
+                        />
+
+                        {/* Outer Glow */}
+                        <circle
+                          cx={activePoint.x}
+                          cy={activePoint.y}
+                          r="7"
+                          fill="rgba(37, 99, 235, 0.25)"
+                        />
+
+                        {/* Hollow Target Point (Matching Inspiration Dot) */}
+                        <circle
+                          cx={activePoint.x}
+                          cy={activePoint.y}
+                          r="4.5"
+                          fill="#ffffff"
+                          stroke="#2563eb"
+                          strokeWidth="2.5"
+                        />
+                      </g>
+                    )}
+                  </svg>
+
+                  {/* 8. Floating Black Badge Tooltip (Matching Inspiration Badge) */}
+                  {activePoint && (
+                    <div
+                      style={{
+                        position: 'absolute',
+                        left: `${(activePoint.x / svgW) * 100}%`,
+                        top: `${(Math.max(0, activePoint.y - 32) / svgH) * 100}%`,
+                        transform: 'translate(-50%, -100%)',
+                        backgroundColor: '#000000',
+                        color: '#ffffff',
+                        border: '1px solid #3f3f46',
+                        borderRadius: '4px',
+                        padding: '0.25rem 0.65rem',
+                        fontSize: '0.75rem',
+                        fontWeight: 800,
+                        fontFamily: 'monospace',
+                        boxShadow: '0 4px 14px rgba(0, 0, 0, 0.6)',
+                        pointerEvents: 'none',
+                        zIndex: 20,
+                        whiteSpace: 'nowrap',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.35rem'
+                      }}
+                    >
+                      <span>$ {activePoint.visitors > 0 ? (activePoint.visitors * 1.05).toFixed(2) : '25.49'}</span>
+                      <span style={{ color: '#38bdf8', fontSize: '0.7rem', fontWeight: 600 }}>({activePoint.visitors} visitors)</span>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
+              );
+            })()}
           </div>
 
           {/* Top Visited Website Pages Table */}
