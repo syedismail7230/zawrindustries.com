@@ -3,6 +3,7 @@
 import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams, notFound } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import RichTextEditor from '@/components/RichTextEditor';
 
 export default function WebmasterDashboardPage() {
   return (
@@ -660,15 +661,25 @@ function WebmasterDashboard() {
                 </div>
               </div>
 
-              <div>
-                <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Role Overview *</label>
-                <textarea required value={newJob.role || ''} onChange={e => setNewJob({...newJob, role: e.target.value})} rows={2} style={{ width: '100%', padding: '0.75rem', backgroundColor: 'transparent', border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', resize: 'vertical' }} />
-              </div>
+              <RichTextEditor
+                label="Role Overview"
+                required
+                value={newJob.role || ''}
+                onChange={(val) => setNewJob({ ...newJob, role: val })}
+                rows={3}
+                placeholder="Detailed description of the role, team context, and strategic mission..."
+                theme={theme}
+              />
 
-              <div>
-                <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Key Responsibilities * (One per line)</label>
-                <textarea required value={(newJob.responsibilities || []).join('\n')} onChange={e => setNewJob({...newJob, responsibilities: e.target.value.split('\n').filter(r => r.trim() !== '')})} rows={4} placeholder="- Define strategy...&#10;- Write clean code..." style={{ width: '100%', padding: '0.75rem', backgroundColor: 'transparent', border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', resize: 'vertical' }} />
-              </div>
+              <RichTextEditor
+                label="Key Responsibilities"
+                required
+                value={(newJob.responsibilities || []).join('\n')}
+                onChange={(val) => setNewJob({ ...newJob, responsibilities: val.split('\n').filter(r => r.trim() !== '') })}
+                rows={5}
+                placeholder="- Define strategy and vision...&#10;- Write clean, tested code...&#10;- Mentor junior engineers..."
+                theme={theme}
+              />
 
               <button type="submit" style={{ padding: '0.75rem 1.5rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, borderRadius: '4px', cursor: 'pointer', alignSelf: 'flex-start', marginTop: '0.5rem' }}>+ Publish Job</button>
             </form>
@@ -1175,15 +1186,14 @@ function WebmasterDashboard() {
                   />
                 </div>
 
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Description</label>
-                  <textarea 
-                    value={eventDesc} 
-                    onChange={(e) => setEventDesc(e.target.value)} 
-                    style={{ width: '100%', height: '100px', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', resize: 'vertical' }} 
-                    placeholder="Enter event details"
-                  />
-                </div>
+                <RichTextEditor
+                  label="Event Description"
+                  value={eventDesc}
+                  onChange={(val) => setEventDesc(val)}
+                  rows={4}
+                  placeholder="Comprehensive event details, keynote speakers, and session breakdown..."
+                  theme={theme}
+                />
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                   <div>
@@ -1219,15 +1229,14 @@ function WebmasterDashboard() {
                   />
                 </div>
 
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Special Note</label>
-                  <textarea 
-                    value={eventSpecialNote} 
-                    onChange={(e) => setEventSpecialNote(e.target.value)} 
-                    style={{ width: '100%', height: '80px', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', resize: 'vertical' }} 
-                    placeholder="Detailed terms, ticketing rules, or special attendee instructions..."
-                  />
-                </div>
+                <RichTextEditor
+                  label="Special Note / Terms"
+                  value={eventSpecialNote}
+                  onChange={(val) => setEventSpecialNote(val)}
+                  rows={3}
+                  placeholder="Detailed terms, ticketing rules, or special attendee instructions..."
+                  theme={theme}
+                />
 
                 <div>
                   <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Card Thumbnail Image / Banner</label>
@@ -1559,15 +1568,14 @@ function WebmasterDashboard() {
                   />
                 </div>
 
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Notice Body Content (Detail page paragraph)</label>
-                  <textarea 
-                    value={noticeBody} 
-                    onChange={(e) => setNoticeBody(e.target.value)} 
-                    style={{ width: '100%', height: '120px', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', resize: 'vertical' }} 
-                    placeholder="Write detailed notice information here..."
-                  />
-                </div>
+                <RichTextEditor
+                  label="Notice Body Content (Detail page paragraph)"
+                  value={noticeBody}
+                  onChange={(val) => setNoticeBody(val)}
+                  rows={5}
+                  placeholder="Write detailed notice information, terms, instructions, or agenda here..."
+                  theme={theme}
+                />
 
                 {/* File Attachment Upload */}
                 <div style={{ padding: '1rem', border: `1px solid ${theme.border}`, borderRadius: '6px', backgroundColor: theme.bg }}>
@@ -2371,15 +2379,14 @@ function WebmasterDashboard() {
                   />
                 </div>
 
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Notification Body Content (Paragraph on detail page)</label>
-                  <textarea 
-                    value={notifBody} 
-                    onChange={(e) => setNotifBody(e.target.value)} 
-                    style={{ width: '100%', height: '120px', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', resize: 'vertical' }} 
-                    placeholder="Write detailed notification information here..."
-                  />
-                </div>
+                <RichTextEditor
+                  label="Notification Body Content (Paragraph on detail page)"
+                  value={notifBody}
+                  onChange={(val) => setNotifBody(val)}
+                  rows={5}
+                  placeholder="Write detailed notification information, corporate updates, or instructions here..."
+                  theme={theme}
+                />
 
                 {/* File Attachment Upload */}
                 <div style={{ padding: '1rem', border: `1px solid ${theme.border}`, borderRadius: '6px', backgroundColor: theme.bg }}>
@@ -2771,15 +2778,15 @@ function WebmasterDashboard() {
                   </div>
                 </div>
 
-                <div>
-                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Summary / Excerpt *</label>
-                  <textarea 
-                    value={blogSummary} 
-                    onChange={(e) => setBlogSummary(e.target.value)} 
-                    style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', outline: 'none', height: '80px', resize: 'vertical' }} 
-                    placeholder="Short description of the blog for listing cards..."
-                  />
-                </div>
+                <RichTextEditor
+                  label="Summary / Excerpt"
+                  required
+                  value={blogSummary}
+                  onChange={(val) => setBlogSummary(val)}
+                  rows={3}
+                  placeholder="Short, compelling executive summary of the insight for editorial cards and search previews..."
+                  theme={theme}
+                />
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
                   <div>
@@ -2832,7 +2839,7 @@ function WebmasterDashboard() {
                           )}
                         </div>
                         
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.8rem' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                           <div>
                             <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Section Heading / Title</label>
                             <input 
@@ -2847,20 +2854,19 @@ function WebmasterDashboard() {
                               placeholder="e.g. 1. The First Principles of Talent Acquisition"
                             />
                           </div>
-                          <div>
-                            <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Section Body Text</label>
-                            <textarea 
-                              value={sect.body}
-                              onChange={(e) => {
-                                const newSects = [...blogSections];
-                                newSects[i].body = e.target.value;
-                                setBlogSections(newSects);
-                              }}
-                              rows={5}
-                              style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', outline: 'none', resize: 'vertical' }}
-                              placeholder="Type section contents here..."
-                            />
-                          </div>
+                          
+                          <RichTextEditor
+                            label="Section Body Content"
+                            value={sect.body}
+                            onChange={(val) => {
+                              const newSects = [...blogSections];
+                              newSects[i].body = val;
+                              setBlogSections(newSects);
+                            }}
+                            rows={6}
+                            placeholder="Type section contents, paragraphs, quotes, and bullet insights here..."
+                            theme={theme}
+                          />
                         </div>
                       </div>
                     ))}

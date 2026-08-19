@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import FormattedContent from '@/components/FormattedContent';
 
 export default function NoticePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = React.use(params);
@@ -86,9 +87,9 @@ export default function NoticePage({ params }: { params: Promise<{ slug: string 
 
         {/* Body text */}
         {notice.body && (
-          <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.85, marginBottom: '3rem', whiteSpace: 'pre-wrap' }}>
-            {notice.body}
-          </p>
+          <div style={{ marginBottom: '3rem' }}>
+            <FormattedContent content={notice.body} style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.85 }} />
+          </div>
         )}
 
         {/* Documents Table */}

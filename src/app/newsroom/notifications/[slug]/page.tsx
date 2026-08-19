@@ -5,6 +5,7 @@ import Script from 'next/script';
 import fs from 'fs';
 import path from 'path';
 import { Metadata } from 'next';
+import FormattedContent from '@/components/FormattedContent';
 
 const getSafeIsoDate = (dateStr: string): string => {
   try {
@@ -181,9 +182,9 @@ export default async function NotificationDetailPage({ params }: { params: Promi
 
         {/* Body text */}
         {notification.body && (
-          <p style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.85, marginBottom: '3rem', whiteSpace: 'pre-wrap' }}>
-            {notification.body}
-          </p>
+          <div style={{ marginBottom: '3rem' }}>
+            <FormattedContent content={notification.body} style={{ fontSize: '1.0625rem', color: '#374151', lineHeight: 1.85 }} />
+          </div>
         )}
 
         {/* Documents Table */}

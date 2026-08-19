@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import FormattedContent from '@/components/FormattedContent';
 
 export default function JobDetailClient({ initialJob }: { initialJob?: any }) {
   const params = useParams();
@@ -211,16 +212,12 @@ export default function JobDetailClient({ initialJob }: { initialJob?: any }) {
 
             <div style={{ marginBottom: '2.5rem' }}>
               <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#f3f4f6' }}>Role Overview</h2>
-              <p style={{ color: '#d1d5db', lineHeight: 1.6, fontSize: '1.125rem' }}>{job.role}</p>
+              <FormattedContent content={job.role} style={{ color: '#d1d5db', fontSize: '1.125rem', lineHeight: 1.6 }} />
             </div>
 
             <div style={{ marginBottom: '2.5rem' }}>
               <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#f3f4f6' }}>Key Responsibilities</h2>
-              <ul style={{ color: '#d1d5db', lineHeight: 1.6, fontSize: '1.125rem', paddingLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {job.responsibilities && Array.isArray(job.responsibilities) && job.responsibilities.map((resp: string, idx: number) => (
-                  <li key={idx}>{resp}</li>
-                ))}
-              </ul>
+              <FormattedContent content={job.responsibilities} style={{ color: '#d1d5db', fontSize: '1.125rem', lineHeight: 1.6 }} />
             </div>
 
             <div>

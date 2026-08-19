@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import FormattedContent from '@/components/FormattedContent';
 
 interface Section {
   title: string;
@@ -898,22 +899,17 @@ export default function BlogClient({
                   </svg>
                   Executive Summary &amp; Key Insights
                 </div>
-                <p className="takeaways-text">{blog.summary}</p>
+                <FormattedContent content={blog.summary} className="takeaways-text" />
               </div>
             )}
 
-            {/* Render Sections with Multi-Paragraph Support */}
-            {blog.sections && blog.sections.map((sect, i) => {
-              const paragraphs = sect.body ? sect.body.split(/\n\n|\n/).filter(p => p.trim()) : [];
-              return (
-                <div key={i} id={`section-${i}`} className="reading-section">
-                  <h2>{sect.title}</h2>
-                  {paragraphs.map((para, pIdx) => (
-                    <p key={pIdx} className="reading-paragraph">{para}</p>
-                  ))}
-                </div>
-              );
-            })}
+            {/* Render Sections with Rich Text & Formatting Support */}
+            {blog.sections && blog.sections.map((sect, i) => (
+              <div key={i} id={`section-${i}`} className="reading-section">
+                <h2>{sect.title}</h2>
+                <FormattedContent content={sect.body} className="reading-paragraph" />
+              </div>
+            ))}
 
             {/* Article Topics & Tags Strip */}
             <div className="tags-row">

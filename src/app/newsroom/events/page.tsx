@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
+import FormattedContent from '@/components/FormattedContent';
 
 interface EventItem {
   id: string;
@@ -652,9 +653,7 @@ export default function EventsPage() {
                       <span style={{ fontSize: '0.75rem', textTransform: 'uppercase', color: '#ffffff', fontWeight: 500, display: 'block', marginBottom: '0.5rem', letterSpacing: '0.05em' }}>
                         Special Note
                       </span>
-                      <p style={{ fontSize: '0.85rem', color: '#a1a1aa', lineHeight: 1.6, margin: 0 }}>
-                        {events[activeEventIndex]?.specialNote}
-                      </p>
+                      <FormattedContent content={events[activeEventIndex]?.specialNote || ''} style={{ fontSize: '0.85rem', color: '#a1a1aa', lineHeight: 1.6 }} />
                     </div>
                   )}
                 </div>
