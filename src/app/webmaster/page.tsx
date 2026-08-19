@@ -479,7 +479,7 @@ function WebmasterDashboard() {
         <style dangerouslySetInnerHTML={{__html: `header, footer, .support-widget, .cookie-banner { display: none !important; } body { overflow: hidden !important; margin: 0; }`}} />
         
         {loginStep === 'key' ? (
-          <form onSubmit={handleAccessKeySubmit} style={{ width: '100%', maxWidth: '400px', padding: '2.5rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
+          <form onSubmit={handleAccessKeySubmit} suppressHydrationWarning style={{ width: '100%', maxWidth: '400px', padding: '2.5rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
             <h1 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.5rem', textAlign: 'center', letterSpacing: '-0.02em' }}>Webmaster Login</h1>
             <p style={{ fontSize: '0.85rem', color: theme.muted, textAlign: 'center', marginBottom: '2rem' }}>Please enter the Webmaster Access Key password to continue.</p>
             
@@ -495,18 +495,20 @@ function WebmasterDashboard() {
                 required
                 disabled={isVerifying}
                 autoComplete="new-password"
+                suppressHydrationWarning
               />
             </div>
             <button 
               type="submit" 
               disabled={isVerifying || !accessKey.trim()}
+              suppressHydrationWarning
               style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, cursor: 'pointer', borderRadius: '4px', opacity: isVerifying || !accessKey.trim() ? 0.6 : 1 }}
             >
               {isVerifying ? 'Checking Access Key...' : 'Next Step →'}
             </button>
           </form>
         ) : (
-          <form onSubmit={handleChallengeSubmit} style={{ width: '100%', maxWidth: '450px', padding: '2.5rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
+          <form onSubmit={handleChallengeSubmit} suppressHydrationWarning style={{ width: '100%', maxWidth: '450px', padding: '2.5rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
             <h1 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.5rem', textAlign: 'center', letterSpacing: '-0.02em' }}>Security Verification</h1>
             <p style={{ fontSize: '0.85rem', color: theme.muted, textAlign: 'center', marginBottom: '2rem' }}>Answer your offline security challenge question to unlock the Webmaster portal.</p>
             
@@ -524,12 +526,14 @@ function WebmasterDashboard() {
                 required
                 disabled={isVerifying || !challengeQuestion}
                 autoComplete="off"
+                suppressHydrationWarning
               />
             </div>
             <div style={{ display: 'flex', gap: '1rem' }}>
               <button 
                 type="button"
                 onClick={() => setLoginStep('key')}
+                suppressHydrationWarning
                 style={{ width: '35%', padding: '0.75rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer' }}
               >
                 ← Back
@@ -537,6 +541,7 @@ function WebmasterDashboard() {
               <button 
                 type="submit" 
                 disabled={isVerifying || !challengeQuestion}
+                suppressHydrationWarning
                 style={{ width: '65%', padding: '0.75rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, cursor: 'pointer', borderRadius: '4px', opacity: isVerifying || !challengeQuestion ? 0.6 : 1 }}
               >
                 {isVerifying ? 'Verifying...' : 'Unlock Portal'}
