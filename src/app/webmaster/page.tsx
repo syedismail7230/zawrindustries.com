@@ -4,6 +4,7 @@ import React, { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams, notFound } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import RichTextEditor from '@/components/RichTextEditor';
+import LiveSitePreview from '@/components/LiveSitePreview';
 
 export default function WebmasterDashboardPage() {
   return (
@@ -23,6 +24,7 @@ function WebmasterDashboard() {
   const [authorized, setAuthorized] = useState(false);
   const [stageChecked, setStageChecked] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [showLivePreview, setShowLivePreview] = useState(true);
 
   const [loginStep, setLoginStep] = useState<'key' | 'question'>('key');
   const [accessKey, setAccessKey] = useState('');
@@ -3100,11 +3102,94 @@ function WebmasterDashboard() {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div style={{ flex: 1, padding: '4rem', overflowY: 'auto' }}>
-        <div style={{ maxWidth: '1000px' }}>
-          {renderContent()}
+      {/* Main Workspace Area (Split into Editor & Realtime Live Site Preview) */}
+      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative' }}>
+        
+        {/* Left/Middle: Editor Form Column */}
+        <div style={{ flex: showLivePreview ? '1 1 55%' : '1 1 100%', padding: '3rem 3.5rem', overflowY: 'auto', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+          
+          {/* Top Workspace Header with Toggle Button */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
+            <button
+              type="button"
+              onClick={() => setShowLivePreview(!showLivePreview)}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.4rem 0.85rem',
+                backgroundColor: showLivePreview ? '#18181b' : theme.fg,
+                color: showLivePreview ? '#d1d5db' : theme.bg,
+                border: `1px solid ${theme.border}`,
+                borderRadius: '6px',
+                fontSize: '0.8rem',
+                fontWeight: 600,
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+              }}
+            >
+              <span>{showLivePreview ? '👁️' : '🖥️'}</span>
+              {showLivePreview ? 'Hide Live Browser Mirror' : 'Show Live Browser Mirror'}
+            </button>
+          </div>
+
+          <div style={{ maxWidth: '900px' }}>
+            {renderContent()}
+          </div>
         </div>
+
+        {/* Right: Live Interactive Browser Preview Panel */}
+        {showLivePreview && (
+          <div style={{ width: '480px', minWidth: '420px', maxWidth: '580px', flex: '1 1 45%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+            <LiveSitePreview
+              activeTab={activeTab}
+              theme={theme}
+              data={{
+                // Jobs
+                newJob,
+                // Blogs
+                blogTitle,
+                blogCategory,
+                blogAuthor,
+                blogDate,
+                blogReadTime,
+                blogSummary,
+                blogSections,
+                blogImage: editingBlog ? editingBlog.image : undefined,
+                authorImage: editingBlog ? editingBlog.authorImage : undefined,
+                // Notices
+                noticeTitle,
+                noticeCategory,
+                noticeDate,
+                noticeSummary,
+                noticeBody,
+                noticeAttachmentName: customNoticeFile ? customNoticeFile.name : (editingNotice ? 'Notice Document.pdf' : undefined),
+                noticeLinkName,
+                noticeLinkUrl,
+                // Notifications
+                notifTitle,
+                notifCategory,
+                notifDate,
+                notifSummary,
+                notifBody,
+                // Events
+                eventTitle,
+                eventSubtitle,
+                eventDesc,
+                eventStartDate,
+                eventEndDate,
+                eventStartTime,
+                eventEndTime,
+                eventVenue,
+                eventSpecialNote,
+                eventTicketsBooked,
+                eventTicketsCapacity,
+                eventImage,
+              }}
+            />
+          </div>
+        )}
+
       </div>
     </div>
   );
