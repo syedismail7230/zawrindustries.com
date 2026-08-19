@@ -60,10 +60,11 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
     }
   }, []);
 
-  const fetchAnalytics = async (showLoading = true) => {
+  const fetchAnalytics = async (showLoading = true, range?: '24h' | '7d' | '30d') => {
+    const targetRange = range || timeRange;
     if (showLoading) setIsRefreshing(true);
     try {
-      const res = await fetch('/api/analytics', { cache: 'no-store' });
+      const res = await fetch(`/api/analytics?timeRange=${targetRange}`, { cache: 'no-store' });
       if (res.ok) {
         const json: AnalyticsData = await res.json();
         setData(json);
@@ -436,16 +437,21 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                   {(['24h', '7d', '30d'] as const).map(t => (
                     <button
                       key={t}
-                      onClick={() => setTimeRange(t)}
+                      onClick={() => {
+                        setTimeRange(t);
+                        fetchAnalytics(false, t);
+                      }}
                       style={{
-                        padding: '0.25rem 0.65rem',
+                        padding: '0.3rem 0.75rem',
                         borderRadius: '4px',
                         border: 'none',
                         backgroundColor: timeRange === t ? '#27272a' : 'transparent',
                         color: timeRange === t ? '#ffffff' : theme.muted,
-                        fontSize: '0.72rem',
-                        fontWeight: 700,
-                        cursor: 'pointer'
+                        fontSize: '0.75rem',
+                        fontWeight: 800,
+                        cursor: 'pointer',
+                        boxShadow: timeRange === t ? '0 2px 8px rgba(0,0,0,0.5)' : 'none',
+                        transition: 'all 0.15s ease'
                       }}
                     >
                       {t.toUpperCase()}
@@ -455,47 +461,44 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
               </div>
             </div>
 
-            {/* SVG Vector Spline Canvas with Financial Trading Terminal Design */}
+            {/* SVG Vector Spline Canvas with Clean Thin Line & Website Metrics */}
             {(() => {
               const svgW = 900;
-              const svgH = 260;
-              const padLeft = 45;
-              const padRight = 25;
-              const padTop = 35;
-              const padBottom = 35;
+              const svgH = 160;
+              const padLeft = 35;
+              const padRight = 20;
+              const padTop = 25;
+              const padBottom = 28;
 
               const plotW = svgW - padLeft - padRight;
               const plotH = svgH - padTop - padBottom;
 
               const dataPoints = trafficChart.length > 0 ? trafficChart : [
-                { time: '10:00', visitors: 23, pageViews: 45 },
-                { time: '12:00', visitors: 22, pageViews: 50 },
-                { time: '14:00', visitors: 25, pageViews: 75 },
-                { time: '16:00', visitors: 24, pageViews: 60 },
-                { time: '18:00', visitors: 26, pageViews: 90 }
+                { time: '10:00', visitors: 1, pageViews: 2 },
+                { time: '12:00', visitors: 1, pageViews: 3 },
+                { time: '14:00', visitors: 2, pageViews: 5 },
+                { time: '16:00', visitors: 1, pageViews: 3 },
+                { time: '18:00', visitors: 3, pageViews: 8 }
               ];
 
-              const rawMax = Math.max(...dataPoints.map(d => d.visitors), 10);
-              const rawMin = Math.min(...dataPoints.map(d => d.visitors), 0);
+              const rawMax = Math.max(...dataPoints.map(d => d.visitors), 1);
               
-              // Nice rounded Y ticks (5 tiers: e.g. 28, 26, 24, 22, 20)
-              const yCeil = Math.ceil(rawMax * 1.15);
-              const yFloor = Math.max(0, Math.floor(rawMin * 0.8));
-              const yRange = Math.max(yCeil - yFloor, 5);
-
+              // Scale Y-axis ticks gracefully (e.g. 12, 9, 6, 3, 0 or dynamic)
+              const yMax = Math.max(Math.ceil(rawMax * 1.3), 4);
               const yTicks = [
-                yCeil,
-                Math.round(yCeil - yRange * 0.25),
-                Math.round(yCeil - yRange * 0.5),
-                Math.round(yCeil - yRange * 0.75),
-                yFloor
+                yMax,
+                Math.round(yMax * 0.75),
+                Math.round(yMax * 0.5),
+                Math.round(yMax * 0.25),
+                0
               ];
 
               const pts = dataPoints.map((d, i) => {
                 const x = padLeft + (i / Math.max(dataPoints.length - 1, 1)) * plotW;
-                const normY = (d.visitors - yFloor) / yRange;
+                const normY = d.visitors / yMax;
                 const y = padTop + (1 - Math.max(0, Math.min(1, normY))) * plotH;
-                const barHeight = Math.max(8, (d.pageViews / (Math.max(...dataPoints.map(p => p.pageViews), 1))) * (plotH * 0.45));
+                const maxHits = Math.max(...dataPoints.map(p => p.pageViews), 1);
+                const barHeight = Math.max(4, (d.pageViews / maxHits) * (plotH * 0.4));
                 return { x, y, time: d.time, visitors: d.visitors, views: d.pageViews, barHeight };
               });
 
@@ -528,8 +531,8 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                   >
                     <defs>
                       <linearGradient id="financialAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#2563eb" stopOpacity="0.22" />
-                        <stop offset="60%" stopColor="#38bdf8" stopOpacity="0.08" />
+                        <stop offset="0%" stopColor="#2563eb" stopOpacity="0.18" />
+                        <stop offset="70%" stopColor="#38bdf8" stopOpacity="0.04" />
                         <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.0" />
                       </linearGradient>
                     </defs>
@@ -539,12 +542,11 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                       const yPos = padTop + (idx / (yTicks.length - 1)) * plotH;
                       return (
                         <g key={`ytick-${idx}`}>
-                          {/* Y-axis label on left */}
                           <text
-                            x={padLeft - 10}
-                            y={yPos + 4}
-                            fill="#a1a1aa"
-                            fontSize="11"
+                            x={padLeft - 8}
+                            y={yPos + 3.5}
+                            fill="#71717a"
+                            fontSize="10"
                             fontWeight="600"
                             textAnchor="end"
                             fontFamily="monospace"
@@ -552,14 +554,13 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                             {val}
                           </text>
 
-                          {/* Dashed Horizontal Line */}
                           <line
                             x1={padLeft}
                             y1={yPos}
                             x2={svgW - padRight}
                             y2={yPos}
-                            stroke="rgba(255, 255, 255, 0.08)"
-                            strokeDasharray="4 4"
+                            stroke="rgba(255, 255, 255, 0.05)"
+                            strokeDasharray="3 3"
                             strokeWidth="1"
                           />
                         </g>
@@ -569,23 +570,21 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                     {/* 2. Vertical Grid Lines & Bottom X-Axis Time Labels */}
                     {pts.map((pt, idx) => (
                       <g key={`xtick-${idx}`}>
-                        {/* Vertical Dashed Line */}
                         <line
                           x1={pt.x}
                           y1={padTop}
                           x2={pt.x}
                           y2={padTop + plotH}
-                          stroke="rgba(255, 255, 255, 0.04)"
-                          strokeDasharray="3 3"
+                          stroke="rgba(255, 255, 255, 0.03)"
+                          strokeDasharray="2 2"
                           strokeWidth="1"
                         />
 
-                        {/* Bottom X-axis label */}
                         <text
                           x={pt.x}
-                          y={padTop + plotH + 20}
-                          fill="#a1a1aa"
-                          fontSize="11"
+                          y={padTop + plotH + 16}
+                          fill="#71717a"
+                          fontSize="10"
                           fontWeight="600"
                           textAnchor="middle"
                           fontFamily="monospace"
@@ -595,19 +594,19 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                       </g>
                     ))}
 
-                    {/* Solid Base Axis Line */}
+                    {/* Base Solid Axis Line */}
                     <line
                       x1={padLeft}
                       y1={padTop + plotH}
                       x2={svgW - padRight}
                       y2={padTop + plotH}
-                      stroke="rgba(255, 255, 255, 0.2)"
-                      strokeWidth="1.5"
+                      stroke="rgba(255, 255, 255, 0.15)"
+                      strokeWidth="1"
                     />
 
-                    {/* 3. Bottom Volume Histogram Bars (Matching Inspiration Image) */}
+                    {/* 3. Bottom Volume Histogram Bars */}
                     {pts.map((pt, idx) => {
-                      const barW = Math.max(4, plotW / (pts.length * 4.5));
+                      const barW = 3;
                       const barY = padTop + plotH - pt.barHeight;
                       return (
                         <rect
@@ -616,7 +615,7 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                           y={barY}
                           width={barW}
                           height={pt.barHeight}
-                          fill="rgba(161, 161, 170, 0.3)"
+                          fill="rgba(161, 161, 170, 0.25)"
                           rx="1"
                         />
                       );
@@ -627,39 +626,37 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                       <path d={areaPath} fill="url(#financialAreaGrad)" />
                     )}
 
-                    {/* 5. Primary Smooth Blue Curve */}
+                    {/* 5. Primary Smooth Thin Blue Curve (strokeWidth 1.5) */}
                     {smoothLine && (
                       <path
                         d={smoothLine}
                         fill="none"
-                        stroke="#2563eb"
-                        strokeWidth="2.75"
+                        stroke="#3b82f6"
+                        strokeWidth="1.5"
                         strokeLinecap="round"
                         strokeLinejoin="round"
                       />
                     )}
 
-                    {/* 6. Interactive Crosshair & Target Points */}
+                    {/* 6. Interactive Crosshair Hover Area */}
                     {pts.map((pt, idx) => (
                       <g
                         key={`pt-${idx}`}
                         onMouseEnter={() => setHoveredPoint(pt)}
                         style={{ cursor: 'pointer' }}
                       >
-                        {/* Invisible large hover hit area */}
                         <circle
                           cx={pt.x}
                           cy={pt.y}
-                          r="18"
+                          r="16"
                           fill="transparent"
                         />
                       </g>
                     ))}
 
-                    {/* 7. Active Target Ring (Hollow White Dot with Solid Blue Border) */}
+                    {/* 7. Active Target Point (Thin, Crisp Dot) */}
                     {activePoint && (
                       <g>
-                        {/* Vertical Tracking Line to X-axis */}
                         <line
                           x1={activePoint.x}
                           y1={activePoint.y}
@@ -668,47 +665,45 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                           stroke="#38bdf8"
                           strokeDasharray="2 2"
                           strokeWidth="1"
-                          opacity="0.6"
+                          opacity="0.5"
                         />
 
-                        {/* Outer Glow */}
                         <circle
                           cx={activePoint.x}
                           cy={activePoint.y}
-                          r="7"
-                          fill="rgba(37, 99, 235, 0.25)"
+                          r="5"
+                          fill="rgba(59, 130, 246, 0.2)"
                         />
 
-                        {/* Hollow Target Point (Matching Inspiration Dot) */}
                         <circle
                           cx={activePoint.x}
                           cy={activePoint.y}
-                          r="4.5"
+                          r="3"
                           fill="#ffffff"
-                          stroke="#2563eb"
-                          strokeWidth="2.5"
+                          stroke="#3b82f6"
+                          strokeWidth="1.5"
                         />
                       </g>
                     )}
                   </svg>
 
-                  {/* 8. Floating Black Badge Tooltip (Matching Inspiration Badge) */}
+                  {/* 8. Floating Black Badge Tooltip with Pure Website Metrics (NO DOLLAR SIGNS) */}
                   {activePoint && (
                     <div
                       style={{
                         position: 'absolute',
                         left: `${(activePoint.x / svgW) * 100}%`,
-                        top: `${(Math.max(0, activePoint.y - 32) / svgH) * 100}%`,
+                        top: `${(Math.max(0, activePoint.y - 24) / svgH) * 100}%`,
                         transform: 'translate(-50%, -100%)',
                         backgroundColor: '#000000',
                         color: '#ffffff',
                         border: '1px solid #3f3f46',
                         borderRadius: '4px',
-                        padding: '0.25rem 0.65rem',
-                        fontSize: '0.75rem',
-                        fontWeight: 800,
+                        padding: '0.2rem 0.55rem',
+                        fontSize: '0.72rem',
+                        fontWeight: 700,
                         fontFamily: 'monospace',
-                        boxShadow: '0 4px 14px rgba(0, 0, 0, 0.6)',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.6)',
                         pointerEvents: 'none',
                         zIndex: 20,
                         whiteSpace: 'nowrap',
@@ -717,8 +712,8 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                         gap: '0.35rem'
                       }}
                     >
-                      <span>$ {activePoint.visitors > 0 ? (activePoint.visitors * 1.05).toFixed(2) : '25.49'}</span>
-                      <span style={{ color: '#38bdf8', fontSize: '0.7rem', fontWeight: 600 }}>({activePoint.visitors} visitors)</span>
+                      <span style={{ color: '#ffffff' }}>{activePoint.visitors} Visitors</span>
+                      <span style={{ color: '#38bdf8', fontSize: '0.68rem', fontWeight: 600 }}>({activePoint.views} page hits)</span>
                     </div>
                   )}
                 </div>

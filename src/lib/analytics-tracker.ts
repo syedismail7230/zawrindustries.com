@@ -216,7 +216,7 @@ const PAGE_TITLE_MAP: Record<string, string> = {
   '/webmaster': 'Webmaster Management Console'
 };
 
-export function getTelemetryData(): AnalyticsData {
+export function getTelemetryData(timeRange: '24h' | '7d' | '30d' = '24h'): AnalyticsData {
   const store = readStore();
   const requests = store.requests || [];
   const emails = store.emails || [];
@@ -314,32 +314,89 @@ export function getTelemetryData(): AnalyticsData {
     };
   }).sort((a, b) => b.visitors - a.visitors);
 
-  // Real Dynamic Time-Binned Trajectory (Last 24 Hours, 8 time slots)
-  const chartSlots = 9;
-  const slotIntervalMs = (24 * 60 * 60 * 1000) / (chartSlots - 1);
-  const startTime = now.getTime() - 24 * 60 * 60 * 1000;
+  // Dynamic Time-Binned Trajectory depending on active timeRange: 24h, 7d, 30d
+  let trafficChart: Array<{ time: string; visitors: number; pageViews: number }> = [];
 
-  const trafficChart = Array.from({ length: chartSlots }).map((_, idx) => {
-    const slotStart = startTime + idx * slotIntervalMs;
-    const slotEnd = slotStart + slotIntervalMs;
-    const slotDate = new Date(slotStart);
-    const timeLabel = idx === chartSlots - 1 ? 'Now' : slotDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+  if (timeRange === '7d') {
+    // 7 Daily slots for the past 7 days
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const slots = 7;
+    const oneDayMs = 24 * 60 * 60 * 1000;
+    const startRangeTime = now.getTime() - (slots - 1) * oneDayMs;
 
-    // Count real requests matching this time window
-    const inSlot = requests.filter(r => {
-      const t = new Date(r.timestamp).getTime();
-      return t >= slotStart && t < slotEnd;
+    trafficChart = Array.from({ length: slots }).map((_, idx) => {
+      const slotStart = startRangeTime + idx * oneDayMs;
+      const slotEnd = slotStart + oneDayMs;
+      const d = new Date(slotStart);
+      const dayName = idx === slots - 1 ? 'Today' : days[d.getDay()];
+
+      const inSlot = requests.filter(r => {
+        const t = new Date(r.timestamp).getTime();
+        return t >= slotStart && t < slotEnd;
+      });
+
+      const slotVisitors = new Set(inSlot.map(r => r.ip)).size;
+      const slotViews = inSlot.length;
+
+      return {
+        time: dayName,
+        visitors: slotVisitors,
+        pageViews: slotViews
+      };
     });
+  } else if (timeRange === '30d') {
+    // 10 3-day slots for the past 30 days
+    const slots = 10;
+    const intervalMs = (30 * 24 * 60 * 60 * 1000) / (slots - 1);
+    const startRangeTime = now.getTime() - 30 * 24 * 60 * 60 * 1000;
 
-    const slotVisitors = new Set(inSlot.map(r => r.ip)).size;
-    const slotViews = inSlot.length;
+    trafficChart = Array.from({ length: slots }).map((_, idx) => {
+      const slotStart = startRangeTime + idx * intervalMs;
+      const slotEnd = slotStart + intervalMs;
+      const d = new Date(slotStart);
+      const timeLabel = idx === slots - 1 ? 'Today' : d.toLocaleDateString([], { month: 'short', day: '2-digit' });
 
-    return {
-      time: timeLabel,
-      visitors: slotVisitors,
-      pageViews: slotViews
-    };
-  });
+      const inSlot = requests.filter(r => {
+        const t = new Date(r.timestamp).getTime();
+        return t >= slotStart && t < slotEnd;
+      });
+
+      const slotVisitors = new Set(inSlot.map(r => r.ip)).size;
+      const slotViews = inSlot.length;
+
+      return {
+        time: timeLabel,
+        visitors: slotVisitors,
+        pageViews: slotViews
+      };
+    });
+  } else {
+    // 24h: 9 3-hour slots for the past 24 hours
+    const chartSlots = 9;
+    const slotIntervalMs = (24 * 60 * 60 * 1000) / (chartSlots - 1);
+    const startTime = now.getTime() - 24 * 60 * 60 * 1000;
+
+    trafficChart = Array.from({ length: chartSlots }).map((_, idx) => {
+      const slotStart = startTime + idx * slotIntervalMs;
+      const slotEnd = slotStart + slotIntervalMs;
+      const slotDate = new Date(slotStart);
+      const timeLabel = idx === chartSlots - 1 ? 'Now' : slotDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+
+      const inSlot = requests.filter(r => {
+        const t = new Date(r.timestamp).getTime();
+        return t >= slotStart && t < slotEnd;
+      });
+
+      const slotVisitors = new Set(inSlot.map(r => r.ip)).size;
+      const slotViews = inSlot.length;
+
+      return {
+        time: timeLabel,
+        visitors: slotVisitors,
+        pageViews: slotViews
+      };
+    });
+  }
 
   return {
     summary: {
