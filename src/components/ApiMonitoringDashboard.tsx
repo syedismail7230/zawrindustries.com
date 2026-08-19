@@ -62,7 +62,7 @@ const ALL_SERVICES: MonitoredService[] = [
   {
     id: 'infra-cdn',
     name: 'Next.js Global Edge Network',
-    route: '/favicon.ico',
+    route: '/',
     method: 'GET',
     category: 'Infrastructure',
     type: 'Anycast CDN & Compute Edge',
@@ -965,7 +965,7 @@ ${internalEndpointsList.map(ep => {
                   onClick={() => setInspectingInfra(inf)}
                   style={{
                     padding: '1.15rem 1.25rem',
-                    backgroundColor: '#111114',
+                    backgroundColor: theme.inputBg || '#111114',
                     border: `1px solid ${theme.border}`,
                     borderRadius: '10px',
                     display: 'flex',

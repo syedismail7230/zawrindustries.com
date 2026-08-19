@@ -3086,16 +3086,16 @@ function WebmasterDashboard() {
       {/* Sidebar */}
       <div style={{ width: '280px', borderRight: `1px solid ${theme.border}`, display: 'flex', flexDirection: 'column', flexShrink: 0, backgroundColor: theme.sidebarBg || theme.bg }}>
         {/* Sidebar Header with Company Logo */}
-        <div style={{ padding: '1.5rem 1.75rem', borderBottom: `1px solid ${theme.border}` }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.65rem' }}>
+        <div style={{ padding: '1.5rem 1.5rem 1.25rem 1.5rem', borderBottom: `1px solid ${theme.border}` }}>
+          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.75rem' }}>
             <img
               src={isDarkMode ? "/assets/logo-white.png" : "/assets/logo-black.png"}
               alt="Zawr Industries"
-              style={{ height: '28px', width: 'auto', maxWidth: '170px', objectFit: 'contain', display: 'block' }}
+              style={{ height: '48px', width: 'auto', maxWidth: '220px', objectFit: 'contain', display: 'block' }}
             />
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.72rem', color: theme.muted }}>
-            <span style={{ width: '7px', height: '7px', backgroundColor: '#10b981', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 8px rgba(16, 185, 129, 0.6)' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.75rem', color: theme.muted }}>
+            <span style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 8px rgba(16, 185, 129, 0.6)' }} />
             <span style={{ fontWeight: 600 }}>Webmaster • Live Synced</span>
           </div>
         </div>
