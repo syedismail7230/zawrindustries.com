@@ -54,10 +54,10 @@ export const metadata: Metadata = {
     siteName: 'Zawr Industries LLP',
     images: [
       {
-        url: 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png',
+        url: 'https://zawrindustries.com/og-image.png',
         width: 1200,
         height: 630,
-        alt: 'Zawr Industries Corporate Profile',
+        alt: 'Zawr Industries — Global Technology, Manufacturing & Logistics Conglomerate',
       }
     ],
     locale: 'en_US',
@@ -68,7 +68,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Zawr Industries LLP',
     description: 'Multi-sector conglomerate engineering AI platforms, automated logistics, and industrial technology.',
-    images: ['https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png'],
+    images: ['https://zawrindustries.com/og-image.png'],
   },
   icons: {
     icon: [
