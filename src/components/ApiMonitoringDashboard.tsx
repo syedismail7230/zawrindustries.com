@@ -351,18 +351,21 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
                 </div>
 
                 {/* Bottom: Vertical Lines Strip */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '2.5px', height: '16px', width: '100%' }}>
-                  {inf.historyTicks.slice(0, 28).map((tick, tIdx) => (
+                <div style={{ display: 'flex', alignItems: 'center', gap: '3px', height: '18px', overflow: 'hidden' }}>
+                  {inf.historyTicks.slice(0, 30).map((tick, tIdx) => (
                     <div
                       key={tIdx}
                       onMouseEnter={() => setHoveredTick({ tick, name: inf.name })}
                       onMouseLeave={() => setHoveredTick(null)}
                       style={{
-                        flex: 1,
-                        height: '100%',
-                        backgroundColor: tIdx > 20 ? '#27272a' : '#0d9488',
+                        width: '3px',
+                        minWidth: '3px',
+                        maxWidth: '3px',
+                        height: '18px',
+                        backgroundColor: tick.status === 'Operational' ? '#10b981' : '#f59e0b',
                         borderRadius: '9999px',
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        flexShrink: 0
                       }}
                     />
                   ))}
@@ -547,20 +550,23 @@ ${report.endpoints.map(ep => `• [${ep.method}] [${ep.status}] ${ep.name} (${ep
                   </div>
 
                   {/* Row 3: Vertical Lines with Clock indicator (Matching Screenshot 1 exactly) */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '2px', height: '14px', width: '130px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '3px', height: '16px' }}>
                       {ep.historyTicks.slice(0, 24).map((tick, tIdx) => (
                         <div
                           key={tIdx}
                           onMouseEnter={() => setHoveredTick({ tick, name: ep.name })}
                           onMouseLeave={() => setHoveredTick(null)}
                           style={{
-                            flex: 1,
-                            height: '100%',
-                            backgroundColor: tIdx > 18 ? '#27272a' : '#0d9488',
+                            width: '3px',
+                            minWidth: '3px',
+                            maxWidth: '3px',
+                            height: '16px',
+                            backgroundColor: tick.status === 'Operational' ? '#10b981' : '#f59e0b',
                             borderRadius: '9999px',
-                            cursor: 'pointer'
+                            cursor: 'pointer',
+                            flexShrink: 0
                           }}
                         />
                       ))}
