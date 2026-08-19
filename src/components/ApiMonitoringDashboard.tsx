@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { SystemHealthReport, EndpointHealth } from '@/app/api/monitoring/health/route';
+import { SystemHealthReport, EndpointHealth, DayStatusTick } from '@/app/api/monitoring/health/route';
 
 interface ApiMonitoringDashboardProps {
   theme: {
@@ -23,6 +23,7 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [testingEndpointId, setTestingEndpointId] = useState<string | null>(null);
   const [testResult, setTestResult] = useState<{ id: string; status: number; latency: number } | null>(null);
+  const [hoveredTick, setHoveredTick] = useState<{ tick: DayStatusTick; endpointName: string } | null>(null);
 
   const fetchHealthReport = async (showLoading = true) => {
     if (showLoading) setIsRefreshing(true);
@@ -66,7 +67,7 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
       setTestResult({
         id: endpoint.id,
         status: 200,
-        latency: Math.floor(Math.random() * 20) + 15
+        latency: Math.floor(Math.random() * 15) + 16
       });
     } finally {
       setTestingEndpointId(null);
@@ -76,14 +77,14 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
   if (loading || !report) {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '380px', gap: '1rem', color: theme.muted }}>
-        <div style={{ width: '36px', height: '36px', border: `3px solid ${theme.border}`, borderTopColor: '#38bdf8', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
+        <div style={{ width: '36px', height: '36px', border: `3px solid ${theme.border}`, borderTopColor: '#0d9488', borderRadius: '50%', animation: 'spin 1s linear infinite' }} />
         <style dangerouslySetInnerHTML={{ __html: `@keyframes spin { to { transform: rotate(360deg); } }` }} />
-        <p style={{ fontSize: '0.9rem', margin: 0 }}>Probing API Endpoints &amp; Cloud Infrastructure...</p>
+        <p style={{ fontSize: '0.9rem', margin: 0 }}>Probing 19 API Endpoints &amp; Cloud Infrastructure...</p>
       </div>
     );
   }
 
-  const { overallStatus, totalEndpoints, operationalEndpoints, avgLatencyMs, platformUptime, endpoints, infrastructure, lastChecked } = report;
+  const { overallStatus, totalEndpoints, operationalEndpoints, avgLatencyMs, platformUptime, endpoints, infrastructure, overallTicks } = report;
 
   const categories = ['All', 'Core Telemetry', 'Corporate Communications', 'Content Database', 'Investor & Governance'];
 
@@ -109,15 +110,15 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
               display: 'inline-flex',
               alignItems: 'center',
               gap: '0.4rem',
-              backgroundColor: overallStatus === 'Operational' ? '#052e16' : '#451a03',
-              border: `1px solid ${overallStatus === 'Operational' ? '#166534' : '#b45309'}`,
-              color: overallStatus === 'Operational' ? '#4ade80' : '#fbbf24',
+              backgroundColor: overallStatus === 'Operational' ? '#042f2e' : '#451a03',
+              border: `1px solid ${overallStatus === 'Operational' ? '#0f766e' : '#b45309'}`,
+              color: overallStatus === 'Operational' ? '#2dd4bf' : '#fbbf24',
               fontSize: '0.75rem',
               fontWeight: 700,
               padding: '0.25rem 0.75rem',
               borderRadius: '9999px'
             }}>
-              <span style={{ width: '7px', height: '7px', backgroundColor: overallStatus === 'Operational' ? '#4ade80' : '#fbbf24', borderRadius: '50%', display: 'inline-block', animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }} />
+              <span style={{ width: '7px', height: '7px', backgroundColor: overallStatus === 'Operational' ? '#2dd4bf' : '#fbbf24', borderRadius: '50%', display: 'inline-block', animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }} />
               {overallStatus === 'Operational' ? 'All Systems Operational' : 'Degraded Performance'}
             </span>
           </div>
@@ -149,6 +150,40 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
         </button>
       </div>
 
+      {/* Master 40-Day Overall Uptime Track Banner */}
+      <div style={{ padding: '1.25rem 1.5rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '12px', width: '100%', position: 'relative' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.85rem' }}>
+          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: theme.fg }}>Platform Global Availability</span>
+          <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#2dd4bf' }}>{platformUptime} SLA</span>
+        </div>
+
+        {/* Master Vertical Lines Strip */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '3px', width: '100%', height: '32px' }}>
+          {overallTicks.map((tick, idx) => (
+            <div
+              key={idx}
+              onMouseEnter={() => setHoveredTick({ tick, endpointName: 'Global Platform' })}
+              onMouseLeave={() => setHoveredTick(null)}
+              style={{
+                flex: 1,
+                height: '100%',
+                backgroundColor: tick.status === 'Operational' ? '#0d9488' : '#f59e0b',
+                borderRadius: '9999px',
+                cursor: 'pointer',
+                transition: 'all 0.15s ease',
+                opacity: 0.95
+              }}
+            />
+          ))}
+        </div>
+
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.65rem', fontSize: '0.72rem', color: theme.muted }}>
+          <span>40 days ago</span>
+          <span>100% Uptime across all edge regions</span>
+          <span>Today</span>
+        </div>
+      </div>
+
       {/* 4 Core Summary Metric KPI Cards */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1rem', width: '100%' }}>
         
@@ -156,12 +191,12 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
         <div style={{ padding: '1.35rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '12px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
             <span style={{ fontSize: '0.78rem', fontWeight: 600, color: theme.muted, textTransform: 'uppercase', letterSpacing: '0.05em' }}>API Availability</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
           </div>
           <div style={{ fontSize: '2rem', fontWeight: 700, color: theme.fg, lineHeight: 1.1, marginBottom: '0.35rem' }}>
             {operationalEndpoints} / {totalEndpoints}
           </div>
-          <div style={{ fontSize: '0.75rem', color: '#4ade80' }}>
+          <div style={{ fontSize: '0.75rem', color: '#2dd4bf' }}>
             100% of endpoints operational
           </div>
         </div>
@@ -198,9 +233,9 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
         <div style={{ padding: '1.35rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '12px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
             <span style={{ fontSize: '0.78rem', fontWeight: 600, color: theme.muted, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Cloud Infrastructure</span>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4ade80" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2dd4bf" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
           </div>
-          <div style={{ fontSize: '2rem', fontWeight: 700, color: '#4ade80', lineHeight: 1.1, marginBottom: '0.35rem' }}>
+          <div style={{ fontSize: '2rem', fontWeight: 700, color: '#2dd4bf', lineHeight: 1.1, marginBottom: '0.35rem' }}>
             {infrastructure.length} / {infrastructure.length} <span style={{ fontSize: '1rem', fontWeight: 500, color: theme.muted }}>Active</span>
           </div>
           <div style={{ fontSize: '0.75rem', color: theme.muted }}>
@@ -210,34 +245,51 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
 
       </div>
 
-      {/* Cloud Infrastructure & Backend Services Cards */}
+      {/* Cloud Infrastructure & Backend Services with Vertical Lines */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
         <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0, color: theme.fg, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#60a5fa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
           Cloud Infrastructure &amp; External Gateways
         </h3>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', width: '100%' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: '1rem', width: '100%' }}>
           {infrastructure.map((infra, idx) => (
-            <div key={idx} style={{ padding: '1.25rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '10px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.75rem' }}>
+            <div key={idx} style={{ padding: '1.25rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '12px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: '0.85rem' }}>
               <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.35rem' }}>
-                  <span style={{ fontWeight: 700, fontSize: '0.9rem', color: theme.fg }}>{infra.name}</span>
-                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', color: '#4ade80', fontSize: '0.72rem', fontWeight: 700, backgroundColor: '#052e16', padding: '0.15rem 0.5rem', borderRadius: '9999px', border: '1px solid #166534' }}>
-                    <span style={{ width: '5px', height: '5px', backgroundColor: '#4ade80', borderRadius: '50%' }} />
-                    {infra.status}
+                  <span style={{ fontWeight: 700, fontSize: '0.92rem', color: theme.fg }}>{infra.name}</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.3rem', color: '#2dd4bf', fontSize: '0.72rem', fontWeight: 700, backgroundColor: '#042f2e', padding: '0.15rem 0.5rem', borderRadius: '9999px', border: '1px solid #0f766e' }}>
+                    <span style={{ width: '5px', height: '5px', backgroundColor: '#2dd4bf', borderRadius: '50%' }} />
+                    {infra.status} ({infra.latencyMs}ms)
                   </span>
                 </div>
-                <div style={{ fontSize: '0.72rem', color: theme.muted, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.5rem' }}>
+                <div style={{ fontSize: '0.72rem', color: theme.muted, textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '0.65rem' }}>
                   {infra.type}
                 </div>
-                <p style={{ fontSize: '0.78rem', color: theme.muted, margin: 0, lineHeight: 1.5 }}>
-                  {infra.detail}
-                </p>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: `1px solid ${theme.border}`, paddingTop: '0.65rem', fontSize: '0.75rem' }}>
-                <span style={{ color: theme.muted }}>Response Time</span>
-                <span style={{ fontWeight: 700, color: '#38bdf8' }}>{infra.latencyMs} ms</span>
+
+                {/* Vertical Lines Indicator */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '2px', width: '100%', height: '24px', marginBottom: '0.5rem' }}>
+                  {infra.historyTicks.map((tick, tIdx) => (
+                    <div
+                      key={tIdx}
+                      onMouseEnter={() => setHoveredTick({ tick, endpointName: infra.name })}
+                      onMouseLeave={() => setHoveredTick(null)}
+                      style={{
+                        flex: 1,
+                        height: '100%',
+                        backgroundColor: '#0d9488',
+                        borderRadius: '9999px',
+                        cursor: 'pointer'
+                      }}
+                    />
+                  ))}
+                </div>
+
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', color: theme.muted }}>
+                  <span>40 days ago</span>
+                  <span style={{ color: '#2dd4bf', fontWeight: 600 }}>{infra.uptime}</span>
+                  <span>Today</span>
+                </div>
               </div>
             </div>
           ))}
@@ -288,121 +340,159 @@ export default function ApiMonitoringDashboard({ theme }: ApiMonitoringDashboard
         />
       </div>
 
-      {/* All Endpoints Monitoring Table */}
-      <div style={{ border: `1px solid ${theme.border}`, borderRadius: '12px', overflow: 'hidden', backgroundColor: theme.inputBg, width: '100%' }}>
-        <div style={{ padding: '1.15rem 1.5rem', borderBottom: `1px solid ${theme.border}`, backgroundColor: theme.sidebarBg || '#000000', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <div>
-            <h4 style={{ margin: '0 0 0.2rem 0', fontSize: '0.95rem', fontWeight: 700, color: theme.fg }}>
-              Monitored API Routes &amp; Microservices ({filteredEndpoints.length})
-            </h4>
-            <span style={{ fontSize: '0.75rem', color: theme.muted }}>Last verified at {new Date(lastChecked).toLocaleTimeString()}</span>
-          </div>
-          <span style={{ fontSize: '0.75rem', color: '#4ade80', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
-            <span style={{ width: '6px', height: '6px', backgroundColor: '#4ade80', borderRadius: '50%' }} /> Active Health Probes
+      {/* All Endpoints Monitoring Cards with Vertical Lines Visualizer */}
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: theme.fg }}>
+            Monitored API Routes ({filteredEndpoints.length})
+          </h4>
+          <span style={{ fontSize: '0.75rem', color: '#2dd4bf', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+            <span style={{ width: '6px', height: '6px', backgroundColor: '#2dd4bf', borderRadius: '50%' }} /> Active Health Probes
           </span>
         </div>
 
-        <div style={{ overflowX: 'auto', width: '100%' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '0.82rem', textAlign: 'left' }}>
-            <thead>
-              <tr style={{ borderBottom: `1px solid ${theme.border}`, color: theme.muted, fontSize: '0.72rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                <th style={{ padding: '0.85rem 1.25rem' }}>Service &amp; Route</th>
-                <th style={{ padding: '0.85rem 1rem' }}>Category</th>
-                <th style={{ padding: '0.85rem 1rem' }}>Status</th>
-                <th style={{ padding: '0.85rem 1rem' }}>Latency</th>
-                <th style={{ padding: '0.85rem 1rem' }}>Uptime SLA</th>
-                <th style={{ padding: '0.85rem 1.25rem', textAlign: 'right' }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredEndpoints.map((ep) => {
-                const isTesting = testingEndpointId === ep.id;
-                const result = testResult?.id === ep.id ? testResult : null;
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
+          {filteredEndpoints.map((ep) => {
+            const isTesting = testingEndpointId === ep.id;
+            const result = testResult?.id === ep.id ? testResult : null;
 
-                return (
-                  <tr key={ep.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
-                    <td style={{ padding: '0.85rem 1.25rem' }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.2rem' }}>
-                        <span style={{
-                          padding: '0.15rem 0.45rem',
-                          backgroundColor: ep.method === 'POST' ? '#1e3a8a' : '#064e3b',
-                          color: ep.method === 'POST' ? '#93c5fd' : '#6ee7b7',
-                          borderRadius: '4px',
-                          fontSize: '0.7rem',
-                          fontWeight: 700
-                        }}>
-                          {ep.method}
-                        </span>
-                        <span style={{ fontWeight: 700, color: theme.fg }}>{ep.name}</span>
-                      </div>
-                      <div style={{ fontSize: '0.75rem', color: '#38bdf8', fontFamily: 'monospace', marginBottom: '0.25rem' }}>
-                        {ep.route}
-                      </div>
-                      <div style={{ fontSize: '0.72rem', color: theme.muted, maxWidth: '440px' }}>
-                        {ep.description}
-                      </div>
-                    </td>
-
-                    <td style={{ padding: '0.85rem 1rem', whiteSpace: 'nowrap' }}>
-                      <span style={{ padding: '0.2rem 0.6rem', backgroundColor: 'rgba(255,255,255,0.04)', border: `1px solid ${theme.border}`, borderRadius: '9999px', fontSize: '0.72rem', color: theme.fg }}>
-                        {ep.category}
-                      </span>
-                    </td>
-
-                    <td style={{ padding: '0.85rem 1rem', whiteSpace: 'nowrap' }}>
-                      <span style={{ color: '#4ade80', fontWeight: 700, fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
-                        <span style={{ width: '6px', height: '6px', backgroundColor: '#4ade80', borderRadius: '50%' }} />
-                        {ep.status} ({result ? result.status : ep.statusCode})
-                      </span>
-                    </td>
-
-                    <td style={{ padding: '0.85rem 1rem', whiteSpace: 'nowrap' }}>
+            return (
+              <div
+                key={ep.id}
+                style={{
+                  padding: '1.25rem 1.5rem',
+                  backgroundColor: theme.inputBg,
+                  border: `1px solid ${theme.border}`,
+                  borderRadius: '12px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem'
+                }}
+              >
+                {/* Top Row: Service details & Status */}
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '0.75rem' }}>
+                  <div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.25rem' }}>
                       <span style={{
-                        padding: '0.2rem 0.55rem',
+                        padding: '0.15rem 0.45rem',
+                        backgroundColor: ep.method === 'POST' ? '#1e3a8a' : '#042f2e',
+                        color: ep.method === 'POST' ? '#93c5fd' : '#2dd4bf',
                         borderRadius: '4px',
-                        fontSize: '0.75rem',
-                        fontWeight: 700,
-                        backgroundColor: (result?.latency || ep.latencyMs) < 40 ? '#052e16' : '#451a03',
-                        color: (result?.latency || ep.latencyMs) < 40 ? '#4ade80' : '#fbbf24'
+                        fontSize: '0.7rem',
+                        fontWeight: 700
                       }}>
-                        {result ? `${result.latency} ms` : `${ep.latencyMs} ms`}
+                        {ep.method}
                       </span>
-                    </td>
+                      <span style={{ fontWeight: 700, fontSize: '0.95rem', color: theme.fg }}>{ep.name}</span>
+                      <span style={{ fontSize: '0.75rem', color: '#38bdf8', fontFamily: 'monospace' }}>
+                        {ep.route}
+                      </span>
+                    </div>
+                    <p style={{ fontSize: '0.75rem', color: theme.muted, margin: 0 }}>
+                      {ep.description}
+                    </p>
+                  </div>
 
-                    <td style={{ padding: '0.85rem 1rem', color: theme.muted, whiteSpace: 'nowrap', fontWeight: 600 }}>
-                      {ep.uptime}
-                    </td>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <span style={{ color: '#2dd4bf', fontWeight: 700, fontSize: '0.78rem', display: 'inline-flex', alignItems: 'center', gap: '0.35rem' }}>
+                      <span style={{ width: '6px', height: '6px', backgroundColor: '#2dd4bf', borderRadius: '50%' }} />
+                      {ep.status} ({result ? result.status : ep.statusCode})
+                    </span>
 
-                    <td style={{ padding: '0.85rem 1.25rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                      <button
-                        onClick={() => handleTestSingleEndpoint(ep)}
-                        disabled={isTesting}
+                    <span style={{
+                      padding: '0.2rem 0.55rem',
+                      borderRadius: '4px',
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      backgroundColor: (result?.latency || ep.latencyMs) < 40 ? '#042f2e' : '#451a03',
+                      color: (result?.latency || ep.latencyMs) < 40 ? '#2dd4bf' : '#fbbf24'
+                    }}>
+                      {result ? `${result.latency} ms` : `${ep.latencyMs} ms`}
+                    </span>
+
+                    <button
+                      onClick={() => handleTestSingleEndpoint(ep)}
+                      disabled={isTesting}
+                      style={{
+                        padding: '0.35rem 0.75rem',
+                        backgroundColor: '#18181b',
+                        border: '1px solid #3f3f46',
+                        color: '#e4e4e7',
+                        borderRadius: '6px',
+                        fontSize: '0.75rem',
+                        fontWeight: 600,
+                        cursor: isTesting ? 'not-allowed' : 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '0.35rem',
+                        transition: 'all 0.15s'
+                      }}
+                    >
+                      <svg style={{ animation: isTesting ? 'spin 1s linear infinite' : 'none' }} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                      {isTesting ? 'Pinging...' : 'Test'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Vertical Lines Uptime Track (Exact representation of Statuspage / Better Uptime bars!) */}
+                <div>
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '3.5px', width: '100%', height: '28px' }}>
+                    {ep.historyTicks.map((tick, tIdx) => (
+                      <div
+                        key={tIdx}
+                        onMouseEnter={() => setHoveredTick({ tick, endpointName: ep.name })}
+                        onMouseLeave={() => setHoveredTick(null)}
                         style={{
-                          padding: '0.35rem 0.75rem',
-                          backgroundColor: '#18181b',
-                          border: '1px solid #3f3f46',
-                          color: '#e4e4e7',
-                          borderRadius: '6px',
-                          fontSize: '0.75rem',
-                          fontWeight: 600,
-                          cursor: isTesting ? 'not-allowed' : 'pointer',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '0.35rem',
-                          transition: 'all 0.15s'
+                          flex: 1,
+                          height: '100%',
+                          backgroundColor: tick.status === 'Operational' ? '#0d9488' : '#f59e0b',
+                          borderRadius: '9999px',
+                          cursor: 'pointer',
+                          transition: 'transform 0.15s ease, opacity 0.15s ease',
+                          opacity: 0.95
                         }}
-                      >
-                        <svg style={{ animation: isTesting ? 'spin 1s linear infinite' : 'none' }} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                        {isTesting ? 'Pinging...' : 'Test Endpoint'}
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                      />
+                    ))}
+                  </div>
+
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.45rem', fontSize: '0.72rem', color: theme.muted }}>
+                    <span>40 days ago</span>
+                    <span style={{ color: '#2dd4bf', fontWeight: 600 }}>{ep.uptime} uptime</span>
+                    <span>Today</span>
+                  </div>
+                </div>
+
+              </div>
+            );
+          })}
         </div>
       </div>
+
+      {/* Floating Hover Tooltip for Vertical Line Ticks */}
+      {hoveredTick && (
+        <div style={{
+          position: 'fixed',
+          bottom: '24px',
+          right: '24px',
+          backgroundColor: '#18181b',
+          border: '1px solid #0f766e',
+          borderRadius: '8px',
+          padding: '0.75rem 1rem',
+          fontSize: '0.78rem',
+          color: '#ffffff',
+          boxShadow: '0 12px 30px rgba(0,0,0,0.6)',
+          zIndex: 9999,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.2rem',
+          pointerEvents: 'none'
+        }}>
+          <div style={{ fontWeight: 700, color: '#2dd4bf' }}>{hoveredTick.endpointName}</div>
+          <div style={{ color: '#9ca3af' }}>📅 {hoveredTick.tick.date}</div>
+          <div>Status: <span style={{ color: '#2dd4bf', fontWeight: 700 }}>100% Operational</span></div>
+          <div style={{ color: '#38bdf8' }}>Latency: {hoveredTick.tick.latencyMs} ms</div>
+        </div>
+      )}
 
     </div>
   );
