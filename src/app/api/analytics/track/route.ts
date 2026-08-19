@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { logWebRequest, logSecurityEvent, recordVisitorHit } from '@/lib/analytics-tracker';
+import { logWebRequest, logSecurityEvent } from '@/lib/analytics-tracker';
 
 export const dynamic = 'force-dynamic';
 
@@ -87,9 +87,6 @@ export async function POST(req: Request) {
       device: (device as any) || 'Desktop',
       userAgent
     });
-
-    // Update real geographic stats
-    recordVisitorHit(finalCountry, finalCity, location.code, location.flag);
 
     return NextResponse.json({ success: true });
   } catch (error) {
