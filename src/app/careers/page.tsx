@@ -588,6 +588,7 @@ export default function CareersPage() {
                   placeholder="Search for a role, skill, or keyword..." 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
+                  suppressHydrationWarning
                   style={{ width: '100%', backgroundColor: '#000000', border: '1px solid #27272a', color: '#ffffff', padding: '0.85rem 1rem 0.85rem 2.75rem', borderRadius: '8px', outline: 'none', fontSize: '0.925rem' }} 
                 />
                 <svg style={{ position: 'absolute', left: '0.85rem', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -604,6 +605,7 @@ export default function CareersPage() {
                   <select 
                     value={selectedTeam}
                     onChange={(e) => setSelectedTeam(e.target.value)}
+                    suppressHydrationWarning
                     style={{ backgroundColor: '#000000', border: '1px solid #27272a', color: '#ffffff', padding: '0.7rem 2.25rem 0.7rem 0.85rem', borderRadius: '8px', width: '100%', appearance: 'none', outline: 'none', fontSize: '0.85rem', cursor: 'pointer' }}
                   >
                     <option value="All">All Teams</option>
@@ -622,6 +624,7 @@ export default function CareersPage() {
                   <select 
                     value={selectedWorkMode}
                     onChange={(e) => setSelectedWorkMode(e.target.value)}
+                    suppressHydrationWarning
                     style={{ backgroundColor: '#000000', border: '1px solid #27272a', color: '#ffffff', padding: '0.7rem 2.25rem 0.7rem 0.85rem', borderRadius: '8px', width: '100%', appearance: 'none', outline: 'none', fontSize: '0.85rem', cursor: 'pointer' }}
                   >
                     <option value="All">All Setups</option>
@@ -643,6 +646,7 @@ export default function CareersPage() {
                     placeholder="e.g. India, UAE, USA..." 
                     value={countryQuery}
                     onChange={(e) => setCountryQuery(e.target.value)}
+                    suppressHydrationWarning
                     style={{ backgroundColor: '#000000', border: '1px solid #27272a', color: '#ffffff', padding: '0.7rem 0.85rem', borderRadius: '8px', width: '100%', outline: 'none', fontSize: '0.85rem' }} 
                   />
                   <datalist id="country-suggestions">
@@ -663,6 +667,7 @@ export default function CareersPage() {
                     placeholder="e.g. Karnataka, Dubai..." 
                     value={stateQuery}
                     onChange={(e) => setStateQuery(e.target.value)}
+                    suppressHydrationWarning
                     style={{ backgroundColor: '#000000', border: '1px solid #27272a', color: '#ffffff', padding: '0.7rem 0.85rem', borderRadius: '8px', width: '100%', outline: 'none', fontSize: '0.85rem' }} 
                   />
                   <datalist id="state-suggestions">
@@ -683,6 +688,7 @@ export default function CareersPage() {
                     placeholder="e.g. Bangalore, London..." 
                     value={cityQuery}
                     onChange={(e) => setCityQuery(e.target.value)}
+                    suppressHydrationWarning
                     style={{ backgroundColor: '#000000', border: '1px solid #27272a', color: '#ffffff', padding: '0.7rem 0.85rem', borderRadius: '8px', width: '100%', outline: 'none', fontSize: '0.85rem' }} 
                   />
                   <datalist id="city-suggestions">
@@ -1026,7 +1032,7 @@ export default function CareersPage() {
                   </div>
                 )}
 
-                <form onSubmit={handleFreelanceSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
+                <form onSubmit={handleFreelanceSubmit} suppressHydrationWarning style={{ display: 'flex', flexDirection: 'column', gap: '1.1rem' }}>
                   <div>
                     <label style={{ display: 'block', fontSize: '0.82rem', fontWeight: 600, color: '#e5e7eb', marginBottom: '0.35rem' }}>
                       Full Name *
@@ -1037,6 +1043,7 @@ export default function CareersPage() {
                       placeholder="e.g. Alex Morgan"
                       value={freelanceForm.fullName}
                       onChange={(e) => setFreelanceForm({ ...freelanceForm, fullName: e.target.value })}
+                      suppressHydrationWarning
                       style={{ width: '100%', padding: '0.65rem 0.85rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', color: '#ffffff' }}
                     />
                   </div>
@@ -1052,6 +1059,7 @@ export default function CareersPage() {
                         placeholder="alex@example.com"
                         value={freelanceForm.email}
                         onChange={(e) => setFreelanceForm({ ...freelanceForm, email: e.target.value })}
+                        suppressHydrationWarning
                         style={{ width: '100%', padding: '0.65rem 0.85rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', color: '#ffffff' }}
                       />
                     </div>
@@ -1064,6 +1072,7 @@ export default function CareersPage() {
                         placeholder="+91 9876543210"
                         value={freelanceForm.phone}
                         onChange={(e) => setFreelanceForm({ ...freelanceForm, phone: e.target.value })}
+                        suppressHydrationWarning
                         style={{ width: '100%', padding: '0.65rem 0.85rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', color: '#ffffff' }}
                       />
                     </div>
@@ -1079,6 +1088,7 @@ export default function CareersPage() {
                       placeholder="e.g. Full Stack React/Node, UI/UX Design, DevOps, AI Engineer"
                       value={freelanceForm.skill}
                       onChange={(e) => setFreelanceForm({ ...freelanceForm, skill: e.target.value })}
+                      suppressHydrationWarning
                       style={{ width: '100%', padding: '0.65rem 0.85rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', color: '#ffffff' }}
                     />
                   </div>
@@ -1092,6 +1102,7 @@ export default function CareersPage() {
                       placeholder="https://github.com/alex"
                       value={freelanceForm.portfolio}
                       onChange={(e) => setFreelanceForm({ ...freelanceForm, portfolio: e.target.value })}
+                      suppressHydrationWarning
                       style={{ width: '100%', padding: '0.65rem 0.85rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', color: '#ffffff' }}
                     />
                   </div>
@@ -1152,6 +1163,7 @@ export default function CareersPage() {
                               e.stopPropagation();
                               setFreelanceResume(null);
                             }}
+                            suppressHydrationWarning
                             style={{ backgroundColor: 'transparent', border: 'none', color: '#ef4444', cursor: 'pointer', fontSize: '0.9rem' }}
                           >
                             ✕
@@ -1188,6 +1200,7 @@ export default function CareersPage() {
                       placeholder="Tell us about your experience and availability..."
                       value={freelanceForm.coverLetter}
                       onChange={(e) => setFreelanceForm({ ...freelanceForm, coverLetter: e.target.value })}
+                      suppressHydrationWarning
                       style={{ width: '100%', padding: '0.65rem 0.85rem', backgroundColor: '#000000', border: '1px solid #27272a', borderRadius: '8px', fontSize: '0.9rem', outline: 'none', resize: 'vertical', color: '#ffffff' }}
                     />
                   </div>
@@ -1195,6 +1208,7 @@ export default function CareersPage() {
                   <button
                     type="submit"
                     disabled={freelanceSubmitting}
+                    suppressHydrationWarning
                     style={{
                       marginTop: '0.5rem',
                       padding: '0.85rem',
