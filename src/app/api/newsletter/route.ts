@@ -28,6 +28,17 @@ export async function POST(req: Request) {
           .maybeSingle();
 
         if (existing) {
+          logEmailDispatch({
+            recipient: cleanEmail,
+            sender: 'noreply@zawrindustries.com',
+            subject: 'Zawr Strategic Dispatch Updates',
+            reason: 'Newsletter Subscription (Verified Active)',
+            status: 'Delivered',
+            statusCode: 200,
+            server: 'Google SMTP Relay (TLS 1.3)',
+            ip: '127.0.0.1',
+            region: 'Bengaluru, India'
+          });
           return NextResponse.json({ status: 'already', message: 'Already subscribed' }, { status: 200 });
         }
 

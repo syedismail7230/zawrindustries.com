@@ -20,6 +20,9 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
   const [loading, setLoading] = useState(true);
   const [activeSubTab, setActiveSubTab] = useState<'overview' | 'emails' | 'requests' | 'geo' | 'security'>('overview');
   const [timeRange, setTimeRange] = useState<'24h' | '7d' | '30d'>('24h');
+  const timeRangeRef = React.useRef<'24h' | '7d' | '30d'>('24h');
+  timeRangeRef.current = timeRange;
+
   const [emailSearch, setEmailSearch] = useState('');
   const [lastUpdated, setLastUpdated] = useState<string>('');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -61,7 +64,7 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
   }, []);
 
   const fetchAnalytics = async (showLoading = true, range?: '24h' | '7d' | '30d') => {
-    const targetRange = range || timeRange;
+    const targetRange = range || timeRangeRef.current;
     if (showLoading) setIsRefreshing(true);
     try {
       const res = await fetch(`/api/analytics?timeRange=${targetRange}`, { cache: 'no-store' });
@@ -77,6 +80,11 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
       setIsRefreshing(false);
     }
   };
+
+  // Re-fetch whenever user switches 24h / 7d / 30d
+  useEffect(() => {
+    fetchAnalytics(false, timeRange);
+  }, [timeRange]);
 
   // Initial load and live 10-second polling interval
   useEffect(() => {
@@ -94,7 +102,7 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
 
     fetchAnalytics(true);
     const interval = setInterval(() => {
-      fetchAnalytics(false);
+      fetchAnalytics(false, timeRangeRef.current);
     }, 10000);
     return () => clearInterval(interval);
   }, []);
