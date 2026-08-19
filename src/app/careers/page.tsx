@@ -293,7 +293,7 @@ export default function CareersPage() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', paddingTop: '8rem', overflow: 'hidden', fontFamily: 'sans-serif' }}>
+    <div suppressHydrationWarning style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', paddingTop: '8rem', overflow: 'hidden', fontFamily: 'sans-serif' }}>
       <BreadcrumbJsonLd
         items={[
           { name: 'Home', item: '/' },
@@ -316,6 +316,7 @@ export default function CareersPage() {
         </p>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
           <button 
+            suppressHydrationWarning
             onClick={() => document.getElementById('open-positions')?.scrollIntoView({ behavior: 'smooth' })}
             style={{ padding: '0.75rem 1.5rem', backgroundColor: '#ffffff', color: '#000000', borderRadius: '9999px', fontSize: '0.875rem', fontWeight: 600, border: 'none', cursor: 'pointer', transition: 'transform 0.2s', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}
             onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
@@ -325,6 +326,7 @@ export default function CareersPage() {
           </button>
 
           <button 
+            suppressHydrationWarning
             onClick={() => document.getElementById('freelance-section')?.scrollIntoView({ behavior: 'smooth' })}
             style={{ padding: '0.75rem 1.5rem', backgroundColor: 'transparent', color: '#ffffff', border: '1px solid #3f3f46', borderRadius: '9999px', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s ease' }}
             onMouseOver={(e) => { e.currentTarget.style.borderColor = '#ffffff'; e.currentTarget.style.backgroundColor = '#18181b'; e.currentTarget.style.transform = 'scale(1.05)'; }}
