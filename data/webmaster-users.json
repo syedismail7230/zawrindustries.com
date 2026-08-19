@@ -1,0 +1,17 @@
+[
+  {
+    "id": "usr-master-001",
+    "name": "Super Administrator",
+    "email": "admin@zawrindustries.com",
+    "passwordHash": "7f8c2fc3c17b30079e75e73e6a4c641ef04cee76ff37a47431fa25567f4f3b40a09349fe7e5a2df5488db610e7522a215925029c11138d09c05926efc0aa35be",
+    "salt": "ce564688e256750ed2185d5d2a8eed37a0b86b14e7e938a948ceeed2baac41d6",
+    "role": "Super Administrator",
+    "permissions": [
+      "*"
+    ],
+    "status": "active",
+    "lastLogin": null,
+    "createdAt": "2026-08-19T18:16:27.587Z",
+    "createdBy": "System Bootstrap"
+  }
+]

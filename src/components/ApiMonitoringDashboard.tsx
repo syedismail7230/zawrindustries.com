@@ -251,7 +251,7 @@ function createAllGreySlots(): LiveCheckSlot[] {
 }
 
 // Get the visual color for a status slot
-export function getSlotColor(status: LiveCheckSlot['status'], isHovered = false): string {
+export function getSlotColor(status: LiveCheckSlot['status'], isHovered = false, isDark = true): string {
   switch (status) {
     case 'operational':
       return isHovered ? '#34d399' : '#10b981'; // Green
@@ -261,7 +261,7 @@ export function getSlotColor(status: LiveCheckSlot['status'], isHovered = false)
       return isHovered ? '#f87171' : '#ef4444'; // Red
     case 'pending':
     default:
-      return isHovered ? '#3f3f46' : '#27272a'; // Grey
+      return isDark ? (isHovered ? '#3f3f46' : '#27272a') : (isHovered ? '#cbd5e1' : '#e2e8f0'); // Grey
   }
 }
 
@@ -609,29 +609,30 @@ ${internalEndpointsList.map(ep => {
 
   const isDegradedMaster = liveMetrics.degraded > 0;
   const isDownMaster = liveMetrics.down > 0;
+  const isDark = theme.bg === '#000000' || !theme.bg.includes('fff');
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem', paddingBottom: '3.5rem', width: '100%' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem', width: '100%', maxWidth: '1280px', margin: '0 auto', color: theme.fg }}>
       
       {/* ───────────────────────────────────────────────────────────── */}
-      {/* 1. TOP HEADER WITH REALTIME CONTROLS */}
+      {/* 1. TOP HEADER & TELEMETRY TRIGGER */}
       {/* ───────────────────────────────────────────────────────────── */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', width: '100%' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.25rem' }}>
-            <div style={{ width: '32px', height: '32px', borderRadius: '8px', backgroundColor: '#064e3b', color: '#10b981', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            <div style={{ width: '28px', height: '28px', borderRadius: '8px', backgroundColor: isDark ? '#052e16' : '#dcfce7', border: isDark ? '1px solid #166534' : '1px solid #86efac', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981' }}>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
             </div>
-            <h2 style={{ fontSize: '1.65rem', fontWeight: 800, letterSpacing: '-0.02em', margin: 0, color: theme.fg }}>
+            <h2 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em', margin: 0, color: theme.fg }}>
               API Health Monitor
             </h2>
           </div>
           <p style={{ fontSize: '0.82rem', color: theme.muted, margin: 0 }}>
-            Live client-side probes of all 23 platform microservices, external databases, and cloud infrastructure
+            Live client-side probes of all {ALL_SERVICES.length} platform microservices, external databases, and cloud infrastructure
           </p>
         </div>
 
-        {/* Header Right Actions */}
+        {/* Top Controls: Countdown Badge, Export, Refresh */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap' }}>
           {/* Live countdown badge (Every 15s, 1 grey line illuminates) */}
           <div style={{
@@ -639,14 +640,14 @@ ${internalEndpointsList.map(ep => {
             alignItems: 'center',
             gap: '0.45rem',
             padding: '0.45rem 0.85rem',
-            backgroundColor: '#18181b',
-            border: `1px solid ${theme.border}`,
+            backgroundColor: isDark ? '#18181b' : '#f0f9ff',
+            border: isDark ? `1px solid ${theme.border}` : '1px solid #bae6fd',
             borderRadius: '8px',
             fontSize: '0.78rem',
             fontWeight: 700,
-            color: '#38bdf8'
+            color: isDark ? '#38bdf8' : '#0284c7'
           }}>
-            <span style={{ width: '6px', height: '6px', backgroundColor: '#38bdf8', borderRadius: '50%', display: 'inline-block', animation: 'pulse 1.5s infinite' }} />
+            <span style={{ width: '6px', height: '6px', backgroundColor: isDark ? '#38bdf8' : '#0284c7', borderRadius: '50%', display: 'inline-block', animation: 'pulse 1.5s infinite' }} />
             <span>Next Live Probe: {countdown}s</span>
           </div>
 
@@ -655,9 +656,9 @@ ${internalEndpointsList.map(ep => {
             onClick={handleExportReport}
             style={{
               padding: '0.45rem 0.85rem',
-              backgroundColor: '#18181b',
+              backgroundColor: theme.inputBg,
               border: `1px solid ${theme.border}`,
-              color: '#e4e4e7',
+              color: theme.fg,
               borderRadius: '8px',
               fontSize: '0.78rem',
               fontWeight: 600,
@@ -678,9 +679,9 @@ ${internalEndpointsList.map(ep => {
             disabled={isRefreshing}
             style={{
               padding: '0.45rem 0.95rem',
-              backgroundColor: '#ffffff',
+              backgroundColor: theme.fg,
               border: 'none',
-              color: '#000000',
+              color: theme.bg,
               borderRadius: '8px',
               fontSize: '0.78rem',
               fontWeight: 700,
@@ -702,8 +703,18 @@ ${internalEndpointsList.map(ep => {
       {/* ───────────────────────────────────────────────────────────── */}
       <div style={{
         padding: '1.5rem 1.75rem',
-        backgroundColor: isDownMaster ? '#1a0707' : isDegradedMaster ? '#1a1306' : '#0c0f0d',
-        border: `1px solid ${isDownMaster ? '#7f1d1d' : isDegradedMaster ? '#78350f' : '#16533c'}`,
+        backgroundColor: isDownMaster 
+          ? (isDark ? '#1a0707' : '#fef2f2') 
+          : isDegradedMaster 
+          ? (isDark ? '#1a1306' : '#fffbeb') 
+          : (isDark ? '#0c0f0d' : '#f0fdf4'),
+        border: `1px solid ${
+          isDownMaster 
+            ? (isDark ? '#7f1d1d' : '#fecaca') 
+            : isDegradedMaster 
+            ? (isDark ? '#78350f' : '#fde68a') 
+            : (isDark ? '#16533c' : '#bbf7d0')
+        }`,
         borderRadius: '14px',
         display: 'flex',
         justifyContent: 'space-between',
@@ -711,7 +722,9 @@ ${internalEndpointsList.map(ep => {
         flexWrap: 'wrap',
         gap: '1.25rem',
         width: '100%',
-        boxShadow: isDownMaster ? '0 0 25px rgba(239, 68, 68, 0.15)' : isDegradedMaster ? '0 0 25px rgba(245, 158, 11, 0.15)' : '0 0 25px rgba(16, 185, 129, 0.1)'
+        boxShadow: isDark
+          ? (isDownMaster ? '0 0 25px rgba(239, 68, 68, 0.15)' : isDegradedMaster ? '0 0 25px rgba(245, 158, 11, 0.15)' : '0 0 25px rgba(16, 185, 129, 0.1)')
+          : '0 4px 20px rgba(0, 0, 0, 0.05)'
       }}>
         {/* Left: Overall Status Banner with Clickable System Audit Modal */}
         <div
@@ -725,7 +738,7 @@ ${internalEndpointsList.map(ep => {
             borderRadius: '10px',
             transition: 'background-color 0.15s ease'
           }}
-          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'rgba(255,255,255,0.04)'; }}
+          onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.03)'; }}
           onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
           title="Click to view full Platform SLA & Telemetry Audit Report"
         >
@@ -733,8 +746,8 @@ ${internalEndpointsList.map(ep => {
             width: '42px',
             height: '42px',
             borderRadius: '50%',
-            backgroundColor: isDownMaster ? '#450a0a' : isDegradedMaster ? '#451a03' : '#064e3b',
-            color: isDownMaster ? '#ef4444' : isDegradedMaster ? '#fbbf24' : '#10b981',
+            backgroundColor: isDownMaster ? (isDark ? '#450a0a' : '#fee2e2') : isDegradedMaster ? (isDark ? '#451a03' : '#fef3c7') : (isDark ? '#064e3b' : '#dcfce7'),
+            color: isDownMaster ? '#ef4444' : isDegradedMaster ? '#d97706' : '#10b981',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -752,13 +765,21 @@ ${internalEndpointsList.map(ep => {
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
               <h3 style={{
                 margin: '0 0 0.25rem 0',
-                color: isDownMaster ? '#ef4444' : isDegradedMaster ? '#fbbf24' : '#10b981',
+                color: isDownMaster ? '#ef4444' : isDegradedMaster ? (isDark ? '#fbbf24' : '#d97706') : '#10b981',
                 fontSize: '1.25rem',
                 fontWeight: 800
               }}>
                 {liveMetrics.overallStatus}
               </h3>
-              <span style={{ fontSize: '0.72rem', padding: '0.15rem 0.4rem', backgroundColor: '#18181b', borderRadius: '4px', color: theme.muted, border: `1px solid ${theme.border}` }}>
+              <span style={{
+                fontSize: '0.72rem',
+                padding: '0.15rem 0.4rem',
+                backgroundColor: isDark ? '#18181b' : '#ffffff',
+                borderRadius: '4px',
+                color: isDark ? theme.muted : '#15803d',
+                border: isDark ? `1px solid ${theme.border}` : '1px solid #86efac',
+                fontWeight: 600
+              }}>
                 Audit 🔍
               </span>
             </div>
@@ -980,7 +1001,7 @@ ${internalEndpointsList.map(ep => {
                   {/* Header inside Card */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                      <div style={{ width: '28px', height: '28px', borderRadius: '6px', backgroundColor: '#1e293b', color: '#38bdf8', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <div style={{ width: '28px', height: '28px', borderRadius: '6px', backgroundColor: isDark ? '#1e293b' : '#e0f2fe', color: isDark ? '#38bdf8' : '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
                       </div>
                       <div>
@@ -1010,7 +1031,7 @@ ${internalEndpointsList.map(ep => {
                   {/* Middle: Latency progress & HTTP Status */}
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                      <div style={{ width: '80px', height: '4px', backgroundColor: '#27272a', borderRadius: '9999px', overflow: 'hidden' }}>
+                      <div style={{ width: '80px', height: '4px', backgroundColor: isDark ? '#27272a' : '#e2e8f0', borderRadius: '9999px', overflow: 'hidden' }}>
                         <div style={{ width: `${Math.min(100, ((live?.latencyMs || 15) / 100) * 100)}%`, height: '100%', backgroundColor: isOper ? '#10b981' : isDeg ? '#f59e0b' : '#ef4444' }} />
                       </div>
                       <span style={{ fontSize: '0.75rem', color: theme.muted, fontWeight: 600 }}>{live ? `${live.latencyMs}ms` : '—'}</span>
@@ -1024,7 +1045,7 @@ ${internalEndpointsList.map(ep => {
                   {/* Bottom: 24-slot Live Dynamic Bar with Green / Yellow / Red / Grey states */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '3px', height: '18px', position: 'relative' }}>
                     {slots.map((slot, sIdx) => {
-                      const slotColor = getSlotColor(slot.status);
+                      const slotColor = getSlotColor(slot.status, false, isDark);
 
                       return (
                         <div
@@ -1214,9 +1235,9 @@ ${internalEndpointsList.map(ep => {
                       }}
                       style={{
                         padding: '0.25rem 0.65rem',
-                        backgroundColor: '#18181b',
+                        backgroundColor: theme.inputBg,
                         border: `1px solid ${theme.border}`,
-                        color: '#e4e4e7',
+                        color: theme.fg,
                         borderRadius: '4px',
                         fontSize: '0.72rem',
                         fontWeight: 600,
@@ -1251,7 +1272,7 @@ ${internalEndpointsList.map(ep => {
                   {/* Row 2: Latency & HTTP Status Code */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                      <div style={{ width: '50px', height: '3px', backgroundColor: '#27272a', borderRadius: '9999px', overflow: 'hidden' }}>
+                      <div style={{ width: '50px', height: '3px', backgroundColor: isDark ? '#27272a' : '#e2e8f0', borderRadius: '9999px', overflow: 'hidden' }}>
                         <div style={{
                           width: `${Math.min(100, ((live?.latencyMs || 18) / 100) * 100)}%`,
                           height: '100%',
@@ -1278,7 +1299,7 @@ ${internalEndpointsList.map(ep => {
                     
                     <div style={{ display: 'flex', alignItems: 'center', gap: '3px', height: '16px' }}>
                       {slots.map((slot, sIdx) => {
-                        const slotColor = getSlotColor(slot.status);
+                        const slotColor = getSlotColor(slot.status, false, isDark);
 
                         return (
                           <div
@@ -1342,13 +1363,13 @@ ${internalEndpointsList.map(ep => {
           <div style={{
             width: '100%',
             maxWidth: '680px',
-            backgroundColor: '#0c0c0e',
+            backgroundColor: theme.bg,
             border: `1px solid ${isDownMaster ? '#ef4444' : isDegradedMaster ? '#f59e0b' : '#10b981'}`,
             borderRadius: '16px',
             overflow: 'hidden',
             boxShadow: '0 25px 60px rgba(0,0,0,0.85)'
           }}>
-            <div style={{ padding: '1.25rem 1.5rem', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#141418' }}>
+            <div style={{ padding: '1.25rem 1.5rem', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: theme.inputBg }}>
               <div>
                 <h3 style={{ margin: '0 0 0.2rem 0', fontSize: '1.2rem', fontWeight: 800, color: theme.fg }}>Platform Global Telemetry Audit</h3>
                 <span style={{ fontSize: '0.75rem', color: theme.muted }}>Continuous SLA Monitoring across 23 enterprise microservices</span>
@@ -1363,15 +1384,15 @@ ${internalEndpointsList.map(ep => {
 
             <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
-                <div style={{ padding: '0.85rem', backgroundColor: '#141418', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
+                <div style={{ padding: '0.85rem', backgroundColor: theme.inputBg, borderRadius: '8px', border: `1px solid ${theme.border}` }}>
                   <div style={{ fontSize: '0.7rem', color: theme.muted, textTransform: 'uppercase' }}>Monthly SLA</div>
                   <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#10b981', marginTop: '0.2rem' }}>99.98%</div>
                 </div>
-                <div style={{ padding: '0.85rem', backgroundColor: '#141418', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
+                <div style={{ padding: '0.85rem', backgroundColor: theme.inputBg, borderRadius: '8px', border: `1px solid ${theme.border}` }}>
                   <div style={{ fontSize: '0.7rem', color: theme.muted, textTransform: 'uppercase' }}>Active Services</div>
                   <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#38bdf8', marginTop: '0.2rem' }}>23 / 23</div>
                 </div>
-                <div style={{ padding: '0.85rem', backgroundColor: '#141418', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
+                <div style={{ padding: '0.85rem', backgroundColor: theme.inputBg, borderRadius: '8px', border: `1px solid ${theme.border}` }}>
                   <div style={{ fontSize: '0.7rem', color: theme.muted, textTransform: 'uppercase' }}>Global Avg Latency</div>
                   <div style={{ fontSize: '1.35rem', fontWeight: 800, color: '#a78bfa', marginTop: '0.2rem' }}>{liveMetrics.avgLatency}ms</div>
                 </div>
@@ -1405,8 +1426,8 @@ ${internalEndpointsList.map(ep => {
                   onClick={handleExportReport}
                   style={{
                     padding: '0.55rem 1.15rem',
-                    backgroundColor: '#18181b',
-                    color: '#ffffff',
+                    backgroundColor: theme.inputBg,
+                    color: theme.fg,
                     border: `1px solid ${theme.border}`,
                     borderRadius: '8px',
                     fontSize: '0.82rem',
@@ -1459,7 +1480,7 @@ ${internalEndpointsList.map(ep => {
             width: '100%',
             maxWidth: '750px',
             maxHeight: '90vh',
-            backgroundColor: '#0c0c0e',
+            backgroundColor: theme.bg,
             border: `1px solid ${theme.border}`,
             borderRadius: '16px',
             display: 'flex',
@@ -1468,13 +1489,13 @@ ${internalEndpointsList.map(ep => {
             boxShadow: '0 25px 60px rgba(0,0,0,0.8)'
           }}>
             {/* Modal Header */}
-            <div style={{ padding: '1.25rem 1.5rem', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#141418' }}>
+            <div style={{ padding: '1.25rem 1.5rem', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: theme.inputBg }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.2rem' }}>
                   <span style={{
                     padding: '0.2rem 0.5rem',
-                    backgroundColor: '#042f2e',
-                    color: '#2dd4bf',
+                    backgroundColor: isDark ? '#042f2e' : '#ccfbf1',
+                    color: isDark ? '#2dd4bf' : '#0f766e',
                     borderRadius: '4px',
                     fontSize: '0.75rem',
                     fontWeight: 800
@@ -1483,7 +1504,7 @@ ${internalEndpointsList.map(ep => {
                   </span>
                   <span style={{ fontWeight: 800, fontSize: '1.1rem', color: theme.fg }}>{inspectingEndpoint.name}</span>
                 </div>
-                <div style={{ fontSize: '0.8rem', color: '#38bdf8', fontFamily: 'monospace' }}>
+                <div style={{ fontSize: '0.8rem', color: isDark ? '#38bdf8' : '#0284c7', fontFamily: 'monospace' }}>
                   https://zawrindustries.com{inspectingEndpoint.route}
                 </div>
               </div>
@@ -1501,28 +1522,28 @@ ${internalEndpointsList.map(ep => {
               
               {/* Status Bar */}
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '0.75rem' }}>
-                <div style={{ padding: '0.75rem', backgroundColor: '#16161a', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
+                <div style={{ padding: '0.75rem', backgroundColor: theme.inputBg, borderRadius: '8px', border: `1px solid ${theme.border}` }}>
                   <div style={{ fontSize: '0.7rem', color: theme.muted, textTransform: 'uppercase' }}>Status</div>
                   <div style={{ fontSize: '1rem', fontWeight: 800, color: '#10b981', marginTop: '0.2rem' }}>
                     {probeResult ? `${probeResult.statusCode} ${probeResult.statusText}` : '200 OK'}
                   </div>
                 </div>
 
-                <div style={{ padding: '0.75rem', backgroundColor: '#16161a', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
+                <div style={{ padding: '0.75rem', backgroundColor: theme.inputBg, borderRadius: '8px', border: `1px solid ${theme.border}` }}>
                   <div style={{ fontSize: '0.7rem', color: theme.muted, textTransform: 'uppercase' }}>Round-Trip Ping</div>
                   <div style={{ fontSize: '1rem', fontWeight: 800, color: '#38bdf8', marginTop: '0.2rem' }}>
                     {probeResult ? `${probeResult.latencyMs} ms` : `${latestStatus[inspectingEndpoint.id]?.latencyMs || 18} ms`}
                   </div>
                 </div>
 
-                <div style={{ padding: '0.75rem', backgroundColor: '#16161a', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
+                <div style={{ padding: '0.75rem', backgroundColor: theme.inputBg, borderRadius: '8px', border: `1px solid ${theme.border}` }}>
                   <div style={{ fontSize: '0.7rem', color: theme.muted, textTransform: 'uppercase' }}>SLA Uptime</div>
                   <div style={{ fontSize: '1rem', fontWeight: 800, color: '#a78bfa', marginTop: '0.2rem' }}>
                     99.99%
                   </div>
                 </div>
 
-                <div style={{ padding: '0.75rem', backgroundColor: '#16161a', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
+                <div style={{ padding: '0.75rem', backgroundColor: theme.inputBg, borderRadius: '8px', border: `1px solid ${theme.border}` }}>
                   <div style={{ fontSize: '0.7rem', color: theme.muted, textTransform: 'uppercase' }}>Category</div>
                   <div style={{ fontSize: '0.85rem', fontWeight: 700, color: theme.fg, marginTop: '0.2rem' }}>
                     {inspectingEndpoint.category}
@@ -1557,8 +1578,8 @@ ${internalEndpointsList.map(ep => {
                   onClick={handleCopyCurl}
                   style={{
                     padding: '0.6rem 1rem',
-                    backgroundColor: '#18181b',
-                    color: '#e4e4e7',
+                    backgroundColor: theme.inputBg,
+                    color: theme.fg,
                     border: `1px solid ${theme.border}`,
                     borderRadius: '8px',
                     fontSize: '0.82rem',
@@ -1583,10 +1604,10 @@ ${internalEndpointsList.map(ep => {
                 <pre style={{
                   margin: 0,
                   padding: '1rem',
-                  backgroundColor: '#050507',
+                  backgroundColor: theme.inputBg,
                   border: `1px solid ${theme.border}`,
                   borderRadius: '8px',
-                  color: '#a7f3d0',
+                  color: isDark ? '#a7f3d0' : '#065f46',
                   fontSize: '0.78rem',
                   fontFamily: 'monospace',
                   overflowX: 'auto',
@@ -1622,7 +1643,7 @@ ${internalEndpointsList.map(ep => {
           <div style={{
             width: '100%',
             maxWidth: '650px',
-            backgroundColor: '#0c0c0e',
+            backgroundColor: theme.bg,
             border: `1px solid ${theme.border}`,
             borderRadius: '16px',
             display: 'flex',
@@ -1630,7 +1651,7 @@ ${internalEndpointsList.map(ep => {
             overflow: 'hidden',
             boxShadow: '0 25px 60px rgba(0,0,0,0.8)'
           }}>
-            <div style={{ padding: '1.25rem 1.5rem', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#141418' }}>
+            <div style={{ padding: '1.25rem 1.5rem', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: theme.inputBg }}>
               <div>
                 <h3 style={{ margin: '0 0 0.2rem 0', fontSize: '1.1rem', fontWeight: 800, color: theme.fg }}>{inspectingInfra.name}</h3>
                 <span style={{ fontSize: '0.75rem', color: theme.muted }}>{inspectingInfra.type}</span>
@@ -1644,9 +1665,9 @@ ${internalEndpointsList.map(ep => {
             </div>
 
             <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 1rem', backgroundColor: '#052e16', borderRadius: '8px', border: '1px solid #166534' }}>
-                <span style={{ color: '#4ade80', fontWeight: 700, fontSize: '0.85rem' }}>● Operational &amp; Healthy</span>
-                <span style={{ color: '#4ade80', fontSize: '0.8rem', fontWeight: 600 }}>Latency: {latestStatus[inspectingInfra.id]?.latencyMs || 15}ms</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem 1rem', backgroundColor: isDark ? '#052e16' : '#dcfce7', borderRadius: '8px', border: isDark ? '1px solid #166534' : '1px solid #86efac' }}>
+                <span style={{ color: isDark ? '#4ade80' : '#15803d', fontWeight: 700, fontSize: '0.85rem' }}>● Operational &amp; Healthy</span>
+                <span style={{ color: isDark ? '#4ade80' : '#15803d', fontSize: '0.8rem', fontWeight: 600 }}>Latency: {latestStatus[inspectingInfra.id]?.latencyMs || 15}ms</span>
               </div>
 
               <div style={{ border: `1px solid ${theme.border}`, borderRadius: '8px', overflow: 'hidden' }}>
@@ -1697,8 +1718,8 @@ ${internalEndpointsList.map(ep => {
           <div style={{
             width: '100%',
             maxWidth: '480px',
-            backgroundColor: '#0c0c0e',
-            border: `1px solid ${getSlotColor(selectedSlotData.slot.status)}`,
+            backgroundColor: theme.bg,
+            border: `1px solid ${getSlotColor(selectedSlotData.slot.status, false, isDark)}`,
             borderRadius: '16px',
             padding: '1.5rem',
             display: 'flex',
@@ -1708,7 +1729,7 @@ ${internalEndpointsList.map(ep => {
           }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
               <div>
-                <h4 style={{ margin: '0 0 0.2rem 0', fontSize: '1rem', fontWeight: 800, color: getSlotColor(selectedSlotData.slot.status) }}>
+                <h4 style={{ margin: '0 0 0.2rem 0', fontSize: '1rem', fontWeight: 800, color: getSlotColor(selectedSlotData.slot.status, false, isDark) }}>
                   {selectedSlotData.name}
                 </h4>
                 <span style={{ fontSize: '0.75rem', color: theme.muted }}>
@@ -1726,12 +1747,12 @@ ${internalEndpointsList.map(ep => {
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-              <div style={{ padding: '0.75rem', backgroundColor: '#141418', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
+              <div style={{ padding: '0.75rem', backgroundColor: theme.inputBg, borderRadius: '8px', border: `1px solid ${theme.border}` }}>
                 <div style={{ fontSize: '0.7rem', color: theme.muted }}>Check Status</div>
                 <div style={{
                   fontSize: '1.1rem',
                   fontWeight: 800,
-                  color: getSlotColor(selectedSlotData.slot.status),
+                  color: getSlotColor(selectedSlotData.slot.status, false, isDark),
                   marginTop: '0.2rem'
                 }}>
                   {selectedSlotData.slot.status === 'operational'
@@ -1743,7 +1764,7 @@ ${internalEndpointsList.map(ep => {
                     : 'Pending'}
                 </div>
               </div>
-              <div style={{ padding: '0.75rem', backgroundColor: '#141418', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
+              <div style={{ padding: '0.75rem', backgroundColor: theme.inputBg, borderRadius: '8px', border: `1px solid ${theme.border}` }}>
                 <div style={{ fontSize: '0.7rem', color: theme.muted }}>Response Latency</div>
                 <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#38bdf8', marginTop: '0.2rem' }}>
                   {selectedSlotData.slot.status !== 'pending' ? `${selectedSlotData.slot.latencyMs} ms` : '—'}
@@ -1751,16 +1772,16 @@ ${internalEndpointsList.map(ep => {
               </div>
             </div>
 
-            <div style={{ padding: '0.75rem', backgroundColor: '#141418', borderRadius: '8px', border: `1px solid ${theme.border}`, display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.75rem' }}>
+            <div style={{ padding: '0.75rem', backgroundColor: theme.inputBg, borderRadius: '8px', border: `1px solid ${theme.border}`, display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.75rem' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ color: theme.muted }}>HTTP Response Code</span>
-                <span style={{ color: getSlotColor(selectedSlotData.slot.status), fontWeight: 700 }}>
+                <span style={{ color: getSlotColor(selectedSlotData.slot.status, false, isDark), fontWeight: 700 }}>
                   {selectedSlotData.slot.status !== 'pending' ? `HTTP ${selectedSlotData.slot.statusCode || 200}` : 'Awaiting Interval'}
                 </span>
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ color: theme.muted }}>Color Indicator</span>
-                <span style={{ color: getSlotColor(selectedSlotData.slot.status), fontWeight: 700 }}>
+                <span style={{ color: getSlotColor(selectedSlotData.slot.status, false, isDark), fontWeight: 700 }}>
                   {selectedSlotData.slot.status === 'operational' ? '🟢 Green (Healthy)' : selectedSlotData.slot.status === 'degraded' ? '🟡 Yellow (Degraded)' : selectedSlotData.slot.status === 'down' ? '🔴 Red (Down)' : '⚪ Grey (Pending)'}
                 </span>
               </div>

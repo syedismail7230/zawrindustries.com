@@ -193,6 +193,8 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
     ? `${visitorPath} L ${visitorPoints[visitorPoints.length - 1].x} ${chartH} L ${visitorPoints[0].x} ${chartH} Z`
     : '';
 
+  const isDark = theme.bg === '#000000' || !theme.bg.includes('fff');
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1.75rem', paddingBottom: '3.5rem', width: '100%' }}>
       
@@ -203,8 +205,19 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
             <h2 style={{ fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.02em', margin: 0, color: theme.fg }}>
               Realtime Analytics &amp; Telemetry
             </h2>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', backgroundColor: '#052e16', border: '1px solid #166534', color: '#4ade80', fontSize: '0.72rem', fontWeight: 700, padding: '0.2rem 0.65rem', borderRadius: '9999px' }}>
-              <span style={{ width: '6px', height: '6px', backgroundColor: '#4ade80', borderRadius: '50%', display: 'inline-block', animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }} />
+            <span style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              backgroundColor: isDark ? '#052e16' : '#dcfce7',
+              border: isDark ? '1px solid #166534' : '1px solid #86efac',
+              color: isDark ? '#4ade80' : '#15803d',
+              fontSize: '0.72rem',
+              fontWeight: 700,
+              padding: '0.2rem 0.65rem',
+              borderRadius: '9999px'
+            }}>
+              <span style={{ width: '6px', height: '6px', backgroundColor: isDark ? '#4ade80' : '#16a34a', borderRadius: '50%', display: 'inline-block', animation: 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite' }} />
               Live Telemetry Stream
             </span>
           </div>
@@ -221,9 +234,9 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
             onClick={() => setShowBrowserMirror(true)}
             style={{
               padding: '0.55rem 0.95rem',
-              backgroundColor: '#18181b',
+              backgroundColor: theme.inputBg,
               border: `1px solid ${theme.border}`,
-              color: '#e4e4e7',
+              color: theme.fg,
               borderRadius: '8px',
               fontSize: '0.8rem',
               fontWeight: 600,
@@ -244,9 +257,9 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
             disabled={isSendingPing}
             style={{
               padding: '0.55rem 0.95rem',
-              backgroundColor: '#18181b',
-              border: '1px solid #3f3f46',
-              color: '#e4e4e7',
+              backgroundColor: theme.inputBg,
+              border: `1px solid ${theme.border}`,
+              color: theme.fg,
               borderRadius: '8px',
               fontSize: '0.8rem',
               fontWeight: 600,
@@ -441,7 +454,7 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                   </span>
                 </div>
 
-                <div style={{ display: 'flex', backgroundColor: '#18181b', borderRadius: '6px', padding: '2px', border: `1px solid ${theme.border}` }}>
+                <div style={{ display: 'flex', backgroundColor: isDark ? '#18181b' : '#f1f5f9', borderRadius: '6px', padding: '2px', border: `1px solid ${theme.border}` }}>
                   {(['24h', '7d', '30d'] as const).map(t => (
                     <button
                       key={t}
@@ -453,12 +466,12 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                         padding: '0.3rem 0.75rem',
                         borderRadius: '4px',
                         border: 'none',
-                        backgroundColor: timeRange === t ? '#27272a' : 'transparent',
-                        color: timeRange === t ? '#ffffff' : theme.muted,
+                        backgroundColor: timeRange === t ? (isDark ? '#27272a' : '#ffffff') : 'transparent',
+                        color: timeRange === t ? (isDark ? '#ffffff' : '#09090b') : theme.muted,
                         fontSize: '0.75rem',
                         fontWeight: 800,
                         cursor: 'pointer',
-                        boxShadow: timeRange === t ? '0 2px 8px rgba(0,0,0,0.5)' : 'none',
+                        boxShadow: timeRange === t ? (isDark ? '0 2px 8px rgba(0,0,0,0.5)' : '0 1px 4px rgba(0,0,0,0.12)') : 'none',
                         transition: 'all 0.15s ease'
                       }}
                     >
@@ -695,7 +708,7 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                     )}
                   </svg>
 
-                  {/* 8. Floating Black Badge Tooltip with Pure Website Metrics (NO DOLLAR SIGNS) */}
+                  {/* 8. Floating Badge Tooltip with Pure Website Metrics (NO DOLLAR SIGNS) */}
                   {activePoint && (
                     <div
                       style={{
@@ -703,15 +716,15 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                         left: `${(activePoint.x / svgW) * 100}%`,
                         top: `${(Math.max(0, activePoint.y - 24) / svgH) * 100}%`,
                         transform: 'translate(-50%, -100%)',
-                        backgroundColor: '#000000',
-                        color: '#ffffff',
-                        border: '1px solid #3f3f46',
-                        borderRadius: '4px',
-                        padding: '0.2rem 0.55rem',
+                        backgroundColor: theme.bg,
+                        color: theme.fg,
+                        border: `1px solid ${theme.border}`,
+                        borderRadius: '6px',
+                        padding: '0.3rem 0.65rem',
                         fontSize: '0.72rem',
                         fontWeight: 700,
                         fontFamily: 'monospace',
-                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.6)',
+                        boxShadow: isDark ? '0 4px 12px rgba(0, 0, 0, 0.6)' : '0 4px 15px rgba(0, 0, 0, 0.12)',
                         pointerEvents: 'none',
                         zIndex: 20,
                         whiteSpace: 'nowrap',
@@ -720,8 +733,8 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
                         gap: '0.35rem'
                       }}
                     >
-                      <span style={{ color: '#ffffff' }}>{activePoint.visitors} Visitors</span>
-                      <span style={{ color: '#38bdf8', fontSize: '0.68rem', fontWeight: 600 }}>({activePoint.views} page hits)</span>
+                      <span style={{ color: theme.fg }}>{activePoint.visitors} Visitors</span>
+                      <span style={{ color: isDark ? '#38bdf8' : '#0284c7', fontSize: '0.68rem', fontWeight: 600 }}>({activePoint.views} page hits)</span>
                     </div>
                   )}
                 </div>
@@ -1150,13 +1163,13 @@ export default function AnalyticsDashboard({ theme }: AnalyticsDashboardProps) {
           <div style={{
             width: '100%',
             maxWidth: '650px',
-            backgroundColor: '#0c0c0e',
-            border: '1px solid #38bdf8',
+            backgroundColor: theme.bg,
+            border: `1px solid ${theme.border}`,
             borderRadius: '16px',
             overflow: 'hidden',
             boxShadow: '0 25px 60px rgba(0,0,0,0.85)'
           }}>
-            <div style={{ padding: '1.25rem 1.5rem', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: '#141418' }}>
+            <div style={{ padding: '1.25rem 1.5rem', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: theme.inputBg }}>
               <div>
                 <h3 style={{ margin: '0 0 0.2rem 0', fontSize: '1.15rem', fontWeight: 800, color: theme.fg }}>Live Client Browser Mirror</h3>
                 <span style={{ fontSize: '0.75rem', color: theme.muted }}>Direct hardware and browser telemetry stream from this active session</span>

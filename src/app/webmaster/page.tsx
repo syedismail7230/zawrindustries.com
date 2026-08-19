@@ -28,12 +28,86 @@ function WebmasterDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showLivePreview, setShowLivePreview] = useState(true);
 
+  // Authentication & RBAC User State
+  const [authMode, setAuthMode] = useState<'staff' | 'master'>('staff');
+  const [authKey, setAuthKey] = useState<string | null>(null);
+  const [authProfile, setAuthProfile] = useState<any | null>(null);
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [staffLoginError, setStaffLoginError] = useState('');
+  const [currentUser, setCurrentUser] = useState<{
+    id: string;
+    name: string;
+    email: string;
+    role: string;
+    permissions: string[];
+  } | null>(null);
+  const [sessionToken, setSessionToken] = useState<string | null>(null);
+
+  // Master Key & Challenge States
   const [loginStep, setLoginStep] = useState<'key' | 'question'>('key');
   const [accessKey, setAccessKey] = useState('');
   const [challengeQuestion, setChallengeQuestion] = useState('');
   const [challengeId, setChallengeId] = useState<number | null>(null);
   const [userAnswer, setUserAnswer] = useState('');
   const [isVerifying, setIsVerifying] = useState(false);
+
+  // User Management Module States
+  const [allUsers, setAllUsers] = useState<any[]>([]);
+  const [newUserName, setNewUserName] = useState('');
+  const [newUserEmail, setNewUserEmail] = useState('');
+  const [newUserPassword, setNewUserPassword] = useState('');
+  const [newUserRole, setNewUserRole] = useState('Content Editor');
+  const [newUserPermissions, setNewUserPermissions] = useState<string[]>(['blogs', 'press-releases']);
+  const [newUserStatus, setNewUserStatus] = useState<'active' | 'suspended'>('active');
+  const [editingUser, setEditingUser] = useState<any | null>(null);
+  const [showResetPassModal, setShowResetPassModal] = useState<any | null>(null);
+  const [resetPasswordVal, setResetPasswordVal] = useState('');
+  const [createdUserCredentials, setCreatedUserCredentials] = useState<{ name: string; email: string; password: string; loginLink: string } | null>(null);
+  const [copiedLinkId, setCopiedLinkId] = useState<string | null>(null);
+  const [copiedCreds, setCopiedCreds] = useState(false);
+  const [userMgmtLoading, setUserMgmtLoading] = useState(false);
+  const [userMgmtMsg, setUserMgmtMsg] = useState('');
+
+  const ALL_NAV_ITEMS = [
+    { id: 'analytics', label: 'Analytics' },
+    { id: 'api-monitoring', label: 'API Monitoring' },
+    { id: 'mail-credentials', label: 'Mail Settings' },
+    { id: 'email-routing', label: 'Email Routing' },
+    { id: 'jobs', label: 'Manage Jobs' },
+    { id: 'newsletters', label: 'Newsletters' },
+    { id: 'pitch-deck', label: 'Pitch Deck' },
+    { id: 'financial-reports', label: 'Financial Reports' },
+    { id: 'events', label: 'Manage Events' },
+    { id: 'notices', label: 'Manage Notices' },
+    { id: 'notifications', label: 'Manage Notifications' },
+    { id: 'press-releases', label: 'Manage Press Releases' },
+    { id: 'blogs', label: 'Manage Blogs' },
+    { id: 'user-management', label: 'User Management' },
+  ];
+
+  const fetchUsers = async () => {
+    setUserMgmtLoading(true);
+    try {
+      const res = await fetch('/api/webmaster/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'list-users',
+          sessionToken,
+          masterKey: accessKey
+        })
+      });
+      const data = await res.json();
+      if (data.success && data.users) {
+        setAllUsers(data.users);
+      }
+    } catch (err) {
+      console.error('Failed to fetch users:', err);
+    }
+    setUserMgmtLoading(false);
+  };
 
   const fetchChallengeQuestion = async (keyInput: string) => {
     setIsVerifying(true);
@@ -57,32 +131,92 @@ function WebmasterDashboard() {
     setIsVerifying(false);
   };
 
+  // Check and restore session on client mount
   useEffect(() => {
-    try {
-      if (sessionStorage.getItem('webmaster_logged_in') === 'true') {
-        setAuthorized(true);
-        setIsAuthenticated(true);
-        setStageChecked(true);
-        return;
-      }
-      
-      if (token === GATE_TOKEN) {
-        sessionStorage.setItem('webmaster_authorized', 'true');
-        setAuthorized(true);
-      } else if (sessionStorage.getItem('webmaster_authorized') === 'true') {
-        setAuthorized(true);
-      }
-    } catch (e) {
-      // Safeguard for private tabs sandboxes
-    }
-    setStageChecked(true);
-  }, [token, GATE_TOKEN]);
+    const restoreSession = async () => {
+      try {
+        const urlAuthKey = searchParams.get('authKey') || searchParams.get('key') || searchParams.get('profileToken');
+        if (urlAuthKey) {
+          setAuthKey(urlAuthKey);
+          try {
+            const res = await fetch('/api/webmaster/users', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ action: 'validate-login-key', authKey: urlAuthKey })
+            });
+            const data = await res.json();
+            if (data.success && data.profile) {
+              setAuthProfile(data.profile);
+              setLoginEmail(data.profile.email);
+              setAuthorized(true);
+              setAuthMode('staff');
+            } else {
+              setStaffLoginError(data.error || 'Invalid or revoked profile link.');
+              setAuthorized(true);
+            }
+          } catch (err) {
+            setStaffLoginError('Error validating unique login link.');
+            setAuthorized(true);
+          }
+        }
 
-  // Read immediately on client load to prevent layout layout shifts
+        const storedToken = sessionStorage.getItem('webmaster_session_token');
+        if (storedToken) {
+          const res = await fetch('/api/webmaster/users', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action: 'verify-session', token: storedToken })
+          });
+          const data = await res.json();
+          if (data.success && data.user) {
+            setCurrentUser(data.user);
+            setSessionToken(storedToken);
+            setAuthorized(true);
+            setIsAuthenticated(true);
+            setStageChecked(true);
+            return;
+          } else {
+            sessionStorage.removeItem('webmaster_session_token');
+          }
+        }
+
+        if (sessionStorage.getItem('webmaster_logged_in') === 'true') {
+          setCurrentUser({
+            id: 'usr-master',
+            name: 'Super Administrator',
+            email: 'admin@zawrindustries.com',
+            role: 'Super Administrator',
+            permissions: ['*']
+          });
+          setAuthorized(true);
+          setIsAuthenticated(true);
+          setStageChecked(true);
+          return;
+        }
+        
+        if (token === GATE_TOKEN) {
+          sessionStorage.setItem('webmaster_authorized', 'true');
+          setAuthorized(true);
+        } else if (sessionStorage.getItem('webmaster_authorized') === 'true') {
+          setAuthorized(true);
+        }
+      } catch (e) {
+        // Safeguard for private tabs sandboxes
+      }
+      setStageChecked(true);
+    };
+
+    restoreSession();
+  }, [token, GATE_TOKEN, searchParams]);
+
+  // Read immediately on client load to prevent layout shifts
+  const urlAuthKey = searchParams.get('authKey') || searchParams.get('key') || searchParams.get('profileToken');
   const isSessionAuth = typeof window !== 'undefined' && (
     sessionStorage.getItem('webmaster_authorized') === 'true' || 
     sessionStorage.getItem('webmaster_logged_in') === 'true' || 
-    token === GATE_TOKEN
+    sessionStorage.getItem('webmaster_session_token') !== null ||
+    token === GATE_TOKEN ||
+    !!urlAuthKey
   );
 
   // Instantly throw 404 if token or session is missing
@@ -202,7 +336,6 @@ function WebmasterDashboard() {
   const [customBlogFile, setCustomBlogFile] = useState<File | null>(null);
   const [customAuthorFile, setCustomAuthorFile] = useState<File | null>(null);
 
-
   // Fetch Data from Supabase
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -279,6 +412,9 @@ function WebmasterDashboard() {
             const data = await res.json();
             setBlogsData(data || []);
           }
+        }
+        else if (activeTab === 'user-management') {
+          fetchUsers();
         }
       } catch (error: any) {
         console.error('Supabase error:', error.message);
@@ -439,6 +575,8 @@ function WebmasterDashboard() {
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
+  const [showUserDropup, setShowUserDropup] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const theme = isDarkMode ? {
     bg: '#000000',
@@ -459,6 +597,47 @@ function WebmasterDashboard() {
   };
 
   if (!isAuthenticated) {
+    const handleStaffLogin = async (e: React.FormEvent) => {
+      e.preventDefault();
+      if (!loginEmail.trim() || !loginPassword.trim()) return;
+      setIsVerifying(true);
+      setStaffLoginError('');
+      try {
+        const res = await fetch('/api/webmaster/users', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'login',
+            email: loginEmail,
+            authKey: authKey,
+            password: loginPassword
+          })
+        });
+        const data = await res.json();
+        if (data.success && data.token && data.user) {
+          sessionStorage.setItem('webmaster_session_token', data.token);
+          sessionStorage.setItem('webmaster_authorized', 'true');
+          setSessionToken(data.token);
+          setCurrentUser(data.user);
+          setIsAuthenticated(true);
+          setAuthorized(true);
+          
+          // Switch to first allowed tab if analytics is restricted
+          if (!data.user.permissions.includes('*') && !data.user.permissions.includes('analytics')) {
+            const firstAllowed = ALL_NAV_ITEMS.find(item => data.user.permissions.includes(item.id));
+            if (firstAllowed) {
+              setActiveTab(firstAllowed.id);
+            }
+          }
+        } else {
+          setStaffLoginError(data.error || 'Invalid credentials');
+        }
+      } catch (err) {
+        setStaffLoginError('Unable to connect to authentication service.');
+      }
+      setIsVerifying(false);
+    };
+
     const handleAccessKeySubmit = (e: React.FormEvent) => {
       e.preventDefault();
       if (!accessKey.trim()) return;
@@ -488,6 +667,13 @@ function WebmasterDashboard() {
           try {
             sessionStorage.setItem('webmaster_logged_in', 'true');
           } catch (err) {}
+          setCurrentUser({
+            id: 'usr-master',
+            name: 'Super Administrator',
+            email: 'admin@zawrindustries.com',
+            role: 'Super Administrator',
+            permissions: ['*']
+          });
           setIsAuthenticated(true);
         } else {
           alert(data.error || 'Incorrect answer');
@@ -499,80 +685,284 @@ function WebmasterDashboard() {
     };
 
     return (
-      <div style={{ height: '100vh', backgroundColor: theme.bg, color: theme.fg, display: 'flex', justifyContent: 'center', alignItems: 'center', fontFamily: 'sans-serif' }}>
-        <style dangerouslySetInnerHTML={{__html: `header, footer, .support-widget, .cookie-banner { display: none !important; } body { overflow: hidden !important; margin: 0; }`}} />
+      <div style={{ minHeight: '100vh', backgroundColor: theme.bg, color: theme.fg, display: 'flex', justifyContent: 'center', alignItems: 'center', fontFamily: 'sans-serif', padding: '1.25rem' }}>
+        <style dangerouslySetInnerHTML={{__html: `header, footer, .support-widget, .cookie-banner { display: none !important; } body { margin: 0; }`}} />
         
-        {loginStep === 'key' ? (
-          <form onSubmit={handleAccessKeySubmit} suppressHydrationWarning style={{ width: '100%', maxWidth: '400px', padding: '2.5rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.5rem', textAlign: 'center', letterSpacing: '-0.02em' }}>Webmaster Login</h1>
-            <p style={{ fontSize: '0.85rem', color: theme.muted, textAlign: 'center', marginBottom: '2rem' }}>Please enter the Webmaster Access Key password to continue.</p>
-            
-            <div style={{ marginBottom: '2rem' }}>
-              <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted, fontWeight: 500 }}>Access Key Password</label>
-              <input 
-                type="password" 
-                value={accessKey} 
-                onChange={(e) => setAccessKey(e.target.value)} 
-                style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
-                placeholder="Enter password key" 
-                autoFocus 
-                required
-                disabled={isVerifying}
-                autoComplete="new-password"
-                suppressHydrationWarning
-              />
+        <div style={{
+          width: '100%',
+          maxWidth: '460px',
+          border: `1px solid ${theme.border}`,
+          borderRadius: '16px',
+          backgroundColor: theme.inputBg,
+          boxShadow: isDarkMode ? '0 20px 50px rgba(0,0,0,0.85)' : '0 20px 40px rgba(0,0,0,0.08)',
+          overflow: 'hidden'
+        }}>
+          {/* Header with Brand Logo & Shield Badge */}
+          <div style={{ padding: '2rem 1.75rem 1.25rem 1.75rem', textAlign: 'center', borderBottom: `1px solid ${theme.border}` }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '48px', height: '48px', borderRadius: '12px', backgroundColor: isDarkMode ? '#1e1b4b' : '#eff6ff', border: isDarkMode ? '1px solid #3730a3' : '1px solid #bfdbfe', marginBottom: '1rem', color: '#38bdf8' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
             </div>
-            <button 
-              type="submit" 
-              disabled={isVerifying || !accessKey.trim()}
-              suppressHydrationWarning
-              style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, cursor: 'pointer', borderRadius: '4px', opacity: isVerifying || !accessKey.trim() ? 0.6 : 1 }}
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 0.4rem 0', letterSpacing: '-0.02em', color: theme.fg }}>
+              Webmaster Security Gateway
+            </h1>
+            <p style={{ fontSize: '0.82rem', color: theme.muted, margin: 0 }}>
+              Encrypted Role-Based Access Control • Salted PBKDF2 Vault
+            </p>
+          </div>
+
+          {/* Mode Switch Tabs */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: `1px solid ${theme.border}`, backgroundColor: theme.bg }}>
+            <button
+              type="button"
+              onClick={() => { setAuthMode('staff'); setStaffLoginError(''); }}
+              style={{
+                padding: '0.85rem 0.5rem',
+                backgroundColor: authMode === 'staff' ? theme.inputBg : 'transparent',
+                border: 'none',
+                borderBottom: authMode === 'staff' ? '2px solid #38bdf8' : '2px solid transparent',
+                color: authMode === 'staff' ? theme.fg : theme.muted,
+                fontWeight: 700,
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                transition: 'all 0.15s'
+              }}
             >
-              {isVerifying ? 'Checking Access Key...' : 'Next Step →'}
+              👤 Employee Login
             </button>
-          </form>
-        ) : (
-          <form onSubmit={handleChallengeSubmit} suppressHydrationWarning style={{ width: '100%', maxWidth: '450px', padding: '2.5rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.5rem', textAlign: 'center', letterSpacing: '-0.02em' }}>Security Verification</h1>
-            <p style={{ fontSize: '0.85rem', color: theme.muted, textAlign: 'center', marginBottom: '2rem' }}>Answer your offline security challenge question to unlock the Webmaster portal.</p>
-            
-            <div style={{ marginBottom: '2rem' }}>
-              <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.75rem', color: theme.muted, fontWeight: 500 }}>
-                {challengeQuestion || 'Loading security challenge...'}
-              </label>
-              <input 
-                type="text" 
-                value={userAnswer} 
-                onChange={(e) => setUserAnswer(e.target.value)} 
-                style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px' }} 
-                placeholder="Enter your private offline answer" 
-                autoFocus 
-                required
-                disabled={isVerifying || !challengeQuestion}
-                autoComplete="off"
-                suppressHydrationWarning
-              />
-            </div>
-            <div style={{ display: 'flex', gap: '1rem' }}>
-              <button 
-                type="button"
-                onClick={() => setLoginStep('key')}
-                suppressHydrationWarning
-                style={{ width: '35%', padding: '0.75rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer' }}
-              >
-                ← Back
-              </button>
-              <button 
-                type="submit" 
-                disabled={isVerifying || !challengeQuestion}
-                suppressHydrationWarning
-                style={{ width: '65%', padding: '0.75rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, cursor: 'pointer', borderRadius: '4px', opacity: isVerifying || !challengeQuestion ? 0.6 : 1 }}
-              >
-                {isVerifying ? 'Verifying...' : 'Unlock Portal'}
-              </button>
-            </div>
-          </form>
-        )}
+            <button
+              type="button"
+              onClick={() => { setAuthMode('master'); setLoginStep('key'); }}
+              style={{
+                padding: '0.85rem 0.5rem',
+                backgroundColor: authMode === 'master' ? theme.inputBg : 'transparent',
+                border: 'none',
+                borderBottom: authMode === 'master' ? '2px solid #38bdf8' : '2px solid transparent',
+                color: authMode === 'master' ? theme.fg : theme.muted,
+                fontWeight: 700,
+                fontSize: '0.82rem',
+                cursor: 'pointer',
+                transition: 'all 0.15s'
+              }}
+            >
+              🔑 Master Gateway
+            </button>
+          </div>
+
+          <div style={{ padding: '1.75rem' }}>
+            {/* ── TAB 1: EMPLOYEE LOGIN ── */}
+            {authMode === 'staff' ? (
+              <form onSubmit={handleStaffLogin} suppressHydrationWarning style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                {authProfile && (
+                  <div style={{
+                    padding: '0.85rem 1rem',
+                    backgroundColor: isDarkMode ? '#1e1b4b' : '#eff6ff',
+                    border: isDarkMode ? '1px solid #3730a3' : '1px solid #bfdbfe',
+                    borderRadius: '10px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem'
+                  }}>
+                    <div style={{
+                      width: '38px',
+                      height: '38px',
+                      borderRadius: '50%',
+                      backgroundColor: '#38bdf8',
+                      color: '#000000',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontWeight: 800,
+                      fontSize: '0.95rem'
+                    }}>
+                      {(authProfile.name?.[0] || 'U').toUpperCase()}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 700, fontSize: '0.9rem', color: theme.fg, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                        {authProfile.name}
+                      </div>
+                      <div style={{ fontSize: '0.75rem', color: isDarkMode ? '#38bdf8' : '#0284c7', fontWeight: 600 }}>
+                        🔒 Authorized: {authProfile.role}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {staffLoginError && (
+                  <div style={{
+                    padding: '0.75rem 1rem',
+                    backgroundColor: isDarkMode ? '#3f0000' : '#fee2e2',
+                    border: isDarkMode ? '1px solid #7f1d1d' : '1px solid #fca5a5',
+                    borderRadius: '8px',
+                    color: isDarkMode ? '#ffaaaa' : '#dc2626',
+                    fontSize: '0.8rem',
+                    fontWeight: 600,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem'
+                  }}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <span>{staffLoginError}</span>
+                  </div>
+                )}
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.45rem', color: theme.muted, fontWeight: 600 }}>
+                    Official Email Address
+                  </label>
+                  <input
+                    type="email"
+                    value={loginEmail}
+                    onChange={(e) => setLoginEmail(e.target.value)}
+                    style={{ width: '100%', padding: '0.75rem 0.9rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '8px', fontSize: '0.875rem' }}
+                    placeholder="name@zawrindustries.com"
+                    autoFocus={!authProfile}
+                    required
+                    disabled={isVerifying || !!authProfile}
+                    autoComplete="email"
+                  />
+                </div>
+
+                <div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.45rem' }}>
+                    <label style={{ fontSize: '0.82rem', color: theme.muted, fontWeight: 600 }}>
+                      Password
+                    </label>
+                    <button
+                      type="button"
+                      onClick={() => setShowLoginPassword(!showLoginPassword)}
+                      style={{ background: 'none', border: 'none', color: '#38bdf8', fontSize: '0.75rem', cursor: 'pointer', fontWeight: 600, padding: 0 }}
+                    >
+                      {showLoginPassword ? 'Hide' : 'Show'}
+                    </button>
+                  </div>
+                  <input
+                    type={showLoginPassword ? 'text' : 'password'}
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                    style={{ width: '100%', padding: '0.75rem 0.9rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '8px', fontSize: '0.875rem' }}
+                    placeholder="Enter assigned password"
+                    required
+                    disabled={isVerifying}
+                    autoComplete="current-password"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isVerifying || !loginEmail.trim() || !loginPassword.trim()}
+                  style={{
+                    width: '100%',
+                    padding: '0.85rem',
+                    backgroundColor: theme.fg,
+                    color: theme.bg,
+                    border: 'none',
+                    fontWeight: 800,
+                    cursor: isVerifying ? 'not-allowed' : 'pointer',
+                    borderRadius: '8px',
+                    fontSize: '0.875rem',
+                    marginTop: '0.5rem',
+                    opacity: isVerifying || !loginEmail.trim() || !loginPassword.trim() ? 0.6 : 1,
+                    transition: 'all 0.15s'
+                  }}
+                >
+                  {isVerifying ? 'Authenticating Credentials...' : 'Sign In to Workspace →'}
+                </button>
+              </form>
+            ) : (
+              /* ── TAB 2: MASTER SUPERADMIN GATEWAY ── */
+              loginStep === 'key' ? (
+                <form onSubmit={handleAccessKeySubmit} suppressHydrationWarning style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                  <p style={{ fontSize: '0.82rem', color: theme.muted, margin: '0 0 0.5rem 0' }}>
+                    Enter the master access key for SuperAdmin system recovery and unrestricted access.
+                  </p>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.45rem', color: theme.muted, fontWeight: 600 }}>
+                      Master Access Key
+                    </label>
+                    <input
+                      type="password"
+                      value={accessKey}
+                      onChange={(e) => setAccessKey(e.target.value)}
+                      style={{ width: '100%', padding: '0.75rem 0.9rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '8px', fontSize: '0.875rem' }}
+                      placeholder="Enter master key"
+                      autoFocus
+                      required
+                      disabled={isVerifying}
+                      autoComplete="new-password"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    disabled={isVerifying || !accessKey.trim()}
+                    style={{
+                      width: '100%',
+                      padding: '0.85rem',
+                      backgroundColor: theme.fg,
+                      color: theme.bg,
+                      border: 'none',
+                      fontWeight: 800,
+                      cursor: isVerifying ? 'not-allowed' : 'pointer',
+                      borderRadius: '8px',
+                      fontSize: '0.875rem',
+                      opacity: isVerifying || !accessKey.trim() ? 0.6 : 1
+                    }}
+                  >
+                    {isVerifying ? 'Verifying Key...' : 'Next: Security Challenge →'}
+                  </button>
+                </form>
+              ) : (
+                <form onSubmit={handleChallengeSubmit} suppressHydrationWarning style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                  <p style={{ fontSize: '0.82rem', color: theme.muted, margin: '0 0 0.5rem 0' }}>
+                    Answer your offline security challenge question to unlock the Master SuperAdmin vault.
+                  </p>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.65rem', color: '#38bdf8', fontWeight: 600 }}>
+                      {challengeQuestion || 'Loading challenge...'}
+                    </label>
+                    <input
+                      type="text"
+                      value={userAnswer}
+                      onChange={(e) => setUserAnswer(e.target.value)}
+                      style={{ width: '100%', padding: '0.75rem 0.9rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '8px', fontSize: '0.875rem' }}
+                      placeholder="Enter offline security answer"
+                      autoFocus
+                      required
+                      disabled={isVerifying || !challengeQuestion}
+                      autoComplete="off"
+                    />
+                  </div>
+                  <div style={{ display: 'flex', gap: '0.75rem' }}>
+                    <button
+                      type="button"
+                      onClick={() => setLoginStep('key')}
+                      style={{ width: '35%', padding: '0.75rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem' }}
+                    >
+                      ← Back
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={isVerifying || !challengeQuestion}
+                      style={{
+                        width: '65%',
+                        padding: '0.75rem',
+                        backgroundColor: theme.fg,
+                        color: theme.bg,
+                        border: 'none',
+                        fontWeight: 800,
+                        cursor: isVerifying ? 'not-allowed' : 'pointer',
+                        borderRadius: '8px',
+                        fontSize: '0.85rem',
+                        opacity: isVerifying || !challengeQuestion ? 0.6 : 1
+                      }}
+                    >
+                      {isVerifying ? 'Unlocking...' : 'Unlock SuperAdmin Vault'}
+                    </button>
+                  </div>
+                </form>
+              )
+            )}
+          </div>
+        </div>
       </div>
     );
   }
@@ -611,33 +1001,35 @@ function WebmasterDashboard() {
         return (
           <div>
             <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '2rem', letterSpacing: '-0.02em' }}>Live Email Routing</h2>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-              <thead>
-                <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
-                  <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Source / Form</th>
-                  <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Destination Address</th>
-                  <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {routes.map((route) => (
-                  <tr key={route.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
-                    <td style={{ padding: '1rem' }}>{route.source}</td>
-                    <td style={{ padding: '1rem' }}>
-                      <input 
-                        type="text" 
-                        value={route.destination} 
-                        onChange={(e) => setRoutes(routes.map(r => r.id === route.id ? { ...r, destination: e.target.value } : r))}
-                        style={{ width: '100%', padding: '0.5rem', backgroundColor: 'transparent', border: 'none', color: theme.fg, borderBottom: `1px dashed ${theme.border}`, outline: 'none' }} 
-                      />
-                    </td>
-                    <td style={{ padding: '1rem' }}>
-                      <button onClick={() => handleUpdateRoute(route.id, route.destination)} style={{ padding: '0.25rem 0.75rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', fontSize: '0.75rem' }}>Sync</button>
-                    </td>
+            <div className="wm-table-wrapper" style={{ border: `1px solid ${theme.border}`, borderRadius: '8px', overflow: 'hidden' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                <thead>
+                  <tr style={{ borderBottom: `1px solid ${theme.border}`, backgroundColor: theme.inputBg }}>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Source / Form</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Destination Address</th>
+                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {routes.map((route) => (
+                    <tr key={route.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                      <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{route.source}</td>
+                      <td style={{ padding: '1rem' }}>
+                        <input 
+                          type="text" 
+                          value={route.destination} 
+                          onChange={(e) => setRoutes(routes.map(r => r.id === route.id ? { ...r, destination: e.target.value } : r))}
+                          style={{ width: '100%', minWidth: '180px', padding: '0.5rem', backgroundColor: 'transparent', border: 'none', color: theme.fg, borderBottom: `1px dashed ${theme.border}`, outline: 'none' }} 
+                        />
+                      </td>
+                      <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>
+                        <button onClick={() => handleUpdateRoute(route.id, route.destination)} style={{ padding: '0.25rem 0.75rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', fontSize: '0.75rem' }}>Sync</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         );
 
@@ -646,12 +1038,12 @@ function WebmasterDashboard() {
           <div>
             <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '2rem', letterSpacing: '-0.02em' }}>Manage Careers (Realtime)</h2>
             
-            {errorMsg && <div style={{ padding: '1rem', backgroundColor: '#3f0000', color: '#ffaaaa', borderRadius: '8px', marginBottom: '2rem' }}>{errorMsg}</div>}
+            {errorMsg && <div style={{ padding: '1rem', backgroundColor: isDarkMode ? '#3f0000' : '#fee2e2', color: isDarkMode ? '#ffaaaa' : '#dc2626', border: isDarkMode ? '1px solid #7f1d1d' : '1px solid #fca5a5', borderRadius: '8px', marginBottom: '2rem' }}>{errorMsg}</div>}
 
             <form onSubmit={handleAddJob} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '3rem', padding: '1.5rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.5rem' }}>Post New Job</h3>
               
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div className="wm-grid-2col" style={{ display: 'grid', gap: '1rem' }}>
                 <div>
                   <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Job Title *</label>
                   <input type="text" required value={newJob.title} onChange={e => setNewJob({...newJob, title: e.target.value})} style={{ width: '100%', padding: '0.75rem', backgroundColor: 'transparent', border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} />
@@ -662,7 +1054,7 @@ function WebmasterDashboard() {
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+              <div className="wm-grid-2col" style={{ display: 'grid', gap: '1rem' }}>
                 <div>
                   <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Employment Type *</label>
                   <select value={newJob.type} onChange={e => setNewJob({...newJob, type: e.target.value})} style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }}>
@@ -705,7 +1097,7 @@ function WebmasterDashboard() {
                 {jobs.length === 0 ? (
                   <div style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No jobs found or table missing.</div>
                 ) : jobs.map((job) => (
-                  <div key={job.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1.25rem', borderBottom: `1px solid ${theme.border}`, backgroundColor: theme.bg }}>
+                  <div key={job.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', padding: '1.25rem', borderBottom: `1px solid ${theme.border}`, backgroundColor: theme.bg }}>
                     <div>
                       <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>{job.title}</div>
                       <div style={{ fontSize: '0.875rem', color: theme.muted }}>{job.location} • {job.type} • Reporting to: {job.reporting || 'N/A'}</div>
@@ -724,35 +1116,37 @@ function WebmasterDashboard() {
       case 'newsletters':
         return (
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-              <h2 style={{ fontSize: '2rem', fontWeight: 600, letterSpacing: '-0.02em' }}>Newsletter Subscribers</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
+              <h2 style={{ fontSize: '2rem', fontWeight: 600, letterSpacing: '-0.02em', margin: 0 }}>Newsletter Subscribers</h2>
               <button style={{ padding: '0.5rem 1.5rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, borderRadius: '4px', cursor: 'pointer' }}>Export CSV</button>
             </div>
-            {errorMsg && <div style={{ padding: '1rem', backgroundColor: '#3f0000', color: '#ffaaaa', borderRadius: '8px', marginBottom: '2rem' }}>{errorMsg}</div>}
+            {errorMsg && <div style={{ padding: '1rem', backgroundColor: isDarkMode ? '#3f0000' : '#fee2e2', color: isDarkMode ? '#ffaaaa' : '#dc2626', border: isDarkMode ? '1px solid #7f1d1d' : '1px solid #fca5a5', borderRadius: '8px', marginBottom: '2rem' }}>{errorMsg}</div>}
             
             {loading ? <div style={{ color: theme.muted }}>Loading from Supabase...</div> : (
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                <thead>
-                  <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Email Address</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date Subscribed</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {subscribers.length === 0 ? (
-                    <tr><td colSpan={3} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No subscribers found.</td></tr>
-                  ) : subscribers.map((sub) => (
-                    <tr key={sub.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
-                      <td style={{ padding: '1rem' }}>{sub.email}</td>
-                      <td style={{ padding: '1rem', color: theme.muted }}>{new Date(sub.created_at).toLocaleDateString()}</td>
-                      <td style={{ padding: '1rem' }}>
-                        <span style={{ color: sub.status === 'Active' ? '#ffffff' : theme.muted }}>{sub.status || 'Active'}</span>
-                      </td>
+              <div className="wm-table-wrapper" style={{ border: `1px solid ${theme.border}`, borderRadius: '8px', overflow: 'hidden' }}>
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                  <thead>
+                    <tr style={{ borderBottom: `1px solid ${theme.border}`, backgroundColor: theme.inputBg }}>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Email Address</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date Subscribed</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Status</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {subscribers.length === 0 ? (
+                      <tr><td colSpan={3} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No subscribers found.</td></tr>
+                    ) : subscribers.map((sub) => (
+                      <tr key={sub.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                        <td style={{ padding: '1rem' }}>{sub.email}</td>
+                        <td style={{ padding: '1rem', color: theme.muted }}>{new Date(sub.created_at).toLocaleDateString()}</td>
+                        <td style={{ padding: '1rem' }}>
+                          <span style={{ color: sub.status === 'Active' ? '#ffffff' : theme.muted }}>{sub.status || 'Active'}</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             )}
           </div>
         );
@@ -1017,155 +1411,101 @@ function WebmasterDashboard() {
                 ))}
               </div>
               
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                <thead>
-                  <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Year</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>PDF URL Status</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {getMappedReportsForWebmaster().map((rep) => (
-                    <tr key={rep.id} style={{ borderBottom: `1px solid ${theme.border}`, opacity: rep.isUserUploaded ? 1 : 0.65 }}>
-                      <td style={{ padding: '1rem', fontWeight: 500 }}>{rep.title}</td>
-                      <td style={{ padding: '1rem', color: '#fff' }}>{rep.category}</td>
-                      <td style={{ padding: '1rem', color: '#fff' }}>{rep.year}</td>
-                      <td style={{ padding: '1rem', color: theme.muted, fontSize: '0.875rem' }}>
-                        {rep.isUserUploaded ? (
-                          rep.isArchived ? (
-                            <span style={{ color: '#ffaaaa', backgroundColor: '#3a0c0c', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Archived Offline</span>
+              <div className="wm-table-wrapper">
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                  <thead>
+                    <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Year</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>PDF URL Status</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {getMappedReportsForWebmaster().map((rep) => (
+                      <tr key={rep.id} style={{ borderBottom: `1px solid ${theme.border}`, opacity: rep.isUserUploaded ? 1 : 0.65 }}>
+                        <td style={{ padding: '1rem', fontWeight: 500 }}>{rep.title}</td>
+                        <td style={{ padding: '1rem', color: '#fff' }}>{rep.category}</td>
+                        <td style={{ padding: '1rem', color: '#fff' }}>{rep.year}</td>
+                        <td style={{ padding: '1rem', color: theme.muted, fontSize: '0.875rem' }}>
+                          {rep.isUserUploaded ? (
+                            rep.isArchived ? (
+                              <span style={{ color: '#ffaaaa', backgroundColor: '#3a0c0c', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Archived Offline</span>
+                            ) : (
+                              <a href={rep.pdfUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#aaaaff', textDecoration: 'underline' }}>
+                                {rep.pdfUrl.length > 50 ? `${rep.pdfUrl.substring(0, 50)}...` : rep.pdfUrl}
+                              </a>
+                            )
                           ) : (
-                            <a href={rep.pdfUrl} target="_blank" rel="noopener noreferrer" style={{ color: '#aaaaff', textDecoration: 'underline' }}>
-                              {rep.pdfUrl.length > 50 ? `${rep.pdfUrl.substring(0, 50)}...` : rep.pdfUrl}
-                            </a>
-                          )
-                        ) : (
-                          <span style={{ color: theme.muted, fontStyle: 'italic' }}>Default Archived Placeholder (Offline)</span>
-                        )}
-                      </td>
-                      <td style={{ padding: '1rem', textAlign: 'right' }}>
-                        {rep.isUserUploaded ? (
-                          <>
-                            <button 
+                            <span style={{ color: '#f59e0b', fontSize: '0.78rem' }}>Default Placeholder</span>
+                          )}
+                        </td>
+                        <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                          {rep.isUserUploaded ? (
+                            <>
+                              <button 
+                                onClick={() => {
+                                  setEditingReport(rep);
+                                  setReportTitle(rep.title);
+                                  setReportCategory(rep.category);
+                                  setReportYear(rep.year);
+                                  setReportIsArchived(!!rep.isArchived);
+                                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                                }}
+                                style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
+                              >
+                                Edit
+                              </button>
+                              <button 
+                                onClick={async () => {
+                                  if (!window.confirm(`Are you sure you want to delete "${rep.title}"?`)) return;
+                                  setLoading(true);
+                                  const formData = new FormData();
+                                  formData.append('action', 'delete');
+                                  formData.append('id', rep.id);
+                                  try {
+                                    const res = await fetch('/api/financial-reports', { method: 'POST', body: formData });
+                                    if (res.ok) {
+                                      const data = await res.json();
+                                      setReports(data.reports || []);
+                                    } else {
+                                      alert('Failed to delete report.');
+                                    }
+                                  } catch (err) {
+                                    alert('Error deleting report.');
+                                  }
+                                  setLoading(false);
+                                }}
+                                style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
+                              >
+                                Delete
+                              </button>
+                            </>
+                          ) : (
+                            <button
                               onClick={() => {
-                                setEditingReport(rep);
+                                setEditingReport(null);
                                 setReportTitle(rep.title);
                                 setReportCategory(rep.category);
                                 setReportYear(rep.year);
-                                setReportIsArchived(!!rep.isArchived);
-                                // Scroll smoothly to form
+                                setReportIsArchived(false);
                                 window.scrollTo({ top: 0, behavior: 'smooth' });
+                                setTimeout(() => {
+                                  alert(`Ready to upload! Choose a PDF file above for "${rep.title}" (${rep.year}) and click "Add Report".`);
+                                }, 300);
                               }}
-                              style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
+                              style={{ padding: '0.5rem 1rem', backgroundColor: '#ffffff', color: '#000000', border: 'none', borderRadius: '4px', fontWeight: 600, cursor: 'pointer', fontSize: '0.875rem' }}
                             >
-                              Edit
+                              Upload PDF File
                             </button>
-                            <button 
-                              onClick={async () => {
-                                setLoading(true);
-                                const formData = new FormData();
-                                formData.append('action', 'update');
-                                formData.append('id', rep.id);
-                                formData.append('title', rep.title);
-                                formData.append('pdfUrl', rep.pdfUrl || '');
-                                formData.append('category', rep.category);
-                                formData.append('year', rep.year);
-                                formData.append('isArchived', String(!rep.isArchived));
-
-                                try {
-                                  const res = await fetch('/api/financial-reports', { method: 'POST', body: formData });
-                                  if (res.ok) {
-                                    const data = await res.json();
-                                    setReports(data.reports || []);
-                                  } else {
-                                    alert('Failed to toggle archive status.');
-                                  }
-                                } catch (e) {
-                                  alert('Error toggling archive status.');
-                                }
-                                setLoading(false);
-                              }}
-                              style={{ 
-                                padding: '0.5rem 1rem', 
-                                backgroundColor: rep.isArchived ? '#0c3a0c' : '#222225', 
-                                color: rep.isArchived ? '#aaffaa' : '#ffffff', 
-                                border: rep.isArchived ? 'none' : `1px solid ${theme.border}`, 
-                                borderRadius: '4px', 
-                                cursor: 'pointer', 
-                                marginRight: '0.5rem', 
-                                fontSize: '0.875rem',
-                                fontWeight: 600,
-                                transition: 'all 0.2s'
-                              }}
-                              onMouseEnter={(e) => {
-                                if (!rep.isArchived) {
-                                  e.currentTarget.style.backgroundColor = '#3a0c0c';
-                                  e.currentTarget.style.color = '#ffaaaa';
-                                  e.currentTarget.style.borderColor = '#ffaaaa';
-                                }
-                              }}
-                              onMouseLeave={(e) => {
-                                if (!rep.isArchived) {
-                                  e.currentTarget.style.backgroundColor = '#222225';
-                                  e.currentTarget.style.color = '#ffffff';
-                                  e.currentTarget.style.borderColor = theme.border;
-                                }
-                              }}
-                            >
-                              {rep.isArchived ? 'Activate' : 'Archive'}
-                            </button>
-                            <button 
-                              onClick={async () => {
-                                if (!confirm(`Are you sure you want to delete ${rep.title}?`)) return;
-                                setLoading(true);
-                                const formData = new FormData();
-                                formData.append('action', 'delete');
-                                formData.append('id', rep.id);
-                                try {
-                                  const res = await fetch('/api/financial-reports', { method: 'POST', body: formData });
-                                  if (res.ok) {
-                                    const data = await res.json();
-                                    setReports(data.reports || []);
-                                  } else {
-                                    alert('Failed to delete report.');
-                                  }
-                                } catch (e) {
-                                  alert('Error deleting report.');
-                                }
-                                setLoading(false);
-                              }}
-                              style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
-                            >
-                              Delete
-                            </button>
-                          </>
-                        ) : (
-                          <button
-                            onClick={() => {
-                              setEditingReport(null);
-                              setReportTitle(rep.title);
-                              setReportCategory(rep.category);
-                              setReportYear(rep.year);
-                              setReportIsArchived(false);
-                              // Scroll smoothly to form and alert
-                              window.scrollTo({ top: 0, behavior: 'smooth' });
-                              setTimeout(() => {
-                                alert(`Ready to upload! Choose a PDF file above for "${rep.title}" (${rep.year}) and click "Add Report".`);
-                              }, 300);
-                            }}
-                            style={{ padding: '0.5rem 1rem', backgroundColor: '#ffffff', color: '#000000', border: 'none', borderRadius: '4px', fontWeight: 600, cursor: 'pointer', fontSize: '0.875rem' }}
-                          >
-                            Upload PDF File
-                          </button>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         );
@@ -1287,14 +1627,14 @@ function WebmasterDashboard() {
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className="wm-grid-2col" style={{ display: 'grid', gap: '1rem' }}>
                   <div>
                     <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Start Date</label>
                     <input 
                       type="date" 
                       value={eventStartDate} 
                       onChange={(e) => setEventStartDate(e.target.value)} 
-                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', colorScheme: 'dark' }} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', colorScheme: isDarkMode ? 'dark' : 'light' }} 
                     />
                   </div>
                   <div>
@@ -1303,19 +1643,19 @@ function WebmasterDashboard() {
                       type="date" 
                       value={eventEndDate} 
                       onChange={(e) => setEventEndDate(e.target.value)} 
-                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', colorScheme: 'dark' }} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', colorScheme: isDarkMode ? 'dark' : 'light' }} 
                     />
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className="wm-grid-2col" style={{ display: 'grid', gap: '1rem' }}>
                   <div>
                     <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Start Time</label>
                     <input 
                       type="time" 
                       value={eventStartTime} 
                       onChange={(e) => setEventStartTime(e.target.value)} 
-                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', colorScheme: 'dark' }} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', colorScheme: isDarkMode ? 'dark' : 'light' }} 
                     />
                   </div>
                   <div>
@@ -1324,7 +1664,7 @@ function WebmasterDashboard() {
                       type="time" 
                       value={eventEndTime} 
                       onChange={(e) => setEventEndTime(e.target.value)} 
-                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', colorScheme: 'dark' }} 
+                      style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '4px', colorScheme: isDarkMode ? 'dark' : 'light' }} 
                     />
                   </div>
                 </div>
@@ -1447,81 +1787,83 @@ function WebmasterDashboard() {
             <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>Current Events</h3>
               
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                <thead>
-                  <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Event Title</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Dates</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Venue & Tickets</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {events.length === 0 ? (
-                    <tr><td colSpan={4} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No events found.</td></tr>
-                  ) : events.map((ev) => (
-                    <tr key={ev.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
-                      <td style={{ padding: '1rem', fontWeight: 500 }}>
-                        <div>{ev.title}</div>
-                        <div style={{ fontSize: '0.75rem', color: theme.muted }}>{ev.subtitle}</div>
-                      </td>
-                      <td style={{ padding: '1rem', color: theme.muted }}>
-                        {ev.startDate === ev.endDate ? ev.startDate : `${ev.startDate} to ${ev.endDate}`}
-                      </td>
-                      <td style={{ padding: '1rem', color: theme.muted }}>
-                        <div>{ev.venue}</div>
-                        <div style={{ fontSize: '0.75rem' }}>Booked: {ev.ticketsBooked || '0'} / {ev.ticketsCapacity || '100'}</div>
-                      </td>
-                      <td style={{ padding: '1rem', textAlign: 'right' }}>
-                        <button 
-                          onClick={() => {
-                            setEditingEvent(ev);
-                            setEventTitle(ev.title);
-                            setEventSubtitle(ev.subtitle || '');
-                            setEventDesc(ev.description || '');
-                            setEventStartDate(ev.startDate);
-                            setEventEndDate(ev.endDate === ev.startDate ? '' : ev.endDate);
-                            setEventStartTime(ev.startTime ? ev.startTime.substring(0, 5) : '');
-                            setEventEndTime(ev.endTime ? ev.endTime.substring(0, 5) : '');
-                            setEventTicketsBooked(ev.ticketsBooked || '0');
-                            setEventTicketsCapacity(ev.ticketsCapacity || '100');
-                            setEventVenue(ev.venue || 'Online');
-                            setEventSpecialNote(ev.specialNote || '');
-                            setEventImage(ev.image || 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1200,c_limit/v1783710478/zawr/assets/event-chart.png');
-                          }}
-                          style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
-                        >
-                          Edit
-                        </button>
-                        <button 
-                          onClick={async () => {
-                            if (!window.confirm(`Are you sure you want to delete "${ev.title}"?`)) return;
-                            setLoading(true);
-                            const formData = new FormData();
-                            formData.append('action', 'delete');
-                            formData.append('id', ev.id);
-                            try {
-                              const res = await fetch('/api/events', { method: 'POST', body: formData });
-                              if (res.ok) {
-                                const data = await res.json();
-                                setEvents(data.events || []);
-                              } else {
-                                alert('Failed to delete event.');
-                              }
-                            } catch (e) {
-                              alert('Error deleting event.');
-                            }
-                            setLoading(false);
-                          }}
-                          style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
-                        >
-                          Delete
-                        </button>
-                      </td>
+              <div className="wm-table-wrapper">
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                  <thead>
+                    <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Event Title</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Dates</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Venue & Tickets</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {events.length === 0 ? (
+                      <tr><td colSpan={4} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No events found.</td></tr>
+                    ) : events.map((ev) => (
+                      <tr key={ev.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                        <td style={{ padding: '1rem', fontWeight: 500 }}>
+                          <div>{ev.title}</div>
+                          <div style={{ fontSize: '0.75rem', color: theme.muted }}>{ev.subtitle}</div>
+                        </td>
+                        <td style={{ padding: '1rem', color: theme.muted }}>
+                          {ev.startDate === ev.endDate ? ev.startDate : `${ev.startDate} to ${ev.endDate}`}
+                        </td>
+                        <td style={{ padding: '1rem', color: theme.muted }}>
+                          <div>{ev.venue}</div>
+                          <div style={{ fontSize: '0.75rem' }}>Booked: {ev.ticketsBooked || '0'} / {ev.ticketsCapacity || '100'}</div>
+                        </td>
+                        <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                          <button 
+                            onClick={() => {
+                              setEditingEvent(ev);
+                              setEventTitle(ev.title);
+                              setEventSubtitle(ev.subtitle || '');
+                              setEventDesc(ev.description || '');
+                              setEventStartDate(ev.startDate);
+                              setEventEndDate(ev.endDate === ev.startDate ? '' : ev.endDate);
+                              setEventStartTime(ev.startTime ? ev.startTime.substring(0, 5) : '');
+                              setEventEndTime(ev.endTime ? ev.endTime.substring(0, 5) : '');
+                              setEventTicketsBooked(ev.ticketsBooked || '0');
+                              setEventTicketsCapacity(ev.ticketsCapacity || '100');
+                              setEventVenue(ev.venue || 'Online');
+                              setEventSpecialNote(ev.specialNote || '');
+                              setEventImage(ev.image || 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1200,c_limit/v1783710478/zawr/assets/event-chart.png');
+                            }}
+                            style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
+                          >
+                            Edit
+                          </button>
+                          <button 
+                            onClick={async () => {
+                              if (!window.confirm(`Are you sure you want to delete "${ev.title}"?`)) return;
+                              setLoading(true);
+                              const formData = new FormData();
+                              formData.append('action', 'delete');
+                              formData.append('id', ev.id);
+                              try {
+                                const res = await fetch('/api/events', { method: 'POST', body: formData });
+                                if (res.ok) {
+                                  const data = await res.json();
+                                  setEvents(data.events || []);
+                                } else {
+                                  alert('Failed to delete event.');
+                                }
+                              } catch (e) {
+                                alert('Error deleting event.');
+                              }
+                              setLoading(false);
+                            }}
+                            style={{ padding: '0.5rem 1rem', backgroundColor: isDarkMode ? '#3f0000' : '#fee2e2', color: isDarkMode ? '#ffaaaa' : '#dc2626', border: isDarkMode ? '1px solid #7f1d1d' : '1px solid #fca5a5', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 600 }}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         );
@@ -1598,7 +1940,7 @@ function WebmasterDashboard() {
                   <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.75rem' }}>Upload Notice PDF Attachment (Optional)</label>
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div className="wm-grid-2col" style={{ display: 'grid', gap: '1rem' }}>
                       <div>
                         <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Attachment Label</label>
                         <input 
@@ -1634,7 +1976,7 @@ function WebmasterDashboard() {
                 <div style={{ padding: '1rem', border: `1px solid ${theme.border}`, borderRadius: '6px', backgroundColor: theme.bg }}>
                   <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.75rem' }}>Manage External Portals / Links (Optional)</label>
                   
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '0.5rem' }}>
+                  <div className="wm-grid-2col" style={{ display: 'grid', gap: '1rem', marginBottom: '0.5rem' }}>
                     <div>
                       <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Portal / Link Label</label>
                       <input 
@@ -1783,131 +2125,135 @@ function WebmasterDashboard() {
             <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>Current Notices</h3>
               
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                <thead>
-                  <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Status</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {notices.length === 0 ? (
-                    <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No notices found.</td></tr>
-                  ) : notices.map((nt) => (
-                    <tr key={nt.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
-                      <td style={{ padding: '1rem', fontWeight: 500 }}>{nt.title}</td>
-                      <td style={{ padding: '1rem', color: theme.muted }}>{nt.date}</td>
-                      <td style={{ padding: '1rem', color: theme.muted }}>{nt.category}</td>
-                      <td style={{ padding: '1rem', color: theme.muted }}>
-                        {nt.archived ? (
-                          <span style={{ color: '#f97316', backgroundColor: '#431407', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Archived</span>
-                        ) : (
-                          <span style={{ color: '#10b981', backgroundColor: '#064e3b', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Active</span>
-                        )}
-                      </td>
-                      <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                        <button 
-                          onClick={() => {
-                            setEditingNotice(nt);
-                            setNoticeTitle(nt.title);
-                            setNoticeCategory(nt.category || 'General');
-                            setNoticeDate(nt.date);
-                            setNoticeSummary(nt.summary || '');
-                            setNoticeBody(nt.body || '');
-                            setNoticeIsArchived(!!nt.archived);
-                            
-                            // Load existing link/attachment fields if populated
-                            if (nt.links && nt.links.length > 0) {
-                              setNoticeLinkName(nt.links[0].label);
-                              setNoticeLinkUrl(nt.links[0].url);
-                            } else {
-                              setNoticeLinkName('');
-                              setNoticeLinkUrl('');
-                            }
-                            if (nt.attachments && nt.attachments.length > 0) {
-                              setNoticeAttachmentName(nt.attachments[0].label);
-                            } else {
-                              setNoticeAttachmentName('');
-                            }
-
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                          }}
-                          style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
-                        >
-                          Edit
-                        </button>
-                        <button 
-                          onClick={async () => {
-                            setLoading(true);
-                            const formData = new FormData();
-                            formData.append('action', 'update');
-                            formData.append('id', nt.id);
-                            formData.append('title', nt.title);
-                            formData.append('category', nt.category);
-                            formData.append('date', nt.date);
-                            formData.append('summary', nt.summary || '');
-                            formData.append('body', nt.body || '');
-                            formData.append('archived', String(!nt.archived));
-                            formData.append('links', JSON.stringify(nt.links || []));
-                            formData.append('attachments', JSON.stringify(nt.attachments || []));
-                            try {
-                              const res = await fetch('/api/notices', { method: 'POST', body: formData });
-                              if (res.ok) {
-                                const data = await res.json();
-                                setNotices(data.notices || []);
-                              } else {
-                                alert('Failed to update status.');
-                              }
-                            } catch (e) {
-                              alert('Error updating status.');
-                            }
-                            setLoading(false);
-                          }}
-                          style={{ 
-                            padding: '0.5rem 1rem', 
-                            backgroundColor: 'transparent', 
-                            color: nt.archived ? '#10b981' : '#f59e0b', 
-                            border: nt.archived ? '1px solid #059669' : '1px solid #d97706', 
-                            borderRadius: '4px', 
-                            cursor: 'pointer', 
-                            marginRight: '0.5rem', 
-                            fontSize: '0.875rem' 
-                          }}
-                        >
-                          {nt.archived ? 'Unarchive' : 'Archive'}
-                        </button>
-                        <button 
-                          onClick={async () => {
-                            if (!window.confirm(`Are you sure you want to delete "${nt.title}"?`)) return;
-                            setLoading(true);
-                            const formData = new FormData();
-                            formData.append('action', 'delete');
-                            formData.append('id', nt.id);
-                            try {
-                              const res = await fetch('/api/notices', { method: 'POST', body: formData });
-                              if (res.ok) {
-                                const data = await res.json();
-                                setNotices(data.notices || []);
-                              } else {
-                                alert('Failed to delete notice.');
-                              }
-                            } catch (e) {
-                              alert('Error deleting notice.');
-                            }
-                            setLoading(false);
-                          }}
-                          style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
-                        >
-                          Delete
-                        </button>
-                      </td>
+              <div className="wm-table-wrapper">
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                  <thead>
+                    <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Status</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {notices.length === 0 ? (
+                      <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No notices found.</td></tr>
+                    ) : notices.map((nt) => (
+                      <tr key={nt.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                        <td style={{ padding: '1rem', fontWeight: 500 }}>{nt.title}</td>
+                        <td style={{ padding: '1rem', color: theme.muted }}>{nt.date}</td>
+                        <td style={{ padding: '1rem', color: theme.muted }}>{nt.category}</td>
+                        <td style={{ padding: '1rem', color: theme.muted }}>
+                          {nt.archived ? (
+                            <span style={{ color: '#f97316', backgroundColor: '#431407', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Archived</span>
+                          ) : (
+                            <span style={{ color: '#10b981', backgroundColor: '#064e3b', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Active</span>
+                          )}
+                        </td>
+                        <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                          <button 
+                            onClick={() => {
+                              setEditingNotice(nt);
+                              setNoticeTitle(nt.title);
+                              setNoticeCategory(nt.category || 'General');
+                              setNoticeDate(nt.date);
+                              setNoticeSummary(nt.summary || '');
+                              setNoticeBody(nt.body || '');
+                              setNoticeIsArchived(!!nt.archived);
+                              
+                              // Load existing link/attachment fields if populated
+                              if (nt.links && nt.links.length > 0) {
+                                setNoticeLinkName(nt.links[0].label);
+                                setNoticeLinkUrl(nt.links[0].url);
+                              } else {
+                                setNoticeLinkName('');
+                                setNoticeLinkUrl('');
+                              }
+                              if (nt.attachments && nt.attachments.length > 0) {
+                                setNoticeAttachmentName(nt.attachments[0].label);
+                              } else {
+                                setNoticeAttachmentName('');
+                              }
+
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
+                          >
+                            Edit
+                          </button>
+                          <button 
+                            onClick={async () => {
+                              setLoading(true);
+                              const formData = new FormData();
+                              formData.append('action', 'update');
+                              formData.append('id', nt.id);
+                              formData.append('title', nt.title);
+                              formData.append('category', nt.category);
+                              formData.append('date', nt.date);
+                              formData.append('summary', nt.summary || '');
+                              formData.append('body', nt.body || '');
+                              formData.append('archived', String(!nt.archived));
+                              formData.append('links', JSON.stringify(nt.links || []));
+                              formData.append('attachments', JSON.stringify(nt.attachments || []));
+                              try {
+                                const res = await fetch('/api/notices', { method: 'POST', body: formData });
+                                if (res.ok) {
+                                  const data = await res.json();
+                                  setNotices(data.notices || []);
+                                } else {
+                                  alert('Failed to toggle archive status.');
+                                }
+                              } catch (e) {
+                                alert('Error toggling archive status.');
+                              }
+                              setLoading(false);
+                            }}
+                            style={{ 
+                              padding: '0.5rem 1rem', 
+                              backgroundColor: nt.archived ? '#0c3a0c' : '#222225', 
+                              color: nt.archived ? '#aaffaa' : '#ffffff', 
+                              border: nt.archived ? 'none' : `1px solid ${theme.border}`, 
+                              borderRadius: '4px', 
+                              cursor: 'pointer', 
+                              marginRight: '0.5rem', 
+                              fontSize: '0.875rem',
+                              fontWeight: 600,
+                              transition: 'all 0.2s'
+                            }}
+                          >
+                            {nt.archived ? 'Unarchive' : 'Archive'}
+                          </button>
+                          <button 
+                            onClick={async () => {
+                              if (!window.confirm(`Are you sure you want to delete "${nt.title}"?`)) return;
+                              setLoading(true);
+                              const formData = new FormData();
+                              formData.append('action', 'delete');
+                              formData.append('id', nt.id);
+                              try {
+                                const res = await fetch('/api/notices', { method: 'POST', body: formData });
+                                if (res.ok) {
+                                  const data = await res.json();
+                                  setNotices(data.notices || []);
+                                } else {
+                                  alert('Failed to delete notice.');
+                                }
+                              } catch (e) {
+                                alert('Error deleting notice.');
+                              }
+                              setLoading(false);
+                            }}
+                            style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         );
@@ -1923,7 +2269,7 @@ function WebmasterDashboard() {
               </h2>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: '1rem' }}>
+                <div className="wm-grid-2col" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
                   <div>
                     <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Title</label>
                     <input 
@@ -1981,7 +2327,7 @@ function WebmasterDashboard() {
                 {/* Upload Attachment */}
                 <div style={{ border: `1px solid ${theme.border}`, padding: '1rem', borderRadius: '6px' }}>
                   <h4 style={{ fontSize: '0.875rem', fontWeight: 600, margin: '0 0 0.75rem 0' }}>Attach PDF Document</h4>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div className="wm-grid-2col" style={{ display: 'grid', gap: '1rem' }}>
                     <div>
                       <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Document Label</label>
                       <input 
@@ -2031,7 +2377,7 @@ function WebmasterDashboard() {
                 {/* External Links */}
                 <div style={{ border: `1px solid ${theme.border}`, padding: '1rem', borderRadius: '6px' }}>
                   <h4 style={{ fontSize: '0.875rem', fontWeight: 600, margin: '0 0 0.75rem 0' }}>Related External Link</h4>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                  <div className="wm-grid-2col" style={{ display: 'grid', gap: '1rem' }}>
                     <div>
                       <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Link Label</label>
                       <input 
@@ -2196,141 +2542,143 @@ function WebmasterDashboard() {
             <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>Current Press Releases</h3>
               
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                <thead>
-                  <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Status</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {pressReleases.length === 0 ? (
-                    <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No press releases found.</td></tr>
-                  ) : pressReleases.map((pr) => (
-                    <tr key={pr.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
-                      <td style={{ padding: '1rem', fontWeight: 500 }}>{pr.title}</td>
-                      <td style={{ padding: '1rem', color: theme.muted }}>{pr.date}</td>
-                      <td style={{ padding: '1rem', color: theme.muted }}>{pr.category}</td>
-                      <td style={{ padding: '1rem', color: theme.muted }}>
-                        {pr.archived ? (
-                          <span style={{ color: '#f97316', backgroundColor: '#431407', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Archived</span>
-                        ) : (
-                          <span style={{ color: '#10b981', backgroundColor: '#064e3b', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Active</span>
-                        )}
-                      </td>
-                      <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                        <button 
-                          onClick={() => {
-                            setEditingPress(pr);
-                            setPressTitle(pr.title);
-                            setPressCategory(pr.category || 'Corporate');
-                            setPressDate(pr.date);
-                            setPressSummary(pr.summary || '');
-                            setPressBody(pr.body || '');
-                            setPressIsArchived(!!pr.archived);
-                            
-                            if (pr.links && pr.links.length > 0) {
-                              setPressLinkName(pr.links[0].label);
-                              setPressLinkUrl(pr.links[0].url);
-                            } else {
-                              setPressLinkName('');
-                              setPressLinkUrl('');
-                            }
-                            if (pr.attachments && pr.attachments.length > 0) {
-                              setPressAttachmentName(pr.attachments[0].label);
-                            } else {
-                              setPressAttachmentName('');
-                            }
-
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                          }}
-                          style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
-                        >
-                          Edit
-                        </button>
-                        <button 
-                          onClick={async () => {
-                            setLoading(true);
-                            const formData = new FormData();
-                            formData.append('action', 'update');
-                            formData.append('id', pr.id);
-                            formData.append('title', pr.title);
-                            formData.append('category', pr.category);
-                            formData.append('date', pr.date);
-                            formData.append('summary', pr.summary || '');
-                            formData.append('body', pr.body || '');
-                            formData.append('archived', String(!pr.archived));
-                            formData.append('links', JSON.stringify(pr.links || []));
-                            formData.append('attachments', JSON.stringify(pr.attachments || []));
-                            try {
-                              const res = await fetch('/api/press-releases', { method: 'POST', body: formData });
-                              if (res.ok) {
-                                const data = await res.json();
-                                setPressReleases(data.releases || []);
-                                const updatedRes = await fetch('/api/press-releases');
-                                if (updatedRes.ok) {
-                                  const updatedData = await updatedRes.json();
-                                  setPressReleases(updatedData);
-                                }
-                              } else {
-                                alert('Failed to update status.');
-                              }
-                            } catch (e) {
-                              alert('Error updating status.');
-                            }
-                            setLoading(false);
-                          }}
-                          style={{ 
-                            padding: '0.5rem 1rem', 
-                            backgroundColor: 'transparent', 
-                            color: pr.archived ? '#10b981' : '#f59e0b', 
-                            border: pr.archived ? '1px solid #059669' : '1px solid #d97706', 
-                            borderRadius: '4px', 
-                            cursor: 'pointer', 
-                            marginRight: '0.5rem', 
-                            fontSize: '0.875rem' 
-                          }}
-                        >
-                          {pr.archived ? 'Unarchive' : 'Archive'}
-                        </button>
-                        <button 
-                          onClick={async () => {
-                            if (!window.confirm(`Are you sure you want to delete "${pr.title}"?`)) return;
-                            setLoading(true);
-                            const formData = new FormData();
-                            formData.append('action', 'delete');
-                            formData.append('id', pr.id);
-                            try {
-                              const res = await fetch('/api/press-releases', { method: 'POST', body: formData });
-                              if (res.ok) {
-                                const data = await res.json();
-                                setPressReleases(data.releases || []);
-                                // Trigger reload of active tab to fetch updated data
-                                const updatedRes = await fetch('/api/press-releases');
-                                if (updatedRes.ok) {
-                                  const updatedData = await updatedRes.json();
-                                  setPressReleases(updatedData);
-                                }
-                              } else {
-                                alert('Failed to delete press release.');
-                              }
-                            } catch (e) {
-                              alert('Error deleting press release.');
-                            }
-                            setLoading(false);
-                          }}
-                          style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
-                        >
-                          Delete
-                        </button>
-                      </td>
+              <div className="wm-table-wrapper">
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                  <thead>
+                    <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Status</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {pressReleases.length === 0 ? (
+                      <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No press releases found.</td></tr>
+                    ) : pressReleases.map((pr) => (
+                      <tr key={pr.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                        <td style={{ padding: '1rem', fontWeight: 500 }}>{pr.title}</td>
+                        <td style={{ padding: '1rem', color: theme.muted }}>{pr.date}</td>
+                        <td style={{ padding: '1rem', color: theme.muted }}>{pr.category}</td>
+                        <td style={{ padding: '1rem', color: theme.muted }}>
+                          {pr.archived ? (
+                            <span style={{ color: '#f97316', backgroundColor: '#431407', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Archived</span>
+                          ) : (
+                            <span style={{ color: '#10b981', backgroundColor: '#064e3b', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Active</span>
+                          )}
+                        </td>
+                        <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                          <button 
+                            onClick={() => {
+                              setEditingPress(pr);
+                              setPressTitle(pr.title);
+                              setPressCategory(pr.category || 'Corporate');
+                              setPressDate(pr.date);
+                              setPressSummary(pr.summary || '');
+                              setPressBody(pr.body || '');
+                              setPressIsArchived(!!pr.archived);
+                              
+                              if (pr.links && pr.links.length > 0) {
+                                setPressLinkName(pr.links[0].label);
+                                setPressLinkUrl(pr.links[0].url);
+                              } else {
+                                setPressLinkName('');
+                                setPressLinkUrl('');
+                              }
+                              if (pr.attachments && pr.attachments.length > 0) {
+                                setPressAttachmentName(pr.attachments[0].label);
+                              } else {
+                                setPressAttachmentName('');
+                              }
+
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
+                          >
+                            Edit
+                          </button>
+                          <button 
+                            onClick={async () => {
+                              setLoading(true);
+                              const formData = new FormData();
+                              formData.append('action', 'update');
+                              formData.append('id', pr.id);
+                              formData.append('title', pr.title);
+                              formData.append('category', pr.category);
+                              formData.append('date', pr.date);
+                              formData.append('summary', pr.summary || '');
+                              formData.append('body', pr.body || '');
+                              formData.append('archived', String(!pr.archived));
+                              formData.append('links', JSON.stringify(pr.links || []));
+                              formData.append('attachments', JSON.stringify(pr.attachments || []));
+                              try {
+                                const res = await fetch('/api/press-releases', { method: 'POST', body: formData });
+                                if (res.ok) {
+                                  const data = await res.json();
+                                  setPressReleases(data.releases || []);
+                                  const updatedRes = await fetch('/api/press-releases');
+                                  if (updatedRes.ok) {
+                                    const updatedData = await updatedRes.json();
+                                    setPressReleases(updatedData);
+                                  }
+                                } else {
+                                  alert('Failed to update status.');
+                                }
+                              } catch (e) {
+                                alert('Error updating status.');
+                              }
+                              setLoading(false);
+                            }}
+                            style={{ 
+                              padding: '0.5rem 1rem', 
+                              backgroundColor: 'transparent', 
+                              color: pr.archived ? '#10b981' : '#f59e0b', 
+                              border: pr.archived ? '1px solid #059669' : '1px solid #d97706', 
+                              borderRadius: '4px', 
+                              cursor: 'pointer', 
+                              marginRight: '0.5rem', 
+                              fontSize: '0.875rem' 
+                            }}
+                          >
+                            {pr.archived ? 'Unarchive' : 'Archive'}
+                          </button>
+                          <button 
+                            onClick={async () => {
+                              if (!window.confirm(`Are you sure you want to delete "${pr.title}"?`)) return;
+                              setLoading(true);
+                              const formData = new FormData();
+                              formData.append('action', 'delete');
+                              formData.append('id', pr.id);
+                              try {
+                                const res = await fetch('/api/press-releases', { method: 'POST', body: formData });
+                                if (res.ok) {
+                                  const data = await res.json();
+                                  setPressReleases(data.releases || []);
+                                  // Trigger reload of active tab to fetch updated data
+                                  const updatedRes = await fetch('/api/press-releases');
+                                  if (updatedRes.ok) {
+                                    const updatedData = await updatedRes.json();
+                                    setPressReleases(updatedData);
+                                  }
+                                } else {
+                                  alert('Failed to delete press release.');
+                                }
+                              } catch (e) {
+                                alert('Error deleting press release.');
+                              }
+                              setLoading(false);
+                            }}
+                            style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         );
@@ -2356,7 +2704,7 @@ function WebmasterDashboard() {
                   />
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                <div className="wm-grid-2col" style={{ display: 'grid', gap: '1rem' }}>
                   <div>
                     <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Category *</label>
                     <select 
@@ -2407,7 +2755,7 @@ function WebmasterDashboard() {
                   <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.75rem' }}>Upload Notification PDF Attachment (Optional)</label>
                   
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <div className="wm-grid-2col" style={{ display: 'grid', gap: '1rem' }}>
                       <div>
                         <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Attachment Label</label>
                         <input 
@@ -2443,7 +2791,7 @@ function WebmasterDashboard() {
                 <div style={{ padding: '1rem', border: `1px solid ${theme.border}`, borderRadius: '6px', backgroundColor: theme.bg }}>
                   <label style={{ display: 'block', fontSize: '0.875rem', fontWeight: 600, marginBottom: '0.75rem' }}>Manage External Portals / Links (Optional)</label>
                   
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '0.5rem' }}>
+                  <div className="wm-grid-2col" style={{ display: 'grid', gap: '1rem', marginBottom: '0.5rem' }}>
                     <div>
                       <label style={{ display: 'block', fontSize: '0.75rem', marginBottom: '0.25rem', color: theme.muted }}>Portal / Link Label</label>
                       <input 
@@ -2592,130 +2940,132 @@ function WebmasterDashboard() {
             <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>Current Notifications</h3>
               
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                <thead>
-                  <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Status</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {notifications.length === 0 ? (
-                    <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No notifications found.</td></tr>
-                  ) : notifications.map((nt) => (
-                    <tr key={nt.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
-                      <td style={{ padding: '1rem', fontWeight: 500 }}>{nt.title}</td>
-                      <td style={{ padding: '1rem', color: theme.muted }}>{nt.date}</td>
-                      <td style={{ padding: '1rem', color: theme.muted }}>{nt.category}</td>
-                      <td style={{ padding: '1rem', color: theme.muted }}>
-                        {nt.archived ? (
-                          <span style={{ color: '#f97316', backgroundColor: '#431407', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Archived</span>
-                        ) : (
-                          <span style={{ color: '#10b981', backgroundColor: '#064e3b', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Active</span>
-                        )}
-                      </td>
-                      <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                        <button 
-                          onClick={() => {
-                            setEditingNotif(nt);
-                            setNotifTitle(nt.title);
-                            setNotifCategory(nt.category || 'General');
-                            setNotifDate(nt.date);
-                            setNotifSummary(nt.summary || '');
-                            setNotifBody(nt.body || '');
-                            setNotifIsArchived(!!nt.archived);
-                            
-                            if (nt.links && nt.links.length > 0) {
-                              setNotifLinkName(nt.links[0].label);
-                              setNotifLinkUrl(nt.links[0].url);
-                            } else {
-                              setNotifLinkName('');
-                              setNotifLinkUrl('');
-                            }
-                            if (nt.attachments && nt.attachments.length > 0) {
-                              setNotifAttachmentName(nt.attachments[0].label);
-                            } else {
-                              setNotifAttachmentName('');
-                            }
-
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                          }}
-                          style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
-                        >
-                          Edit
-                        </button>
-                        <button 
-                          onClick={async () => {
-                            setLoading(true);
-                            const formData = new FormData();
-                            formData.append('action', 'update');
-                            formData.append('id', nt.id);
-                            formData.append('title', nt.title);
-                            formData.append('category', nt.category);
-                            formData.append('date', nt.date);
-                            formData.append('summary', nt.summary || '');
-                            formData.append('body', nt.body || '');
-                            formData.append('archived', String(!nt.archived));
-                            formData.append('links', JSON.stringify(nt.links || []));
-                            formData.append('attachments', JSON.stringify(nt.attachments || []));
-                            try {
-                              const res = await fetch('/api/notifications', { method: 'POST', body: formData });
-                              if (res.ok) {
-                                const data = await res.json();
-                                setNotifications(data.notifications || []);
-                              } else {
-                                alert('Failed to update status.');
-                              }
-                            } catch (e) {
-                              alert('Error updating status.');
-                            }
-                            setLoading(false);
-                          }}
-                          style={{ 
-                            padding: '0.5rem 1rem', 
-                            backgroundColor: 'transparent', 
-                            color: nt.archived ? '#10b981' : '#f59e0b', 
-                            border: nt.archived ? '1px solid #059669' : '1px solid #d97706', 
-                            borderRadius: '4px', 
-                            cursor: 'pointer', 
-                            marginRight: '0.5rem', 
-                            fontSize: '0.875rem' 
-                          }}
-                        >
-                          {nt.archived ? 'Unarchive' : 'Archive'}
-                        </button>
-                        <button 
-                          onClick={async () => {
-                            if (!window.confirm(`Are you sure you want to delete "${nt.title}"?`)) return;
-                            setLoading(true);
-                            const formData = new FormData();
-                            formData.append('action', 'delete');
-                            formData.append('id', nt.id);
-                            try {
-                              const res = await fetch('/api/notifications', { method: 'POST', body: formData });
-                              if (res.ok) {
-                                const data = await res.json();
-                                setNotifications(data.notifications || []);
-                              } else {
-                                alert('Failed to delete notification.');
-                              }
-                            } catch (e) {
-                              alert('Error deleting notification.');
-                            }
-                            setLoading(false);
-                          }}
-                          style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
-                        >
-                          Delete
-                        </button>
-                      </td>
+              <div className="wm-table-wrapper">
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                  <thead>
+                    <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Status</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {notifications.length === 0 ? (
+                      <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No notifications found.</td></tr>
+                    ) : notifications.map((nt) => (
+                      <tr key={nt.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                        <td style={{ padding: '1rem', fontWeight: 500 }}>{nt.title}</td>
+                        <td style={{ padding: '1rem', color: theme.muted }}>{nt.date}</td>
+                        <td style={{ padding: '1rem', color: theme.muted }}>{nt.category}</td>
+                        <td style={{ padding: '1rem', color: theme.muted }}>
+                          {nt.archived ? (
+                            <span style={{ color: '#f97316', backgroundColor: '#431407', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Archived</span>
+                          ) : (
+                            <span style={{ color: '#10b981', backgroundColor: '#064e3b', padding: '0.2rem 0.5rem', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}>Active</span>
+                          )}
+                        </td>
+                        <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                          <button 
+                            onClick={() => {
+                              setEditingNotif(nt);
+                              setNotifTitle(nt.title);
+                              setNotifCategory(nt.category || 'General');
+                              setNotifDate(nt.date);
+                              setNotifSummary(nt.summary || '');
+                              setNotifBody(nt.body || '');
+                              setNotifIsArchived(!!nt.archived);
+                              
+                              if (nt.links && nt.links.length > 0) {
+                                setNotifLinkName(nt.links[0].label);
+                                setNotifLinkUrl(nt.links[0].url);
+                              } else {
+                                setNotifLinkName('');
+                                setNotifLinkUrl('');
+                              }
+                              if (nt.attachments && nt.attachments.length > 0) {
+                                setNotifAttachmentName(nt.attachments[0].label);
+                              } else {
+                                setNotifAttachmentName('');
+                              }
+
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
+                          >
+                            Edit
+                          </button>
+                          <button 
+                            onClick={async () => {
+                              setLoading(true);
+                              const formData = new FormData();
+                              formData.append('action', 'update');
+                              formData.append('id', nt.id);
+                              formData.append('title', nt.title);
+                              formData.append('category', nt.category);
+                              formData.append('date', nt.date);
+                              formData.append('summary', nt.summary || '');
+                              formData.append('body', nt.body || '');
+                              formData.append('archived', String(!nt.archived));
+                              formData.append('links', JSON.stringify(nt.links || []));
+                              formData.append('attachments', JSON.stringify(nt.attachments || []));
+                              try {
+                                const res = await fetch('/api/notifications', { method: 'POST', body: formData });
+                                if (res.ok) {
+                                  const data = await res.json();
+                                  setNotifications(data.notifications || []);
+                                } else {
+                                  alert('Failed to update status.');
+                                }
+                              } catch (e) {
+                                alert('Error updating status.');
+                              }
+                              setLoading(false);
+                            }}
+                            style={{ 
+                              padding: '0.5rem 1rem', 
+                              backgroundColor: 'transparent', 
+                              color: nt.archived ? '#10b981' : '#f59e0b', 
+                              border: nt.archived ? '1px solid #059669' : '1px solid #d97706', 
+                              borderRadius: '4px', 
+                              cursor: 'pointer', 
+                              marginRight: '0.5rem', 
+                              fontSize: '0.875rem' 
+                            }}
+                          >
+                            {nt.archived ? 'Unarchive' : 'Archive'}
+                          </button>
+                          <button 
+                            onClick={async () => {
+                              if (!window.confirm(`Are you sure you want to delete "${nt.title}"?`)) return;
+                              setLoading(true);
+                              const formData = new FormData();
+                              formData.append('action', 'delete');
+                              formData.append('id', nt.id);
+                              try {
+                                const res = await fetch('/api/notifications', { method: 'POST', body: formData });
+                                if (res.ok) {
+                                  const data = await res.json();
+                                  setNotifications(data.notifications || []);
+                                } else {
+                                  alert('Failed to delete notification.');
+                                }
+                              } catch (e) {
+                                alert('Error deleting notification.');
+                              }
+                              setLoading(false);
+                            }}
+                            style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         );
@@ -2732,7 +3082,7 @@ function WebmasterDashboard() {
               </h3>
               
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <div style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '1.5rem' }}>
+                <div className="wm-grid-2col" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
                   <div>
                     <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Blog Title *</label>
                     <input 
@@ -2759,7 +3109,7 @@ function WebmasterDashboard() {
                   </div>
                 </div>
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem' }}>
+                <div className="wm-grid-2col" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1.5rem' }}>
                   <div>
                     <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Author Name</label>
                     <input 
@@ -2802,7 +3152,7 @@ function WebmasterDashboard() {
                   theme={theme}
                 />
 
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+                <div className="wm-grid-2col" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem' }}>
                   <div>
                     <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Upload Featured Image</label>
                     <input 
@@ -2860,9 +3210,9 @@ function WebmasterDashboard() {
                               type="text" 
                               value={sect.title}
                               onChange={(e) => {
-                                const newSects = [...blogSections];
-                                newSects[i].title = e.target.value;
-                                setBlogSections(newSects);
+                                const next = [...blogSections];
+                                next[i].title = e.target.value;
+                                setBlogSections(next);
                               }}
                               style={{ width: '100%', padding: '0.5rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px', outline: 'none' }}
                               placeholder="e.g. 1. The First Principles of Talent Acquisition"
@@ -2873,9 +3223,9 @@ function WebmasterDashboard() {
                             label="Section Body Content"
                             value={sect.body}
                             onChange={(val) => {
-                              const newSects = [...blogSections];
-                              newSects[i].body = val;
-                              setBlogSections(newSects);
+                              const next = [...blogSections];
+                              next[i].body = val;
+                              setBlogSections(next);
                             }}
                             rows={6}
                             placeholder="Type section contents, paragraphs, quotes, and bullet insights here..."
@@ -2987,72 +3337,822 @@ function WebmasterDashboard() {
             <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>Published Blog Articles</h3>
               
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                <thead>
-                  <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Author</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {blogsData.length === 0 ? (
-                    <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No blog articles found.</td></tr>
-                  ) : blogsData.map((b) => (
-                    <tr key={b.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
-                      <td style={{ padding: '1rem', fontWeight: 500 }}>{b.title}</td>
-                      <td style={{ padding: '1rem', color: theme.muted }}>{b.author}</td>
-                      <td style={{ padding: '1rem', color: theme.muted }}>{b.category}</td>
-                      <td style={{ padding: '1rem', color: theme.muted }}>{b.date}</td>
-                      <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
-                        <button 
-                          onClick={() => {
-                            setEditingBlog(b);
-                            setBlogTitle(b.title);
-                            setBlogCategory(b.category || 'News');
-                            setBlogAuthor(b.author || 'Lina Linder');
-                            setBlogDate(b.date || '');
-                            setBlogSummary(b.summary || '');
-                            setBlogReadTime(b.readTime || '5 min read');
-                            setBlogSections(b.sections || [{ title: '', body: '' }]);
-                            
-                            window.scrollTo({ top: 0, behavior: 'smooth' });
-                          }}
-                          style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
-                        >
-                          Edit
-                        </button>
-                        <button 
-                          onClick={async () => {
-                            if (!window.confirm(`Are you sure you want to delete "${b.title}"?`)) return;
-                            setLoading(true);
-                            const formData = new FormData();
-                            formData.append('action', 'delete');
-                            formData.append('id', b.id);
-                            try {
-                              const res = await fetch('/api/blogs', { method: 'POST', body: formData });
-                              if (res.ok) {
-                                const data = await res.json();
-                                setBlogsData(data.blogs || []);
-                              } else {
-                                alert('Failed to delete blog.');
-                              }
-                            } catch (e) {
-                              alert('Error deleting blog.');
-                            }
-                            setLoading(false);
-                          }}
-                          style={{ padding: '0.5rem 1rem', backgroundColor: '#3f0000', color: '#ffaaaa', border: 'none', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem' }}
-                        >
-                          Delete
-                        </button>
-                      </td>
+              <div className="wm-table-wrapper">
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                  <thead>
+                    <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Title</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Author</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {blogsData.length === 0 ? (
+                      <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No blog articles found.</td></tr>
+                    ) : blogsData.map((b) => (
+                      <tr key={b.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                        <td style={{ padding: '1rem', fontWeight: 500 }}>{b.title}</td>
+                        <td style={{ padding: '1rem', color: theme.muted }}>{b.author}</td>
+                        <td style={{ padding: '1rem', color: theme.muted }}>{b.category}</td>
+                        <td style={{ padding: '1rem', color: theme.muted }}>{b.date}</td>
+                        <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                          <button 
+                            onClick={() => {
+                              setEditingBlog(b);
+                              setBlogTitle(b.title);
+                              setBlogCategory(b.category || 'News');
+                              setBlogAuthor(b.author || 'Lina Linder');
+                              setBlogDate(b.date || '');
+                              setBlogSummary(b.summary || '');
+                              setBlogReadTime(b.readTime || '5 min read');
+                              setBlogSections(b.sections || [{ title: '', body: '' }]);
+                              
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.5rem', fontSize: '0.875rem' }}
+                          >
+                            Edit
+                          </button>
+                          <button 
+                            onClick={async () => {
+                              if (!window.confirm(`Are you sure you want to delete "${b.title}"?`)) return;
+                              setLoading(true);
+                              const formData = new FormData();
+                              formData.append('action', 'delete');
+                              formData.append('id', b.id);
+                              try {
+                                const res = await fetch('/api/blogs', { method: 'POST', body: formData });
+                                if (res.ok) {
+                                  const data = await res.json();
+                                  setBlogsData(data.blogs || []);
+                                } else {
+                                  alert('Failed to delete blog.');
+                                }
+                              } catch (e) {
+                                alert('Error deleting blog.');
+                              }
+                              setLoading(false);
+                            }}
+                            style={{ padding: '0.5rem 1rem', backgroundColor: isDarkMode ? '#3f0000' : '#fee2e2', color: isDarkMode ? '#ffaaaa' : '#dc2626', border: isDarkMode ? '1px solid #7f1d1d' : '1px solid #fca5a5', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 600 }}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'user-management':
+        return (
+          <div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
+              <div>
+                <h2 style={{ fontSize: '2rem', fontWeight: 700, margin: '0 0 0.5rem 0', letterSpacing: '-0.02em', color: theme.fg }}>
+                  User Profiles &amp; Access Control (RBAC)
+                </h2>
+                <p style={{ fontSize: '0.875rem', color: theme.muted, margin: 0 }}>
+                  Create employee profiles, assign custom roles, and grant granular page permissions with salted PBKDF2 encryption.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={fetchUsers}
+                disabled={userMgmtLoading}
+                style={{
+                  padding: '0.6rem 1.25rem',
+                  backgroundColor: theme.inputBg,
+                  border: `1px solid ${theme.border}`,
+                  color: theme.fg,
+                  borderRadius: '8px',
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  cursor: userMgmtLoading ? 'not-allowed' : 'pointer',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem'
+                }}
+              >
+                {userMgmtLoading ? 'Refreshing...' : '🔄 Refresh Profiles'}
+              </button>
+            </div>
+
+            {userMgmtMsg && (
+              <div style={{
+                padding: '0.85rem 1.25rem',
+                backgroundColor: isDarkMode ? '#052e16' : '#dcfce7',
+                border: isDarkMode ? '1px solid #166534' : '1px solid #86efac',
+                color: isDarkMode ? '#4ade80' : '#15803d',
+                borderRadius: '8px',
+                fontSize: '0.875rem',
+                fontWeight: 600,
+                marginBottom: '2rem',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}>
+                <span>{userMgmtMsg}</span>
+                <button type="button" onClick={() => setUserMgmtMsg('')} style={{ background: 'none', border: 'none', color: 'inherit', cursor: 'pointer', fontWeight: 700 }}>✕</button>
+              </div>
+            )}
+
+            {/* Add / Edit Profile Form */}
+            <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '12px', backgroundColor: theme.inputBg, marginBottom: '3rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', color: theme.fg }}>
+                {editingUser ? `Edit Profile: ${editingUser.name}` : 'Create New Employee Profile'}
+              </h3>
+
+              <form onSubmit={async (e) => {
+                e.preventDefault();
+                if (!newUserName.trim() || !newUserEmail.trim()) {
+                  alert('Full name and email are required.');
+                  return;
+                }
+                if (!editingUser && (!newUserPassword || newUserPassword.length < 6)) {
+                  alert('Password must be at least 6 characters.');
+                  return;
+                }
+                if (newUserPermissions.length === 0) {
+                  alert('Please select at least one page permission for this profile.');
+                  return;
+                }
+
+                setUserMgmtLoading(true);
+                try {
+                  const res = await fetch('/api/webmaster/users', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                      action: editingUser ? 'update-user' : 'create-user',
+                      sessionToken,
+                      masterKey: accessKey,
+                      id: editingUser?.id,
+                      name: newUserName,
+                      email: newUserEmail,
+                      password: newUserPassword,
+                      role: newUserRole,
+                      permissions: newUserPermissions,
+                      status: newUserStatus
+                    })
+                  });
+                  const data = await res.json();
+                  if (data.success) {
+                    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+                    const generatedLink = `${origin}/webmaster?authKey=${data.loginKey || data.user?.loginKey}`;
+                    
+                    if (!editingUser) {
+                      setCreatedUserCredentials({
+                        name: newUserName,
+                        email: newUserEmail,
+                        password: newUserPassword,
+                        loginLink: generatedLink
+                      });
+                    }
+
+                    setUserMgmtMsg(editingUser ? 'Profile updated successfully.' : `Profile for ${newUserName} created successfully.`);
+                    setNewUserName('');
+                    setNewUserEmail('');
+                    setNewUserPassword('');
+                    setNewUserRole('Content Editor');
+                    setNewUserPermissions(['blogs', 'press-releases']);
+                    setNewUserStatus('active');
+                    setEditingUser(null);
+                    fetchUsers();
+                  } else {
+                    alert(data.error || 'Failed to save profile.');
+                  }
+                } catch (err) {
+                  alert('Error saving user profile.');
+                }
+                setUserMgmtLoading(false);
+              }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                  <div className="wm-grid-2col" style={{ display: 'grid', gap: '1.25rem' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.45rem', color: theme.muted, fontWeight: 600 }}>Employee Full Name *</label>
+                      <input
+                        type="text"
+                        value={newUserName}
+                        onChange={(e) => setNewUserName(e.target.value)}
+                        style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '6px' }}
+                        placeholder="e.g. Sarah Jenkins"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.45rem', color: theme.muted, fontWeight: 600 }}>Official Email Address *</label>
+                      <input
+                        type="email"
+                        value={newUserEmail}
+                        onChange={(e) => setNewUserEmail(e.target.value)}
+                        style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '6px' }}
+                        placeholder="e.g. sarah@zawrindustries.com"
+                        required
+                        disabled={!!editingUser}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="wm-grid-2col" style={{ display: 'grid', gap: '1.25rem' }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.45rem', color: theme.muted, fontWeight: 600 }}>Role / Job Title *</label>
+                      <input
+                        type="text"
+                        value={newUserRole}
+                        onChange={(e) => setNewUserRole(e.target.value)}
+                        style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '6px' }}
+                        placeholder="e.g. Content Lead / HR Specialist / Financial Analyst"
+                        required
+                      />
+                    </div>
+                    
+                    {!editingUser && (
+                      <div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.45rem' }}>
+                          <label style={{ fontSize: '0.82rem', color: theme.muted, fontWeight: 600 }}>Assigned Initial Password *</label>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const randomPass = 'Zawr_' + Math.random().toString(36).substring(2, 8) + '!' + Math.floor(100 + Math.random() * 900);
+                              setNewUserPassword(randomPass);
+                            }}
+                            style={{ background: 'none', border: 'none', color: '#38bdf8', fontSize: '0.75rem', cursor: 'pointer', fontWeight: 600, padding: 0 }}
+                          >
+                            ⚡ Auto Generate
+                          </button>
+                        </div>
+                        <input
+                          type="text"
+                          value={newUserPassword}
+                          onChange={(e) => setNewUserPassword(e.target.value)}
+                          style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '6px', fontFamily: 'monospace' }}
+                          placeholder="Enter or generate temporary password"
+                          required
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Quick Preset Buttons */}
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.65rem', color: theme.muted, fontWeight: 600 }}>
+                      Role Access Presets:
+                    </label>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem' }}>
+                      <button
+                        type="button"
+                        onClick={() => setNewUserPermissions(['*'])}
+                        style={{ padding: '0.4rem 0.85rem', backgroundColor: newUserPermissions.includes('*') ? '#38bdf8' : theme.bg, color: newUserPermissions.includes('*') ? '#000000' : theme.fg, border: `1px solid ${theme.border}`, borderRadius: '6px', fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer' }}
+                      >
+                        👑 Super Admin (Full Access)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setNewUserPermissions(['blogs', 'press-releases', 'notices', 'notifications'])}
+                        style={{ padding: '0.4rem 0.85rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '6px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
+                      >
+                        ✍️ Content Desk (Blogs, Press, Notices)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setNewUserPermissions(['jobs', 'email-routing'])}
+                        style={{ padding: '0.4rem 0.85rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '6px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
+                      >
+                        💼 HR &amp; Careers (Jobs, Routing)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setNewUserPermissions(['financial-reports', 'events', 'pitch-deck'])}
+                        style={{ padding: '0.4rem 0.85rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '6px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
+                      >
+                        📈 Investor Desk (Financials, Events, Deck)
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setNewUserPermissions(['analytics', 'api-monitoring', 'mail-credentials'])}
+                        style={{ padding: '0.4rem 0.85rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '6px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer' }}
+                      >
+                        ⚡ DevOps &amp; Telemetry (Analytics, Probes)
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Granular Permission Checkbox Matrix */}
+                  <div style={{ padding: '1.25rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.bg }}>
+                    <label style={{ display: 'block', fontSize: '0.85rem', fontWeight: 700, marginBottom: '0.85rem', color: theme.fg }}>
+                      Granular Page Permissions Matrix:
+                    </label>
+
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: '0.75rem' }}>
+                      {[
+                        { id: 'analytics', label: '📊 Realtime Analytics' },
+                        { id: 'api-monitoring', label: '⚡ API Health Probes' },
+                        { id: 'mail-credentials', label: '🔐 Mail Settings' },
+                        { id: 'email-routing', label: '📬 Email Routing' },
+                        { id: 'jobs', label: '💼 Careers & Jobs' },
+                        { id: 'newsletters', label: '📰 Newsletters' },
+                        { id: 'pitch-deck', label: '📑 Pitch Deck' },
+                        { id: 'financial-reports', label: '📈 Financial Reports' },
+                        { id: 'events', label: '📅 Corporate Events' },
+                        { id: 'notices', label: '📜 Statutory Notices' },
+                        { id: 'notifications', label: '🔔 Notifications' },
+                        { id: 'press-releases', label: '📢 Press Releases' },
+                        { id: 'blogs', label: '✍️ Blog Articles' },
+                        { id: 'user-management', label: '👥 User & Access Control' },
+                      ].map((mod) => {
+                        const isChecked = newUserPermissions.includes('*') || newUserPermissions.includes(mod.id);
+                        return (
+                          <label
+                            key={mod.id}
+                            style={{
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.5rem',
+                              padding: '0.55rem 0.75rem',
+                              backgroundColor: isChecked ? (isDarkMode ? '#1e1b4b' : '#eff6ff') : theme.inputBg,
+                              border: isChecked ? '1px solid #38bdf8' : `1px solid ${theme.border}`,
+                              borderRadius: '6px',
+                              cursor: 'pointer',
+                              fontSize: '0.8rem',
+                              fontWeight: isChecked ? 700 : 400,
+                              color: isChecked ? (isDarkMode ? '#38bdf8' : '#0284c7') : theme.fg,
+                              transition: 'all 0.15s'
+                            }}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={(e) => {
+                                if (newUserPermissions.includes('*')) {
+                                  if (!e.target.checked) {
+                                    setNewUserPermissions([
+                                      'analytics', 'api-monitoring', 'mail-credentials', 'email-routing',
+                                      'jobs', 'newsletters', 'pitch-deck', 'financial-reports',
+                                      'events', 'notices', 'notifications', 'press-releases', 'blogs', 'user-management'
+                                    ].filter(id => id !== mod.id));
+                                  }
+                                } else {
+                                  if (e.target.checked) {
+                                    setNewUserPermissions([...newUserPermissions, mod.id]);
+                                  } else {
+                                    setNewUserPermissions(newUserPermissions.filter(id => id !== mod.id));
+                                  }
+                                }
+                              }}
+                              style={{ accentColor: '#38bdf8' }}
+                            />
+                            <span>{mod.label}</span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* Account Status Toggle */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', userSelect: 'none' }}>
+                      <input
+                        type="checkbox"
+                        checked={newUserStatus === 'active'}
+                        onChange={(e) => setNewUserStatus(e.target.checked ? 'active' : 'suspended')}
+                        style={{ width: '16px', height: '16px', accentColor: '#10b981' }}
+                      />
+                      <span style={{ fontSize: '0.875rem', fontWeight: 600, color: newUserStatus === 'active' ? '#10b981' : '#f59e0b' }}>
+                        {newUserStatus === 'active' ? '🟢 Account Status: Active (Can sign in)' : '🟠 Account Status: Suspended (Access locked)'}
+                      </span>
+                    </label>
+                  </div>
+
+                  {/* Submit & Cancel Buttons */}
+                  <div style={{ display: 'flex', gap: '1rem', marginTop: '0.5rem' }}>
+                    <button
+                      type="submit"
+                      disabled={userMgmtLoading}
+                      style={{
+                        padding: '0.75rem 1.75rem',
+                        backgroundColor: theme.fg,
+                        color: theme.bg,
+                        border: 'none',
+                        fontWeight: 800,
+                        borderRadius: '6px',
+                        cursor: userMgmtLoading ? 'not-allowed' : 'pointer',
+                        fontSize: '0.875rem'
+                      }}
+                    >
+                      {userMgmtLoading ? 'Saving Profile...' : editingUser ? 'Update Profile' : 'Create Staff Profile'}
+                    </button>
+
+                    {editingUser && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setEditingUser(null);
+                          setNewUserName('');
+                          setNewUserEmail('');
+                          setNewUserPassword('');
+                          setNewUserRole('Content Editor');
+                          setNewUserPermissions(['blogs', 'press-releases']);
+                          setNewUserStatus('active');
+                        }}
+                        style={{
+                          padding: '0.75rem 1.5rem',
+                          backgroundColor: 'transparent',
+                          color: theme.fg,
+                          border: `1px solid ${theme.border}`,
+                          borderRadius: '6px',
+                          cursor: 'pointer',
+                          fontSize: '0.875rem'
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </form>
+            </div>
+
+            {/* Modal for Newly Generated Profile Credentials & Unique Login Link */}
+            {createdUserCredentials && (
+              <div style={{
+                position: 'fixed',
+                inset: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                backdropFilter: 'blur(6px)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 10000,
+                padding: '1.25rem'
+              }}>
+                <div style={{
+                  backgroundColor: theme.inputBg,
+                  border: `1px solid ${theme.border}`,
+                  borderRadius: '16px',
+                  padding: '2.25rem',
+                  maxWidth: '540px',
+                  width: '100%',
+                  boxShadow: '0 25px 60px rgba(0, 0, 0, 0.9)'
+                }}>
+                  <div style={{ textAlign: 'center', marginBottom: '1.5rem' }}>
+                    <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '56px', height: '56px', borderRadius: '50%', backgroundColor: isDarkMode ? '#052e16' : '#dcfce7', color: '#10b981', marginBottom: '1rem', fontSize: '1.75rem' }}>
+                      ✓
+                    </div>
+                    <h3 style={{ fontSize: '1.4rem', fontWeight: 800, margin: '0 0 0.4rem 0', color: theme.fg }}>
+                      Profile &amp; Unique Login Link Generated!
+                    </h3>
+                    <p style={{ fontSize: '0.82rem', color: theme.muted, margin: 0 }}>
+                      Share these official credentials and the unique login link with the employee.
+                    </p>
+                  </div>
+
+                  <div style={{ backgroundColor: theme.bg, border: `1px solid ${theme.border}`, borderRadius: '10px', padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.9rem', marginBottom: '1.5rem', fontSize: '0.85rem' }}>
+                    <div>
+                      <span style={{ color: theme.muted, fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Employee Name</span>
+                      <div style={{ fontWeight: 700, color: theme.fg, marginTop: '0.2rem' }}>{createdUserCredentials.name}</div>
+                    </div>
+                    <div>
+                      <span style={{ color: theme.muted, fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Official Email</span>
+                      <div style={{ fontWeight: 700, color: theme.fg, fontFamily: 'monospace', marginTop: '0.2rem' }}>{createdUserCredentials.email}</div>
+                    </div>
+                    <div>
+                      <span style={{ color: theme.muted, fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Temporary Password</span>
+                      <div style={{ fontWeight: 700, color: '#38bdf8', fontFamily: 'monospace', marginTop: '0.2rem' }}>{createdUserCredentials.password}</div>
+                    </div>
+                    <div>
+                      <span style={{ color: theme.muted, fontSize: '0.72rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>Unique Profile Login Link</span>
+                      <div style={{ fontWeight: 600, color: '#38bdf8', fontFamily: 'monospace', fontSize: '0.78rem', wordBreak: 'break-all', backgroundColor: theme.inputBg, padding: '0.65rem 0.75rem', borderRadius: '6px', border: `1px solid ${theme.border}`, marginTop: '0.35rem' }}>
+                        {createdUserCredentials.loginLink}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const textToCopy = `Official Webmaster Access Credentials:\n\n• Name: ${createdUserCredentials.name}\n• Email: ${createdUserCredentials.email}\n• Password: ${createdUserCredentials.password}\n• Login Link: ${createdUserCredentials.loginLink}\n\nPlease keep these credentials secure.`;
+                        navigator.clipboard.writeText(textToCopy);
+                        setCopiedCreds(true);
+                        setTimeout(() => setCopiedCreds(false), 3000);
+                      }}
+                      style={{
+                        flex: 1,
+                        padding: '0.75rem 1rem',
+                        backgroundColor: copiedCreds ? '#10b981' : theme.fg,
+                        color: copiedCreds ? '#ffffff' : theme.bg,
+                        border: 'none',
+                        borderRadius: '8px',
+                        fontWeight: 800,
+                        fontSize: '0.85rem',
+                        cursor: 'pointer',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: '0.5rem'
+                      }}
+                    >
+                      {copiedCreds ? '✓ All Credentials Copied!' : '📋 Copy All Credentials'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setCreatedUserCredentials(null)}
+                      style={{
+                        padding: '0.75rem 1.25rem',
+                        backgroundColor: 'transparent',
+                        border: `1px solid ${theme.border}`,
+                        color: theme.fg,
+                        borderRadius: '8px',
+                        fontWeight: 600,
+                        fontSize: '0.85rem',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      Done
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* User Directory Table */}
+            <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '12px', backgroundColor: theme.inputBg }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '1.5rem', color: theme.fg }}>
+                Registered Staff &amp; Access Profiles ({allUsers.length})
+              </h3>
+
+              <div className="wm-table-wrapper">
+                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '0.875rem' }}>
+                  <thead>
+                    <tr style={{ borderBottom: `1px solid ${theme.border}` }}>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 600 }}>Employee Name &amp; Email</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 600 }}>Role</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 600 }}>Granted Pages</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 600 }}>Unique Login Link</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 600 }}>Status</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 600 }}>Last Login</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 600, textAlign: 'right' }}>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {allUsers.length === 0 ? (
+                      <tr><td colSpan={7} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No user profiles registered yet.</td></tr>
+                    ) : allUsers.map((u) => (
+                      <tr key={u.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
+                        <td style={{ padding: '1rem' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                            <div style={{
+                              width: '32px',
+                              height: '32px',
+                              borderRadius: '50%',
+                              backgroundColor: isDarkMode ? '#27272a' : '#e2e8f0',
+                              color: theme.fg,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontWeight: 800,
+                              fontSize: '0.8rem'
+                            }}>
+                              {(u.name?.[0] || 'U').toUpperCase()}
+                            </div>
+                            <div>
+                              <div style={{ fontWeight: 700, color: theme.fg }}>{u.name}</div>
+                              <div style={{ fontSize: '0.75rem', color: theme.muted }}>{u.email}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td style={{ padding: '1rem', fontWeight: 600 }}>{u.role}</td>
+                        <td style={{ padding: '1rem' }}>
+                          {u.permissions.includes('*') ? (
+                            <span style={{ padding: '0.2rem 0.5rem', backgroundColor: isDarkMode ? '#1e1b4b' : '#eff6ff', color: '#38bdf8', border: isDarkMode ? '1px solid #3730a3' : '1px solid #bfdbfe', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 700 }}>
+                              👑 Full Master Access
+                            </span>
+                          ) : (
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.3rem', maxWidth: '240px' }}>
+                              {u.permissions.map((p: string) => (
+                                <span key={p} style={{ padding: '0.15rem 0.4rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, borderRadius: '4px', fontSize: '0.7rem', color: theme.muted }}>
+                                  {p}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                        </td>
+                        <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                const origin = typeof window !== 'undefined' ? window.location.origin : '';
+                                const fullUrl = `${origin}/webmaster?authKey=${u.loginKey}`;
+                                navigator.clipboard.writeText(fullUrl);
+                                setCopiedLinkId(u.id);
+                                setTimeout(() => setCopiedLinkId(null), 2500);
+                              }}
+                              style={{
+                                padding: '0.35rem 0.65rem',
+                                backgroundColor: copiedLinkId === u.id ? '#10b981' : (isDarkMode ? '#1e1b4b' : '#eff6ff'),
+                                color: copiedLinkId === u.id ? '#ffffff' : (isDarkMode ? '#38bdf8' : '#0284c7'),
+                                border: copiedLinkId === u.id ? '1px solid #10b981' : `1px solid ${isDarkMode ? '#3730a3' : '#bfdbfe'}`,
+                                borderRadius: '6px',
+                                fontSize: '0.74rem',
+                                fontWeight: 700,
+                                cursor: 'pointer',
+                                display: 'inline-flex',
+                                alignItems: 'center',
+                                gap: '0.3rem',
+                                transition: 'all 0.15s'
+                              }}
+                            >
+                              <span>{copiedLinkId === u.id ? '✓ Copied Link!' : '🔗 Copy Login Link'}</span>
+                            </button>
+                            
+                            <button
+                              type="button"
+                              title="Regenerate & Revoke Old Link"
+                              onClick={async () => {
+                                if (!window.confirm(`Regenerate unique login link for "${u.name}"? The previous link will be permanently revoked.`)) return;
+                                setUserMgmtLoading(true);
+                                try {
+                                  const res = await fetch('/api/webmaster/users', {
+                                    method: 'POST',
+                                    headers: { 'Content-Type': 'application/json' },
+                                    body: JSON.stringify({
+                                      action: 'regenerate-login-key',
+                                      sessionToken,
+                                      masterKey: accessKey,
+                                      id: u.id
+                                    })
+                                  });
+                                  const data = await res.json();
+                                  if (data.success && data.loginKey) {
+                                    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+                                    const fullUrl = `${origin}/webmaster?authKey=${data.loginKey}`;
+                                    alert(`New unique login link generated for ${u.name}!\n\nLink: ${fullUrl}`);
+                                    fetchUsers();
+                                  } else {
+                                    alert(data.error || 'Failed to regenerate link.');
+                                  }
+                                } catch (err) {
+                                  alert('Error regenerating link.');
+                                }
+                                setUserMgmtLoading(false);
+                              }}
+                              style={{
+                                padding: '0.35rem 0.5rem',
+                                backgroundColor: 'transparent',
+                                color: theme.muted,
+                                border: `1px solid ${theme.border}`,
+                                borderRadius: '6px',
+                                fontSize: '0.74rem',
+                                cursor: 'pointer'
+                              }}
+                            >
+                              ⚡
+                            </button>
+                          </div>
+                        </td>
+                        <td style={{ padding: '1rem' }}>
+                          {u.status === 'active' ? (
+                            <span style={{ color: '#10b981', backgroundColor: isDarkMode ? '#064e3b' : '#dcfce7', padding: '0.25rem 0.6rem', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: 700 }}>
+                              ● Active
+                            </span>
+                          ) : (
+                            <span style={{ color: '#f59e0b', backgroundColor: isDarkMode ? '#451a03' : '#fef3c7', padding: '0.25rem 0.6rem', borderRadius: '9999px', fontSize: '0.72rem', fontWeight: 700 }}>
+                              ● Suspended
+                            </span>
+                          )}
+                        </td>
+                        <td style={{ padding: '1rem', fontSize: '0.78rem', color: theme.muted }}>
+                          {u.lastLogin ? new Date(u.lastLogin).toLocaleDateString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : 'Never logged in'}
+                        </td>
+                        <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setEditingUser(u);
+                              setNewUserName(u.name);
+                              setNewUserEmail(u.email);
+                              setNewUserRole(u.role);
+                              setNewUserPermissions(u.permissions);
+                              setNewUserStatus(u.status);
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            }}
+                            style={{ padding: '0.45rem 0.75rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.4rem', fontSize: '0.78rem', fontWeight: 600 }}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              const newPass = prompt(`Enter new temporary password for ${u.name} (min 6 characters):`);
+                              if (!newPass) return;
+                              if (newPass.length < 6) {
+                                alert('Password must be at least 6 characters.');
+                                return;
+                              }
+                              setUserMgmtLoading(true);
+                              try {
+                                const res = await fetch('/api/webmaster/users', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({
+                                    action: 'reset-password',
+                                    sessionToken,
+                                    masterKey: accessKey,
+                                    id: u.id,
+                                    newPassword: newPass
+                                  })
+                                });
+                                const data = await res.json();
+                                if (data.success) {
+                                  alert(`Password for ${u.name} reset successfully!\nShare new password with employee: ${newPass}`);
+                                } else {
+                                  alert(data.error || 'Failed to reset password.');
+                                }
+                              } catch (err) {
+                                alert('Error resetting password.');
+                              }
+                              setUserMgmtLoading(false);
+                            }}
+                            style={{ padding: '0.45rem 0.75rem', backgroundColor: 'transparent', color: '#38bdf8', border: '1px solid #38bdf8', borderRadius: '4px', cursor: 'pointer', marginRight: '0.4rem', fontSize: '0.78rem', fontWeight: 600 }}
+                          >
+                            Reset Pass
+                          </button>
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              const nextStatus = u.status === 'active' ? 'suspended' : 'active';
+                              setUserMgmtLoading(true);
+                              try {
+                                const res = await fetch('/api/webmaster/users', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({
+                                    action: 'update-user',
+                                    sessionToken,
+                                    masterKey: accessKey,
+                                    id: u.id,
+                                    status: nextStatus
+                                  })
+                                });
+                                const data = await res.json();
+                                if (data.success) {
+                                  fetchUsers();
+                                } else {
+                                  alert(data.error || 'Failed to toggle status.');
+                                }
+                              } catch (err) {
+                                alert('Error toggling status.');
+                              }
+                              setUserMgmtLoading(false);
+                            }}
+                            style={{ padding: '0.45rem 0.75rem', backgroundColor: 'transparent', color: u.status === 'active' ? '#f59e0b' : '#10b981', border: u.status === 'active' ? '1px solid #d97706' : '1px solid #059669', borderRadius: '4px', cursor: 'pointer', marginRight: '0.4rem', fontSize: '0.78rem', fontWeight: 600 }}
+                          >
+                            {u.status === 'active' ? 'Suspend' : 'Activate'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={async () => {
+                              if (!window.confirm(`Are you sure you want to permanently delete user profile for "${u.name}" (${u.email})?`)) return;
+                              setUserMgmtLoading(true);
+                              try {
+                                const res = await fetch('/api/webmaster/users', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({
+                                    action: 'delete-user',
+                                    sessionToken,
+                                    masterKey: accessKey,
+                                    id: u.id
+                                  })
+                                });
+                                const data = await res.json();
+                                if (data.success) {
+                                  fetchUsers();
+                                } else {
+                                  alert(data.error || 'Failed to delete user.');
+                                }
+                              } catch (err) {
+                                alert('Error deleting user.');
+                              }
+                              setUserMgmtLoading(false);
+                            }}
+                            style={{ padding: '0.45rem 0.75rem', backgroundColor: isDarkMode ? '#3f0000' : '#fee2e2', color: isDarkMode ? '#ffaaaa' : '#dc2626', border: isDarkMode ? '1px solid #7f1d1d' : '1px solid #fca5a5', borderRadius: '4px', cursor: 'pointer', fontSize: '0.78rem', fontWeight: 600 }}
+                          >
+                            Delete
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         );
@@ -3062,237 +4162,514 @@ function WebmasterDashboard() {
     }
   };
 
-  const navItems = [
-    { id: 'analytics', label: 'Analytics' },
-    { id: 'api-monitoring', label: 'API Monitoring' },
-    { id: 'mail-credentials', label: 'Mail Settings' },
-    { id: 'email-routing', label: 'Email Routing' },
-    { id: 'jobs', label: 'Manage Jobs' },
-    { id: 'newsletters', label: 'Newsletters' },
-    { id: 'pitch-deck', label: 'Pitch Deck' },
-    { id: 'financial-reports', label: 'Financial Reports' },
-    { id: 'events', label: 'Manage Events' },
-    { id: 'notices', label: 'Manage Notices' },
-    { id: 'notifications', label: 'Manage Notifications' },
-    { id: 'press-releases', label: 'Manage Press Releases' },
-    { id: 'blogs', label: 'Manage Blogs' },
-  ];
+  const navItems = ALL_NAV_ITEMS.filter((item: { id: string; label: string }) => {
+    if (!currentUser) return true;
+    if (currentUser.permissions.includes('*')) return true;
+    return currentUser.permissions.includes(item.id);
+  });
 
   return (
-    <div style={{ height: '100vh', display: 'flex', backgroundColor: theme.bg, color: theme.fg, fontFamily: 'sans-serif', overflow: 'hidden' }}>
+    <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: theme.bg, color: theme.fg, fontFamily: 'sans-serif', overflow: 'hidden' }}>
       
-      <style dangerouslySetInnerHTML={{__html: `header, footer, .support-widget, .cookie-banner { display: none !important; } body { overflow: hidden !important; margin: 0; }`}} />
-
-      {/* Sidebar */}
-      <div style={{ width: '280px', borderRight: `1px solid ${theme.border}`, display: 'flex', flexDirection: 'column', flexShrink: 0, backgroundColor: theme.sidebarBg || theme.bg }}>
-        {/* Sidebar Header with Company Logo */}
-        <div style={{ padding: '1.5rem 1.5rem 1.25rem 1.5rem', borderBottom: `1px solid ${theme.border}` }}>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.75rem' }}>
-            <img
-              src={isDarkMode ? "/assets/logo-white.png" : "/assets/logo-black.png"}
-              alt="Zawr Industries"
-              style={{ height: '48px', width: 'auto', maxWidth: '220px', objectFit: 'contain', display: 'block' }}
-            />
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.75rem', color: theme.muted }}>
-            <span style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 8px rgba(16, 185, 129, 0.6)' }} />
-            <span style={{ fontWeight: 600 }}>Webmaster • Live Synced</span>
-          </div>
-        </div>
+      <style dangerouslySetInnerHTML={{__html: `
+        header, footer, .support-widget, .cookie-banner { display: none !important; }
+        body { overflow: hidden !important; margin: 0; }
         
-        <nav style={{ flex: 1, padding: '1rem 0', overflowY: 'auto' }}>
-          {navItems.map(item => (
-            <button
-              key={item.id}
-              onClick={() => setActiveTab(item.id)}
-              style={{
-                width: '100%',
-                textAlign: 'left',
-                padding: '0.75rem 1.75rem',
-                backgroundColor: activeTab === item.id ? theme.hover : 'transparent',
-                border: 'none',
-                color: activeTab === item.id ? theme.fg : theme.muted,
-                fontWeight: activeTab === item.id ? 700 : 400,
-                fontSize: '0.875rem',
-                cursor: 'pointer',
-                transition: 'all 0.15s ease',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between'
-              }}
-            >
-              <span>{item.label}</span>
-              {activeTab === item.id && (
-                <span style={{ width: '5px', height: '5px', backgroundColor: '#38bdf8', borderRadius: '50%' }} />
-              )}
-            </button>
-          ))}
-        </nav>
+        /* Mobile-First Responsive Classes */
+        @media (max-width: 1024px) {
+          .wm-mobile-header { display: flex !important; }
+          .wm-sidebar-overlay { display: block !important; }
+          .wm-sidebar {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            bottom: 0 !important;
+            z-index: 1000 !important;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.85) !important;
+            transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+          }
+          .wm-sidebar-closed { transform: translateX(-100%) !important; }
+          .wm-sidebar-open { transform: translateX(0) !important; }
+          .wm-main-area { flex-direction: column !important; height: calc(100vh - 60px) !important; }
+          .wm-workspace-col { padding: 1.25rem 1rem !important; flex: 1 1 100% !important; max-width: 100% !important; }
+          .wm-grid-2col { grid-template-columns: 1fr !important; }
+          .wm-preview-col {
+            position: fixed !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            height: 82vh !important;
+            z-index: 990 !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            border-radius: 16px 16px 0 0 !important;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.7) !important;
+          }
+        }
 
-        {/* Sidebar Footer: Profile, Theme, Settings, and Logout Button */}
-        <div style={{ padding: '1.25rem 1.5rem', borderTop: `1px solid ${theme.border}`, display: 'flex', flexDirection: 'column', gap: '0.75rem', backgroundColor: theme.sidebarBg || theme.bg }}>
-          
-          {/* Quick Utility Icon Bar: Profile, Theme Switcher, Settings */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.4rem', backgroundColor: theme.inputBg, padding: '0.35rem', borderRadius: '8px', border: `1px solid ${theme.border}` }}>
-            
-            {/* Profile Icon Button */}
-            <button
-              type="button"
-              onClick={() => setShowProfileModal(true)}
-              title="Admin Profile & Security Credentials"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.2rem',
-                padding: '0.45rem 0.2rem',
-                backgroundColor: showProfileModal ? theme.hover : 'transparent',
-                color: theme.fg,
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontSize: '0.68rem',
-                fontWeight: 600,
-                transition: 'all 0.15s ease'
-              }}
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              Profile
-            </button>
+        @media (min-width: 1025px) {
+          .wm-mobile-header { display: none !important; }
+          .wm-sidebar-overlay { display: none !important; }
+          .wm-sidebar { position: relative !important; transform: none !important; }
+          .wm-main-area { flex-direction: row !important; height: 100vh !important; }
+          .wm-workspace-col { padding: 2.5rem 3rem !important; }
+          .wm-grid-2col { grid-template-columns: 1fr 1fr !important; }
+        }
 
-            {/* Theme Toggle Icon Button */}
-            <button
-              type="button"
-              onClick={() => setIsDarkMode(!isDarkMode)}
-              title={isDarkMode ? "Switch to Light Theme" : "Switch to Dark Theme"}
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.2rem',
-                padding: '0.45rem 0.2rem',
-                backgroundColor: 'transparent',
-                color: isDarkMode ? '#f59e0b' : '#3b82f6',
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontSize: '0.68rem',
-                fontWeight: 600,
-                transition: 'all 0.15s ease'
-              }}
-            >
-              {isDarkMode ? (
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-              ) : (
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-              )}
-              {isDarkMode ? 'Light' : 'Dark'}
-            </button>
+        /* Responsive Table Containers */
+        .wm-table-wrapper {
+          width: 100%;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+        }
+        .wm-table-wrapper table {
+          min-width: 580px;
+        }
+      `}} />
 
-            {/* Settings Icon Button */}
-            <button
-              type="button"
-              onClick={() => setShowSettingsModal(true)}
-              title="Webmaster System Settings"
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '0.2rem',
-                padding: '0.45rem 0.2rem',
-                backgroundColor: showSettingsModal ? theme.hover : 'transparent',
-                color: theme.fg,
-                border: 'none',
-                borderRadius: '6px',
-                cursor: 'pointer',
-                fontSize: '0.68rem',
-                fontWeight: 600,
-                transition: 'all 0.15s ease'
-              }}
-            >
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-              Settings
-            </button>
-          </div>
-
-          {/* Logout Button */}
+      {/* Mobile Top Header Bar (Visible on <= 1024px) */}
+      <div className="wm-mobile-header" style={{
+        display: 'none',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0.75rem 1rem',
+        backgroundColor: theme.sidebarBg || theme.bg,
+        borderBottom: `1px solid ${theme.border}`,
+        position: 'sticky',
+        top: 0,
+        zIndex: 900,
+        flexShrink: 0,
+        height: '60px',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <button
-            onClick={() => { setIsAuthenticated(false); router.push('/'); }}
+            type="button"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             style={{
-              width: '100%',
-              padding: '0.65rem',
-              backgroundColor: 'transparent',
-              color: '#ef4444',
-              border: `1px solid ${theme.border}`,
+              width: '38px',
+              height: '38px',
               borderRadius: '6px',
-              cursor: 'pointer',
-              fontSize: '0.8rem',
-              fontWeight: 700,
+              backgroundColor: theme.inputBg,
+              border: `1px solid ${theme.border}`,
+              color: theme.fg,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '0.45rem',
-              transition: 'all 0.15s ease'
+              cursor: 'pointer',
+              fontSize: '1.2rem',
+              padding: 0,
             }}
+            aria-label="Toggle Navigation Menu"
           >
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-            Logout / Exit
+            {isMobileMenuOpen ? '✕' : '☰'}
+          </button>
+          <img
+            src={isDarkMode ? "/assets/logo-white.png" : "/assets/logo-black.png"}
+            alt="Zawr Industries"
+            style={{ height: '36px', width: 'auto', maxWidth: '140px', objectFit: 'contain' }}
+          />
+        </div>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+          <span style={{
+            fontSize: '0.75rem',
+            fontWeight: 700,
+            padding: '0.25rem 0.55rem',
+            borderRadius: '6px',
+            backgroundColor: theme.inputBg,
+            border: `1px solid ${theme.border}`,
+            color: theme.fg,
+            maxWidth: '120px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}>
+            {navItems.find(n => n.id === activeTab)?.label || 'Dashboard'}
+          </span>
+          <button
+            type="button"
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            style={{
+              width: '34px',
+              height: '34px',
+              borderRadius: '6px',
+              backgroundColor: theme.inputBg,
+              border: `1px solid ${theme.border}`,
+              color: isDarkMode ? '#f59e0b' : '#3b82f6',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+            }}
+            aria-label="Toggle Theme"
+          >
+            {isDarkMode ? '☀' : '☾'}
           </button>
         </div>
       </div>
 
-      {/* Main Workspace Area (Split into Editor & Realtime Live Site Preview) */}
-      <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative' }}>
-        
-        {/* Left/Middle: Editor Form Column */}
-        <div style={{ flex: showLivePreview ? '1 1 55%' : '1 1 100%', padding: '3rem 3.5rem', overflowY: 'auto', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+      {/* Main Container */}
+      <div className="wm-main-area" style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative' }}>
+
+        {/* Mobile Drawer Backdrop Overlay */}
+        {isMobileMenuOpen && (
+          <div
+            className="wm-sidebar-overlay"
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{
+              position: 'fixed',
+              inset: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.65)',
+              backdropFilter: 'blur(4px)',
+              zIndex: 998,
+            }}
+          />
+        )}
+
+        {/* Sidebar (Desktop Static / Mobile Off-Canvas Drawer) */}
+        <div className={`wm-sidebar ${isMobileMenuOpen ? 'wm-sidebar-open' : 'wm-sidebar-closed'}`} style={{
+          width: '280px',
+          borderRight: `1px solid ${theme.border}`,
+          display: 'flex',
+          flexDirection: 'column',
+          flexShrink: 0,
+          backgroundColor: theme.sidebarBg || theme.bg,
+          height: '100%',
+        }}>
+          {/* Sidebar Header with Company Logo */}
+          <div style={{ padding: '1.25rem 1.75rem 1.15rem 1.75rem', borderBottom: `1px solid ${theme.border}` }}>
+            <div style={{ display: 'flex', alignItems: 'center', marginBottom: '0.65rem' }}>
+              <img
+                src={isDarkMode ? "/assets/logo-white.png" : "/assets/logo-black.png"}
+                alt="Zawr Industries"
+                style={{
+                  height: '76px',
+                  width: 'auto',
+                  maxWidth: '225px',
+                  objectFit: 'contain',
+                  objectPosition: 'left center',
+                  display: 'block'
+                }}
+              />
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', fontSize: '0.75rem', color: theme.muted }}>
+              <span style={{ width: '8px', height: '8px', backgroundColor: '#10b981', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 8px rgba(16, 185, 129, 0.6)' }} />
+              <span style={{ fontWeight: 600 }}>Webmaster • Live Synced</span>
+            </div>
+          </div>
           
-          {/* Top Workspace Header with Toggle Button */}
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
+          <nav style={{ flex: 1, padding: '1rem 0', overflowY: 'auto' }}>
+            {navItems.map(item => (
+              <button
+                key={item.id}
+                onClick={() => {
+                  setActiveTab(item.id);
+                  setIsMobileMenuOpen(false);
+                }}
+                style={{
+                  width: '100%',
+                  textAlign: 'left',
+                  padding: '0.75rem 1.75rem',
+                  backgroundColor: activeTab === item.id ? theme.hover : 'transparent',
+                  border: 'none',
+                  color: activeTab === item.id ? theme.fg : theme.muted,
+                  fontWeight: activeTab === item.id ? 700 : 400,
+                  fontSize: '0.875rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between'
+                }}
+              >
+                <span>{item.label}</span>
+                {activeTab === item.id && (
+                  <span style={{ width: '5px', height: '5px', backgroundColor: '#38bdf8', borderRadius: '50%' }} />
+                )}
+              </button>
+            ))}
+          </nav>
+
+          {/* Sidebar Footer with Dropup Profile & Controls */}
+          <div style={{ padding: '1rem 1.25rem', borderTop: `1px solid ${theme.border}`, backgroundColor: theme.sidebarBg || theme.bg, position: 'relative' }}>
+            
+            {/* Backdrop for closing dropup when clicking outside */}
+            {showUserDropup && (
+              <div
+                onClick={() => setShowUserDropup(false)}
+                style={{ position: 'fixed', inset: 0, zIndex: 100 }}
+              />
+            )}
+
+            {/* Vertical Dropup Menu Card */}
+            {showUserDropup && (
+              <div style={{
+                position: 'absolute',
+                bottom: 'calc(100% + 0.5rem)',
+                left: '1.25rem',
+                right: '1.25rem',
+                backgroundColor: theme.bg,
+                border: `1px solid ${theme.border}`,
+                borderRadius: '10px',
+                boxShadow: isDarkMode ? '0 12px 30px rgba(0, 0, 0, 0.85)' : '0 12px 30px rgba(0, 0, 0, 0.12)',
+                padding: '0.4rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.2rem',
+                zIndex: 101,
+              }}>
+                {/* Option 1: Profile */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowProfileModal(true);
+                    setShowUserDropup(false);
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '0.6rem 0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.65rem',
+                    backgroundColor: 'transparent',
+                    color: theme.fg,
+                    border: 'none',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontSize: '0.82rem',
+                    fontWeight: 600,
+                    textAlign: 'left',
+                    transition: 'background-color 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.hover || 'rgba(255,255,255,0.05)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                  <span>Profile</span>
+                </button>
+
+                {/* Option 2: Theme Toggle */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsDarkMode(!isDarkMode);
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '0.6rem 0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    backgroundColor: 'transparent',
+                    color: theme.fg,
+                    border: 'none',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontSize: '0.82rem',
+                    fontWeight: 600,
+                    textAlign: 'left',
+                    transition: 'background-color 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.hover || 'rgba(255,255,255,0.05)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                    {isDarkMode ? (
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                    ) : (
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                    )}
+                    <span>Theme</span>
+                  </div>
+                  <span style={{ fontSize: '0.72rem', color: isDarkMode ? '#f59e0b' : '#3b82f6', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, padding: '0.15rem 0.45rem', borderRadius: '4px', fontWeight: 700 }}>
+                    {isDarkMode ? 'Dark' : 'Light'}
+                  </span>
+                </button>
+
+                {/* Option 3: Settings */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowSettingsModal(true);
+                    setShowUserDropup(false);
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '0.6rem 0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.65rem',
+                    backgroundColor: 'transparent',
+                    color: theme.fg,
+                    border: 'none',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontSize: '0.82rem',
+                    fontWeight: 600,
+                    textAlign: 'left',
+                    transition: 'background-color 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.hover || 'rgba(255,255,255,0.05)'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                  <span>Settings</span>
+                </button>
+
+                <div style={{ height: '1px', backgroundColor: theme.border, margin: '0.2rem 0.25rem' }} />
+
+                {/* Option 4: Logout */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowUserDropup(false);
+                    try {
+                      sessionStorage.removeItem('webmaster_session_token');
+                      sessionStorage.removeItem('webmaster_logged_in');
+                      sessionStorage.removeItem('webmaster_authorized');
+                    } catch (e) {}
+                    setCurrentUser(null);
+                    setSessionToken(null);
+                    setIsAuthenticated(false);
+                    setAuthorized(false);
+                    router.push('/');
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '0.6rem 0.75rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.65rem',
+                    backgroundColor: 'transparent',
+                    color: '#ef4444',
+                    border: 'none',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontSize: '0.82rem',
+                    fontWeight: 700,
+                    textAlign: 'left',
+                    transition: 'background-color 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = isDarkMode ? 'rgba(239, 68, 68, 0.1)' : '#fee2e2'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  <span>Logout / Exit</span>
+                </button>
+              </div>
+            )}
+
+            {/* Main User Card / Dropup Trigger Button */}
             <button
               type="button"
-              onClick={() => setShowLivePreview(!showLivePreview)}
+              onClick={() => setShowUserDropup(!showUserDropup)}
               style={{
-                display: 'inline-flex',
+                width: '100%',
+                padding: '0.6rem 0.75rem',
+                display: 'flex',
                 alignItems: 'center',
-                gap: '0.5rem',
-                padding: '0.4rem 0.85rem',
-                backgroundColor: showLivePreview ? '#18181b' : theme.fg,
-                color: showLivePreview ? '#d1d5db' : theme.bg,
-                border: `1px solid ${theme.border}`,
-                borderRadius: '6px',
-                fontSize: '0.8rem',
-                fontWeight: 600,
+                justifyContent: 'space-between',
+                backgroundColor: showUserDropup ? theme.inputBg : 'transparent',
+                border: `1px solid ${showUserDropup ? theme.fg : theme.border}`,
+                borderRadius: '8px',
                 cursor: 'pointer',
-                transition: 'all 0.2s',
+                color: theme.fg,
+                transition: 'all 0.15s ease',
               }}
             >
-              {showLivePreview ? (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
-              ) : (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-              )}
-              {showLivePreview ? 'Hide Live Browser Mirror' : 'Show Live Browser Mirror'}
-            </button>
-          </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
+                <div style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  backgroundColor: isDarkMode ? '#27272a' : '#09090b',
+                  color: '#ffffff',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 800,
+                  fontSize: '0.85rem'
+                }}>
+                  {(currentUser?.name?.[0] || 'A').toUpperCase()}
+                </div>
+                <div style={{ textAlign: 'left' }}>
+                  <div style={{ fontSize: '0.82rem', fontWeight: 700, lineHeight: 1.2, color: theme.fg }}>{currentUser?.name || 'Admin User'}</div>
+                  <div style={{ fontSize: '0.7rem', color: theme.muted, lineHeight: 1.2 }}>{currentUser?.role || currentUser?.email || 'Super Administrator'}</div>
+                </div>
+              </div>
 
-          <div style={{ maxWidth: showLivePreview ? '920px' : '100%', width: '100%', transition: 'max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
-            {renderContent()}
+              {/* Dropup Chevron Indicator */}
+              <div style={{ display: 'flex', alignItems: 'center', color: theme.muted, padding: '0.2rem' }}>
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  style={{
+                    transform: showUserDropup ? 'rotate(180deg)' : 'none',
+                    transition: 'transform 0.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                  }}
+                >
+                  <polyline points="18 15 12 9 6 15"/>
+                </svg>
+              </div>
+            </button>
           </div>
         </div>
 
-        {/* Right: Live Interactive Browser Preview Panel */}
-        {showLivePreview && (
-          <div style={{ width: '480px', minWidth: '420px', maxWidth: '580px', flex: '1 1 45%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-            <LiveSitePreview
-              activeTab={activeTab}
-              theme={theme}
-              onClose={() => setShowLivePreview(false)}
-              data={{
-                // Jobs
+        {/* Main Workspace Area (Split into Editor & Realtime Live Site Preview) */}
+        <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative', width: '100%' }}>
+          
+          {/* Left/Middle: Editor Form Column */}
+          <div className="wm-workspace-col" style={{ flex: showLivePreview ? '1 1 55%' : '1 1 100%', overflowY: 'auto', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+            
+            {/* Top Workspace Header with Toggle Button */}
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
+              <button
+                type="button"
+                onClick={() => setShowLivePreview(!showLivePreview)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.4rem 0.85rem',
+                  backgroundColor: showLivePreview ? theme.inputBg : theme.fg,
+                  color: showLivePreview ? theme.fg : theme.bg,
+                  border: `1px solid ${theme.border}`,
+                  borderRadius: '6px',
+                  fontSize: '0.8rem',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s',
+                }}
+              >
+                {showLivePreview ? (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+                ) : (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+                )}
+                {showLivePreview ? 'Hide Live Browser Mirror' : 'Show Live Browser Mirror'}
+              </button>
+            </div>
+
+            <div style={{ maxWidth: showLivePreview ? '920px' : '100%', width: '100%', transition: 'max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+              {renderContent()}
+            </div>
+          </div>
+
+          {/* Right: Live Interactive Browser Preview Panel */}
+          {showLivePreview && (
+            <div className="wm-preview-col" style={{ width: '480px', minWidth: '340px', maxWidth: '580px', flex: '1 1 45%', height: '100%', display: 'flex', flexDirection: 'column' }}>
+              <LiveSitePreview
+                activeTab={activeTab}
+                theme={theme}
+                onClose={() => setShowLivePreview(false)}
+                data={{
+                  // Jobs
                 newJob,
                 // Blogs
                 blogTitle,
@@ -3346,6 +4723,7 @@ function WebmasterDashboard() {
           </div>
         )}
 
+      </div>
       </div>
 
       {/* ───────────────────────────────────────────────────────────── */}

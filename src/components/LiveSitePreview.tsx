@@ -522,17 +522,19 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
 
     // Default Overview
     return (
-      <div style={{ backgroundColor: '#09090b', color: '#ffffff', minHeight: '100%', padding: '2rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
-        <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: '#18181b', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
+      <div style={{ backgroundColor: theme.bg, color: theme.fg, minHeight: '100%', padding: '2rem 1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center' }}>
+        <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '1rem' }}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
         </div>
-        <h3 style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 0.5rem 0' }}>Live Interactive Browser Mirror</h3>
-        <p style={{ fontSize: '0.85rem', color: '#9ca3af', maxWidth: '340px', margin: 0 }}>
+        <h3 style={{ fontSize: '1.1rem', fontWeight: 600, margin: '0 0 0.5rem 0', color: theme.fg }}>Live Interactive Browser Mirror</h3>
+        <p style={{ fontSize: '0.85rem', color: theme.muted, maxWidth: '340px', margin: 0 }}>
           Select a content module (Careers, Blogs, Notices, Press Releases) on the left sidebar to see keystroke changes rendered in realtime.
         </p>
       </div>
     );
   };
+
+  const isDark = theme.bg === '#000000' || !theme.bg.includes('fff');
 
   return (
     <>
@@ -542,7 +544,7 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
           style={{
             position: 'fixed',
             inset: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.85)',
+            backgroundColor: 'rgba(0, 0, 0, 0.75)',
             backdropFilter: 'blur(8px)',
             zIndex: 999998,
           }}
@@ -558,17 +560,17 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
           zIndex: 999999,
           display: 'flex',
           flexDirection: 'column',
-          backgroundColor: '#09090b',
+          backgroundColor: theme.bg,
           border: '1px solid #38bdf8',
           borderRadius: '16px',
           overflow: 'hidden',
-          boxShadow: '0 25px 80px rgba(0, 0, 0, 0.95)',
+          boxShadow: isDark ? '0 25px 80px rgba(0, 0, 0, 0.95)' : '0 25px 60px rgba(0, 0, 0, 0.25)',
           userSelect: 'none',
         } : {
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
-          backgroundColor: '#09090b',
+          backgroundColor: theme.bg,
           borderLeft: `1px solid ${theme.border}`,
           position: 'relative',
           userSelect: 'none',
@@ -578,7 +580,7 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
         <div
           style={{
             padding: '0.5rem 0.85rem',
-            backgroundColor: '#121215',
+            backgroundColor: theme.inputBg,
             borderBottom: `1px solid ${theme.border}`,
             display: 'flex',
             justifyContent: 'space-between',
@@ -688,7 +690,7 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
             </div>
 
           {/* Mode Switcher: Keystroke Draft vs Real Live Route */}
-          <div style={{ display: 'flex', backgroundColor: '#18181b', padding: '0.15rem', borderRadius: '6px', border: '1px solid #27272a' }}>
+          <div style={{ display: 'flex', backgroundColor: isDark ? '#18181b' : '#f1f5f9', padding: '0.15rem', borderRadius: '6px', border: `1px solid ${theme.border}` }}>
             <button
               type="button"
               onClick={() => setViewMode('draft')}
@@ -699,7 +701,7 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
                 borderRadius: '4px',
                 border: 'none',
                 backgroundColor: viewMode === 'draft' ? '#10b981' : 'transparent',
-                color: viewMode === 'draft' ? '#000000' : '#9ca3af',
+                color: viewMode === 'draft' ? '#000000' : theme.muted,
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -719,7 +721,7 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
                 borderRadius: '4px',
                 border: 'none',
                 backgroundColor: viewMode === 'iframe' ? '#3b82f6' : 'transparent',
-                color: viewMode === 'iframe' ? '#ffffff' : '#9ca3af',
+                color: viewMode === 'iframe' ? '#ffffff' : theme.muted,
                 cursor: 'pointer',
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -733,7 +735,7 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
         </div>
 
         {/* Viewport Toggles (Desktop / Mobile) */}
-        <div style={{ display: 'flex', gap: '0.25rem', backgroundColor: '#18181b', padding: '0.15rem', borderRadius: '6px', border: '1px solid #27272a' }}>
+        <div style={{ display: 'flex', gap: '0.25rem', backgroundColor: isDark ? '#18181b' : '#f1f5f9', padding: '0.15rem', borderRadius: '6px', border: `1px solid ${theme.border}` }}>
           <button
             type="button"
             onClick={() => setDeviceMode('desktop')}
@@ -744,8 +746,8 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
               fontWeight: 600,
               borderRadius: '4px',
               border: 'none',
-              backgroundColor: deviceMode === 'desktop' ? '#ffffff' : 'transparent',
-              color: deviceMode === 'desktop' ? '#000000' : '#9ca3af',
+              backgroundColor: deviceMode === 'desktop' ? (isDark ? '#ffffff' : '#09090b') : 'transparent',
+              color: deviceMode === 'desktop' ? (isDark ? '#000000' : '#ffffff') : theme.muted,
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
@@ -765,8 +767,8 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
               fontWeight: 600,
               borderRadius: '4px',
               border: 'none',
-              backgroundColor: deviceMode === 'mobile' ? '#ffffff' : 'transparent',
-              color: deviceMode === 'mobile' ? '#000000' : '#9ca3af',
+              backgroundColor: deviceMode === 'mobile' ? (isDark ? '#ffffff' : '#09090b') : 'transparent',
+              color: deviceMode === 'mobile' ? (isDark ? '#000000' : '#ffffff') : theme.muted,
               cursor: 'pointer',
               display: 'inline-flex',
               alignItems: 'center',
@@ -783,7 +785,7 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
       <div
         style={{
           padding: '0.4rem 1rem',
-          backgroundColor: '#0c0c0e',
+          backgroundColor: theme.inputBg,
           borderBottom: `1px solid ${theme.border}`,
           display: 'flex',
           alignItems: 'center',
@@ -797,12 +799,12 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
             display: 'flex',
             alignItems: 'center',
             gap: '0.4rem',
-            backgroundColor: '#18181b',
-            border: '1px solid #27272a',
+            backgroundColor: isDark ? '#18181b' : '#ffffff',
+            border: `1px solid ${theme.border}`,
             borderRadius: '4px',
             padding: '0.25rem 0.6rem',
             fontSize: '0.72rem',
-            color: '#a1a1aa',
+            color: theme.muted,
             fontFamily: 'monospace',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -819,7 +821,9 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
         style={{
           flex: 1,
           overflowY: 'auto',
-          backgroundColor: deviceMode === 'mobile' ? '#000000' : '#050505',
+          backgroundColor: isDark
+            ? (deviceMode === 'mobile' ? '#000000' : '#050505')
+            : (deviceMode === 'mobile' ? '#f1f5f9' : '#f8fafc'),
           display: 'flex',
           justifyContent: 'center',
           padding: deviceMode === 'mobile' ? '1.5rem 0' : 0,
@@ -830,10 +834,10 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
             width: deviceMode === 'mobile' ? '375px' : '100%',
             height: deviceMode === 'mobile' ? '720px' : '100%',
             minHeight: deviceMode === 'mobile' ? '720px' : '100%',
-            boxShadow: deviceMode === 'mobile' ? '0 20px 40px rgba(0,0,0,0.8), 0 0 0 1px #27272a' : 'none',
+            boxShadow: deviceMode === 'mobile' ? (isDark ? '0 20px 40px rgba(0,0,0,0.8), 0 0 0 1px #27272a' : '0 20px 40px rgba(0,0,0,0.15), 0 0 0 1px #e2e8f0') : 'none',
             borderRadius: deviceMode === 'mobile' ? '28px' : 0,
             overflow: 'hidden',
-            border: deviceMode === 'mobile' ? '8px solid #18181b' : 'none',
+            border: deviceMode === 'mobile' ? (isDark ? '8px solid #18181b' : '8px solid #cbd5e1') : 'none',
             transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
             alignSelf: deviceMode === 'mobile' ? 'flex-start' : 'stretch',
             display: 'flex',
@@ -849,7 +853,7 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
                 width: '100%',
                 height: '100%',
                 border: 'none',
-                backgroundColor: '#000000',
+                backgroundColor: theme.bg,
                 display: 'block',
               }}
             />
