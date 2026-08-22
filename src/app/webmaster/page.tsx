@@ -197,8 +197,14 @@ function WebmasterDashboard() {
         if (token === GATE_TOKEN) {
           sessionStorage.setItem('webmaster_authorized', 'true');
           setAuthorized(true);
+          if (!urlAuthKey) {
+            setAuthMode('master');
+          }
         } else if (sessionStorage.getItem('webmaster_authorized') === 'true') {
           setAuthorized(true);
+          if (!urlAuthKey) {
+            setAuthMode('master');
+          }
         }
       } catch (e) {
         // Safeguard for private tabs sandboxes
@@ -699,72 +705,91 @@ function WebmasterDashboard() {
         }}>
           {/* Header with Brand Logo & Shield Badge */}
           <div style={{ padding: '2rem 1.75rem 1.25rem 1.75rem', textAlign: 'center', borderBottom: `1px solid ${theme.border}` }}>
-            <div style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '48px', height: '48px', borderRadius: '12px', backgroundColor: isDarkMode ? '#1e1b4b' : '#eff6ff', border: isDarkMode ? '1px solid #3730a3' : '1px solid #bfdbfe', marginBottom: '1rem', color: '#38bdf8' }}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '52px',
+              height: '52px',
+              borderRadius: '14px',
+              backgroundColor: authProfile ? (isDarkMode ? '#064e3b' : '#dcfce7') : (isDarkMode ? '#1e1b4b' : '#eff6ff'),
+              border: authProfile ? (isDarkMode ? '1px solid #059669' : '1px solid #86efac') : (isDarkMode ? '1px solid #3730a3' : '1px solid #bfdbfe'),
+              marginBottom: '1rem',
+              color: authProfile ? '#10b981' : '#38bdf8'
+            }}>
+              {authProfile ? (
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              ) : (
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+              )}
             </div>
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 0.4rem 0', letterSpacing: '-0.02em', color: theme.fg }}>
-              Webmaster Security Gateway
+            <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 0.4rem 0', letterSpacing: '-0.02em', color: theme.fg }}>
+              {authProfile ? 'Authorized Employee Workspace' : 'Webmaster Master Gateway'}
             </h1>
             <p style={{ fontSize: '0.82rem', color: theme.muted, margin: 0 }}>
-              Encrypted Role-Based Access Control • Salted PBKDF2 Vault
+              {authProfile
+                ? `Welcome, ${authProfile.name} • ${authProfile.role}`
+                : 'Super Administrator Authentication • Salted PBKDF2 Vault'}
             </p>
           </div>
 
-          {/* Mode Switch Tabs */}
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: `1px solid ${theme.border}`, backgroundColor: theme.bg }}>
-            <button
-              type="button"
-              onClick={() => { setAuthMode('staff'); setStaffLoginError(''); }}
-              style={{
-                padding: '0.85rem 0.5rem',
-                backgroundColor: authMode === 'staff' ? theme.inputBg : 'transparent',
-                border: 'none',
-                borderBottom: authMode === 'staff' ? '2px solid #38bdf8' : '2px solid transparent',
-                color: authMode === 'staff' ? theme.fg : theme.muted,
-                fontWeight: 700,
-                fontSize: '0.82rem',
-                cursor: 'pointer',
-                transition: 'all 0.15s'
-              }}
-            >
-              👤 Employee Login
-            </button>
-            <button
-              type="button"
-              onClick={() => { setAuthMode('master'); setLoginStep('key'); }}
-              style={{
-                padding: '0.85rem 0.5rem',
-                backgroundColor: authMode === 'master' ? theme.inputBg : 'transparent',
-                border: 'none',
-                borderBottom: authMode === 'master' ? '2px solid #38bdf8' : '2px solid transparent',
-                color: authMode === 'master' ? theme.fg : theme.muted,
-                fontWeight: 700,
-                fontSize: '0.82rem',
-                cursor: 'pointer',
-                transition: 'all 0.15s'
-              }}
-            >
-              🔑 Master Gateway
-            </button>
-          </div>
+          {/* Mode Switch Tabs (Only visible on master gateway, hidden on unique profile links) */}
+          {!authProfile && (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: `1px solid ${theme.border}`, backgroundColor: theme.bg }}>
+              <button
+                type="button"
+                onClick={() => { setAuthMode('master'); setLoginStep('key'); }}
+                style={{
+                  padding: '0.85rem 0.5rem',
+                  backgroundColor: authMode === 'master' ? theme.inputBg : 'transparent',
+                  border: 'none',
+                  borderBottom: authMode === 'master' ? '2px solid #38bdf8' : '2px solid transparent',
+                  color: authMode === 'master' ? theme.fg : theme.muted,
+                  fontWeight: 700,
+                  fontSize: '0.82rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s'
+                }}
+              >
+                🔑 Master Gateway
+              </button>
+              <button
+                type="button"
+                onClick={() => { setAuthMode('staff'); setStaffLoginError(''); }}
+                style={{
+                  padding: '0.85rem 0.5rem',
+                  backgroundColor: authMode === 'staff' ? theme.inputBg : 'transparent',
+                  border: 'none',
+                  borderBottom: authMode === 'staff' ? '2px solid #38bdf8' : '2px solid transparent',
+                  color: authMode === 'staff' ? theme.fg : theme.muted,
+                  fontWeight: 700,
+                  fontSize: '0.82rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.15s'
+                }}
+              >
+                👤 Employee Login
+              </button>
+            </div>
+          )}
 
           <div style={{ padding: '1.75rem' }}>
-            {/* ── TAB 1: EMPLOYEE LOGIN ── */}
+            {/* ── TAB 1: EMPLOYEE LOGIN (OR UNIQUE PROFILE PORTAL) ── */}
             {authMode === 'staff' ? (
               <form onSubmit={handleStaffLogin} suppressHydrationWarning style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                {authProfile && (
+                {authProfile ? (
                   <div style={{
-                    padding: '0.85rem 1rem',
+                    padding: '1rem',
                     backgroundColor: isDarkMode ? '#1e1b4b' : '#eff6ff',
                     border: isDarkMode ? '1px solid #3730a3' : '1px solid #bfdbfe',
-                    borderRadius: '10px',
+                    borderRadius: '12px',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.75rem'
+                    gap: '0.85rem'
                   }}>
                     <div style={{
-                      width: '38px',
-                      height: '38px',
+                      width: '42px',
+                      height: '42px',
                       borderRadius: '50%',
                       backgroundColor: '#38bdf8',
                       color: '#000000',
@@ -772,18 +797,36 @@ function WebmasterDashboard() {
                       alignItems: 'center',
                       justifyContent: 'center',
                       fontWeight: 800,
-                      fontSize: '0.95rem'
+                      fontSize: '1.05rem',
+                      flexShrink: 0
                     }}>
                       {(authProfile.name?.[0] || 'U').toUpperCase()}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontWeight: 700, fontSize: '0.9rem', color: theme.fg, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <div style={{ fontWeight: 800, fontSize: '0.95rem', color: theme.fg, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {authProfile.name}
                       </div>
-                      <div style={{ fontSize: '0.75rem', color: isDarkMode ? '#38bdf8' : '#0284c7', fontWeight: 600 }}>
-                        🔒 Authorized: {authProfile.role}
+                      <div style={{ fontSize: '0.78rem', color: isDarkMode ? '#38bdf8' : '#0284c7', fontWeight: 600 }}>
+                        {authProfile.role} • <span style={{ fontFamily: 'monospace' }}>{authProfile.email}</span>
                       </div>
                     </div>
+                  </div>
+                ) : (
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.45rem', color: theme.muted, fontWeight: 600 }}>
+                      Official Email Address
+                    </label>
+                    <input
+                      type="email"
+                      value={loginEmail}
+                      onChange={(e) => setLoginEmail(e.target.value)}
+                      style={{ width: '100%', padding: '0.75rem 0.9rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '8px', fontSize: '0.875rem' }}
+                      placeholder="name@zawrindustries.com"
+                      autoFocus
+                      required
+                      disabled={isVerifying}
+                      autoComplete="email"
+                    />
                   </div>
                 )}
 
@@ -806,23 +849,6 @@ function WebmasterDashboard() {
                 )}
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.45rem', color: theme.muted, fontWeight: 600 }}>
-                    Official Email Address
-                  </label>
-                  <input
-                    type="email"
-                    value={loginEmail}
-                    onChange={(e) => setLoginEmail(e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem 0.9rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '8px', fontSize: '0.875rem' }}
-                    placeholder="name@zawrindustries.com"
-                    autoFocus={!authProfile}
-                    required
-                    disabled={isVerifying || !!authProfile}
-                    autoComplete="email"
-                  />
-                </div>
-
-                <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.45rem' }}>
                     <label style={{ fontSize: '0.82rem', color: theme.muted, fontWeight: 600 }}>
                       Password
@@ -840,8 +866,9 @@ function WebmasterDashboard() {
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
                     style={{ width: '100%', padding: '0.75rem 0.9rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '8px', fontSize: '0.875rem' }}
-                    placeholder="Enter assigned password"
+                    placeholder={authProfile ? "Enter your assigned password" : "Enter assigned password"}
                     required
+                    autoFocus={!!authProfile}
                     disabled={isVerifying}
                     autoComplete="current-password"
                   />
@@ -849,7 +876,7 @@ function WebmasterDashboard() {
 
                 <button
                   type="submit"
-                  disabled={isVerifying || !loginEmail.trim() || !loginPassword.trim()}
+                  disabled={isVerifying || !loginPassword.trim() || (!authProfile && !loginEmail.trim())}
                   style={{
                     width: '100%',
                     padding: '0.85rem',
@@ -861,11 +888,10 @@ function WebmasterDashboard() {
                     borderRadius: '8px',
                     fontSize: '0.875rem',
                     marginTop: '0.5rem',
-                    opacity: isVerifying || !loginEmail.trim() || !loginPassword.trim() ? 0.6 : 1,
                     transition: 'all 0.15s'
                   }}
                 >
-                  {isVerifying ? 'Authenticating Credentials...' : 'Sign In to Workspace →'}
+                  {isVerifying ? 'Authenticating...' : authProfile ? 'Unlock Workspace →' : 'Sign In to Workspace →'}
                 </button>
               </form>
             ) : (
