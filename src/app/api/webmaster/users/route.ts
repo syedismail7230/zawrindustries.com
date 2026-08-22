@@ -17,7 +17,23 @@ import {
 } from '@/lib/webmaster-security';
 import { supabase } from '@/lib/supabase';
 
-const USERS_FILE_PATH = path.join(process.cwd(), 'data', 'webmaster-users.json');
+import os from 'os';
+
+const LOCAL_USERS_FILE = path.join(process.cwd(), 'data', 'webmaster-users.json');
+const TMP_USERS_FILE = path.join(os.tmpdir(), 'webmaster-users.json');
+
+// In-memory cache across warm lambdas
+let memoryUsersCache: WebmasterUser[] | null = null;
+
+function getWritableUsersFilePath(): string {
+  try {
+    const dir = path.dirname(LOCAL_USERS_FILE);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    return LOCAL_USERS_FILE;
+  } catch (e) {
+    return TMP_USERS_FILE;
+  }
+}
 
 // Default initial Master Administrator profile if no database file exists yet
 function getInitialUsers(): WebmasterUser[] {
@@ -44,17 +60,23 @@ function getInitialUsers(): WebmasterUser[] {
 
 // ── Persistent File & Database Operations ──
 function loadUsersFromFile(): WebmasterUser[] {
+  if (memoryUsersCache && memoryUsersCache.length > 0) {
+    return memoryUsersCache;
+  }
+
   try {
-    const dir = path.dirname(USERS_FILE_PATH);
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-    if (!fs.existsSync(USERS_FILE_PATH)) {
+    // Check local file first, then tmp file
+    let filePathToRead = LOCAL_USERS_FILE;
+    if (!fs.existsSync(LOCAL_USERS_FILE) && fs.existsSync(TMP_USERS_FILE)) {
+      filePathToRead = TMP_USERS_FILE;
+    } else if (!fs.existsSync(LOCAL_USERS_FILE) && !fs.existsSync(TMP_USERS_FILE)) {
       const initial = getInitialUsers();
-      fs.writeFileSync(USERS_FILE_PATH, JSON.stringify(initial, null, 2), 'utf-8');
+      saveUsersToFile(initial);
+      memoryUsersCache = initial;
       return initial;
     }
-    const data = fs.readFileSync(USERS_FILE_PATH, 'utf-8');
+
+    const data = fs.readFileSync(filePathToRead, 'utf-8');
     const parsed: WebmasterUser[] = JSON.parse(data);
     let dirty = false;
     for (const u of parsed) {
@@ -66,22 +88,43 @@ function loadUsersFromFile(): WebmasterUser[] {
     if (dirty) {
       saveUsersToFile(parsed);
     }
+    memoryUsersCache = parsed;
     return parsed;
   } catch (error) {
     console.error('Failed to read users file:', error);
-    return getInitialUsers();
+    if (fs.existsSync(TMP_USERS_FILE)) {
+      try {
+        const tmpData = fs.readFileSync(TMP_USERS_FILE, 'utf-8');
+        const parsed: WebmasterUser[] = JSON.parse(tmpData);
+        memoryUsersCache = parsed;
+        return parsed;
+      } catch (err2) {}
+    }
+    const initial = getInitialUsers();
+    memoryUsersCache = initial;
+    return initial;
   }
 }
 
 function saveUsersToFile(users: WebmasterUser[]): void {
+  memoryUsersCache = [...users];
+
+  // Try writing to local data file
   try {
-    const dir = path.dirname(USERS_FILE_PATH);
+    const dir = path.dirname(LOCAL_USERS_FILE);
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir, { recursive: true });
     }
-    fs.writeFileSync(USERS_FILE_PATH, JSON.stringify(users, null, 2), 'utf-8');
+    fs.writeFileSync(LOCAL_USERS_FILE, JSON.stringify(users, null, 2), 'utf-8');
   } catch (error) {
-    console.error('Failed to save users file:', error);
+    // Local directory read-only on serverless, write to /tmp
+  }
+
+  // Always write to /tmp as well for serverless safety
+  try {
+    fs.writeFileSync(TMP_USERS_FILE, JSON.stringify(users, null, 2), 'utf-8');
+  } catch (tmpErr) {
+    console.error('Failed to save to tmp users file:', tmpErr);
   }
 }
 
