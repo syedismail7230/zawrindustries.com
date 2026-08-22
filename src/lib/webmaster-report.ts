@@ -351,83 +351,112 @@ export function generateDailyReportEmailHtml(data: DailyReportSummary): string {
   const topPagesRows = performance.topPages
     .map((p, idx) => `
       <tr>
-        <td style="padding: 10px 0; font-size: 13px; color: #555555; border-bottom: 1px solid #f0f0f0;">${idx + 1}. <strong style="color: #000000;">${p.path}</strong></td>
-        <td style="padding: 10px 0; font-size: 13px; color: #000000; text-align: right; border-bottom: 1px solid #f0f0f0; font-weight: 600;">${p.views} views (${p.uniqueVisitors} visitors)</td>
+        <td style="padding: 10px 0; font-size: 13px; color: #555555; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''}">${idx + 1}. <strong style="color: #000000;">${p.path}</strong></td>
+        <td style="padding: 10px 0; font-size: 13px; color: #000000; text-align: right; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''} font-weight: 600;">${p.views} views (${p.uniqueVisitors} visitors)</td>
       </tr>
     `)
     .join('');
 
   const emailLogsRows = emailsSummary.logs.length > 0
     ? emailsSummary.logs
-        .map(e => `
+        .map((e, idx) => `
           <tr>
-            <td style="padding: 10px 8px; font-size: 12px; color: #666666; border-bottom: 1px solid #f0f0f0;">${e.time}</td>
-            <td style="padding: 10px 8px; font-size: 12px; color: #000000; font-weight: 600; border-bottom: 1px solid #f0f0f0;">${e.recipient}</td>
-            <td style="padding: 10px 8px; font-size: 12px; color: #333333; border-bottom: 1px solid #f0f0f0;">${e.subject}</td>
-            <td style="padding: 10px 8px; font-size: 12px; color: #2563eb; border-bottom: 1px solid #f0f0f0;">${e.reason}</td>
-            <td style="padding: 10px 8px; font-size: 11px; text-align: right; border-bottom: 1px solid #f0f0f0;">
-              <span style="background-color: ${e.status === 'Failed' ? '#fee2e2' : '#dcfce7'}; color: ${e.status === 'Failed' ? '#991b1b' : '#166534'}; padding: 3px 8px; border-radius: 4px; font-weight: 600;">
-                ${e.status}
-              </span>
+            <td style="padding: 10px 0; font-size: 12.5px; color: #777777; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''}" width="22%">${e.time}</td>
+            <td style="padding: 10px 0; font-size: 12.5px; color: #000000; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''}">
+              <strong>${e.recipient}</strong><br/>
+              <span style="color: #666666; font-size: 11.5px;">${e.subject} &bull; ${e.reason}</span>
+            </td>
+            <td style="padding: 10px 0; font-size: 12px; text-align: right; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''}; font-weight: 600; color: ${e.status === 'Failed' ? '#dc2626' : '#16a34a'};" width="18%">
+              ${e.status}
             </td>
           </tr>
         `)
         .join('')
-    : `<tr><td colspan="5" style="padding: 16px 0; text-align: center; color: #888888; font-size: 13px;">No outbound emails logged in the last 24 hours.</td></tr>`;
+    : `<tr><td colspan="3" style="padding: 14px 0; font-size: 13px; color: #777777;">No outbound emails logged in the last 24 hours.</td></tr>`;
 
   const jobApplicationsRows = applicationsSummary.jobApplications.length > 0
-    ? applicationsSummary.jobApplications
-        .map(job => `
-          <div style="background-color: #fafafa; border: 1px solid #eeeeee; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-              <strong style="font-size: 14px; color: #000000;">${job.role}</strong>
-              <span style="font-size: 12px; color: #888888;">${job.time}</span>
-            </div>
-            <p style="margin: 0; font-size: 13px; color: #444444;">
-              Candidate: <strong>${job.candidateName}</strong> &bull; Email: <a href="mailto:${job.email}" style="color: #000000; text-decoration: underline;">${job.email}</a>
-            </p>
-          </div>
-        `)
-        .join('')
-    : `<p style="color: #888888; font-size: 13px; margin: 8px 0;">No new career applications received today.</p>`;
+    ? `
+      <div style="margin-bottom: 18px;">
+        <p style="margin: 0 0 8px 0; font-size: 13.5px; font-weight: 600; color: #000000;">
+          Careers &amp; Freelance Applications (${applicationsSummary.jobApplications.length + applicationsSummary.freelanceApplications.length})
+        </p>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
+          ${applicationsSummary.jobApplications.map((job, idx) => `
+            <tr>
+              <td style="padding: 10px 0; font-size: 13px; color: #000000; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''}">
+                <strong>${job.role}</strong> &bull; Candidate: ${job.candidateName} (<a href="mailto:${job.email}" style="color: #000000; text-decoration: underline;">${job.email}</a>)
+              </td>
+              <td style="padding: 10px 0; font-size: 12px; color: #777777; text-align: right; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''}">
+                ${job.time}
+              </td>
+            </tr>
+          `).join('')}
+        </table>
+      </div>
+    `
+    : '';
 
   const inquiriesRows = applicationsSummary.inquiries.length > 0
-    ? applicationsSummary.inquiries
-        .map(inq => `
-          <div style="background-color: #fafafa; border: 1px solid #eeeeee; border-radius: 8px; padding: 12px 16px; margin-bottom: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-              <strong style="font-size: 13.5px; color: #000000;">${inq.category}</strong>
-              <span style="font-size: 12px; color: #888888;">${inq.time}</span>
-            </div>
-            <p style="margin: 0; font-size: 13px; color: #444444;">Subject: ${inq.subject}</p>
-          </div>
-        `)
-        .join('')
-    : `<p style="color: #888888; font-size: 13px; margin: 8px 0;">No general contact form submissions in this period.</p>`;
-
-  const followUpRows = followUpWork
-    .map(f => `
-      <div style="border-left: 3px solid ${f.priority === 'High' ? '#ef4444' : f.priority === 'Medium' ? '#f59e0b' : '#10b981'}; padding-left: 12px; margin-bottom: 14px;">
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
-          <span style="font-size: 11px; font-weight: 700; background-color: #000000; color: #ffffff; padding: 2px 6px; border-radius: 3px;">${f.id}</span>
-          <strong style="font-size: 13.5px; color: #111111;">${f.task}</strong>
-        </div>
-        <p style="margin: 0; font-size: 12.5px; color: #555555;">${f.actionRequired}</p>
+    ? `
+      <div style="margin-bottom: 18px;">
+        <p style="margin: 0 0 8px 0; font-size: 13.5px; font-weight: 600; color: #000000;">
+          Business &amp; Public Inquiries (${applicationsSummary.inquiries.length})
+        </p>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
+          ${applicationsSummary.inquiries.map((inq, idx) => `
+            <tr>
+              <td style="padding: 10px 0; font-size: 13px; color: #000000; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''}">
+                <strong>${inq.category}</strong>: ${inq.subject}
+              </td>
+              <td style="padding: 10px 0; font-size: 12px; color: #777777; text-align: right; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''}">
+                ${inq.time}
+              </td>
+            </tr>
+          `).join('')}
+        </table>
       </div>
-    `)
-    .join('');
+    `
+    : '';
 
-  const criticalRows = criticalUpdates
-    .map(c => `
-      <div style="background-color: #fafafa; border: 1px solid #e5e5e5; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-          <strong style="font-size: 13px; color: #111111;">${c.title}</strong>
-          <span style="font-size: 11px; color: #888888;">${c.timestamp}</span>
-        </div>
-        <p style="margin: 0; font-size: 12.5px; color: #555555;">${c.details}</p>
+  const followUpRows = followUpWork.length > 0
+    ? `
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
+        ${followUpWork.map((f, idx) => `
+          <tr>
+            <td style="padding: 10px 0; font-size: 13px; color: #777777; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''}" width="20%">
+              <span style="font-weight: 600; color: ${f.priority === 'High' ? '#dc2626' : f.priority === 'Medium' ? '#d97706' : '#16a34a'};">${f.priority}</span>
+            </td>
+            <td style="padding: 10px 0; font-size: 13px; color: #333333; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''}">
+              <strong style="color: #000000;">${f.task}</strong><br/>
+              <span style="color: #666666; font-size: 12.5px;">${f.actionRequired}</span>
+            </td>
+          </tr>
+        `).join('')}
+      </table>
+    `
+    : '<p style="margin: 0; font-size: 13px; color: #777777;">No pending follow-up action items.</p>';
+
+  const criticalRows = criticalUpdates.length > 0
+    ? `
+      <div style="margin-top: 16px;">
+        <p style="margin: 0 0 8px 0; font-size: 13.5px; font-weight: 600; color: #dc2626;">
+          Recent Security Telemetry
+        </p>
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
+          ${criticalUpdates.map((c, idx) => `
+            <tr>
+              <td style="padding: 10px 0; font-size: 12.5px; color: #000000; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''}">
+                <strong>${c.title}</strong> — ${c.details}
+              </td>
+              <td style="padding: 10px 0; font-size: 11.5px; color: #888888; text-align: right; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''}">
+                ${c.timestamp}
+              </td>
+            </tr>
+          `).join('')}
+        </table>
       </div>
-    `)
-    .join('');
+    `
+    : '';
 
   return `
 <!DOCTYPE html>
@@ -443,180 +472,180 @@ export function generateDailyReportEmailHtml(data: DailyReportSummary): string {
     }
   </style>
 </head>
-<body style="margin: 0; padding: 0; background-color: #0a0a0a; color: #111111; -webkit-font-smoothing: antialiased;">
-  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #0a0a0a; padding: 40px 16px;">
+<body style="margin: 0; padding: 0; background-color: #ffffff; color: #111111; -webkit-font-smoothing: antialiased;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; padding: 40px 20px;">
     <tr>
       <td align="center">
-        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 680px; background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.4); text-align: left;">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 580px; text-align: left;">
           
-          <!-- Top Hero Brand Header -->
+          <!-- Header -->
           <tr>
-            <td style="background-color: #000000; padding: 36px 32px; color: #ffffff;">
-              <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span style="font-size: 11px; letter-spacing: 0.16em; font-weight: 700; color: #888888; text-transform: uppercase;">
-                  ZAWR INDUSTRIES &bull; WEBMASTER DISPATCH
-                </span>
-                <span style="font-size: 11px; background-color: #222222; color: #10b981; padding: 4px 10px; border-radius: 20px; font-weight: 600;">
-                  ● ALL SYSTEMS OPERATIONAL
-                </span>
-              </div>
-              <h1 style="margin: 16px 0 6px 0; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; color: #ffffff;">
-                Daily Website Performance & Operations Report
-              </h1>
-              <p style="margin: 0; font-size: 13.5px; color: #a3a3a3; font-weight: 400;">
-                Report Date: <strong style="color: #ffffff;">${dateStr}</strong> &bull; Dispatched to: <strong style="color: #ffffff;">webmaster@zawrindustries.com</strong>
-              </p>
-            </td>
-          </tr>
-
-          <!-- KPI Summary Cards Grid -->
-          <tr>
-            <td style="padding: 28px 32px 10px 32px; background-color: #fafafa; border-bottom: 1px solid #eeeeee;">
+            <td style="padding-bottom: 24px; border-bottom: 1px solid #eeeeee;">
               <table width="100%" border="0" cellspacing="0" cellpadding="0">
                 <tr>
-                  <td width="25%" style="padding: 8px;">
-                    <div style="background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 10px; padding: 14px 12px; text-align: center;">
-                      <span style="font-size: 11px; color: #777777; text-transform: uppercase; font-weight: 600;">Pageviews</span>
-                      <h2 style="margin: 6px 0 0 0; font-size: 22px; font-weight: 700; color: #000000;">${performance.totalPageViews24h}</h2>
-                    </div>
+                  <td>
+                    <!-- Logo: ZAWR bold, INDUSTRIES regular -->
+                    <span style="font-family: 'Poppins', sans-serif; font-size: 20px; color: #000000; display: inline-block; line-height: 1;">
+                      <strong style="font-weight: 800; letter-spacing: 0.02em;">ZAWR</strong> <span style="font-weight: 400; letter-spacing: 0.08em;">INDUSTRIES</span>
+                    </span>
                   </td>
-                  <td width="25%" style="padding: 8px;">
-                    <div style="background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 10px; padding: 14px 12px; text-align: center;">
-                      <span style="font-size: 11px; color: #777777; text-transform: uppercase; font-weight: 600;">Unique Visitors</span>
-                      <h2 style="margin: 6px 0 0 0; font-size: 22px; font-weight: 700; color: #000000;">${performance.uniqueVisitors24h}</h2>
-                    </div>
-                  </td>
-                  <td width="25%" style="padding: 8px;">
-                    <div style="background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 10px; padding: 14px 12px; text-align: center;">
-                      <span style="font-size: 11px; color: #777777; text-transform: uppercase; font-weight: 600;">Emails Sent</span>
-                      <h2 style="margin: 6px 0 0 0; font-size: 22px; font-weight: 700; color: #000000;">${emailsSummary.totalDispatched24h}</h2>
-                    </div>
-                  </td>
-                  <td width="25%" style="padding: 8px;">
-                    <div style="background-color: #ffffff; border: 1px solid #eaeaea; border-radius: 10px; padding: 14px 12px; text-align: center;">
-                      <span style="font-size: 11px; color: #777777; text-transform: uppercase; font-weight: 600;">Applications</span>
-                      <h2 style="margin: 6px 0 0 0; font-size: 22px; font-weight: 700; color: #000000;">${applicationsSummary.totalApplications24h}</h2>
-                    </div>
+                  <td align="right" valign="middle">
+                    <span style="font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #666666;">
+                      EXECUTIVE WEBMASTER REPORT
+                    </span>
                   </td>
                 </tr>
               </table>
             </td>
           </tr>
 
-          <!-- Section 1: Traffic & Top Pages -->
+          <!-- Main Heading -->
           <tr>
-            <td style="padding: 28px 32px; border-bottom: 1px solid #eeeeee;">
-              <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 700; color: #000000; letter-spacing: -0.01em;">
-                1. Website Traffic & Top Visited Pages (Past 24 Hours)
-              </h3>
-              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+            <td style="padding-top: 32px; padding-bottom: 16px;">
+              <h1 style="margin: 0; font-size: 24px; font-weight: 600; color: #000000; letter-spacing: -0.02em; line-height: 1.3;">
+                Daily Website Performance &amp; Operations Report
+              </h1>
+            </td>
+          </tr>
+
+          <!-- Greeting & Intro -->
+          <tr>
+            <td style="padding-bottom: 24px;">
+              <p style="margin: 0 0 14px 0; font-size: 15px; line-height: 1.6; color: #333333;">
+                Dear <strong style="color: #000000;">Webmaster &amp; Technical Operations Team</strong>,
+              </p>
+              <p style="margin: 0; font-size: 15px; line-height: 1.65; color: #555555;">
+                Here is the official 24-hour summary of website performance telemetry, outbound/inbound communications, applications breakdown, and system health for <strong>${dateStr}</strong>.
+              </p>
+            </td>
+          </tr>
+
+          <!-- KPI Summary Table -->
+          <tr>
+            <td style="padding-bottom: 28px;">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-bottom: 1px solid #f5f5f5;" width="50%">Total Pageviews (24h)</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; font-weight: 600; border-bottom: 1px solid #f5f5f5;">${performance.totalPageViews24h}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-bottom: 1px solid #f5f5f5;">Unique Visitors</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; font-weight: 600; border-bottom: 1px solid #f5f5f5;">${performance.uniqueVisitors24h}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-bottom: 1px solid #f5f5f5;">Outbound Emails Dispatched</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; font-weight: 600; border-bottom: 1px solid #f5f5f5;">${emailsSummary.totalDispatched24h} (${emailsSummary.successfulCount} Delivered)</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-bottom: 1px solid #f5f5f5;">Applications &amp; Inquiries Received</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; font-weight: 600; border-bottom: 1px solid #f5f5f5;">${applicationsSummary.totalApplications24h}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-bottom: 1px solid #f5f5f5;">Device Breakdown</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; font-weight: 500; border-bottom: 1px solid #f5f5f5;">${performance.desktopRatio} Desktop &bull; ${performance.mobileRatio} Mobile</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777;">Avg Server Latency &bull; Uptime</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; font-weight: 500;">${performance.avgLatencyMs} ms &bull; ${performance.uptimePercentage}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Section 1: Top Visited Pages -->
+          <tr>
+            <td style="padding-bottom: 28px;">
+              <h2 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #000000; letter-spacing: -0.01em;">
+                1. Top Visited Pages (24h)
+              </h2>
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
                 ${topPagesRows}
               </table>
-              <div style="margin-top: 14px; display: flex; gap: 16px; font-size: 12.5px; color: #666666;">
-                <span>Device Split: <strong>${performance.desktopRatio} Desktop</strong> / <strong>${performance.mobileRatio} Mobile</strong></span>
-                <span>&bull;</span>
-                <span>Avg Latency: <strong>${performance.avgLatencyMs} ms</strong></span>
-                <span>&bull;</span>
-                <span>Edge Uptime: <strong>${performance.uptimePercentage}</strong></span>
-              </div>
             </td>
           </tr>
 
           <!-- Section 2: Outbound & Inbound Email Activity -->
           <tr>
-            <td style="padding: 28px 32px; border-bottom: 1px solid #eeeeee;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <h3 style="margin: 0; font-size: 16px; font-weight: 700; color: #000000; letter-spacing: -0.01em;">
-                  2. Outbound & Inbound Email Communications Log
-                </h3>
-                <span style="font-size: 12px; color: #666666;">
-                  Total: <strong>${emailsSummary.totalDispatched24h}</strong> (${emailsSummary.successfulCount} delivered)
-                </span>
-              </div>
-              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-collapse: collapse;">
-                <thead>
-                  <tr style="background-color: #f7f7f7;">
-                    <th style="padding: 8px; font-size: 11px; color: #777777; text-align: left; font-weight: 600;">Time</th>
-                    <th style="padding: 8px; font-size: 11px; color: #777777; text-align: left; font-weight: 600;">Recipient</th>
-                    <th style="padding: 8px; font-size: 11px; color: #777777; text-align: left; font-weight: 600;">Subject</th>
-                    <th style="padding: 8px; font-size: 11px; color: #777777; text-align: left; font-weight: 600;">Purpose / Desk</th>
-                    <th style="padding: 8px; font-size: 11px; color: #777777; text-align: right; font-weight: 600;">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  ${emailLogsRows}
-                </tbody>
+            <td style="padding-bottom: 28px;">
+              <h2 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #000000; letter-spacing: -0.01em;">
+                2. Outbound Communications Log (${emailsSummary.totalDispatched24h} Total)
+              </h2>
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
+                ${emailLogsRows}
               </table>
             </td>
           </tr>
 
-          <!-- Section 3: Applications & Inquiries Breakdown -->
+          <!-- Section 3: Applications & Inquiries -->
           <tr>
-            <td style="padding: 28px 32px; border-bottom: 1px solid #eeeeee;">
-              <h3 style="margin: 0 0 14px 0; font-size: 16px; font-weight: 700; color: #000000; letter-spacing: -0.01em;">
-                3. Career Applications & Inquiries Breakdown
-              </h3>
-              
-              <h4 style="margin: 12px 0 8px 0; font-size: 13px; text-transform: uppercase; color: #777777; letter-spacing: 0.05em;">
-                Job & Freelance Applications (${applicationsSummary.jobApplications.length + applicationsSummary.freelanceApplications.length})
-              </h4>
+            <td style="padding-bottom: 28px;">
+              <h2 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #000000; letter-spacing: -0.01em;">
+                3. Career Applications &amp; Inquiries (${applicationsSummary.totalApplications24h})
+              </h2>
               ${jobApplicationsRows}
-
-              <h4 style="margin: 18px 0 8px 0; font-size: 13px; text-transform: uppercase; color: #777777; letter-spacing: 0.05em;">
-                Business & Contact Inquiries (${applicationsSummary.inquiries.length})
-              </h4>
               ${inquiriesRows}
             </td>
           </tr>
 
           <!-- Section 4: Follow-up Work & Action Items -->
           <tr>
-            <td style="padding: 28px 32px; border-bottom: 1px solid #eeeeee;">
-              <h3 style="margin: 0 0 16px 0; font-size: 16px; font-weight: 700; color: #000000; letter-spacing: -0.01em;">
-                4. Action Items & Follow-up Work Required
-              </h3>
+            <td style="padding-bottom: 28px;">
+              <h2 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #000000; letter-spacing: -0.01em;">
+                4. Action Items &amp; Follow-up Tasks
+              </h2>
               ${followUpRows}
             </td>
           </tr>
 
-          <!-- Section 5: Critical Updates & System Security -->
+          <!-- Section 5: System Telemetry & Perimeter Security -->
           <tr>
-            <td style="padding: 28px 32px 36px 32px;">
-              <h3 style="margin: 0 0 14px 0; font-size: 16px; font-weight: 700; color: #000000; letter-spacing: -0.01em;">
-                5. Critical Updates & System Telemetry Status
-              </h3>
-              ${criticalRows}
-
-              <!-- System Status Grid -->
-              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top: 18px; background-color: #f9f9f9; border-radius: 8px; padding: 12px;">
+            <td style="padding-bottom: 32px;">
+              <h2 style="margin: 0 0 12px 0; font-size: 16px; font-weight: 600; color: #000000; letter-spacing: -0.01em;">
+                5. System Telemetry &amp; Perimeter Defense
+              </h2>
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
                 <tr>
-                  <td width="50%" style="padding: 6px 12px; font-size: 12.5px; color: #555555;">
-                    Supabase Database: <strong style="color: #16a34a;">${systemHealth.databaseStatus}</strong>
-                  </td>
-                  <td width="50%" style="padding: 6px 12px; font-size: 12.5px; color: #555555;">
-                    Gmail SMTP Relay: <strong style="color: #16a34a;">${systemHealth.smtpRelayStatus}</strong>
-                  </td>
+                  <td style="padding: 10px 0; font-size: 13.5px; color: #777777; border-bottom: 1px solid #f5f5f5;" width="50%">Realtime Database (Supabase)</td>
+                  <td style="padding: 10px 0; font-size: 13.5px; color: #000000; font-weight: 600; border-bottom: 1px solid #f5f5f5;">${systemHealth.databaseStatus}</td>
                 </tr>
                 <tr>
-                  <td width="50%" style="padding: 6px 12px; font-size: 12.5px; color: #555555;">
-                    API Endpoints: <strong style="color: #16a34a;">${systemHealth.apiServicesStatus}</strong>
-                  </td>
-                  <td width="50%" style="padding: 6px 12px; font-size: 12.5px; color: #555555;">
-                    Vercel Edge Runtime: <strong style="color: #16a34a;">${systemHealth.edgeRuntimeStatus}</strong>
-                  </td>
+                  <td style="padding: 10px 0; font-size: 13.5px; color: #777777; border-bottom: 1px solid #f5f5f5;">Gmail SMTP Dispatch Gateway</td>
+                  <td style="padding: 10px 0; font-size: 13.5px; color: #000000; font-weight: 600; border-bottom: 1px solid #f5f5f5;">${systemHealth.smtpRelayStatus}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 0; font-size: 13.5px; color: #777777; border-bottom: 1px solid #f5f5f5;">API Endpoints</td>
+                  <td style="padding: 10px 0; font-size: 13.5px; color: #000000; font-weight: 600; border-bottom: 1px solid #f5f5f5;">${systemHealth.apiServicesStatus}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 10px 0; font-size: 13.5px; color: #777777;">Edge Serverless Runtime</td>
+                  <td style="padding: 10px 0; font-size: 13.5px; color: #000000; font-weight: 600;">${systemHealth.edgeRuntimeStatus}</td>
                 </tr>
               </table>
+              ${criticalRows}
+            </td>
+          </tr>
+
+          <!-- Sign-off -->
+          <tr>
+            <td style="padding-bottom: 40px;">
+              <p style="margin: 0 0 4px 0; font-size: 14px; color: #777777;">
+                Warm regards,
+              </p>
+              <p style="margin: 0; font-size: 14.5px; font-weight: 600; color: #000000;">
+                Webmaster Automation &amp; Technical Operations<br/>
+                <span style="font-weight: 400; color: #777777;">Zawr Industries</span>
+              </p>
             </td>
           </tr>
 
           <!-- Footer -->
           <tr>
-            <td style="background-color: #111111; padding: 24px 32px; text-align: center; color: #777777;">
-              <p style="margin: 0 0 6px 0; font-size: 12px; color: #aaaaaa;">
-                Automated System Dispatch &bull; Zawr Industries LLP Corporate Webmaster Division
+            <td style="padding-top: 24px; border-top: 1px solid #eeeeee; text-align: center;">
+              <p style="margin: 0 0 6px 0; font-size: 12px; color: #888888;">
+                © ${new Date().getFullYear()} Zawr Industries. All rights reserved.
               </p>
-              <p style="margin: 0; font-size: 11px; color: #666666;">
-                Bengaluru, Karnataka, India &bull; <a href="https://zawrindustries.com/webmaster" style="color: #888888; text-decoration: underline;">Webmaster Console</a>
+              <p style="margin: 0; font-size: 12px; color: #aaaaaa;">
+                Bengaluru, India · <a href="https://zawrindustries.com" style="color: #000000; text-decoration: underline;">zawrindustries.com</a> · <a href="https://zawrindustries.com/webmaster" style="color: #000000; text-decoration: underline;">webmaster console</a>
               </p>
             </td>
           </tr>
@@ -627,7 +656,7 @@ export function generateDailyReportEmailHtml(data: DailyReportSummary): string {
   </table>
 </body>
 </html>
-  `;
+  `.trim();
 }
 
 export async function sendDailyReportToWebmaster(manualTriggeredBy?: string): Promise<{ success: boolean; messageId?: string; error?: string }> {
@@ -709,12 +738,12 @@ export async function sendDailyReportToWebmaster(manualTriggeredBy?: string): Pr
       statusCode: 500,
       server: 'smtp.gmail.com (TLS 1.3)',
       ip: '127.0.0.1',
-      region: 'India / Cron Server'
+      region: 'India / Error Log'
     });
 
     return {
       success: false,
-      error: error.message || 'Failed to dispatch report'
+      error: error.message || 'Failed to dispatch report email'
     };
   }
 }
@@ -759,19 +788,134 @@ export async function sendCriticalAlertToWebmaster({
     });
 
     const html = `
-      <div style="font-family: 'Poppins', sans-serif; padding: 24px; background-color: #000000; color: #ffffff; border-radius: 12px;">
-        <div style="background-color: #ef4444; color: #ffffff; padding: 4px 12px; border-radius: 4px; font-weight: 700; display: inline-block; font-size: 12px; margin-bottom: 12px;">
-          CRITICAL WEBMASTER SECURITY ALERT (${severity.toUpperCase()})
-        </div>
-        <h2 style="margin: 0 0 12px 0; font-size: 20px;">${title}</h2>
-        <p style="color: #cccccc; font-size: 14px; line-height: 1.6;">${details}</p>
-        <div style="margin-top: 16px; padding: 12px; background-color: #111111; border-radius: 6px; font-size: 12px; color: #888888;">
-          Timestamp: ${new Date().toISOString()}<br>
-          Origin IP: ${ip}<br>
-          Action: Immediate notification to webmaster@zawrindustries.com
-        </div>
-      </div>
-    `;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zawr Industries — Critical Security Alert</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap');
+    body, table, td, p, a, h1, h2, h3, span, strong {
+      font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif !important;
+    }
+  </style>
+</head>
+<body style="margin: 0; padding: 0; background-color: #ffffff; color: #111111; -webkit-font-smoothing: antialiased;">
+  <table width="100%" border="0" cellspacing="0" cellpadding="0" style="background-color: #ffffff; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" style="max-width: 580px; text-align: left;">
+          
+          <!-- Header -->
+          <tr>
+            <td style="padding-bottom: 24px; border-bottom: 1px solid #eeeeee;">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                  <td>
+                    <span style="font-family: 'Poppins', sans-serif; font-size: 20px; color: #000000; display: inline-block; line-height: 1;">
+                      <strong style="font-weight: 800; letter-spacing: 0.02em;">ZAWR</strong> <span style="font-weight: 400; letter-spacing: 0.08em;">INDUSTRIES</span>
+                    </span>
+                  </td>
+                  <td align="right" valign="middle">
+                    <span style="font-family: 'Poppins', sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #dc2626;">
+                      CRITICAL SECURITY ALERT
+                    </span>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Main Heading -->
+          <tr>
+            <td style="padding-top: 32px; padding-bottom: 16px;">
+              <h1 style="margin: 0; font-size: 24px; font-weight: 600; color: #dc2626; letter-spacing: -0.02em; line-height: 1.3;">
+                ${title}
+              </h1>
+            </td>
+          </tr>
+
+          <!-- Intro -->
+          <tr>
+            <td style="padding-bottom: 24px;">
+              <p style="margin: 0 0 14px 0; font-size: 15px; line-height: 1.6; color: #333333;">
+                Dear <strong style="color: #000000;">Webmaster &amp; Security Administrator</strong>,
+              </p>
+              <p style="margin: 0; font-size: 15px; line-height: 1.65; color: #555555;">
+                An automated critical security event has been intercepted and logged by the Zawr Industries Perimeter Security Gateway. Immediate review may be required.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Details Table -->
+          <tr>
+            <td style="padding-bottom: 28px;">
+              <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border-top: 1px solid #eeeeee; border-bottom: 1px solid #eeeeee;">
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-bottom: 1px solid #f5f5f5;" width="36%">Severity Level</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #dc2626; font-weight: 700; border-bottom: 1px solid #f5f5f5;">${severity.toUpperCase()}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-bottom: 1px solid #f5f5f5;">Origin IP Address</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; font-weight: 600; border-bottom: 1px solid #f5f5f5;">${ip}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-bottom: 1px solid #f5f5f5;">Timestamp</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; font-weight: 500; border-bottom: 1px solid #f5f5f5;">${new Date().toISOString()}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #777777;">Action Taken</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; font-weight: 500;">Access Locked for 5 Minutes &bull; Alert Dispatched</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Incident Details -->
+          <tr>
+            <td style="padding-bottom: 32px;">
+              <p style="margin: 0 0 8px 0; font-size: 14px; font-weight: 600; color: #000000;">
+                Incident Summary:
+              </p>
+              <p style="margin: 0; font-size: 14px; line-height: 1.65; color: #555555;">
+                ${details}
+              </p>
+            </td>
+          </tr>
+
+          <!-- Sign-off -->
+          <tr>
+            <td style="padding-bottom: 40px;">
+              <p style="margin: 0 0 4px 0; font-size: 14px; color: #777777;">
+                Warm regards,
+              </p>
+              <p style="margin: 0; font-size: 14.5px; font-weight: 600; color: #000000;">
+                Zawr Perimeter Security Gateway<br/>
+                <span style="font-weight: 400; color: #777777;">Zawr Industries</span>
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding-top: 24px; border-top: 1px solid #eeeeee; text-align: center;">
+              <p style="margin: 0 0 6px 0; font-size: 12px; color: #888888;">
+                © ${new Date().getFullYear()} Zawr Industries. All rights reserved.
+              </p>
+              <p style="margin: 0; font-size: 12px; color: #aaaaaa;">
+                Bengaluru, India · <a href="https://zawrindustries.com" style="color: #000000; text-decoration: underline;">zawrindustries.com</a> · <a href="https://zawrindustries.com/webmaster" style="color: #000000; text-decoration: underline;">webmaster console</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+    `.trim();
 
     await transporter.sendMail({
       from: senderFrom,
