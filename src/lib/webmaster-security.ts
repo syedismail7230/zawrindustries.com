@@ -75,7 +75,7 @@ export function checkRateLimit(identifier: string): { allowed: boolean; remainin
       const remainingMinutes = Math.ceil((record.lockUntil - now) / 60000);
       return { allowed: false, remainingMinutes };
     }
-    if (record.lockUntil <= now && record.attempts >= 5) {
+    if (record.lockUntil <= now && record.attempts >= 15) {
       // Lock expired, reset
       loginAttemptsMap.delete(identifier);
     }
@@ -89,14 +89,14 @@ export function recordFailedAttempt(identifier: string): { locked: boolean; atte
   const record = loginAttemptsMap.get(identifier) || { attempts: 0, lockUntil: 0 };
   
   record.attempts += 1;
-  if (record.attempts >= 5) {
-    record.lockUntil = now + 15 * 60 * 1000; // 15 minutes lock
+  if (record.attempts >= 15) {
+    record.lockUntil = now + 5 * 60 * 1000; // 5 minutes lock
     loginAttemptsMap.set(identifier, record);
     return { locked: true, attemptsLeft: 0 };
   }
 
   loginAttemptsMap.set(identifier, record);
-  return { locked: false, attemptsLeft: 5 - record.attempts };
+  return { locked: false, attemptsLeft: 15 - record.attempts };
 }
 
 export function clearRateLimit(identifier: string): void {

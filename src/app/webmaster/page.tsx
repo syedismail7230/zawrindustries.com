@@ -620,7 +620,14 @@ function WebmasterDashboard() {
   if (!isAuthenticated) {
     const handleStaffLogin = async (e: React.FormEvent) => {
       e.preventDefault();
-      if (!loginEmail.trim() || !loginPassword.trim()) return;
+      const activeKey = authKey || searchParams.get('authKey') || searchParams.get('key') || searchParams.get('profileToken') || '';
+      const activeEmail = loginEmail || authProfile?.email || '';
+
+      if (!loginPassword.trim()) {
+        setStaffLoginError('Please enter your account password.');
+        return;
+      }
+
       setIsVerifying(true);
       setStaffLoginError('');
       try {
@@ -629,8 +636,8 @@ function WebmasterDashboard() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'login',
-            email: loginEmail,
-            authKey: authKey,
+            email: activeEmail,
+            authKey: activeKey,
             password: loginPassword
           })
         });
