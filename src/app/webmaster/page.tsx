@@ -599,6 +599,65 @@ function WebmasterDashboard() {
   const [showUserDropup, setShowUserDropup] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  // Daily Webmaster Performance Report States
+  const [sendingDailyReport, setSendingDailyReport] = useState(false);
+  const [showReportPreviewModal, setShowReportPreviewModal] = useState(false);
+  const [reportPreviewHtml, setReportPreviewHtml] = useState<string | null>(null);
+  const [reportPreviewLoading, setReportPreviewLoading] = useState(false);
+  const [reportToast, setReportToast] = useState<{ text: string; type: 'success' | 'error' } | null>(null);
+
+  const handleSendDailyReport = async () => {
+    setSendingDailyReport(true);
+    setReportToast(null);
+    try {
+      const activeToken = sessionToken || (typeof window !== 'undefined' ? sessionStorage.getItem('webmaster_session_token') : null);
+      const res = await fetch('/api/webmaster/daily-report', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          ...(activeToken ? { 'Authorization': `Bearer ${activeToken}` } : {})
+        }
+      });
+      const data = await res.json();
+      if (data.success) {
+        setReportToast({
+          text: `Daily Performance & Operations Report successfully dispatched to ${data.recipient || 'webmaster@zawrindustries.com'}!`,
+          type: 'success'
+        });
+      } else {
+        setReportToast({
+          text: data.error || 'Failed to dispatch daily report email.',
+          type: 'error'
+        });
+      }
+    } catch (err: any) {
+      setReportToast({
+        text: 'Network error triggering daily report dispatch.',
+        type: 'error'
+      });
+    }
+    setSendingDailyReport(false);
+    setTimeout(() => setReportToast(null), 8000);
+  };
+
+  const handlePreviewDailyReport = async () => {
+    setShowReportPreviewModal(true);
+    setReportPreviewLoading(true);
+    try {
+      const activeToken = sessionToken || (typeof window !== 'undefined' ? sessionStorage.getItem('webmaster_session_token') : null);
+      const res = await fetch('/api/webmaster/daily-report?format=html', {
+        headers: {
+          ...(activeToken ? { 'Authorization': `Bearer ${activeToken}` } : {})
+        }
+      });
+      const htmlText = await res.text();
+      setReportPreviewHtml(htmlText);
+    } catch (err) {
+      setReportPreviewHtml('<div style="padding: 2rem; color: #ef4444; font-family: sans-serif;">Failed to load live preview report.</div>');
+    }
+    setReportPreviewLoading(false);
+  };
+
   const theme = isDarkMode ? {
     bg: '#000000',
     fg: '#ffffff',
@@ -5007,6 +5066,62 @@ function WebmasterDashboard() {
                 <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#38bdf8', backgroundColor: 'rgba(56,189,248,0.1)', padding: '0.25rem 0.65rem', borderRadius: '20px' }}>Active</span>
               </div>
 
+              {/* Daily Webmaster Report Dispatcher */}
+              <div style={{ padding: '1rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '10px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                  <div>
+                    <div style={{ fontSize: '0.88rem', fontWeight: 800, color: theme.fg, display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <span>Daily Webmaster Executive Report</span>
+                      <span style={{ fontSize: '0.68rem', fontWeight: 800, color: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', padding: '0.15rem 0.5rem', borderRadius: '12px' }}>
+                        ● Active (Daily @ 05:30 AM IST)
+                      </span>
+                    </div>
+                    <div style={{ fontSize: '0.72rem', color: theme.muted, marginTop: '0.25rem', lineHeight: 1.4 }}>
+                      Dispatches full 24h website performance, email communication logs, applications breakdown, action items, and critical alerts directly to <strong style={{ color: theme.fg }}>webmaster@zawrindustries.com</strong>.
+                    </div>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.6rem', marginTop: '0.85rem' }}>
+                  <button
+                    type="button"
+                    onClick={handlePreviewDailyReport}
+                    style={{
+                      flex: 1,
+                      padding: '0.5rem 0.75rem',
+                      backgroundColor: theme.hover,
+                      color: theme.fg,
+                      border: `1px solid ${theme.border}`,
+                      borderRadius: '6px',
+                      fontSize: '0.78rem',
+                      fontWeight: 700,
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Preview Today's Report
+                  </button>
+                  <button
+                    type="button"
+                    disabled={sendingDailyReport}
+                    onClick={handleSendDailyReport}
+                    style={{
+                      flex: 1,
+                      padding: '0.5rem 0.75rem',
+                      backgroundColor: theme.fg,
+                      color: theme.bg,
+                      border: 'none',
+                      borderRadius: '6px',
+                      fontSize: '0.78rem',
+                      fontWeight: 800,
+                      cursor: sendingDailyReport ? 'not-allowed' : 'pointer',
+                      opacity: sendingDailyReport ? 0.7 : 1
+                    }}
+                  >
+                    {sendingDailyReport ? 'Dispatching...' : 'Send Report Now'}
+                  </button>
+                </div>
+              </div>
+
               {/* Actions */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '0.75rem', marginTop: '0.5rem' }}>
                 <button
@@ -5045,6 +5160,112 @@ function WebmasterDashboard() {
               </div>
             </div>
           </div>
+        </div>
+      )}
+
+      {/* ───────────────────────────────────────────────────────────── */}
+      {/* DAILY REPORT LIVE PREVIEW MODAL */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      {showReportPreviewModal && (
+        <div style={{
+          position: 'fixed',
+          inset: 0,
+          backgroundColor: 'rgba(0, 0, 0, 0.85)',
+          backdropFilter: 'blur(8px)',
+          zIndex: 100000,
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: '1.5rem'
+        }}>
+          <div style={{
+            width: '100%',
+            maxWidth: '780px',
+            maxHeight: '90vh',
+            backgroundColor: theme.bg,
+            border: `1px solid ${theme.border}`,
+            borderRadius: '16px',
+            overflow: 'hidden',
+            boxShadow: '0 25px 70px rgba(0,0,0,0.9)',
+            display: 'flex',
+            flexDirection: 'column'
+          }}>
+            <div style={{ padding: '1.25rem 1.5rem', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: theme.inputBg }}>
+              <div>
+                <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: theme.fg }}>Daily Webmaster Report Live Preview</h3>
+                <span style={{ fontSize: '0.72rem', color: theme.muted }}>Official 24-Hour Operations &amp; Performance Summary</span>
+              </div>
+              <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                <button
+                  type="button"
+                  disabled={sendingDailyReport}
+                  onClick={handleSendDailyReport}
+                  style={{
+                    padding: '0.4rem 0.9rem',
+                    backgroundColor: theme.fg,
+                    color: theme.bg,
+                    border: 'none',
+                    borderRadius: '6px',
+                    fontSize: '0.78rem',
+                    fontWeight: 800,
+                    cursor: sendingDailyReport ? 'not-allowed' : 'pointer'
+                  }}
+                >
+                  {sendingDailyReport ? 'Sending...' : 'Email to Webmaster'}
+                </button>
+                <button
+                  onClick={() => setShowReportPreviewModal(false)}
+                  style={{ background: 'none', border: 'none', color: theme.muted, cursor: 'pointer', fontSize: '1.25rem', padding: '0.25rem' }}
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+
+            <div style={{ flex: 1, overflowY: 'auto', backgroundColor: '#0a0a0a', padding: '1rem' }}>
+              {reportPreviewLoading ? (
+                <div style={{ padding: '4rem', textAlign: 'center', color: '#ffffff', fontSize: '0.9rem' }}>
+                  Generating 24-Hour Telemetry &amp; Email Activity Digest...
+                </div>
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: reportPreviewHtml || '' }} />
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ───────────────────────────────────────────────────────────── */}
+      {/* FLOATING REPORT TOAST NOTIFICATION */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      {reportToast && (
+        <div style={{
+          position: 'fixed',
+          bottom: '24px',
+          right: '24px',
+          zIndex: 100001,
+          backgroundColor: reportToast.type === 'success' ? '#064e3b' : '#7f1d1d',
+          color: '#ffffff',
+          border: `1px solid ${reportToast.type === 'success' ? '#059669' : '#dc2626'}`,
+          borderRadius: '10px',
+          padding: '1rem 1.25rem',
+          boxShadow: '0 12px 36px rgba(0,0,0,0.5)',
+          maxWidth: '420px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.75rem',
+          fontSize: '0.85rem',
+          fontWeight: 600,
+          animation: 'fadeIn 0.2s ease-in-out'
+        }}>
+          <span>{reportToast.type === 'success' ? '✓' : '✕'}</span>
+          <span style={{ flex: 1 }}>{reportToast.text}</span>
+          <button
+            onClick={() => setReportToast(null)}
+            style={{ background: 'none', border: 'none', color: '#ffffff', cursor: 'pointer', fontSize: '1rem', padding: 0 }}
+          >
+            ✕
+          </button>
         </div>
       )}
 

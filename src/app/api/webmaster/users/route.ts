@@ -16,6 +16,7 @@ import {
   clearRateLimit
 } from '@/lib/webmaster-security';
 import { supabase } from '@/lib/supabase';
+import { sendCriticalAlertToWebmaster } from '@/lib/webmaster-report';
 
 import os from 'os';
 
@@ -219,6 +220,14 @@ export async function POST(request: Request) {
 
       if (!user) {
         const attempt = recordFailedAttempt(rateLimitKey);
+        if (attempt.locked) {
+          sendCriticalAlertToWebmaster({
+            title: 'Multiple Failed Login Attempts (Account Locked)',
+            details: `Failed authentication attempts exceeded threshold for identifier: "${rateLimitIdentifier}". Access has been locked for 5 minutes.`,
+            severity: 'High',
+            ip: clientIp
+          }).catch(console.error);
+        }
         return NextResponse.json({
           success: false,
           error: attempt.locked 
@@ -250,6 +259,14 @@ export async function POST(request: Request) {
 
       if (!isMatch) {
         const attempt = recordFailedAttempt(rateLimitKey);
+        if (attempt.locked) {
+          sendCriticalAlertToWebmaster({
+            title: 'Account Locked Due to Repeated Invalid Passwords',
+            details: `Account "${user.name}" (${user.email}) has been locked for 5 minutes following repeated invalid password attempts.`,
+            severity: 'High',
+            ip: clientIp
+          }).catch(console.error);
+        }
         return NextResponse.json({
           success: false,
           error: attempt.locked 
