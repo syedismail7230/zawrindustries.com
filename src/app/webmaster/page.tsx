@@ -703,7 +703,7 @@ function WebmasterDashboard() {
           boxShadow: isDarkMode ? '0 20px 50px rgba(0,0,0,0.85)' : '0 20px 40px rgba(0,0,0,0.08)',
           overflow: 'hidden'
         }}>
-          {/* Header with Brand Logo & Shield Badge */}
+          {/* Header */}
           <div style={{ padding: '2rem 1.75rem 1.25rem 1.75rem', textAlign: 'center', borderBottom: `1px solid ${theme.border}` }}>
             <div style={{
               display: 'inline-flex',
@@ -712,72 +712,32 @@ function WebmasterDashboard() {
               width: '52px',
               height: '52px',
               borderRadius: '14px',
-              backgroundColor: authProfile ? (isDarkMode ? '#064e3b' : '#dcfce7') : (isDarkMode ? '#1e1b4b' : '#eff6ff'),
-              border: authProfile ? (isDarkMode ? '1px solid #059669' : '1px solid #86efac') : (isDarkMode ? '1px solid #3730a3' : '1px solid #bfdbfe'),
+              backgroundColor: (authProfile || urlAuthKey) ? (isDarkMode ? '#064e3b' : '#dcfce7') : (isDarkMode ? '#1e1b4b' : '#eff6ff'),
+              border: (authProfile || urlAuthKey) ? (isDarkMode ? '1px solid #059669' : '1px solid #86efac') : (isDarkMode ? '1px solid #3730a3' : '1px solid #bfdbfe'),
               marginBottom: '1rem',
-              color: authProfile ? '#10b981' : '#38bdf8'
+              color: (authProfile || urlAuthKey) ? '#10b981' : '#38bdf8'
             }}>
-              {authProfile ? (
+              {(authProfile || urlAuthKey) ? (
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
               ) : (
                 <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
               )}
             </div>
             <h1 style={{ fontSize: '1.45rem', fontWeight: 800, margin: '0 0 0.4rem 0', letterSpacing: '-0.02em', color: theme.fg }}>
-              {authProfile ? 'Authorized Employee Workspace' : 'Webmaster Master Gateway'}
+              {(authProfile || urlAuthKey) ? 'Authorized Employee Workspace' : 'Webmaster Master Gateway'}
             </h1>
             <p style={{ fontSize: '0.82rem', color: theme.muted, margin: 0 }}>
-              {authProfile
-                ? `Welcome, ${authProfile.name} • ${authProfile.role}`
+              {(authProfile || urlAuthKey)
+                ? (authProfile ? `Welcome, ${authProfile.name} • ${authProfile.role}` : 'Unique Profile Authentication Gateway')
                 : 'Super Administrator Authentication • Salted PBKDF2 Vault'}
             </p>
           </div>
 
-          {/* Mode Switch Tabs (Only visible on master gateway, hidden on unique profile links) */}
-          {!authProfile && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: `1px solid ${theme.border}`, backgroundColor: theme.bg }}>
-              <button
-                type="button"
-                onClick={() => { setAuthMode('master'); setLoginStep('key'); }}
-                style={{
-                  padding: '0.85rem 0.5rem',
-                  backgroundColor: authMode === 'master' ? theme.inputBg : 'transparent',
-                  border: 'none',
-                  borderBottom: authMode === 'master' ? '2px solid #38bdf8' : '2px solid transparent',
-                  color: authMode === 'master' ? theme.fg : theme.muted,
-                  fontWeight: 700,
-                  fontSize: '0.82rem',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s'
-                }}
-              >
-                🔑 Master Gateway
-              </button>
-              <button
-                type="button"
-                onClick={() => { setAuthMode('staff'); setStaffLoginError(''); }}
-                style={{
-                  padding: '0.85rem 0.5rem',
-                  backgroundColor: authMode === 'staff' ? theme.inputBg : 'transparent',
-                  border: 'none',
-                  borderBottom: authMode === 'staff' ? '2px solid #38bdf8' : '2px solid transparent',
-                  color: authMode === 'staff' ? theme.fg : theme.muted,
-                  fontWeight: 700,
-                  fontSize: '0.82rem',
-                  cursor: 'pointer',
-                  transition: 'all 0.15s'
-                }}
-              >
-                👤 Employee Login
-              </button>
-            </div>
-          )}
-
           <div style={{ padding: '1.75rem' }}>
-            {/* ── TAB 1: EMPLOYEE LOGIN (OR UNIQUE PROFILE PORTAL) ── */}
-            {authMode === 'staff' ? (
+            {/* ── VIEW A: DEDICATED EMPLOYEE WORKSPACE GATEWAY (FOR ?authKey=...) ── */}
+            {(authProfile || urlAuthKey) ? (
               <form onSubmit={handleStaffLogin} suppressHydrationWarning style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                {authProfile ? (
+                {authProfile && (
                   <div style={{
                     padding: '1rem',
                     backgroundColor: isDarkMode ? '#1e1b4b' : '#eff6ff',
@@ -811,23 +771,6 @@ function WebmasterDashboard() {
                       </div>
                     </div>
                   </div>
-                ) : (
-                  <div>
-                    <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.45rem', color: theme.muted, fontWeight: 600 }}>
-                      Official Email Address
-                    </label>
-                    <input
-                      type="email"
-                      value={loginEmail}
-                      onChange={(e) => setLoginEmail(e.target.value)}
-                      style={{ width: '100%', padding: '0.75rem 0.9rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '8px', fontSize: '0.875rem' }}
-                      placeholder="name@zawrindustries.com"
-                      autoFocus
-                      required
-                      disabled={isVerifying}
-                      autoComplete="email"
-                    />
-                  </div>
                 )}
 
                 {staffLoginError && (
@@ -853,22 +796,15 @@ function WebmasterDashboard() {
                     <label style={{ fontSize: '0.82rem', color: theme.muted, fontWeight: 600 }}>
                       Password
                     </label>
-                    <button
-                      type="button"
-                      onClick={() => setShowLoginPassword(!showLoginPassword)}
-                      style={{ background: 'none', border: 'none', color: '#38bdf8', fontSize: '0.75rem', cursor: 'pointer', fontWeight: 600, padding: 0 }}
-                    >
-                      {showLoginPassword ? 'Hide' : 'Show'}
-                    </button>
                   </div>
                   <input
                     type={showLoginPassword ? 'text' : 'password'}
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
                     style={{ width: '100%', padding: '0.75rem 0.9rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '8px', fontSize: '0.875rem' }}
-                    placeholder={authProfile ? "Enter your assigned password" : "Enter assigned password"}
+                    placeholder="Enter assigned password"
                     required
-                    autoFocus={!!authProfile}
+                    autoFocus
                     disabled={isVerifying}
                     autoComplete="current-password"
                   />
@@ -876,7 +812,7 @@ function WebmasterDashboard() {
 
                 <button
                   type="submit"
-                  disabled={isVerifying || !loginPassword.trim() || (!authProfile && !loginEmail.trim())}
+                  disabled={isVerifying || !loginPassword.trim()}
                   style={{
                     width: '100%',
                     padding: '0.85rem',
@@ -891,15 +827,15 @@ function WebmasterDashboard() {
                     transition: 'all 0.15s'
                   }}
                 >
-                  {isVerifying ? 'Authenticating...' : authProfile ? 'Unlock Workspace →' : 'Sign In to Workspace →'}
+                  {isVerifying ? 'Authenticating...' : 'Unlock Workspace →'}
                 </button>
               </form>
             ) : (
-              /* ── TAB 2: MASTER SUPERADMIN GATEWAY ── */
+              /* ── VIEW B: SUPERADMIN MASTER GATEWAY (FOR ?token=zawr-admin-gate) ── */
               loginStep === 'key' ? (
                 <form onSubmit={handleAccessKeySubmit} suppressHydrationWarning style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                   <p style={{ fontSize: '0.82rem', color: theme.muted, margin: '0 0 0.5rem 0' }}>
-                    Enter the master access key for SuperAdmin system recovery and unrestricted access.
+                    Enter the master access key for SuperAdmin system recovery and unrestricted control.
                   </p>
                   <div>
                     <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.45rem', color: theme.muted, fontWeight: 600 }}>
@@ -930,58 +866,81 @@ function WebmasterDashboard() {
                       cursor: isVerifying ? 'not-allowed' : 'pointer',
                       borderRadius: '8px',
                       fontSize: '0.875rem',
-                      opacity: isVerifying || !accessKey.trim() ? 0.6 : 1
+                      marginTop: '0.5rem',
+                      opacity: isVerifying || !accessKey.trim() ? 0.6 : 1,
+                      transition: 'all 0.15s'
                     }}
                   >
-                    {isVerifying ? 'Verifying Key...' : 'Next: Security Challenge →'}
+                    {isVerifying ? 'Verifying Key...' : 'Continue to Security Challenge →'}
                   </button>
                 </form>
               ) : (
                 <form onSubmit={handleChallengeSubmit} suppressHydrationWarning style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                  <p style={{ fontSize: '0.82rem', color: theme.muted, margin: '0 0 0.5rem 0' }}>
-                    Answer your offline security challenge question to unlock the Master SuperAdmin vault.
-                  </p>
+                  <div style={{
+                    padding: '0.85rem 1rem',
+                    backgroundColor: isDarkMode ? '#1e1b4b' : '#eff6ff',
+                    border: isDarkMode ? '1px solid #3730a3' : '1px solid #bfdbfe',
+                    borderRadius: '8px',
+                    fontSize: '0.85rem',
+                    color: isDarkMode ? '#e0e7ff' : '#1e3a8a',
+                    lineHeight: 1.5
+                  }}>
+                    <strong style={{ display: 'block', marginBottom: '0.25rem', color: isDarkMode ? '#38bdf8' : '#0284c7' }}>Master Security Challenge:</strong>
+                    {challengeQuestion || 'Loading challenge...'}
+                  </div>
+
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.65rem', color: '#38bdf8', fontWeight: 600 }}>
-                      {challengeQuestion || 'Loading challenge...'}
+                    <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.45rem', color: theme.muted, fontWeight: 600 }}>
+                      Security Answer
                     </label>
                     <input
                       type="text"
                       value={userAnswer}
                       onChange={(e) => setUserAnswer(e.target.value)}
                       style={{ width: '100%', padding: '0.75rem 0.9rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, outline: 'none', borderRadius: '8px', fontSize: '0.875rem' }}
-                      placeholder="Enter offline security answer"
+                      placeholder="Enter the secret answer"
                       autoFocus
                       required
-                      disabled={isVerifying || !challengeQuestion}
-                      autoComplete="off"
+                      disabled={isVerifying}
                     />
                   </div>
+
                   <div style={{ display: 'flex', gap: '0.75rem' }}>
                     <button
                       type="button"
                       onClick={() => setLoginStep('key')}
-                      style={{ width: '35%', padding: '0.75rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '8px', cursor: 'pointer', fontSize: '0.85rem' }}
+                      disabled={isVerifying}
+                      style={{
+                        padding: '0.85rem 1rem',
+                        backgroundColor: 'transparent',
+                        color: theme.fg,
+                        border: `1px solid ${theme.border}`,
+                        borderRadius: '8px',
+                        fontSize: '0.875rem',
+                        fontWeight: 600,
+                        cursor: 'pointer'
+                      }}
                     >
-                      ← Back
+                      Back
                     </button>
                     <button
                       type="submit"
-                      disabled={isVerifying || !challengeQuestion}
+                      disabled={isVerifying || !userAnswer.trim()}
                       style={{
-                        width: '65%',
-                        padding: '0.75rem',
+                        flex: 1,
+                        padding: '0.85rem',
                         backgroundColor: theme.fg,
                         color: theme.bg,
                         border: 'none',
                         fontWeight: 800,
                         cursor: isVerifying ? 'not-allowed' : 'pointer',
                         borderRadius: '8px',
-                        fontSize: '0.85rem',
-                        opacity: isVerifying || !challengeQuestion ? 0.6 : 1
+                        fontSize: '0.875rem',
+                        opacity: isVerifying || !userAnswer.trim() ? 0.6 : 1,
+                        transition: 'all 0.15s'
                       }}
                     >
-                      {isVerifying ? 'Unlocking...' : 'Unlock SuperAdmin Vault'}
+                      {isVerifying ? 'Authenticating...' : 'Unlock Master Console →'}
                     </button>
                   </div>
                 </form>
