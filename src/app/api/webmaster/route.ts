@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { createSessionToken } from '@/lib/webmaster-security';
 
 // Secure server-side environment variable fallbacks
 const ACCESS_KEY = process.env.NEXT_PUBLIC_WEBMASTER_ACCESS_KEY || 'GDkehiuih873276##@';
@@ -76,7 +77,30 @@ export async function POST(request: Request) {
       // Verify the answer (case-insensitive and trimmed)
       const cleanUserAnswer = (answer || '').trim().toLowerCase();
       if (cleanUserAnswer === questionItem.answer) {
-        return NextResponse.json({ success: true });
+        const token = createSessionToken({
+          id: 'usr-master-001',
+          name: 'Super Administrator',
+          email: process.env.WEBMASTER_DEFAULT_ADMIN_EMAIL || 'admin@zawrindustries.com',
+          loginKey: 'master',
+          role: 'Super Administrator',
+          permissions: ['*'],
+          status: 'active',
+          lastLogin: new Date().toISOString(),
+          createdAt: new Date().toISOString(),
+          createdBy: 'System Bootstrap'
+        }, 12); // 12-hour session
+
+        return NextResponse.json({
+          success: true,
+          token,
+          user: {
+            id: 'usr-master-001',
+            name: 'Super Administrator',
+            email: process.env.WEBMASTER_DEFAULT_ADMIN_EMAIL || 'admin@zawrindustries.com',
+            role: 'Super Administrator',
+            permissions: ['*']
+          }
+        });
       } else {
         return NextResponse.json({ success: false, error: 'Incorrect security answer' }, { status: 401 });
       }
@@ -87,3 +111,4 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }
+

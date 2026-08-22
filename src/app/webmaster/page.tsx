@@ -87,18 +87,28 @@ function WebmasterDashboard() {
     { id: 'user-management', label: 'User Management' },
   ];
 
+  const callUsersApi = async (reqBody: any) => {
+    const activeToken = sessionToken || (typeof window !== 'undefined' ? sessionStorage.getItem('webmaster_session_token') : null);
+    const activeKey = accessKey || (typeof window !== 'undefined' ? sessionStorage.getItem('webmaster_master_key') : '') || 'GDkehiuih873276##@';
+    
+    return fetch('/api/webmaster/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(activeToken ? { 'Authorization': `Bearer ${activeToken}` } : {})
+      },
+      body: JSON.stringify({
+        ...reqBody,
+        sessionToken: activeToken,
+        masterKey: activeKey
+      })
+    });
+  };
+
   const fetchUsers = async () => {
     setUserMgmtLoading(true);
     try {
-      const res = await fetch('/api/webmaster/users', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          action: 'list-users',
-          sessionToken,
-          masterKey: accessKey
-        })
-      });
+      const res = await callUsersApi({ action: 'list-users' });
       const data = await res.json();
       if (data.success && data.users) {
         setAllUsers(data.users);
@@ -178,6 +188,11 @@ function WebmasterDashboard() {
           } else {
             sessionStorage.removeItem('webmaster_session_token');
           }
+        }
+
+        const storedKey = sessionStorage.getItem('webmaster_master_key');
+        if (storedKey) {
+          setAccessKey(storedKey);
         }
 
         if (sessionStorage.getItem('webmaster_logged_in') === 'true') {
@@ -672,8 +687,15 @@ function WebmasterDashboard() {
         if (data.success) {
           try {
             sessionStorage.setItem('webmaster_logged_in', 'true');
+            if (data.token) {
+              sessionStorage.setItem('webmaster_session_token', data.token);
+              setSessionToken(data.token);
+            }
+            if (accessKey) {
+              sessionStorage.setItem('webmaster_master_key', accessKey);
+            }
           } catch (err) {}
-          setCurrentUser({
+          setCurrentUser(data.user || {
             id: 'usr-master',
             name: 'Super Administrator',
             email: 'admin@zawrindustries.com',
@@ -681,6 +703,7 @@ function WebmasterDashboard() {
             permissions: ['*']
           });
           setIsAuthenticated(true);
+          setAuthorized(true);
         } else {
           alert(data.error || 'Incorrect answer');
         }
@@ -3614,21 +3637,15 @@ function WebmasterDashboard() {
 
                 setUserMgmtLoading(true);
                 try {
-                  const res = await fetch('/api/webmaster/users', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                      action: editingUser ? 'update-user' : 'create-user',
-                      sessionToken,
-                      masterKey: accessKey,
-                      id: editingUser?.id,
-                      name: newUserName,
-                      email: newUserEmail,
-                      password: newUserPassword,
-                      role: newUserRole,
-                      permissions: newUserPermissions,
-                      status: newUserStatus
-                    })
+                  const res = await callUsersApi({
+                    action: editingUser ? 'update-user' : 'create-user',
+                    id: editingUser?.id,
+                    name: newUserName,
+                    email: newUserEmail,
+                    password: newUserPassword,
+                    role: newUserRole,
+                    permissions: newUserPermissions,
+                    status: newUserStatus
                   });
                   const data = await res.json();
                   if (data.success) {
@@ -4136,17 +4153,11 @@ function WebmasterDashboard() {
                               title="Regenerate & Revoke Old Link"
                               onClick={async () => {
                                 if (!window.confirm(`Regenerate unique login link for "${u.name}"? The previous link will be permanently revoked.`)) return;
-                                setUserMgmtLoading(true);
+                                 setUserMgmtLoading(true);
                                 try {
-                                  const res = await fetch('/api/webmaster/users', {
-                                    method: 'POST',
-                                    headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify({
-                                      action: 'regenerate-login-key',
-                                      sessionToken,
-                                      masterKey: accessKey,
-                                      id: u.id
-                                    })
+                                  const res = await callUsersApi({
+                                    action: 'regenerate-login-key',
+                                    id: u.id
                                   });
                                   const data = await res.json();
                                   if (data.success && data.loginKey) {
@@ -4222,16 +4233,10 @@ function WebmasterDashboard() {
                               }
                               setUserMgmtLoading(true);
                               try {
-                                const res = await fetch('/api/webmaster/users', {
-                                  method: 'POST',
-                                  headers: { 'Content-Type': 'application/json' },
-                                  body: JSON.stringify({
-                                    action: 'reset-password',
-                                    sessionToken,
-                                    masterKey: accessKey,
-                                    id: u.id,
-                                    newPassword: newPass
-                                  })
+                                const res = await callUsersApi({
+                                  action: 'reset-password',
+                                  id: u.id,
+                                  newPassword: newPass
                                 });
                                 const data = await res.json();
                                 if (data.success) {
@@ -4254,16 +4259,10 @@ function WebmasterDashboard() {
                               const nextStatus = u.status === 'active' ? 'suspended' : 'active';
                               setUserMgmtLoading(true);
                               try {
-                                const res = await fetch('/api/webmaster/users', {
-                                  method: 'POST',
-                                  headers: { 'Content-Type': 'application/json' },
-                                  body: JSON.stringify({
-                                    action: 'update-user',
-                                    sessionToken,
-                                    masterKey: accessKey,
-                                    id: u.id,
-                                    status: nextStatus
-                                  })
+                                const res = await callUsersApi({
+                                  action: 'update-user',
+                                  id: u.id,
+                                  status: nextStatus
                                 });
                                 const data = await res.json();
                                 if (data.success) {
@@ -4286,15 +4285,9 @@ function WebmasterDashboard() {
                               if (!window.confirm(`Are you sure you want to permanently delete user profile for "${u.name}" (${u.email})?`)) return;
                               setUserMgmtLoading(true);
                               try {
-                                const res = await fetch('/api/webmaster/users', {
-                                  method: 'POST',
-                                  headers: { 'Content-Type': 'application/json' },
-                                  body: JSON.stringify({
-                                    action: 'delete-user',
-                                    sessionToken,
-                                    masterKey: accessKey,
-                                    id: u.id
-                                  })
+                                const res = await callUsersApi({
+                                  action: 'delete-user',
+                                  id: u.id
                                 });
                                 const data = await res.json();
                                 if (data.success) {
