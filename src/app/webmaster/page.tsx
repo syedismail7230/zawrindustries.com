@@ -4248,6 +4248,8 @@ function WebmasterDashboard() {
     return currentUser.permissions.includes(item.id);
   });
 
+  const isSuperAdmin = currentUser ? (currentUser.permissions.includes('*') || currentUser.role === 'Super Administrator') : false;
+
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: theme.bg, color: theme.fg, fontFamily: 'sans-serif', overflow: 'hidden' }}>
       
@@ -4566,35 +4568,37 @@ function WebmasterDashboard() {
                   </span>
                 </button>
 
-                {/* Option 3: Settings */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowSettingsModal(true);
-                    setShowUserDropup(false);
-                  }}
-                  style={{
-                    width: '100%',
-                    padding: '0.6rem 0.75rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '0.65rem',
-                    backgroundColor: 'transparent',
-                    color: theme.fg,
-                    border: 'none',
-                    borderRadius: '6px',
-                    cursor: 'pointer',
-                    fontSize: '0.82rem',
-                    fontWeight: 600,
-                    textAlign: 'left',
-                    transition: 'background-color 0.15s ease',
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.hover || 'rgba(255,255,255,0.05)'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                >
-                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                  <span>Settings</span>
-                </button>
+                {/* Option 3: Settings (Super Administrator Only) */}
+                {isSuperAdmin && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowSettingsModal(true);
+                      setShowUserDropup(false);
+                    }}
+                    style={{
+                      width: '100%',
+                      padding: '0.6rem 0.75rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.65rem',
+                      backgroundColor: 'transparent',
+                      color: theme.fg,
+                      border: 'none',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      fontSize: '0.82rem',
+                      fontWeight: 600,
+                      textAlign: 'left',
+                      transition: 'background-color 0.15s ease',
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = theme.hover || 'rgba(255,255,255,0.05)'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    <span>Settings</span>
+                  </button>
+                )}
 
                 <div style={{ height: '1px', backgroundColor: theme.border, margin: '0.2rem 0.25rem' }} />
 
@@ -4832,12 +4836,24 @@ function WebmasterDashboard() {
           }}>
             <div style={{ padding: '1.25rem 1.5rem', borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor: theme.inputBg }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                <div style={{ width: '36px', height: '36px', borderRadius: '50%', backgroundColor: '#38bdf8', color: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: '1rem' }}>
-                  Z
+                <div style={{
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  backgroundColor: theme.hover,
+                  color: theme.fg,
+                  border: `1px solid ${theme.border}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontWeight: 800,
+                  fontSize: '0.95rem'
+                }}>
+                  {(currentUser?.name?.[0] || 'U').toUpperCase()}
                 </div>
                 <div>
-                  <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: theme.fg }}>Administrator Profile</h3>
-                  <span style={{ fontSize: '0.72rem', color: theme.muted }}>Zawr Master Administrator Credentials</span>
+                  <h3 style={{ margin: 0, fontSize: '1.05rem', fontWeight: 800, color: theme.fg }}>{currentUser?.name || 'User Profile'}</h3>
+                  <span style={{ fontSize: '0.72rem', color: theme.muted }}>{currentUser?.role || 'Staff Account'}</span>
                 </div>
               </div>
               <button
@@ -4851,38 +4867,41 @@ function WebmasterDashboard() {
             <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
               <div style={{ padding: '1rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '10px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                  <span style={{ fontSize: '0.75rem', color: theme.muted }}>Access Level</span>
-                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#10b981', backgroundColor: 'rgba(16,185,129,0.1)', padding: '0.2rem 0.6rem', borderRadius: '20px' }}>Superadmin (Tier 1)</span>
+                  <span style={{ fontSize: '0.75rem', color: theme.muted }}>Role &amp; Access Tier</span>
+                  <span style={{ fontSize: '0.75rem', fontWeight: 800, color: isSuperAdmin ? '#10b981' : '#38bdf8', backgroundColor: isSuperAdmin ? 'rgba(16,185,129,0.1)' : 'rgba(56,189,248,0.1)', padding: '0.2rem 0.6rem', borderRadius: '20px' }}>
+                    {isSuperAdmin ? 'Super Administrator (Tier 1)' : `${currentUser?.role || 'Staff Member'} (Restricted)`}
+                  </span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                  <span style={{ fontSize: '0.75rem', color: theme.muted }}>Primary Authority</span>
-                  <span style={{ fontSize: '0.78rem', fontWeight: 700, color: theme.fg }}>admin@zawrindustries.com</span>
+                  <span style={{ fontSize: '0.75rem', color: theme.muted }}>Official Email</span>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 700, color: theme.fg }}>{currentUser?.email || 'N/A'}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
                   <span style={{ fontSize: '0.75rem', color: theme.muted }}>Authentication Protocol</span>
-                  <span style={{ fontSize: '0.78rem', fontWeight: 700, color: theme.fg }}>Offline Challenge Verification</span>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 700, color: theme.fg }}>{isSuperAdmin ? 'Master Challenge Protocol' : 'Unique HMAC Profile Token'}</span>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span style={{ fontSize: '0.75rem', color: theme.muted }}>Active Session Status</span>
-                  <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#38bdf8' }}>Verified &amp; Edge Encrypted</span>
+                  <span style={{ fontSize: '0.75rem', color: theme.muted }}>Session Status</span>
+                  <span style={{ fontSize: '0.78rem', fontWeight: 700, color: '#10b981' }}>Active &amp; Authenticated</span>
                 </div>
               </div>
 
               <div>
-                <h4 style={{ fontSize: '0.8rem', fontWeight: 700, color: theme.muted, textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.5rem 0' }}>Assigned Master Permissions</h4>
+                <h4 style={{ fontSize: '0.8rem', fontWeight: 700, color: theme.muted, textTransform: 'uppercase', letterSpacing: '0.05em', margin: '0 0 0.5rem 0' }}>
+                  {isSuperAdmin ? 'Master Access Privileges' : 'Granted Desk Permissions'}
+                </h4>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.4rem', fontSize: '0.75rem' }}>
-                  <div style={{ padding: '0.45rem 0.6rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <span style={{ color: '#10b981' }}>✓</span> Supabase Live Tables
-                  </div>
-                  <div style={{ padding: '0.45rem 0.6rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <span style={{ color: '#10b981' }}>✓</span> Realtime Analytics
-                  </div>
-                  <div style={{ padding: '0.45rem 0.6rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <span style={{ color: '#10b981' }}>✓</span> SMTP Mail Relay
-                  </div>
-                  <div style={{ padding: '0.45rem 0.6rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                    <span style={{ color: '#10b981' }}>✓</span> Edge Security Controls
-                  </div>
+                  {isSuperAdmin ? (
+                    <div style={{ padding: '0.45rem 0.6rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '0.4rem', gridColumn: '1 / -1' }}>
+                      <span style={{ color: '#10b981' }}>✓</span> Full Master Access Across All 14 Desks &amp; User Controls
+                    </div>
+                  ) : (
+                    ALL_NAV_ITEMS.filter(item => currentUser?.permissions?.includes(item.id)).map(item => (
+                      <div key={item.id} style={{ padding: '0.45rem 0.6rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, borderRadius: '6px', display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                        <span style={{ color: '#10b981' }}>✓</span> {item.label}
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
 
@@ -4909,9 +4928,9 @@ function WebmasterDashboard() {
       )}
 
       {/* ───────────────────────────────────────────────────────────── */}
-      {/* WEBMASTER SETTINGS MODAL */}
+      {/* WEBMASTER SETTINGS MODAL (SUPERADMIN ONLY) */}
       {/* ───────────────────────────────────────────────────────────── */}
-      {showSettingsModal && (
+      {showSettingsModal && isSuperAdmin && (
         <div style={{
           position: 'fixed',
           inset: 0,
