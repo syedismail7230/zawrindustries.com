@@ -12,13 +12,13 @@ const Capabilities3DGrid = dynamic(() => import('@/components/Capabilities3DGrid
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
-  title: "Trade & Logistics Solutions — Zawr Industries India",
-  description: "Zawr Industries offers technology-enabled trade and logistics solutions across India and international markets — automated supply chain, multi-modal freight, AGV warehousing, and smart mobility platforms.",
+  title: "Logistics and Transport — Zawr Industries",
+  description: "Technology-enabled trade and logistics solutions, multi-modal freight, automated AGV warehousing, and AI supply chain routing.",
   alternates: {
     canonical: 'https://zawrindustries.com/industries/transport-and-logistics',
   },
   openGraph: {
-    title: "Transport & Logistics Automation — Zawr Industries",
+    title: "Logistics and Transport — Zawr Industries",
     description: "Multi-modal freight, smart fleet telematics, AGV warehousing, and automated supply chain routing.",
     url: "https://zawrindustries.com/industries/transport-and-logistics",
     type: "website",

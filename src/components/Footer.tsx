@@ -202,9 +202,9 @@ export default function Footer() {
 
           <h4 className="mt-8">Industries</h4>
           <ul className="footer-links">
-            <li><Link href="/industries/it-service">IT Service</Link></li>
-            <li><Link href="/industries/transport-and-logistics">Transport and Logistics</Link></li>
+            <li><Link href="/industries/it-service">IT Services</Link></li>
             <li><Link href="/industries/manufacturing">Manufacturing</Link></li>
+            <li><Link href="/industries/transport-and-logistics">Logistics and Transport</Link></li>
             <li><Link href="/industries/estate">Estate</Link></li>
           </ul>
         </div>
@@ -241,10 +241,9 @@ export default function Footer() {
 
           <h4 className="mt-8">Contact</h4>
           <ul className="footer-links">
-            <li><Link href="/investors">Investors</Link></li>
+            <li><Link href="/contact">Contact Us</Link></li>
             <li><Link href="/contact/client-relations">Client Relations</Link></li>
             <li><Link href="/contact/sponsorship">Sponsorship</Link></li>
-            <li><Link href="/contact/public-relations">Public Relations</Link></li>
             <li><Link href="/contact/partner">Partner</Link></li>
             <li><a href="mailto:Grievance@zawrindustries.com">Grievance</a></li>
           </ul>

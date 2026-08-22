@@ -91,14 +91,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     if (route === '') {
       priority = 1.0;
       changeFrequency = 'daily';
-    } else if (['/industries/it-service', '/industries/transport-and-logistics', '/industries/manufacturing', '/industries/estate', '/investors', '/careers', '/contact'].includes(route)) {
+    } else if (['/industries/it-service', '/industries/manufacturing', '/industries/transport-and-logistics', '/industries/estate'].includes(route)) {
+      priority = 0.98;
+      changeFrequency = 'daily';
+    } else if (['/contact'].includes(route)) {
       priority = 0.95;
       changeFrequency = 'daily';
-    } else if (['/about', '/platforms', '/newsroom'].includes(route)) {
-      priority = 0.85;
+    } else if (['/about', '/platforms', '/investors', '/careers', '/newsroom'].includes(route)) {
+      priority = 0.75;
       changeFrequency = 'weekly';
-    } else if (['/sustainability/empowerment', '/newsroom/media-kit', '/fraud-alert', '/notices'].includes(route)) {
-      priority = 0.3;
+    } else if (['/sustainability/empowerment', '/newsroom/media-kit', '/fraud-alert', '/notices', '/contact/public-relations'].includes(route)) {
+      priority = 0.2;
       changeFrequency = 'monthly';
     }
     

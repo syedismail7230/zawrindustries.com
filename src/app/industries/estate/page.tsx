@@ -16,13 +16,13 @@ const RealEstate3DGrassHero = dynamic(() => import('@/components/RealEstate3DGra
 });
 
 export const metadata: Metadata = {
-  title: "Estate — Real Estate Development & Infrastructure | Zawr Industries",
-  description: "Zawr Industries delivers smart commercial infrastructure, modern residential developments, and strategic real estate asset management across India and the UAE.",
+  title: "Estate — Zawr Industries",
+  description: "Smart commercial real estate developments, modern residential infrastructure, and strategic property asset management.",
   alternates: {
     canonical: 'https://zawrindustries.com/industries/estate',
   },
   openGraph: {
-    title: "Estate & Infrastructure Solutions — Zawr Industries",
+    title: "Estate — Zawr Industries",
     description: "Smart commercial real estate, sustainable urban infrastructure, and strategic property management.",
     url: "https://zawrindustries.com/industries/estate",
     type: "website",

@@ -220,9 +220,9 @@ export default function Header() {
             </span>
           </div>
           <div className={`dropdown ${activeMobileSubmenu === 'industries' ? 'mobile-submenu-open' : ''}`}>
-            <Link href="/industries/it-service" onClick={closeMobileMenu}>IT Service</Link>
-            <Link href="/industries/transport-and-logistics" onClick={closeMobileMenu}>Transport and Logistics</Link>
+            <Link href="/industries/it-service" onClick={closeMobileMenu}>IT Services</Link>
             <Link href="/industries/manufacturing" onClick={closeMobileMenu}>Manufacturing</Link>
+            <Link href="/industries/transport-and-logistics" onClick={closeMobileMenu}>Logistics and Transport</Link>
             <Link href="/industries/estate" onClick={closeMobileMenu}>Estate</Link>
           </div>
         </div>

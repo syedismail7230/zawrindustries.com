@@ -4,13 +4,13 @@ import ITServicesPageClient from './ITServicesPageClient';
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
-  title: "IT Services & Custom Software Development — Zawr Industries Bangalore",
-  description: "Zawr Industries delivers custom enterprise software, AI/ML engineering, cloud architecture, cybersecurity, and full-stack digital transformation across India, UAE, and USA.",
+  title: "IT Services — Zawr Industries",
+  description: "Custom enterprise software engineering, AI/ML platforms, cloud infrastructure, cybersecurity, and digital transformation.",
   alternates: {
     canonical: 'https://zawrindustries.com/industries/it-service',
   },
   openGraph: {
-    title: "IT Services & Software Engineering — Zawr Industries",
+    title: "IT Services — Zawr Industries",
     description: "Enterprise custom software development, cloud infrastructure, AI models, and cybersecurity solutions headquartered in Bengaluru.",
     url: "https://zawrindustries.com/industries/it-service",
     type: "website",

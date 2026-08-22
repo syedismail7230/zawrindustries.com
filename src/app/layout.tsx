@@ -318,16 +318,9 @@ export default function RootLayout({
                     {
                       "@type": "WebPage",
                       "@id": "https://zawrindustries.com/industries/it-service#webpage",
-                      "name": "IT Service",
+                      "name": "IT Services",
                       "url": "https://zawrindustries.com/industries/it-service",
                       "description": "Custom Software Engineering, AI Platforms, Cloud Infrastructure & Cybersecurity"
-                    },
-                    {
-                      "@type": "WebPage",
-                      "@id": "https://zawrindustries.com/industries/transport-and-logistics#webpage",
-                      "name": "Transport and Logistics",
-                      "url": "https://zawrindustries.com/industries/transport-and-logistics",
-                      "description": "Supply Chain Logistics, Fleet Telematics, AGV Warehousing & Multi-Modal Freight"
                     },
                     {
                       "@type": "WebPage",
@@ -338,6 +331,13 @@ export default function RootLayout({
                     },
                     {
                       "@type": "WebPage",
+                      "@id": "https://zawrindustries.com/industries/transport-and-logistics#webpage",
+                      "name": "Logistics and Transport",
+                      "url": "https://zawrindustries.com/industries/transport-and-logistics",
+                      "description": "Supply Chain Logistics, Fleet Telematics, AGV Warehousing & Multi-Modal Freight"
+                    },
+                    {
+                      "@type": "WebPage",
                       "@id": "https://zawrindustries.com/industries/estate#webpage",
                       "name": "Estate",
                       "url": "https://zawrindustries.com/industries/estate",
@@ -345,22 +345,8 @@ export default function RootLayout({
                     },
                     {
                       "@type": "WebPage",
-                      "@id": "https://zawrindustries.com/investors#webpage",
-                      "name": "Investors",
-                      "url": "https://zawrindustries.com/investors",
-                      "description": "Audited Financial Statements, Shareholder Governance & Capital Growth"
-                    },
-                    {
-                      "@type": "WebPage",
-                      "@id": "https://zawrindustries.com/careers#webpage",
-                      "name": "Careers",
-                      "url": "https://zawrindustries.com/careers",
-                      "description": "Full-Time Engineering Positions, Global Freelance Network & Career Growth"
-                    },
-                    {
-                      "@type": "WebPage",
                       "@id": "https://zawrindustries.com/contact#webpage",
-                      "name": "Contact",
+                      "name": "Contact Us",
                       "url": "https://zawrindustries.com/contact",
                       "description": "Executive Public Relations, Client Relations Desk & Global Inquiries"
                     }
@@ -374,20 +360,20 @@ export default function RootLayout({
                     {
                       "@type": "SiteNavigationElement",
                       "position": 1,
-                      "name": "IT Service",
+                      "name": "IT Services",
                       "url": "https://zawrindustries.com/industries/it-service"
                     },
                     {
                       "@type": "SiteNavigationElement",
                       "position": 2,
-                      "name": "Transport and Logistics",
-                      "url": "https://zawrindustries.com/industries/transport-and-logistics"
+                      "name": "Manufacturing",
+                      "url": "https://zawrindustries.com/industries/manufacturing"
                     },
                     {
                       "@type": "SiteNavigationElement",
                       "position": 3,
-                      "name": "Manufacturing",
-                      "url": "https://zawrindustries.com/industries/manufacturing"
+                      "name": "Logistics and Transport",
+                      "url": "https://zawrindustries.com/industries/transport-and-logistics"
                     },
                     {
                       "@type": "SiteNavigationElement",
@@ -398,19 +384,7 @@ export default function RootLayout({
                     {
                       "@type": "SiteNavigationElement",
                       "position": 5,
-                      "name": "Investors",
-                      "url": "https://zawrindustries.com/investors"
-                    },
-                    {
-                      "@type": "SiteNavigationElement",
-                      "position": 6,
-                      "name": "Careers",
-                      "url": "https://zawrindustries.com/careers"
-                    },
-                    {
-                      "@type": "SiteNavigationElement",
-                      "position": 7,
-                      "name": "Contact",
+                      "name": "Contact Us",
                       "url": "https://zawrindustries.com/contact"
                     }
                   ]

@@ -9,13 +9,13 @@ const FactoryDashboardInteractive = dynamic(() => import('@/components/FactoryDa
 import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
-  title: "AI Powered Precision Manufacturing — Zawr Industries",
-  description: "Zawr Industries delivers AI-powered precision manufacturing, 3D robotics, CNC metallurgy, and turnkey industrial production under Make in India.",
+  title: "Manufacturing — Zawr Industries",
+  description: "AI-powered precision manufacturing, 3D industrial robotics, CNC metallurgy, and turnkey manufacturing solutions under Make in India.",
   alternates: {
     canonical: 'https://zawrindustries.com/industries/manufacturing',
   },
   openGraph: {
-    title: "Precision Manufacturing & Industrial Autonomy — Zawr Industries",
+    title: "Manufacturing — Zawr Industries",
     description: "Multi-axis CNC milling, robotic automation, and AI defect detection for aerospace and industrial engineering.",
     url: "https://zawrindustries.com/industries/manufacturing",
     type: "website",

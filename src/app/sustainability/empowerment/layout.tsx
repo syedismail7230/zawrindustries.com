@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
-import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
-  title: "Empowerment & Human Capital — ESG Sustainability | Zawr Industries",
-  description: "Empowering communities and developing workforce skills through inclusive growth, education programs, and sustainable human capital initiatives at Zawr Industries.",
-  alternates: {
-    canonical: 'https://zawrindustries.com/sustainability/empowerment',
-  }
+  title: "Empowerment & Inclusion — Sustainability | Zawr Industries",
+  description: "Zawr Industries empowerment programs, skill development, community upliftment, and gender equality initiatives.",
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default function EmpowermentLayout({
@@ -14,16 +14,5 @@ export default function EmpowermentLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <BreadcrumbJsonLd
-        items={[
-          { name: 'Home', item: '/' },
-          { name: 'Sustainability', item: '/sustainability/environment' },
-          { name: 'Empowerment', item: '/sustainability/empowerment' }
-        ]}
-      />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }

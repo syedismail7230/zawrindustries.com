@@ -1,12 +1,12 @@
 import { Metadata } from 'next';
-import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
-  title: "Media Kit & Brand Assets — Press Kit | Zawr Industries",
-  description: "Official media kit, brand guidelines, executive photography, and certified company logos for press and media outlets.",
-  alternates: {
-    canonical: 'https://zawrindustries.com/newsroom/media-kit',
-  }
+  title: "Media & Brand Assets — Newsroom | Zawr Industries",
+  description: "Official logos, brand guidelines, executive photography, and press kits for Zawr Industries.",
+  robots: {
+    index: false,
+    follow: true,
+  },
 };
 
 export default function MediaKitLayout({
@@ -14,16 +14,5 @@ export default function MediaKitLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <BreadcrumbJsonLd
-        items={[
-          { name: 'Home', item: '/' },
-          { name: 'Newsroom', item: '/newsroom' },
-          { name: 'Media Kit', item: '/newsroom/media-kit' }
-        ]}
-      />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }
