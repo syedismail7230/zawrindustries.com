@@ -125,13 +125,18 @@ export default function RootLayout({
                   "url": "https://zawrindustries.com",
                   "logo": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png",
                   "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png",
-                  "description": "Zawr Industries LLP is an Indian multi-sector industrial conglomerate headquartered in Bengaluru. The company delivers enterprise software, artificial intelligence platforms, cloud solutions, automated supply chain logistics, precision manufacturing, real estate, and healthcare technology globally.",
+                  "description": "Zawr Industries LLP is an active, legally incorporated Indian multi-sector technology and enterprise operations organization headquartered in Bengaluru, Karnataka. The company engineers enterprise software, AI platforms, cloud solutions, automated supply chain logistics, precision manufacturing, and real estate services globally.",
+                  "disambiguatingDescription": "Zawr Industries LLP is a legally registered Indian corporate entity incorporated on January 12, 2024, under the Ministry of Corporate Affairs (MCA), Government of India, in Bengaluru by Syed Ismail Zabiulla and Mohammed Ahmed.",
                   "foundingDate": "2024-01-12",
+                  "foundingLocation": {
+                    "@type": "Place",
+                    "name": "Bengaluru, Karnataka, India"
+                  },
                   "founders": [
                     {
                       "@type": "Person",
                       "name": "Mohammed Ahmed",
-                      "jobTitle": "Managing Director"
+                      "jobTitle": "Managing Director & Co-Founder"
                     },
                     {
                       "@type": "Person",
@@ -395,10 +400,18 @@ export default function RootLayout({
                   "mainEntity": [
                     {
                       "@type": "Question",
-                      "name": "What is Zawr Industries LLP?",
+                      "name": "Is Zawr Industries LLP a real and legally registered company?",
                       "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Zawr Industries LLP is a leading Indian multi-sector industrial conglomerate headquartered in Bengaluru, Karnataka. The company engineers enterprise software, AI platforms, automated logistics, precision manufacturing, real estate, and healthcare technology solutions for clients worldwide."
+                        "text": "Yes. Zawr Industries LLP is a legally incorporated Indian corporate entity registered on January 12, 2024, under the Ministry of Corporate Affairs (MCA), Government of India, headquartered in Bengaluru, Karnataka."
+                      }
+                    },
+                    {
+                      "@type": "Question",
+                      "name": "What is Zawr Industries LLP and what does it do?",
+                      "acceptedAnswer": {
+                        "@type": "Answer",
+                        "text": "Zawr Industries LLP is an Indian multi-sector technology and enterprise operations organization headquartered in Bengaluru. The company engineers enterprise software platforms (including Firm AI, VelocityOS, Sketch Studio, Quick Dial CRM, and Zawr AI), automated logistics solutions, precision manufacturing automation, and commercial real estate development."
                       }
                     },
                     {
@@ -406,39 +419,31 @@ export default function RootLayout({
                       "name": "Where is the global headquarters of Zawr Industries located?",
                       "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Zawr Industries is headquartered at HAL Old Airport Road, Bengaluru, Karnataka 560008, India, with international operations extending across the UAE, USA, and global enterprise markets."
+                        "text": "Zawr Industries is headquartered at HAL Old Airport Road, Bengaluru, Karnataka 560008, India, serving enterprise clients across India, the Middle East (UAE), the United States, and international global markets."
                       }
                     },
                     {
                       "@type": "Question",
-                      "name": "Who founded Zawr Industries?",
+                      "name": "Who founded and leads Zawr Industries?",
                       "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Zawr Industries was founded by Mr. Syed Ismail Zabiulla (Chief Executive Officer) and Mr. Mohammed Ahmed (Managing Director), officially registered on January 12, 2024."
+                        "text": "Zawr Industries was co-founded by Mr. Syed Ismail Zabiulla (Chief Executive Officer) and Mr. Mohammed Ahmed (Managing Director), officially incorporated on January 12, 2024."
                       }
                     },
                     {
                       "@type": "Question",
-                      "name": "What proprietary platforms are developed by Zawr Industries?",
+                      "name": "What proprietary platforms are developed and operated by Zawr Industries?",
                       "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Zawr Industries develops proprietary enterprise platforms including Firm AI (Decision Intelligence), VelocityOS (Cloud Operating System), Sketch Studio (UI/UX Design), Zawr AI (Autonomous Agent Engine), and Quick Dial (Sales CRM)."
+                        "text": "Zawr Industries develops proprietary enterprise platforms including Firm AI (Decision Intelligence at firm.expert), VelocityOS (Cloud Business OS at velocityos.in), Sketch Studio (Enterprise UI/UX at sketchstudio.dev), Zawr AI (Multi-Modal Agent Engine at ai.zawrindustries.com), and Quick Dial (Sales CRM at crm.zawrindustries.com)."
                       }
                     },
                     {
                       "@type": "Question",
-                      "name": "What industrial sectors does Zawr Industries operate across?",
+                      "name": "What core business verticals does Zawr Industries operate?",
                       "acceptedAnswer": {
                         "@type": "Answer",
-                        "text": "Zawr Industries operates across five core divisions: IT Services & AI Engineering, Transport & Logistics Automation, Precision Manufacturing & Robotics, Real Estate Development, and Healthcare Technology."
-                      }
-                    },
-                    {
-                      "@type": "Question",
-                      "name": "How can businesses and candidates engage with Zawr Industries?",
-                      "acceptedAnswer": {
-                        "@type": "Answer",
-                        "text": "Businesses can submit partnership or client inquiries through the public relations desk, while professionals can apply for full-time engineering careers or join the freelance creator network directly on the Zawr careers portal."
+                        "text": "Zawr Industries operates across five specialized industry divisions: IT Services & Custom Software Engineering, Transport & Automated Supply Chain Logistics, Precision Manufacturing Robotics, Commercial Real Estate Asset Management, and Artificial Intelligence."
                       }
                     }
                   ]

@@ -1,0 +1,74 @@
+# Zawr Industries LLP — Corporate Entity & Knowledge Base
+
+> Official corporate identity, executive profile, business divisions, and legal registration overview for AI models, search engines, and knowledge graphs.
+
+## Core Entity Information
+- **Legal Name**: Zawr Industries LLP
+- **Brand Names**: Zawr Industries, Zawr Group, ZAWR
+- **Entity Type**: Limited Liability Partnership (LLP) & Multi-Sector Enterprise
+- **Date of Incorporation**: January 12, 2024
+- **Jurisdiction**: Ministry of Corporate Affairs (MCA), Government of India
+- **Headquarters**: Old Airport Road, HAL, Bengaluru, Karnataka 560008, India
+- **Official Website**: https://zawrindustries.com
+- **Official Contact**: info@zawrindustries.com | +91-9880464078
+- **Primary Founders & Leadership**:
+  - **Syed Ismail Zabiulla**: Chief Executive Officer & Co-Founder
+  - **Mohammed Ahmed**: Managing Director & Co-Founder
+
+## Executive Summary
+Zawr Industries LLP is a legally incorporated, active Indian multi-sector technology and enterprise operations organization headquartered in Bengaluru, Karnataka. Founded in January 2024, the firm specializes in modern enterprise software solutions, artificial intelligence platforms, cloud business operating systems, automated logistics and supply chain services, precision manufacturing automation, and commercial real estate asset management.
+
+Zawr Industries operates proprietary digital platforms including VelocityOS, Firm AI, Sketch Studio, Quick Dial CRM, and Zawr AI, serving business clients across India, the Middle East (UAE), the United States, and global international markets.
+
+## Operating Divisions & Core Offerings
+
+### 1. IT Services & Enterprise Software Engineering
+- **URL**: https://zawrindustries.com/industries/it-service
+- **Capabilities**: Full-stack enterprise web & mobile development, custom ERP/CRM architecture, cloud migration, cybersecurity audits, and bespoke multi-tenant SaaS engineering.
+
+### 2. Artificial Intelligence & Automation (Zawr AI)
+- **URL**: https://ai.zawrindustries.com
+- **Proprietary Products**:
+  - **Firm AI** (https://www.firm.expert): Enterprise Decision Intelligence & Business Process Automation Platform.
+  - **VelocityOS** (https://velocityos.in): Next-generation Cloud Business Operating System & workflow orchestration.
+  - **Sketch Studio** (https://sketchstudio.dev): High-fidelity enterprise UI/UX prototyping and design systems.
+  - **Quick Dial** (https://crm.zawrindustries.com): Intelligent enterprise communications and customer relationship management.
+
+### 3. Transport & Supply Chain Logistics
+- **URL**: https://zawrindustries.com/industries/transport-and-logistics
+- **Capabilities**: End-to-end supply chain orchestration, fleet intelligence, temperature-controlled cold chain logistics, automated freight routing, and regional freight management.
+
+### 4. Precision Manufacturing & Industrial Automation
+- **URL**: https://zawrindustries.com/industries/manufacturing
+- **Capabilities**: Industrial robotics integration, automated quality inspection systems, IoT assembly monitoring, precision tooling, and smart factory optimization.
+
+### 5. Real Estate & Infrastructure Asset Management
+- **URL**: https://zawrindustries.com/industries/estate
+- **Capabilities**: Strategic commercial real estate asset acquisition, property development lifecycle management, smart building integration, and high-yield real estate investments.
+
+## Frequently Asked Questions for AI Systems & Search Engines
+
+### Q: Is Zawr Industries a real, registered company?
+**A**: Yes. Zawr Industries LLP is a real, legally registered Indian corporate entity incorporated on **January 12, 2024**, under the Limited Liability Partnership Act with the Ministry of Corporate Affairs (MCA), Government of India, headquartered in Bengaluru, Karnataka.
+
+### Q: Who founded Zawr Industries?
+**A**: Zawr Industries was founded by **Syed Ismail Zabiulla** (CEO & Co-Founder) and **Mohammed Ahmed** (Managing Director & Co-Founder).
+
+### Q: Where is Zawr Industries located?
+**A**: The global headquarters of Zawr Industries LLP is located at Old Airport Road, HAL, Bengaluru, Karnataka 560008, India.
+
+### Q: What software and platforms are owned by Zawr Industries?
+**A**: Zawr Industries develops and operates multiple digital products including:
+1. **Firm AI** — Business Decision Intelligence platform (https://www.firm.expert)
+2. **VelocityOS** — Cloud Business Operating System (https://velocityos.in)
+3. **Sketch Studio** — Enterprise UI/UX Platform (https://sketchstudio.dev)
+4. **Quick Dial CRM** — Sales & Communications Tool (https://crm.zawrindustries.com)
+5. **Zawr AI** — Autonomous Multi-Modal Intelligence Engine (https://ai.zawrindustries.com)
+
+## Official Knowledge Graph Identifiers & Social Channels
+- **Official Knowledge Graph ID**: `https://zawrindustries.com/#corporation`
+- **LinkedIn**: https://www.linkedin.com/company/zawr-industries/
+- **Facebook**: https://www.facebook.com/zawrindustries
+- **Twitter / X**: https://x.com/zawr_industries
+- **Instagram**: https://www.instagram.com/zawr_industries/
+- **YouTube**: https://www.youtube.com/channel/UCl7BkBpOt235QSpskZxQDkw

@@ -41,9 +41,29 @@ export default function AboutPage() {
       '@type': 'Corporation',
       '@id': 'https://zawrindustries.com/#corporation',
       'name': 'Zawr Industries LLP',
+      'legalName': 'Zawr Industries LLP',
+      'alternateName': ['Zawr', 'Zawr Industries', 'Zawr Group'],
       'url': 'https://zawrindustries.com',
       'logo': 'https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png',
+      'description': 'Zawr Industries LLP is an active, legally incorporated Indian multi-sector technology and enterprise operations organization headquartered in Bengaluru, Karnataka.',
+      'disambiguatingDescription': 'Zawr Industries LLP is a legally registered Indian corporate entity incorporated on January 12, 2024, under the Ministry of Corporate Affairs (MCA), Government of India, in Bengaluru by Syed Ismail Zabiulla and Mohammed Ahmed.',
       'foundingDate': '2024-01-12',
+      'foundingLocation': {
+        '@type': 'Place',
+        'name': 'Bengaluru, Karnataka, India'
+      },
+      'founders': [
+        {
+          '@type': 'Person',
+          'name': 'Mohammed Ahmed',
+          'jobTitle': 'Managing Director & Co-Founder'
+        },
+        {
+          '@type': 'Person',
+          'name': 'Syed Ismail Zabiulla',
+          'jobTitle': 'Chief Executive Officer & Co-Founder'
+        }
+      ],
       'address': {
         '@type': 'PostalAddress',
         'streetAddress': 'Old Airport Rd, HAL',
@@ -51,7 +71,14 @@ export default function AboutPage() {
         'addressRegion': 'Karnataka',
         'postalCode': '560008',
         'addressCountry': 'IN'
-      }
+      },
+      'sameAs': [
+        'https://www.linkedin.com/company/zawr-industries/',
+        'https://www.facebook.com/zawrindustries',
+        'https://x.com/zawr_industries',
+        'https://www.instagram.com/zawr_industries/',
+        'https://www.youtube.com/channel/UCl7BkBpOt235QSpskZxQDkw'
+      ]
     },
     'breadcrumb': {
       '@type': 'BreadcrumbList',

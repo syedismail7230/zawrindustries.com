@@ -1,0 +1,58 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Corporation",
+  "@id": "https://zawrindustries.com/#corporation",
+  "name": "Zawr Industries LLP",
+  "legalName": "Zawr Industries LLP",
+  "alternateName": ["Zawr Industries", "Zawr", "Zawr Group"],
+  "url": "https://zawrindustries.com",
+  "logo": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png",
+  "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png",
+  "description": "Zawr Industries LLP is a legally incorporated Indian multi-sector technology and enterprise operations organization headquartered in Bengaluru, Karnataka, providing enterprise software, AI platforms, cloud solutions, logistics automation, precision manufacturing, and real estate services.",
+  "disambiguatingDescription": "Zawr Industries LLP is an active Indian corporate entity registered on January 12, 2024 with the Ministry of Corporate Affairs (MCA), Government of India, in Bengaluru by Syed Ismail Zabiulla and Mohammed Ahmed.",
+  "foundingDate": "2024-01-12",
+  "foundingLocation": {
+    "@type": "Place",
+    "name": "Bengaluru, Karnataka, India"
+  },
+  "founders": [
+    {
+      "@type": "Person",
+      "name": "Mohammed Ahmed",
+      "jobTitle": "Managing Director & Co-Founder"
+    },
+    {
+      "@type": "Person",
+      "name": "Syed Ismail Zabiulla",
+      "jobTitle": "Chief Executive Officer & Co-Founder"
+    }
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Old Airport Rd, HAL",
+    "addressLocality": "Bengaluru",
+    "addressRegion": "Karnataka",
+    "postalCode": "560008",
+    "addressCountry": "IN"
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "telephone": "+91-9880464078",
+    "contactType": "customer service",
+    "email": "info@zawrindustries.com"
+  },
+  "sameAs": [
+    "https://www.linkedin.com/company/zawr-industries/",
+    "https://www.facebook.com/zawrindustries",
+    "https://x.com/zawr_industries",
+    "https://www.instagram.com/zawr_industries/",
+    "https://www.youtube.com/channel/UCl7BkBpOt235QSpskZxQDkw"
+  ],
+  "brand": [
+    { "@type": "Brand", "name": "Firm AI", "url": "https://www.firm.expert" },
+    { "@type": "Brand", "name": "VelocityOS", "url": "https://velocityos.in" },
+    { "@type": "Brand", "name": "Sketch Studio", "url": "https://sketchstudio.dev" },
+    { "@type": "Brand", "name": "Quick Dial CRM", "url": "https://crm.zawrindustries.com" },
+    { "@type": "Brand", "name": "Zawr AI", "url": "https://ai.zawrindustries.com" }
+  ]
+}
