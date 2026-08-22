@@ -716,98 +716,86 @@ function WebmasterDashboard() {
     return (
       <div style={{
         minHeight: '100vh',
-        backgroundColor: '#050508',
-        backgroundImage: 'radial-gradient(circle at 50% 10%, rgba(56, 189, 248, 0.12) 0%, transparent 60%), radial-gradient(circle at 85% 90%, rgba(99, 102, 241, 0.08) 0%, transparent 55%)',
-        color: '#ffffff',
+        backgroundColor: theme.bg,
+        color: theme.fg,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        fontFamily: "'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif",
+        fontFamily: 'inherit',
         padding: '1.5rem',
-        position: 'relative',
-        overflow: 'hidden'
+        margin: 0
       }}>
         <style dangerouslySetInnerHTML={{__html: `
           header, footer, .support-widget, .cookie-banner { display: none !important; }
-          body { margin: 0; background-color: #050508; }
-          .wm-input:focus {
-            border-color: #38bdf8 !important;
-            box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
+          body { margin: 0; background-color: ${theme.bg}; overflow: auto !important; }
+          .wm-login-input {
+            width: 100%;
+            padding: 0.75rem 0.9rem;
+            background-color: ${theme.bg};
+            border: 1px solid ${theme.border};
+            color: ${theme.fg};
+            outline: none;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-family: inherit;
+            color-scheme: dark;
+            transition: border-color 0.15s ease;
           }
-          .wm-btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 8px 25px rgba(56, 189, 248, 0.35) !important;
+          .wm-login-input:focus {
+            border-color: ${theme.fg} !important;
+          }
+          .wm-login-input:-webkit-autofill,
+          .wm-login-input:-webkit-autofill:hover, 
+          .wm-login-input:-webkit-autofill:focus, 
+          .wm-login-input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 1000px ${theme.bg} inset !important;
+            -webkit-text-fill-color: ${theme.fg} !important;
+            caret-color: ${theme.fg} !important;
+            color-scheme: dark !important;
+          }
+          .wm-login-btn {
+            width: 100%;
+            padding: 0.85rem;
+            background-color: ${theme.fg};
+            color: ${theme.bg};
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-family: inherit;
+            transition: opacity 0.15s ease;
+          }
+          .wm-login-btn:hover {
+            opacity: 0.9;
           }
         `}} />
-        
-        {/* Ambient Grid Pattern */}
-        <div style={{
-          position: 'absolute',
-          inset: 0,
-          backgroundImage: 'linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px)',
-          backgroundSize: '40px 40px',
-          pointerEvents: 'none',
-          opacity: 0.6
-        }} />
 
         <div style={{
           width: '100%',
-          maxWidth: '480px',
-          border: '1px solid rgba(255, 255, 255, 0.1)',
-          borderTop: '1px solid rgba(56, 189, 248, 0.45)',
-          borderRadius: '24px',
-          backgroundColor: 'rgba(13, 16, 26, 0.82)',
-          backdropFilter: 'blur(24px) saturate(180%)',
-          WebkitBackdropFilter: 'blur(24px) saturate(180%)',
-          boxShadow: '0 30px 70px -15px rgba(0,0,0,0.9), 0 0 50px -10px rgba(56, 189, 248, 0.15)',
-          overflow: 'hidden',
-          position: 'relative',
-          zIndex: 1
+          maxWidth: '440px',
+          border: `1px solid ${theme.border}`,
+          borderRadius: '12px',
+          backgroundColor: theme.inputBg,
+          boxShadow: isDarkMode ? '0 20px 50px rgba(0, 0, 0, 0.85)' : '0 20px 40px rgba(0, 0, 0, 0.08)',
+          overflow: 'hidden'
         }}>
-          {/* Header with Official Wordmark & Floating Crest */}
-          <div style={{ padding: '2.5rem 2rem 1.5rem 2rem', textAlign: 'center', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
-            
-            {/* Official ZAWR INDUSTRIES Wordmark */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '0.4rem',
-              fontSize: '1.2rem',
-              letterSpacing: '0.06em',
-              marginBottom: '1.5rem'
-            }}>
-              <span style={{ fontWeight: 800, color: '#ffffff' }}>ZAWR</span>
-              <span style={{ fontWeight: 300, color: 'rgba(255,255,255,0.65)', letterSpacing: '0.14em' }}>INDUSTRIES</span>
+          {/* Header */}
+          <div style={{ padding: '2.5rem 2rem 1.5rem 2rem', textAlign: 'center', borderBottom: `1px solid ${theme.border}` }}>
+            <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.25rem' }}>
+              <img
+                src={isDarkMode ? "/assets/logo-white.png" : "/assets/logo-black.png"}
+                alt="Zawr Industries"
+                style={{ height: '42px', width: 'auto', objectFit: 'contain' }}
+              />
             </div>
 
-            {/* Glowing Crest Badge */}
-            <div style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              width: '56px',
-              height: '56px',
-              borderRadius: '16px',
-              backgroundColor: (authProfile || urlAuthKey) ? 'rgba(16, 185, 129, 0.12)' : 'rgba(56, 189, 248, 0.12)',
-              border: (authProfile || urlAuthKey) ? '1px solid rgba(16, 185, 129, 0.4)' : '1px solid rgba(56, 189, 248, 0.4)',
-              boxShadow: (authProfile || urlAuthKey) ? '0 0 25px rgba(16, 185, 129, 0.25)' : '0 0 25px rgba(56, 189, 248, 0.25)',
-              marginBottom: '1.1rem',
-              color: (authProfile || urlAuthKey) ? '#10b981' : '#38bdf8'
-            }}>
-              {(authProfile || urlAuthKey) ? (
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-              ) : (
-                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              )}
-            </div>
-
-            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 0.45rem 0', letterSpacing: '-0.02em', color: '#ffffff' }}>
-              {(authProfile || urlAuthKey) ? 'Authorized Employee Workspace' : 'Webmaster Master Gateway'}
+            <h1 style={{ fontSize: '1.35rem', fontWeight: 700, margin: '0 0 0.4rem 0', letterSpacing: '-0.02em', color: theme.fg }}>
+              {(authProfile || urlAuthKey) ? 'Employee Workspace' : 'Webmaster Gateway'}
             </h1>
-            <p style={{ fontSize: '0.82rem', color: 'rgba(255, 255, 255, 0.6)', margin: 0, letterSpacing: '0.01em' }}>
+            <p style={{ fontSize: '0.82rem', color: theme.muted, margin: 0 }}>
               {(authProfile || urlAuthKey)
-                ? (authProfile ? `Welcome, ${authProfile.name} • ${authProfile.role}` : 'Encrypted Workspace Authentication Gateway')
+                ? (authProfile ? `Welcome, ${authProfile.name} • ${authProfile.role}` : 'Dedicated Profile Authentication')
                 : 'Super Administrator Authentication • Salted PBKDF2 Vault'}
             </p>
           </div>
@@ -818,37 +806,36 @@ function WebmasterDashboard() {
               <form onSubmit={handleStaffLogin} suppressHydrationWarning style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                 {authProfile && (
                   <div style={{
-                    padding: '1.1rem 1.25rem',
-                    backgroundColor: 'rgba(30, 41, 59, 0.45)',
-                    border: '1px solid rgba(56, 189, 248, 0.3)',
-                    borderRadius: '14px',
+                    padding: '0.9rem 1rem',
+                    backgroundColor: theme.bg,
+                    border: `1px solid ${theme.border}`,
+                    borderRadius: '8px',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '1rem',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.3)'
+                    gap: '0.85rem'
                   }}>
                     <div style={{
-                      width: '44px',
-                      height: '44px',
+                      width: '38px',
+                      height: '38px',
                       borderRadius: '50%',
-                      background: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)',
-                      color: '#000000',
+                      backgroundColor: theme.hover,
+                      color: theme.fg,
+                      border: `1px solid ${theme.border}`,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      fontWeight: 800,
-                      fontSize: '1.1rem',
-                      flexShrink: 0,
-                      boxShadow: '0 0 15px rgba(56, 189, 248, 0.4)'
+                      fontWeight: 700,
+                      fontSize: '0.95rem',
+                      flexShrink: 0
                     }}>
                       {(authProfile.name?.[0] || 'U').toUpperCase()}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontWeight: 800, fontSize: '0.98rem', color: '#ffffff', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                      <div style={{ fontWeight: 700, fontSize: '0.9rem', color: theme.fg, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {authProfile.name}
                       </div>
-                      <div style={{ fontSize: '0.78rem', color: '#38bdf8', fontWeight: 600, marginTop: '0.15rem' }}>
-                        {authProfile.role} • <span style={{ color: 'rgba(255,255,255,0.7)', fontFamily: 'monospace' }}>{authProfile.email}</span>
+                      <div style={{ fontSize: '0.75rem', color: theme.muted, marginTop: '0.1rem' }}>
+                        {authProfile.role} • <span style={{ fontFamily: 'monospace' }}>{authProfile.email}</span>
                       </div>
                     </div>
                   </div>
@@ -856,43 +843,31 @@ function WebmasterDashboard() {
 
                 {staffLoginError && (
                   <div style={{
-                    padding: '0.85rem 1rem',
-                    backgroundColor: 'rgba(220, 38, 38, 0.15)',
-                    border: '1px solid rgba(239, 68, 68, 0.4)',
-                    borderRadius: '10px',
-                    color: '#fca5a5',
+                    padding: '0.75rem 1rem',
+                    backgroundColor: isDarkMode ? '#1f1315' : '#fee2e2',
+                    border: isDarkMode ? '1px solid #4a1d24' : '1px solid #fca5a5',
+                    borderRadius: '6px',
+                    color: isDarkMode ? '#f87171' : '#dc2626',
                     fontSize: '0.82rem',
                     fontWeight: 600,
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '0.6rem'
+                    gap: '0.5rem'
                   }}>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
                     <span>{staffLoginError}</span>
                   </div>
                 )}
 
                 <div>
-                  <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.5rem', color: 'rgba(255, 255, 255, 0.7)', fontWeight: 600, letterSpacing: '0.02em' }}>
+                  <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.45rem', color: theme.muted, fontWeight: 600 }}>
                     Assigned Account Password
                   </label>
                   <input
                     type="password"
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
-                    className="wm-input"
-                    style={{
-                      width: '100%',
-                      padding: '0.85rem 1rem',
-                      backgroundColor: 'rgba(18, 22, 34, 0.8)',
-                      border: '1px solid rgba(255, 255, 255, 0.12)',
-                      color: '#ffffff',
-                      outline: 'none',
-                      borderRadius: '10px',
-                      fontSize: '0.9rem',
-                      fontFamily: 'inherit',
-                      transition: 'all 0.2s'
-                    }}
+                    className="wm-login-input"
                     placeholder="Enter your assigned password"
                     required
                     autoFocus
@@ -904,55 +879,32 @@ function WebmasterDashboard() {
                 <button
                   type="submit"
                   disabled={isVerifying || !loginPassword.trim()}
-                  className="wm-btn-primary"
+                  className="wm-login-btn"
                   style={{
-                    width: '100%',
-                    padding: '0.9rem',
-                    background: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)',
-                    color: '#000000',
-                    border: 'none',
-                    fontWeight: 800,
-                    cursor: isVerifying ? 'not-allowed' : 'pointer',
-                    borderRadius: '10px',
-                    fontSize: '0.9rem',
-                    marginTop: '0.5rem',
-                    boxShadow: '0 4px 20px rgba(56, 189, 248, 0.25)',
-                    transition: 'all 0.2s',
-                    letterSpacing: '0.02em'
+                    opacity: isVerifying || !loginPassword.trim() ? 0.6 : 1,
+                    cursor: isVerifying || !loginPassword.trim() ? 'not-allowed' : 'pointer'
                   }}
                 >
-                  {isVerifying ? 'Authenticating Credentials...' : 'Unlock Workspace →'}
+                  {isVerifying ? 'Authenticating...' : 'Unlock Workspace →'}
                 </button>
               </form>
             ) : (
               /* ── VIEW B: SUPERADMIN MASTER GATEWAY (FOR ?token=zawr-admin-gate) ── */
               loginStep === 'key' ? (
                 <form onSubmit={handleAccessKeySubmit} suppressHydrationWarning style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                  <p style={{ fontSize: '0.82rem', color: 'rgba(255, 255, 255, 0.65)', margin: '0 0 0.5rem 0', lineHeight: 1.5 }}>
-                    Enter the master access key for SuperAdmin system recovery and unrestricted conglomerate control.
+                  <p style={{ fontSize: '0.82rem', color: theme.muted, margin: 0, lineHeight: 1.5 }}>
+                    Enter the master access key for SuperAdmin system recovery and website management.
                   </p>
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.5rem', color: 'rgba(255, 255, 255, 0.7)', fontWeight: 600, letterSpacing: '0.02em' }}>
+                    <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.45rem', color: theme.muted, fontWeight: 600 }}>
                       Master Access Key
                     </label>
                     <input
                       type="password"
                       value={accessKey}
                       onChange={(e) => setAccessKey(e.target.value)}
-                      className="wm-input"
-                      style={{
-                        width: '100%',
-                        padding: '0.85rem 1rem',
-                        backgroundColor: 'rgba(18, 22, 34, 0.8)',
-                        border: '1px solid rgba(255, 255, 255, 0.12)',
-                        color: '#ffffff',
-                        outline: 'none',
-                        borderRadius: '10px',
-                        fontSize: '0.9rem',
-                        fontFamily: 'inherit',
-                        transition: 'all 0.2s'
-                      }}
-                      placeholder="Enter master key"
+                      className="wm-login-input"
+                      placeholder="Enter master access key"
                       autoFocus
                       required
                       disabled={isVerifying}
@@ -962,22 +914,10 @@ function WebmasterDashboard() {
                   <button
                     type="submit"
                     disabled={isVerifying || !accessKey.trim()}
-                    className="wm-btn-primary"
+                    className="wm-login-btn"
                     style={{
-                      width: '100%',
-                      padding: '0.9rem',
-                      background: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)',
-                      color: '#000000',
-                      border: 'none',
-                      fontWeight: 800,
-                      cursor: isVerifying ? 'not-allowed' : 'pointer',
-                      borderRadius: '10px',
-                      fontSize: '0.9rem',
-                      marginTop: '0.5rem',
                       opacity: isVerifying || !accessKey.trim() ? 0.6 : 1,
-                      boxShadow: '0 4px 20px rgba(56, 189, 248, 0.25)',
-                      transition: 'all 0.2s',
-                      letterSpacing: '0.02em'
+                      cursor: isVerifying || !accessKey.trim() ? 'not-allowed' : 'pointer'
                     }}
                   >
                     {isVerifying ? 'Verifying Key...' : 'Continue to Security Challenge →'}
@@ -985,55 +925,41 @@ function WebmasterDashboard() {
                 </form>
               ) : (
                 <form onSubmit={handleChallengeSubmit} suppressHydrationWarning style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                  {/* Security Challenge Card */}
                   <div style={{
-                    padding: '1.15rem 1.25rem',
-                    backgroundColor: 'rgba(30, 41, 59, 0.45)',
-                    border: '1px solid rgba(56, 189, 248, 0.3)',
-                    borderRadius: '14px',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.3)',
-                    lineHeight: 1.55
+                    padding: '1rem 1.15rem',
+                    backgroundColor: theme.bg,
+                    border: `1px solid ${theme.border}`,
+                    borderRadius: '8px',
+                    lineHeight: 1.5
                   }}>
                     <div style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.45rem',
                       fontSize: '0.72rem',
-                      fontWeight: 800,
-                      letterSpacing: '0.06em',
-                      color: '#38bdf8',
+                      fontWeight: 700,
+                      letterSpacing: '0.05em',
+                      color: theme.muted,
                       textTransform: 'uppercase',
-                      marginBottom: '0.5rem'
+                      marginBottom: '0.4rem',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.4rem'
                     }}>
-                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                      <span>MASTER SECURITY CHALLENGE</span>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                      <span>Master Security Challenge</span>
                     </div>
-                    <div style={{ fontSize: '0.95rem', color: '#f8fafc', fontWeight: 600 }}>
+                    <div style={{ fontSize: '0.9rem', color: theme.fg, fontWeight: 600 }}>
                       {challengeQuestion || 'Loading security challenge...'}
                     </div>
                   </div>
 
                   <div>
-                    <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.5rem', color: 'rgba(255, 255, 255, 0.7)', fontWeight: 600, letterSpacing: '0.02em' }}>
+                    <label style={{ display: 'block', fontSize: '0.82rem', marginBottom: '0.45rem', color: theme.muted, fontWeight: 600 }}>
                       Security Answer
                     </label>
                     <input
                       type="text"
                       value={userAnswer}
                       onChange={(e) => setUserAnswer(e.target.value)}
-                      className="wm-input"
-                      style={{
-                        width: '100%',
-                        padding: '0.85rem 1rem',
-                        backgroundColor: 'rgba(18, 22, 34, 0.8)',
-                        border: '1px solid rgba(255, 255, 255, 0.12)',
-                        color: '#ffffff',
-                        outline: 'none',
-                        borderRadius: '10px',
-                        fontSize: '0.9rem',
-                        fontFamily: 'inherit',
-                        transition: 'all 0.2s'
-                      }}
+                      className="wm-login-input"
                       placeholder="Enter the secret answer"
                       autoFocus
                       required
@@ -1048,14 +974,14 @@ function WebmasterDashboard() {
                       disabled={isVerifying}
                       style={{
                         padding: '0.85rem 1.25rem',
-                        backgroundColor: 'rgba(255, 255, 255, 0.06)',
-                        color: '#e2e8f0',
-                        border: '1px solid rgba(255, 255, 255, 0.12)',
-                        borderRadius: '10px',
+                        backgroundColor: 'transparent',
+                        color: theme.fg,
+                        border: `1px solid ${theme.border}`,
+                        borderRadius: '6px',
                         fontSize: '0.875rem',
                         fontWeight: 600,
                         cursor: 'pointer',
-                        transition: 'all 0.15s'
+                        transition: 'opacity 0.15s ease'
                       }}
                     >
                       Back
@@ -1063,21 +989,11 @@ function WebmasterDashboard() {
                     <button
                       type="submit"
                       disabled={isVerifying || !userAnswer.trim()}
-                      className="wm-btn-primary"
+                      className="wm-login-btn"
                       style={{
                         flex: 1,
-                        padding: '0.9rem',
-                        background: 'linear-gradient(135deg, #38bdf8 0%, #0284c7 100%)',
-                        color: '#000000',
-                        border: 'none',
-                        fontWeight: 800,
-                        cursor: isVerifying ? 'not-allowed' : 'pointer',
-                        borderRadius: '10px',
-                        fontSize: '0.9rem',
                         opacity: isVerifying || !userAnswer.trim() ? 0.6 : 1,
-                        boxShadow: '0 4px 20px rgba(56, 189, 248, 0.25)',
-                        transition: 'all 0.2s',
-                        letterSpacing: '0.02em'
+                        cursor: isVerifying || !userAnswer.trim() ? 'not-allowed' : 'pointer'
                       }}
                     >
                       {isVerifying ? 'Authenticating...' : 'Unlock Master Console →'}
@@ -1091,18 +1007,18 @@ function WebmasterDashboard() {
           {/* Footer Security Badge */}
           <div style={{
             padding: '0.85rem 1.5rem',
-            backgroundColor: 'rgba(0, 0, 0, 0.35)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+            backgroundColor: theme.bg,
+            borderTop: `1px solid ${theme.border}`,
             textAlign: 'center',
             fontSize: '0.72rem',
-            color: 'rgba(255, 255, 255, 0.4)',
+            color: theme.muted,
             letterSpacing: '0.04em',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             gap: '0.45rem'
           }}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             <span>256-BIT ENCRYPTED VAULT • PBKDF2 HMAC-SHA512</span>
           </div>
         </div>
@@ -3755,7 +3671,7 @@ function WebmasterDashboard() {
                       <button
                         type="button"
                         onClick={() => setNewUserPermissions(['*'])}
-                        style={{ padding: '0.4rem 0.85rem', backgroundColor: newUserPermissions.includes('*') ? '#38bdf8' : theme.bg, color: newUserPermissions.includes('*') ? '#000000' : theme.fg, border: `1px solid ${theme.border}`, borderRadius: '6px', fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
+                        style={{ padding: '0.4rem 0.85rem', backgroundColor: newUserPermissions.includes('*') ? theme.fg : theme.bg, color: newUserPermissions.includes('*') ? theme.bg : theme.fg, border: `1px solid ${theme.border}`, borderRadius: '6px', fontSize: '0.78rem', fontWeight: 700, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
                       >
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
                         <span>Super Admin (Full Access)</span>
@@ -3827,13 +3743,13 @@ function WebmasterDashboard() {
                               alignItems: 'center',
                               gap: '0.6rem',
                               padding: '0.6rem 0.8rem',
-                              backgroundColor: isChecked ? (isDarkMode ? '#1e1b4b' : '#eff6ff') : theme.inputBg,
-                              border: isChecked ? '1px solid #38bdf8' : `1px solid ${theme.border}`,
+                              backgroundColor: isChecked ? theme.hover : theme.inputBg,
+                              border: isChecked ? `1px solid ${theme.fg}` : `1px solid ${theme.border}`,
                               borderRadius: '6px',
                               cursor: 'pointer',
                               fontSize: '0.8rem',
                               fontWeight: isChecked ? 700 : 400,
-                              color: isChecked ? (isDarkMode ? '#38bdf8' : '#0284c7') : theme.fg,
+                              color: isChecked ? theme.fg : theme.muted,
                               transition: 'all 0.15s'
                             }}
                           >
@@ -3857,7 +3773,7 @@ function WebmasterDashboard() {
                                   }
                                 }
                               }}
-                              style={{ accentColor: '#38bdf8' }}
+                              style={{ accentColor: isDarkMode ? '#ffffff' : '#000000' }}
                             />
                             <span style={{ display: 'inline-flex', alignItems: 'center', opacity: isChecked ? 1 : 0.7 }}>{mod.icon}</span>
                             <span>{mod.label}</span>
@@ -4249,7 +4165,7 @@ function WebmasterDashboard() {
                               }
                               setUserMgmtLoading(false);
                             }}
-                            style={{ padding: '0.45rem 0.75rem', backgroundColor: 'transparent', color: '#38bdf8', border: '1px solid #38bdf8', borderRadius: '4px', cursor: 'pointer', marginRight: '0.4rem', fontSize: '0.78rem', fontWeight: 600 }}
+                            style={{ padding: '0.45rem 0.75rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', marginRight: '0.4rem', fontSize: '0.78rem', fontWeight: 600 }}
                           >
                             Reset Pass
                           </button>
