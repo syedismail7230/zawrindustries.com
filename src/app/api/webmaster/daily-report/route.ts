@@ -17,7 +17,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const format = searchParams.get('format') || 'json';
 
-    const reportData = generateDailyReportData();
+    const reportData = await generateDailyReportData();
 
     if (format === 'html') {
       const html = generateDailyReportEmailHtml(reportData);

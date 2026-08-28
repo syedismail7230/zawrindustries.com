@@ -95,8 +95,7 @@ function readTelemetryStore() {
   return { requests: [], emails: [], security: [] };
 }
 
-export function generateDailyReportData(targetDate: Date = new Date()): DailyReportSummary {
-  const store = readTelemetryStore();
+export async function generateDailyReportData(targetDate: Date = new Date()): Promise<DailyReportSummary> {
   const now = targetDate;
   const twentyFourHoursAgo = now.getTime() - 24 * 60 * 60 * 1000;
 
@@ -107,27 +106,27 @@ export function generateDailyReportData(targetDate: Date = new Date()): DailyRep
     day: 'numeric'
   });
 
-  // 1. Filter 24h Requests
-  const recentRequests = store.requests.filter((r: WebRequestEntry) => {
-    const t = new Date(r.timestamp).getTime();
-    return t >= twentyFourHoursAgo && t <= now.getTime();
-  });
+  // Fetch real telemetry from Supabase and local storage
+  const { fetchRealTelemetry24h } = await import('@/lib/analytics-tracker');
+  const telemetry = await fetchRealTelemetry24h(now);
 
+  // 1. Process 24h Web Requests
+  const recentRequests = telemetry.requests;
   const totalVisits24h = recentRequests.length;
   const totalPageViews24h = recentRequests.filter((r: WebRequestEntry) => r.method === 'GET').length;
   const uniqueIps = new Set(recentRequests.map((r: WebRequestEntry) => r.ip));
   const uniqueVisitors24h = uniqueIps.size;
 
   const totalLatency = recentRequests.reduce((acc: number, r: WebRequestEntry) => acc + (r.latencyMs || 0), 0);
-  const avgLatencyMs = recentRequests.length > 0 ? Math.round(totalLatency / recentRequests.length) : 18;
+  const avgLatencyMs = recentRequests.length > 0 ? Math.round(totalLatency / recentRequests.length) : 0;
 
   const mobileCount = recentRequests.filter((r: WebRequestEntry) => r.device === 'Mobile').length;
   const desktopCount = recentRequests.filter((r: WebRequestEntry) => r.device === 'Desktop').length;
-  const totalDevices = mobileCount + desktopCount || 1;
-  const mobileRatio = `${Math.round((mobileCount / totalDevices) * 100)}%`;
-  const desktopRatio = `${Math.round((desktopCount / totalDevices) * 100)}%`;
+  const totalDevices = mobileCount + desktopCount;
+  const mobileRatio = totalDevices > 0 ? `${Math.round((mobileCount / totalDevices) * 100)}%` : '0%';
+  const desktopRatio = totalDevices > 0 ? `${Math.round((desktopCount / totalDevices) * 100)}%` : '0%';
 
-  // Top Pages
+  // Top Pages (Exact real data, no fake mock pages)
   const pathViews: Record<string, { views: number; ips: Set<string> }> = {};
   for (const r of recentRequests) {
     const cleanPath = r.path.split('?')[0] || '/';
@@ -174,12 +173,8 @@ export function generateDailyReportData(targetDate: Date = new Date()): DailyRep
     .sort((a, b) => b.visitors - a.visitors)
     .slice(0, 5);
 
-  // 2. Filter 24h Emails
-  const recentEmails = store.emails.filter((e: EmailLogEntry) => {
-    const t = new Date(e.timestamp).getTime();
-    return t >= twentyFourHoursAgo && t <= now.getTime();
-  });
-
+  // 2. Process 24h Outbound & Inbound Emails (from Supabase + local store)
+  const recentEmails = telemetry.emails;
   const totalDispatched24h = recentEmails.length;
   const successfulCount = recentEmails.filter((e: EmailLogEntry) => e.status !== 'Failed').length;
   const failedCount = recentEmails.filter((e: EmailLogEntry) => e.status === 'Failed').length;
@@ -193,7 +188,7 @@ export function generateDailyReportData(targetDate: Date = new Date()): DailyRep
     server: e.server || 'smtp.gmail.com TLS 1.3'
   }));
 
-  // 3. Applications & Inquiries Breakdown from Emails
+  // 3. Applications & Inquiries Breakdown from Real Email Logs
   const jobApplications: DailyReportSummary['applicationsSummary']['jobApplications'] = [];
   const freelanceApplications: DailyReportSummary['applicationsSummary']['freelanceApplications'] = [];
   const inquiries: DailyReportSummary['applicationsSummary']['inquiries'] = [];
@@ -207,10 +202,10 @@ export function generateDailyReportData(targetDate: Date = new Date()): DailyRep
       const match = e.subject.match(/Job Application:\s*(.*?)\s*\((.*?)\)/i);
       jobApplications.push({
         time: new Date(e.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
-        candidateName: match ? match[2] : e.recipient,
+        candidateName: match ? match[2] : (e.recipient.split('@')[0] || 'Candidate'),
         email: e.recipient,
-        role: match ? match[1] : 'Software Engineering Position',
-        reason: 'Zawr Careers Portal Application'
+        role: match ? match[1] : 'Careers Application',
+        reason: e.reason || 'Zawr Careers Portal Application'
       });
     } else if (sub.includes('freelance') || reason.includes('freelance')) {
       freelanceApplications.push({
@@ -221,7 +216,7 @@ export function generateDailyReportData(targetDate: Date = new Date()): DailyRep
       });
     } else if (sub.includes('newsletter') || reason.includes('newsletter')) {
       newsletterSubscriptionsCount++;
-    } else if (e.recipient !== 'noreply@zawrindustries.com' && !sub.includes('confirmation')) {
+    } else if (e.recipient !== 'noreply@zawrindustries.com' && !sub.includes('confirmation') && !sub.includes('report') && !sub.includes('webmaster')) {
       inquiries.push({
         time: new Date(e.timestamp).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
         category: e.reason || 'Client Relations Inquiry',
@@ -234,11 +229,7 @@ export function generateDailyReportData(targetDate: Date = new Date()): DailyRep
   const totalApplications24h = jobApplications.length + freelanceApplications.length + inquiries.length;
 
   // 4. Security & Critical Updates
-  const recentSecurity = store.security.filter((s: SecurityEventEntry) => {
-    const t = new Date(s.timestamp).getTime();
-    return t >= twentyFourHoursAgo && t <= now.getTime();
-  });
-
+  const recentSecurity = telemetry.security;
   const criticalUpdates: DailyReportSummary['criticalUpdates'] = [];
   
   if (recentSecurity.length > 0) {
@@ -259,7 +250,7 @@ export function generateDailyReportData(targetDate: Date = new Date()): DailyRep
     });
   }
 
-  // 5. Follow-Up Work & Action Items
+  // 5. Follow-Up Work & Action Items (Generated strictly from real events)
   const followUpWork: DailyReportSummary['followUpWork'] = [];
 
   if (jobApplications.length > 0) {
@@ -267,7 +258,7 @@ export function generateDailyReportData(targetDate: Date = new Date()): DailyRep
       id: 'ACT-JOB-01',
       priority: 'High',
       category: 'Careers & HR',
-      task: `Review ${jobApplications.length} new career application(s) received today.`,
+      task: `Review ${jobApplications.length} new career application(s) received in the last 24h.`,
       actionRequired: 'Screen submitted resumes in HR portal and schedule technical interviews.'
     });
   }
@@ -292,7 +283,7 @@ export function generateDailyReportData(targetDate: Date = new Date()): DailyRep
     });
   }
 
-  // Standard recurring action items
+  // Standard routine maintenance item
   followUpWork.push({
     id: 'ACT-SYS-04',
     priority: 'Low',
@@ -306,20 +297,16 @@ export function generateDailyReportData(targetDate: Date = new Date()): DailyRep
     generatedAt: now.toISOString(),
     recipient: process.env.WEBMASTER_REPORT_EMAIL || 'webmaster@zawrindustries.com',
     performance: {
-      totalVisits24h: Math.max(totalVisits24h, 1),
-      totalPageViews24h: Math.max(totalPageViews24h, 1),
-      uniqueVisitors24h: Math.max(uniqueVisitors24h, 1),
+      totalVisits24h,
+      totalPageViews24h,
+      uniqueVisitors24h,
       avgLatencyMs,
       uptimePercentage: '99.99%',
-      cdnHitRatio: '100%',
+      cdnHitRatio: totalVisits24h > 0 ? '100%' : 'N/A',
       desktopRatio,
       mobileRatio,
-      topPages: topPages.length > 0 ? topPages : [
-        { path: '/', views: 1, uniqueVisitors: 1 },
-        { path: '/industries/it-service', views: 1, uniqueVisitors: 1 },
-        { path: '/careers', views: 1, uniqueVisitors: 1 }
-      ],
-      topRegions: topRegions.length > 0 ? topRegions : [{ country: 'India', flag: '🇮🇳', visitors: 1 }]
+      topPages,
+      topRegions
     },
     emailsSummary: {
       totalDispatched24h,
@@ -348,14 +335,16 @@ export function generateDailyReportData(targetDate: Date = new Date()): DailyRep
 export function generateDailyReportEmailHtml(data: DailyReportSummary): string {
   const { dateStr, performance, emailsSummary, applicationsSummary, followUpWork, criticalUpdates, systemHealth } = data;
 
-  const topPagesRows = performance.topPages
-    .map((p, idx) => `
-      <tr>
-        <td style="padding: 10px 0; font-size: 13px; color: #555555; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''}">${idx + 1}. <strong style="color: #000000;">${p.path}</strong></td>
-        <td style="padding: 10px 0; font-size: 13px; color: #000000; text-align: right; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''} font-weight: 600;">${p.views} views (${p.uniqueVisitors} visitors)</td>
-      </tr>
-    `)
-    .join('');
+  const topPagesRows = performance.topPages.length > 0
+    ? performance.topPages
+        .map((p, idx) => `
+          <tr>
+            <td style="padding: 10px 0; font-size: 13px; color: #555555; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''}">${idx + 1}. <strong style="color: #000000;">${p.path}</strong></td>
+            <td style="padding: 10px 0; font-size: 13px; color: #000000; text-align: right; ${idx > 0 ? 'border-top: 1px solid #f5f5f5;' : ''} font-weight: 600;">${p.views} views (${p.uniqueVisitors} visitors)</td>
+          </tr>
+        `)
+        .join('')
+    : `<tr><td colspan="2" style="padding: 14px 0; font-size: 13px; color: #777777;">No page traffic recorded in the last 24 hours.</td></tr>`;
 
   const emailLogsRows = emailsSummary.logs.length > 0
     ? emailsSummary.logs
@@ -372,7 +361,7 @@ export function generateDailyReportEmailHtml(data: DailyReportSummary): string {
           </tr>
         `)
         .join('')
-    : `<tr><td colspan="3" style="padding: 14px 0; font-size: 13px; color: #777777;">No outbound emails logged in the last 24 hours.</td></tr>`;
+    : `<tr><td colspan="3" style="padding: 14px 0; font-size: 13px; color: #777777;">No outbound emails dispatched in the last 24 hours.</td></tr>`;
 
   const jobApplicationsRows = applicationsSummary.jobApplications.length > 0
     ? `
@@ -542,11 +531,11 @@ export function generateDailyReportEmailHtml(data: DailyReportSummary): string {
                 </tr>
                 <tr>
                   <td style="padding: 12px 0; font-size: 13.5px; color: #777777; border-bottom: 1px solid #f5f5f5;">Device Breakdown</td>
-                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; font-weight: 500; border-bottom: 1px solid #f5f5f5;">${performance.desktopRatio} Desktop &bull; ${performance.mobileRatio} Mobile</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; font-weight: 500; border-bottom: 1px solid #f5f5f5;">${performance.totalVisits24h > 0 ? `${performance.desktopRatio} Desktop &bull; ${performance.mobileRatio} Mobile` : 'No traffic recorded'}</td>
                 </tr>
                 <tr>
                   <td style="padding: 12px 0; font-size: 13.5px; color: #777777;">Avg Server Latency &bull; Uptime</td>
-                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; font-weight: 500;">${performance.avgLatencyMs} ms &bull; ${performance.uptimePercentage}</td>
+                  <td style="padding: 12px 0; font-size: 13.5px; color: #000000; font-weight: 500;">${performance.avgLatencyMs > 0 ? `${performance.avgLatencyMs} ms &bull; ` : ''}${performance.uptimePercentage}</td>
                 </tr>
               </table>
             </td>
@@ -661,7 +650,7 @@ export function generateDailyReportEmailHtml(data: DailyReportSummary): string {
 
 export async function sendDailyReportToWebmaster(manualTriggeredBy?: string): Promise<{ success: boolean; messageId?: string; error?: string }> {
   try {
-    const reportData = generateDailyReportData();
+    const reportData = await generateDailyReportData();
     const htmlContent = generateDailyReportEmailHtml(reportData);
 
     const recipient = process.env.WEBMASTER_REPORT_EMAIL || 'webmaster@zawrindustries.com';

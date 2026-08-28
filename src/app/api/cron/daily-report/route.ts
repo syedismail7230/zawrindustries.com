@@ -18,7 +18,7 @@ export async function GET(req: Request) {
     }
 
     const result = await sendDailyReportToWebmaster('Automated Cron Service');
-    const summary = generateDailyReportData();
+    const summary = await generateDailyReportData();
 
     return NextResponse.json({
       success: result.success,
