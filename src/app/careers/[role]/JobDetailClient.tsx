@@ -210,16 +210,67 @@ export default function JobDetailClient({ initialJob }: { initialJob?: any }) {
               <span style={{ backgroundColor: '#1f2937', color: '#e5e7eb', padding: '0.5rem 1rem', borderRadius: '9999px', fontSize: '0.875rem', fontWeight: 500 }}>{job.type || 'Full-Time'}</span>
             </div>
 
+            {/* Role Overview */}
             <div style={{ marginBottom: '2.5rem' }}>
               <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#f3f4f6' }}>Role Overview</h2>
               <FormattedContent content={job.role} style={{ color: '#d1d5db', fontSize: '1.125rem', lineHeight: 1.6 }} />
             </div>
 
+            {/* Key Responsibilities */}
             <div style={{ marginBottom: '2.5rem' }}>
               <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#f3f4f6' }}>Key Responsibilities</h2>
               <FormattedContent content={job.responsibilities} style={{ color: '#d1d5db', fontSize: '1.125rem', lineHeight: 1.6 }} />
             </div>
 
+            {/* Candidate Profile */}
+            {job.candidate_profile && (
+              <div style={{ marginBottom: '2.5rem' }}>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#f3f4f6' }}>Candidate Profile</h2>
+                <FormattedContent content={job.candidate_profile} style={{ color: '#d1d5db', fontSize: '1.125rem', lineHeight: 1.6 }} />
+              </div>
+            )}
+
+            {/* Required Skills & Competencies */}
+            {job.required_skills && (Array.isArray(job.required_skills) ? job.required_skills.length > 0 : Boolean(job.required_skills)) && (
+              <div style={{ marginBottom: '2.5rem' }}>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#f3f4f6' }}>Required Skills &amp; Competencies</h2>
+                <FormattedContent content={job.required_skills} style={{ color: '#d1d5db', fontSize: '1.125rem', lineHeight: 1.6 }} />
+              </div>
+            )}
+
+            {/* Education Qualifications */}
+            {job.education_qualifications && (
+              <div style={{ marginBottom: '2.5rem' }}>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#f3f4f6' }}>Education Qualifications</h2>
+                <FormattedContent content={job.education_qualifications} style={{ color: '#d1d5db', fontSize: '1.125rem', lineHeight: 1.6 }} />
+              </div>
+            )}
+
+            {/* Preferred Qualifications */}
+            {job.preferred_qualifications && (
+              <div style={{ marginBottom: '2.5rem' }}>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#f3f4f6' }}>Preferred Qualifications</h2>
+                <FormattedContent content={job.preferred_qualifications} style={{ color: '#d1d5db', fontSize: '1.125rem', lineHeight: 1.6 }} />
+              </div>
+            )}
+
+            {/* Performance Expectations */}
+            {job.performance_expectations && (
+              <div style={{ marginBottom: '2.5rem' }}>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#f3f4f6' }}>Performance Expectations</h2>
+                <FormattedContent content={job.performance_expectations} style={{ color: '#d1d5db', fontSize: '1.125rem', lineHeight: 1.6 }} />
+              </div>
+            )}
+
+            {/* Perks & Benefits */}
+            {job.perks_and_benefits && (
+              <div style={{ marginBottom: '2.5rem' }}>
+                <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#f3f4f6' }}>Perks &amp; Benefits</h2>
+                <FormattedContent content={job.perks_and_benefits} style={{ color: '#d1d5db', fontSize: '1.125rem', lineHeight: 1.6 }} />
+              </div>
+            )}
+
+            {/* Reporting Structure */}
             <div>
               <h2 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '1rem', color: '#f3f4f6' }}>Reporting Structure</h2>
               <p style={{ color: '#d1d5db', lineHeight: 1.6, fontSize: '1.125rem' }}>

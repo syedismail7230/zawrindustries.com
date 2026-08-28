@@ -19,9 +19,16 @@ interface LiveSitePreviewProps {
       title: string;
       location: string;
       type: string;
+      status?: string;
       reporting?: string;
       role?: string;
       responsibilities?: string[];
+      education_qualifications?: string;
+      preferred_qualifications?: string;
+      required_skills?: string[] | string;
+      candidate_profile?: string;
+      perks_and_benefits?: string;
+      performance_expectations?: string;
     };
     // Blogs
     blogTitle?: string;
@@ -220,6 +227,54 @@ export default function LiveSitePreview({ activeTab, theme, data, onClose }: Liv
               <p style={{ color: '#52525b', fontSize: '0.9rem', fontStyle: 'italic', margin: 0 }}>Add responsibilities in the editor...</p>
             )}
           </div>
+
+          {/* Candidate Profile */}
+          {job.candidate_profile && (
+            <div style={{ marginBottom: '2.25rem' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 600, margin: '0 0 0.85rem 0', color: '#f3f4f6' }}>Candidate Profile</h2>
+              <FormattedContent content={job.candidate_profile} style={{ color: '#d1d5db', fontSize: '0.95rem', lineHeight: 1.65 }} />
+            </div>
+          )}
+
+          {/* Required Skills & Competencies */}
+          {job.required_skills && (Array.isArray(job.required_skills) ? job.required_skills.length > 0 : Boolean(job.required_skills)) && (
+            <div style={{ marginBottom: '2.25rem' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 600, margin: '0 0 0.85rem 0', color: '#f3f4f6' }}>Required Skills &amp; Competencies</h2>
+              <FormattedContent content={job.required_skills} style={{ color: '#d1d5db', fontSize: '0.95rem', lineHeight: 1.65 }} />
+            </div>
+          )}
+
+          {/* Education Qualifications */}
+          {job.education_qualifications && (
+            <div style={{ marginBottom: '2.25rem' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 600, margin: '0 0 0.85rem 0', color: '#f3f4f6' }}>Education Qualifications</h2>
+              <FormattedContent content={job.education_qualifications} style={{ color: '#d1d5db', fontSize: '0.95rem', lineHeight: 1.65 }} />
+            </div>
+          )}
+
+          {/* Preferred Qualifications */}
+          {job.preferred_qualifications && (
+            <div style={{ marginBottom: '2.25rem' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 600, margin: '0 0 0.85rem 0', color: '#f3f4f6' }}>Preferred Qualifications</h2>
+              <FormattedContent content={job.preferred_qualifications} style={{ color: '#d1d5db', fontSize: '0.95rem', lineHeight: 1.65 }} />
+            </div>
+          )}
+
+          {/* Performance Expectations */}
+          {job.performance_expectations && (
+            <div style={{ marginBottom: '2.25rem' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 600, margin: '0 0 0.85rem 0', color: '#f3f4f6' }}>Performance Expectations</h2>
+              <FormattedContent content={job.performance_expectations} style={{ color: '#d1d5db', fontSize: '0.95rem', lineHeight: 1.65 }} />
+            </div>
+          )}
+
+          {/* Perks & Benefits */}
+          {job.perks_and_benefits && (
+            <div style={{ marginBottom: '2.25rem' }}>
+              <h2 style={{ fontSize: '1.25rem', fontWeight: 600, margin: '0 0 0.85rem 0', color: '#f3f4f6' }}>Perks &amp; Benefits</h2>
+              <FormattedContent content={job.perks_and_benefits} style={{ color: '#d1d5db', fontSize: '0.95rem', lineHeight: 1.65 }} />
+            </div>
+          )}
 
           {/* Reporting Structure */}
           <div style={{ marginBottom: '2.5rem' }}>

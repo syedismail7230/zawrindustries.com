@@ -265,9 +265,36 @@ function WebmasterDashboard() {
   const [errorMsg, setErrorMsg] = useState('');
 
   // Form State for new job
-  const [newJob, setNewJob] = useState<{title: string, location: string, type: string, status: string, role: string, responsibilities: string[], reporting: string}>({ 
-    title: '', location: '', type: 'Full-time', status: 'Active', role: '', responsibilities: [], reporting: '' 
+  const [newJob, setNewJob] = useState<{
+    title: string;
+    location: string;
+    type: string;
+    status: string;
+    reporting: string;
+    role: string;
+    responsibilities: string[];
+    education_qualifications: string;
+    preferred_qualifications: string;
+    required_skills: string[];
+    candidate_profile: string;
+    perks_and_benefits: string;
+    performance_expectations: string;
+  }>({ 
+    title: '',
+    location: '',
+    type: 'Full-time',
+    status: 'Active',
+    reporting: '',
+    role: '',
+    responsibilities: [],
+    education_qualifications: '',
+    preferred_qualifications: '',
+    required_skills: [],
+    candidate_profile: '',
+    perks_and_benefits: '',
+    performance_expectations: ''
   });
+  const [editingJob, setEditingJob] = useState<any>(null);
 
   // Financial Reports States
   const [reports, setReports] = useState<any[]>([]);
@@ -560,28 +587,159 @@ function WebmasterDashboard() {
     return activeList.sort((a, b) => b.year.localeCompare(a.year));
   };
 
-  // Actions
-  const handleAddJob = async (e: React.FormEvent) => {
+  // Job Actions (Add, Edit, Update, Status Toggle, Delete)
+  const handleSaveJob = async (e: React.FormEvent) => {
     e.preventDefault();
-    const now = new Date();
-    const validThrough = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
-    const payload = {
-      ...newJob,
-      date_posted: now.toISOString().split('T')[0],
-      valid_through: validThrough,
-    };
-    const { data, error } = await supabase.from('jobs').insert([payload]).select();
+    if (!newJob.title.trim() || !newJob.location.trim()) {
+      alert('Please fill in required fields: Job Title and Location.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const payload = {
+        title: newJob.title.trim(),
+        location: newJob.location.trim(),
+        type: newJob.type,
+        status: newJob.status || 'Active',
+        reporting: newJob.reporting || '',
+        role: newJob.role || '',
+        responsibilities: newJob.responsibilities || [],
+        education_qualifications: newJob.education_qualifications || '',
+        preferred_qualifications: newJob.preferred_qualifications || '',
+        required_skills: newJob.required_skills || [],
+        candidate_profile: newJob.candidate_profile || '',
+        perks_and_benefits: newJob.perks_and_benefits || '',
+        performance_expectations: newJob.performance_expectations || '',
+      };
+
+      if (editingJob) {
+        // Update existing job
+        const { data, error } = await supabase.from('jobs').update(payload).eq('id', editingJob.id).select();
+        if (error) {
+          alert(`Error updating job: ${error.message}`);
+        } else {
+          const updatedJob = (data && data[0]) ? data[0] : { ...editingJob, ...payload };
+          setJobs(jobs.map(j => j.id === editingJob.id ? updatedJob : j));
+          setEditingJob(null);
+          setNewJob({
+            title: '',
+            location: '',
+            type: 'Full-time',
+            status: 'Active',
+            reporting: '',
+            role: '',
+            responsibilities: [],
+            education_qualifications: '',
+            preferred_qualifications: '',
+            required_skills: [],
+            candidate_profile: '',
+            perks_and_benefits: '',
+            performance_expectations: ''
+          });
+          alert('Job position updated successfully!');
+        }
+      } else {
+        // Insert new job
+        const now = new Date();
+        const validThrough = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+        const insertPayload = {
+          ...payload,
+          date_posted: now.toISOString().split('T')[0],
+          valid_through: validThrough,
+        };
+        const { data, error } = await supabase.from('jobs').insert([insertPayload]).select();
+        if (error) {
+          alert(`Error adding job: Make sure the 'jobs' table exists with columns: title, location, type, status.\nSupabase msg: ${error.message}`);
+        } else if (data) {
+          setJobs([data[0], ...jobs]);
+          setNewJob({
+            title: '',
+            location: '',
+            type: 'Full-time',
+            status: 'Active',
+            reporting: '',
+            role: '',
+            responsibilities: [],
+            education_qualifications: '',
+            preferred_qualifications: '',
+            required_skills: [],
+            candidate_profile: '',
+            perks_and_benefits: '',
+            performance_expectations: ''
+          });
+          alert('Job position published successfully!');
+        }
+      }
+    } catch (err: any) {
+      alert('Error saving job position: ' + err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditJob = (job: any) => {
+    setEditingJob(job);
+    setNewJob({
+      title: job.title || '',
+      location: job.location || '',
+      type: job.type || 'Full-time',
+      status: job.status || 'Active',
+      reporting: job.reporting || '',
+      role: job.role || '',
+      responsibilities: Array.isArray(job.responsibilities)
+        ? job.responsibilities
+        : (typeof job.responsibilities === 'string' ? job.responsibilities.split('\n').filter(Boolean) : []),
+      education_qualifications: job.education_qualifications || job.education || '',
+      preferred_qualifications: job.preferred_qualifications || job.preferred || '',
+      required_skills: Array.isArray(job.required_skills)
+        ? job.required_skills
+        : (typeof job.required_skills === 'string' ? job.required_skills.split('\n').filter(Boolean) : (Array.isArray(job.skills) ? job.skills : [])),
+      candidate_profile: job.candidate_profile || job.profile || '',
+      perks_and_benefits: job.perks_and_benefits || job.perks || job.benefits || '',
+      performance_expectations: job.performance_expectations || job.expectations || ''
+    });
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleCancelJobEdit = () => {
+    setEditingJob(null);
+    setNewJob({
+      title: '',
+      location: '',
+      type: 'Full-time',
+      status: 'Active',
+      reporting: '',
+      role: '',
+      responsibilities: [],
+      education_qualifications: '',
+      preferred_qualifications: '',
+      required_skills: [],
+      candidate_profile: '',
+      perks_and_benefits: '',
+      performance_expectations: ''
+    });
+  };
+
+  const handleToggleJobStatus = async (job: any) => {
+    const newStatus = job.status === 'Active' ? 'Closed' : 'Active';
+    setJobs(jobs.map(j => j.id === job.id ? { ...j, status: newStatus } : j));
+    const { error } = await supabase.from('jobs').update({ status: newStatus }).eq('id', job.id);
     if (error) {
-      alert(`Error adding job: Make sure the 'jobs' table exists with columns: title, location, type, status.\nSupabase msg: ${error.message}`);
-    } else if (data) {
-      setJobs([data[0], ...jobs]);
-      setNewJob({ title: '', location: '', type: 'Full-time', status: 'Active', role: '', responsibilities: [], reporting: '' });
+      alert(`Error updating job status: ${error.message}`);
+      setJobs(jobs.map(j => j.id === job.id ? { ...j, status: job.status } : j));
     }
   };
 
   const handleDeleteJob = async (id: number) => {
+    if (!window.confirm('Are you sure you want to delete this job position? This cannot be undone.')) return;
     await supabase.from('jobs').delete().eq('id', id);
     setJobs(jobs.filter(j => j.id !== id));
+    if (editingJob && editingJob.id === id) {
+      handleCancelJobEdit();
+    }
   };
 
   const handleUpdateRoute = async (id: number, newDest: string) => {
@@ -1161,41 +1319,72 @@ function WebmasterDashboard() {
       case 'jobs':
         return (
           <div>
-            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '2rem', letterSpacing: '-0.02em' }}>Manage Careers (Realtime)</h2>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
+              <h2 style={{ fontSize: '2rem', fontWeight: 600, margin: 0, letterSpacing: '-0.02em' }}>Manage Careers (Realtime)</h2>
+              {editingJob && (
+                <button
+                  type="button"
+                  onClick={handleCancelJobEdit}
+                  style={{ padding: '0.5rem 1rem', backgroundColor: 'transparent', color: '#ff6666', border: '1px solid #ff6666', borderRadius: '4px', cursor: 'pointer', fontSize: '0.875rem', fontWeight: 600 }}
+                >
+                  ✕ Cancel Edit Mode
+                </button>
+              )}
+            </div>
             
             {errorMsg && <div style={{ padding: '1rem', backgroundColor: isDarkMode ? '#3f0000' : '#fee2e2', color: isDarkMode ? '#ffaaaa' : '#dc2626', border: isDarkMode ? '1px solid #7f1d1d' : '1px solid #fca5a5', borderRadius: '8px', marginBottom: '2rem' }}>{errorMsg}</div>}
 
-            <form onSubmit={handleAddJob} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginBottom: '3rem', padding: '1.5rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '0.5rem' }}>Post New Job</h3>
+            <form onSubmit={handleSaveJob} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '3rem', padding: '1.75rem', border: `1px solid ${editingJob ? '#3b82f6' : theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg, transition: 'border-color 0.2s' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+                <h3 style={{ fontSize: '1.25rem', fontWeight: 600, margin: 0, color: editingJob ? '#60a5fa' : theme.fg }}>
+                  {editingJob ? `✏️ Edit Job: ${editingJob.title} (ID: #${editingJob.id})` : '+ Post New Job'}
+                </h3>
+                {editingJob && (
+                  <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.6rem', backgroundColor: 'rgba(59, 130, 246, 0.15)', color: '#60a5fa', border: '1px solid #3b82f6', borderRadius: '9999px', fontWeight: 600 }}>
+                    Editing Live
+                  </span>
+                )}
+              </div>
               
               <div className="wm-grid-2col" style={{ display: 'grid', gap: '1rem' }}>
                 <div>
                   <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Job Title *</label>
-                  <input type="text" required value={newJob.title} onChange={e => setNewJob({...newJob, title: e.target.value})} style={{ width: '100%', padding: '0.75rem', backgroundColor: 'transparent', border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} />
+                  <input type="text" required value={newJob.title} onChange={e => setNewJob({...newJob, title: e.target.value})} placeholder="e.g. Senior AI Systems Engineer" style={{ width: '100%', padding: '0.75rem', backgroundColor: 'transparent', border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} />
                 </div>
                 <div>
                   <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Location *</label>
-                  <input type="text" required value={newJob.location} onChange={e => setNewJob({...newJob, location: e.target.value})} placeholder="e.g. Remote / Hybrid" style={{ width: '100%', padding: '0.75rem', backgroundColor: 'transparent', border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} />
+                  <input type="text" required value={newJob.location} onChange={e => setNewJob({...newJob, location: e.target.value})} placeholder="e.g. Bengaluru / Hybrid / Remote" style={{ width: '100%', padding: '0.75rem', backgroundColor: 'transparent', border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} />
                 </div>
               </div>
 
-              <div className="wm-grid-2col" style={{ display: 'grid', gap: '1rem' }}>
+              <div className="wm-grid-3col" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem' }}>
                 <div>
                   <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Employment Type *</label>
                   <select value={newJob.type} onChange={e => setNewJob({...newJob, type: e.target.value})} style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }}>
                     <option value="Full-time">Full-time</option>
                     <option value="Contract">Contract</option>
                     <option value="Internship">Internship</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Freelance">Freelance</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Status *</label>
+                  <select value={newJob.status} onChange={e => setNewJob({...newJob, status: e.target.value})} style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }}>
+                    <option value="Active">Active (Accepting Applications)</option>
+                    <option value="Closed">Closed (Archived)</option>
+                    <option value="Draft">Draft (Hidden)</option>
                   </select>
                 </div>
                 <div>
                   <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>Reporting To</label>
-                  <input type="text" value={newJob.reporting || ''} onChange={e => setNewJob({...newJob, reporting: e.target.value})} placeholder="e.g. CEO" style={{ width: '100%', padding: '0.75rem', backgroundColor: 'transparent', border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} />
+                  <input type="text" value={newJob.reporting || ''} onChange={e => setNewJob({...newJob, reporting: e.target.value})} placeholder="e.g. VP of Engineering / CEO" style={{ width: '100%', padding: '0.75rem', backgroundColor: 'transparent', border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '4px' }} />
                 </div>
               </div>
 
+              {/* 1. Role Overview */}
               <RichTextEditor
-                label="Role Overview"
+                label="1. Role Overview *"
                 required
                 value={newJob.role || ''}
                 onChange={(val) => setNewJob({ ...newJob, role: val })}
@@ -1204,32 +1393,207 @@ function WebmasterDashboard() {
                 theme={theme}
               />
 
+              {/* 2. Key Responsibilities */}
               <RichTextEditor
-                label="Key Responsibilities"
+                label="2. Key Responsibilities *"
                 required
                 value={(newJob.responsibilities || []).join('\n')}
                 onChange={(val) => setNewJob({ ...newJob, responsibilities: val.split('\n').filter(r => r.trim() !== '') })}
                 rows={5}
-                placeholder="- Define strategy and vision...&#10;- Write clean, tested code...&#10;- Mentor junior engineers..."
+                placeholder="- Define strategy and architectural vision...&#10;- Write clean, robust, and tested code...&#10;- Lead sprint planning and mentor team members..."
                 theme={theme}
               />
 
-              <button type="submit" style={{ padding: '0.75rem 1.5rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, borderRadius: '4px', cursor: 'pointer', alignSelf: 'flex-start', marginTop: '0.5rem' }}>+ Publish Job</button>
+              {/* 3. Candidate Profile */}
+              <RichTextEditor
+                label="3. Candidate Profile"
+                value={newJob.candidate_profile || ''}
+                onChange={(val) => setNewJob({ ...newJob, candidate_profile: val })}
+                rows={3}
+                placeholder="Describe the ideal candidate's mindset, background, problem-solving approach, and work ethics..."
+                theme={theme}
+              />
+
+              {/* 4. Required Skills & Competencies */}
+              <RichTextEditor
+                label="4. Required Skills & Competencies"
+                value={Array.isArray(newJob.required_skills) ? newJob.required_skills.join('\n') : (newJob.required_skills || '')}
+                onChange={(val) => setNewJob({ ...newJob, required_skills: val.split('\n').filter(s => s.trim() !== '') })}
+                rows={4}
+                placeholder="- 4+ years hands-on experience in Next.js, React, and TypeScript&#10;- Strong knowledge of distributed cloud architectures and API systems&#10;- Experience with PostgreSQL / Supabase and real-time state synchronization"
+                theme={theme}
+              />
+
+              {/* 5. Education Qualifications */}
+              <RichTextEditor
+                label="5. Education Qualifications"
+                value={newJob.education_qualifications || ''}
+                onChange={(val) => setNewJob({ ...newJob, education_qualifications: val })}
+                rows={2}
+                placeholder="e.g. Bachelor's / Master's degree in Computer Science, Engineering, Mathematics, or equivalent practical experience..."
+                theme={theme}
+              />
+
+              {/* 6. Preferred Qualifications */}
+              <RichTextEditor
+                label="6. Preferred Qualifications"
+                value={newJob.preferred_qualifications || ''}
+                onChange={(val) => setNewJob({ ...newJob, preferred_qualifications: val })}
+                rows={3}
+                placeholder="- Prior experience in high-growth technology startups or multi-tenant SaaS products&#10;- Contributions to open-source software or published research..."
+                theme={theme}
+              />
+
+              {/* 7. Performance Expectations */}
+              <RichTextEditor
+                label="7. Performance Expectations (30 / 60 / 90 Days)"
+                value={newJob.performance_expectations || ''}
+                onChange={(val) => setNewJob({ ...newJob, performance_expectations: val })}
+                rows={3}
+                placeholder="Outline what success looks like in this role during the first 30, 60, and 90 days of onboarding..."
+                theme={theme}
+              />
+
+              {/* 8. Perks & Benefits */}
+              <RichTextEditor
+                label="8. Perks & Benefits"
+                value={newJob.perks_and_benefits || ''}
+                onChange={(val) => setNewJob({ ...newJob, perks_and_benefits: val })}
+                rows={3}
+                placeholder="- Competitive compensation and performance bonuses&#10;- Comprehensive health & wellness coverage&#10;- Flexible hybrid/remote work schedule & latest workstation hardware"
+                theme={theme}
+              />
+
+              <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginTop: '0.5rem' }}>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  style={{
+                    padding: '0.85rem 1.75rem',
+                    backgroundColor: editingJob ? '#2563eb' : theme.fg,
+                    color: editingJob ? '#ffffff' : theme.bg,
+                    border: 'none',
+                    fontWeight: 600,
+                    borderRadius: '4px',
+                    cursor: loading ? 'not-allowed' : 'pointer',
+                    opacity: loading ? 0.7 : 1,
+                    transition: 'all 0.2s'
+                  }}
+                >
+                  {loading ? 'Saving...' : editingJob ? '💾 Save Changes' : '+ Publish Job'}
+                </button>
+
+                {editingJob && (
+                  <button
+                    type="button"
+                    onClick={handleCancelJobEdit}
+                    style={{
+                      padding: '0.85rem 1.5rem',
+                      backgroundColor: 'transparent',
+                      color: theme.fg,
+                      border: `1px solid ${theme.border}`,
+                      fontWeight: 500,
+                      borderRadius: '4px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
             </form>
             
-            {loading ? <div style={{ color: theme.muted }}>Syncing with Supabase...</div> : (
+            {loading && jobs.length === 0 ? <div style={{ color: theme.muted }}>Syncing with Supabase...</div> : (
               <div style={{ border: `1px solid ${theme.border}`, borderRadius: '8px', overflow: 'hidden' }}>
+                <div style={{ padding: '1rem 1.25rem', backgroundColor: theme.inputBg, borderBottom: `1px solid ${theme.border}`, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: 600, margin: 0 }}>Active & Posted Jobs ({jobs.length})</h3>
+                  <span style={{ fontSize: '0.8rem', color: theme.muted }}>Click "Edit" to modify any position</span>
+                </div>
                 {jobs.length === 0 ? (
                   <div style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No jobs found or table missing.</div>
                 ) : jobs.map((job) => (
-                  <div key={job.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem', padding: '1.25rem', borderBottom: `1px solid ${theme.border}`, backgroundColor: theme.bg }}>
-                    <div>
-                      <div style={{ fontWeight: 600, marginBottom: '0.25rem' }}>{job.title}</div>
-                      <div style={{ fontSize: '0.875rem', color: theme.muted }}>{job.location} • {job.type} • Reporting to: {job.reporting || 'N/A'}</div>
+                  <div
+                    key={job.id}
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'center',
+                      flexWrap: 'wrap',
+                      gap: '0.75rem',
+                      padding: '1.25rem',
+                      borderBottom: `1px solid ${theme.border}`,
+                      backgroundColor: editingJob?.id === job.id ? (isDarkMode ? 'rgba(59, 130, 246, 0.1)' : 'rgba(59, 130, 246, 0.05)') : theme.bg,
+                      transition: 'background-color 0.2s'
+                    }}
+                  >
+                    <div style={{ flex: '1 1 300px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                        <span style={{ fontWeight: 600, fontSize: '1rem' }}>{job.title}</span>
+                        {editingJob?.id === job.id && (
+                          <span style={{ fontSize: '0.7rem', padding: '0.1rem 0.4rem', backgroundColor: '#3b82f6', color: '#fff', borderRadius: '4px', fontWeight: 600 }}>Currently Editing</span>
+                        )}
+                      </div>
+                      <div style={{ fontSize: '0.875rem', color: theme.muted }}>
+                        {job.location} • {job.type} • Reporting to: {job.reporting || 'N/A'}
+                      </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                      <span style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem', border: `1px solid ${job.status === 'Active' ? '#10b981' : theme.muted}`, borderRadius: '4px', color: job.status === 'Active' ? '#10b981' : theme.muted }}>{job.status}</span>
-                      <button onClick={() => handleDeleteJob(job.id)} style={{ background: 'none', border: 'none', color: '#ff4444', cursor: 'pointer', fontSize: '0.875rem' }}>Delete</button>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                      {/* Clickable Status Toggle */}
+                      <button
+                        type="button"
+                        onClick={() => handleToggleJobStatus(job)}
+                        title="Click to toggle Active / Closed status"
+                        style={{
+                          fontSize: '0.75rem',
+                          padding: '0.3rem 0.65rem',
+                          border: `1px solid ${job.status === 'Active' ? '#10b981' : theme.muted}`,
+                          borderRadius: '4px',
+                          backgroundColor: job.status === 'Active' ? 'rgba(16, 185, 129, 0.1)' : 'transparent',
+                          color: job.status === 'Active' ? '#10b981' : theme.muted,
+                          cursor: 'pointer',
+                          fontWeight: 600,
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        {job.status || 'Active'}
+                      </button>
+
+                      {/* Edit Button */}
+                      <button
+                        type="button"
+                        onClick={() => handleEditJob(job)}
+                        style={{
+                          padding: '0.35rem 0.85rem',
+                          backgroundColor: editingJob?.id === job.id ? theme.fg : 'transparent',
+                          color: editingJob?.id === job.id ? theme.bg : theme.fg,
+                          border: `1px solid ${theme.border}`,
+                          borderRadius: '4px',
+                          cursor: 'pointer',
+                          fontSize: '0.8125rem',
+                          fontWeight: 600,
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        {editingJob?.id === job.id ? 'Editing...' : 'Edit'}
+                      </button>
+
+                      {/* Delete Button */}
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteJob(job.id)}
+                        style={{
+                          padding: '0.35rem 0.65rem',
+                          background: 'none',
+                          border: 'none',
+                          color: '#ff4444',
+                          cursor: 'pointer',
+                          fontSize: '0.8125rem',
+                          fontWeight: 500,
+                          transition: 'color 0.2s'
+                        }}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </div>
                 ))}
