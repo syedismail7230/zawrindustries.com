@@ -617,7 +617,11 @@ function WebmasterDashboard() {
         // Update existing job
         const { data, error } = await supabase.from('jobs').update(payload).eq('id', editingJob.id).select();
         if (error) {
-          alert(`Error updating job: ${error.message}`);
+          if (error.message.includes('column') && error.message.includes('schema cache')) {
+            alert(`Supabase Database Update Required:\nYour Supabase 'jobs' table needs the new columns.\n\nPlease run the SQL snippet in Supabase SQL Editor:\nALTER TABLE public.jobs\nADD COLUMN IF NOT EXISTS candidate_profile TEXT,\nADD COLUMN IF NOT EXISTS education_qualifications TEXT,\nADD COLUMN IF NOT EXISTS preferred_qualifications TEXT,\nADD COLUMN IF NOT EXISTS required_skills TEXT[],\nADD COLUMN IF NOT EXISTS perks_and_benefits TEXT,\nADD COLUMN IF NOT EXISTS performance_expectations TEXT;\n\nSupabase details: ${error.message}`);
+          } else {
+            alert(`Error updating job: ${error.message}`);
+          }
         } else {
           const updatedJob = (data && data[0]) ? data[0] : { ...editingJob, ...payload };
           setJobs(jobs.map(j => j.id === editingJob.id ? updatedJob : j));
@@ -650,7 +654,11 @@ function WebmasterDashboard() {
         };
         const { data, error } = await supabase.from('jobs').insert([insertPayload]).select();
         if (error) {
-          alert(`Error adding job: Make sure the 'jobs' table exists with columns: title, location, type, status.\nSupabase msg: ${error.message}`);
+          if (error.message.includes('column') && error.message.includes('schema cache')) {
+            alert(`Supabase Database Update Required:\nYour Supabase 'jobs' table needs the new columns.\n\nPlease run the SQL snippet in Supabase SQL Editor:\nALTER TABLE public.jobs\nADD COLUMN IF NOT EXISTS candidate_profile TEXT,\nADD COLUMN IF NOT EXISTS education_qualifications TEXT,\nADD COLUMN IF NOT EXISTS preferred_qualifications TEXT,\nADD COLUMN IF NOT EXISTS required_skills TEXT[],\nADD COLUMN IF NOT EXISTS perks_and_benefits TEXT,\nADD COLUMN IF NOT EXISTS performance_expectations TEXT;`);
+          } else {
+            alert(`Error adding job: ${error.message}`);
+          }
         } else if (data) {
           setJobs([data[0], ...jobs]);
           setNewJob({
