@@ -100,6 +100,7 @@ export default function HomeNewsroomSection() {
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
                 type="button"
+                suppressHydrationWarning
                 className={`newsroom-category-pill ${isActive ? 'active' : ''}`}
               >
                 {cat}

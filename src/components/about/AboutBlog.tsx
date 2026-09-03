@@ -180,7 +180,7 @@ export default function AboutBlog() {
                 </div>
               )}
 
-              <div style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', flexGrow: 1, gap: '0.75rem' }}>
+              <div className="blog-card-body" style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', flexGrow: 1, gap: '0.75rem' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem', color: '#64748b', fontWeight: 500 }}>
                   <span style={{ textTransform: 'uppercase', color: '#64748b', letterSpacing: '0.06em', fontWeight: 600 }}>
                     {blog.category}
@@ -239,23 +239,25 @@ export default function AboutBlog() {
             overflow-x: auto !important;
             scroll-snap-type: x mandatory !important;
             -webkit-overflow-scrolling: touch !important;
-            gap: 1rem !important;
-            padding-bottom: 1.25rem !important;
-            padding-top: 0.25rem !important;
-            padding-left: 0.25rem !important;
-            padding-right: 0.25rem !important;
+            gap: 1.15rem !important;
+            margin: 0 -1.5rem !important;
+            padding: 0.25rem 1.5rem 1.5rem 1.5rem !important;
             scrollbar-width: none !important;
           }
           .blogs-grid-container::-webkit-scrollbar {
             display: none !important;
           }
           .blog-card {
-            flex: 0 0 84% !important;
-            max-width: 330px !important;
-            min-width: 270px !important;
+            flex: 0 0 76% !important;
+            max-width: 300px !important;
+            min-width: 260px !important;
             scroll-snap-align: start !important;
             grid-column: auto !important;
             box-sizing: border-box !important;
+          }
+          .blog-card-body {
+            padding: 1.15rem 1rem !important;
+            gap: 0.5rem !important;
           }
         }
       `}</style>
