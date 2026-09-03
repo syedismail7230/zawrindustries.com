@@ -143,6 +143,7 @@ export default function AboutBlog() {
             gridTemplateColumns: 'repeat(12, 1fr)',
             gap: '2rem',
           }}
+          className="blogs-grid-container"
         >
           {blogs.map((blog) => (
             <div
@@ -231,9 +232,30 @@ export default function AboutBlog() {
         .blog-card:hover .blog-card-img {
           transform: scale(1.04);
         }
-        @media (max-width: 900px) {
+        @media (max-width: 840px) {
+          .blogs-grid-container {
+            display: flex !important;
+            flex-direction: row !important;
+            overflow-x: auto !important;
+            scroll-snap-type: x mandatory !important;
+            -webkit-overflow-scrolling: touch !important;
+            gap: 1rem !important;
+            padding-bottom: 1.25rem !important;
+            padding-top: 0.25rem !important;
+            padding-left: 0.25rem !important;
+            padding-right: 0.25rem !important;
+            scrollbar-width: none !important;
+          }
+          .blogs-grid-container::-webkit-scrollbar {
+            display: none !important;
+          }
           .blog-card {
-            grid-column: span 12 !important;
+            flex: 0 0 84% !important;
+            max-width: 330px !important;
+            min-width: 270px !important;
+            scroll-snap-align: start !important;
+            grid-column: auto !important;
+            box-sizing: border-box !important;
           }
         }
       `}</style>
