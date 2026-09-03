@@ -3,6 +3,7 @@ import Link from 'next/link';
 import TechStatementReveal from '@/components/TechStatementReveal';
 import ITServiceSoftwareSection from '@/components/ITServiceSoftwareSection';
 import OurProcessSection from '@/components/OurProcessSection';
+import HomeNewsroomSection from '@/components/HomeNewsroomSection';
 
 export const metadata: Metadata = {
   title: 'Zawr Industries — Technology, Manufacturing & Logistics Conglomerate | Bangalore',
@@ -87,6 +88,9 @@ export default function Home() {
 
       {/* Section 4: Our Process 3D Horizontal Barrel Roll Carousel */}
       <OurProcessSection />
+
+      {/* Section 5: Newsroom & Media Dispatches */}
+      <HomeNewsroomSection />
 
       <style dangerouslySetInnerHTML={{__html: `
         @media (max-width: 768px) {
