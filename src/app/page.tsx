@@ -4,7 +4,7 @@ import TechStatementReveal from '@/components/TechStatementReveal';
 import ITServiceSoftwareSection from '@/components/ITServiceSoftwareSection';
 import OurProcessSection from '@/components/OurProcessSection';
 import HomeNewsroomSection from '@/components/HomeNewsroomSection';
-import HomeBlogsSection from '@/components/HomeBlogsSection';
+import AboutBlog from '@/components/about/AboutBlog';
 
 export const metadata: Metadata = {
   title: 'Zawr Industries — Technology, Manufacturing & Logistics Conglomerate | Bangalore',
@@ -93,8 +93,8 @@ export default function Home() {
       {/* Section 5: Newsroom & Media Dispatches */}
       <HomeNewsroomSection />
 
-      {/* Section 6: Blogs & Industry Insights */}
-      <HomeBlogsSection />
+      {/* Section 6: Corporate Blog & Insights */}
+      <AboutBlog />
 
       <style dangerouslySetInnerHTML={{__html: `
         @media (max-width: 768px) {
