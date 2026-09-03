@@ -332,29 +332,7 @@ export default function Header() {
           </button>
 
           {isNotifDropdownOpen && (
-            <div
-              className="notif-dropdown-panel"
-              style={{
-                position: 'absolute',
-                top: 'calc(100% + 0.75rem)',
-                right: isMobileMenuOpen ? 'auto' : 0,
-                left: isMobileMenuOpen ? 0 : 'auto',
-                width: 'clamp(290px, 86vw, 360px)',
-                display: 'flex',
-                flexDirection: 'column',
-                opacity: 1,
-                visibility: 'visible',
-                pointerEvents: 'auto',
-                transform: 'translateY(0)',
-                zIndex: 1000,
-                backgroundColor: '#ffffff',
-                borderRadius: '16px',
-                boxShadow: '0 20px 45px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.05)',
-                border: '1px solid #e2e8f0',
-                overflow: 'hidden',
-                color: '#0f172a',
-              }}
-            >
+            <div className="notif-dropdown-panel">
               {/* Dropdown Header */}
               <div
                 style={{
