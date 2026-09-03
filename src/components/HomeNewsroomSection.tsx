@@ -100,122 +100,43 @@ export default function HomeNewsroomSection() {
     <section
       id="newsroom"
       aria-label="Newsroom and Corporate Dispatches"
+      className="home-newsroom-section"
       style={{
         backgroundColor: '#ffffff',
         width: '100%',
-        padding: 'clamp(5rem, 8vw, 8.5rem) 2%',
-        display: 'flex',
-        justifyContent: 'center',
-        position: 'relative',
+        boxSizing: 'border-box',
         color: '#000000',
         fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       }}
     >
-      <div style={{ width: '100%', maxWidth: '1680px', margin: '0 auto' }}>
+      <div className="home-newsroom-container">
         {/* Top Header Block */}
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            flexWrap: 'wrap',
-            gap: '1.5rem',
-            marginBottom: '3rem',
-            paddingBottom: '2rem',
-            borderBottom: '1px solid #ebebeb',
-          }}
-        >
-          <div style={{ maxWidth: '820px' }}>
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '6px 14px',
-                borderRadius: '100px',
-                backgroundColor: '#f5f5f5',
-                border: '1px solid #e5e5e5',
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                textTransform: 'uppercase',
-                letterSpacing: '0.08em',
-                color: '#555555',
-                marginBottom: '1rem',
-              }}
-            >
-              <span
-                style={{
-                  width: '6px',
-                  height: '6px',
-                  borderRadius: '50%',
-                  backgroundColor: '#16a34a',
-                  display: 'inline-block',
-                }}
-              />
+        <div className="newsroom-header-row">
+          <div className="newsroom-header-copy">
+            <span className="newsroom-eyebrow">
               Newsroom &amp; Dispatches
-            </div>
-            <h2
-              style={{
-                fontSize: 'clamp(2.2rem, 5vw, 3.8rem)',
-                fontWeight: 300,
-                letterSpacing: '-0.025em',
-                lineHeight: 1.12,
-                color: '#000000',
-                margin: '0 0 1rem 0',
-              }}
-            >
+            </span>
+            <h2 className="newsroom-main-title">
               Inside Zawr Industries
             </h2>
-            <p
-              style={{
-                fontSize: 'clamp(1rem, 1.4vw, 1.15rem)',
-                lineHeight: 1.6,
-                color: '#666666',
-                margin: 0,
-                fontWeight: 400,
-              }}
-            >
+            <p className="newsroom-main-subtext">
               Official press releases, strategic technology announcements, sustainability updates, and global industrial dispatches.
             </p>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
+          <div className="newsroom-header-actions">
             <Link
               href="/newsroom/press-release"
               className="newsroom-header-cta"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '12px 24px',
-                borderRadius: '100px',
-                backgroundColor: '#000000',
-                color: '#ffffff',
-                fontSize: '0.9rem',
-                fontWeight: 500,
-                textDecoration: 'none',
-                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
-              }}
             >
               <span>Explore All Press Releases</span>
-              <span style={{ fontSize: '1.1rem', transition: 'transform 0.2s ease' }} className="cta-arrow">
-                &rarr;
-              </span>
+              <span className="cta-arrow">&rarr;</span>
             </Link>
           </div>
         </div>
 
-        {/* Category Filter Pills */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '8px',
-            flexWrap: 'wrap',
-            marginBottom: '2.5rem',
-          }}
-        >
+        {/* Category Filter Pills (Scrollable on mobile) */}
+        <div className="newsroom-categories-bar">
           {categories.map((cat) => {
             const isActive = activeCategory === cat;
             return (
@@ -223,17 +144,7 @@ export default function HomeNewsroomSection() {
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
                 type="button"
-                style={{
-                  padding: '8px 18px',
-                  borderRadius: '100px',
-                  fontSize: '0.85rem',
-                  fontWeight: isActive ? 600 : 500,
-                  border: isActive ? '1px solid #000000' : '1px solid #e5e5e5',
-                  backgroundColor: isActive ? '#000000' : '#ffffff',
-                  color: isActive ? '#ffffff' : '#555555',
-                  cursor: 'pointer',
-                  transition: 'all 0.2s ease',
-                }}
+                className={`newsroom-category-pill ${isActive ? 'active' : ''}`}
               >
                 {cat}
               </button>
@@ -242,273 +153,76 @@ export default function HomeNewsroomSection() {
         </div>
 
         {/* Editorial Stories Grid */}
-        <div
-          className="newsroom-stories-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1.25fr) minmax(0, 1fr)',
-            gap: '2rem',
-            marginBottom: '4rem',
-          }}
-        >
+        <div className="newsroom-stories-grid">
           {/* Main Featured Lead Story Card */}
           <Link
             href={`/newsroom/press-release/${leadStory.slug}`}
             className="news-lead-card"
-            style={{
-              textDecoration: 'none',
-              color: 'inherit',
-              display: 'flex',
-              flexDirection: 'column',
-              backgroundColor: '#fafafa',
-              borderRadius: '28px',
-              border: '1px solid #ebebeb',
-              overflow: 'hidden',
-              transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
-            }}
           >
-            <div
-              style={{
-                position: 'relative',
-                width: '100%',
-                height: 'clamp(280px, 38vw, 440px)',
-                overflow: 'hidden',
-                backgroundColor: '#eeeeee',
-              }}
-            >
+            <div className="news-lead-media">
               <img
                 src={leadStory.banner}
                 alt={leadStory.title}
                 className="news-lead-img"
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                  display: 'block',
-                  transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-                }}
                 loading="lazy"
               />
-              <div
-                style={{
-                  position: 'absolute',
-                  top: '1.25rem',
-                  left: '1.25rem',
-                  display: 'flex',
-                  gap: '8px',
-                }}
-              >
-                <span
-                  style={{
-                    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-                    backdropFilter: 'blur(8px)',
-                    color: '#ffffff',
-                    padding: '5px 12px',
-                    borderRadius: '100px',
-                    fontSize: '0.75rem',
-                    fontWeight: 600,
-                    letterSpacing: '0.04em',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  {leadStory.category}
-                </span>
-                <span
-                  style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                    backdropFilter: 'blur(8px)',
-                    color: '#000000',
-                    padding: '5px 12px',
-                    borderRadius: '100px',
-                    fontSize: '0.75rem',
-                    fontWeight: 500,
-                  }}
-                >
-                  Featured Story
-                </span>
+              <div className="news-lead-badges">
+                <span className="badge-category">{leadStory.category}</span>
+                <span className="badge-featured">Featured Story</span>
               </div>
             </div>
 
-            <div style={{ padding: 'clamp(1.5rem, 3vw, 2.5rem)', display: 'flex', flexDirection: 'column', flex: 1 }}>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '12px',
-                  fontSize: '0.82rem',
-                  color: '#777777',
-                  marginBottom: '0.75rem',
-                }}
-              >
+            <div className="news-lead-content">
+              <div className="news-lead-meta">
                 <span>{leadStory.date}</span>
                 <span>&bull;</span>
                 <span>{leadStory.readTime}</span>
               </div>
 
-              <h3
-                className="lead-title"
-                style={{
-                  fontSize: 'clamp(1.4rem, 2.4vw, 2rem)',
-                  fontWeight: 500,
-                  letterSpacing: '-0.02em',
-                  lineHeight: 1.25,
-                  margin: '0 0 1rem 0',
-                  color: '#000000',
-                  transition: 'color 0.2s ease',
-                }}
-              >
+              <h3 className="news-lead-heading">
                 {leadStory.title}
               </h3>
 
-              <p
-                style={{
-                  fontSize: '0.98rem',
-                  lineHeight: 1.6,
-                  color: '#555555',
-                  margin: '0 0 1.75rem 0',
-                  fontWeight: 400,
-                  display: '-webkit-box',
-                  WebkitLineClamp: 3,
-                  WebkitBoxOrient: 'vertical',
-                  overflow: 'hidden',
-                }}
-              >
+              <p className="news-lead-summary">
                 {leadStory.summary}
               </p>
 
-              <div
-                style={{
-                  marginTop: 'auto',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  fontSize: '0.9rem',
-                  fontWeight: 600,
-                  color: '#000000',
-                }}
-              >
+              <div className="news-lead-link">
                 <span>Read Full Press Release</span>
-                <span style={{ transition: 'transform 0.2s ease' }} className="link-arrow">
-                  &rarr;
-                </span>
+                <span className="link-arrow">&rarr;</span>
               </div>
             </div>
           </Link>
 
           {/* Secondary Stacked Stories Column */}
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '1.25rem',
-            }}
-          >
+          <div className="news-secondary-column">
             {sideStories.map((story) => (
               <Link
                 key={story.id}
                 href={`/newsroom/press-release/${story.slug}`}
                 className="news-secondary-card"
-                style={{
-                  textDecoration: 'none',
-                  color: 'inherit',
-                  display: 'flex',
-                  gap: '1.25rem',
-                  alignItems: 'stretch',
-                  backgroundColor: '#ffffff',
-                  borderRadius: '20px',
-                  border: '1px solid #ebebeb',
-                  padding: '1.25rem',
-                  transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                }}
               >
-                <div
-                  style={{
-                    position: 'relative',
-                    width: '130px',
-                    minWidth: '130px',
-                    borderRadius: '14px',
-                    overflow: 'hidden',
-                    backgroundColor: '#f0f0f0',
-                  }}
-                >
+                <div className="news-secondary-media">
                   <img
                     src={story.banner}
                     alt={story.title}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      display: 'block',
-                      transition: 'transform 0.5s ease',
-                    }}
-                    className="side-img"
+                    className="news-secondary-img"
                     loading="lazy"
                   />
                 </div>
 
-                <div
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    flex: 1,
-                    minWidth: 0,
-                  }}
-                >
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      fontSize: '0.75rem',
-                      marginBottom: '6px',
-                    }}
-                  >
-                    <span
-                      style={{
-                        color: '#000000',
-                        fontWeight: 600,
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.04em',
-                      }}
-                    >
-                      {story.category}
-                    </span>
-                    <span style={{ color: '#cccccc' }}>&bull;</span>
-                    <span style={{ color: '#777777' }}>{story.date}</span>
+                <div className="news-secondary-content">
+                  <div className="news-secondary-meta">
+                    <span className="sec-category">{story.category}</span>
+                    <span className="sec-dot">&bull;</span>
+                    <span className="sec-date">{story.date}</span>
                   </div>
 
-                  <h4
-                    className="side-title"
-                    style={{
-                      fontSize: 'clamp(1rem, 1.25vw, 1.15rem)',
-                      fontWeight: 500,
-                      letterSpacing: '-0.015em',
-                      lineHeight: 1.35,
-                      margin: '0 0 6px 0',
-                      color: '#000000',
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                      transition: 'color 0.2s ease',
-                    }}
-                  >
+                  <h4 className="news-secondary-heading">
                     {story.title}
                   </h4>
 
-                  <p
-                    style={{
-                      fontSize: '0.85rem',
-                      lineHeight: 1.5,
-                      color: '#666666',
-                      margin: 0,
-                      display: '-webkit-box',
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden',
-                    }}
-                  >
+                  <p className="news-secondary-summary">
                     {story.summary}
                   </p>
                 </div>
@@ -518,201 +232,49 @@ export default function HomeNewsroomSection() {
         </div>
 
         {/* Four Quick Navigation Portals Strip */}
-        <div
-          style={{
-            marginBottom: '3rem',
-          }}
-        >
-          <div
-            style={{
-              fontSize: '0.8rem',
-              fontWeight: 600,
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              color: '#888888',
-              marginBottom: '1rem',
-            }}
-          >
+        <div className="newsroom-portals-wrapper">
+          <div className="newsroom-portals-label">
             Newsroom Navigation &amp; Resources
           </div>
 
-          <div
-            className="newsroom-portals-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(4, minmax(0, 1fr))',
-              gap: '1.25rem',
-            }}
-          >
-            {QUICK_PORTALS.map((portal, index) => (
+          <div className="newsroom-portals-grid">
+            {QUICK_PORTALS.map((portal) => (
               <Link
                 key={portal.title}
                 href={portal.href}
                 className="newsroom-portal-card"
-                style={{
-                  textDecoration: 'none',
-                  color: 'inherit',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  padding: '1.5rem',
-                  borderRadius: '20px',
-                  backgroundColor: '#fafafa',
-                  border: '1px solid #ebebeb',
-                  transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                  position: 'relative',
-                }}
               >
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: '1rem',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: '0.72rem',
-                      fontWeight: 600,
-                      padding: '4px 10px',
-                      borderRadius: '100px',
-                      backgroundColor: '#ffffff',
-                      border: '1px solid #e5e5e5',
-                      color: '#444444',
-                    }}
-                  >
-                    {portal.badge}
-                  </span>
-                  <span
-                    className="portal-arrow"
-                    style={{
-                      fontSize: '1.1rem',
-                      color: '#000000',
-                      transition: 'transform 0.2s ease',
-                    }}
-                  >
-                    &rarr;
-                  </span>
+                <div className="portal-card-top">
+                  <span className="portal-badge">{portal.badge}</span>
+                  <span className="portal-arrow">&rarr;</span>
                 </div>
 
-                <h4
-                  style={{
-                    fontSize: '1.1rem',
-                    fontWeight: 600,
-                    margin: '0 0 0.5rem 0',
-                    color: '#000000',
-                    letterSpacing: '-0.01em',
-                  }}
-                >
-                  {portal.title}
-                </h4>
-
-                <p
-                  style={{
-                    fontSize: '0.86rem',
-                    lineHeight: 1.55,
-                    color: '#666666',
-                    margin: 0,
-                  }}
-                >
-                  {portal.desc}
-                </p>
+                <h4 className="portal-title">{portal.title}</h4>
+                <p className="portal-desc">{portal.desc}</p>
               </Link>
             ))}
           </div>
         </div>
 
         {/* Media Inquiries & Press Office Contact Bar */}
-        <div
-          style={{
-            borderRadius: '24px',
-            backgroundColor: '#000000',
-            color: '#ffffff',
-            padding: 'clamp(2rem, 3.5vw, 3rem)',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '1.75rem',
-          }}
-        >
-          <div style={{ maxWidth: '720px' }}>
-            <span
-              style={{
-                fontSize: '0.75rem',
-                fontWeight: 600,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: '#aaaaaa',
-                display: 'block',
-                marginBottom: '0.5rem',
-              }}
-            >
+        <div className="newsroom-media-bar">
+          <div className="media-bar-copy">
+            <span className="media-bar-eyebrow">
               Accredited Press &amp; Media Inquiries
             </span>
-            <h3
-              style={{
-                fontSize: 'clamp(1.4rem, 2.5vw, 1.9rem)',
-                fontWeight: 400,
-                letterSpacing: '-0.02em',
-                lineHeight: 1.25,
-                margin: '0 0 0.5rem 0',
-                color: '#ffffff',
-              }}
-            >
+            <h3 className="media-bar-title">
               Connect with the Global Communications Office
             </h3>
-            <p
-              style={{
-                fontSize: '0.95rem',
-                color: '#888888',
-                lineHeight: 1.55,
-                margin: 0,
-              }}
-            >
+            <p className="media-bar-desc">
               Direct pipeline for journalist inquiries, broadcast interview requests, and institutional media assets.
             </p>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <Link
-              href="/newsroom/media-kit"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '12px 22px',
-                borderRadius: '100px',
-                backgroundColor: '#ffffff',
-                color: '#000000',
-                fontSize: '0.88rem',
-                fontWeight: 600,
-                textDecoration: 'none',
-                transition: 'opacity 0.2s ease',
-              }}
-              className="press-btn-white"
-            >
+          <div className="media-bar-actions">
+            <Link href="/newsroom/media-kit" className="press-btn-white">
               <span>Download Media Kit</span>
             </Link>
-            <Link
-              href="/contact/public-relations"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '12px 22px',
-                borderRadius: '100px',
-                backgroundColor: 'rgba(255, 255, 255, 0.12)',
-                color: '#ffffff',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                fontSize: '0.88rem',
-                fontWeight: 500,
-                textDecoration: 'none',
-                transition: 'background-color 0.2s ease',
-              }}
-              className="press-btn-outline"
-            >
+            <Link href="/contact/public-relations" className="press-btn-outline">
               <span>Contact PR Team &rarr;</span>
             </Link>
           </div>
@@ -720,78 +282,596 @@ export default function HomeNewsroomSection() {
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `
-        .newsroom-header-cta:hover {
-          background-color: #222222 !important;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        /* Root container with generous, responsive side breathing room */
+        .home-newsroom-section {
+          padding: clamp(4.5rem, 7vw, 7.5rem) clamp(1.5rem, 5vw, 5rem);
+          display: flex;
+          justifyContent: center;
+          position: relative;
         }
+
+        .home-newsroom-container {
+          width: 100%;
+          max-width: 1400px;
+          margin: 0 auto;
+        }
+
+        /* Top Header Row */
+        .newsroom-header-row {
+          display: flex;
+          flex-direction: row;
+          justifyContent: space-between;
+          align-items: flex-end;
+          flex-wrap: wrap;
+          gap: 1.5rem;
+          margin-bottom: 2.75rem;
+          padding-bottom: 2rem;
+          border-bottom: 1px solid #eeeeee;
+        }
+
+        .newsroom-header-copy {
+          max-width: 800px;
+        }
+
+        .newsroom-eyebrow {
+          display: inline-block;
+          font-size: 0.76rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.12em;
+          color: #777777;
+          margin-bottom: 0.85rem;
+        }
+
+        .newsroom-main-title {
+          font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+          font-weight: 300;
+          letter-spacing: -0.025em;
+          line-height: 1.15;
+          color: #000000;
+          margin: 0 0 1rem 0;
+        }
+
+        .newsroom-main-subtext {
+          font-size: clamp(1rem, 1.35vw, 1.12rem);
+          line-height: 1.6;
+          color: #666666;
+          margin: 0;
+          font-weight: 400;
+        }
+
+        .newsroom-header-actions {
+          display: flex;
+          align-items: center;
+        }
+
+        .newsroom-header-cta {
+          display: inline-flex;
+          align-items: center;
+          gap: 10px;
+          padding: 13px 26px;
+          border-radius: 100px;
+          background-color: #000000;
+          color: #ffffff;
+          font-size: 0.9rem;
+          font-weight: 500;
+          text-decoration: none;
+          transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+          white-space: nowrap;
+        }
+
+        .newsroom-header-cta:hover {
+          background-color: #222222;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+        }
+
         .newsroom-header-cta:hover .cta-arrow {
           transform: translateX(4px);
+        }
+
+        .cta-arrow {
+          font-size: 1.1rem;
+          transition: transform 0.2s ease;
+        }
+
+        /* Categories Filter Bar (Touch-friendly & horizontal scroll on small screens) */
+        .newsroom-categories-bar {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 2.5rem;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          padding-bottom: 4px;
+        }
+
+        .newsroom-categories-bar::-webkit-scrollbar {
+          display: none;
+        }
+
+        .newsroom-category-pill {
+          padding: 8px 20px;
+          border-radius: 100px;
+          font-size: 0.85rem;
+          font-weight: 500;
+          border: 1px solid #e5e5e5;
+          background-color: #ffffff;
+          color: #555555;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          white-space: nowrap;
+          flex-shrink: 0;
+        }
+
+        .newsroom-category-pill.active {
+          font-weight: 600;
+          border-color: #000000;
+          background-color: #000000;
+          color: #ffffff;
+        }
+
+        /* Stories Grid */
+        .newsroom-stories-grid {
+          display: grid;
+          grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+          gap: 2rem;
+          margin-bottom: 4rem;
+        }
+
+        /* Lead Card */
+        .news-lead-card {
+          text-decoration: none;
+          color: inherit;
+          display: flex;
+          flex-direction: column;
+          background-color: #fafafa;
+          border-radius: 24px;
+          border: 1px solid #eeeeee;
+          overflow: hidden;
+          transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .news-lead-card:hover {
           transform: translateY(-4px);
           box-shadow: 0 16px 36px rgba(0, 0, 0, 0.08);
-          border-color: #d0d0d0 !important;
+          border-color: #d6d6d6;
         }
+
+        .news-lead-media {
+          position: relative;
+          width: 100%;
+          height: clamp(240px, 30vw, 380px);
+          overflow: hidden;
+          background-color: #f0f0f0;
+        }
+
+        .news-lead-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
         .news-lead-card:hover .news-lead-img {
           transform: scale(1.03);
         }
-        .news-lead-card:hover .lead-title {
+
+        .news-lead-badges {
+          position: absolute;
+          top: 1.25rem;
+          left: 1.25rem;
+          display: flex;
+          gap: 8px;
+        }
+
+        .badge-category {
+          background-color: rgba(0, 0, 0, 0.78);
+          backdrop-filter: blur(8px);
+          color: #ffffff;
+          padding: 5px 12px;
+          border-radius: 100px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+        }
+
+        .badge-featured {
+          background-color: rgba(255, 255, 255, 0.92);
+          backdrop-filter: blur(8px);
+          color: #000000;
+          padding: 5px 12px;
+          border-radius: 100px;
+          font-size: 0.75rem;
+          font-weight: 500;
+        }
+
+        .news-lead-content {
+          padding: clamp(1.5rem, 3vw, 2.25rem);
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+        }
+
+        .news-lead-meta {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-size: 0.82rem;
+          color: #777777;
+          margin-bottom: 0.75rem;
+        }
+
+        .news-lead-heading {
+          font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+          font-weight: 500;
+          letter-spacing: -0.02em;
+          line-height: 1.28;
+          margin: 0 0 0.85rem 0;
           color: #000000;
         }
+
+        .news-lead-summary {
+          font-size: 0.95rem;
+          line-height: 1.6;
+          color: #555555;
+          margin: 0 0 1.5rem 0;
+          font-weight: 400;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .news-lead-link {
+          margin-top: auto;
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.9rem;
+          font-weight: 600;
+          color: #000000;
+        }
+
         .news-lead-card:hover .link-arrow {
           transform: translateX(5px);
+        }
+
+        .link-arrow {
+          transition: transform 0.2s ease;
+        }
+
+        /* Secondary Stories Column */
+        .news-secondary-column {
+          display: flex;
+          flex-direction: column;
+          gap: 1.25rem;
+        }
+
+        .news-secondary-card {
+          text-decoration: none;
+          color: inherit;
+          display: flex;
+          gap: 1.25rem;
+          align-items: stretch;
+          background-color: #ffffff;
+          border-radius: 20px;
+          border: 1px solid #eeeeee;
+          padding: 1.25rem;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .news-secondary-card:hover {
           transform: translateY(-3px);
           box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
-          border-color: #d0d0d0 !important;
+          border-color: #d6d6d6;
         }
-        .news-secondary-card:hover .side-img {
+
+        .news-secondary-media {
+          position: relative;
+          width: 125px;
+          min-width: 125px;
+          border-radius: 14px;
+          overflow: hidden;
+          background-color: #f0f0f0;
+        }
+
+        .news-secondary-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          transition: transform 0.5s ease;
+        }
+
+        .news-secondary-card:hover .news-secondary-img {
           transform: scale(1.04);
         }
-        .news-secondary-card:hover .side-title {
+
+        .news-secondary-content {
+          display: flex;
+          flex-direction: column;
+          justifyContent: center;
+          flex: 1;
+          min-width: 0;
+        }
+
+        .news-secondary-meta {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.75rem;
+          margin-bottom: 6px;
+        }
+
+        .sec-category {
           color: #000000;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+        }
+
+        .sec-dot {
+          color: #cccccc;
+        }
+
+        .sec-date {
+          color: #777777;
+        }
+
+        .news-secondary-heading {
+          font-size: clamp(1rem, 1.2vw, 1.15rem);
+          font-weight: 500;
+          letter-spacing: -0.015em;
+          line-height: 1.35;
+          margin: 0 0 6px 0;
+          color: #000000;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .news-secondary-summary {
+          font-size: 0.85rem;
+          line-height: 1.5;
+          color: #666666;
+          margin: 0;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        /* 4 Portals Strip */
+        .newsroom-portals-wrapper {
+          margin-bottom: 3.5rem;
+        }
+
+        .newsroom-portals-label {
+          font-size: 0.78rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: #888888;
+          margin-bottom: 1rem;
+        }
+
+        .newsroom-portals-grid {
+          display: grid;
+          grid-template-columns: repeat(4, minmax(0, 1fr));
+          gap: 1.25rem;
+        }
+
+        .newsroom-portal-card {
+          text-decoration: none;
+          color: inherit;
+          display: flex;
+          flex-direction: column;
+          padding: 1.5rem;
+          border-radius: 20px;
+          background-color: #fafafa;
+          border: 1px solid #eeeeee;
+          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         .newsroom-portal-card:hover {
           transform: translateY(-3px);
-          background-color: #f4f4f4 !important;
-          border-color: #000000 !important;
+          background-color: #f5f5f5;
+          border-color: #000000;
           box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
         }
+
+        .portal-card-top {
+          display: flex;
+          justifyContent: space-between;
+          align-items: center;
+          margin-bottom: 1rem;
+        }
+
+        .portal-badge {
+          font-size: 0.72rem;
+          font-weight: 600;
+          padding: 4px 10px;
+          border-radius: 100px;
+          background-color: #ffffff;
+          border: 1px solid #e5e5e5;
+          color: #444444;
+        }
+
+        .portal-arrow {
+          font-size: 1.1rem;
+          color: #000000;
+          transition: transform 0.2s ease;
+        }
+
         .newsroom-portal-card:hover .portal-arrow {
           transform: translate(3px, -3px);
+        }
+
+        .portal-title {
+          font-size: 1.08rem;
+          font-weight: 600;
+          margin: 0 0 0.5rem 0;
+          color: #000000;
+          letter-spacing: -0.01em;
+        }
+
+        .portal-desc {
+          font-size: 0.86rem;
+          line-height: 1.55;
+          color: #666666;
+          margin: 0;
+        }
+
+        /* Media Inquiries Black Banner */
+        .newsroom-media-bar {
+          border-radius: 24px;
+          background-color: #000000;
+          color: #ffffff;
+          padding: clamp(2rem, 3.5vw, 3rem);
+          display: flex;
+          flex-direction: row;
+          justifyContent: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 1.75rem;
+          box-sizing: border-box;
+        }
+
+        .media-bar-copy {
+          max-width: 720px;
+        }
+
+        .media-bar-eyebrow {
+          font-size: 0.75rem;
+          font-weight: 600;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          color: #aaaaaa;
+          display: block;
+          margin-bottom: 0.5rem;
+        }
+
+        .media-bar-title {
+          font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+          font-weight: 400;
+          letter-spacing: -0.02em;
+          line-height: 1.25;
+          margin: 0 0 0.5rem 0;
+          color: #ffffff;
+        }
+
+        .media-bar-desc {
+          font-size: 0.95rem;
+          color: #888888;
+          line-height: 1.55;
+          margin: 0;
+        }
+
+        .media-bar-actions {
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          flex-wrap: wrap;
+        }
+
+        .press-btn-white {
+          display: inline-flex;
+          align-items: center;
+          padding: 12px 22px;
+          border-radius: 100px;
+          background-color: #ffffff;
+          color: #000000;
+          font-size: 0.88rem;
+          font-weight: 600;
+          text-decoration: none;
+          transition: opacity 0.2s ease;
+          white-space: nowrap;
         }
 
         .press-btn-white:hover {
           opacity: 0.9;
         }
-        .press-btn-outline:hover {
-          background-color: rgba(255, 255, 255, 0.2) !important;
+
+        .press-btn-outline {
+          display: inline-flex;
+          align-items: center;
+          padding: 12px 22px;
+          border-radius: 100px;
+          background-color: rgba(255, 255, 255, 0.12);
+          color: #ffffff;
+          border: 1px solid rgba(255, 255, 255, 0.25);
+          font-size: 0.88rem;
+          font-weight: 500;
+          text-decoration: none;
+          transition: background-color 0.2s ease;
+          white-space: nowrap;
         }
 
+        .press-btn-outline:hover {
+          background-color: rgba(255, 255, 255, 0.22);
+        }
+
+        /* Mobile & Responsive Breakpoints */
         @media (max-width: 1024px) {
           .newsroom-stories-grid {
-            grid-template-columns: 1fr !important;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
           }
           .newsroom-portals-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+
+        @media (max-width: 768px) {
+          .home-newsroom-section {
+            padding: 3.5rem 1.25rem !important;
+          }
+          .newsroom-header-row {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+          }
+          .newsroom-header-cta {
+            width: 100%;
+            justify-content: center;
+          }
+          .newsroom-header-actions {
+            width: 100%;
+          }
+          .media-bar-actions {
+            width: 100%;
+            flex-direction: column;
+            align-items: stretch;
+          }
+          .press-btn-white, .press-btn-outline {
+            width: 100%;
+            justify-content: center;
+            box-sizing: border-box;
           }
         }
 
         @media (max-width: 640px) {
+          .home-newsroom-section {
+            padding: 3rem 1rem !important;
+          }
           .newsroom-portals-grid {
-            grid-template-columns: 1fr !important;
+            grid-template-columns: 1fr;
           }
           .news-secondary-card {
-            flex-direction: column !important;
+            flex-direction: column;
+            padding: 1rem;
           }
-          .news-secondary-card > div:first-child {
-            width: 100% !important;
-            height: 180px !important;
+          .news-secondary-media {
+            width: 100%;
+            min-width: 100%;
+            height: 190px;
           }
         }
       `}} />
