@@ -57,33 +57,6 @@ const FEATURED_NEWS: NewsItem[] = [
   },
 ];
 
-const QUICK_PORTALS = [
-  {
-    title: 'Press Releases',
-    desc: 'Official statements, executive dispatches, and corporate milestone announcements.',
-    href: '/newsroom/press-release',
-    badge: '18 Releases',
-  },
-  {
-    title: 'Notifications & Circulars',
-    desc: 'Statutory disclosures, public notices, and regulatory documentation.',
-    href: '/newsroom/notifications',
-    badge: 'Active Notices',
-  },
-  {
-    title: 'Global Events & Summits',
-    desc: 'Industry keynotes, technology delegations, and executive summit appearances.',
-    href: '/newsroom/events',
-    badge: '2026 Calendar',
-  },
-  {
-    title: 'Media Kit & Brand Assets',
-    desc: 'High-resolution logo vectors, brand guidelines, and official executive portraits.',
-    href: '/newsroom/media-kit',
-    badge: 'Press Downloads',
-  },
-];
-
 export default function HomeNewsroomSection() {
   const [activeCategory, setActiveCategory] = useState<string>('All');
 
@@ -101,13 +74,6 @@ export default function HomeNewsroomSection() {
       id="newsroom"
       aria-label="Newsroom and Corporate Dispatches"
       className="home-newsroom-section"
-      style={{
-        backgroundColor: '#ffffff',
-        width: '100%',
-        boxSizing: 'border-box',
-        color: '#000000',
-        fontFamily: 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      }}
     >
       <div className="home-newsroom-container">
         {/* Top Header Block */}
@@ -152,7 +118,7 @@ export default function HomeNewsroomSection() {
           })}
         </div>
 
-        {/* Editorial Stories Grid */}
+        {/* Editorial Stories Grid (Perfect Top & Bottom Alignment) */}
         <div className="newsroom-stories-grid">
           {/* Main Featured Lead Story Card */}
           <Link
@@ -194,7 +160,7 @@ export default function HomeNewsroomSection() {
             </div>
           </Link>
 
-          {/* Secondary Stacked Stories Column */}
+          {/* Secondary Stacked Stories Column (Evenly Stretched to Match Left Height) */}
           <div className="news-secondary-column">
             {sideStories.map((story) => (
               <Link
@@ -230,60 +196,16 @@ export default function HomeNewsroomSection() {
             ))}
           </div>
         </div>
-
-        {/* Four Quick Navigation Portals Strip */}
-        <div className="newsroom-portals-wrapper">
-          <div className="newsroom-portals-label">
-            Newsroom Navigation &amp; Resources
-          </div>
-
-          <div className="newsroom-portals-grid">
-            {QUICK_PORTALS.map((portal) => (
-              <Link
-                key={portal.title}
-                href={portal.href}
-                className="newsroom-portal-card"
-              >
-                <div className="portal-card-top">
-                  <span className="portal-badge">{portal.badge}</span>
-                  <span className="portal-arrow">&rarr;</span>
-                </div>
-
-                <h4 className="portal-title">{portal.title}</h4>
-                <p className="portal-desc">{portal.desc}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Media Inquiries & Press Office Contact Bar */}
-        <div className="newsroom-media-bar">
-          <div className="media-bar-copy">
-            <span className="media-bar-eyebrow">
-              Accredited Press &amp; Media Inquiries
-            </span>
-            <h3 className="media-bar-title">
-              Connect with the Global Communications Office
-            </h3>
-            <p className="media-bar-desc">
-              Direct pipeline for journalist inquiries, broadcast interview requests, and institutional media assets.
-            </p>
-          </div>
-
-          <div className="media-bar-actions">
-            <Link href="/newsroom/media-kit" className="press-btn-white">
-              <span>Download Media Kit</span>
-            </Link>
-            <Link href="/contact/public-relations" className="press-btn-outline">
-              <span>Contact PR Team &rarr;</span>
-            </Link>
-          </div>
-        </div>
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `
         /* Root container with generous, responsive side breathing room */
         .home-newsroom-section {
+          background-color: #ffffff;
+          width: 100%;
+          box-sizing: border-box;
+          color: #000000;
+          font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
           padding: clamp(4.5rem, 7vw, 7.5rem) clamp(1.5rem, 5vw, 5rem);
           display: flex;
           justifyContent: center;
@@ -304,7 +226,7 @@ export default function HomeNewsroomSection() {
           align-items: flex-end;
           flex-wrap: wrap;
           gap: 1.5rem;
-          margin-bottom: 2.75rem;
+          margin-bottom: 2.5rem;
           padding-bottom: 2rem;
           border-bottom: 1px solid #eeeeee;
         }
@@ -375,12 +297,12 @@ export default function HomeNewsroomSection() {
           transition: transform 0.2s ease;
         }
 
-        /* Categories Filter Bar (Touch-friendly & horizontal scroll on small screens) */
+        /* Categories Filter Bar */
         .newsroom-categories-bar {
           display: flex;
           align-items: center;
           gap: 8px;
-          margin-bottom: 2.5rem;
+          margin-bottom: 2.25rem;
           overflow-x: auto;
           -webkit-overflow-scrolling: touch;
           scrollbar-width: none;
@@ -412,15 +334,16 @@ export default function HomeNewsroomSection() {
           color: #ffffff;
         }
 
-        /* Stories Grid */
+        /* Stories Grid: Perfect Top and Bottom Alignment */
         .newsroom-stories-grid {
           display: grid;
-          grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-          gap: 2rem;
-          margin-bottom: 4rem;
+          grid-template-columns: minmax(0, 1.22fr) minmax(0, 1fr);
+          gap: 1.75rem;
+          align-items: stretch;
+          margin-bottom: 0;
         }
 
-        /* Lead Card */
+        /* Left Lead Card */
         .news-lead-card {
           text-decoration: none;
           color: inherit;
@@ -431,6 +354,7 @@ export default function HomeNewsroomSection() {
           border: 1px solid #eeeeee;
           overflow: hidden;
           transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+          height: 100%;
         }
 
         .news-lead-card:hover {
@@ -442,7 +366,7 @@ export default function HomeNewsroomSection() {
         .news-lead-media {
           position: relative;
           width: 100%;
-          height: clamp(240px, 30vw, 380px);
+          height: clamp(220px, 24vw, 320px);
           overflow: hidden;
           background-color: #f0f0f0;
         }
@@ -490,7 +414,7 @@ export default function HomeNewsroomSection() {
         }
 
         .news-lead-content {
-          padding: clamp(1.5rem, 3vw, 2.25rem);
+          padding: clamp(1.5rem, 2.5vw, 2rem);
           display: flex;
           flex-direction: column;
           flex: 1;
@@ -506,19 +430,19 @@ export default function HomeNewsroomSection() {
         }
 
         .news-lead-heading {
-          font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+          font-size: clamp(1.3rem, 2vw, 1.75rem);
           font-weight: 500;
           letter-spacing: -0.02em;
           line-height: 1.28;
-          margin: 0 0 0.85rem 0;
+          margin: 0 0 0.75rem 0;
           color: #000000;
         }
 
         .news-lead-summary {
-          font-size: 0.95rem;
-          line-height: 1.6;
+          font-size: 0.92rem;
+          line-height: 1.55;
           color: #555555;
-          margin: 0 0 1.5rem 0;
+          margin: 0 0 1.25rem 0;
           font-weight: 400;
           display: -webkit-box;
           -webkit-line-clamp: 3;
@@ -531,7 +455,7 @@ export default function HomeNewsroomSection() {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          font-size: 0.9rem;
+          font-size: 0.88rem;
           font-weight: 600;
           color: #000000;
         }
@@ -544,24 +468,27 @@ export default function HomeNewsroomSection() {
           transition: transform 0.2s ease;
         }
 
-        /* Secondary Stories Column */
+        /* Right Secondary Stories Column: Flex-1 Distribution for Exact Height Alignment */
         .news-secondary-column {
           display: flex;
           flex-direction: column;
           gap: 1.25rem;
+          height: 100%;
         }
 
         .news-secondary-card {
           text-decoration: none;
           color: inherit;
           display: flex;
+          flex: 1;
           gap: 1.25rem;
-          align-items: stretch;
+          align-items: center;
           background-color: #ffffff;
           border-radius: 20px;
           border: 1px solid #eeeeee;
           padding: 1.25rem;
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+          box-sizing: border-box;
         }
 
         .news-secondary-card:hover {
@@ -574,6 +501,8 @@ export default function HomeNewsroomSection() {
           position: relative;
           width: 125px;
           min-width: 125px;
+          height: 100%;
+          min-height: 85px;
           border-radius: 14px;
           overflow: hidden;
           background-color: #f0f0f0;
@@ -623,7 +552,7 @@ export default function HomeNewsroomSection() {
         }
 
         .news-secondary-heading {
-          font-size: clamp(1rem, 1.2vw, 1.15rem);
+          font-size: clamp(0.98rem, 1.15vw, 1.12rem);
           font-weight: 500;
           letter-spacing: -0.015em;
           line-height: 1.35;
@@ -636,7 +565,7 @@ export default function HomeNewsroomSection() {
         }
 
         .news-secondary-summary {
-          font-size: 0.85rem;
+          font-size: 0.84rem;
           line-height: 1.5;
           color: #666666;
           margin: 0;
@@ -646,184 +575,19 @@ export default function HomeNewsroomSection() {
           overflow: hidden;
         }
 
-        /* 4 Portals Strip */
-        .newsroom-portals-wrapper {
-          margin-bottom: 3.5rem;
-        }
-
-        .newsroom-portals-label {
-          font-size: 0.78rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.08em;
-          color: #888888;
-          margin-bottom: 1rem;
-        }
-
-        .newsroom-portals-grid {
-          display: grid;
-          grid-template-columns: repeat(4, minmax(0, 1fr));
-          gap: 1.25rem;
-        }
-
-        .newsroom-portal-card {
-          text-decoration: none;
-          color: inherit;
-          display: flex;
-          flex-direction: column;
-          padding: 1.5rem;
-          border-radius: 20px;
-          background-color: #fafafa;
-          border: 1px solid #eeeeee;
-          transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .newsroom-portal-card:hover {
-          transform: translateY(-3px);
-          background-color: #f5f5f5;
-          border-color: #000000;
-          box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
-        }
-
-        .portal-card-top {
-          display: flex;
-          justifyContent: space-between;
-          align-items: center;
-          margin-bottom: 1rem;
-        }
-
-        .portal-badge {
-          font-size: 0.72rem;
-          font-weight: 600;
-          padding: 4px 10px;
-          border-radius: 100px;
-          background-color: #ffffff;
-          border: 1px solid #e5e5e5;
-          color: #444444;
-        }
-
-        .portal-arrow {
-          font-size: 1.1rem;
-          color: #000000;
-          transition: transform 0.2s ease;
-        }
-
-        .newsroom-portal-card:hover .portal-arrow {
-          transform: translate(3px, -3px);
-        }
-
-        .portal-title {
-          font-size: 1.08rem;
-          font-weight: 600;
-          margin: 0 0 0.5rem 0;
-          color: #000000;
-          letter-spacing: -0.01em;
-        }
-
-        .portal-desc {
-          font-size: 0.86rem;
-          line-height: 1.55;
-          color: #666666;
-          margin: 0;
-        }
-
-        /* Media Inquiries Black Banner */
-        .newsroom-media-bar {
-          border-radius: 24px;
-          background-color: #000000;
-          color: #ffffff;
-          padding: clamp(2rem, 3.5vw, 3rem);
-          display: flex;
-          flex-direction: row;
-          justifyContent: space-between;
-          align-items: center;
-          flex-wrap: wrap;
-          gap: 1.75rem;
-          box-sizing: border-box;
-        }
-
-        .media-bar-copy {
-          max-width: 720px;
-        }
-
-        .media-bar-eyebrow {
-          font-size: 0.75rem;
-          font-weight: 600;
-          letter-spacing: 0.08em;
-          text-transform: uppercase;
-          color: #aaaaaa;
-          display: block;
-          margin-bottom: 0.5rem;
-        }
-
-        .media-bar-title {
-          font-size: clamp(1.4rem, 2.4vw, 1.9rem);
-          font-weight: 400;
-          letter-spacing: -0.02em;
-          line-height: 1.25;
-          margin: 0 0 0.5rem 0;
-          color: #ffffff;
-        }
-
-        .media-bar-desc {
-          font-size: 0.95rem;
-          color: #888888;
-          line-height: 1.55;
-          margin: 0;
-        }
-
-        .media-bar-actions {
-          display: flex;
-          align-items: center;
-          gap: 1rem;
-          flex-wrap: wrap;
-        }
-
-        .press-btn-white {
-          display: inline-flex;
-          align-items: center;
-          padding: 12px 22px;
-          border-radius: 100px;
-          background-color: #ffffff;
-          color: #000000;
-          font-size: 0.88rem;
-          font-weight: 600;
-          text-decoration: none;
-          transition: opacity 0.2s ease;
-          white-space: nowrap;
-        }
-
-        .press-btn-white:hover {
-          opacity: 0.9;
-        }
-
-        .press-btn-outline {
-          display: inline-flex;
-          align-items: center;
-          padding: 12px 22px;
-          border-radius: 100px;
-          background-color: rgba(255, 255, 255, 0.12);
-          color: #ffffff;
-          border: 1px solid rgba(255, 255, 255, 0.25);
-          font-size: 0.88rem;
-          font-weight: 500;
-          text-decoration: none;
-          transition: background-color 0.2s ease;
-          white-space: nowrap;
-        }
-
-        .press-btn-outline:hover {
-          background-color: rgba(255, 255, 255, 0.22);
-        }
-
-        /* Mobile & Responsive Breakpoints */
+        /* Mobile & Tablet Breakpoints */
         @media (max-width: 1024px) {
           .newsroom-stories-grid {
             grid-template-columns: 1fr;
             gap: 1.5rem;
           }
-          .newsroom-portals-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
+          .news-secondary-column {
+            height: auto;
+            gap: 1rem;
+          }
+          .news-secondary-card {
+            flex: initial;
+            min-height: auto;
           }
         }
 
@@ -835,7 +599,7 @@ export default function HomeNewsroomSection() {
             flex-direction: column;
             align-items: flex-start;
             gap: 1.25rem;
-            margin-bottom: 2rem;
+            margin-bottom: 1.75rem;
             padding-bottom: 1.5rem;
           }
           .newsroom-header-cta {
@@ -845,33 +609,21 @@ export default function HomeNewsroomSection() {
           .newsroom-header-actions {
             width: 100%;
           }
-          .media-bar-actions {
-            width: 100%;
-            flex-direction: column;
-            align-items: stretch;
-          }
-          .press-btn-white, .press-btn-outline {
-            width: 100%;
-            justify-content: center;
-            box-sizing: border-box;
-          }
         }
 
         @media (max-width: 640px) {
           .home-newsroom-section {
             padding: 3rem 1rem !important;
           }
-          .newsroom-portals-grid {
-            grid-template-columns: 1fr;
-          }
           .news-secondary-card {
             flex-direction: column;
             padding: 1rem;
+            align-items: flex-start;
           }
           .news-secondary-media {
             width: 100%;
             min-width: 100%;
-            height: 190px;
+            height: 180px;
           }
         }
       `}} />
