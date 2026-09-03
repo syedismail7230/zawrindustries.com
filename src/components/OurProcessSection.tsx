@@ -70,10 +70,8 @@ export default function OurProcessSection() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
-  const sliceSize = 1 / STEPS.length;
-  const activeIndex = Math.min(STEPS.length - 1, Math.floor(progress / sliceSize));
-  const sliceStart = activeIndex * sliceSize;
-  const activeCardProgress = progress >= 1 ? 1 : Math.min(1, (progress - sliceStart) / sliceSize);
+  const numTransitions = STEPS.length - 1;
+  const sliceSize = 1 / numTransitions;
 
   const innerStyle: React.CSSProperties =
     pinState === 'pinned'
@@ -87,7 +85,7 @@ export default function OurProcessSection() {
       ref={spacerRef}
       style={{
         position: 'relative',
-        height: `${STEPS.length * 120 + 20}vh`,
+        height: `${(STEPS.length - 1) * 110 + 40}vh`,
         backgroundColor: '#ffffff',
         fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, sans-serif',
       }}
@@ -113,14 +111,44 @@ export default function OurProcessSection() {
           }}
         >
           {STEPS.map((item, index) => {
-            const isActive = index === activeIndex;
-            const hasLanded = index < activeIndex;
-            const isPending = index > activeIndex;
-            const cardsOnTop = activeIndex - index;
+            let translateY = 0;
+            let opacity = 1;
 
-            const translateY = isActive ? (1 - activeCardProgress) * 100 : isPending ? 100 : 0;
-            const scale = hasLanded ? Math.max(0.88, 1 - cardsOnTop * 0.034) : 1;
-            const stackShift = hasLanded ? -cardsOnTop * 14 : 0;
+            if (index === 0) {
+              // First card is already in place from the start
+              translateY = 0;
+              opacity = 1;
+            } else {
+              const cardStart = (index - 1) * sliceSize;
+              const cardEnd = index * sliceSize;
+
+              if (progress <= cardStart) {
+                translateY = 100;
+                opacity = 0;
+              } else if (progress >= cardEnd) {
+                translateY = 0;
+                opacity = 1;
+              } else {
+                const cardProgress = (progress - cardStart) / sliceSize;
+                translateY = (1 - cardProgress) * 100;
+                opacity = cardProgress > 0.02 ? 1 : 0;
+              }
+            }
+
+            // Calculate stacking effects from cards landed above
+            let effectiveCardsOnTop = 0;
+            for (let k = index + 1; k < STEPS.length; k++) {
+              const kStart = (k - 1) * sliceSize;
+              const kEnd = k * sliceSize;
+              if (progress >= kEnd) {
+                effectiveCardsOnTop += 1;
+              } else if (progress > kStart) {
+                effectiveCardsOnTop += (progress - kStart) / sliceSize;
+              }
+            }
+
+            const scale = Math.max(0.88, 1 - effectiveCardsOnTop * 0.034);
+            const stackShift = -effectiveCardsOnTop * 14;
 
             return (
               <div
@@ -132,7 +160,7 @@ export default function OurProcessSection() {
                   overflow: 'hidden',
                   backgroundColor: '#111111',
                   zIndex: index + 1,
-                  opacity: isPending ? 0 : 1,
+                  opacity,
                   transform: `translateY(calc(${translateY}% + ${stackShift}px)) scale(${scale})`,
                   transformOrigin: 'center bottom',
                   willChange: 'transform, opacity',
