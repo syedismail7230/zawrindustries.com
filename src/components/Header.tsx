@@ -329,35 +329,11 @@ export default function Header() {
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
               <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
             </svg>
-            {notifications.length > 0 && (
-              <span
-                style={{
-                  position: 'absolute',
-                  top: '-4px',
-                  right: '-6px',
-                  backgroundColor: '#ef4444',
-                  color: '#ffffff',
-                  fontSize: '0.62rem',
-                  fontWeight: 700,
-                  minWidth: '15px',
-                  height: '15px',
-                  borderRadius: '999px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '0 3px',
-                  lineHeight: 1,
-                  boxShadow: '0 0 0 2px var(--primary-color, #0f172a)',
-                }}
-              >
-                {notifications.length}
-              </span>
-            )}
           </button>
 
           {isNotifDropdownOpen && (
             <div
-              className="dropdown notif-dropdown"
+              className="notif-dropdown-panel"
               style={{
                 position: 'absolute',
                 top: 'calc(100% + 0.75rem)',
@@ -371,11 +347,12 @@ export default function Header() {
                 pointerEvents: 'auto',
                 transform: 'translateY(0)',
                 zIndex: 1000,
-                backgroundColor: 'var(--primary-color, #0f172a)',
-                borderRadius: '12px',
-                boxShadow: '0 20px 45px rgba(0, 0, 0, 0.35)',
-                border: '1px solid rgba(255, 255, 255, 0.14)',
+                backgroundColor: '#ffffff',
+                borderRadius: '16px',
+                boxShadow: '0 20px 45px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.05)',
+                border: '1px solid #e2e8f0',
                 overflow: 'hidden',
+                color: '#0f172a',
               }}
             >
               {/* Dropdown Header */}
@@ -385,19 +362,19 @@ export default function Header() {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   padding: '0.9rem 1.15rem',
-                  borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                  borderBottom: '1px solid #f1f5f9',
+                  backgroundColor: '#f8fafc',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#ffffff' }}>Notifications</span>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#0f172a' }}>Notifications</span>
                   <span
                     style={{
                       fontSize: '0.68rem',
-                      fontWeight: 700,
-                      backgroundColor: 'rgba(255, 255, 255, 0.16)',
-                      color: '#ffffff',
-                      padding: '2px 7px',
+                      fontWeight: 600,
+                      backgroundColor: '#e2e8f0',
+                      color: '#334155',
+                      padding: '2px 8px',
                       borderRadius: '100px',
                     }}
                   >
@@ -407,7 +384,7 @@ export default function Header() {
                 <Link
                   href="/newsroom/notifications"
                   onClick={closeMobileMenu}
-                  style={{ fontSize: '0.78rem', color: '#94a3b8', textDecoration: 'none', transition: 'color 0.2s' }}
+                  style={{ fontSize: '0.78rem', color: '#64748b', textDecoration: 'none', fontWeight: 500, transition: 'color 0.2s' }}
                 >
                   View Page
                 </Link>
@@ -421,10 +398,11 @@ export default function Header() {
                   overflowY: 'auto',
                   display: 'flex',
                   flexDirection: 'column',
+                  backgroundColor: '#ffffff',
                 }}
               >
                 {notifications.length === 0 ? (
-                  <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#94a3b8', fontSize: '0.85rem' }}>
+                  <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#64748b', fontSize: '0.85rem' }}>
                     No active notifications.
                   </div>
                 ) : (
@@ -434,38 +412,40 @@ export default function Header() {
                       href={`/newsroom/notifications/${item.slug}`}
                       onClick={closeMobileMenu}
                       style={{
-                        padding: '0.9rem 1.15rem',
-                        borderBottom: '1px solid rgba(255, 255, 255, 0.07)',
+                        padding: '0.95rem 1.15rem',
+                        borderBottom: '1px solid #f1f5f9',
                         textDecoration: 'none',
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '4px',
+                        gap: '5px',
+                        backgroundColor: '#ffffff',
                         transition: 'background-color 0.2s ease',
                       }}
-                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)')}
-                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f8fafc')}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#ffffff')}
                     >
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.7rem' }}>
                         <span
                           style={{
                             fontWeight: 700,
-                            letterSpacing: '0.06em',
+                            letterSpacing: '0.04em',
                             textTransform: 'uppercase',
-                            color: item.category === 'Investor' ? '#60a5fa' : item.category === 'Operations' ? '#34d399' : '#f59e0b',
+                            fontSize: '0.68rem',
+                            color: item.category === 'Investor' ? '#1d4ed8' : item.category === 'Operations' ? '#15803d' : '#b45309',
                           }}
                         >
                           {item.category || 'General'}
                         </span>
-                        <span style={{ color: '#94a3b8' }}>{item.date}</span>
+                        <span style={{ color: '#94a3b8', fontSize: '0.72rem' }}>{item.date}</span>
                       </div>
-                      <div style={{ fontSize: '0.84rem', fontWeight: 500, color: '#ffffff', lineHeight: 1.35 }}>
+                      <div style={{ fontSize: '0.85rem', fontWeight: 600, color: '#0f172a', lineHeight: 1.35 }}>
                         {item.title}
                       </div>
                       <div
                         style={{
-                          fontSize: '0.76rem',
-                          color: '#94a3b8',
-                          lineHeight: 1.4,
+                          fontSize: '0.78rem',
+                          color: '#64748b',
+                          lineHeight: 1.45,
                           display: '-webkit-box',
                           WebkitLineClamp: 2,
                           WebkitBoxOrient: 'vertical',
@@ -483,8 +463,8 @@ export default function Header() {
               <div
                 style={{
                   padding: '0.75rem 1.15rem',
-                  borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                  borderTop: '1px solid #f1f5f9',
+                  backgroundColor: '#f8fafc',
                   textAlign: 'center',
                 }}
               >
@@ -494,7 +474,7 @@ export default function Header() {
                   style={{
                     fontSize: '0.82rem',
                     fontWeight: 600,
-                    color: '#ffffff',
+                    color: '#0f172a',
                     textDecoration: 'none',
                     display: 'inline-flex',
                     alignItems: 'center',

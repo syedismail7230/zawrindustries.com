@@ -731,28 +731,28 @@ button, input {
     box-shadow: none;
   }
   
-  .nav-links.mobile-active {
-    display: flex;
-    flex-direction: column;
-    order: 3;
-    padding: 2rem 0;
-    margin-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
-  }
-  
   .header-actions.mobile-active {
     display: flex !important;
     flex-direction: row !important;
     justify-content: flex-start !important;
     align-items: center !important;
     gap: 1rem !important;
-    order: 4 !important;
-    padding: 0.8rem 0 0.8rem 1.5rem !important;
-    margin: 1rem 0 6rem 0 !important;
+    order: 2 !important;
+    padding: 1.25rem 0 1.25rem 1.5rem !important;
+    margin: 0 !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
     background: transparent !important;
-    border: none !important;
     width: 100% !important;
     box-sizing: border-box !important;
+  }
+
+  .nav-links.mobile-active {
+    display: flex;
+    flex-direction: column;
+    order: 3 !important;
+    padding: 1.5rem 0 4rem 0 !important;
+    margin-top: 0 !important;
+    border-top: none !important;
   }
 
   .header-actions.mobile-active > * {
