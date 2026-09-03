@@ -15,7 +15,7 @@ const STEPS = [
     title: 'Ideation',
     subtitle: 'Designing every detail',
     description: 'From system architecture to digital user experience, we design solutions with meticulous detail tailored for enterprise scaling.',
-    image: '/assets/ideation.png',
+    image: '/assets/ideating.png',
   },
   {
     number: '03',
