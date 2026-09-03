@@ -76,29 +76,19 @@ export default function HomeNewsroomSection() {
       className="home-newsroom-section"
     >
       <div className="home-newsroom-container">
-        {/* Top Header Block */}
-        <div className="newsroom-header-row">
-          <div className="newsroom-header-copy">
-            <span className="newsroom-eyebrow">
-              Newsroom &amp; Dispatches
-            </span>
-            <h2 className="newsroom-main-title">
-              Inside Zawr Industries
-            </h2>
-            <p className="newsroom-main-subtext">
-              Official press releases, strategic technology announcements, sustainability updates, and global industrial dispatches.
-            </p>
-          </div>
-
-          <div className="newsroom-header-actions">
-            <Link
-              href="/newsroom/press-release"
-              className="newsroom-header-cta"
-            >
-              <span>Explore All Press Releases</span>
-              <span className="cta-arrow">&rarr;</span>
-            </Link>
-          </div>
+        {/* Section Header (Centered exactly like 'Our Process') */}
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem, 4vh, 3.25rem)' }}>
+          <h2
+            style={{
+              fontSize: 'clamp(2.2rem, 4.5vw, 3.6rem)',
+              fontWeight: 400,
+              color: '#0f172a',
+              letterSpacing: '-0.03em',
+              margin: 0,
+            }}
+          >
+            Newsroom
+          </h2>
         </div>
 
         {/* Category Filter Pills (Scrollable on mobile) */}
@@ -202,6 +192,17 @@ export default function HomeNewsroomSection() {
             ))}
           </div>
         </div>
+
+        {/* Centered Explore All Link */}
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 'clamp(2.5rem, 4.5vw, 3.75rem)' }}>
+          <Link
+            href="/newsroom/press-release"
+            className="newsroom-header-cta"
+          >
+            <span>Explore All Press Releases</span>
+            <span className="cta-arrow">&rarr;</span>
+          </Link>
+        </div>
       </div>
 
       <style dangerouslySetInnerHTML={{ __html: `
@@ -224,60 +225,11 @@ export default function HomeNewsroomSection() {
           margin: 0 auto;
         }
 
-        /* Top Header Row */
-        .newsroom-header-row {
-          display: flex;
-          flex-direction: row;
-          justifyContent: space-between;
-          align-items: flex-end;
-          flex-wrap: wrap;
-          gap: 1.5rem;
-          margin-bottom: 2.5rem;
-          padding-bottom: 2rem;
-          border-bottom: 1px solid #eeeeee;
-        }
-
-        .newsroom-header-copy {
-          max-width: 800px;
-        }
-
-        .newsroom-eyebrow {
-          display: inline-block;
-          font-size: 0.76rem;
-          font-weight: 600;
-          text-transform: uppercase;
-          letter-spacing: 0.12em;
-          color: #777777;
-          margin-bottom: 0.85rem;
-        }
-
-        .newsroom-main-title {
-          font-size: clamp(2.2rem, 4.5vw, 3.6rem);
-          font-weight: 300;
-          letter-spacing: -0.025em;
-          line-height: 1.15;
-          color: #000000;
-          margin: 0 0 1rem 0;
-        }
-
-        .newsroom-main-subtext {
-          font-size: clamp(1rem, 1.35vw, 1.12rem);
-          line-height: 1.6;
-          color: #666666;
-          margin: 0;
-          font-weight: 400;
-        }
-
-        .newsroom-header-actions {
-          display: flex;
-          align-items: center;
-        }
-
         .newsroom-header-cta {
           display: inline-flex;
           align-items: center;
           gap: 10px;
-          padding: 13px 26px;
+          padding: 13px 28px;
           border-radius: 100px;
           background-color: #000000;
           color: #ffffff;
@@ -307,8 +259,9 @@ export default function HomeNewsroomSection() {
         .newsroom-categories-bar {
           display: flex;
           align-items: center;
+          justify-content: center;
           gap: 8px;
-          margin-bottom: 2.25rem;
+          margin-bottom: 2.5rem;
           overflow-x: auto;
           -webkit-overflow-scrolling: touch;
           scrollbar-width: none;
@@ -595,21 +548,13 @@ export default function HomeNewsroomSection() {
             padding: 3rem 1rem !important;
           }
 
-          .newsroom-header-row {
-            flex-direction: column;
-            align-items: flex-start;
-            gap: 1.25rem;
-            margin-bottom: 1.75rem;
-            padding-bottom: 1.25rem;
+          .newsroom-categories-bar {
+            justify-content: flex-start;
           }
 
           .newsroom-header-cta {
             width: 100%;
             justify-content: center;
-          }
-
-          .newsroom-header-actions {
-            width: 100%;
           }
 
           /* 2 In A Row Cards Grid */
