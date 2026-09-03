@@ -38,15 +38,26 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeMobileSubmenu, setActiveMobileSubmenu] = useState<string | null>(null);
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+  const [isNotifDropdownOpen, setIsNotifDropdownOpen] = useState(false);
+  const [notifications, setNotifications] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [langQuery, setLangQuery] = useState('');
   const [searchError, setSearchError] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
 
   const langDropdownRef = useRef<HTMLDivElement>(null);
+  const notifDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setIsMounted(true);
+    fetch('/api/notifications')
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setNotifications(data.filter((n: any) => !n.archived));
+        }
+      })
+      .catch((err) => console.error('Failed to load header notifications', err));
   }, []);
 
   useEffect(() => {
@@ -64,20 +75,24 @@ export default function Header() {
       if (langDropdownRef.current && !langDropdownRef.current.contains(event.target as Node)) {
         setIsLangDropdownOpen(false);
       }
+      if (notifDropdownRef.current && !notifDropdownRef.current.contains(event.target as Node)) {
+        setIsNotifDropdownOpen(false);
+      }
     };
-    if (isLangDropdownOpen) {
+    if (isLangDropdownOpen || isNotifDropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isLangDropdownOpen]);
+  }, [isLangDropdownOpen, isNotifDropdownOpen]);
 
   // Close mobile menu and reset scroll state on route change
   useEffect(() => {
     setIsMobileMenuOpen(false);
     setActiveMobileSubmenu(null);
     setIsLangDropdownOpen(false);
+    setIsNotifDropdownOpen(false);
     setIsScrolled(false);
   }, [pathname]);
 
@@ -85,6 +100,7 @@ export default function Header() {
     setIsMobileMenuOpen(false);
     setActiveMobileSubmenu(null);
     setIsLangDropdownOpen(false);
+    setIsNotifDropdownOpen(false);
   };
 
   const toggleMobileSubmenu = (menuName: string) => {
@@ -296,6 +312,203 @@ export default function Header() {
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
+
+        {/* Notifications Button & Dropdown */}
+        <div ref={notifDropdownRef} style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+          <button
+            className="icon-btn notif-btn"
+            aria-label="Notifications"
+            onClick={() => {
+              setIsNotifDropdownOpen((prev) => !prev);
+              setIsLangDropdownOpen(false);
+            }}
+            suppressHydrationWarning
+            style={{ position: 'relative' }}
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            {notifications.length > 0 && (
+              <span
+                style={{
+                  position: 'absolute',
+                  top: '-4px',
+                  right: '-6px',
+                  backgroundColor: '#ef4444',
+                  color: '#ffffff',
+                  fontSize: '0.62rem',
+                  fontWeight: 700,
+                  minWidth: '15px',
+                  height: '15px',
+                  borderRadius: '999px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '0 3px',
+                  lineHeight: 1,
+                  boxShadow: '0 0 0 2px var(--primary-color, #0f172a)',
+                }}
+              >
+                {notifications.length}
+              </span>
+            )}
+          </button>
+
+          {isNotifDropdownOpen && (
+            <div
+              className="dropdown notif-dropdown"
+              style={{
+                position: 'absolute',
+                top: 'calc(100% + 0.75rem)',
+                right: isMobileMenuOpen ? 'auto' : 0,
+                left: isMobileMenuOpen ? 0 : 'auto',
+                width: 'clamp(290px, 86vw, 360px)',
+                display: 'flex',
+                flexDirection: 'column',
+                opacity: 1,
+                visibility: 'visible',
+                pointerEvents: 'auto',
+                transform: 'translateY(0)',
+                zIndex: 1000,
+                backgroundColor: 'var(--primary-color, #0f172a)',
+                borderRadius: '12px',
+                boxShadow: '0 20px 45px rgba(0, 0, 0, 0.35)',
+                border: '1px solid rgba(255, 255, 255, 0.14)',
+                overflow: 'hidden',
+              }}
+            >
+              {/* Dropdown Header */}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  padding: '0.9rem 1.15rem',
+                  borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                }}
+              >
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '0.9rem', fontWeight: 600, color: '#ffffff' }}>Notifications</span>
+                  <span
+                    style={{
+                      fontSize: '0.68rem',
+                      fontWeight: 700,
+                      backgroundColor: 'rgba(255, 255, 255, 0.16)',
+                      color: '#ffffff',
+                      padding: '2px 7px',
+                      borderRadius: '100px',
+                    }}
+                  >
+                    {notifications.length} Active
+                  </span>
+                </div>
+                <Link
+                  href="/newsroom/notifications"
+                  onClick={closeMobileMenu}
+                  style={{ fontSize: '0.78rem', color: '#94a3b8', textDecoration: 'none', transition: 'color 0.2s' }}
+                >
+                  View Page
+                </Link>
+              </div>
+
+              {/* Notifications List */}
+              <div
+                className="custom-scrollbar"
+                style={{
+                  maxHeight: '320px',
+                  overflowY: 'auto',
+                  display: 'flex',
+                  flexDirection: 'column',
+                }}
+              >
+                {notifications.length === 0 ? (
+                  <div style={{ padding: '2rem 1rem', textAlign: 'center', color: '#94a3b8', fontSize: '0.85rem' }}>
+                    No active notifications.
+                  </div>
+                ) : (
+                  notifications.map((item) => (
+                    <Link
+                      key={item.id}
+                      href={`/newsroom/notifications/${item.slug}`}
+                      onClick={closeMobileMenu}
+                      style={{
+                        padding: '0.9rem 1.15rem',
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.07)',
+                        textDecoration: 'none',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '4px',
+                        transition: 'background-color 0.2s ease',
+                      }}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.06)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.7rem' }}>
+                        <span
+                          style={{
+                            fontWeight: 700,
+                            letterSpacing: '0.06em',
+                            textTransform: 'uppercase',
+                            color: item.category === 'Investor' ? '#60a5fa' : item.category === 'Operations' ? '#34d399' : '#f59e0b',
+                          }}
+                        >
+                          {item.category || 'General'}
+                        </span>
+                        <span style={{ color: '#94a3b8' }}>{item.date}</span>
+                      </div>
+                      <div style={{ fontSize: '0.84rem', fontWeight: 500, color: '#ffffff', lineHeight: 1.35 }}>
+                        {item.title}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: '0.76rem',
+                          color: '#94a3b8',
+                          lineHeight: 1.4,
+                          display: '-webkit-box',
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: 'vertical',
+                          overflow: 'hidden',
+                        }}
+                      >
+                        {item.summary}
+                      </div>
+                    </Link>
+                  ))
+                )}
+              </div>
+
+              {/* Dropdown Footer */}
+              <div
+                style={{
+                  padding: '0.75rem 1.15rem',
+                  borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+                  backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                  textAlign: 'center',
+                }}
+              >
+                <Link
+                  href="/newsroom/notifications"
+                  onClick={closeMobileMenu}
+                  style={{
+                    fontSize: '0.82rem',
+                    fontWeight: 600,
+                    color: '#ffffff',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    transition: 'opacity 0.2s',
+                  }}
+                >
+                  <span>See All Notifications</span>
+                  <span style={{ fontSize: '1rem' }}>&rarr;</span>
+                </Link>
+              </div>
+            </div>
+          )}
+        </div>
 
         {/* Language Button & Dropdown */}
         <div ref={langDropdownRef} style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
