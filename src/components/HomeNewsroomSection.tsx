@@ -154,7 +154,8 @@ export default function HomeNewsroomSection() {
               </p>
 
               <div className="news-lead-link">
-                <span>Read Full Press Release</span>
+                <span className="lead-link-desktop">Read Full Press Release</span>
+                <span className="lead-link-mobile">Read Story</span>
                 <span className="link-arrow">&rarr;</span>
               </div>
             </div>
@@ -584,6 +585,10 @@ export default function HomeNewsroomSection() {
           display: none;
         }
 
+        .lead-link-mobile {
+          display: none;
+        }
+
         /* Mobile & Tablet Breakpoints: 2 In A Row Cards on Mobile */
         @media (max-width: 768px) {
           .home-newsroom-section {
@@ -682,28 +687,32 @@ export default function HomeNewsroomSection() {
             margin-bottom: 4px !important;
           }
 
+          /* Headlines get full space without clutter: up to 3 lines */
           .news-lead-heading,
           .news-secondary-heading {
-            font-size: clamp(0.78rem, 2.8vw, 0.92rem) !important;
+            font-size: clamp(0.82rem, 2.9vw, 0.95rem) !important;
             font-weight: 600 !important;
-            line-height: 1.28 !important;
-            margin: 0 0 4px 0 !important;
+            line-height: 1.34 !important;
+            margin: 0 0 8px 0 !important;
             display: -webkit-box !important;
-            -webkit-line-clamp: 2 !important;
+            -webkit-line-clamp: 3 !important;
             -webkit-box-orient: vertical !important;
             overflow: hidden !important;
+            min-height: 4em !important;
           }
 
+          /* HIDE SUMMARIES ON MOBILE: Only headlines are displayed */
           .news-lead-summary,
           .news-secondary-summary {
-            font-size: 0.72rem !important;
-            line-height: 1.38 !important;
-            margin: 0 0 0.5rem 0 !important;
-            color: #666666 !important;
-            display: -webkit-box !important;
-            -webkit-line-clamp: 2 !important;
-            -webkit-box-orient: vertical !important;
-            overflow: hidden !important;
+            display: none !important;
+          }
+
+          .lead-link-desktop {
+            display: none !important;
+          }
+
+          .lead-link-mobile {
+            display: inline !important;
           }
 
           .news-lead-link,
