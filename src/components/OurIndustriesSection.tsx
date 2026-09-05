@@ -118,10 +118,11 @@ export default function OurIndustriesSection() {
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: 'clamp(3rem, 8vw, 6rem)',
-              rowGap: 'clamp(3.5rem, 9vw, 6.5rem)',
-              maxWidth: '760px',
+              columnGap: 'clamp(6rem, 18vw, 15rem)',
+              rowGap: 'clamp(6rem, 14vh, 11rem)',
+              maxWidth: '1100px',
               margin: '0 auto',
+              padding: '2rem 0',
             }}
           >
             {INDUSTRIES_DATA.map((item) => (
@@ -149,7 +150,7 @@ export default function OurIndustriesSection() {
                   border: 'none',
                   padding: 0,
                   width: '100%',
-                  maxWidth: '310px',
+                  maxWidth: '260px',
                   margin: '0 auto',
                   transition: 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
                 }}
@@ -170,8 +171,8 @@ export default function OurIndustriesSection() {
                     style={{
                       width: '100%',
                       height: '100%',
-                      maxWidth: '300px',
-                      maxHeight: '300px',
+                      maxWidth: '240px',
+                      maxHeight: '240px',
                       objectFit: 'contain',
                       transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease',
                       filter: 'drop-shadow(0 8px 20px rgba(0, 0, 0, 0.04))',
@@ -181,6 +182,22 @@ export default function OurIndustriesSection() {
                     decoding="async"
                   />
                 </div>
+
+                {/* Industry Title */}
+                <h3
+                  className="industry-pure-title"
+                  style={{
+                    margin: '1.25rem 0 0 0',
+                    fontSize: 'clamp(1.15rem, 1.8vw, 1.4rem)',
+                    fontWeight: 500,
+                    letterSpacing: '-0.02em',
+                    color: '#0f172a',
+                    textAlign: 'center',
+                    transition: 'color 0.25s ease',
+                  }}
+                >
+                  {item.title}
+                </h3>
               </div>
             ))}
           </div>
@@ -392,7 +409,20 @@ export default function OurIndustriesSection() {
         @media (max-width: 768px) {
           .industries-grid-pure {
             grid-template-columns: repeat(2, 1fr) !important;
-            gap: 1.5rem !important;
+            column-gap: 1.75rem !important;
+            row-gap: 2.75rem !important;
+            padding: 1rem 0 !important;
+          }
+          .industry-pure-item {
+            max-width: 100% !important;
+          }
+          .industry-pure-img {
+            max-width: 160px !important;
+            max-height: 160px !important;
+          }
+          .industry-pure-title {
+            font-size: 1.05rem !important;
+            margin-top: 0.85rem !important;
           }
           .industry-tab-pills {
             display: none !important;
@@ -405,8 +435,18 @@ export default function OurIndustriesSection() {
 
         @media (max-width: 480px) {
           .industries-grid-pure {
-            grid-template-columns: 1fr !important;
-            gap: 2rem !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            column-gap: 1rem !important;
+            row-gap: 2.25rem !important;
+            padding: 0.5rem 0 !important;
+          }
+          .industry-pure-img {
+            max-width: 135px !important;
+            max-height: 135px !important;
+          }
+          .industry-pure-title {
+            font-size: 0.92rem !important;
+            margin-top: 0.75rem !important;
           }
         }
       ` }} />
