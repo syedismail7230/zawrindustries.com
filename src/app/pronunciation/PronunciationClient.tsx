@@ -53,7 +53,7 @@ export const PRONUNCIATION_LANGUAGES: LanguagePronunciation[] = [
     phonetic: 'زاور',
     guide: 'Zā-war',
     locale: 'ar-SA',
-    speechText: 'زاور',
+    speechText: 'زَاوَرْ',
     dir: 'rtl',
   },
   {
@@ -105,10 +105,22 @@ export default function PronunciationClient() {
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
+  const safetyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const currentLang =
     PRONUNCIATION_LANGUAGES.find((lang) => lang.id === selectedLangId) ||
     PRONUNCIATION_LANGUAGES[0];
+
+  // Preload speech synthesis voices on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+      const onVoicesChanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+      window.speechSynthesis.onvoiceschanged = onVoicesChanged;
+    }
+  }, []);
 
   // Close mobile dropdown when clicking outside
   useEffect(() => {
@@ -131,6 +143,9 @@ export default function PronunciationClient() {
   // Clean up any ongoing audio on unmount
   useEffect(() => {
     return () => {
+      if (safetyTimeoutRef.current) {
+        clearTimeout(safetyTimeoutRef.current);
+      }
       if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         window.speechSynthesis.cancel();
       }
@@ -141,6 +156,10 @@ export default function PronunciationClient() {
     if (langId === selectedLangId) {
       setIsDropdownOpen(false);
       return;
+    }
+
+    if (safetyTimeoutRef.current) {
+      clearTimeout(safetyTimeoutRef.current);
     }
 
     if (isPlaying) {
@@ -231,6 +250,10 @@ export default function PronunciationClient() {
   }, []);
 
   const playAudio = useCallback(() => {
+    if (safetyTimeoutRef.current) {
+      clearTimeout(safetyTimeoutRef.current);
+    }
+
     if (isPlaying) {
       if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         window.speechSynthesis.cancel();
@@ -241,41 +264,74 @@ export default function PronunciationClient() {
 
     setIsPlaying(true);
 
+    // Safety timeout to prevent stuck button state
+    safetyTimeoutRef.current = setTimeout(() => {
+      setIsPlaying(false);
+    }, 2200);
+
     if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
-
-      const utterance = new SpeechSynthesisUtterance(currentLang.speechText);
-      utterance.lang = currentLang.locale;
-      utterance.rate =
-        currentLang.locale.startsWith('hi') || currentLang.locale.startsWith('zh')
-          ? 0.82
-          : 0.88;
-      utterance.pitch = 0.95;
-
-      const voices = window.speechSynthesis.getVoices();
-      const matchVoice = voices.find(
-        (v) =>
-          v.lang.toLowerCase() === currentLang.locale.toLowerCase() ||
-          v.lang.toLowerCase().startsWith(currentLang.locale.slice(0, 2).toLowerCase())
-      );
-      if (matchVoice) {
-        utterance.voice = matchVoice;
-      }
-
-      utterance.onend = () => {
-        setIsPlaying(false);
-      };
-
-      utterance.onerror = () => {
-        playWebAudioFallback();
-      };
-
       try {
+        window.speechSynthesis.cancel();
+
+        const voices = window.speechSynthesis.getVoices();
+        const langPrefix = currentLang.locale.slice(0, 2).toLowerCase();
+        const matchVoice = voices.find(
+          (v) =>
+            v.lang.toLowerCase().startsWith(langPrefix) ||
+            v.lang.toLowerCase() === currentLang.locale.toLowerCase()
+        );
+
+        // Determine best text to speak:
+        // If a matching native voice exists in the user's OS, use native text.
+        // If no native voice exists (common on systems without Arabic/Hindi TTS voice packs),
+        // fallback to phonetic English transliteration so the system ALWAYS speaks cleanly!
+        let textToSpeak = currentLang.speechText;
+        let langCode = currentLang.locale;
+
+        if (!matchVoice) {
+          if (currentLang.id === 'ar') {
+            textToSpeak = 'Za-war';
+            langCode = 'en-US';
+          } else if (currentLang.id === 'hi') {
+            textToSpeak = 'Zah-var';
+            langCode = 'en-US';
+          } else if (currentLang.id === 'zh') {
+            textToSpeak = 'Za-war';
+            langCode = 'en-US';
+          } else {
+            textToSpeak = 'Zah-vahr';
+            langCode = 'en-US';
+          }
+        }
+
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = langCode;
+        if (matchVoice) {
+          utterance.voice = matchVoice;
+        }
+        utterance.rate =
+          currentLang.id === 'hi' || currentLang.id === 'zh'
+            ? 0.82
+            : 0.88;
+        utterance.pitch = 0.95;
+
+        utterance.onend = () => {
+          if (safetyTimeoutRef.current) clearTimeout(safetyTimeoutRef.current);
+          setIsPlaying(false);
+        };
+
+        utterance.onerror = () => {
+          if (safetyTimeoutRef.current) clearTimeout(safetyTimeoutRef.current);
+          playWebAudioFallback();
+        };
+
         window.speechSynthesis.speak(utterance);
       } catch {
+        if (safetyTimeoutRef.current) clearTimeout(safetyTimeoutRef.current);
         playWebAudioFallback();
       }
     } else {
+      if (safetyTimeoutRef.current) clearTimeout(safetyTimeoutRef.current);
       playWebAudioFallback();
     }
   }, [isPlaying, currentLang, playWebAudioFallback]);
