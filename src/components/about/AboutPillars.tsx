@@ -7,25 +7,25 @@ const pillars = [
     title: 'Software & AI Engineering',
     tag: 'ENTERPRISE TECH',
     description: 'Custom SaaS platforms, cloud-native infrastructure, LLM integrations, and cybersecurity for global enterprises.',
-    icon: 'âš¡',
+    icon: '⚡',
   },
   {
     title: 'Industrial Autonomy & Robotics',
     tag: 'ADVANCED MANUFACTURING',
     description: 'Automated Guided Vehicles (AGVs), CNC precision engineering, IoT factory dashboards, and autonomous logistics.',
-    icon: 'ðŸ¤–',
+    icon: '🤖',
   },
   {
     title: 'Real Estate & PropTech',
     tag: 'SUSTAINABLE ESTATES',
     description: 'Eco-resorts, luxury residences, biophilic urban towers, and digital asset management across growth corridors.',
-    icon: 'ðŸ›ï¸',
+    icon: '🏛️',
   },
   {
     title: 'Business & Process Transformation',
     tag: 'STRATEGIC ADVISORY',
     description: 'Cognitive operations, CRM/CXM solutions, digital marketing, and enterprise IT consulting.',
-    icon: 'ðŸŒ',
+    icon: '🌐',
   },
 ];
 

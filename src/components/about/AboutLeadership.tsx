@@ -88,7 +88,7 @@ export default function AboutLeadership() {
               margin: 0,
             }}
           >
-            "Technology is not merely a toolâ€”it is the structural foundation of modern enterprise value."
+            &ldquo;Technology is not merely a tool &mdash; it is the structural foundation of modern enterprise value.&rdquo;
           </h2>
 
           <div
@@ -116,7 +116,7 @@ export default function AboutLeadership() {
               Office of the Managing Director
             </div>
             <div style={{ fontSize: '0.88rem', color: '#64748b', marginTop: '0.2rem', fontWeight: 400 }}>
-              Zawr Industries LLP â€” Global Executive Operations
+              Zawr Industries LLP &mdash; Global Executive Operations
             </div>
           </div>
         </div>

@@ -259,7 +259,7 @@ export default function Footer() {
             <li><Link href="/investors#events-presentations">Events & Presentations</Link></li>
             <li><Link href="/investors/subsidiaries">Subsidiaries & Associates</Link></li>
             <li><Link href="/investors/shareholders-info">Shareholders' Information</Link></li>
-            <li><Link href="/investors/resource-centre">Resource Centre</Link></li>
+            <li><Link href="/investors/resource-centre">Resource Center</Link></li>
             <li><Link href="/investors/notice-of-forfeiture">Notice Of Forfeiture</Link></li>
           </ul>
         </div>

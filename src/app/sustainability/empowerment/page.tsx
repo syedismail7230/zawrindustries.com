@@ -131,12 +131,12 @@ export default function SustainabilityEmpowermentPage() {
               Growth becomes meaningful when it creates broader opportunity.
             </h3>
             <p style={{ fontSize: '0.92rem', color: '#374151', lineHeight: 1.8, margin: '0 0 0.75rem 0' }}>
-              At Zawr, we recognise that true impact starts well beyond the office. Our community
-              programmes have supported local organisations, small suppliers, and education initiatives,
+              At Zawr, we recognize that true impact starts well beyond the office. Our community
+              programs have supported local organizations, small suppliers, and education initiatives,
               creating networks of shared opportunity across every generation.
             </p>
             <p style={{ fontSize: '0.92rem', color: '#374151', lineHeight: 1.8, margin: 0 }}>
-              We believe organisations have the power to transform communities — and an equal obligation to do so.
+              We believe organizations have the power to transform communities — and an equal obligation to do so.
             </p>
           </div>
         </section>
@@ -173,7 +173,7 @@ export default function SustainabilityEmpowermentPage() {
               Innovation thrives where curiosity meets opportunity.
             </h3>
             <p style={{ fontSize: '0.92rem', color: '#374151', lineHeight: 1.8, margin: '0 0 0.75rem 0' }}>
-              We aim to support innovators within our organisation, where:
+              We aim to support innovators within our organization, where:
             </p>
             <ul style={{ fontSize: '0.92rem', color: '#374151', lineHeight: 2, paddingLeft: '1.4rem', margin: '0 0 0.75rem 0' }}>
               <li>technology solves meaningful problems;</li>
@@ -236,7 +236,7 @@ export default function SustainabilityEmpowermentPage() {
               Our focus extends beyond delivering solutions — we aim to create capabilities.
             </h3>
             <p style={{ fontSize: '0.92rem', color: '#374151', lineHeight: 1.8, margin: '0 0 0.75rem 0' }}>
-              This means helping organisations:
+              This means helping organizations:
             </p>
             <ul style={{ fontSize: '0.92rem', color: '#374151', lineHeight: 2, paddingLeft: '1.4rem', margin: '0 0 0.75rem 0' }}>
               <li>build internal competency;</li>

@@ -426,7 +426,7 @@ export default function ManufacturingPage() {
               marginBottom: '2.4rem',
               maxWidth: '420px',
             }}>
-              The Zawr CNC Machining Centre delivers micron-level accuracy across aerospace, defence, and heavy-industry components. Equipped with a multi-axis spindle, intelligent tool-change carousel, and integrated CNC controller, it runs 24/7 adaptive machining programs with zero operator intervention.
+              The Zawr CNC Machining Center delivers micron-level accuracy across aerospace, defense, and heavy-industry components. Equipped with a multi-axis spindle, intelligent tool-change carousel, and integrated CNC controller, it runs 24/7 adaptive machining programs with zero operator intervention.
             </p>
 
             {/* Spec items */}
@@ -520,7 +520,7 @@ export default function ManufacturingPage() {
               marginBottom: '2.4rem',
               maxWidth: '420px',
             }}>
-              The Zawr AGV-2 is a next-generation autonomous guided vehicle engineered for high-throughput factory floors and warehouse environments. With sub-centimetre navigation precision and a 500 kg payload capacity, it operates around the clock in dynamic, human-shared spaces — eliminating inefficiency from internal logistics.
+              The Zawr AGV-2 is a next-generation autonomous guided vehicle engineered for high-throughput factory floors and warehouse environments. With sub-centimeter navigation precision and a 500 kg payload capacity, it operates around the clock in dynamic, human-shared spaces — eliminating inefficiency from internal logistics.
             </p>
 
             {/* Spec items — no borders, plain text */}

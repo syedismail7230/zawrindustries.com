@@ -534,15 +534,15 @@
         "a": "We are experienced across AWS, Microsoft Azure, and Google Cloud Platform, and can architect multi-cloud or hybrid solutions based on your requirements."
       },
       {
-        "q": "How do you minimise downtime during cloud migration?",
+        "q": "How do you minimize downtime during cloud migration?",
         "a": "We use phased migration strategies with blue-green deployments, rollback plans, and off-peak cutover windows to keep production systems running throughout."
       },
       {
         "q": "Can you migrate legacy on-premise systems?",
-        "a": "Yes. We assess legacy workloads using the 6R framework (rehost, replatform, refactor, repurchase, retire, retain) and produce a prioritised migration roadmap."
+        "a": "Yes. We assess legacy workloads using the 6R framework (rehost, replatform, refactor, repurchase, retire, retain) and produce a prioritized migration roadmap."
       },
       {
-        "q": "What does cloud cost optimisation involve?",
+        "q": "What does cloud cost optimization involve?",
         "a": "We analyse your usage patterns, right-size instances, implement reserved capacity planning, and set up automated scaling to eliminate wasted spend."
       },
       {
@@ -772,7 +772,7 @@
         "name": "Government",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710505/zawr/assets/industry/government-industry.png",
         "projectName": "Critical Infrastructure Protection",
-        "projectDescription": "Cyber resilience programme protecting national grid control systems from APT actors."
+        "projectDescription": "Cyber resilience program protecting national grid control systems from APT actors."
       },
       {
         "name": "Education",
@@ -794,7 +794,7 @@
       },
       {
         "q": "How do you conduct a security assessment?",
-        "a": "We combine automated vulnerability scanning, manual penetration testing, threat modelling, and architecture review to produce a prioritised risk register."
+        "a": "We combine automated vulnerability scanning, manual penetration testing, threat modelling, and architecture review to produce a prioritized risk register."
       },
       {
         "q": "What is zero-trust and do we need it?",
@@ -806,7 +806,7 @@
       },
       {
         "q": "Do you offer security awareness training?",
-        "a": "Yes. We deliver role-based training programmes, phishing simulations, and executive briefings to reduce human-factor risk across your organisation."
+        "a": "Yes. We deliver role-based training programs, phishing simulations, and executive briefings to reduce human-factor risk across your organisation."
       },
       {
         "q": "Can you help us achieve compliance certification?",
@@ -1040,7 +1040,7 @@
       {
         "name": "Logistics",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710507/zawr/assets/industry/logistics-industry.png",
-        "projectName": "Warehouse Network Modernisation",
+        "projectName": "Warehouse Network Modernization",
         "projectDescription": "High-density Wi-Fi 6 deployment enabling real-time RF scanning at 8 fulfilment centres."
       },
       {
@@ -1059,13 +1059,13 @@
         "name": "Government",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710505/zawr/assets/industry/government-industry.png",
         "projectName": "Secure Government WAN",
-        "projectDescription": "Encrypted multi-site WAN connecting 140 government offices with centralised policy control."
+        "projectDescription": "Encrypted multi-site WAN connecting 140 government offices with centralized policy control."
       }
     ],
     "faqs": [
       {
         "q": "What is SD-WAN and when should we use it?",
-        "a": "SD-WAN centralises network management and routes traffic intelligently across broadband, MPLS, and LTE links—ideal for multi-site organisations seeking lower costs and higher reliability."
+        "a": "SD-WAN centralizes network management and routes traffic intelligently across broadband, MPLS, and LTE links—ideal for multi-site organisations seeking lower costs and higher reliability."
       },
       {
         "q": "Can you support our existing network hardware?",
@@ -1319,7 +1319,7 @@
         "name": "Agriculture",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710498/zawr/assets/industry/agricultue-industry.png",
         "projectName": "Precision Agriculture Platform",
-        "projectDescription": "Drone + AI system optimising irrigation and fertilisation, cutting input costs by 29%."
+        "projectDescription": "Drone + AI system optimizing irrigation and fertilization, cutting input costs by 29%."
       },
       {
         "name": "Energy",
@@ -1357,7 +1357,7 @@
       },
       {
         "q": "How do you address worker safety with autonomous systems?",
-        "a": "All deployments include safety risk assessments, CE/ISO 10218 compliance validation, physical safety interlocks, and operator training programmes."
+        "a": "All deployments include safety risk assessments, CE/ISO 10218 compliance validation, physical safety interlocks, and operator training programs."
       },
       {
         "q": "What is the typical ROI timeline for automation projects?",
@@ -1608,7 +1608,7 @@
         "name": "Logistics",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "TMS Enterprise Suite",
-        "projectDescription": "Transport management system optimising $1.2B logistics spend for a global 3PL."
+        "projectDescription": "Transport management system optimizing $1.2B logistics spend for a global 3PL."
       },
       {
         "name": "Education",
@@ -1619,7 +1619,7 @@
       {
         "name": "Financial Services",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710504/zawr/assets/industry/financial-services-industry.png",
-        "projectName": "Banking Core Modernisation",
+        "projectName": "Banking Core Modernization",
         "projectDescription": "Temenos T24 implementation replacing 30-year-old core banking for a regional bank."
       },
       {
@@ -1640,14 +1640,14 @@
       },
       {
         "q": "What change management support do you provide?",
-        "a": "We deliver role-specific training, super-user programmes, communication plans, and go-live support to drive adoption and minimise disruption."
+        "a": "We deliver role-specific training, super-user programs, communication plans, and go-live support to drive adoption and minimize disruption."
       },
       {
         "q": "How long does an enterprise implementation take?",
         "a": "Scope varies by complexity: single-module implementations run 3–6 months; full enterprise rollouts typically take 9–18 months with phased go-lives."
       },
       {
-        "q": "Can you customise standard ERP functionality?",
+        "q": "Can you customize standard ERP functionality?",
         "a": "Yes. We build custom extensions, workflow automations, and integrations while following upgrade-safe development practices to protect your investment."
       },
       {
@@ -1888,7 +1888,7 @@
         "name": "Financial Services",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Open Banking Consulting",
-        "projectDescription": "PSD2/Open Banking readiness programme for a top-10 European bank."
+        "projectDescription": "PSD2/Open Banking readiness program for a top-10 European bank."
       },
       {
         "name": "Startups",
@@ -2437,7 +2437,7 @@
         "name": "Telecom",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710517/zawr/assets/industry/telecom-industry.png",
         "projectName": "Network Operations AI",
-        "projectDescription": "Self-optimising NOC reducing incident MTTR from 4.2h to 38 minutes."
+        "projectDescription": "Self-optimizing NOC reducing incident MTTR from 4.2h to 38 minutes."
       },
       {
         "name": "Education",
@@ -2754,8 +2754,8 @@
         "a": "We work with headless CMS platforms (Contentful, Sanity, Strapi), Shopify Plus, Commercetools, and custom-built composable commerce architectures."
       },
       {
-        "q": "How do you approach web performance optimisation?",
-        "a": "We target Core Web Vitals compliance through server-side rendering, image optimisation, CDN configuration, lazy loading, and bundle size reduction."
+        "q": "How do you approach web performance optimization?",
+        "a": "We target Core Web Vitals compliance through server-side rendering, image optimization, CDN configuration, lazy loading, and bundle size reduction."
       },
       {
         "q": "Do you handle SEO as part of web development?",
@@ -2767,7 +2767,7 @@
       },
       {
         "q": "How do you ensure accessibility compliance?",
-        "a": "We build to WCAG 2.1 AA standards with keyboard navigation, screen reader compatibility, sufficient colour contrast, and automated accessibility audits in our CI pipeline."
+        "a": "We build to WCAG 2.1 AA standards with keyboard navigation, screen reader compatibility, sufficient color contrast, and automated accessibility audits in our CI pipeline."
       },
       {
         "q": "What analytics and tracking do you set up?",
@@ -3318,7 +3318,7 @@
         "a": "Most MVPs are delivered in 8–12 weeks depending on feature complexity. We use a fixed-scope sprint model to maintain pace and predictability."
       },
       {
-        "q": "How do you help prioritise features for the MVP?",
+        "q": "How do you help prioritize features for the MVP?",
         "a": "We facilitate a product scoping workshop using the MoSCoW method to identify must-have features that validate core assumptions with minimum investment."
       },
       {
@@ -3600,7 +3600,7 @@
       },
       {
         "q": "How long does a CRM implementation take?",
-        "a": "Standard implementations run 6–12 weeks. Complex multi-team or multi-region rollouts with heavy customisation typically take 3–6 months."
+        "a": "Standard implementations run 6–12 weeks. Complex multi-team or multi-region rollouts with heavy customization typically take 3–6 months."
       },
       {
         "q": "What training do you provide for our sales team?",
@@ -3854,7 +3854,7 @@
       {
         "name": "E-Commerce",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710500/zawr/assets/industry/e-commerce-industry.png",
-        "projectName": "E-Commerce CX Optimisation",
+        "projectName": "E-Commerce CX Optimization",
         "projectDescription": "Personalisation and support automation reducing returns by 19% and tickets by 33%."
       }
     ],
@@ -3877,11 +3877,11 @@
       },
       {
         "q": "How long before we see improvement in customer satisfaction scores?",
-        "a": "Quick-win journey optimisations typically show CSAT improvement within 30–60 days. Deeper platform implementations yield measurable uplift within 3–6 months."
+        "a": "Quick-win journey optimizations typically show CSAT improvement within 30–60 days. Deeper platform implementations yield measurable uplift within 3–6 months."
       },
       {
         "q": "Can you help us reduce customer churn?",
-        "a": "Yes. We build churn prediction models, proactive outreach workflows, and loyalty programme integrations specifically designed to improve retention metrics."
+        "a": "Yes. We build churn prediction models, proactive outreach workflows, and loyalty program integrations specifically designed to improve retention metrics."
       }
     ]
   },
@@ -4120,7 +4120,7 @@
         "name": "Logistics",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710507/zawr/assets/industry/logistics-industry.png",
         "projectName": "B2B Logistics Marketing",
-        "projectDescription": "ABM programme generating 180 enterprise MQLs per quarter in logistics sector."
+        "projectDescription": "ABM program generating 180 enterprise MQLs per quarter in logistics sector."
       },
       {
         "name": "Technology",
@@ -4132,7 +4132,7 @@
     "faqs": [
       {
         "q": "What digital marketing services do you offer?",
-        "a": "We provide SEO, paid search (PPC), paid social, programmatic display, content marketing, email automation, influencer marketing, and conversion rate optimisation."
+        "a": "We provide SEO, paid search (PPC), paid social, programmatic display, content marketing, email automation, influencer marketing, and conversion rate optimization."
       },
       {
         "q": "How do you measure campaign performance?",
@@ -4140,7 +4140,7 @@
       },
       {
         "q": "Do you manage ad budgets directly?",
-        "a": "Yes. We manage media budgets as your agency, optimising daily bids, audience segments, and creative rotation to maximise returns against agreed KPIs."
+        "a": "Yes. We manage media budgets as your agency, optimizing daily bids, audience segments, and creative rotation to maximize returns against agreed KPIs."
       },
       {
         "q": "How long before SEO efforts show results?",
@@ -4646,7 +4646,7 @@
         "name": "Agriculture",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710498/zawr/assets/industry/agricultue-industry.png",
         "projectName": "Smart Farm Platform",
-        "projectDescription": "Soil, weather and crop sensor network optimising yield by 31% across 12,000 acres."
+        "projectDescription": "Soil, weather and crop sensor network optimizing yield by 31% across 12,000 acres."
       },
       {
         "name": "Healthcare",
@@ -4939,13 +4939,13 @@
         "name": "Financial Services",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710504/zawr/assets/industry/financial-services-industry.png",
         "projectName": "Banking DevSecOps",
-        "projectDescription": "SOC-2-compliant DevSecOps programme with automated security scanning in every pipeline."
+        "projectDescription": "SOC-2-compliant DevSecOps program with automated security scanning in every pipeline."
       },
       {
         "name": "SaaS",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710511/zawr/assets/industry/saas-industry.png",
         "projectName": "SaaS Reliability Engineering",
-        "projectDescription": "SRE programme achieving 99.99% uptime SLA for a 200K-seat enterprise SaaS product."
+        "projectDescription": "SRE program achieving 99.99% uptime SLA for a 200K-seat enterprise SaaS product."
       },
       {
         "name": "Technology",
@@ -5451,7 +5451,7 @@
         "name": "Automotive",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710498/zawr/assets/industry/automotive-industry.png",
         "projectName": "ASPICE QA Programme",
-        "projectDescription": "ASPICE Level 2 compliance programme across 4 embedded software teams."
+        "projectDescription": "ASPICE Level 2 compliance program across 4 embedded software teams."
       },
       {
         "name": "Healthcare",
@@ -5493,7 +5493,7 @@
         "name": "SaaS",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710511/zawr/assets/industry/saas-industry.png",
         "projectName": "SaaS Continuous QA",
-        "projectDescription": "Shift-left QA programme integrated into CI/CD—defect escape rate reduced by 84%."
+        "projectDescription": "Shift-left QA program integrated into CI/CD—defect escape rate reduced by 84%."
       }
     ],
     "faqs": [
@@ -5503,7 +5503,7 @@
       },
       {
         "q": "How do you approach test automation strategy?",
-        "a": "We apply the automation pyramid: maximise unit tests, balance integration tests, and use selective UI automation for high-value user journeys only."
+        "a": "We apply the automation pyramid: maximize unit tests, balance integration tests, and use selective UI automation for high-value user journeys only."
       },
       {
         "q": "What performance testing tools do you use?",
@@ -5714,7 +5714,7 @@
       {
         "name": "Healthcare",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710505/zawr/assets/industry/healthcare-industry.png",
-        "projectName": "Clinical Workforce Modernisation",
+        "projectName": "Clinical Workforce Modernization",
         "projectDescription": "Digital workplace for 12,000 clinical staff with secure mobile access to patient data."
       },
       {
@@ -5765,7 +5765,7 @@
       },
       {
         "q": "How do you drive employee adoption of new tools?",
-        "a": "We combine targeted training, champion networks, usage analytics, and a 90-day adoption programme to drive sustained tool engagement across all user segments."
+        "a": "We combine targeted training, champion networks, usage analytics, and a 90-day adoption program to drive sustained tool engagement across all user segments."
       },
       {
         "q": "Can you help design physical and hybrid workspaces?",
@@ -6038,7 +6038,7 @@
       },
       {
         "q": "How do you identify the best processes to automate?",
-        "a": "We conduct a process discovery workshop using task mining, interview sessions, and volume/complexity analysis to produce a prioritised automation opportunity pipeline."
+        "a": "We conduct a process discovery workshop using task mining, interview sessions, and volume/complexity analysis to produce a prioritized automation opportunity pipeline."
       },
       {
         "q": "How long does it take to automate a process?",
@@ -6248,7 +6248,7 @@
         "name": "Manufacturing",
         "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_800,c_limit,dpr_auto/v1783710508/zawr/assets/industry/manufacturing-industry.png",
         "projectName": "Manufacturing BPM Platform",
-        "projectDescription": "End-to-end process modelling and optimisation delivering 28% operational cost reduction."
+        "projectDescription": "End-to-end process modelling and optimization delivering 28% operational cost reduction."
       },
       {
         "name": "Automotive",
@@ -6308,7 +6308,7 @@
       },
       {
         "q": "How long does a BPM implementation take?",
-        "a": "Single process automation implementations run 6–10 weeks. Enterprise-wide BPM programmes with multiple processes and integrations typically take 6–18 months."
+        "a": "Single process automation implementations run 6–10 weeks. Enterprise-wide BPM programs with multiple processes and integrations typically take 6–18 months."
       },
       {
         "q": "Can BPM solutions integrate with our existing ERP?",
