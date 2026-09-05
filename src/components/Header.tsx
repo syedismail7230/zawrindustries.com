@@ -179,7 +179,7 @@ export default function Header() {
     }
   };
 
-  const isDarkPage = isMounted && (pathname.startsWith('/about') || pathname.startsWith('/careers') || pathname.startsWith('/contact/client-relations') || pathname.startsWith('/contact/sponsorship') || pathname.startsWith('/investors') || pathname.startsWith('/newsroom/events') || pathname.startsWith('/industries/it-service') || pathname === '/contact/partner/creator-partner');
+  const isDarkPage = isMounted && (pathname.startsWith('/about') || pathname.startsWith('/careers') || pathname.startsWith('/contact/client-relations') || pathname.startsWith('/contact/sponsorship') || pathname.startsWith('/investors') || pathname.startsWith('/newsroom/events') || pathname.startsWith('/industries/it-service') || pathname.startsWith('/industries/energy') || pathname === '/contact/partner/creator-partner');
   const isLightPage = isMounted && (pathname === '/' || pathname.startsWith('/pronunciation') || pathname === '/sustainability/empowerment' || pathname === '/sustainability/health' || pathname === '/sustainability/education' || pathname.startsWith('/industries/transport-and-logistics') || pathname.startsWith('/industries/manufacturing'));
 
   return (
@@ -243,6 +243,7 @@ export default function Header() {
             <Link href="/industries/manufacturing" onClick={closeMobileMenu}>Manufacturing</Link>
             <Link href="/industries/transport-and-logistics" onClick={closeMobileMenu}>Logistics and Transport</Link>
             <Link href="/industries/estate" onClick={closeMobileMenu}>Estate</Link>
+            <Link href="/industries/energy" onClick={closeMobileMenu}>Energy</Link>
           </div>
         </div>
 

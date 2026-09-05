@@ -50,6 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/industries/transport-and-logistics',
     '/industries/manufacturing',
     '/industries/estate',
+    '/industries/energy',
     '/industries/healthcare',
     '/industries/fmcg',
     '/platforms',
