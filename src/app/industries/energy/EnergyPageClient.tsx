@@ -129,43 +129,21 @@ export default function EnergyPageClient() {
           margin: '0 auto',
         }}
       >
-        {/* Top Tag & Narrative */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'minmax(60px, 120px) 1fr',
-            gap: '2rem',
-            marginBottom: '4.5rem',
-            alignItems: 'flex-start',
-          }}
-          className="energy-mission-header"
-        >
-          <div
+        {/* Narrative Statement */}
+        <div style={{ marginBottom: '4.5rem' }}>
+          <h2
             style={{
-              fontSize: '1rem',
-              fontWeight: 600,
-              letterSpacing: '0.1em',
-              color: '#94a3b8',
-              fontFamily: 'monospace',
+              fontSize: 'clamp(1.8rem, 3.8vw, 3.2rem)',
+              fontWeight: 400,
+              letterSpacing: '-0.03em',
+              lineHeight: 1.25,
+              color: '#0f172a',
+              margin: 0,
+              maxWidth: '980px',
             }}
           >
-            01
-          </div>
-          <div>
-            <h2
-              style={{
-                fontSize: 'clamp(1.8rem, 3.8vw, 3.2rem)',
-                fontWeight: 400,
-                letterSpacing: '-0.03em',
-                lineHeight: 1.25,
-                color: '#0f172a',
-                margin: 0,
-                maxWidth: '960px',
-              }}
-            >
-              Zawr Energy exists to make clean energy accessible, measurable, and community-powered. Because sustainability only works if enterprise infrastructure and heavy industry take part.
-            </h2>
-          </div>
+            Zawr Energy exists to make clean energy accessible, measurable, and community-powered. Because sustainability only works if enterprise infrastructure and heavy industry take part.
+          </h2>
         </div>
 
         {/* Asymmetric Floating Editorial Image Cards */}
@@ -297,18 +275,6 @@ export default function EnergyPageClient() {
           position: 'relative',
         }}
       >
-        <div
-          style={{
-            fontSize: '1rem',
-            fontWeight: 600,
-            letterSpacing: '0.1em',
-            color: '#94a3b8',
-            fontFamily: 'monospace',
-            marginBottom: '1.5rem',
-          }}
-        >
-          02
-        </div>
 
         {/* Masked Typography Cutout Container */}
         <div
@@ -427,19 +393,6 @@ export default function EnergyPageClient() {
               }}
             >
               <div>
-                <span
-                  style={{
-                    fontSize: '0.9rem',
-                    fontWeight: 600,
-                    letterSpacing: '0.1em',
-                    color: '#f59e0b',
-                    fontFamily: 'monospace',
-                    display: 'block',
-                    marginBottom: '0.75rem',
-                  }}
-                >
-                  03
-                </span>
                 <h3
                   style={{
                     fontSize: 'clamp(1.8rem, 3.5vw, 3rem)',
@@ -589,42 +542,20 @@ export default function EnergyPageClient() {
           margin: '0 auto',
         }}
       >
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'minmax(60px, 120px) 1fr',
-            gap: '2rem',
-            marginBottom: '3.5rem',
-            alignItems: 'flex-start',
-          }}
-          className="energy-mission-header"
-        >
-          <div
+        <div style={{ marginBottom: '3.5rem' }}>
+          <h2
             style={{
-              fontSize: '1rem',
-              fontWeight: 600,
-              letterSpacing: '0.1em',
-              color: '#94a3b8',
-              fontFamily: 'monospace',
+              fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
+              fontWeight: 400,
+              letterSpacing: '-0.03em',
+              lineHeight: 1.25,
+              color: '#0f172a',
+              margin: 0,
+              maxWidth: '820px',
             }}
           >
-            04
-          </div>
-          <div>
-            <h2
-              style={{
-                fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)',
-                fontWeight: 400,
-                letterSpacing: '-0.03em',
-                lineHeight: 1.25,
-                color: '#0f172a',
-                margin: 0,
-                maxWidth: '780px',
-              }}
-            >
-              Every number here represents a step toward a sustainable future and the communities we serve.
-            </h2>
-          </div>
+            Every number here represents a step toward a sustainable future and the communities we serve.
+          </h2>
         </div>
 
         {/* Bento Grid */}
@@ -962,18 +893,7 @@ export default function EnergyPageClient() {
             marginBottom: '3.5rem',
           }}
         >
-          <div style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
-            <span
-              style={{
-                fontSize: '1rem',
-                fontWeight: 600,
-                letterSpacing: '0.1em',
-                color: '#94a3b8',
-                fontFamily: 'monospace',
-              }}
-            >
-              05
-            </span>
+          <div>
             <h2
               style={{
                 fontSize: 'clamp(2rem, 4vw, 3.2rem)',
