@@ -147,6 +147,8 @@ export default function Header() {
       'newsroom': '/#newsroom',
       'news': '/#newsroom',
       'investors': '/#investors',
+      'pronunciation': '/pronunciation',
+      'pronounce': '/pronunciation',
       'home': '/'
     };
 
@@ -178,7 +180,7 @@ export default function Header() {
   };
 
   const isDarkPage = isMounted && (pathname.startsWith('/about') || pathname.startsWith('/careers') || pathname.startsWith('/contact/client-relations') || pathname.startsWith('/contact/sponsorship') || pathname.startsWith('/investors') || pathname.startsWith('/newsroom/events') || pathname.startsWith('/industries/it-service') || pathname === '/contact/partner/creator-partner');
-  const isLightPage = isMounted && (pathname === '/' || pathname === '/sustainability/empowerment' || pathname === '/sustainability/health' || pathname === '/sustainability/education' || pathname.startsWith('/industries/transport-and-logistics') || pathname.startsWith('/industries/manufacturing'));
+  const isLightPage = isMounted && (pathname === '/' || pathname.startsWith('/pronunciation') || pathname === '/sustainability/empowerment' || pathname === '/sustainability/health' || pathname === '/sustainability/education' || pathname.startsWith('/industries/transport-and-logistics') || pathname.startsWith('/industries/manufacturing'));
 
   return (
     <header className={`header ${!isMobileMenuOpen && (isScrolled || (pathname.startsWith('/contact') && !isDarkPage)) ? 'scrolled' : ''} ${isMobileMenuOpen ? 'mobile-open' : ''} ${isDarkPage ? 'dark-page-header' : ''} ${isLightPage ? 'light-page-header' : ''}`} suppressHydrationWarning>
@@ -221,6 +223,7 @@ export default function Header() {
             <Link href="/about#mission" onClick={closeMobileMenu}>Mission</Link>
             <Link href="/about#innovation" onClick={closeMobileMenu}>Innovation</Link>
             <Link href="/about#code-of-conduct" onClick={closeMobileMenu}>Code of Conduct</Link>
+            <Link href="/pronunciation" onClick={closeMobileMenu}>Pronunciation</Link>
           </div>
         </div>
 

@@ -18,6 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/about/csr',
     '/about/innovation',
     '/about/code-of-conduct',
+    '/pronunciation',
     '/sustainability/environment',
     '/sustainability/empowerment',
     '/sustainability/health',

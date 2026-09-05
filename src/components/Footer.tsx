@@ -187,6 +187,7 @@ export default function Footer() {
             <li><Link href="/about#csr">CSR</Link></li>
             <li><Link href="/about#innovation">Innovation</Link></li>
             <li><Link href="/about#code-of-conduct">Code of conduct</Link></li>
+            <li><Link href="/pronunciation">Pronunciation</Link></li>
           </ul>
         </div>
 
