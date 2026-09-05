@@ -1,17 +1,16 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Cormorant_Garamond, Playfair_Display } from 'next/font/google';
+import { Poppins, Inter } from 'next/font/google';
 
-const cormorant = Cormorant_Garamond({
+const poppins = Poppins({
   subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
+  weight: ['300', '400', '500', '600', '700', '800'],
   display: 'swap',
 });
 
-const playfair = Playfair_Display({
+const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
   display: 'swap',
 });
 
@@ -159,10 +158,12 @@ export default function PronunciationClient() {
     }, 180);
   };
 
-  // Web Audio Harmonic Voice Fallback (human vowel formant synthesis for "Zah-Var")
+  // Web Audio Harmonic Voice Fallback (human formant resonance synthesis for "Zah-Var")
   const playWebAudioFallback = useCallback(() => {
     try {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       if (!AudioCtx) {
         setIsPlaying(false);
         return;
@@ -180,7 +181,6 @@ export default function PronunciationClient() {
       const now = ctx.currentTime;
       const duration = 1.35;
 
-      // Master output node
       const masterGain = ctx.createGain();
       masterGain.gain.setValueAtTime(0, now);
       masterGain.gain.linearRampToValueAtTime(0.28, now + 0.08);
@@ -188,19 +188,18 @@ export default function PronunciationClient() {
       masterGain.gain.linearRampToValueAtTime(0, now + duration);
       masterGain.connect(ctx.destination);
 
-      // Syllable 1: "ZAH" (F0 around 125Hz, Formants: F1 730Hz, F2 1090Hz)
+      // Syllable 1: "ZAH"
       const osc1 = ctx.createOscillator();
       osc1.type = 'sawtooth';
       osc1.frequency.setValueAtTime(128, now);
       osc1.frequency.exponentialRampToValueAtTime(118, now + 0.5);
 
-      // Vowel filter 1 (F1)
       const filter1 = ctx.createBiquadFilter();
       filter1.type = 'bandpass';
       filter1.frequency.setValueAtTime(730, now);
       filter1.Q.setValueAtTime(4.5, now);
 
-      // Syllable 2: "VAHR" (F0 around 132Hz -> 110Hz, Formants: F1 750Hz, F2 1180Hz)
+      // Syllable 2: "VAHR"
       const osc2 = ctx.createOscillator();
       osc2.type = 'sawtooth';
       osc2.frequency.setValueAtTime(132, now + 0.55);
@@ -283,11 +282,11 @@ export default function PronunciationClient() {
 
   return (
     <main
-      className="pronunciation-page-container"
+      className={`pronunciation-page-container ${inter.className}`}
       style={{
         minHeight: '100vh',
         backgroundColor: '#ffffff',
-        color: '#0a0a0a',
+        color: '#0f172a',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -295,7 +294,6 @@ export default function PronunciationClient() {
         padding: 'clamp(7.5rem, 15vh, 10.5rem) 1.5rem clamp(4.5rem, 9vh, 6.5rem) 1.5rem',
         boxSizing: 'border-box',
         position: 'relative',
-        fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
       }}
     >
       <div
@@ -315,8 +313,8 @@ export default function PronunciationClient() {
           className="pronunciation-top-eyebrow"
           style={{
             fontSize: 'clamp(0.72rem, 1.2vw, 0.82rem)',
-            fontWeight: 500,
-            letterSpacing: '0.38em',
+            fontWeight: 600,
+            letterSpacing: '0.36em',
             textTransform: 'uppercase',
             color: '#475569',
             marginBottom: 'clamp(1.25rem, 2.5vh, 2rem)',
@@ -326,14 +324,14 @@ export default function PronunciationClient() {
           PRONUNCIATION
         </div>
 
-        {/* Primary Brand Wordmark */}
+        {/* Primary Brand Wordmark in Website Poppins Bold */}
         <h1
-          className={`pronunciation-wordmark ${cormorant.className}`}
+          className={`pronunciation-wordmark ${poppins.className}`}
           style={{
-            fontSize: 'clamp(4.8rem, 13vw, 10.5rem)',
-            lineHeight: 0.95,
-            fontWeight: 400,
-            letterSpacing: '0.04em',
+            fontSize: 'clamp(4.2rem, 11.5vw, 8.8rem)',
+            lineHeight: 0.96,
+            fontWeight: 700,
+            letterSpacing: '0.02em',
             color: '#000000',
             margin: 0,
             marginBottom: 'clamp(2rem, 4.5vh, 3.25rem)',
@@ -347,8 +345,8 @@ export default function PronunciationClient() {
         <div
           className="pronunciation-sub-eyebrow"
           style={{
-            fontSize: 'clamp(0.7rem, 1.1vw, 0.82rem)',
-            fontWeight: 500,
+            fontSize: 'clamp(0.72rem, 1.1vw, 0.84rem)',
+            fontWeight: 600,
             letterSpacing: '0.32em',
             textTransform: 'uppercase',
             color: '#64748b',
@@ -359,7 +357,7 @@ export default function PronunciationClient() {
           PRONOUNCED
         </div>
 
-        {/* Dynamic Phonetic Representation */}
+        {/* Dynamic Phonetic Representation in Website Poppins / Clean Sans Typography */}
         <div
           className="pronunciation-phonetic-stage"
           style={{
@@ -371,16 +369,20 @@ export default function PronunciationClient() {
           }}
         >
           <div
-            className={`pronunciation-phonetic-text ${cormorant.className}`}
+            className={`pronunciation-phonetic-text ${poppins.className}`}
             style={{
               fontSize: 'clamp(2.4rem, 5.8vw, 4.5rem)',
               lineHeight: 1.1,
-              fontWeight: 400,
-              letterSpacing: currentLang.id === 'ar' || currentLang.id === 'zh' || currentLang.id === 'hi' ? '0.04em' : '0.14em',
-              color: '#000000',
+              fontWeight: 600,
+              letterSpacing:
+                currentLang.id === 'ar' || currentLang.id === 'zh' || currentLang.id === 'hi'
+                  ? '0.02em'
+                  : '0.08em',
+              color: '#0f172a',
               opacity: isTransitioning ? 0 : 1,
               transform: isTransitioning ? 'translateY(6px)' : 'translateY(0)',
-              transition: 'opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+              transition:
+                'opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1), transform 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
             }}
             dir={currentLang.dir || 'ltr'}
           >
@@ -417,7 +419,7 @@ export default function PronunciationClient() {
               width: '56px',
               height: '56px',
               borderRadius: '50%',
-              border: '1.25px solid #111111',
+              border: '1.5px solid #000000',
               backgroundColor: isPlaying ? '#000000' : 'transparent',
               color: isPlaying ? '#ffffff' : '#000000',
               display: 'flex',
@@ -470,14 +472,15 @@ export default function PronunciationClient() {
             )}
           </div>
 
-          {/* HEAR IT Text Label */}
+          {/* HEAR IT Text Label in Website Theme */}
           <span
+            className={poppins.className}
             style={{
-              fontSize: '0.78rem',
+              fontSize: '0.8rem',
               fontWeight: 600,
-              letterSpacing: '0.24em',
+              letterSpacing: '0.22em',
               textTransform: 'uppercase',
-              color: '#111111',
+              color: '#000000',
               transition: 'color 0.2s ease',
             }}
           >
@@ -490,7 +493,7 @@ export default function PronunciationClient() {
           style={{
             width: '1px',
             height: '30px',
-            backgroundColor: '#d1d5db',
+            backgroundColor: '#cbd5e1',
             margin: 'clamp(2.25rem, 4vh, 3.25rem) auto clamp(1.25rem, 2.2vh, 1.75rem) auto',
           }}
         />
@@ -542,7 +545,7 @@ export default function PronunciationClient() {
                   justifyContent: 'center',
                   background: 'none',
                   border: 'none',
-                  borderRight: isLast ? 'none' : '1px solid #e5e7eb',
+                  borderRight: isLast ? 'none' : '1px solid #e2e8f0',
                   padding: '0.75rem 1rem',
                   cursor: 'pointer',
                   position: 'relative',
@@ -560,12 +563,12 @@ export default function PronunciationClient() {
               >
                 {/* Language Name */}
                 <div
+                  className={poppins.className}
                   style={{
-                    fontSize: '1.05rem',
-                    fontWeight: isSelected ? 600 : 500,
-                    color: isSelected ? '#000000' : '#4b5563',
+                    fontSize: '1rem',
+                    fontWeight: isSelected ? 700 : 500,
+                    color: isSelected ? '#000000' : '#475569',
                     marginBottom: '4px',
-                    fontFamily: lang.id === 'hi' ? 'inherit' : `${playfair.className}, serif`,
                     letterSpacing: '0.01em',
                   }}
                 >
@@ -576,7 +579,7 @@ export default function PronunciationClient() {
                 <div
                   style={{
                     width: '24px',
-                    height: '2px',
+                    height: '2.5px',
                     backgroundColor: isSelected ? '#000000' : 'transparent',
                     marginBottom: '6px',
                     transition: 'background-color 0.25s ease',
@@ -585,12 +588,15 @@ export default function PronunciationClient() {
 
                 {/* Phonetic Representation */}
                 <div
-                  className={cormorant.className}
+                  className={poppins.className}
                   style={{
-                    fontSize: '0.88rem',
-                    fontWeight: 400,
-                    letterSpacing: lang.id === 'ar' || lang.id === 'zh' || lang.id === 'hi' ? '0.02em' : '0.12em',
-                    color: isSelected ? '#111111' : '#6b7280',
+                    fontSize: '0.84rem',
+                    fontWeight: isSelected ? 600 : 400,
+                    letterSpacing:
+                      lang.id === 'ar' || lang.id === 'zh' || lang.id === 'hi'
+                        ? '0.02em'
+                        : '0.06em',
+                    color: isSelected ? '#0f172a' : '#64748b',
                     transition: 'color 0.2s ease',
                   }}
                   dir={lang.dir || 'ltr'}
@@ -608,10 +614,10 @@ export default function PronunciationClient() {
           className="pronunciation-mobile-dropdown-wrapper"
           style={{
             position: 'relative',
-            display: 'none', // Overridden in CSS media query below
+            display: 'none',
             marginTop: '0.5rem',
             width: '100%',
-            maxWidth: '280px',
+            maxWidth: '290px',
           }}
         >
           {/* Minimalist Pill Dropdown Button */}
@@ -620,6 +626,7 @@ export default function PronunciationClient() {
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             aria-expanded={isDropdownOpen}
             aria-haspopup="listbox"
+            className={poppins.className}
             style={{
               width: '100%',
               display: 'inline-flex',
@@ -628,11 +635,11 @@ export default function PronunciationClient() {
               gap: '10px',
               padding: '11px 22px',
               borderRadius: '999px',
-              border: '1px solid #d1d5db',
+              border: '1.5px solid #cbd5e1',
               backgroundColor: '#ffffff',
-              color: '#111111',
-              fontSize: '0.92rem',
-              fontWeight: 500,
+              color: '#0f172a',
+              fontSize: '0.9rem',
+              fontWeight: 600,
               cursor: 'pointer',
               boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
               transition: 'border-color 0.2s, box-shadow 0.2s',
@@ -648,7 +655,7 @@ export default function PronunciationClient() {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              style={{ color: '#4b5563' }}
+              style={{ color: '#475569' }}
             >
               <circle cx="12" cy="12" r="10" />
               <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
@@ -709,6 +716,7 @@ export default function PronunciationClient() {
                     role="option"
                     aria-selected={isSelected}
                     onClick={() => handleLanguageChange(lang.id)}
+                    className={poppins.className}
                     style={{
                       display: 'flex',
                       alignItems: 'center',
@@ -717,10 +725,10 @@ export default function PronunciationClient() {
                       borderRadius: '10px',
                       border: 'none',
                       backgroundColor: isSelected ? '#f8fafc' : 'transparent',
-                      color: isSelected ? '#000000' : '#4b5563',
+                      color: isSelected ? '#000000' : '#475569',
                       cursor: 'pointer',
                       fontSize: '0.88rem',
-                      fontWeight: isSelected ? 600 : 400,
+                      fontWeight: isSelected ? 700 : 500,
                       transition: 'background-color 0.15s ease',
                       width: '100%',
                       textAlign: 'left',
@@ -738,11 +746,14 @@ export default function PronunciationClient() {
                   >
                     <span>{lang.nativeName}</span>
                     <span
-                      className={cormorant.className}
                       style={{
                         fontSize: '0.85rem',
+                        fontWeight: isSelected ? 600 : 400,
                         color: isSelected ? '#000000' : '#64748b',
-                        letterSpacing: lang.id === 'ar' || lang.id === 'zh' || lang.id === 'hi' ? '0.02em' : '0.08em',
+                        letterSpacing:
+                          lang.id === 'ar' || lang.id === 'zh' || lang.id === 'hi'
+                            ? '0.02em'
+                            : '0.06em',
                       }}
                       dir={lang.dir || 'ltr'}
                     >
