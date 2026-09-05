@@ -118,8 +118,9 @@ export default function OurIndustriesSection() {
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(2, 1fr)',
-              gap: 'clamp(2rem, 5vw, 4rem)',
-              maxWidth: '860px',
+              gap: 'clamp(3rem, 8vw, 6rem)',
+              rowGap: 'clamp(3.5rem, 9vw, 6.5rem)',
+              maxWidth: '760px',
               margin: '0 auto',
             }}
           >
@@ -147,6 +148,9 @@ export default function OurIndustriesSection() {
                   background: 'none',
                   border: 'none',
                   padding: 0,
+                  width: '100%',
+                  maxWidth: '310px',
+                  margin: '0 auto',
                   transition: 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
                 }}
               >
@@ -166,9 +170,11 @@ export default function OurIndustriesSection() {
                     style={{
                       width: '100%',
                       height: '100%',
+                      maxWidth: '300px',
+                      maxHeight: '300px',
                       objectFit: 'contain',
                       transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease',
-                      filter: 'drop-shadow(0 10px 25px rgba(0, 0, 0, 0.04))',
+                      filter: 'drop-shadow(0 8px 20px rgba(0, 0, 0, 0.04))',
                     }}
                     className="industry-pure-img"
                     loading="lazy"
