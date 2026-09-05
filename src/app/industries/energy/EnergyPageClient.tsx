@@ -76,12 +76,14 @@ export default function EnergyPageClient() {
       <section
         style={{
           position: 'relative',
-          minHeight: '92vh',
+          height: '100vh',
+          minHeight: '100vh',
+          width: '100%',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: '8rem 1.5rem 6rem 1.5rem',
+          padding: '0 1.5rem',
           backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45)), url("/assets/energy/energy-hero-wind.jpg")',
           backgroundSize: 'cover',
           backgroundPosition: 'center 40%',
