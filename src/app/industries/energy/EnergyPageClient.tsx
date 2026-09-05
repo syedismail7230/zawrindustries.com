@@ -100,39 +100,6 @@ export default function EnergyPageClient() {
             zIndex: 2,
           }}
         >
-          {/* Eyebrow badge */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '8px 18px',
-              borderRadius: '100px',
-              backgroundColor: 'rgba(255, 255, 255, 0.15)',
-              backdropFilter: 'blur(12px)',
-              WebkitBackdropFilter: 'blur(12px)',
-              border: '1px solid rgba(255, 255, 255, 0.25)',
-              fontSize: '0.82rem',
-              fontWeight: 600,
-              letterSpacing: '0.12em',
-              textTransform: 'uppercase',
-              color: '#ffffff',
-              marginBottom: '2rem',
-              animation: 'fadeInUp 0.8s ease forwards',
-            }}
-          >
-            <span
-              style={{
-                width: '7px',
-                height: '7px',
-                borderRadius: '50%',
-                backgroundColor: '#10b981',
-                boxShadow: '0 0 10px #10b981',
-              }}
-            />
-            <span>Zawr Energy Division</span>
-          </div>
-
           {/* Massive Display Title */}
           <h1
             style={{
@@ -140,7 +107,7 @@ export default function EnergyPageClient() {
               fontWeight: 500,
               letterSpacing: '-0.04em',
               lineHeight: 0.95,
-              margin: '0 0 2.5rem 0',
+              margin: 0,
               color: '#ffffff',
               textShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
               maxWidth: '1100px',
@@ -148,80 +115,6 @@ export default function EnergyPageClient() {
           >
             New Energy
           </h1>
-
-          {/* Floating Pill Action */}
-          <div
-            style={{
-              display: 'flex',
-              gap: '14px',
-              flexWrap: 'wrap',
-              justifyContent: 'center',
-            }}
-          >
-            <a
-              href="#energy-mission"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                backgroundColor: 'rgba(255, 255, 255, 0.92)',
-                color: '#000000',
-                padding: '13px 32px',
-                borderRadius: '100px',
-                fontSize: '0.95rem',
-                fontWeight: 600,
-                textDecoration: 'none',
-                backdropFilter: 'blur(8px)',
-                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                boxShadow: '0 8px 24px rgba(0, 0, 0, 0.25)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#ffffff';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-                e.currentTarget.style.boxShadow = '0 12px 30px rgba(0, 0, 0, 0.35)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.92)';
-                e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 8px 24px rgba(0, 0, 0, 0.25)';
-              }}
-            >
-              <span>Our Mission</span>
-              <span style={{ fontSize: '1.1rem' }}>↘</span>
-            </a>
-
-            <Link
-              href="/contact/client-relations"
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                backgroundColor: 'rgba(0, 0, 0, 0.65)',
-                color: '#ffffff',
-                padding: '13px 32px',
-                borderRadius: '100px',
-                fontSize: '0.95rem',
-                fontWeight: 500,
-                textDecoration: 'none',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                backdropFilter: 'blur(8px)',
-                transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#000000';
-                e.currentTarget.style.borderColor = '#ffffff';
-                e.currentTarget.style.transform = 'translateY(-2px)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(0, 0, 0, 0.65)';
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                e.currentTarget.style.transform = 'translateY(0)';
-              }}
-            >
-              <span>Partner With Us</span>
-              <span style={{ fontSize: '1.1rem' }}>↗</span>
-            </Link>
-          </div>
         </div>
       </section>
 
