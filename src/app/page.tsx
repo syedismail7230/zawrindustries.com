@@ -3,6 +3,7 @@ import Link from 'next/link';
 import TechStatementReveal from '@/components/TechStatementReveal';
 import ITServiceSoftwareSection from '@/components/ITServiceSoftwareSection';
 import OurProcessSection from '@/components/OurProcessSection';
+import OurIndustriesSection from '@/components/OurIndustriesSection';
 import HomeNewsroomSection from '@/components/HomeNewsroomSection';
 import AboutBlog from '@/components/about/AboutBlog';
 
@@ -90,10 +91,13 @@ export default function Home() {
       {/* Section 4: Our Process 3D Horizontal Barrel Roll Carousel */}
       <OurProcessSection />
 
-      {/* Section 5: Newsroom & Media Dispatches */}
+      {/* Section 5: Our Industries Interactive Showcase */}
+      <OurIndustriesSection />
+
+      {/* Section 6: Newsroom & Media Dispatches */}
       <HomeNewsroomSection />
 
-      {/* Section 6: Corporate Blog & Insights */}
+      {/* Section 7: Corporate Blog & Insights */}
       <AboutBlog />
 
       <style dangerouslySetInnerHTML={{__html: `
