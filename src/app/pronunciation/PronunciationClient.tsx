@@ -379,6 +379,7 @@ export default function PronunciationClient() {
   return (
     <main
       className={`pronunciation-page-container ${inter.className}`}
+      suppressHydrationWarning
       style={{
         minHeight: '100vh',
         backgroundColor: '#ffffff',
@@ -484,7 +485,7 @@ export default function PronunciationClient() {
           </div>
         </div>
 
-        {/* Audio Control (Iconic Circular Button + Minimalist HEAR IT Label) */}
+        {/* Audio Control (Native Button with Minimalist HEAR IT Label) */}
         <div
           style={{
             display: 'inline-flex',
@@ -493,8 +494,10 @@ export default function PronunciationClient() {
             marginBottom: 'clamp(2.5rem, 5vh, 3.75rem)',
           }}
         >
-          <div
+          <button
+            type="button"
             className="pronunciation-audio-bar"
+            suppressHydrationWarning
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -502,23 +505,19 @@ export default function PronunciationClient() {
               gap: '16px',
               cursor: 'pointer',
               userSelect: 'none',
+              background: 'none',
+              border: 'none',
+              padding: 0,
+              outline: 'none',
             }}
             onClick={() => playAudio()}
-            role="button"
-            tabIndex={0}
             aria-label={
               isPlaying
                 ? 'Pause pronunciation'
                 : `Play ZAWR pronunciation in ${currentLang.name}`
             }
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                playAudio();
-              }
-            }}
           >
-            {/* Circular Button */}
+            {/* Circular Play Button */}
             <div
               className={`pronunciation-play-circle ${isPlaying ? 'is-playing' : ''}`}
               style={{
@@ -574,7 +573,7 @@ export default function PronunciationClient() {
             >
               {isPlaying ? 'PLAYING...' : 'HEAR IT'}
             </span>
-          </div>
+          </button>
         </div>
 
         {/* Minimal Vertical Divider */}
@@ -625,6 +624,7 @@ export default function PronunciationClient() {
               <button
                 key={lang.id}
                 type="button"
+                suppressHydrationWarning
                 onClick={() => handleLanguageChange(lang.id)}
                 aria-pressed={isSelected}
                 style={{
@@ -693,6 +693,7 @@ export default function PronunciationClient() {
         >
           <button
             type="button"
+            suppressHydrationWarning
             onClick={() => setIsDropdownOpen(!isDropdownOpen)}
             aria-expanded={isDropdownOpen}
             aria-haspopup="listbox"
@@ -761,6 +762,7 @@ export default function PronunciationClient() {
                   <button
                     key={lang.id}
                     type="button"
+                    suppressHydrationWarning
                     role="option"
                     aria-selected={isSelected}
                     onClick={() => handleLanguageChange(lang.id)}
@@ -1147,6 +1149,7 @@ export default function PronunciationClient() {
                   <td style={{ padding: '14px', textAlign: 'right' }}>
                     <button
                       type="button"
+                      suppressHydrationWarning
                       onClick={() => {
                         setSelectedLangId(lang.id);
                         playAudio(lang);
@@ -1236,6 +1239,7 @@ export default function PronunciationClient() {
               >
                 <button
                   type="button"
+                  suppressHydrationWarning
                   onClick={() => setOpenFaqIndex(isOpen ? null : index)}
                   aria-expanded={isOpen}
                   style={{
