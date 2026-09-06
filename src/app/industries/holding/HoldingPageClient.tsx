@@ -1,15 +1,25 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import ScrollTextReveal from '@/components/ScrollTextReveal';
 
+interface OperatingVertical {
+  id: string;
+  title: string;
+  slug: string;
+  subtitle: string;
+  body: string;
+  achievements: string[];
+  metrics: { val: string; label: string }[];
+  tech: string[];
+}
 
-
-const FRANCHISE_FOLDERS = [
+const OPERATING_VERTICALS: OperatingVertical[] = [
   {
     id: 'luxury-retail',
-    name: '/LuxuryRetail',
+    title: 'Commercial Retail',
+    slug: '/LuxuryRetail',
     subtitle: 'High-Concourse Boutiques & Flagship Stores',
     body: 'Turnkey architectural fit-outs, visual merchandising compliance, and high-touch VIP customer service protocols for international luxury and premium lifestyle brands.',
     achievements: [
@@ -27,7 +37,8 @@ const FRANCHISE_FOLDERS = [
   },
   {
     id: 'specialty-dining',
-    name: '/SpecialtyDining',
+    title: 'Hospitality & Dining',
+    slug: '/SpecialtyDining',
     subtitle: 'Artisanal Coffee, Bakeries & QSR Chains',
     body: 'Multi-unit culinary franchise management featuring standardized ingredient prep, digital self-order kiosks, and centralized cold-chain replenishment.',
     achievements: [
@@ -45,7 +56,8 @@ const FRANCHISE_FOLDERS = [
   },
   {
     id: 'operations-hub',
-    name: '/OperationsHub',
+    title: 'Operations Command',
+    slug: '/OperationsHub',
     subtitle: 'Centralized Multi-Unit Telemetry Command',
     body: 'Command center synchronizing live transactional data, automated cash reconciliation, fraud prevention, and workforce scheduling across all active store locations.',
     achievements: [
@@ -63,7 +75,8 @@ const FRANCHISE_FOLDERS = [
   },
   {
     id: 'micro-logistics',
-    name: '/MicroLogistics',
+    title: 'Franchise Logistics',
+    slug: '/MicroLogistics',
     subtitle: 'Automated Franchise Supply & Hub Delivery',
     body: 'Automated urban micro-fulfillment centers operating temperature-controlled dry and cold storage to deliver just-in-time replenishment directly to store network shelves.',
     achievements: [
@@ -81,7 +94,8 @@ const FRANCHISE_FOLDERS = [
   },
   {
     id: 'urban-franchises',
-    name: '/UrbanFranchises',
+    title: 'Urban Networks',
+    slug: '/UrbanFranchises',
     subtitle: 'High-Street Commercial Multi-Unit Networks',
     body: 'Master franchise operations across prime high-street commercial corridors with shared municipal licensing, local marketing power, and cross-brand customer loyalty.',
     achievements: [
@@ -99,7 +113,8 @@ const FRANCHISE_FOLDERS = [
   },
   {
     id: 'transit-hubs',
-    name: '/TransitHubs',
+    title: 'Transit Hubs',
+    slug: '/TransitHubs',
     subtitle: 'Airport & Terminal Concourse Franchise Stores',
     body: 'High-velocity retail and express dining outlets engineered for international airport departures, transit stations, and duty-free passenger concourses.',
     achievements: [
@@ -193,19 +208,19 @@ const FAQ_ITEMS = [
 
 export default function HoldingPageClient() {
   // Folder Modal State
-  const [selectedFolder, setSelectedFolder] = useState<typeof FRANCHISE_FOLDERS[0] | null>(null);
-  const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
+  const [selectedVertical, setSelectedVertical] = useState<OperatingVertical | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-  const handleFolderClick = (folder: typeof FRANCHISE_FOLDERS[0]) => {
-    setSelectedFolder(folder);
-    setIsFolderModalOpen(true);
+  const handleVerticalClick = (vertical: OperatingVertical) => {
+    setSelectedVertical(vertical);
+    setIsModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setIsFolderModalOpen(false);
+    setIsModalOpen(false);
     setTimeout(() => {
-      setSelectedFolder(null);
+      setSelectedVertical(null);
     }, 400);
   };
 
@@ -284,98 +299,112 @@ export default function HoldingPageClient() {
         text="We deploy, manage, and scale high-growth franchises and multi-unit businesses across leading global brands. By combining prime real estate, centralized supply chains, and real-time operations telemetry, Zawr Holding transforms multi-brand expansion into an institutional standard."
       />
 
-
-
       {/* ─────────────────────────────────────────────────────────────
-          5. INTERACTIVE FRANCHISE FOLDERS (IT Services signature style)
+          3. OPERATING VERTICALS (Pillars Grid matching screenshot)
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
           padding: 'clamp(5rem, 9vh, 8rem) 1.5rem',
-          backgroundColor: '#000000',
-          color: '#ffffff',
+          backgroundColor: '#ffffff',
+          color: '#0f172a',
           position: 'relative',
+          borderTop: '1px solid #f1f5f9',
+          borderBottom: '1px solid #f1f5f9',
         }}
       >
-        <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
+        <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center' }}>
           <h2
             style={{
-              fontSize: 'clamp(2rem, 4.5vw, 3rem)',
-              fontWeight: 300,
-              color: '#ffffff',
-              marginBottom: '4rem',
-              letterSpacing: '-0.02em',
-              opacity: 0.9,
+              fontSize: 'clamp(2.2rem, 4.5vw, 3.6rem)',
+              fontWeight: 400,
+              color: '#0f172a',
+              marginBottom: '1rem',
+              letterSpacing: '-0.03em',
             }}
           >
             Operating Verticals
           </h2>
+          <p
+            style={{
+              fontSize: 'clamp(1rem, 1.5vw, 1.15rem)',
+              color: '#64748b',
+              maxWidth: '640px',
+              margin: '0 auto clamp(3.5rem, 7vh, 5.5rem)',
+              fontWeight: 400,
+            }}
+          >
+            Six core institutional pillars powering multi-brand deployment, centralized telemetry, and franchise expansion.
+          </p>
 
           <style
             dangerouslySetInnerHTML={{
               __html: `
-              .holding-folders-grid {
+              .holding-pillars-grid {
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
-                gap: 4rem 2rem;
-                max-width: 960px;
+                column-gap: clamp(2rem, 5vw, 4.5rem);
+                row-gap: clamp(3.5rem, 7vh, 5.5rem);
+                max-width: 1040px;
                 margin: 0 auto;
               }
-              @media (max-width: 768px) {
-                .holding-folders-grid {
+              @media (max-width: 820px) {
+                .holding-pillars-grid {
                   grid-template-columns: repeat(2, 1fr);
-                  gap: 3rem 1.5rem;
+                  column-gap: 2rem;
+                  row-gap: 3.5rem;
                 }
               }
-              @media (max-width: 480px) {
-                .holding-folders-grid {
+              @media (max-width: 520px) {
+                .holding-pillars-grid {
                   grid-template-columns: 1fr;
-                  gap: 3rem;
+                  row-gap: 3rem;
                 }
               }
-              .holding-folder-card {
+              .holding-pillar-card {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
                 cursor: pointer;
+                outline: none;
+                background: none;
+                border: none;
+                padding: 0;
               }
-              .folder-img-container {
+              .pillar-img-container {
                 position: relative;
-                width: 180px;
-                height: 180px;
-                margin-bottom: 1.5rem;
+                width: 100%;
                 display: flex;
                 align-items: center;
                 justify-content: center;
               }
-              .folder-img {
+              .pillar-img {
                 width: 100%;
-                height: 100%;
+                max-width: 180px;
+                height: clamp(260px, 34vh, 360px);
                 object-fit: contain;
-                transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+                filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.05));
               }
-              .folder-img.open-img {
-                position: absolute;
-                top: 0;
-                left: 0;
-                opacity: 0;
+              .holding-pillar-card:hover .pillar-img {
+                transform: translateY(-10px) scale(1.03);
+                filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.12));
               }
-              .holding-folder-card:hover .folder-img.closed-img {
-                opacity: 0;
-              }
-              .holding-folder-card:hover .folder-img.open-img {
-                opacity: 1;
-                transform: scale(1.05);
-              }
-              .holding-folder-name {
-                font-size: 1.1rem;
-                font-weight: 400;
-                color: rgba(255, 255, 255, 0.85);
-                letter-spacing: -0.01em;
+              .pillar-title {
+                font-size: clamp(1.15rem, 1.8vw, 1.35rem);
+                font-weight: 500;
+                color: #0f172a;
+                margin-top: 1.5rem;
+                letter-spacing: -0.02em;
                 transition: color 0.2s ease;
               }
-              .holding-folder-card:hover .holding-folder-name {
-                color: #ffffff;
+              .holding-pillar-card:hover .pillar-title {
+                color: #000000;
+              }
+              .pillar-slug {
+                font-size: 0.88rem;
+                color: #64748b;
+                margin-top: 0.3rem;
+                font-weight: 400;
               }
 
               .mac-modal-overlay {
@@ -456,39 +485,40 @@ export default function HoldingPageClient() {
             }}
           />
 
-          <div className="holding-folders-grid">
-            {FRANCHISE_FOLDERS.map((folder) => (
+          <div className="holding-pillars-grid">
+            {OPERATING_VERTICALS.map((vertical) => (
               <div
-                key={folder.id}
-                className="holding-folder-card"
-                onClick={() => handleFolderClick(folder)}
+                key={vertical.id}
+                className="holding-pillar-card"
+                onClick={() => handleVerticalClick(vertical)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleVerticalClick(vertical);
+                  }
+                }}
               >
-                <div className="folder-img-container">
+                <div className="pillar-img-container">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1200,c_limit/v1783710489/zawr/assets/folder.png"
-                    alt="Closed Folder"
-                    className="folder-img closed-img"
-                    loading="lazy"
-                    decoding="async"
-                  />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1200,c_limit/v1783710488/zawr/assets/folder-open.png"
-                    alt="Open Folder"
-                    className="folder-img open-img"
+                    src="/assets/holding-pillar.png"
+                    alt={vertical.title}
+                    className="pillar-img"
                     loading="lazy"
                     decoding="async"
                   />
                 </div>
-                <div className="holding-folder-name">{folder.name}</div>
+                <div className="pillar-title">{vertical.title}</div>
+                <div className="pillar-slug">{vertical.slug}</div>
               </div>
             ))}
           </div>
         </div>
 
         {/* Modal Window Popup */}
-        {isFolderModalOpen && selectedFolder && (
+        {isModalOpen && selectedVertical && (
           <div className="mac-modal-overlay" onClick={handleCloseModal}>
             <div className="mac-modal-window" onClick={(e) => e.stopPropagation()}>
               <div className="mac-titlebar">
@@ -497,16 +527,16 @@ export default function HoldingPageClient() {
                   <span className="mac-light minimize" />
                   <span className="mac-light maximize" />
                 </div>
-                <span className="mac-title">{selectedFolder.name} — Zawr Holding</span>
+                <span className="mac-title">{selectedVertical.slug} — Zawr Holding</span>
               </div>
 
               <div className="mac-content">
                 <div>
                   <h3 style={{ fontSize: '1.4rem', fontWeight: 600, color: '#ffffff', margin: '0 0 0.5rem 0' }}>
-                    {selectedFolder.subtitle}
+                    {selectedVertical.subtitle}
                   </h3>
                   <p style={{ fontSize: '0.92rem', color: 'rgba(255,255,255,0.75)', lineHeight: 1.6, margin: '0 0 1.5rem 0' }}>
-                    {selectedFolder.body}
+                    {selectedVertical.body}
                   </p>
 
                   {/* Highlights */}
@@ -515,7 +545,7 @@ export default function HoldingPageClient() {
                       Operational Deliverables
                     </div>
                     <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                      {selectedFolder.achievements.map((ach, i) => (
+                      {selectedVertical.achievements.map((ach, i) => (
                         <li key={i} style={{ fontSize: '0.85rem', color: '#e2e8f0', display: 'flex', alignItems: 'center', gap: '8px' }}>
                           <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#f59e0b', flexShrink: 0 }} />
                           <span>{ach}</span>
@@ -537,7 +567,7 @@ export default function HoldingPageClient() {
                       marginBottom: '1.5rem',
                     }}
                   >
-                    {selectedFolder.metrics.map((m, i) => (
+                    {selectedVertical.metrics.map((m, i) => (
                       <div key={i} style={{ textAlign: 'center' }}>
                         <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#ffffff' }}>{m.val}</div>
                         <div style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '2px' }}>{m.label}</div>
@@ -547,7 +577,7 @@ export default function HoldingPageClient() {
 
                   {/* Tech Stack Pills */}
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                    {selectedFolder.tech.map((t, i) => (
+                    {selectedVertical.tech.map((t, i) => (
                       <span
                         key={i}
                         style={{
@@ -596,7 +626,7 @@ export default function HoldingPageClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          6. THE OPERATING BLUEPRINT: DEPLOY · MANAGE · RUN · SCALE
+          4. THE OPERATING BLUEPRINT: DEPLOY · MANAGE · RUN · SCALE
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
@@ -693,7 +723,7 @@ export default function HoldingPageClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          7. VALUE COMPARISON MATRIX (Standalone vs Zawr Holding)
+          5. VALUE COMPARISON MATRIX (Standalone vs Zawr Holding)
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
@@ -776,7 +806,7 @@ export default function HoldingPageClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          8. FULL-WIDTH EDGE-TO-EDGE BANNER SECTION (Estate signature style)
+          6. FULL-WIDTH EDGE-TO-EDGE BANNER SECTION (Estate signature style)
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
@@ -843,7 +873,7 @@ export default function HoldingPageClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          9. FREQUENTLY ASKED QUESTIONS
+          7. FREQUENTLY ASKED QUESTIONS
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
@@ -943,7 +973,7 @@ export default function HoldingPageClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          10. HIGH-IMPACT BOTTOM CTA BANNER (Footer Signature)
+          8. HIGH-IMPACT BOTTOM CTA BANNER (Footer Signature)
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
