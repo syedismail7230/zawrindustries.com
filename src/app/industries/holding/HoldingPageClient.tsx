@@ -4,44 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import ScrollTextReveal from '@/components/ScrollTextReveal';
 
-interface StackedStepItem {
-  number: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  image: string;
-}
 
-const STACKED_SECTORS: StackedStepItem[] = [
-  {
-    number: '01',
-    title: 'Commercial Flagship Retail',
-    subtitle: 'Luxury Concourse & Multi-Brand Boutiques',
-    description: 'Engineering turnkey physical store rollouts for international fashion, luxury accessories, electronics, and lifestyle brands in prime commercial retail concourses.',
-    image: '/assets/holding/holding-flagship.jpg',
-  },
-  {
-    number: '02',
-    title: 'Hospitality & Dining Franchises',
-    subtitle: 'Artisanal Coffee Lounges, Bakeries & QSR Networks',
-    description: 'Deploying and operating multi-unit culinary concepts, specialty café lounges, and quick-service restaurant networks with standardized culinary SOPs and automated ordering.',
-    image: '/assets/holding/holding-hospitality.jpg',
-  },
-  {
-    number: '03',
-    title: 'Centralized Operations Command',
-    subtitle: 'Multi-Store Telemetry & Enterprise POS Command',
-    description: 'Real-time multi-brand command center monitoring store footfall, live POS transactional flows, shift scheduling, inventory replenishment, and security telemetry.',
-    image: '/assets/holding/holding-operations.jpg',
-  },
-  {
-    number: '04',
-    title: 'Franchise Supply Chain & Fulfillment',
-    subtitle: 'Just-in-Time Micro-Fulfillment & Bulk Supply',
-    description: 'Operating integrated warehousing and automated fulfillment centers that service multi-brand stores with just-in-time inventory and bulk purchasing volume leverage.',
-    image: '/assets/holding/holding-logistics.jpg',
-  },
-];
 
 const FRANCHISE_FOLDERS = [
   {
@@ -229,48 +192,10 @@ const FAQ_ITEMS = [
 ];
 
 export default function HoldingPageClient() {
-  // Pinned Process Animation State
-  const spacerRef = useRef<HTMLDivElement>(null);
-  const [pinState, setPinState] = useState<'before' | 'pinned' | 'after'>('before');
-  const [progress, setProgress] = useState(0);
-
   // Folder Modal State
   const [selectedFolder, setSelectedFolder] = useState<typeof FRANCHISE_FOLDERS[0] | null>(null);
   const [isFolderModalOpen, setIsFolderModalOpen] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
-  useEffect(() => {
-    const onScroll = () => {
-      const spacer = spacerRef.current;
-      if (!spacer) return;
-
-      const scrollY = window.scrollY;
-      const vh = window.innerHeight;
-      const top = spacer.offsetTop;
-      const height = spacer.offsetHeight;
-
-      const pinStart = top;
-      const pinEnd = top + height - vh;
-
-      if (scrollY <= pinStart) {
-        setPinState('before');
-        setProgress(0);
-      } else if (scrollY >= pinEnd) {
-        setPinState('after');
-        setProgress(1);
-      } else {
-        setPinState('pinned');
-        setProgress((scrollY - pinStart) / (pinEnd - pinStart));
-      }
-    };
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-    return () => window.removeEventListener('scroll', onScroll);
-  }, []);
-
-  const numTransitions = STACKED_SECTORS.length - 1;
-  const sliceSize = 1 / numTransitions;
 
   const handleFolderClick = (folder: typeof FRANCHISE_FOLDERS[0]) => {
     setSelectedFolder(folder);
@@ -359,169 +284,7 @@ export default function HoldingPageClient() {
         text="We deploy, manage, and scale high-growth franchises and multi-unit businesses across leading global brands. By combining prime real estate, centralized supply chains, and real-time operations telemetry, Zawr Holding transforms multi-brand expansion into an institutional standard."
       />
 
-      {/* ─────────────────────────────────────────────────────────────
-          3. STACKED CARD DECK ANIMATION (Our Process Signature Style)
-      ───────────────────────────────────────────────────────────── */}
-      <section
-        ref={spacerRef}
-        style={{
-          position: 'relative',
-          height: `${(STACKED_SECTORS.length - 1) * 110 + 40}vh`,
-          backgroundColor: '#ffffff',
-          borderTop: '1px solid #f1f5f9',
-          borderBottom: '1px solid #f1f5f9',
-        }}
-      >
-        <div
-          style={
-            pinState === 'pinned'
-              ? { position: 'fixed', top: 0, left: 0, right: 0, height: '100vh', zIndex: 10, backgroundColor: '#ffffff' }
-              : pinState === 'after'
-              ? { position: 'absolute', bottom: 0, left: 0, right: 0, height: '100vh', zIndex: 1, backgroundColor: '#ffffff' }
-              : { position: 'absolute', top: 0, left: 0, right: 0, height: '100vh', zIndex: 1, backgroundColor: '#ffffff' }
-          }
-        >
-          {/* Section Header */}
-          <div style={{ position: 'absolute', top: 'clamp(2.5rem, 5vh, 4rem)', left: 0, right: 0, textAlign: 'center', zIndex: 10 }}>
-            <h2
-              style={{
-                fontSize: 'clamp(2.2rem, 4.5vw, 3.6rem)',
-                fontWeight: 400,
-                color: '#0f172a',
-                letterSpacing: '-0.03em',
-                margin: 0,
-              }}
-            >
-              Franchise Ecosystem
-            </h2>
-          </div>
 
-          {/* Stacked Full-Image Cards Stage */}
-          <div
-            style={{
-              position: 'absolute',
-              top: '54%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              width: '90%',
-              maxWidth: '1020px',
-              height: 'clamp(380px, 58vh, 580px)',
-            }}
-          >
-            {STACKED_SECTORS.map((item, index) => {
-              let translateY = 0;
-              let opacity = 1;
-
-              if (index === 0) {
-                translateY = 0;
-                opacity = 1;
-              } else {
-                const cardStart = (index - 1) * sliceSize;
-                const cardEnd = index * sliceSize;
-
-                if (progress <= cardStart) {
-                  translateY = 100;
-                  opacity = 0;
-                } else if (progress >= cardEnd) {
-                  translateY = 0;
-                  opacity = 1;
-                } else {
-                  const cardProgress = (progress - cardStart) / sliceSize;
-                  translateY = (1 - cardProgress) * 100;
-                  opacity = cardProgress > 0.02 ? 1 : 0;
-                }
-              }
-
-              // Calculate stacking effects from cards landed above
-              let effectiveCardsOnTop = 0;
-              for (let k = index + 1; k < STACKED_SECTORS.length; k++) {
-                const kStart = (k - 1) * sliceSize;
-                const kEnd = k * sliceSize;
-                if (progress >= kEnd) {
-                  effectiveCardsOnTop += 1;
-                } else if (progress > kStart) {
-                  effectiveCardsOnTop += (progress - kStart) / sliceSize;
-                }
-              }
-
-              const scale = Math.max(0.88, 1 - effectiveCardsOnTop * 0.034);
-              const stackShift = -effectiveCardsOnTop * 14;
-
-              return (
-                <div
-                  key={item.number}
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    borderRadius: '28px',
-                    overflow: 'hidden',
-                    backgroundColor: '#111111',
-                    zIndex: index + 1,
-                    opacity,
-                    transform: `translateY(calc(${translateY}% + ${stackShift}px)) scale(${scale})`,
-                    transformOrigin: 'center bottom',
-                    willChange: 'transform, opacity',
-                    transition: 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease',
-                    boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.2)',
-                  }}
-                >
-                  {/* Full Card Image */}
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      display: 'block',
-                    }}
-                  />
-
-                  {/* Bottom Gradient & Text Overlay */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      background: 'linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.35) 45%, rgba(0,0,0,0) 100%)',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      justifyContent: 'flex-end',
-                      padding: 'clamp(2rem, 4vw, 3.5rem)',
-                      boxSizing: 'border-box',
-                    }}
-                  >
-                    <h3
-                      style={{
-                        fontSize: 'clamp(1.8rem, 3.5vw, 3.2rem)',
-                        fontWeight: 400,
-                        color: '#ffffff',
-                        letterSpacing: '-0.02em',
-                        margin: 0,
-                        marginBottom: '0.35rem',
-                      }}
-                    >
-                      {item.title}
-                    </h3>
-
-                    <p
-                      style={{
-                        fontSize: 'clamp(1rem, 1.5vw, 1.35rem)',
-                        fontWeight: 400,
-                        fontStyle: 'italic',
-                        color: 'rgba(255, 255, 255, 0.9)',
-                        margin: 0,
-                      }}
-                    >
-                      {item.subtitle}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
 
       {/* ─────────────────────────────────────────────────────────────
           5. INTERACTIVE FRANCHISE FOLDERS (IT Services signature style)
