@@ -628,9 +628,11 @@ export default function HoldingPageClient() {
     };
   }, []);
 
-  // Operating Blueprint Dual-Wing State
+  // Operating Blueprint Dual-Wing & Mobile State
   const [leftShelfId, setLeftShelfId] = useState<string>('deploy-s1');
   const [rightShelfId, setRightShelfId] = useState<string>('run-s1');
+  const [mobileShelfId, setMobileShelfId] = useState<string>('deploy-s1');
+  const [activeMobileBay, setActiveMobileBay] = useState<number>(0);
   const [hoveredShelfId, setHoveredShelfId] = useState<string | null>(null);
   const [activeLeftBay, setActiveLeftBay] = useState<number>(0);
   const [activeRightBay, setActiveRightBay] = useState<number>(2);
@@ -643,6 +645,42 @@ export default function HoldingPageClient() {
   const activeRightShelf =
     BLUEPRINT_SHELVES.find((s) => s.id === (hoveredShelfId && (BLUEPRINT_SHELVES.find((x) => x.id === hoveredShelfId)?.bayIndex === 2 || BLUEPRINT_SHELVES.find((x) => x.id === hoveredShelfId)?.bayIndex === 3) ? hoveredShelfId : rightShelfId)) ||
     BLUEPRINT_SHELVES[8];
+
+  const activeMobileShelf =
+    BLUEPRINT_SHELVES.find((s) => s.id === mobileShelfId) ||
+    BLUEPRINT_SHELVES[0];
+
+  // Touch Swipe Handlers for Section 5 (Why Brands Partner)
+  const touchStartY = useRef<number>(0);
+  const touchStartX = useRef<number>(0);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const touchEndY = e.changedTouches[0].clientY;
+    const touchEndX = e.changedTouches[0].clientX;
+    const diffY = touchStartY.current - touchEndY;
+    const diffX = touchStartX.current - touchEndX;
+
+    if (Math.abs(diffY) > 25 || Math.abs(diffX) > 25) {
+      if (Math.abs(diffY) >= Math.abs(diffX)) {
+        if (diffY > 0) {
+          setActiveBenefit((prev) => (prev + 1) % PARTNER_BENEFITS.length);
+        } else {
+          setActiveBenefit((prev) => (prev - 1 + PARTNER_BENEFITS.length) % PARTNER_BENEFITS.length);
+        }
+      } else {
+        if (diffX > 0) {
+          setActiveBenefit((prev) => (prev + 1) % PARTNER_BENEFITS.length);
+        } else {
+          setActiveBenefit((prev) => (prev - 1 + PARTNER_BENEFITS.length) % PARTNER_BENEFITS.length);
+        }
+      }
+    }
+  };
 
   const handleVerticalClick = (vertical: OperatingVertical) => {
     setSelectedVertical(vertical);
@@ -674,13 +712,14 @@ export default function HoldingPageClient() {
           position: 'relative',
           width: '100%',
           height: '100vh',
+          minHeight: '560px',
           backgroundImage: 'url("/assets/holding-hero.png")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           display: 'flex',
           alignItems: 'flex-end',
           justifyContent: 'flex-start',
-          padding: '0 clamp(1rem, 6vw, 8%) 8vh clamp(1rem, 6vw, 8%)',
+          padding: '0 clamp(1.25rem, 6vw, 8%) clamp(3rem, 8vh, 6rem) clamp(1.25rem, 6vw, 8%)',
           boxSizing: 'border-box',
         }}
       >
@@ -697,7 +736,7 @@ export default function HoldingPageClient() {
         <div style={{ position: 'relative', zIndex: 10, maxWidth: '840px' }}>
           <h1
             style={{
-              fontSize: 'clamp(2.5rem, 6vw, 5.5rem)',
+              fontSize: 'clamp(2.5rem, 6.5vw, 5.5rem)',
               fontWeight: 300,
               color: '#ffffff',
               margin: 0,
@@ -712,7 +751,7 @@ export default function HoldingPageClient() {
             style={{
               fontSize: 'clamp(1rem, 1.8vw, 1.25rem)',
               color: 'rgba(255,255,255,0.85)',
-              marginTop: '1.5rem',
+              marginTop: '1.25rem',
               lineHeight: 1.6,
               maxWidth: '640px',
               fontWeight: 300,
@@ -736,7 +775,7 @@ export default function HoldingPageClient() {
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
-          padding: 'clamp(5rem, 9vh, 8rem) 1.5rem',
+          padding: 'clamp(4rem, 8vh, 8rem) clamp(1rem, 4vw, 2rem)',
           backgroundColor: '#ffffff',
           color: '#0f172a',
           position: 'relative',
@@ -747,10 +786,10 @@ export default function HoldingPageClient() {
         <div style={{ maxWidth: '1100px', margin: '0 auto', textAlign: 'center' }}>
           <h2
             style={{
-              fontSize: 'clamp(2.2rem, 4.5vw, 3.6rem)',
+              fontSize: 'clamp(2rem, 4.5vw, 3.6rem)',
               fontWeight: 400,
               color: '#0f172a',
-              marginBottom: '1rem',
+              marginBottom: '0.85rem',
               letterSpacing: '-0.03em',
             }}
           >
@@ -758,11 +797,12 @@ export default function HoldingPageClient() {
           </h2>
           <p
             style={{
-              fontSize: 'clamp(1rem, 1.5vw, 1.15rem)',
+              fontSize: 'clamp(0.95rem, 1.5vw, 1.15rem)',
               color: '#64748b',
               maxWidth: '640px',
-              margin: '0 auto clamp(3.5rem, 7vh, 5.5rem)',
+              margin: '0 auto clamp(2.5rem, 6vh, 5rem)',
               fontWeight: 400,
+              lineHeight: 1.6,
             }}
           >
             Six core institutional pillars powering multi-brand deployment, centralized telemetry, and franchise expansion.
@@ -774,22 +814,23 @@ export default function HoldingPageClient() {
               .holding-pillars-grid {
                 display: grid;
                 grid-template-columns: repeat(3, 1fr);
-                column-gap: clamp(2rem, 5vw, 4.5rem);
-                row-gap: clamp(3.5rem, 7vh, 5.5rem);
+                column-gap: clamp(1.5rem, 4vw, 4.5rem);
+                row-gap: clamp(2.5rem, 6vh, 5.5rem);
                 max-width: 1040px;
                 margin: 0 auto;
               }
-              @media (max-width: 820px) {
+              @media (max-width: 860px) {
                 .holding-pillars-grid {
                   grid-template-columns: repeat(2, 1fr);
-                  column-gap: 2rem;
-                  row-gap: 3.5rem;
+                  column-gap: 1.5rem;
+                  row-gap: 3rem;
                 }
               }
               @media (max-width: 520px) {
                 .holding-pillars-grid {
-                  grid-template-columns: 1fr;
-                  row-gap: 3rem;
+                  grid-template-columns: repeat(2, 1fr);
+                  column-gap: 1rem;
+                  row-gap: 2.25rem;
                 }
               }
               .holding-pillar-card {
@@ -812,30 +853,42 @@ export default function HoldingPageClient() {
               .pillar-img {
                 width: 100%;
                 max-width: 180px;
-                height: clamp(260px, 34vh, 360px);
+                height: clamp(200px, 30vh, 360px);
                 object-fit: contain;
                 transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
                 filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.05));
               }
+              @media (max-width: 520px) {
+                .pillar-img {
+                  max-width: 135px;
+                  height: 180px;
+                }
+              }
               .holding-pillar-card:hover .pillar-img {
-                transform: translateY(-10px) scale(1.03);
+                transform: translateY(-8px) scale(1.02);
                 filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.12));
               }
               .pillar-title {
-                font-size: clamp(1.15rem, 1.8vw, 1.35rem);
+                font-size: clamp(1rem, 1.8vw, 1.35rem);
                 font-weight: 500;
                 color: #0f172a;
-                margin-top: 1.5rem;
+                margin-top: 1.25rem;
                 letter-spacing: -0.02em;
                 transition: color 0.2s ease;
+              }
+              @media (max-width: 520px) {
+                .pillar-title {
+                  margin-top: 0.75rem;
+                  font-size: 0.95rem;
+                }
               }
               .holding-pillar-card:hover .pillar-title {
                 color: #000000;
               }
               .pillar-slug {
-                font-size: 0.88rem;
-                color: #64748b;
-                margin-top: 0.3rem;
+                font-size: 0.84rem;
+                color: '#64748b';
+                margin-top: 0.25rem;
                 font-weight: 400;
               }
 
@@ -848,14 +901,14 @@ export default function HoldingPageClient() {
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                padding: 1.5rem;
+                padding: clamp(1rem, 3vw, 1.5rem);
                 box-sizing: border-box;
               }
               .mac-modal-window {
                 width: 100%;
-                max-width: 750px;
-                max-height: 560px;
-                background: rgba(12, 16, 26, 0.95);
+                max-width: min(750px, 94vw);
+                max-height: 88vh;
+                background: rgba(12, 16, 26, 0.96);
                 border: 1px solid rgba(255, 255, 255, 0.15);
                 box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.9);
                 border-radius: 16px;
@@ -899,19 +952,18 @@ export default function HoldingPageClient() {
                 font-size: 0.85rem;
                 font-weight: 500;
                 color: rgba(255, 255, 255, 0.6);
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 60%;
               }
               .mac-content {
-                padding: 2.2rem;
+                padding: clamp(1.25rem, 3vw, 2.2rem);
                 flex-grow: 1;
                 display: flex;
                 flex-direction: column;
                 justify-content: space-between;
                 overflow-y: auto;
-              }
-              @media (max-width: 768px) {
-                .mac-content {
-                  padding: 1.25rem;
-                }
               }
             `,
             }}
@@ -943,7 +995,7 @@ export default function HoldingPageClient() {
                   />
                 </div>
                 <div className="pillar-title">{vertical.title}</div>
-                <div className="pillar-slug">{vertical.slug}</div>
+                <div className="pillar-slug" style={{ fontSize: '0.84rem', color: '#64748b', marginTop: '0.25rem', fontWeight: 400 }}>{vertical.slug}</div>
               </div>
             ))}
           </div>
@@ -964,15 +1016,15 @@ export default function HoldingPageClient() {
 
               <div className="mac-content">
                 <div>
-                  <h3 style={{ fontSize: '1.4rem', fontWeight: 600, color: '#ffffff', margin: '0 0 0.5rem 0' }}>
+                  <h3 style={{ fontSize: 'clamp(1.15rem, 3vw, 1.4rem)', fontWeight: 600, color: '#ffffff', margin: '0 0 0.5rem 0' }}>
                     {selectedVertical.subtitle}
                   </h3>
-                  <p style={{ fontSize: '0.92rem', color: 'rgba(255,255,255,0.75)', lineHeight: 1.6, margin: '0 0 1.5rem 0' }}>
+                  <p style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.75)', lineHeight: 1.6, margin: '0 0 1.5rem 0' }}>
                     {selectedVertical.body}
                   </p>
 
                   {/* Highlights */}
-                  <div style={{ marginBottom: '1.5rem' }}>
+                  <div style={{ marginBottom: '1.25rem' }}>
                     <div style={{ fontSize: '0.75rem', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.5rem' }}>
                       Operational Deliverables
                     </div>
@@ -990,18 +1042,18 @@ export default function HoldingPageClient() {
                   <div
                     style={{
                       display: 'grid',
-                      gridTemplateColumns: 'repeat(4, 1fr)',
-                      gap: '0.75rem',
-                      padding: '1rem',
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))',
+                      gap: '0.65rem',
+                      padding: '0.85rem',
                       backgroundColor: 'rgba(255,255,255,0.04)',
                       borderRadius: '10px',
                       border: '1px solid rgba(255,255,255,0.08)',
-                      marginBottom: '1.5rem',
+                      marginBottom: '1.25rem',
                     }}
                   >
                     {selectedVertical.metrics.map((m, i) => (
                       <div key={i} style={{ textAlign: 'center' }}>
-                        <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#ffffff' }}>{m.val}</div>
+                        <div style={{ fontSize: '1.05rem', fontWeight: 700, color: '#ffffff' }}>{m.val}</div>
                         <div style={{ fontSize: '0.72rem', color: '#94a3b8', marginTop: '2px' }}>{m.label}</div>
                       </div>
                     ))}
@@ -1059,11 +1111,11 @@ export default function HoldingPageClient() {
 
       {/* ─────────────────────────────────────────────────────────────
           4. THE OPERATING BLUEPRINT: DEPLOY · MANAGE · RUN · SCALE
-             Minimalist Editorial Layout with Direct Bookcase
+             Minimalist Editorial Layout with Direct Bookcase (Desktop + Mobile)
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
-          padding: 'clamp(4rem, 8vh, 7rem) clamp(1rem, 3.5vw, 3rem)',
+          padding: 'clamp(3.5rem, 7vh, 6.5rem) clamp(1rem, 3.5vw, 3rem)',
           backgroundColor: '#ffffff',
           borderBottom: '1px solid #f1f5f9',
           position: 'relative',
@@ -1071,19 +1123,19 @@ export default function HoldingPageClient() {
       >
         <div style={{ maxWidth: '1680px', margin: '0 auto' }}>
           {/* Section Header */}
-          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto clamp(2.5rem, 5vh, 4rem)' }}>
+          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto clamp(2rem, 4vh, 3.5rem)' }}>
             <h2
               style={{
-                fontSize: 'clamp(2.2rem, 4.5vw, 3.4rem)',
+                fontSize: 'clamp(2rem, 4.2vw, 3.4rem)',
                 fontWeight: 400,
                 letterSpacing: '-0.03em',
                 color: '#0f172a',
-                margin: '0 0 1rem 0',
+                margin: '0 0 0.85rem 0',
               }}
             >
               The Operating Blueprint
             </h2>
-            <p style={{ fontSize: '1.05rem', color: '#64748b', lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)', color: '#64748b', lineHeight: 1.6, margin: 0 }}>
               An institutional end-to-end framework removing operational friction, safeguarding brand integrity, and accelerating multi-unit expansion.
             </p>
           </div>
@@ -1091,7 +1143,8 @@ export default function HoldingPageClient() {
           <style
             dangerouslySetInnerHTML={{
               __html: `
-              .blueprint-triptych-grid {
+              /* Desktop 3-Column Triptych */
+              .blueprint-desktop-grid {
                 display: grid;
                 grid-template-columns: minmax(280px, 340px) minmax(500px, 1fr) minmax(280px, 340px);
                 gap: clamp(1.5rem, 3vw, 3.5rem);
@@ -1099,10 +1152,20 @@ export default function HoldingPageClient() {
                 max-width: 1600px;
                 margin: 0 auto;
               }
-              @media (max-width: 1200px) {
-                .blueprint-triptych-grid {
-                  grid-template-columns: 1fr;
-                  gap: 3rem;
+              .blueprint-mobile-container {
+                display: none;
+              }
+              @media (max-width: 1024px) {
+                .blueprint-desktop-grid {
+                  display: none;
+                }
+                .blueprint-mobile-container {
+                  display: flex;
+                  flex-direction: column;
+                  align-items: center;
+                  gap: 1.75rem;
+                  max-width: 640px;
+                  margin: 0 auto;
                 }
               }
 
@@ -1141,15 +1204,45 @@ export default function HoldingPageClient() {
                 border: none;
                 outline: none;
               }
+
+              .blueprint-mobile-card {
+                width: 100%;
+                background: #f8fafc;
+                border: 1px solid #e2e8f0;
+                border-radius: 14px;
+                padding: clamp(1.25rem, 4vw, 1.75rem);
+                box-sizing: border-box;
+                text-align: left;
+                transition: all 0.3s ease;
+              }
+
+              .blueprint-bay-tab-btn {
+                padding: 8px 14px;
+                border-radius: 100px;
+                font-size: 0.8rem;
+                font-weight: 500;
+                letter-spacing: 0.04em;
+                cursor: pointer;
+                border: 1px solid #e2e8f0;
+                background: #ffffff;
+                color: #64748b;
+                transition: all 0.25s ease;
+                white-space: nowrap;
+              }
+              .blueprint-bay-tab-btn.active {
+                background: #0f172a;
+                color: #ffffff;
+                border-color: #0f172a;
+                box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+              }
             `,
             }}
           />
 
-          {/* 3-Column Triptych Grid */}
-          <div className="blueprint-triptych-grid">
-            {/* ───────────────── LEFT MINIMALIST PANEL (Bays 01 & 02) ───────────────── */}
+          {/* ───────────────── DESKTOP 3-COLUMN TRIPTYCH (min-width: 1025px) ───────────────── */}
+          <div className="blueprint-desktop-grid">
+            {/* LEFT MINIMALIST PANEL (Bays 01 & 02) */}
             <div className="blueprint-minimal-side">
-              {/* Overline Phase */}
               <div
                 style={{
                   fontSize: '0.78rem',
@@ -1163,7 +1256,6 @@ export default function HoldingPageClient() {
                 {activeLeftShelf.bayPhase}
               </div>
 
-              {/* Title */}
               <h3
                 style={{
                   fontSize: 'clamp(1.4rem, 2vw, 1.85rem)',
@@ -1177,7 +1269,6 @@ export default function HoldingPageClient() {
                 {activeLeftShelf.shelfTitle}
               </h3>
 
-              {/* Summary Description */}
               <p
                 style={{
                   fontSize: '0.94rem',
@@ -1189,7 +1280,6 @@ export default function HoldingPageClient() {
                 {activeLeftShelf.summary}
               </p>
 
-              {/* Minimal Highlights List */}
               <ul
                 style={{
                   listStyle: 'none',
@@ -1228,7 +1318,7 @@ export default function HoldingPageClient() {
               </ul>
             </div>
 
-            {/* ───────────────── CENTER BOOKCASE IMAGE (Direct, Clean) ───────────────── */}
+            {/* CENTER BOOKCASE IMAGE */}
             <div className="bookcase-direct-canvas">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -1265,6 +1355,8 @@ export default function HoldingPageClient() {
                         setRightShelfId(item.id);
                         setActiveRightBay(item.bayIndex);
                       }
+                      setMobileShelfId(item.id);
+                      setActiveMobileBay(item.bayIndex);
                     }}
                     onMouseLeave={() => setHoveredShelfId(null)}
                     onClick={() => {
@@ -1275,6 +1367,8 @@ export default function HoldingPageClient() {
                         setRightShelfId(item.id);
                         setActiveRightBay(item.bayIndex);
                       }
+                      setMobileShelfId(item.id);
+                      setActiveMobileBay(item.bayIndex);
                     }}
                     role="button"
                     tabIndex={0}
@@ -1285,9 +1379,8 @@ export default function HoldingPageClient() {
               })}
             </div>
 
-            {/* ───────────────── RIGHT MINIMALIST PANEL (Bays 03 & 04) ───────────────── */}
+            {/* RIGHT MINIMALIST PANEL (Bays 03 & 04) */}
             <div className="blueprint-minimal-side">
-              {/* Overline Phase */}
               <div
                 style={{
                   fontSize: '0.78rem',
@@ -1301,7 +1394,6 @@ export default function HoldingPageClient() {
                 {activeRightShelf.bayPhase}
               </div>
 
-              {/* Title */}
               <h3
                 style={{
                   fontSize: 'clamp(1.4rem, 2vw, 1.85rem)',
@@ -1315,7 +1407,6 @@ export default function HoldingPageClient() {
                 {activeRightShelf.shelfTitle}
               </h3>
 
-              {/* Summary Description */}
               <p
                 style={{
                   fontSize: '0.94rem',
@@ -1327,7 +1418,6 @@ export default function HoldingPageClient() {
                 {activeRightShelf.summary}
               </p>
 
-              {/* Minimal Highlights List */}
               <ul
                 style={{
                   listStyle: 'none',
@@ -1366,6 +1456,162 @@ export default function HoldingPageClient() {
               </ul>
             </div>
           </div>
+
+          {/* ───────────────── MOBILE UNIFIED BLUEPRINT EXPLORER (max-width: 1024px) ───────────────── */}
+          <div className="blueprint-mobile-container">
+            {/* Bay Selector Pill Tabs */}
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '8px',
+                justifyContent: 'center',
+                width: '100%',
+              }}
+            >
+              {BLUEPRINT_BAYS.map((bay, idx) => {
+                const isActive = activeMobileBay === idx;
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    className={`blueprint-bay-tab-btn ${isActive ? 'active' : ''}`}
+                    onClick={() => {
+                      setActiveMobileBay(idx);
+                      const defaultShelfForBay = BLUEPRINT_SHELVES.find((s) => s.bayIndex === idx);
+                      if (defaultShelfForBay) setMobileShelfId(defaultShelfForBay.id);
+                    }}
+                  >
+                    {bay.phase}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Interactive Bookcase Canvas */}
+            <div className="bookcase-direct-canvas">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/assets/holding-bp.png"
+                alt="Zawr Holding Operating Blueprint Classical Library"
+                className="bookcase-direct-img"
+                loading="lazy"
+                decoding="async"
+              />
+
+              {/* 16 Interactive Hotspots */}
+              {BLUEPRINT_SHELVES.map((item) => {
+                const isActive = activeMobileShelf.id === item.id;
+                return (
+                  <div
+                    key={item.id}
+                    className={`shelf-minimal-hotspot ${isActive ? 'active' : ''}`}
+                    style={{
+                      left: `${item.x}%`,
+                      top: `${item.y}%`,
+                      width: `${item.w}%`,
+                      height: `${item.h}%`,
+                    }}
+                    onClick={() => {
+                      setMobileShelfId(item.id);
+                      setActiveMobileBay(item.bayIndex);
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${item.bayPhase}: ${item.shelfTitle}`}
+                  />
+                );
+              })}
+            </div>
+
+            {/* Active Shelf Details Card */}
+            <div className="blueprint-mobile-card">
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '0.5rem',
+                }}
+              >
+                <span
+                  style={{
+                    fontSize: '0.76rem',
+                    fontWeight: 700,
+                    letterSpacing: '0.1em',
+                    color: '#f59e0b',
+                    textTransform: 'uppercase',
+                  }}
+                >
+                  {activeMobileShelf.bayPhase}
+                </span>
+                <span
+                  style={{
+                    fontSize: '0.74rem',
+                    fontWeight: 500,
+                    color: '#64748b',
+                    backgroundColor: '#ffffff',
+                    padding: '2px 8px',
+                    borderRadius: '4px',
+                    border: '1px solid #e2e8f0',
+                  }}
+                >
+                  {activeMobileShelf.timelineOrSla}
+                </span>
+              </div>
+
+              <h3
+                style={{
+                  fontSize: 'clamp(1.15rem, 4vw, 1.45rem)',
+                  fontWeight: 500,
+                  color: '#0f172a',
+                  margin: '0 0 0.65rem 0',
+                  lineHeight: 1.3,
+                }}
+              >
+                {activeMobileShelf.shelfTitle}
+              </h3>
+
+              <p
+                style={{
+                  fontSize: '0.9rem',
+                  color: '#64748b',
+                  lineHeight: 1.6,
+                  margin: '0 0 1rem 0',
+                }}
+              >
+                {activeMobileShelf.summary}
+              </p>
+
+              <ul
+                style={{
+                  listStyle: 'none',
+                  padding: 0,
+                  margin: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.5rem',
+                }}
+              >
+                {activeMobileShelf.deliverables.map((deliv, i) => (
+                  <li
+                    key={i}
+                    style={{
+                      fontSize: '0.84rem',
+                      color: '#475569',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '8px',
+                      lineHeight: 1.45,
+                    }}
+                  >
+                    <span style={{ color: '#f59e0b', fontSize: '0.85rem', lineHeight: '1.2rem', flexShrink: 0 }}>•</span>
+                    <span>{deliv}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -1374,7 +1620,7 @@ export default function HoldingPageClient() {
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
-          padding: 'clamp(4.5rem, 8vh, 7rem) clamp(1rem, 4vw, 4rem)',
+          padding: 'clamp(4rem, 7vh, 7rem) clamp(1rem, 4vw, 4rem)',
           backgroundColor: '#ffffff',
           position: 'relative',
           overflow: 'hidden',
@@ -1383,10 +1629,10 @@ export default function HoldingPageClient() {
       >
         <div style={{ maxWidth: '1840px', margin: '0 auto', width: '100%' }}>
           {/* Section Header */}
-          <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto clamp(2.5rem, 5vh, 4rem)' }}>
+          <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto clamp(2rem, 4vh, 3.5rem)' }}>
             <h2
               style={{
-                fontSize: 'clamp(2.2rem, 4.2vw, 3.4rem)',
+                fontSize: 'clamp(2rem, 4.2vw, 3.4rem)',
                 fontWeight: 400,
                 letterSpacing: '-0.03em',
                 color: '#0f172a',
@@ -1395,7 +1641,7 @@ export default function HoldingPageClient() {
             >
               Why Brands Partner With Zawr Holding
             </h2>
-            <p style={{ fontSize: '1.05rem', color: '#64748b', lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: 'clamp(0.95rem, 1.4vw, 1.05rem)', color: '#64748b', lineHeight: 1.6, margin: 0 }}>
               The operational advantage of scaling franchises with an institutional multi-brand engine.
             </p>
           </div>
@@ -1406,7 +1652,7 @@ export default function HoldingPageClient() {
               .holding-benefits-triptych {
                 display: grid;
                 grid-template-columns: minmax(280px, 440px) minmax(520px, 1fr) minmax(280px, 440px);
-                gap: clamp(2rem, 5vw, 7rem);
+                gap: clamp(1.5rem, 4vw, 7rem);
                 align-items: center;
                 justify-content: space-between;
                 max-width: 1840px;
@@ -1452,6 +1698,7 @@ export default function HoldingPageClient() {
                 overflow: visible;
                 user-select: none;
                 cursor: grab;
+                touch-action: pan-y;
                 -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
                 mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
               }
@@ -1476,13 +1723,14 @@ export default function HoldingPageClient() {
                 transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
                             opacity 0.55s ease,
                             filter 0.55s ease;
-                padding: 0.75rem 1.5rem;
+                padding: 0.75rem 1.25rem;
                 background: transparent;
                 border: none;
                 outline: none;
+                box-sizing: border-box;
               }
               .barrel-item-title {
-                font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+                font-size: clamp(1.1rem, 1.6vw, 1.45rem);
                 font-weight: 300;
                 color: #94a3b8;
                 letter-spacing: -0.01em;
@@ -1494,7 +1742,7 @@ export default function HoldingPageClient() {
                 color: #475569;
               }
               .barrel-item.active .barrel-item-title {
-                font-size: clamp(2.3rem, 3.8vw, 3.25rem);
+                font-size: clamp(1.8rem, 4.5vw, 3.25rem);
                 font-weight: 300;
                 color: #0f172a;
                 letter-spacing: -0.035em;
@@ -1503,7 +1751,7 @@ export default function HoldingPageClient() {
                 max-width: 640px;
               }
               .barrel-item-detail {
-                margin-top: 1.25rem;
+                margin-top: 1rem;
                 animation: barrelReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
                 display: flex;
                 flex-direction: column;
@@ -1520,10 +1768,10 @@ export default function HoldingPageClient() {
                 }
               }
               .barrel-item-summary {
-                font-size: 1.05rem;
+                font-size: clamp(0.92rem, 1.4vw, 1.05rem);
                 color: #64748b;
-                line-height: 1.7;
-                margin: 0 0 1.25rem 0;
+                line-height: 1.65;
+                margin: 0 0 1rem 0;
                 max-width: 560px;
                 text-align: center;
                 font-weight: 300;
@@ -1531,20 +1779,55 @@ export default function HoldingPageClient() {
               .barrel-item-badge {
                 display: inline-flex;
                 align-items: center;
-                gap: 10px;
-                font-size: 0.94rem;
+                gap: 8px;
+                font-size: 0.92rem;
                 background: transparent;
                 border: none;
                 padding: 0;
                 margin-top: 0.25rem;
               }
+              .barrel-mobile-nav {
+                display: none;
+              }
               @media (max-width: 1024px) {
                 .holding-benefits-triptych {
                   grid-template-columns: 1fr;
-                  gap: 2.5rem;
+                  gap: 1.5rem;
                 }
                 .statue-col {
                   display: none;
+                }
+                .barrel-roll-stage {
+                  height: clamp(380px, 50vh, 520px);
+                  min-height: 380px;
+                  max-height: 520px;
+                }
+                .barrel-item-title {
+                  white-space: normal;
+                }
+                .barrel-mobile-nav {
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  gap: 12px;
+                  margin-top: 1rem;
+                }
+                .barrel-nav-btn {
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
+                  width: 36px;
+                  height: 36px;
+                  border-radius: 50%;
+                  background: #f1f5f9;
+                  border: 1px solid #e2e8f0;
+                  color: #0f172a;
+                  cursor: pointer;
+                  transition: all 0.2s ease;
+                }
+                .barrel-nav-btn:hover {
+                  background: #0f172a;
+                  color: #ffffff;
                 }
               }
             `,
@@ -1565,91 +1848,118 @@ export default function HoldingPageClient() {
             </div>
 
             {/* Center 3D Barrel Roll Benefits List */}
-            <div
-              ref={barrelRef}
-              className="barrel-roll-stage"
-              onMouseEnter={() => setIsBarrelHovered(true)}
-              onMouseLeave={() => setIsBarrelHovered(false)}
-            >
-              {PARTNER_BENEFITS.map((benefit, idx) => {
-                const isActive = activeBenefit === idx;
-                const N = PARTNER_BENEFITS.length;
-                let offset = idx - activeBenefit;
-                // Infinite modular wrap to shortest cylindrical path [-2, 2]
-                if (offset > Math.floor(N / 2)) offset -= N;
-                if (offset < -Math.floor(N / 2)) offset += N;
+            <div style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div
+                ref={barrelRef}
+                className="barrel-roll-stage"
+                onMouseEnter={() => setIsBarrelHovered(true)}
+                onMouseLeave={() => setIsBarrelHovered(false)}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+              >
+                {PARTNER_BENEFITS.map((benefit, idx) => {
+                  const isActive = activeBenefit === idx;
+                  const N = PARTNER_BENEFITS.length;
+                  let offset = idx - activeBenefit;
+                  // Infinite modular wrap to shortest cylindrical path [-2, 2]
+                  if (offset > Math.floor(N / 2)) offset -= N;
+                  if (offset < -Math.floor(N / 2)) offset += N;
 
-                // 3D Geometry with complete clutter elimination & generous breathing room
-                let transformStyle = '';
-                let opacityStyle = 0;
-                let blurStyle = 0;
-                let pointerEventsStyle: 'auto' | 'none' = 'none';
+                  // 3D Geometry with complete clutter elimination & generous breathing room
+                  let transformStyle = '';
+                  let opacityStyle = 0;
+                  let blurStyle = 0;
+                  let pointerEventsStyle: 'auto' | 'none' = 'none';
 
-                if (offset === 0) {
-                  // Active Center Card
-                  transformStyle = 'translateY(-50%) rotateX(0deg) translateZ(190px) scale(1)';
-                  opacityStyle = 1;
-                  blurStyle = 0;
-                  pointerEventsStyle = 'auto';
-                } else if (offset === -1) {
-                  // Previous Item (Positioned well above the active title with clear whitespace)
-                  transformStyle = 'translateY(calc(-50% - 215px)) rotateX(26deg) translateZ(60px) scale(0.85)';
-                  opacityStyle = 0.35;
-                  blurStyle = 0.3;
-                  pointerEventsStyle = 'auto';
-                } else if (offset === 1) {
-                  // Next Item (Positioned well below the active badge with clear whitespace)
-                  transformStyle = 'translateY(calc(-50% + 215px)) rotateX(-26deg) translateZ(60px) scale(0.85)';
-                  opacityStyle = 0.35;
-                  blurStyle = 0.3;
-                  pointerEventsStyle = 'auto';
-                } else {
-                  // Outer items (offset = ±2): hidden completely to eliminate ghosting/clutter
-                  transformStyle = offset < 0
-                    ? 'translateY(calc(-50% - 320px)) rotateX(45deg) translateZ(0px) scale(0.65)'
-                    : 'translateY(calc(-50% + 320px)) rotateX(-45deg) translateZ(0px) scale(0.65)';
-                  opacityStyle = 0;
-                  blurStyle = 2;
-                  pointerEventsStyle = 'none';
-                }
+                  if (offset === 0) {
+                    transformStyle = 'translateY(-50%) rotateX(0deg) translateZ(190px) scale(1)';
+                    opacityStyle = 1;
+                    blurStyle = 0;
+                    pointerEventsStyle = 'auto';
+                  } else if (offset === -1) {
+                    transformStyle = 'translateY(calc(-50% - 215px)) rotateX(26deg) translateZ(60px) scale(0.85)';
+                    opacityStyle = 0.35;
+                    blurStyle = 0.3;
+                    pointerEventsStyle = 'auto';
+                  } else if (offset === 1) {
+                    transformStyle = 'translateY(calc(-50% + 215px)) rotateX(-26deg) translateZ(60px) scale(0.85)';
+                    opacityStyle = 0.35;
+                    blurStyle = 0.3;
+                    pointerEventsStyle = 'auto';
+                  } else {
+                    transformStyle = offset < 0
+                      ? 'translateY(calc(-50% - 320px)) rotateX(45deg) translateZ(0px) scale(0.65)'
+                      : 'translateY(calc(-50% + 320px)) rotateX(-45deg) translateZ(0px) scale(0.65)';
+                    opacityStyle = 0;
+                    blurStyle = 2;
+                    pointerEventsStyle = 'none';
+                  }
 
-                return (
-                  <div
-                    key={benefit.id}
-                    className={`barrel-item ${isActive ? 'active' : ''}`}
-                    style={{
-                      transform: transformStyle,
-                      opacity: opacityStyle,
-                      filter: blurStyle > 0 ? `blur(${blurStyle}px)` : 'none',
-                      zIndex: isActive ? 10 : 5 - Math.abs(offset),
-                      pointerEvents: pointerEventsStyle,
-                      visibility: Math.abs(offset) >= 2 ? 'hidden' : 'visible',
-                    }}
-                    onMouseEnter={() => setActiveBenefit(idx)}
-                    onClick={() => setActiveBenefit(idx)}
-                    role="button"
-                    tabIndex={0}
-                    onKeyDown={(e) => {
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        setActiveBenefit(idx);
-                      }
-                    }}
-                  >
-                    <div className="barrel-item-title">{benefit.title}</div>
-                    {isActive && (
-                      <div className="barrel-item-detail">
-                        <p className="barrel-item-summary">{benefit.summary}</p>
-                        <div className="barrel-item-badge">
-                          <span style={{ fontWeight: 400, color: '#d97706' }}>{benefit.metric}</span>
-                          <span style={{ color: '#cbd5e1' }}>•</span>
-                          <span style={{ color: '#64748b', fontWeight: 300 }}>{benefit.metricLabel}</span>
+                  return (
+                    <div
+                      key={benefit.id}
+                      className={`barrel-item ${isActive ? 'active' : ''}`}
+                      style={{
+                        transform: transformStyle,
+                        opacity: opacityStyle,
+                        filter: blurStyle > 0 ? `blur(${blurStyle}px)` : 'none',
+                        zIndex: isActive ? 10 : 5 - Math.abs(offset),
+                        pointerEvents: pointerEventsStyle,
+                        visibility: Math.abs(offset) >= 2 ? 'hidden' : 'visible',
+                      }}
+                      onMouseEnter={() => setActiveBenefit(idx)}
+                      onClick={() => setActiveBenefit(idx)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter' || e.key === ' ') {
+                          e.preventDefault();
+                          setActiveBenefit(idx);
+                        }
+                      }}
+                    >
+                      <div className="barrel-item-title">{benefit.title}</div>
+                      {isActive && (
+                        <div className="barrel-item-detail">
+                          <p className="barrel-item-summary">{benefit.summary}</p>
+                          <div className="barrel-item-badge">
+                            <span style={{ fontWeight: 400, color: '#d97706' }}>{benefit.metric}</span>
+                            <span style={{ color: '#cbd5e1' }}>•</span>
+                            <span style={{ color: '#64748b', fontWeight: 300 }}>{benefit.metricLabel}</span>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Mobile Quick Pagination Controls */}
+              <div className="barrel-mobile-nav">
+                <button
+                  type="button"
+                  aria-label="Previous Benefit"
+                  className="barrel-nav-btn"
+                  onClick={() => setActiveBenefit((prev) => (prev - 1 + PARTNER_BENEFITS.length) % PARTNER_BENEFITS.length)}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
+                <span style={{ fontSize: '0.82rem', color: '#64748b', fontWeight: 500 }}>
+                  {activeBenefit + 1} / {PARTNER_BENEFITS.length}
+                </span>
+                <button
+                  type="button"
+                  aria-label="Next Benefit"
+                  className="barrel-nav-btn"
+                  onClick={() => setActiveBenefit((prev) => (prev + 1) % PARTNER_BENEFITS.length)}
+                >
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
+              </div>
             </div>
 
             {/* Right Classical Muse Statue */}
@@ -1688,7 +1998,7 @@ export default function HoldingPageClient() {
             style={{
               width: '100%',
               height: 'auto',
-              minHeight: '440px',
+              minHeight: 'clamp(380px, 55vh, 680px)',
               maxHeight: '82vh',
               objectFit: 'cover',
               objectPosition: 'center 42%',
@@ -1701,7 +2011,7 @@ export default function HoldingPageClient() {
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.35) 45%, rgba(0, 0, 0, 0.05) 100%)',
+              background: 'linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.4) 50%, rgba(0, 0, 0, 0.08) 100%)',
               pointerEvents: 'none',
             }}
           />
@@ -1710,9 +2020,9 @@ export default function HoldingPageClient() {
           <div
             style={{
               position: 'absolute',
-              bottom: 'clamp(2rem, 5vw, 4.5rem)',
-              left: 'clamp(1.5rem, 5vw, 6vw)',
-              right: '1.5rem',
+              bottom: 'clamp(1.5rem, 4vw, 4.5rem)',
+              left: 'clamp(1.25rem, 5vw, 6vw)',
+              right: 'clamp(1.25rem, 5vw, 2rem)',
               maxWidth: '780px',
               color: '#ffffff',
               zIndex: 10,
@@ -1720,23 +2030,23 @@ export default function HoldingPageClient() {
           >
             <div
               style={{
-                fontSize: '0.82rem',
+                fontSize: '0.8rem',
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
                 color: '#f59e0b',
                 fontWeight: 500,
-                marginBottom: '0.75rem',
+                marginBottom: '0.65rem',
               }}
             >
               Institutional Permanence
             </div>
             <h3
               style={{
-                fontSize: 'clamp(1.75rem, 4vw, 3.2rem)',
+                fontSize: 'clamp(1.5rem, 4vw, 3.2rem)',
                 fontWeight: 300,
                 letterSpacing: '-0.03em',
                 lineHeight: 1.15,
-                margin: '0 0 1rem 0',
+                margin: '0 0 0.85rem 0',
                 color: '#ffffff',
                 textShadow: '0 2px 12px rgba(0,0,0,0.5)',
               }}
@@ -1745,10 +2055,10 @@ export default function HoldingPageClient() {
             </h3>
             <p
               style={{
-                fontSize: 'clamp(0.98rem, 1.4vw, 1.15rem)',
+                fontSize: 'clamp(0.92rem, 1.4vw, 1.15rem)',
                 fontWeight: 300,
                 color: 'rgba(255, 255, 255, 0.85)',
-                lineHeight: 1.65,
+                lineHeight: 1.6,
                 margin: 0,
                 maxWidth: '640px',
                 textShadow: '0 1px 8px rgba(0,0,0,0.5)',
@@ -1765,7 +2075,7 @@ export default function HoldingPageClient() {
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
-          padding: 'clamp(5rem, 9vh, 8rem) 1.5rem',
+          padding: 'clamp(3.5rem, 7vh, 7.5rem) clamp(1rem, 3.5vw, 2rem)',
           backgroundColor: '#ffffff',
           borderTop: '1px solid #e2e8f0',
           borderBottom: '1px solid #e2e8f0',
@@ -1776,11 +2086,11 @@ export default function HoldingPageClient() {
           {/* Section Header */}
           <h2
             style={{
-              fontSize: 'clamp(2.2rem, 4.2vw, 3.2rem)',
+              fontSize: 'clamp(2rem, 4.2vw, 3.2rem)',
               fontWeight: 400,
               letterSpacing: '-0.03em',
               color: '#0f172a',
-              margin: '0 auto clamp(2.5rem, 5vh, 4rem)',
+              margin: '0 auto clamp(2rem, 4vh, 3.5rem)',
             }}
           >
             Frequently Asked Questions
@@ -1792,7 +2102,7 @@ export default function HoldingPageClient() {
               .faq-books-stand {
                 position: relative;
                 width: 100%;
-                max-width: 480px;
+                max-width: clamp(260px, 80vw, 480px);
                 margin: 0 auto;
                 user-select: none;
                 z-index: 1;
@@ -1825,8 +2135,8 @@ export default function HoldingPageClient() {
               .faq-open-book-wrap {
                 position: relative;
                 width: 100%;
-                max-width: 680px;
-                margin: -35px auto 0;
+                max-width: clamp(300px, 94vw, 680px);
+                margin: -30px auto 0;
                 z-index: 2;
                 user-select: none;
                 cursor: pointer;
@@ -1858,10 +2168,10 @@ export default function HoldingPageClient() {
               }
               @media (max-width: 640px) {
                 .faq-books-stand {
-                  max-width: 340px;
+                  max-width: 300px;
                 }
                 .faq-open-book-wrap {
-                  margin-top: -20px;
+                  margin-top: -18px;
                 }
               }
             `,
@@ -1966,14 +2276,14 @@ export default function HoldingPageClient() {
           position: 'relative',
           backgroundColor: '#000000',
           color: '#ffffff',
-          padding: 'clamp(5rem, 10vh, 8rem) 1.5rem',
+          padding: 'clamp(4.5rem, 9vh, 8rem) clamp(1.25rem, 4vw, 2rem)',
           textAlign: 'center',
         }}
       >
         <div style={{ maxWidth: '860px', margin: '0 auto' }}>
           <h2
             style={{
-              fontSize: 'clamp(2.2rem, 5vw, 3.8rem)',
+              fontSize: 'clamp(2rem, 5vw, 3.8rem)',
               fontWeight: 300,
               letterSpacing: '-0.03em',
               lineHeight: 1.15,
@@ -1985,7 +2295,7 @@ export default function HoldingPageClient() {
           </h2>
           <p
             style={{
-              fontSize: 'clamp(1rem, 1.6vw, 1.2rem)',
+              fontSize: 'clamp(0.95rem, 1.6vw, 1.2rem)',
               color: 'rgba(255,255,255,0.75)',
               lineHeight: 1.6,
               maxWidth: '640px',
@@ -2002,6 +2312,7 @@ export default function HoldingPageClient() {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
+                justifyContent: 'center',
                 gap: '10px',
                 padding: '14px 32px',
                 backgroundColor: '#ffffff',
@@ -2011,6 +2322,8 @@ export default function HoldingPageClient() {
                 fontWeight: 500,
                 textDecoration: 'none',
                 transition: 'all 0.25s ease',
+                flex: '1 1 auto',
+                maxWidth: '280px',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = '#f1f5f9';
@@ -2033,6 +2346,7 @@ export default function HoldingPageClient() {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
+                justifyContent: 'center',
                 gap: '10px',
                 padding: '14px 28px',
                 backgroundColor: 'transparent',
@@ -2043,6 +2357,8 @@ export default function HoldingPageClient() {
                 textDecoration: 'none',
                 border: '1px solid rgba(255, 255, 255, 0.25)',
                 transition: 'all 0.25s ease',
+                flex: '1 1 auto',
+                maxWidth: '240px',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.6)';
