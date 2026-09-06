@@ -4,13 +4,13 @@ import BreadcrumbJsonLd from '@/components/BreadcrumbJsonLd';
 
 export const metadata: Metadata = {
   title: "Energy & Clean Transition — Zawr Industries",
-  description: "Next-generation clean energy infrastructure, utility-scale solar generation, alpine wind corridors, hybrid industrial microgrids, and battery energy storage solutions by Zawr Industries.",
+  description: "Next-generation clean energy infrastructure, petrol forecourt EV charging modernization, utility-scale solar generation, wind corridors, and battery energy storage solutions by Zawr Industries.",
   alternates: {
     canonical: 'https://zawrindustries.com/industries/energy',
   },
   openGraph: {
     title: "Energy & Clean Transition — Zawr Industries",
-    description: "Accelerating industrial decarbonization through utility-scale renewable generation, BESS microgrids, and green hydrogen infrastructure.",
+    description: "Accelerating clean energy transition and forecourt e-mobility modernization through ultra-fast EV charging, utility solar, and BESS microgrid infrastructure.",
     url: "https://zawrindustries.com/industries/energy",
     type: "website",
     images: [
@@ -35,7 +35,7 @@ export default function EnergyPage() {
       'name': 'Zawr Industries LLP',
       'url': 'https://zawrindustries.com',
     },
-    'serviceType': 'Renewable Energy Generation, Industrial Microgrids, BESS Storage & Green Hydrogen Systems',
+    'serviceType': 'EV Charging Forecourt Infrastructure, Renewable Energy Generation, Industrial Microgrids, & BESS Storage Systems',
     'areaServed': ['India', 'United Arab Emirates', 'United States', 'Global'],
   };
 
@@ -48,15 +48,15 @@ export default function EnergyPage() {
         'name': 'What energy solutions does Zawr Industries provide?',
         'acceptedAnswer': {
           '@type': 'Answer',
-          'text': 'Zawr Energy engineers utility-scale solar PV farms, aerodynamic alpine wind turbine corridors, grid-tied battery energy storage systems (BESS), hybrid industrial microgrids, and green hydrogen production facilities.',
+          'text': 'Zawr Energy engineers turnkey retail forecourt EV charging plazas, modular 60kW–360kW DC fast chargers, utility-scale solar PV fields, wind turbine corridors, and grid-tied battery energy storage systems (BESS).',
         },
       },
       {
         '@type': 'Question',
-        'name': 'How do Zawr hybrid microgrids benefit enterprise industrial operations?',
+        'name': 'How does Zawr help petrol pumps and forecourt operators transition to EV charging?',
         'acceptedAnswer': {
           '@type': 'Answer',
-          'text': 'Our hybrid microgrids combine on-site renewable generation with large-scale BESS and real-time AI load-balancing to provide 99.99% autonomous uptime, peak-shaving, and up to 45% reduction in corporate carbon emissions.',
+          'text': 'We deliver end-to-end modernization for fuel forecourts, integrating ultra-fast DC dispensers with architectural solar canopies, dynamic load routing, and on-site BESS buffer storage to prevent grid capacity bottlenecks.',
         },
       },
       {
@@ -64,7 +64,7 @@ export default function EnergyPage() {
         'name': 'Can Zawr Energy support commercial decarbonization and corporate ESG goals?',
         'acceptedAnswer': {
           '@type': 'Answer',
-          'text': 'Yes. We partner with industrial enterprises, tech parks, and commercial hubs to engineer custom Power Purchase Agreements (PPAs), turnkey clean energy infrastructure, and verified carbon abatement auditing.',
+          'text': 'Yes. We partner with commercial hubs, fleet operators, and industrial enterprises to engineer custom clean power systems, microgrid resilience, and EV infrastructure.',
         },
       },
     ],
