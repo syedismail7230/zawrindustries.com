@@ -1358,16 +1358,16 @@ export default function HoldingPageClient() {
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
-          padding: 'clamp(4.5rem, 8vh, 7rem) clamp(1rem, 3vw, 2.5rem)',
+          padding: 'clamp(4.5rem, 8vh, 7rem) clamp(1rem, 4vw, 4rem)',
           backgroundColor: '#ffffff',
           position: 'relative',
           overflow: 'hidden',
           borderBottom: '1px solid #f1f5f9',
         }}
       >
-        <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '1840px', margin: '0 auto', width: '100%' }}>
           {/* Section Header */}
-          <div style={{ textAlign: 'center', maxWidth: '750px', margin: '0 auto clamp(2.5rem, 5vh, 4rem)' }}>
+          <div style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto clamp(2.5rem, 5vh, 4rem)' }}>
             <h2
               style={{
                 fontSize: 'clamp(2.2rem, 4.2vw, 3.4rem)',
@@ -1389,49 +1389,55 @@ export default function HoldingPageClient() {
               __html: `
               .holding-benefits-triptych {
                 display: grid;
-                grid-template-columns: minmax(320px, 520px) minmax(360px, 1fr) minmax(320px, 520px);
-                gap: clamp(1rem, 2vw, 3rem);
+                grid-template-columns: minmax(280px, 440px) minmax(520px, 1fr) minmax(280px, 440px);
+                gap: clamp(2rem, 5vw, 7rem);
                 align-items: center;
-                justify-content: center;
-                max-width: 1760px;
+                justify-content: space-between;
+                max-width: 1840px;
+                width: 100%;
                 margin: 0 auto;
               }
               .statue-col {
                 display: flex;
-                justify-content: center;
                 align-items: flex-start;
-                height: clamp(620px, 72vh, 840px);
+                height: clamp(520px, 60vh, 700px);
                 overflow: hidden;
                 user-select: none;
                 position: relative;
+                pointer-events: none;
+              }
+              .statue-col.left-statue {
+                justify-content: flex-start;
+              }
+              .statue-col.right-statue {
+                justify-content: flex-end;
               }
               .statue-col-img {
                 width: 100%;
-                min-width: 520px;
-                max-width: none;
+                max-width: 460px;
                 height: auto;
-                transform: scale(2.15) translateY(16%);
-                transform-origin: top center;
-                filter: drop-shadow(0 30px 45px rgba(15, 23, 42, 0.08));
-                transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-              }
-              .statue-col:hover .statue-col-img {
-                transform: scale(2.18) translateY(15%);
+                display: block;
+                object-fit: contain;
+                transform: none;
+                filter: drop-shadow(0 20px 35px rgba(15, 23, 42, 0.06));
+                transition: transform 0.4s ease;
               }
               .barrel-roll-stage {
-                perspective: 1200px;
+                perspective: 1400px;
                 perspective-origin: 50% 50%;
                 transform-style: preserve-3d;
-                height: 560px;
-                min-height: 560px;
-                max-height: 560px;
+                height: 600px;
+                min-height: 600px;
+                max-height: 600px;
                 width: 100%;
-                max-width: 680px;
+                max-width: 780px;
                 margin: 0 auto;
                 position: relative;
                 overflow: visible;
                 user-select: none;
                 cursor: grab;
+                -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+                mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
               }
               .barrel-roll-stage:active {
                 cursor: grabbing;
@@ -1443,7 +1449,7 @@ export default function HoldingPageClient() {
                 right: 0;
                 margin: 0 auto;
                 width: 100%;
-                max-width: 620px;
+                max-width: 720px;
                 cursor: pointer;
                 display: flex;
                 flex-direction: column;
@@ -1451,35 +1457,37 @@ export default function HoldingPageClient() {
                 text-align: center;
                 transform-style: preserve-3d;
                 will-change: transform, opacity, filter;
-                transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
-                            opacity 0.5s ease,
-                            filter 0.5s ease;
-                padding: 0.5rem 1.25rem;
+                transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+                            opacity 0.55s ease,
+                            filter 0.55s ease;
+                padding: 0.75rem 1.5rem;
                 background: transparent;
                 border: none;
                 outline: none;
               }
               .barrel-item-title {
-                font-size: clamp(1.35rem, 2.1vw, 2rem);
-                font-weight: 400;
+                font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+                font-weight: 300;
                 color: #94a3b8;
-                letter-spacing: -0.02em;
+                letter-spacing: -0.01em;
                 transition: color 0.35s ease, font-size 0.35s ease;
-                line-height: 1.25;
+                line-height: 1.3;
                 white-space: nowrap;
               }
               .barrel-item:hover .barrel-item-title {
                 color: #475569;
               }
               .barrel-item.active .barrel-item-title {
-                font-size: clamp(1.85rem, 2.9vw, 2.75rem);
-                font-weight: 700;
+                font-size: clamp(2.3rem, 3.8vw, 3.25rem);
+                font-weight: 300;
                 color: #0f172a;
-                letter-spacing: -0.03em;
+                letter-spacing: -0.035em;
+                line-height: 1.15;
                 white-space: normal;
+                max-width: 640px;
               }
               .barrel-item-detail {
-                margin-top: 0.95rem;
+                margin-top: 1.25rem;
                 animation: barrelReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
                 display: flex;
                 flex-direction: column;
@@ -1488,7 +1496,7 @@ export default function HoldingPageClient() {
               @keyframes barrelReveal {
                 from {
                   opacity: 0;
-                  transform: translateY(10px) scale(0.96);
+                  transform: translateY(12px) scale(0.97);
                 }
                 to {
                   opacity: 1;
@@ -1496,22 +1504,23 @@ export default function HoldingPageClient() {
                 }
               }
               .barrel-item-summary {
-                font-size: 0.96rem;
+                font-size: 1.05rem;
                 color: #64748b;
-                line-height: 1.65;
-                margin: 0 0 0.85rem 0;
-                max-width: 500px;
+                line-height: 1.7;
+                margin: 0 0 1.25rem 0;
+                max-width: 560px;
                 text-align: center;
+                font-weight: 300;
               }
               .barrel-item-badge {
                 display: inline-flex;
                 align-items: center;
-                gap: 8px;
-                font-size: 0.82rem;
-                color: #475569;
-                background: rgba(245, 158, 11, 0.08);
-                padding: 4px 14px;
-                border-radius: 100px;
+                gap: 10px;
+                font-size: 0.94rem;
+                background: transparent;
+                border: none;
+                padding: 0;
+                margin-top: 0.25rem;
               }
               @media (max-width: 1024px) {
                 .holding-benefits-triptych {
@@ -1554,21 +1563,51 @@ export default function HoldingPageClient() {
                 if (offset > Math.floor(N / 2)) offset -= N;
                 if (offset < -Math.floor(N / 2)) offset += N;
 
-                // 3D Cylindrical Geometry
-                const angleDeg = offset * -34;
-                const scale = isActive ? 1 : Math.max(0.72, 1 - Math.abs(offset) * 0.1);
-                const opacity = isActive ? 1 : Math.max(0.18, 0.6 - Math.abs(offset) * 0.22);
-                const blur = isActive ? 0 : Math.min(1.2, Math.abs(offset) * 0.5);
+                // 3D Geometry with complete clutter elimination & generous breathing room
+                let transformStyle = '';
+                let opacityStyle = 0;
+                let blurStyle = 0;
+                let pointerEventsStyle: 'auto' | 'none' = 'none';
+
+                if (offset === 0) {
+                  // Active Center Card
+                  transformStyle = 'translateY(-50%) rotateX(0deg) translateZ(190px) scale(1)';
+                  opacityStyle = 1;
+                  blurStyle = 0;
+                  pointerEventsStyle = 'auto';
+                } else if (offset === -1) {
+                  // Previous Item (Positioned well above the active title with clear whitespace)
+                  transformStyle = 'translateY(calc(-50% - 215px)) rotateX(26deg) translateZ(60px) scale(0.85)';
+                  opacityStyle = 0.35;
+                  blurStyle = 0.3;
+                  pointerEventsStyle = 'auto';
+                } else if (offset === 1) {
+                  // Next Item (Positioned well below the active badge with clear whitespace)
+                  transformStyle = 'translateY(calc(-50% + 215px)) rotateX(-26deg) translateZ(60px) scale(0.85)';
+                  opacityStyle = 0.35;
+                  blurStyle = 0.3;
+                  pointerEventsStyle = 'auto';
+                } else {
+                  // Outer items (offset = ±2): hidden completely to eliminate ghosting/clutter
+                  transformStyle = offset < 0
+                    ? 'translateY(calc(-50% - 320px)) rotateX(45deg) translateZ(0px) scale(0.65)'
+                    : 'translateY(calc(-50% + 320px)) rotateX(-45deg) translateZ(0px) scale(0.65)';
+                  opacityStyle = 0;
+                  blurStyle = 2;
+                  pointerEventsStyle = 'none';
+                }
 
                 return (
                   <div
                     key={benefit.id}
                     className={`barrel-item ${isActive ? 'active' : ''}`}
                     style={{
-                      transform: `translateY(-50%) rotateX(${angleDeg}deg) translateZ(220px) scale(${scale})`,
-                      opacity,
-                      filter: blur > 0 ? `blur(${blur}px)` : 'none',
+                      transform: transformStyle,
+                      opacity: opacityStyle,
+                      filter: blurStyle > 0 ? `blur(${blurStyle}px)` : 'none',
                       zIndex: isActive ? 10 : 5 - Math.abs(offset),
+                      pointerEvents: pointerEventsStyle,
+                      visibility: Math.abs(offset) >= 2 ? 'hidden' : 'visible',
                     }}
                     onMouseEnter={() => setActiveBenefit(idx)}
                     onClick={() => setActiveBenefit(idx)}
@@ -1586,9 +1625,9 @@ export default function HoldingPageClient() {
                       <div className="barrel-item-detail">
                         <p className="barrel-item-summary">{benefit.summary}</p>
                         <div className="barrel-item-badge">
-                          <span style={{ fontWeight: 700, color: '#d97706' }}>{benefit.metric}</span>
+                          <span style={{ fontWeight: 400, color: '#d97706' }}>{benefit.metric}</span>
                           <span style={{ color: '#cbd5e1' }}>•</span>
-                          <span style={{ color: '#64748b', fontWeight: 500 }}>{benefit.metricLabel}</span>
+                          <span style={{ color: '#64748b', fontWeight: 300 }}>{benefit.metricLabel}</span>
                         </div>
                       </div>
                     )}
