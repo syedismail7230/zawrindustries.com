@@ -84,7 +84,7 @@ export default function EnergyPageClient() {
           justifyContent: 'center',
           alignItems: 'center',
           padding: '0 1.5rem',
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45)), url("/assets/energy/energy-hero-wind.jpg")',
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45)), url("/assets/energy-hero-bg.png")',
           backgroundSize: 'cover',
           backgroundPosition: 'center 40%',
           backgroundRepeat: 'no-repeat',

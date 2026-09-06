@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: '/assets/energy/energy-hero-wind.jpg',
+        url: '/assets/energy-hero-bg.png',
         width: 1920,
         height: 1080,
         alt: 'Zawr Energy — Clean Power Infrastructure',
