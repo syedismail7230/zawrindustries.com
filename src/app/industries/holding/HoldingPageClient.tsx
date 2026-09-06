@@ -342,7 +342,7 @@ const BLUEPRINT_SHELVES: BlueprintShelfItem[] = [
     sopCode: 'SOP-RUN-01',
     timelineOrSla: 'Sub-Second Sync',
     books: ['Store Operations', 'POS Systems', 'Inventory Management', 'Staff Attendance'],
-    summary: 'VelocityOS edge point-of-sale infrastructure syncing every SKU transaction, shift clock-in, and inventory burn-rate directly to holding telemetry.',
+    summary: 'Enterprise cloud point-of-sale infrastructure syncing every SKU transaction, shift clock-in, and inventory burn-rate directly to holding telemetry.',
     deliverables: [
       'Sub-second register transaction sync with cloud telemetry',
       'Biometric employee clock-in with geo-fencing checks',
@@ -504,31 +504,41 @@ const BLUEPRINT_SHELVES: BlueprintShelfItem[] = [
   }
 ];
 
-const COMPARISON_ROWS = [
+const PARTNER_BENEFITS = [
   {
-    criteria: 'Store Setup & Turnkey Launch',
-    traditional: '6–9 months of delayed vendor negotiations and fit-out disputes',
-    zawr: '45–60 days rapid turnkey rollout with in-house architectural teams',
+    id: 'turnkey',
+    title: 'Rapid Turnkey Deployment',
+    summary: 'Accelerated 45–60 day store opening cycles supported by in-house architectural teams, master contractor networks, and permit clearance.',
+    metric: '45–60 Days',
+    metricLabel: 'From Lease to Grand Opening',
   },
   {
-    criteria: 'Supply Chain & Procurement',
-    traditional: 'Fragmented local buying with minimal volume discounts',
-    zawr: 'Centralized bulk procurement cutting inventory COGS by up to 30%',
+    id: 'procurement',
+    title: 'Centralized Tier-1 Purchasing',
+    summary: 'Aggregated volume contracts delivering 20% to 30% reduction in packaging, raw ingredients, and operating equipment unit COGS.',
+    metric: '20%–30%',
+    metricLabel: 'Unit COGS Reduction',
   },
   {
-    criteria: 'Point-of-Sale & Operations Tech',
-    traditional: 'Disparate off-the-shelf POS software with manual spreadsheet auditing',
-    zawr: 'Unified VelocityOS telemetry with live automated revenue and inventory audits',
+    id: 'telemetry',
+    title: 'Real-Time Cloud POS Telemetry',
+    summary: 'Cloud-native point-of-sale telemetry with sub-second digital cash auditing, automated replenishment triggers, and live EBITDA scorecards.',
+    metric: '99.98%',
+    metricLabel: 'Cash & Inventory Audit Accuracy',
   },
   {
-    criteria: 'Workforce Onboarding & Retention',
-    traditional: 'High frontline churn with inconsistent store customer service',
-    zawr: 'Continuous certified training academy with structured career ladders',
+    id: 'workforce',
+    title: 'Certified Workforce Academy',
+    summary: 'Standardized employee onboarding with mandatory 40-hour brand certification, mystery shopper quality audits, and clear career ladders.',
+    metric: '40 Hours',
+    metricLabel: 'Mandatory Staff Certification',
   },
   {
-    criteria: 'Expansion & Capital Scalability',
-    traditional: 'Limited individual borrowing capacity slowing multi-unit growth',
-    zawr: 'Institutional holding capital & shared corporate service scalability',
+    id: 'capital',
+    title: 'Institutional Capital & Scale',
+    summary: 'Private equity-backed growth syndication combined with centralized corporate legal, HR management, tax auditing, and territorial governance.',
+    metric: '10+ Locations',
+    metricLabel: 'Concurrent Expansion Capacity',
   },
 ];
 
@@ -543,7 +553,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'How does Zawr maintain brand standards across multiple franchise locations?',
-    a: 'Every brand operated under Zawr Holding is managed via strict Standard Operating Procedures (SOPs), real-time VelocityOS POS telemetry, secret-shopper quality audits, and centralized staff certification at our in-house training academy.',
+    a: 'Every brand operated under Zawr Holding is managed via strict Standard Operating Procedures (SOPs), real-time cloud POS telemetry, secret-shopper quality audits, and centralized staff certification at our in-house training academy.',
   },
   {
     q: 'Can global brands or property developers partner with Zawr Holding?',
@@ -556,6 +566,7 @@ export default function HoldingPageClient() {
   const [selectedVertical, setSelectedVertical] = useState<OperatingVertical | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+  const [activeBenefit, setActiveBenefit] = useState<number>(2);
 
   // Operating Blueprint Dual-Wing State
   const [leftShelfId, setLeftShelfId] = useState<string>('deploy-s1');
@@ -1299,84 +1310,247 @@ export default function HoldingPageClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          5. VALUE COMPARISON MATRIX (Standalone vs Zawr Holding)
+          5. WHY BRANDS PARTNER WITH ZAWR HOLDING (Classical Triptych)
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
-          padding: 'clamp(4.5rem, 9vh, 7rem) 1.5rem',
-          backgroundColor: '#f8fafc',
-          borderBottom: '1px solid #e2e8f0',
+          padding: 'clamp(4.5rem, 8vh, 7rem) clamp(1rem, 3vw, 2.5rem)',
+          backgroundColor: '#ffffff',
+          position: 'relative',
+          overflow: 'hidden',
+          borderBottom: '1px solid #f1f5f9',
         }}
       >
-        <div style={{ maxWidth: '1080px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto clamp(2.5rem, 5vh, 4rem)' }}>
+        <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
+          {/* Section Header */}
+          <div style={{ textAlign: 'center', maxWidth: '750px', margin: '0 auto clamp(2.5rem, 5vh, 4rem)' }}>
             <h2
               style={{
-                fontSize: 'clamp(2rem, 4vw, 3rem)',
+                fontSize: 'clamp(2.2rem, 4.2vw, 3.4rem)',
                 fontWeight: 400,
                 letterSpacing: '-0.03em',
                 color: '#0f172a',
-                margin: '0 0 1rem 0',
+                margin: '0 0 0.85rem 0',
               }}
             >
               Why Brands Partner With Zawr Holding
             </h2>
-            <p style={{ fontSize: '1.02rem', color: '#64748b', lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: '1.05rem', color: '#64748b', lineHeight: 1.6, margin: 0 }}>
               The operational advantage of scaling franchises with an institutional multi-brand engine.
             </p>
           </div>
 
-          <div
-            style={{
-              backgroundColor: '#ffffff',
-              borderRadius: '20px',
-              border: '1px solid #e2e8f0',
-              overflow: 'hidden',
-              boxShadow: '0 4px 25px rgba(0, 0, 0, 0.04)',
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+              .holding-benefits-triptych {
+                display: grid;
+                grid-template-columns: minmax(180px, 320px) minmax(360px, 1fr) minmax(180px, 320px);
+                gap: clamp(1rem, 2.5vw, 3rem);
+                align-items: center;
+                justify-content: center;
+                max-width: 1400px;
+                margin: 0 auto;
+              }
+              .statue-col {
+                display: flex;
+                justify-content: center;
+                align-items: flex-end;
+                height: 100%;
+                user-select: none;
+              }
+              .statue-col-img {
+                width: 100%;
+                max-width: 310px;
+                height: auto;
+                max-height: 560px;
+                object-fit: contain;
+                filter: drop-shadow(0 20px 30px rgba(15, 23, 42, 0.05));
+                transition: transform 0.35s ease;
+              }
+              .statue-col:hover .statue-col-img {
+                transform: translateY(-4px);
+              }
+              .barrel-roll-stage {
+                perspective: 1200px;
+                perspective-origin: 50% 50%;
+                transform-style: preserve-3d;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                min-height: 490px;
+                padding: 1.5rem 0;
+                user-select: none;
+                position: relative;
+              }
+              .barrel-item {
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                transform-style: preserve-3d;
+                will-change: transform, opacity, filter;
+                transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
+                            opacity 0.45s ease,
+                            filter 0.45s ease;
+                padding: 0.35rem 1rem;
+                width: 100%;
+                max-width: 600px;
+                background: transparent;
+                border: none;
+                outline: none;
+              }
+              .barrel-item-title {
+                font-size: clamp(1.4rem, 2.2vw, 2.1rem);
+                font-weight: 400;
+                color: #94a3b8;
+                letter-spacing: -0.02em;
+                transition: color 0.3s ease, font-size 0.3s ease;
+                line-height: 1.25;
+              }
+              .barrel-item:hover .barrel-item-title {
+                color: #475569;
+              }
+              .barrel-item.active .barrel-item-title {
+                font-size: clamp(1.75rem, 2.7vw, 2.6rem);
+                font-weight: 700;
+                color: #0f172a;
+                letter-spacing: -0.03em;
+              }
+              .barrel-item-detail {
+                margin-top: 0.85rem;
+                animation: barrelReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+              }
+              @keyframes barrelReveal {
+                from {
+                  opacity: 0;
+                  transform: translateY(10px) scale(0.96);
+                }
+                to {
+                  opacity: 1;
+                  transform: translateY(0) scale(1);
+                }
+              }
+              .barrel-item-summary {
+                font-size: 0.96rem;
+                color: #64748b;
+                line-height: 1.65;
+                margin: 0 0 0.85rem 0;
+                max-width: 480px;
+                text-align: center;
+              }
+              .barrel-item-badge {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                font-size: 0.82rem;
+                color: #475569;
+                background: rgba(245, 158, 11, 0.08);
+                padding: 4px 14px;
+                border-radius: 100px;
+              }
+              @media (max-width: 1024px) {
+                .holding-benefits-triptych {
+                  grid-template-columns: 1fr;
+                  gap: 2.5rem;
+                }
+                .statue-col {
+                  display: none;
+                }
+              }
+            `,
             }}
-          >
-            {/* Table Header */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'minmax(180px, 1.2fr) minmax(220px, 1.8fr) minmax(220px, 2fr)',
-                backgroundColor: '#0f172a',
-                color: '#ffffff',
-                padding: '1.25rem 1.5rem',
-                fontSize: '0.85rem',
-                fontWeight: 700,
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-              }}
-            >
-              <div>Operational Dimension</div>
-              <div style={{ color: '#94a3b8' }}>Standalone Franchisee</div>
-              <div style={{ color: '#f59e0b' }}>Zawr Holding Platform</div>
+          />
+
+          <div className="holding-benefits-triptych">
+            {/* Left Roman Statue */}
+            <div className="statue-col left-statue">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/assets/hch-1.png"
+                alt="Classical Pillar of Strength — Zawr Holding"
+                className="statue-col-img"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
 
-            {/* Table Rows */}
-            {COMPARISON_ROWS.map((row, rIdx) => (
-              <div
-                key={rIdx}
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'minmax(180px, 1.2fr) minmax(220px, 1.8fr) minmax(220px, 2fr)',
-                  padding: '1.25rem 1.5rem',
-                  borderTop: '1px solid #f1f5f9',
-                  backgroundColor: rIdx % 2 === 0 ? '#ffffff' : '#fafafa',
-                  fontSize: '0.9rem',
-                  lineHeight: 1.55,
-                  alignItems: 'center',
-                }}
-              >
-                <div style={{ fontWeight: 600, color: '#0f172a' }}>{row.criteria}</div>
-                <div style={{ color: '#64748b', paddingRight: '1rem' }}>{row.traditional}</div>
-                <div style={{ color: '#0f172a', fontWeight: 500, display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ color: '#16a34a', fontWeight: 700 }}>✓</span>
-                  <span>{row.zawr}</span>
-                </div>
-              </div>
-            ))}
+            {/* Center 3D Barrel Roll Benefits List */}
+            <div
+              className="barrel-roll-stage"
+              onWheel={(e) => {
+                if (Math.abs(e.deltaY) > 30) {
+                  if (e.deltaY > 0) {
+                    setActiveBenefit((prev) => (prev < PARTNER_BENEFITS.length - 1 ? prev + 1 : 0));
+                  } else {
+                    setActiveBenefit((prev) => (prev > 0 ? prev - 1 : PARTNER_BENEFITS.length - 1));
+                  }
+                }
+              }}
+            >
+              {PARTNER_BENEFITS.map((benefit, idx) => {
+                const isActive = activeBenefit === idx;
+                const offset = idx - activeBenefit;
+                // 3D Barrel Roll Coordinates
+                const rotateX = offset * -25;
+                const translateY = offset * 10;
+                const translateZ = (Math.cos((offset * Math.PI) / 4.2) - 1) * 55;
+                const scale = Math.max(0.74, 1 - Math.abs(offset) * 0.08);
+                const opacity = isActive ? 1 : Math.max(0.18, 0.62 - Math.abs(offset) * 0.22);
+                const blur = isActive ? 0 : Math.min(1.2, Math.abs(offset) * 0.5);
+
+                return (
+                  <div
+                    key={benefit.id}
+                    className={`barrel-item ${isActive ? 'active' : ''}`}
+                    style={{
+                      transform: `rotateX(${rotateX}deg) translateY(${translateY}px) translateZ(${translateZ}px) scale(${scale})`,
+                      opacity,
+                      filter: blur > 0 ? `blur(${blur}px)` : 'none',
+                    }}
+                    onMouseEnter={() => setActiveBenefit(idx)}
+                    onClick={() => setActiveBenefit(idx)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        setActiveBenefit(idx);
+                      }
+                    }}
+                  >
+                    <div className="barrel-item-title">{benefit.title}</div>
+                    {isActive && (
+                      <div className="barrel-item-detail">
+                        <p className="barrel-item-summary">{benefit.summary}</p>
+                        <div className="barrel-item-badge">
+                          <span style={{ fontWeight: 700, color: '#d97706' }}>{benefit.metric}</span>
+                          <span style={{ color: '#cbd5e1' }}>•</span>
+                          <span style={{ color: '#64748b', fontWeight: 500 }}>{benefit.metricLabel}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Right Classical Muse Statue */}
+            <div className="statue-col right-statue">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/assets/hch-2.png"
+                alt="Classical Pillar of Wisdom — Zawr Holding"
+                className="statue-col-img"
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
           </div>
         </div>
       </section>
