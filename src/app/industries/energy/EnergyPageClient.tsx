@@ -161,6 +161,7 @@ export default function EnergyPageClient() {
               maxWidth: '100vw',
               objectFit: 'contain',
               objectPosition: 'bottom center',
+              filter: 'drop-shadow(0 2px 14px rgba(245, 158, 11, 0.12)) contrast(1.02) brightness(1.02)',
             }}
           >
             <source src="/assets/turbine-alpha.webm" type="video/webm" />
