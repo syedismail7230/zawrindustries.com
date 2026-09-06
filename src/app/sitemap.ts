@@ -100,6 +100,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     } else if (['/contact'].includes(route)) {
       priority = 0.95;
       changeFrequency = 'daily';
+    } else if (['/pronunciation'].includes(route)) {
+      priority = 0.9;
+      changeFrequency = 'weekly';
     } else if (['/about', '/platforms', '/investors', '/careers', '/newsroom'].includes(route)) {
       priority = 0.75;
       changeFrequency = 'weekly';
