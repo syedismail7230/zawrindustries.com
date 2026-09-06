@@ -1050,16 +1050,16 @@ export default function EnergyPageClient() {
             </div>
           </div>
 
-          {/* Stacked Full-Card Stage (Centered in Viewport) */}
+          {/* Stacked Full-Card Stage (Centered in Viewport - Matching OurProcessSection full-bleed cards) */}
           <div
             style={{
               position: 'absolute',
-              top: '56%',
+              top: '55%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
               width: '90%',
-              maxWidth: '1180px',
-              height: 'clamp(420px, 58vh, 560px)',
+              maxWidth: '1100px',
+              height: 'clamp(440px, 60vh, 580px)',
               zIndex: 10,
             }}
           >
@@ -1108,167 +1108,211 @@ export default function EnergyPageClient() {
                   style={{
                     position: 'absolute',
                     inset: 0,
-                    borderRadius: '32px',
+                    borderRadius: '28px',
                     overflow: 'hidden',
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #e2e8f0',
+                    backgroundColor: '#0a0e1a',
                     zIndex: index + 1,
                     opacity,
                     transform: `translateY(calc(${translateY}% + ${stackShift}px)) scale(${scale})`,
                     transformOrigin: 'center bottom',
                     willChange: 'transform, opacity',
                     transition: 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease',
-                    boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.12)',
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                    gap: 'clamp(2rem, 4vw, 3.5rem)',
-                    alignItems: 'center',
-                    padding: 'clamp(1.75rem, 3.5vw, 3rem)',
-                    boxSizing: 'border-box',
+                    boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.35)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
                   }}
                   className="energy-stacked-card"
                 >
-                  {/* Left Column: Project Details */}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', zIndex: 2 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <span
-                        style={{
-                          fontSize: '0.82rem',
-                          fontWeight: 600,
-                          color: '#f59e0b',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.08em',
-                        }}
-                      >
-                        {item.category}
-                      </span>
-                      <span style={{ color: '#cbd5e1' }}>·</span>
-                      <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>{item.year}</span>
-                    </div>
+                  {/* Full-Bleed Card Image */}
+                  <img
+                    src={item.image}
+                    alt={item.title}
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      display: 'block',
+                    }}
+                  />
 
-                    <h3
+                  {/* Multi-Stop Cinematic Gradient Overlay */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      background: 'linear-gradient(to top, rgba(5, 8, 18, 0.95) 0%, rgba(5, 8, 18, 0.72) 42%, rgba(5, 8, 18, 0.22) 72%, rgba(5, 8, 18, 0.45) 100%)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      justifyContent: 'space-between',
+                      padding: 'clamp(1.75rem, 3.5vw, 3rem)',
+                      boxSizing: 'border-box',
+                      zIndex: 2,
+                    }}
+                  >
+                    {/* Top Header Row Inside Card */}
+                    <div
                       style={{
-                        fontSize: 'clamp(1.6rem, 2.8vw, 2.4rem)',
-                        fontWeight: 400,
-                        letterSpacing: '-0.03em',
-                        color: '#0f172a',
-                        lineHeight: 1.2,
-                        margin: 0,
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                        gap: '12px',
+                        zIndex: 3,
                       }}
                     >
-                      {item.title}
-                    </h3>
-
-                    <p
-                      style={{
-                        fontSize: 'clamp(0.92rem, 1.3vw, 1.05rem)',
-                        color: '#475569',
-                        lineHeight: 1.7,
-                        margin: 0,
-                      }}
-                    >
-                      {item.description}
-                    </p>
-
-                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                      {item.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          style={{
-                            padding: '4px 12px',
-                            borderRadius: '100px',
-                            backgroundColor: '#f1f5f9',
-                            fontSize: '0.78rem',
-                            fontWeight: 500,
-                            color: '#475569',
-                          }}
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-
-                    <div style={{ marginTop: '0.5rem' }}>
-                      <Link
-                        href="/contact/client-relations"
+                      <div
                         style={{
                           display: 'inline-flex',
                           alignItems: 'center',
                           gap: '8px',
-                          fontSize: '0.95rem',
-                          fontWeight: 600,
-                          color: '#0f172a',
-                          textDecoration: 'none',
-                          borderBottom: '1px solid #0f172a',
-                          paddingBottom: '2px',
-                          transition: 'all 0.2s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.color = '#f59e0b';
-                          e.currentTarget.style.borderBottomColor = '#f59e0b';
-                          e.currentTarget.style.paddingLeft = '4px';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.color = '#0f172a';
-                          e.currentTarget.style.borderBottomColor = '#0f172a';
-                          e.currentTarget.style.paddingLeft = '0px';
+                          padding: '6px 16px',
+                          borderRadius: '100px',
+                          backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                          backdropFilter: 'blur(12px)',
+                          border: '1px solid rgba(255, 255, 255, 0.18)',
                         }}
                       >
-                        <span>Deploy with Zawr Energy</span>
-                        <span>→</span>
-                      </Link>
+                        <span
+                          style={{
+                            fontSize: '0.82rem',
+                            fontWeight: 700,
+                            color: '#f59e0b',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.08em',
+                          }}
+                        >
+                          {item.category}
+                        </span>
+                        <span style={{ color: 'rgba(255, 255, 255, 0.4)' }}>·</span>
+                        <span style={{ fontSize: '0.82rem', color: 'rgba(255, 255, 255, 0.9)', fontWeight: 500 }}>{item.year}</span>
+                      </div>
+
+                      <div
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '6px 16px',
+                          borderRadius: '100px',
+                          backgroundColor: 'rgba(245, 158, 11, 0.2)',
+                          backdropFilter: 'blur(12px)',
+                          border: '1px solid rgba(245, 158, 11, 0.45)',
+                        }}
+                      >
+                        <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#f59e0b', display: 'inline-block' }} />
+                        <span
+                          style={{
+                            fontSize: '0.8rem',
+                            fontWeight: 600,
+                            color: '#ffffff',
+                            letterSpacing: '0.03em',
+                          }}
+                        >
+                          {item.metrics}
+                        </span>
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Right Column: Project Image */}
-                  <div
-                    style={{
-                      position: 'relative',
-                      borderRadius: '24px',
-                      overflow: 'hidden',
-                      height: '100%',
-                      maxHeight: '400px',
-                      aspectRatio: '16 / 10',
-                      backgroundColor: '#f1f5f9',
-                      boxShadow: '0 12px 30px rgba(0, 0, 0, 0.08)',
-                    }}
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        display: 'block',
-                      }}
-                    />
-
-                    {/* Floating Top-Right Metric Badge */}
+                    {/* Bottom Content Area Inside Card */}
                     <div
                       style={{
-                        position: 'absolute',
-                        top: '16px',
-                        right: '16px',
                         display: 'flex',
-                        gap: '8px',
+                        flexDirection: 'column',
+                        gap: '1rem',
                         zIndex: 3,
+                        maxWidth: '850px',
                       }}
                     >
-                      <span
+                      <h3
                         style={{
-                          padding: '6px 14px',
-                          borderRadius: '100px',
-                          backgroundColor: 'rgba(0, 0, 0, 0.7)',
-                          backdropFilter: 'blur(8px)',
+                          fontSize: 'clamp(1.75rem, 3.2vw, 2.8rem)',
+                          fontWeight: 500,
                           color: '#ffffff',
-                          fontSize: '0.75rem',
-                          fontWeight: 600,
-                          letterSpacing: '0.04em',
+                          letterSpacing: '-0.025em',
+                          lineHeight: 1.15,
+                          margin: 0,
+                          textShadow: '0 2px 10px rgba(0, 0, 0, 0.5)',
                         }}
                       >
-                        {item.metrics}
-                      </span>
+                        {item.title}
+                      </h3>
+
+                      <p
+                        style={{
+                          fontSize: 'clamp(0.95rem, 1.4vw, 1.12rem)',
+                          color: 'rgba(255, 255, 255, 0.88)',
+                          lineHeight: 1.6,
+                          margin: 0,
+                          textShadow: '0 1px 6px rgba(0, 0, 0, 0.4)',
+                          maxWidth: '750px',
+                        }}
+                      >
+                        {item.description}
+                      </p>
+
+                      {/* Tags & Action Button Row */}
+                      <div
+                        style={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          flexWrap: 'wrap',
+                          gap: '1rem',
+                          marginTop: '0.5rem',
+                        }}
+                      >
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                          {item.tags.map((tag) => (
+                            <span
+                              key={tag}
+                              style={{
+                                padding: '5px 14px',
+                                borderRadius: '100px',
+                                backgroundColor: 'rgba(255, 255, 255, 0.12)',
+                                backdropFilter: 'blur(8px)',
+                                border: '1px solid rgba(255, 255, 255, 0.18)',
+                                fontSize: '0.8rem',
+                                fontWeight: 500,
+                                color: '#ffffff',
+                              }}
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                        </div>
+
+                        <Link
+                          href="/contact/client-relations"
+                          style={{
+                            display: 'inline-flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            backgroundColor: '#ffffff',
+                            color: '#0f172a',
+                            padding: '10px 22px',
+                            borderRadius: '100px',
+                            fontSize: '0.88rem',
+                            fontWeight: 600,
+                            textDecoration: 'none',
+                            boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25)',
+                            transition: 'all 0.25s ease',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.backgroundColor = '#f59e0b';
+                            e.currentTarget.style.color = '#ffffff';
+                            e.currentTarget.style.transform = 'translateY(-2px)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.backgroundColor = '#ffffff';
+                            e.currentTarget.style.color = '#0f172a';
+                            e.currentTarget.style.transform = 'translateY(0)';
+                          }}
+                        >
+                          <span>Deploy with Zawr Energy</span>
+                          <span>→</span>
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
