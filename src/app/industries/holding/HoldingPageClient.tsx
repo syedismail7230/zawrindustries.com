@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import ScrollTextReveal from '@/components/ScrollTextReveal';
 
@@ -567,6 +567,50 @@ export default function HoldingPageClient() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const [activeBenefit, setActiveBenefit] = useState<number>(2);
+
+  // 3D Barrel Roll Infinite Loop & Wheel Listener
+  const barrelRef = useRef<HTMLDivElement>(null);
+  const lastScrollTime = useRef<number>(0);
+  const [isBarrelHovered, setIsBarrelHovered] = useState(false);
+
+  // Auto-rotation loop
+  useEffect(() => {
+    if (isBarrelHovered) return;
+    const timer = setInterval(() => {
+      setActiveBenefit((prev) => (prev + 1) % PARTNER_BENEFITS.length);
+    }, 3800);
+    return () => clearInterval(timer);
+  }, [isBarrelHovered]);
+
+  // Non-passive wheel event listener for smooth infinite scrolling
+  useEffect(() => {
+    const el = barrelRef.current;
+    if (!el) return;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const now = Date.now();
+      if (now - lastScrollTime.current < 150) return;
+
+      if (Math.abs(e.deltaY) > 6) {
+        lastScrollTime.current = now;
+        if (e.deltaY > 0) {
+          // Roll Down -> Next
+          setActiveBenefit((prev) => (prev + 1) % PARTNER_BENEFITS.length);
+        } else {
+          // Roll Up -> Previous (Infinite Loop)
+          setActiveBenefit((prev) => (prev - 1 + PARTNER_BENEFITS.length) % PARTNER_BENEFITS.length);
+        }
+      }
+    };
+
+    el.addEventListener('wheel', handleWheel, { passive: false });
+    return () => {
+      el.removeEventListener('wheel', handleWheel);
+    };
+  }, []);
 
   // Operating Blueprint Dual-Wing State
   const [leftShelfId, setLeftShelfId] = useState<string>('deploy-s1');
@@ -1345,31 +1389,33 @@ export default function HoldingPageClient() {
               __html: `
               .holding-benefits-triptych {
                 display: grid;
-                grid-template-columns: minmax(180px, 320px) minmax(360px, 1fr) minmax(180px, 320px);
-                gap: clamp(1rem, 2.5vw, 3rem);
+                grid-template-columns: minmax(280px, 460px) minmax(380px, 1fr) minmax(280px, 460px);
+                gap: clamp(1rem, 2vw, 3rem);
                 align-items: center;
                 justify-content: center;
-                max-width: 1400px;
+                max-width: 1680px;
                 margin: 0 auto;
               }
               .statue-col {
                 display: flex;
                 justify-content: center;
-                align-items: flex-end;
-                height: 100%;
+                align-items: flex-start;
+                height: clamp(540px, 62vh, 720px);
+                overflow: hidden;
                 user-select: none;
+                position: relative;
               }
               .statue-col-img {
                 width: 100%;
-                max-width: 310px;
+                max-width: 480px;
                 height: auto;
-                max-height: 560px;
-                object-fit: contain;
-                filter: drop-shadow(0 20px 30px rgba(15, 23, 42, 0.05));
-                transition: transform 0.35s ease;
+                transform: scale(1.65) translateY(12%);
+                transform-origin: top center;
+                filter: drop-shadow(0 25px 40px rgba(15, 23, 42, 0.08));
+                transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
               }
               .statue-col:hover .statue-col-img {
-                transform: translateY(-4px);
+                transform: scale(1.68) translateY(11%);
               }
               .barrel-roll-stage {
                 perspective: 1200px;
@@ -1380,10 +1426,14 @@ export default function HoldingPageClient() {
                 justify-content: center;
                 align-items: center;
                 text-align: center;
-                min-height: 490px;
-                padding: 1.5rem 0;
+                min-height: 520px;
+                padding: 2rem 0;
                 user-select: none;
                 position: relative;
+                cursor: grab;
+              }
+              .barrel-roll-stage:active {
+                cursor: grabbing;
               }
               .barrel-item {
                 cursor: pointer;
@@ -1392,12 +1442,12 @@ export default function HoldingPageClient() {
                 align-items: center;
                 transform-style: preserve-3d;
                 will-change: transform, opacity, filter;
-                transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1),
-                            opacity 0.45s ease,
-                            filter 0.45s ease;
-                padding: 0.35rem 1rem;
+                transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                            opacity 0.4s ease,
+                            filter 0.4s ease;
+                padding: 0.5rem 1.25rem;
                 width: 100%;
-                max-width: 600px;
+                max-width: 620px;
                 background: transparent;
                 border: none;
                 outline: none;
@@ -1414,13 +1464,13 @@ export default function HoldingPageClient() {
                 color: #475569;
               }
               .barrel-item.active .barrel-item-title {
-                font-size: clamp(1.75rem, 2.7vw, 2.6rem);
+                font-size: clamp(1.8rem, 2.8vw, 2.65rem);
                 font-weight: 700;
                 color: #0f172a;
                 letter-spacing: -0.03em;
               }
               .barrel-item-detail {
-                margin-top: 0.85rem;
+                margin-top: 0.95rem;
                 animation: barrelReveal 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
                 display: flex;
                 flex-direction: column;
@@ -1441,7 +1491,7 @@ export default function HoldingPageClient() {
                 color: #64748b;
                 line-height: 1.65;
                 margin: 0 0 0.85rem 0;
-                max-width: 480px;
+                max-width: 500px;
                 text-align: center;
               }
               .barrel-item-badge {
@@ -1482,26 +1532,25 @@ export default function HoldingPageClient() {
 
             {/* Center 3D Barrel Roll Benefits List */}
             <div
+              ref={barrelRef}
               className="barrel-roll-stage"
-              onWheel={(e) => {
-                if (Math.abs(e.deltaY) > 30) {
-                  if (e.deltaY > 0) {
-                    setActiveBenefit((prev) => (prev < PARTNER_BENEFITS.length - 1 ? prev + 1 : 0));
-                  } else {
-                    setActiveBenefit((prev) => (prev > 0 ? prev - 1 : PARTNER_BENEFITS.length - 1));
-                  }
-                }
-              }}
+              onMouseEnter={() => setIsBarrelHovered(true)}
+              onMouseLeave={() => setIsBarrelHovered(false)}
             >
               {PARTNER_BENEFITS.map((benefit, idx) => {
                 const isActive = activeBenefit === idx;
-                const offset = idx - activeBenefit;
-                // 3D Barrel Roll Coordinates
-                const rotateX = offset * -25;
-                const translateY = offset * 10;
-                const translateZ = (Math.cos((offset * Math.PI) / 4.2) - 1) * 55;
-                const scale = Math.max(0.74, 1 - Math.abs(offset) * 0.08);
-                const opacity = isActive ? 1 : Math.max(0.18, 0.62 - Math.abs(offset) * 0.22);
+                const N = PARTNER_BENEFITS.length;
+                let offset = idx - activeBenefit;
+                // Infinite modular wrap to shortest cylindrical path [-2, 2]
+                if (offset > Math.floor(N / 2)) offset -= N;
+                if (offset < -Math.floor(N / 2)) offset += N;
+
+                // 3D Cylindrical Coordinates
+                const rotateX = offset * -28;
+                const translateY = offset * (isActive ? 0 : offset > 0 ? 24 : -24);
+                const translateZ = (Math.cos((offset * Math.PI) / 3.8) - 1) * 65;
+                const scale = Math.max(0.72, 1 - Math.abs(offset) * 0.09);
+                const opacity = isActive ? 1 : Math.max(0.18, 0.58 - Math.abs(offset) * 0.2);
                 const blur = isActive ? 0 : Math.min(1.2, Math.abs(offset) * 0.5);
 
                 return (
@@ -1509,7 +1558,7 @@ export default function HoldingPageClient() {
                     key={benefit.id}
                     className={`barrel-item ${isActive ? 'active' : ''}`}
                     style={{
-                      transform: `rotateX(${rotateX}deg) translateY(${translateY}px) translateZ(${translateZ}px) scale(${scale})`,
+                      transform: `perspective(1100px) rotateX(${rotateX}deg) translateY(${translateY}px) translateZ(${translateZ}px) scale(${scale})`,
                       opacity,
                       filter: blur > 0 ? `blur(${blur}px)` : 'none',
                     }}
