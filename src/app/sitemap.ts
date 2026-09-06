@@ -51,6 +51,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/industries/manufacturing',
     '/industries/estate',
     '/industries/energy',
+    '/industries/holding',
     '/industries/healthcare',
     '/industries/fmcg',
     '/platforms',
@@ -93,7 +94,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     if (route === '') {
       priority = 1.0;
       changeFrequency = 'daily';
-    } else if (['/industries/it-service', '/industries/manufacturing', '/industries/transport-and-logistics', '/industries/estate'].includes(route)) {
+    } else if (['/industries/it-service', '/industries/manufacturing', '/industries/transport-and-logistics', '/industries/estate', '/industries/energy', '/industries/holding'].includes(route)) {
       priority = 0.98;
       changeFrequency = 'daily';
     } else if (['/contact'].includes(route)) {

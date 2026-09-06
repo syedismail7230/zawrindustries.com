@@ -27,6 +27,9 @@ export default function Footer() {
     if (pathname.startsWith('/industries/energy')) {
       return { main: 'ZAWR', sub: 'ENERGY' };
     }
+    if (pathname.startsWith('/industries/holding')) {
+      return { main: 'ZAWR', sub: 'HOLDING' };
+    }
     if (pathname.startsWith('/industries/healthcare')) {
       return { main: 'ZAWR', sub: 'HEALTH CARE' };
     }
@@ -211,6 +214,7 @@ export default function Footer() {
             <li><Link href="/industries/transport-and-logistics">Logistics and Transport</Link></li>
             <li><Link href="/industries/estate">Estate</Link></li>
             <li><Link href="/industries/energy">Energy</Link></li>
+            <li><Link href="/industries/holding">Holding</Link></li>
           </ul>
         </div>
 
