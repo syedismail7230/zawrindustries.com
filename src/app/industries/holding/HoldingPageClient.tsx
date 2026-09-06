@@ -1652,7 +1652,100 @@ export default function HoldingPageClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          6. FREQUENTLY ASKED QUESTIONS
+          6. ARCHITECTURAL PERMANENCE SHOWCASE (hch-4.png)
+      ───────────────────────────────────────────────────────────── */}
+      <section
+        style={{
+          width: '100%',
+          backgroundColor: '#ffffff',
+          padding: '0',
+          position: 'relative',
+          overflow: 'hidden',
+          borderBottom: '1px solid #e2e8f0',
+        }}
+      >
+        <div style={{ width: '100%', maxWidth: '100%', position: 'relative', overflow: 'hidden' }}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/assets/hch-4.png"
+            alt="The Architecture of Enduring Enterprise — Zawr Holding"
+            style={{
+              width: '100%',
+              height: 'auto',
+              minHeight: '440px',
+              maxHeight: '82vh',
+              objectFit: 'cover',
+              objectPosition: 'center 42%',
+              display: 'block',
+            }}
+          />
+
+          {/* Soft Dark Gradient Scrim overlay for legibility */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.35) 45%, rgba(0, 0, 0, 0.05) 100%)',
+              pointerEvents: 'none',
+            }}
+          />
+
+          {/* Bottom Left Editorial Overlay */}
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 'clamp(2rem, 5vw, 4.5rem)',
+              left: 'clamp(1.5rem, 5vw, 6vw)',
+              right: '1.5rem',
+              maxWidth: '780px',
+              color: '#ffffff',
+              zIndex: 10,
+            }}
+          >
+            <div
+              style={{
+                fontSize: '0.82rem',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: '#f59e0b',
+                fontWeight: 500,
+                marginBottom: '0.75rem',
+              }}
+            >
+              Institutional Permanence
+            </div>
+            <h3
+              style={{
+                fontSize: 'clamp(1.75rem, 4vw, 3.2rem)',
+                fontWeight: 300,
+                letterSpacing: '-0.03em',
+                lineHeight: 1.15,
+                margin: '0 0 1rem 0',
+                color: '#ffffff',
+                textShadow: '0 2px 12px rgba(0,0,0,0.5)',
+              }}
+            >
+              The Architecture of Enduring Enterprise
+            </h3>
+            <p
+              style={{
+                fontSize: 'clamp(0.98rem, 1.4vw, 1.15rem)',
+                fontWeight: 300,
+                color: 'rgba(255, 255, 255, 0.85)',
+                lineHeight: 1.65,
+                margin: 0,
+                maxWidth: '640px',
+                textShadow: '0 1px 8px rgba(0,0,0,0.5)',
+              }}
+            >
+              Combining prime commercial real estate concourses, centralized Tier-1 supply chains, and enterprise telemetry to operate world-class franchise brands at institutional scale.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          7. FREQUENTLY ASKED QUESTIONS
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
