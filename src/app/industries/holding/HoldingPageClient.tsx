@@ -2269,44 +2269,84 @@ export default function HoldingPageClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          8. HIGH-IMPACT BOTTOM CTA BANNER (Footer Signature)
+          8. INSTITUTIONAL PARTNERSHIP CTA (Holding Page Signature)
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
           position: 'relative',
-          backgroundColor: '#000000',
-          color: '#ffffff',
-          padding: 'clamp(4.5rem, 9vh, 8rem) clamp(1.25rem, 4vw, 2rem)',
+          backgroundColor: '#ffffff',
+          backgroundImage: 'radial-gradient(ellipse at 50% 120%, rgba(245, 158, 11, 0.07) 0%, rgba(255, 255, 255, 0.98) 65%, #ffffff 100%)',
+          color: '#0f172a',
+          padding: 'clamp(5rem, 10vh, 8.5rem) clamp(1.25rem, 4vw, 2.5rem)',
           textAlign: 'center',
+          borderTop: '1px solid #f1f5f9',
+          overflow: 'hidden',
         }}
       >
-        <div style={{ maxWidth: '860px', margin: '0 auto' }}>
+        <div style={{ maxWidth: '880px', margin: '0 auto', position: 'relative', zIndex: 2 }}>
+          {/* Classical Overline Ornament */}
+          <div
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '12px',
+              marginBottom: '1.25rem',
+            }}
+          >
+            <span style={{ width: '28px', height: '1px', backgroundColor: '#e2e8f0' }} />
+            <span
+              style={{
+                fontSize: '0.78rem',
+                fontWeight: 600,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: '#d97706',
+              }}
+            >
+              Institutional Partnership
+            </span>
+            <span style={{ width: '28px', height: '1px', backgroundColor: '#e2e8f0' }} />
+          </div>
+
+          {/* Main Title */}
           <h2
             style={{
-              fontSize: 'clamp(2rem, 5vw, 3.8rem)',
+              fontSize: 'clamp(2.2rem, 4.8vw, 3.8rem)',
               fontWeight: 300,
-              letterSpacing: '-0.03em',
+              letterSpacing: '-0.035em',
               lineHeight: 1.15,
               margin: '0 0 1.25rem 0',
-              color: '#ffffff',
+              color: '#0f172a',
             }}
           >
             Ready to Deploy or Expand Your Brand Franchise?
           </h2>
+
+          {/* Subtitle */}
           <p
             style={{
-              fontSize: 'clamp(0.95rem, 1.6vw, 1.2rem)',
-              color: 'rgba(255,255,255,0.75)',
-              lineHeight: 1.6,
-              maxWidth: '640px',
-              margin: '0 auto 2.5rem',
+              fontSize: 'clamp(1rem, 1.5vw, 1.18rem)',
+              color: '#64748b',
+              lineHeight: 1.7,
+              maxWidth: '680px',
+              margin: '0 auto clamp(2.25rem, 5vh, 3.25rem)',
               fontWeight: 300,
             }}
           >
             Partner with Zawr Holding Company for institutional capital, turnkey commercial fit-outs, centralized supply chains, and master multi-unit territory expansion.
           </p>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', justifyContent: 'center', alignItems: 'center' }}>
+          {/* Action Buttons */}
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '1rem',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginBottom: '2.5rem',
+            }}
+          >
             <Link
               href="/contact/partner"
               style={{
@@ -2314,24 +2354,27 @@ export default function HoldingPageClient() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '10px',
-                padding: '14px 32px',
-                backgroundColor: '#ffffff',
-                color: '#000000',
+                padding: '15px 34px',
+                backgroundColor: '#0f172a',
+                color: '#ffffff',
                 borderRadius: '100px',
                 fontSize: '0.95rem',
                 fontWeight: 500,
                 textDecoration: 'none',
-                transition: 'all 0.25s ease',
+                boxShadow: '0 4px 20px rgba(15, 23, 42, 0.12)',
+                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
                 flex: '1 1 auto',
-                maxWidth: '280px',
+                maxWidth: '260px',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#f1f5f9';
+                e.currentTarget.style.backgroundColor = '#1e293b';
                 e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 8px 25px rgba(15, 23, 42, 0.18)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#ffffff';
+                e.currentTarget.style.backgroundColor = '#0f172a';
                 e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 20px rgba(15, 23, 42, 0.12)';
               }}
             >
               <span>Explore Partnership</span>
@@ -2348,29 +2391,56 @@ export default function HoldingPageClient() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: '10px',
-                padding: '14px 28px',
-                backgroundColor: 'transparent',
-                color: '#ffffff',
+                padding: '15px 30px',
+                backgroundColor: '#ffffff',
+                color: '#0f172a',
                 borderRadius: '100px',
                 fontSize: '0.95rem',
                 fontWeight: 400,
                 textDecoration: 'none',
-                border: '1px solid rgba(255, 255, 255, 0.25)',
-                transition: 'all 0.25s ease',
+                border: '1px solid #cbd5e1',
+                boxShadow: '0 2px 8px rgba(15, 23, 42, 0.04)',
+                transition: 'all 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
                 flex: '1 1 auto',
                 maxWidth: '240px',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.6)';
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
+                e.currentTarget.style.borderColor = '#94a3b8';
+                e.currentTarget.style.backgroundColor = '#f8fafc';
+                e.currentTarget.style.transform = 'translateY(-2px)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
-                e.currentTarget.style.backgroundColor = 'transparent';
+                e.currentTarget.style.borderColor = '#cbd5e1';
+                e.currentTarget.style.backgroundColor = '#ffffff';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
               <span>Client Relations</span>
             </Link>
+          </div>
+
+          {/* Institutional Assurance Strip */}
+          <div
+            style={{
+              display: 'inline-flex',
+              flexWrap: 'wrap',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '12px 18px',
+              fontSize: '0.82rem',
+              color: '#64748b',
+              fontWeight: 400,
+              padding: '8px 18px',
+              borderRadius: '100px',
+              backgroundColor: '#f8fafc',
+              border: '1px solid #e2e8f0',
+            }}
+          >
+            <span>Turnkey 45–60D Rollout</span>
+            <span style={{ color: '#d97706' }}>•</span>
+            <span>Tier-1 Concourse Sites</span>
+            <span style={{ color: '#d97706' }}>•</span>
+            <span>Institutional Capital Scale</span>
           </div>
         </div>
       </section>
