@@ -1117,7 +1117,14 @@ function WebmasterDashboard() {
                     cursor: isVerifying || !loginPassword.trim() ? 'not-allowed' : 'pointer'
                   }}
                 >
-                  {isVerifying ? 'Authenticating...' : 'Unlock Workspace →'}
+                  {isVerifying ? (
+                    'Authenticating...'
+                  ) : (
+                    <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                      <span>Unlock Workspace</span>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
+                    </span>
+                  )}
                 </button>
               </form>
             ) : (
@@ -1152,7 +1159,14 @@ function WebmasterDashboard() {
                       cursor: isVerifying || !accessKey.trim() ? 'not-allowed' : 'pointer'
                     }}
                   >
-                    {isVerifying ? 'Verifying Key...' : 'Continue to Security Challenge →'}
+                    {isVerifying ? (
+                      'Verifying Key...'
+                    ) : (
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                        <span>Continue to Security Challenge</span>
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
+                      </span>
+                    )}
                   </button>
                 </form>
               ) : (
@@ -1228,7 +1242,14 @@ function WebmasterDashboard() {
                         cursor: isVerifying || !userAnswer.trim() ? 'not-allowed' : 'pointer'
                       }}
                     >
-                      {isVerifying ? 'Authenticating...' : 'Unlock Master Console →'}
+                      {isVerifying ? (
+                        'Authenticating...'
+                      ) : (
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                          <span>Unlock Master Console</span>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
+                        </span>
+                      )}
                     </button>
                   </div>
                 </form>

@@ -597,7 +597,7 @@ export default function FactoryDashboardInteractive() {
 
                           <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', color: '#475569', marginBottom: '0.5rem' }}>
                             <span>{task.origin}</span>
-                            <span style={{ color: '#94a3b8' }}>→</span>
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#94a3b8" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                             <span>{task.dest}</span>
                             <span style={{ color: '#94a3b8' }}>{task.time}</span>
                           </div>

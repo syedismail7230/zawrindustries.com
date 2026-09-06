@@ -147,7 +147,7 @@ export default function HomeNewsroomSection() {
               <div className="news-lead-link">
                 <span className="lead-link-desktop">Read Full Press Release</span>
                 <span className="lead-link-mobile">Read Story</span>
-                <span className="link-arrow">&rarr;</span>
+                <span className="link-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg></span>
               </div>
             </div>
           </Link>
@@ -186,7 +186,7 @@ export default function HomeNewsroomSection() {
 
                   <div className="news-secondary-link">
                     <span>Read Story</span>
-                    <span className="link-arrow">&rarr;</span>
+                    <span className="link-arrow"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg></span>
                   </div>
                 </div>
               </Link>
@@ -201,7 +201,7 @@ export default function HomeNewsroomSection() {
             className="newsroom-header-cta"
           >
             <span>Explore All Press Releases</span>
-            <span className="cta-arrow">&rarr;</span>
+            <span className="cta-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg></span>
           </Link>
         </div>
       </div>

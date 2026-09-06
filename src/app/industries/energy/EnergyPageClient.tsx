@@ -599,7 +599,7 @@ export default function EnergyPageClient() {
                 }}
               >
                 <span>Forecourt Solutions</span>
-                <span style={{ fontSize: '1rem' }}>↗</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
               </Link>
             </div>
 
@@ -1246,7 +1246,7 @@ export default function EnergyPageClient() {
                           }}
                         >
                           <span>Deploy with Zawr Energy</span>
-                          <span>→</span>
+                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
                         </Link>
                       </div>
                     </div>
@@ -1353,7 +1353,7 @@ export default function EnergyPageClient() {
               }}
             >
               <span>Get Started</span>
-              <span style={{ fontSize: '1.15rem' }}>↗</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
             </Link>
           </div>
         </div>

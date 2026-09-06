@@ -958,14 +958,20 @@ export default function BlogClient({
               <div className="article-nav-row">
                 {prevBlog ? (
                   <Link href={`/about/blog/${prevBlog.slug}`} className="nav-card">
-                    <span className="nav-card-label">&larr; Previous Article</span>
+                    <span className="nav-card-label" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                      Previous Article
+                    </span>
                     <span className="nav-card-title">{prevBlog.title}</span>
                   </Link>
                 ) : <div />}
 
                 {nextBlog ? (
                   <Link href={`/about/blog/${nextBlog.slug}`} className="nav-card" style={{ textAlign: 'right' }}>
-                    <span className="nav-card-label">Next Article &rarr;</span>
+                    <span className="nav-card-label" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', justifyContent: 'flex-end' }}>
+                      Next Article
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
+                    </span>
                     <span className="nav-card-title">{nextBlog.title}</span>
                   </Link>
                 ) : <div />}
@@ -979,8 +985,9 @@ export default function BlogClient({
           <div className="related-section">
             <div className="related-header">
               <h2 className="related-title">Related Insights &amp; Perspectives</h2>
-              <Link href="/about/blog" style={{ color: '#000000', fontWeight: 600, fontSize: '0.9rem', textDecoration: 'none' }}>
-                View All Insights &rarr;
+              <Link href="/about/blog" style={{ color: '#000000', fontWeight: 600, fontSize: '0.9rem', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                <span>View All Insights</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
               </Link>
             </div>
 

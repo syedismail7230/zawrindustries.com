@@ -241,7 +241,7 @@ export default function OurIndustriesSection() {
                 onMouseEnter={(e) => (e.currentTarget.style.color = '#000000')}
                 onMouseLeave={(e) => (e.currentTarget.style.color = '#475569')}
               >
-                <span style={{ fontSize: '1.1rem', lineHeight: 1 }}>←</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
                 <span>All Industries</span>
               </button>
 
@@ -380,7 +380,7 @@ export default function OurIndustriesSection() {
                     }}
                   >
                     <span>Know more</span>
-                    <span style={{ fontSize: '1.15rem', lineHeight: 1 }}>↗</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
                   </Link>
                 </div>
               </div>
