@@ -60,6 +60,30 @@ const INDUSTRIES_DATA: IndustryItem[] = [
       'We incorporate smart microgrid energy management, graywater recycling, and fractional digital ownership into every master development.',
       'Our architectural philosophy balances sustainable environmental stewardship with timeless aesthetics and cutting-edge building automation.'
     ]
+  },
+  {
+    id: 'energy',
+    title: 'Energy',
+    eyebrow: 'CLEAN INFRASTRUCTURE & MOBILITY',
+    image: '/assets/energy-44.png',
+    href: '/industries/energy',
+    summary: [
+      'Zawr Energy accelerates the global transition to clean power through utility-scale solar generation, wind corridors, and industrial battery energy storage systems (BESS).',
+      'We engineer turnkey retail forecourt EV charging plazas, integrating modular 60kW–360kW DC fast chargers, dynamic load management, and architectural solar canopies.',
+      'By coupling distributed renewable microgrids with intelligent storage telemetry, Zawr delivers zero-emission, resilient energy architectures for commercial and industrial ecosystems.'
+    ]
+  },
+  {
+    id: 'holding',
+    title: 'Holding',
+    eyebrow: 'MULTI-BRAND FRANCHISE ENTERPRISES',
+    image: '/assets/holding-44.png',
+    href: '/industries/holding',
+    summary: [
+      'Zawr Holding operates as an institutional multi-brand franchise management platform, deploying, scaling, and operating commercial franchises across prime retail, dining, and service corridors.',
+      'We accelerate multi-unit expansion with rapid 45–60 day turnkey store buildouts, centralized procurement and supply chain infrastructure, and standardized ISO-certified operational governance.',
+      'Through shared corporate services, prime real estate site selection, and institutional capital efficiency, Zawr Holding empowers leading global and homegrown brands to expand seamlessly.'
+    ]
   }
 ];
 
@@ -110,17 +134,17 @@ export default function OurIndustriesSection() {
           </h2>
         </div>
 
-        {/* ── CONDITIONAL VIEW: 2x2 GRID vs DETAIL SPLIT VIEW ── */}
+        {/* ── CONDITIONAL VIEW: 3-COLUMN CLEAN GRID vs DETAIL SPLIT VIEW ── */}
         {!selectedIndustry ? (
-          /* ── 2x2 CLEAN GRID VIEW (No outer card boxes, pure floating models on white canvas) ── */
+          /* ── 3-COLUMN CLEAN GRID VIEW (No outer card boxes, pure floating models on white canvas) ── */
           <div
             className="industries-grid-pure"
             style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(2, 1fr)',
-              columnGap: 'clamp(6rem, 18vw, 15rem)',
-              rowGap: 'clamp(6rem, 14vh, 11rem)',
-              maxWidth: '1100px',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              columnGap: 'clamp(2.5rem, 5.5vw, 6.5rem)',
+              rowGap: 'clamp(4rem, 8vh, 6.5rem)',
+              maxWidth: '1200px',
               margin: '0 auto',
               padding: '2rem 0',
             }}
@@ -404,6 +428,18 @@ export default function OurIndustriesSection() {
         .industry-pure-item:hover .industry-pure-img {
           transform: scale(1.06);
           filter: drop-shadow(0 20px 35px rgba(0, 0, 0, 0.08)) !important;
+        }
+
+        @media (max-width: 1024px) {
+          .industries-grid-pure {
+            grid-template-columns: repeat(3, 1fr) !important;
+            column-gap: 2rem !important;
+            row-gap: 3.5rem !important;
+          }
+          .industry-pure-img {
+            max-width: 190px !important;
+            max-height: 190px !important;
+          }
         }
 
         @media (max-width: 768px) {
