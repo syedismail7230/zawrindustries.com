@@ -544,18 +544,26 @@ const PARTNER_BENEFITS = [
 
 const FAQ_ITEMS = [
   {
+    volume: 'Volume I',
+    tag: 'Partnership Models',
     q: 'How does Zawr Holding partner with franchise brands?',
     a: 'We operate flexible institutional models including Master Franchise Agreements, Area Development Partnerships, Joint-Venture Operating Models, and Direct Turnkey Management. We provide the capital, commercial real estate, operational workforce, and tech infrastructure while upholding strict brand guidelines.',
   },
   {
+    volume: 'Volume II',
+    tag: 'Operating Verticals',
     q: 'What business verticals does Zawr Holding operate in?',
     a: 'Our multi-brand holding portfolio spans luxury commercial retail, specialty coffee and artisanal culinary concepts, quick-service dining (QSR), convenience hubs, and integrated micro-fulfillment logistics centers.',
   },
   {
+    volume: 'Volume III',
+    tag: 'Standards & SOPs',
     q: 'How does Zawr maintain brand standards across multiple franchise locations?',
     a: 'Every brand operated under Zawr Holding is managed via strict Standard Operating Procedures (SOPs), real-time cloud POS telemetry, secret-shopper quality audits, and centralized staff certification at our in-house training academy.',
   },
   {
+    volume: 'Volume IV',
+    tag: 'Global Expansion',
     q: 'Can global brands or property developers partner with Zawr Holding?',
     a: 'Yes. We welcome conversations with international brand owners seeking rapid territory expansion, as well as institutional real estate developers seeking anchor multi-brand franchise operators for prime commercial concourses.',
   },
@@ -565,7 +573,8 @@ export default function HoldingPageClient() {
   // Folder Modal State
   const [selectedVertical, setSelectedVertical] = useState<OperatingVertical | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
+  const [activeFaq, setActiveFaq] = useState<number | null>(0);
+  const [hoveredBook, setHoveredBook] = useState<number | null>(null);
   const [activeBenefit, setActiveBenefit] = useState<number>(2);
 
   // 3D Barrel Roll Infinite Loop & Wheel Listener
@@ -1745,101 +1754,314 @@ export default function HoldingPageClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          7. FREQUENTLY ASKED QUESTIONS
+          7. FREQUENTLY ASKED QUESTIONS (Interactive Classical Codex)
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
-          padding: 'clamp(4.5rem, 9vh, 7rem) 1.5rem',
-          backgroundColor: '#f8fafc',
+          padding: 'clamp(5rem, 9vh, 8rem) clamp(1rem, 4vw, 3.5rem)',
+          backgroundColor: '#ffffff',
           borderTop: '1px solid #e2e8f0',
           borderBottom: '1px solid #e2e8f0',
         }}
       >
-        <div style={{ maxWidth: '860px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', marginBottom: 'clamp(2.5rem, 5vh, 3.5rem)' }}>
+        <div style={{ maxWidth: '1440px', margin: '0 auto', width: '100%' }}>
+          {/* Section Header */}
+          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto clamp(3rem, 6vh, 4.5rem)' }}>
+            <div
+              style={{
+                fontSize: '0.82rem',
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: '#f59e0b',
+                fontWeight: 500,
+                marginBottom: '0.75rem',
+              }}
+            >
+              Knowledge & Governance
+            </div>
             <h2
               style={{
-                fontSize: 'clamp(2rem, 4vw, 2.8rem)',
-                fontWeight: 400,
+                fontSize: 'clamp(2.2rem, 4vw, 3.2rem)',
+                fontWeight: 300,
                 letterSpacing: '-0.03em',
                 color: '#0f172a',
-                margin: 0,
+                margin: '0 0 0.85rem 0',
               }}
             >
               Frequently Asked Questions
             </h2>
+            <p style={{ fontSize: '1.05rem', color: '#64748b', lineHeight: 1.6, margin: 0, fontWeight: 300 }}>
+              Essential answers for prospective franchise partners, brand licensors, and commercial real estate developers.
+            </p>
           </div>
 
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {FAQ_ITEMS.map((faq, idx) => {
-              const isOpen = activeFaq === idx;
-              return (
-                <div
-                  key={idx}
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+              .holding-faq-layout {
+                display: grid;
+                grid-template-columns: minmax(320px, 480px) minmax(460px, 1fr);
+                gap: clamp(2.5rem, 5vw, 6rem);
+                align-items: center;
+                justify-content: center;
+                max-width: 1380px;
+                margin: 0 auto;
+              }
+              .faq-books-container {
+                position: relative;
+                width: 100%;
+                max-width: 480px;
+                margin: 0 auto;
+                user-select: none;
+              }
+              .faq-books-img {
+                width: 100%;
+                height: auto;
+                display: block;
+                filter: drop-shadow(0 20px 35px rgba(15, 23, 42, 0.08));
+                transition: transform 0.4s ease;
+              }
+              .faq-book-hotspot {
+                position: absolute;
+                cursor: pointer;
+                border-radius: 8px;
+                transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+                background: transparent;
+                border: none;
+                padding: 0;
+                outline: none;
+                z-index: 10;
+              }
+              .faq-book-hotspot:hover {
+                background: rgba(245, 158, 11, 0.12);
+                box-shadow: 0 0 25px rgba(245, 158, 11, 0.25);
+              }
+              .faq-book-hotspot.active {
+                background: rgba(245, 158, 11, 0.16);
+                box-shadow: 0 0 30px rgba(245, 158, 11, 0.35);
+              }
+              @media (max-width: 1024px) {
+                .holding-faq-layout {
+                  grid-template-columns: 1fr;
+                  gap: 3rem;
+                }
+                .faq-books-container {
+                  max-width: 420px;
+                }
+              }
+            `,
+            }}
+          />
+
+          <div className="holding-faq-layout">
+            {/* Left Interactive Books Display (h-faq.png) */}
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+              <div className="faq-books-container">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/assets/h-faq.png"
+                  alt="Zawr Holding Governance Library & Codex — Frequently Asked Questions"
+                  className="faq-books-img"
+                  loading="lazy"
+                  decoding="async"
+                />
+
+                {/* Hotspot 1: FAQ 1 (Brown Leather) */}
+                <button
+                  type="button"
+                  aria-label="View FAQ 1: Partnership Models"
+                  className={`faq-book-hotspot ${activeFaq === 0 ? 'active' : ''}`}
                   style={{
-                    backgroundColor: '#ffffff',
-                    borderRadius: '16px',
-                    border: '1px solid #e2e8f0',
-                    overflow: 'hidden',
+                    left: '8.5%',
+                    top: '4%',
+                    width: '17%',
+                    height: '92%',
                   }}
-                >
-                  <button
-                    type="button"
-                    onClick={() => setActiveFaq(isOpen ? null : idx)}
+                  onClick={() => setActiveFaq(activeFaq === 0 ? null : 0)}
+                  onMouseEnter={() => setHoveredBook(0)}
+                  onMouseLeave={() => setHoveredBook(null)}
+                />
+
+                {/* Hotspot 2: FAQ 2 (Tan Leather) */}
+                <button
+                  type="button"
+                  aria-label="View FAQ 2: Operating Verticals"
+                  className={`faq-book-hotspot ${activeFaq === 1 ? 'active' : ''}`}
+                  style={{
+                    left: '26.5%',
+                    top: '6%',
+                    width: '17%',
+                    height: '90%',
+                  }}
+                  onClick={() => setActiveFaq(activeFaq === 1 ? null : 1)}
+                  onMouseEnter={() => setHoveredBook(1)}
+                  onMouseLeave={() => setHoveredBook(null)}
+                />
+
+                {/* Hotspot 3: FAQ 3 (Green Leather Slanted) */}
+                <button
+                  type="button"
+                  aria-label="View FAQ 3: Standards & SOPs"
+                  className={`faq-book-hotspot ${activeFaq === 2 ? 'active' : ''}`}
+                  style={{
+                    left: '45%',
+                    top: '11%',
+                    width: '25%',
+                    height: '86%',
+                  }}
+                  onClick={() => setActiveFaq(activeFaq === 2 ? null : 2)}
+                  onMouseEnter={() => setHoveredBook(2)}
+                  onMouseLeave={() => setHoveredBook(null)}
+                />
+
+                {/* Hotspot 4: FAQ 4 (Burgundy Leather) */}
+                <button
+                  type="button"
+                  aria-label="View FAQ 4: Global Expansion"
+                  className={`faq-book-hotspot ${activeFaq === 3 ? 'active' : ''}`}
+                  style={{
+                    left: '71.5%',
+                    top: '11%',
+                    width: '18.5%',
+                    height: '88%',
+                  }}
+                  onClick={() => setActiveFaq(activeFaq === 3 ? null : 3)}
+                  onMouseEnter={() => setHoveredBook(3)}
+                  onMouseLeave={() => setHoveredBook(null)}
+                />
+              </div>
+
+              {/* Volume Status Indicator */}
+              <div
+                style={{
+                  marginTop: '1.5rem',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontSize: '0.88rem',
+                  color: '#64748b',
+                  fontWeight: 300,
+                  background: '#f8fafc',
+                  padding: '6px 18px',
+                  borderRadius: '9999px',
+                  border: '1px solid #e2e8f0',
+                }}
+              >
+                <span style={{ color: '#d97706', fontWeight: 500 }}>
+                  {activeFaq !== null ? FAQ_ITEMS[activeFaq].volume : 'Interactive Library'}
+                </span>
+                <span style={{ color: '#cbd5e1' }}>•</span>
+                <span>
+                  {activeFaq !== null ? FAQ_ITEMS[activeFaq].tag : 'Click any book to read'}
+                </span>
+              </div>
+            </div>
+
+            {/* Right Accordion Questions & Answers */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {FAQ_ITEMS.map((faq, idx) => {
+                const isOpen = activeFaq === idx;
+                const isHovered = hoveredBook === idx;
+                return (
+                  <div
+                    key={idx}
                     style={{
-                      width: '100%',
-                      padding: '1.35rem 1.5rem',
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      alignItems: 'center',
-                      background: 'none',
-                      border: 'none',
-                      textAlign: 'left',
-                      cursor: 'pointer',
-                      fontSize: '1.05rem',
-                      fontWeight: 500,
-                      color: '#0f172a',
+                      backgroundColor: '#ffffff',
+                      borderRadius: '16px',
+                      border: isOpen
+                        ? '1px solid #d97706'
+                        : isHovered
+                        ? '1px solid #cbd5e1'
+                        : '1px solid #e2e8f0',
+                      boxShadow: isOpen ? '0 8px 25px rgba(217, 119, 6, 0.08)' : '0 2px 6px rgba(0,0,0,0.02)',
+                      transition: 'all 0.3s ease',
+                      overflow: 'hidden',
                     }}
                   >
-                    <span>{faq.q}</span>
-                    <svg
-                      width="18"
-                      height="18"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
+                    <button
+                      type="button"
+                      onClick={() => setActiveFaq(isOpen ? null : idx)}
                       style={{
-                        transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                        transition: 'transform 0.25s ease',
-                        color: '#64748b',
-                        flexShrink: 0,
-                        marginLeft: '1rem',
+                        width: '100%',
+                        padding: '1.35rem 1.5rem',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        background: 'none',
+                        border: 'none',
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        gap: '1rem',
                       }}
                     >
-                      <polyline points="6 9 12 15 18 9" />
-                    </svg>
-                  </button>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+                        <span
+                          style={{
+                            fontSize: '0.78rem',
+                            letterSpacing: '0.08em',
+                            textTransform: 'uppercase',
+                            color: isOpen ? '#d97706' : '#94a3b8',
+                            fontWeight: 500,
+                            padding: '3px 10px',
+                            background: isOpen ? 'rgba(245, 158, 11, 0.08)' : '#f1f5f9',
+                            borderRadius: '6px',
+                            flexShrink: 0,
+                          }}
+                        >
+                          {faq.volume}
+                        </span>
+                        <span
+                          style={{
+                            fontSize: '1.08rem',
+                            fontWeight: 300,
+                            color: isOpen ? '#0f172a' : '#334155',
+                            lineHeight: 1.4,
+                            letterSpacing: '-0.015em',
+                          }}
+                        >
+                          {faq.q}
+                        </span>
+                      </div>
 
-                  {isOpen && (
-                    <div
-                      style={{
-                        padding: '0 1.5rem 1.35rem',
-                        fontSize: '0.95rem',
-                        lineHeight: 1.65,
-                        color: '#475569',
-                        borderTop: '1px solid #f1f5f9',
-                        paddingTop: '1rem',
-                      }}
-                    >
-                      {faq.a}
-                    </div>
-                  )}
-                </div>
-              );
-            })}
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        style={{
+                          transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
+                          transition: 'transform 0.25s ease',
+                          color: isOpen ? '#d97706' : '#94a3b8',
+                          flexShrink: 0,
+                        }}
+                      >
+                        <polyline points="6 9 12 15 18 9" />
+                      </svg>
+                    </button>
+
+                    {isOpen && (
+                      <div
+                        style={{
+                          padding: '0 1.5rem 1.35rem',
+                          fontSize: '0.98rem',
+                          lineHeight: 1.7,
+                          color: '#475569',
+                          borderTop: '1px solid #f8fafc',
+                          paddingTop: '1rem',
+                          fontWeight: 300,
+                        }}
+                      >
+                        {faq.a}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
