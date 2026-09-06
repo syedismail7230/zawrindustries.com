@@ -136,7 +136,7 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     question: 'What does the brand name ZAWR mean and represent?',
     answer:
-      'ZAWR represents industrial autonomy, architectural permanence, and technological momentum across enterprise software, precision robotics manufacturing, clean energy microgrids, global freight logistics, sustainable real estate, and multi-brand franchise operations.',
+      'A name built to represent strength, ambition, and forward movement.',
   },
 ];
 
@@ -586,20 +586,21 @@ export default function PronunciationClient() {
           }}
         />
 
-        {/* Subtle Tagline */}
+        {/* Subtle Tagline / Brand Ethos */}
         <div
           className="pronunciation-tagline"
           style={{
-            fontSize: 'clamp(0.68rem, 1vw, 0.78rem)',
+            fontSize: 'clamp(0.74rem, 1.15vw, 0.86rem)',
             fontWeight: 500,
-            letterSpacing: '0.28em',
-            textTransform: 'uppercase',
+            letterSpacing: '0.12em',
             color: '#64748b',
             marginBottom: 'clamp(2rem, 4vh, 3rem)',
             userSelect: 'none',
+            maxWidth: '600px',
+            lineHeight: 1.6,
           }}
         >
-          SAME NAME. A GLOBAL CONVERSATION.
+          A name built to represent strength, ambition, and forward movement.
         </div>
 
         {/* Multilingual Selector: Desktop Minimalist Line Bar */}

@@ -109,7 +109,7 @@ export default function PronunciationPage() {
         name: 'ZAWR',
         termCode: 'ZAWR',
         description:
-          'ZAWR is the global brand name of Zawr Industries LLP, pronounced "ZA-VAR" (/zɑːvɑːr/).',
+          'ZAWR is a name built to represent strength, ambition, and forward movement. It is the global brand name of Zawr Industries LLP, pronounced "ZA-VAR" (/zɑːvɑːr/).',
         inDefinedTermSet: {
           '@type': 'DefinedTermSet',
           name: 'Zawr Industries Brand Lexicon',
@@ -152,10 +152,10 @@ export default function PronunciationPage() {
           },
           {
             '@type': 'Question',
-            name: 'What does the brand name ZAWR represent?',
+            name: 'What does the brand name ZAWR mean and represent?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'ZAWR represents architectural permanence, industrial autonomy, and high-velocity enterprise innovation across technology, manufacturing, energy, logistics, and commercial holding enterprises.',
+              text: 'A name built to represent strength, ambition, and forward movement.',
             },
           },
           {
