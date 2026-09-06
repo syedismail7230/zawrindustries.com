@@ -132,30 +132,375 @@ const OPERATING_VERTICALS: OperatingVertical[] = [
   }
 ];
 
-const OPERATING_PILLARS = [
+export interface BlueprintShelfItem {
+  id: string;
+  bayIndex: number; // 0: DEPLOY, 1: MANAGE, 2: RUN, 3: SCALE
+  shelfIndex: number; // 0 to 3
+  bayTitle: string;
+  bayPhase: string;
+  shelfTitle: string;
+  sopCode: string;
+  timelineOrSla: string;
+  books: string[];
+  summary: string;
+  deliverables: string[];
+  // Bounding box percentages on holding-bp.png (1536x1024)
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+const BLUEPRINT_BAYS = [
+  { phase: '01 / DEPLOY', title: 'Turnkey Store Rollout', subtitle: '45–60 Day Rapid Commissioning' },
+  { phase: '02 / MANAGE', title: 'Centralized Governance', subtitle: 'Shared Enterprise Infrastructure' },
+  { phase: '03 / RUN', title: 'High-Fidelity Daily Operations', subtitle: 'Real-Time Telemetry & SLAs' },
+  { phase: '04 / SCALE', title: 'Territorial Expansion', subtitle: 'Multi-City Franchise Replication' }
+];
+
+const BLUEPRINT_SHELVES: BlueprintShelfItem[] = [
+  // ──────────────────────────── BAY 0: 01 / DEPLOY ────────────────────────────
   {
-    phase: '01 / DEPLOY',
-    title: 'Turnkey Store Rollout',
-    desc: 'From prime high-footfall real estate acquisition and lease negotiation to strict architectural brand guidelines execution, we take stores from zero to opening in 45–60 days.',
-    highlights: ['Prime Concourse Site Selection', 'Architectural Fit-Out & Millwork', 'Vendor & Regulatory Licensing', 'Grand Opening Marketing Campaigns']
+    id: 'deploy-s1',
+    bayIndex: 0,
+    shelfIndex: 0,
+    bayPhase: '01 / DEPLOY',
+    bayTitle: 'Turnkey Store Rollout',
+    shelfTitle: 'Site Selection & Real Estate Acquisition',
+    sopCode: 'SOP-DEP-01',
+    timelineOrSla: 'Days 1–15',
+    books: ['Real Estate Acquisition', 'Site Selection', 'Lease Negotiation', 'Architectural Fit-Out'],
+    summary: 'High-density commercial demographic analysis, pedestrian footfall modeling (>15k daily traffic), master landlord negotiations, and structural MEP feasibility checks.',
+    deliverables: [
+      'Footfall density & demographic heat-map validation',
+      'Exclusive territory & non-compete lease covenants',
+      'Architectural structural load, HVAC & power audits'
+    ],
+    x: 14.6,
+    y: 33.8,
+    w: 15.6,
+    h: 12.4
   },
   {
-    phase: '02 / MANAGE',
-    title: 'Centralized Governance',
-    desc: 'Shared administrative infrastructure eliminating redundant back-office overhead. We handle enterprise accounting, legal compliance, standardized training, and master vendor bulk contracts.',
-    highlights: ['Shared Corporate & Legal Services', 'Centralized Bulk Purchasing', 'ISO 9001 Standard Operating Procedures', 'Franchise Transparency Reporting']
+    id: 'deploy-s2',
+    bayIndex: 0,
+    shelfIndex: 1,
+    bayPhase: '01 / DEPLOY',
+    bayTitle: 'Turnkey Store Rollout',
+    shelfTitle: 'Construction Management & Millwork',
+    sopCode: 'SOP-DEP-02',
+    timelineOrSla: 'Days 15–38',
+    books: ['Construction Management', 'Millwork & Fixtures', 'Brand Design Compliance'],
+    summary: 'Prefabricated modular store fixtures, high-spec bespoke architectural millwork, and strict brand identity compliance under turnkey master contracts.',
+    deliverables: [
+      'Class-A storefront facade & illuminated signage installation',
+      'UL/CE-certified electrical, plumbing & HVAC engineering',
+      'Custom millwork fabrication with luxury stone & wood finishes'
+    ],
+    x: 14.6,
+    y: 48.3,
+    w: 15.6,
+    h: 12.4
   },
   {
-    phase: '03 / RUN',
-    title: 'High-Fidelity Daily Operations',
-    desc: 'Managing unit-level store performance with military precision. Live cash reconciliation, staff attendance, customer satisfaction metrics, and instant restock triggers.',
-    highlights: ['Multi-Unit Store Leadership', 'Real-Time POS & Revenue Auditing', 'Quality Control & Mystery Shopper Audits', 'Predictive Workforce Shift Planning']
+    id: 'deploy-s3',
+    bayIndex: 0,
+    shelfIndex: 2,
+    bayPhase: '01 / DEPLOY',
+    bayTitle: 'Turnkey Store Rollout',
+    shelfTitle: 'Licensing, Brand Guidelines & Launch Marketing',
+    sopCode: 'SOP-DEP-03',
+    timelineOrSla: 'Days 30–48',
+    books: ['Vendor Management', 'Regulatory Licensing', 'Brand Guidelines', 'Marketing Campaigns', 'Grand Opening'],
+    summary: 'Expedited commercial health and fire safety clearance, food/retail municipal trade permits, and hyper-local geo-targeted PR launch blitzes.',
+    deliverables: [
+      'Civil defense, health & municipal trade license approvals',
+      'Omnichannel influencer & social PR grand launch campaigns',
+      'Franchise global brand audit certification checklist'
+    ],
+    x: 14.6,
+    y: 62.6,
+    w: 15.6,
+    h: 12.4
   },
   {
-    phase: '04 / SCALE',
-    title: 'Territorial Expansion',
-    desc: 'Replicating proven unit economics across major metropolitan centers, airports, and commercial lifestyle hubs with shared logistics and localized marketing power.',
-    highlights: ['Multi-City Master Franchise Scaling', 'Cross-Brand Concourse Synergies', 'Omnichannel & Local Delivery Integration', 'Institutional Capital Allocation']
+    id: 'deploy-s4',
+    bayIndex: 0,
+    shelfIndex: 3,
+    bayPhase: '01 / DEPLOY',
+    bayTitle: 'Turnkey Store Rollout',
+    shelfTitle: 'Store Commissioning & Pilot Handover',
+    sopCode: 'SOP-DEP-04',
+    timelineOrSla: 'Days 45–60 (Live)',
+    books: ['From Vision to Opening', 'Store Commissioning', 'POS Live Cutover', 'Handover Protocols'],
+    summary: 'Final punch-list sign-off, full inventory dry-run restock, POS gateway live cutover, and seamless operational handover to the daily management squad.',
+    deliverables: [
+      'Zero-defect architectural sign-off checklist',
+      'Live payment gateway, POS & register stress testing',
+      'Formal operational handover to unit General Manager'
+    ],
+    x: 14.6,
+    y: 76.8,
+    w: 15.6,
+    h: 12.6
+  },
+
+  // ──────────────────────────── BAY 1: 02 / MANAGE ────────────────────────────
+  {
+    id: 'manage-s1',
+    bayIndex: 1,
+    shelfIndex: 0,
+    bayPhase: '02 / MANAGE',
+    bayTitle: 'Centralized Governance',
+    shelfTitle: 'Corporate Governance & Legal Master Contracts',
+    sopCode: 'SOP-MNG-01',
+    timelineOrSla: 'Continuous SLA',
+    books: ['Corporate Governance', 'Legal Compliance', 'Enterprise Accounting', 'Vendor Contracts'],
+    summary: 'Unified holding legal frameworks, master franchise agreement safeguards, centralized enterprise GAAP bookkeeping, and automated tax compliance.',
+    deliverables: [
+      'Centralized multi-entity corporate & tax filings',
+      'Master brand trademark and licensing compliance audits',
+      'Standardized master vendor agreements (Net 60 terms)'
+    ],
+    x: 32.9,
+    y: 33.8,
+    w: 15.6,
+    h: 12.4
+  },
+  {
+    id: 'manage-s2',
+    bayIndex: 1,
+    shelfIndex: 1,
+    bayPhase: '02 / MANAGE',
+    bayTitle: 'Centralized Governance',
+    shelfTitle: 'Centralized Purchasing & ISO 9001 Standards',
+    sopCode: 'SOP-MNG-02',
+    timelineOrSla: 'Volume Tier-1',
+    books: ['Bulk Purchasing', 'Supplier Management', 'Cost Optimization', 'ISO 9001 Standards'],
+    summary: 'Aggregated holding purchasing power securing Tier-1 factory-direct pricing on packaging, ingredients, consumables, and uniform inventory.',
+    deliverables: [
+      '20% to 30% reduction in unit COGS via centralized buying',
+      'ISO 9001 certified quality control supplier verification',
+      'Automated purchase order dispatch on safety stock triggers'
+    ],
+    x: 32.9,
+    y: 48.3,
+    w: 15.6,
+    h: 12.4
+  },
+  {
+    id: 'manage-s3',
+    bayIndex: 1,
+    shelfIndex: 2,
+    bayPhase: '02 / MANAGE',
+    bayTitle: 'Centralized Governance',
+    shelfTitle: 'Training Academy & Franchise Transparency',
+    sopCode: 'SOP-MNG-03',
+    timelineOrSla: 'Weekly Audited',
+    books: ['Training Development', 'Franchise Transparency', 'Reporting & Analytics'],
+    summary: 'In-house certified employee training programs, secret guest scorecards, and live stakeholder financial reporting dashboards.',
+    deliverables: [
+      'Mandatory 40-hour brand certification for store staff',
+      'Real-time investor reporting portal with EBITDA tracking',
+      'Zero-tolerance cleanliness & hospitality scorecards'
+    ],
+    x: 32.9,
+    y: 62.6,
+    w: 15.6,
+    h: 12.4
+  },
+  {
+    id: 'manage-s4',
+    bayIndex: 1,
+    shelfIndex: 3,
+    bayPhase: '02 / MANAGE',
+    bayTitle: 'Centralized Governance',
+    shelfTitle: 'Financial Controls & Standard Operating Procedures',
+    sopCode: 'SOP-MNG-04',
+    timelineOrSla: '100% Audit Ready',
+    books: ['Financial Controls', 'Risk Management', 'Standard Operating Procedures (SOPs)', 'Vault Controls'],
+    summary: 'Strict segregation of duties, automated daily bank reconciliation, comprehensive multi-risk commercial insurance, and disaster recovery plans.',
+    deliverables: [
+      'Daily automated bank vs POS cash audit matching',
+      'Comprehensive third-party liability & property insurance',
+      'Rigid internal audit routines conducted every 14 days'
+    ],
+    x: 32.9,
+    y: 76.8,
+    w: 15.6,
+    h: 12.6
+  },
+
+  // ──────────────────────────── BAY 2: 03 / RUN ────────────────────────────
+  {
+    id: 'run-s1',
+    bayIndex: 2,
+    shelfIndex: 0,
+    bayPhase: '03 / RUN',
+    bayTitle: 'High-Fidelity Daily Operations',
+    shelfTitle: 'Store Operations & Real-Time POS Telemetry',
+    sopCode: 'SOP-RUN-01',
+    timelineOrSla: 'Sub-Second Sync',
+    books: ['Store Operations', 'POS Systems', 'Inventory Management', 'Staff Attendance'],
+    summary: 'VelocityOS edge point-of-sale infrastructure syncing every SKU transaction, shift clock-in, and inventory burn-rate directly to holding telemetry.',
+    deliverables: [
+      'Sub-second register transaction sync with cloud telemetry',
+      'Biometric employee clock-in with geo-fencing checks',
+      'Real-time SKU-level inventory depletion calculations'
+    ],
+    x: 51.2,
+    y: 33.8,
+    w: 15.6,
+    h: 12.4
+  },
+  {
+    id: 'run-s2',
+    bayIndex: 2,
+    shelfIndex: 1,
+    bayPhase: '03 / RUN',
+    bayTitle: 'High-Fidelity Daily Operations',
+    shelfTitle: 'Store Leadership & Mystery Shopper Audits',
+    sopCode: 'SOP-RUN-02',
+    timelineOrSla: '98.6% Target Score',
+    books: ['Store Leadership', 'Performance Metrics', 'Quality Control', 'Mystery Shopper Audits'],
+    summary: 'On-the-ground store general managers driven by quantitative SLAs, bi-weekly unannounced mystery shopper audits, and customer NPS telemetry.',
+    deliverables: [
+      'Bi-weekly third-party mystery customer scoring audits',
+      'Live customer review aggregation & instant complaint escalation',
+      'Shift leader performance incentive bonus structures'
+    ],
+    x: 51.2,
+    y: 48.3,
+    w: 15.6,
+    h: 12.4
+  },
+  {
+    id: 'run-s3',
+    bayIndex: 2,
+    shelfIndex: 2,
+    bayPhase: '03 / RUN',
+    bayTitle: 'High-Fidelity Daily Operations',
+    shelfTitle: 'Cash Reconciliation & Restock Triggers',
+    sopCode: 'SOP-RUN-03',
+    timelineOrSla: '< 0.01% Variance',
+    books: ['Cash Reconciliation', 'Revenue Auditing', 'Restock Triggers', 'Workforce Planning'],
+    summary: 'Automated end-of-day register closure, armored vault pickup dispatch, dynamic automated vendor restock orders, and algorithmic shift scheduling.',
+    deliverables: [
+      'Zero-variance nightly digital drawer reconciliation',
+      'Predictive demand-based workforce shift scheduling',
+      'Automated replenishment dispatch before stockouts'
+    ],
+    x: 51.2,
+    y: 62.6,
+    w: 15.6,
+    h: 12.4
+  },
+  {
+    id: 'run-s4',
+    bayIndex: 2,
+    shelfIndex: 3,
+    bayPhase: '03 / RUN',
+    bayTitle: 'High-Fidelity Daily Operations',
+    shelfTitle: 'Data Analytics & Loss Prevention Audits',
+    sopCode: 'SOP-RUN-04',
+    timelineOrSla: 'Operations Excellence',
+    books: ['Data Analytics', 'Predictive Planning', 'Loss Prevention', 'Store Audits', 'Operations Excellence'],
+    summary: 'Advanced POS fraud anomaly detection, smart sensor shrinkage monitoring, yield loss reduction, and executive store performance leaderboards.',
+    deliverables: [
+      'Algorithmic anomaly detection for voids and discounts',
+      'Shrinkage & waste minimized to below 0.4% of turnover',
+      'Automated weekly unit profitability scorecards'
+    ],
+    x: 51.2,
+    y: 76.8,
+    w: 15.6,
+    h: 12.6
+  },
+
+  // ──────────────────────────── BAY 3: 04 / SCALE ────────────────────────────
+  {
+    id: 'scale-s1',
+    bayIndex: 3,
+    shelfIndex: 0,
+    bayPhase: '04 / SCALE',
+    bayTitle: 'Territorial Expansion',
+    shelfTitle: 'Territorial Planning & Concourse Targeting',
+    sopCode: 'SOP-SCL-01',
+    timelineOrSla: 'Multi-City Scope',
+    books: ['Market Research', 'Territorial Planning', 'Metropolitan Centers', 'Commercial Lifestyle Hubs'],
+    summary: 'Macro demographic modeling, master commercial developer relationships, airport concourse bids, and territorial density optimization.',
+    deliverables: [
+      'Pipeline of verified high-conversion retail locations',
+      'Master developer pre-lease agreements across shopping districts',
+      'Airport authority RFP submission blueprints'
+    ],
+    x: 69.5,
+    y: 33.8,
+    w: 15.6,
+    h: 12.4
+  },
+  {
+    id: 'scale-s2',
+    bayIndex: 3,
+    shelfIndex: 1,
+    bayPhase: '04 / SCALE',
+    bayTitle: 'Territorial Expansion',
+    shelfTitle: 'Cross-Brand Synergies & Omnichannel Logistics',
+    sopCode: 'SOP-SCL-02',
+    timelineOrSla: '+40% Unit Margin',
+    books: ['Franchise Scaling', 'Cross-Brand Synergies', 'Omnichannel Integration', 'Local Delivery Logistics'],
+    summary: 'Leveraging adjacent store locations for shared micro-warehousing, pooled delivery driver dispatch, cross-brand loyalty rewards, and joint promotions.',
+    deliverables: [
+      'Shared localized fulfillment hubs reducing last-mile delivery costs',
+      'Unified customer loyalty program driving multi-brand cross-selling',
+      'Shared district supervisory management reducing overhead'
+    ],
+    x: 69.5,
+    y: 48.3,
+    w: 15.6,
+    h: 12.4
+  },
+  {
+    id: 'scale-s3',
+    bayIndex: 3,
+    shelfIndex: 2,
+    bayPhase: '04 / SCALE',
+    bayTitle: 'Territorial Expansion',
+    shelfTitle: 'Institutional Capital & Master Franchising',
+    sopCode: 'SOP-SCL-03',
+    timelineOrSla: 'Institutional Tier',
+    books: ['Market Entry Strategy', 'Institutional Capital', 'Partnerships', 'International Expansion'],
+    summary: 'Master territory rights acquisition, institutional equity syndication, sovereign wealth / private equity partnerships, and international brand franchising.',
+    deliverables: [
+      'Institutional capitalization models for 10+ store rollouts',
+      'Master franchise territorial exclusivity agreements',
+      'Structured risk-weighted joint venture equity vehicles'
+    ],
+    x: 69.5,
+    y: 62.6,
+    w: 15.6,
+    h: 12.4
+  },
+  {
+    id: 'scale-s4',
+    bayIndex: 3,
+    shelfIndex: 3,
+    bayPhase: '04 / SCALE',
+    bayTitle: 'Territorial Expansion',
+    shelfTitle: 'Global Expansion Playbook & Master Blueprints',
+    sopCode: 'SOP-SCL-04',
+    timelineOrSla: 'Global Reach',
+    books: ['Growth Strategy', 'New Markets', 'Global Retail', 'Master Blueprints'],
+    summary: 'Codified expansion playbooks enabling rapid market entry in new metropolitan regions in under 60 days with proven unit economics.',
+    deliverables: [
+      'Comprehensive turnkey market entry documentation',
+      'Localized supply chain vendor pre-qualification matrices',
+      'Global brand standard assurance and long-term asset value'
+    ],
+    x: 69.5,
+    y: 76.8,
+    w: 15.6,
+    h: 12.6
   }
 ];
 
@@ -211,6 +556,22 @@ export default function HoldingPageClient() {
   const [selectedVertical, setSelectedVertical] = useState<OperatingVertical | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
+
+  // Operating Blueprint Dual-Wing State
+  const [leftShelfId, setLeftShelfId] = useState<string>('deploy-s1');
+  const [rightShelfId, setRightShelfId] = useState<string>('run-s1');
+  const [hoveredShelfId, setHoveredShelfId] = useState<string | null>(null);
+  const [activeLeftBay, setActiveLeftBay] = useState<number>(0);
+  const [activeRightBay, setActiveRightBay] = useState<number>(2);
+
+  // Derive active items
+  const activeLeftShelf =
+    BLUEPRINT_SHELVES.find((s) => s.id === (hoveredShelfId && (BLUEPRINT_SHELVES.find((x) => x.id === hoveredShelfId)?.bayIndex === 0 || BLUEPRINT_SHELVES.find((x) => x.id === hoveredShelfId)?.bayIndex === 1) ? hoveredShelfId : leftShelfId)) ||
+    BLUEPRINT_SHELVES[0];
+
+  const activeRightShelf =
+    BLUEPRINT_SHELVES.find((s) => s.id === (hoveredShelfId && (BLUEPRINT_SHELVES.find((x) => x.id === hoveredShelfId)?.bayIndex === 2 || BLUEPRINT_SHELVES.find((x) => x.id === hoveredShelfId)?.bayIndex === 3) ? hoveredShelfId : rightShelfId)) ||
+    BLUEPRINT_SHELVES[8];
 
   const handleVerticalClick = (vertical: OperatingVertical) => {
     setSelectedVertical(vertical);
@@ -627,16 +988,19 @@ export default function HoldingPageClient() {
 
       {/* ─────────────────────────────────────────────────────────────
           4. THE OPERATING BLUEPRINT: DEPLOY · MANAGE · RUN · SCALE
+             Minimalist Editorial Layout with Direct Bookcase
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
-          padding: 'clamp(5rem, 9vh, 8rem) 1.5rem',
+          padding: 'clamp(4rem, 8vh, 7rem) clamp(1rem, 3.5vw, 3rem)',
           backgroundColor: '#ffffff',
-          borderBottom: '1px solid #e2e8f0',
+          borderBottom: '1px solid #f1f5f9',
+          position: 'relative',
         }}
       >
-        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-          <div style={{ textAlign: 'center', maxWidth: '700px', margin: '0 auto clamp(3rem, 6vh, 4.5rem)' }}>
+        <div style={{ maxWidth: '1680px', margin: '0 auto' }}>
+          {/* Section Header */}
+          <div style={{ textAlign: 'center', maxWidth: '780px', margin: '0 auto clamp(2.5rem, 5vh, 4rem)' }}>
             <h2
               style={{
                 fontSize: 'clamp(2.2rem, 4.5vw, 3.4rem)',
@@ -653,71 +1017,283 @@ export default function HoldingPageClient() {
             </p>
           </div>
 
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-              gap: '1.75rem',
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+              .blueprint-triptych-grid {
+                display: grid;
+                grid-template-columns: minmax(280px, 340px) minmax(500px, 1fr) minmax(280px, 340px);
+                gap: clamp(1.5rem, 3vw, 3.5rem);
+                align-items: center;
+                max-width: 1600px;
+                margin: 0 auto;
+              }
+              @media (max-width: 1200px) {
+                .blueprint-triptych-grid {
+                  grid-template-columns: 1fr;
+                  gap: 3rem;
+                }
+              }
+
+              .blueprint-minimal-side {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                transition: opacity 0.3s ease;
+              }
+
+              .bookcase-direct-canvas {
+                position: relative;
+                width: 100%;
+                max-width: 880px;
+                margin: 0 auto;
+              }
+              .bookcase-direct-img {
+                width: 100%;
+                height: auto;
+                display: block;
+                user-select: none;
+              }
+
+              .shelf-minimal-hotspot {
+                position: absolute;
+                cursor: pointer;
+                transition: all 0.25s ease;
+                border: none;
+                outline: none;
+                background: transparent;
+                box-sizing: border-box;
+                z-index: 20;
+              }
+              .shelf-minimal-hotspot:hover, .shelf-minimal-hotspot.active {
+                background: radial-gradient(ellipse at center, rgba(245, 158, 11, 0.16) 0%, rgba(245, 158, 11, 0.03) 60%, transparent 80%);
+                border: none;
+                outline: none;
+              }
+            `,
             }}
-          >
-            {OPERATING_PILLARS.map((p, idx) => (
+          />
+
+          {/* 3-Column Triptych Grid */}
+          <div className="blueprint-triptych-grid">
+            {/* ───────────────── LEFT MINIMALIST PANEL (Bays 01 & 02) ───────────────── */}
+            <div className="blueprint-minimal-side">
+              {/* Overline Phase */}
               <div
-                key={idx}
                 style={{
-                  backgroundColor: '#f8fafc',
-                  borderRadius: '20px',
-                  padding: '2rem',
-                  border: '1px solid #e2e8f0',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  transition: 'all 0.3s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#ffffff';
-                  e.currentTarget.style.borderColor = '#cbd5e1';
-                  e.currentTarget.style.boxShadow = '0 12px 30px rgba(0, 0, 0, 0.06)';
-                  e.currentTarget.style.transform = 'translateY(-3px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#f8fafc';
-                  e.currentTarget.style.borderColor = '#e2e8f0';
-                  e.currentTarget.style.boxShadow = 'none';
-                  e.currentTarget.style.transform = 'translateY(0)';
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.12em',
+                  color: '#f59e0b',
+                  textTransform: 'uppercase',
+                  marginBottom: '0.6rem',
                 }}
               >
-                <div
-                  style={{
-                    fontSize: '0.82rem',
-                    fontWeight: 800,
-                    color: '#f59e0b',
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
-                    marginBottom: '0.75rem',
-                  }}
-                >
-                  {p.phase}
-                </div>
-
-                <h3 style={{ fontSize: '1.3rem', fontWeight: 600, color: '#0f172a', margin: '0 0 0.85rem 0' }}>
-                  {p.title}
-                </h3>
-
-                <p style={{ fontSize: '0.92rem', color: '#64748b', lineHeight: 1.6, margin: '0 0 1.5rem 0', flexGrow: 1 }}>
-                  {p.desc}
-                </p>
-
-                <div style={{ borderTop: '1px solid #e2e8f0', paddingTop: '1.25rem' }}>
-                  <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-                    {p.highlights.map((hl, i) => (
-                      <li key={i} style={{ fontSize: '0.82rem', color: '#334155', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                        <span style={{ width: '5px', height: '5px', borderRadius: '50%', backgroundColor: '#0f172a', flexShrink: 0 }} />
-                        <span>{hl}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {activeLeftShelf.bayPhase}
               </div>
-            ))}
+
+              {/* Title */}
+              <h3
+                style={{
+                  fontSize: 'clamp(1.4rem, 2vw, 1.85rem)',
+                  fontWeight: 400,
+                  color: '#0f172a',
+                  margin: '0 0 1rem 0',
+                  lineHeight: 1.25,
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                {activeLeftShelf.shelfTitle}
+              </h3>
+
+              {/* Summary Description */}
+              <p
+                style={{
+                  fontSize: '0.94rem',
+                  color: '#64748b',
+                  lineHeight: 1.7,
+                  margin: '0 0 1.5rem 0',
+                }}
+              >
+                {activeLeftShelf.summary}
+              </p>
+
+              {/* Minimal Highlights List */}
+              <ul
+                style={{
+                  listStyle: 'none',
+                  padding: 0,
+                  margin: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.65rem',
+                }}
+              >
+                {activeLeftShelf.deliverables.map((deliv, i) => (
+                  <li
+                    key={i}
+                    style={{
+                      fontSize: '0.86rem',
+                      color: '#475569',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '10px',
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: '#f59e0b',
+                        fontSize: '0.9rem',
+                        lineHeight: '1.2rem',
+                        flexShrink: 0,
+                      }}
+                    >
+                      •
+                    </span>
+                    <span>{deliv}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* ───────────────── CENTER BOOKCASE IMAGE (Direct, Clean) ───────────────── */}
+            <div className="bookcase-direct-canvas">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/assets/holding-bp.png"
+                alt="Zawr Holding Operating Blueprint Classical Library"
+                className="bookcase-direct-img"
+                loading="lazy"
+                decoding="async"
+              />
+
+              {/* 16 Interactive Hotspots */}
+              {BLUEPRINT_SHELVES.map((item) => {
+                const isHovered = hoveredShelfId === item.id;
+                const isLeftSelected = activeLeftShelf.id === item.id;
+                const isRightSelected = activeRightShelf.id === item.id;
+                const isActive = isHovered || isLeftSelected || isRightSelected;
+
+                return (
+                  <div
+                    key={item.id}
+                    className={`shelf-minimal-hotspot ${isActive ? 'active' : ''}`}
+                    style={{
+                      left: `${item.x}%`,
+                      top: `${item.y}%`,
+                      width: `${item.w}%`,
+                      height: `${item.h}%`,
+                    }}
+                    onMouseEnter={() => {
+                      setHoveredShelfId(item.id);
+                      if (item.bayIndex === 0 || item.bayIndex === 1) {
+                        setLeftShelfId(item.id);
+                        setActiveLeftBay(item.bayIndex);
+                      } else {
+                        setRightShelfId(item.id);
+                        setActiveRightBay(item.bayIndex);
+                      }
+                    }}
+                    onMouseLeave={() => setHoveredShelfId(null)}
+                    onClick={() => {
+                      if (item.bayIndex === 0 || item.bayIndex === 1) {
+                        setLeftShelfId(item.id);
+                        setActiveLeftBay(item.bayIndex);
+                      } else {
+                        setRightShelfId(item.id);
+                        setActiveRightBay(item.bayIndex);
+                      }
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`${item.bayPhase}: ${item.shelfTitle}`}
+                    title={`${item.bayPhase}: ${item.shelfTitle}`}
+                  />
+                );
+              })}
+            </div>
+
+            {/* ───────────────── RIGHT MINIMALIST PANEL (Bays 03 & 04) ───────────────── */}
+            <div className="blueprint-minimal-side">
+              {/* Overline Phase */}
+              <div
+                style={{
+                  fontSize: '0.78rem',
+                  fontWeight: 700,
+                  letterSpacing: '0.12em',
+                  color: '#f59e0b',
+                  textTransform: 'uppercase',
+                  marginBottom: '0.6rem',
+                }}
+              >
+                {activeRightShelf.bayPhase}
+              </div>
+
+              {/* Title */}
+              <h3
+                style={{
+                  fontSize: 'clamp(1.4rem, 2vw, 1.85rem)',
+                  fontWeight: 400,
+                  color: '#0f172a',
+                  margin: '0 0 1rem 0',
+                  lineHeight: 1.25,
+                  letterSpacing: '-0.02em',
+                }}
+              >
+                {activeRightShelf.shelfTitle}
+              </h3>
+
+              {/* Summary Description */}
+              <p
+                style={{
+                  fontSize: '0.94rem',
+                  color: '#64748b',
+                  lineHeight: 1.7,
+                  margin: '0 0 1.5rem 0',
+                }}
+              >
+                {activeRightShelf.summary}
+              </p>
+
+              {/* Minimal Highlights List */}
+              <ul
+                style={{
+                  listStyle: 'none',
+                  padding: 0,
+                  margin: 0,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.65rem',
+                }}
+              >
+                {activeRightShelf.deliverables.map((deliv, i) => (
+                  <li
+                    key={i}
+                    style={{
+                      fontSize: '0.86rem',
+                      color: '#475569',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '10px',
+                      lineHeight: 1.5,
+                    }}
+                  >
+                    <span
+                      style={{
+                        color: '#f59e0b',
+                        fontSize: '0.9rem',
+                        lineHeight: '1.2rem',
+                        flexShrink: 0,
+                      }}
+                    >
+                      •
+                    </span>
+                    <span>{deliv}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>
