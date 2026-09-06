@@ -178,7 +178,7 @@ export default function EnergyPageClient() {
         >
           <h1
             style={{
-              fontSize: 'clamp(3.5rem, 11.5vw, 11rem)',
+              fontSize: 'clamp(2.2rem, 9.5vw, 11rem)',
               fontWeight: 700,
               letterSpacing: '-0.04em',
               lineHeight: 1,
@@ -400,7 +400,7 @@ export default function EnergyPageClient() {
           {/* Base Layer: Warm Amber Word */}
           <h2
             style={{
-              fontSize: 'clamp(2.8rem, 8.8vw, 7.8rem)',
+              fontSize: 'clamp(1.6rem, 7.8vw, 7.8rem)',
               fontWeight: 600,
               letterSpacing: '-0.035em',
               color: '#f49d37',
@@ -462,7 +462,7 @@ export default function EnergyPageClient() {
             >
               <h2
                 style={{
-                  fontSize: 'clamp(2.8rem, 8.8vw, 7.8rem)',
+                  fontSize: 'clamp(1.6rem, 7.8vw, 7.8rem)',
                   fontWeight: 600,
                   letterSpacing: '-0.035em',
                   color: '#ffffff',
@@ -968,28 +968,28 @@ export default function EnergyPageClient() {
               : { position: 'absolute', top: 0, left: 0, right: 0, height: '100vh', zIndex: 1, backgroundColor: '#ffffff', overflow: 'hidden' }
           }
         >
-          {/* Top Header & Interactive Category Navigation Tabs */}
+          {/* Top Header & Horizontally Scrollable Category Navigation Tabs */}
           <div
+            className="energy-showcase-header"
             style={{
               position: 'absolute',
-              top: 'clamp(1.5rem, 3.5vh, 3rem)',
+              top: 'clamp(1.25rem, 3vh, 2.75rem)',
               left: 0,
               right: 0,
               maxWidth: '1240px',
               margin: '0 auto',
-              padding: '0 1.5rem',
+              padding: '0 clamp(1rem, 3vw, 1.5rem)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'flex-end',
-              flexWrap: 'wrap',
               gap: '1rem',
               zIndex: 20,
             }}
           >
-            <div>
+            <div style={{ flexShrink: 0 }}>
               <span
                 style={{
-                  fontSize: '0.82rem',
+                  fontSize: '0.8rem',
                   fontWeight: 600,
                   color: '#f59e0b',
                   textTransform: 'uppercase',
@@ -1002,23 +1002,29 @@ export default function EnergyPageClient() {
               </span>
               <h2
                 style={{
-                  fontSize: 'clamp(1.75rem, 3.2vw, 2.6rem)',
+                  fontSize: 'clamp(1.4rem, 3.2vw, 2.6rem)',
                   fontWeight: 400,
                   letterSpacing: '-0.03em',
                   color: '#0f172a',
                   margin: 0,
+                  lineHeight: 1.2,
                 }}
               >
                 Clean Energy Across Industries
               </h2>
             </div>
 
-            {/* Interactive Category Tabs */}
+            {/* Horizontally Scrollable Category Tabs */}
             <div
+              className="energy-tab-scroll"
               style={{
                 display: 'flex',
                 gap: '8px',
-                flexWrap: 'wrap',
+                overflowX: 'auto',
+                whiteSpace: 'nowrap',
+                maxWidth: '100%',
+                paddingBottom: '4px',
+                WebkitOverflowScrolling: 'touch',
               }}
             >
               {PROJECTS_DATA.map((proj, idx) => {
@@ -1038,8 +1044,9 @@ export default function EnergyPageClient() {
                       backgroundColor: isSelected ? '#0f172a' : '#ffffff',
                       color: isSelected ? '#ffffff' : '#64748b',
                       cursor: 'pointer',
+                      flexShrink: 0,
                       transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                      transform: isSelected ? 'scale(1.04)' : 'scale(1)',
+                      transform: isSelected ? 'scale(1.03)' : 'scale(1)',
                       boxShadow: isSelected ? '0 4px 14px rgba(15, 23, 42, 0.15)' : 'none',
                     }}
                   >
@@ -1052,9 +1059,10 @@ export default function EnergyPageClient() {
 
           {/* Stacked Full-Card Stage (Centered in Viewport - Matching OurProcessSection full-bleed cards) */}
           <div
+            className="energy-stacked-stage"
             style={{
               position: 'absolute',
-              top: '55%',
+              top: '56%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
               width: '90%',
@@ -1141,11 +1149,11 @@ export default function EnergyPageClient() {
                     style={{
                       position: 'absolute',
                       inset: 0,
-                      background: 'linear-gradient(to top, rgba(5, 8, 18, 0.92) 0%, rgba(5, 8, 18, 0.55) 45%, rgba(0, 0, 0, 0) 85%)',
+                      background: 'linear-gradient(to top, rgba(5, 8, 18, 0.95) 0%, rgba(5, 8, 18, 0.65) 45%, rgba(0, 0, 0, 0) 85%)',
                       display: 'flex',
                       flexDirection: 'column',
                       justifyContent: 'flex-end',
-                      padding: 'clamp(2rem, 4vw, 3.25rem)',
+                      padding: 'clamp(1.25rem, 3.5vw, 3.25rem)',
                       boxSizing: 'border-box',
                       zIndex: 2,
                     }}
@@ -1155,18 +1163,18 @@ export default function EnergyPageClient() {
                       style={{
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '1rem',
+                        gap: 'clamp(0.45rem, 1.2vh, 0.9rem)',
                         zIndex: 3,
                         maxWidth: '850px',
                       }}
                     >
                       <h3
                         style={{
-                          fontSize: 'clamp(1.75rem, 3.2vw, 2.8rem)',
+                          fontSize: 'clamp(1.25rem, 3vw, 2.6rem)',
                           fontWeight: 500,
                           color: '#ffffff',
                           letterSpacing: '-0.025em',
-                          lineHeight: 1.15,
+                          lineHeight: 1.18,
                           margin: 0,
                           textShadow: '0 2px 10px rgba(0, 0, 0, 0.5)',
                         }}
@@ -1176,9 +1184,9 @@ export default function EnergyPageClient() {
 
                       <p
                         style={{
-                          fontSize: 'clamp(0.95rem, 1.4vw, 1.12rem)',
+                          fontSize: 'clamp(0.82rem, 1.3vw, 1.05rem)',
                           color: 'rgba(255, 255, 255, 0.88)',
-                          lineHeight: 1.6,
+                          lineHeight: 1.5,
                           margin: 0,
                           textShadow: '0 1px 6px rgba(0, 0, 0, 0.4)',
                           maxWidth: '750px',
@@ -1194,21 +1202,21 @@ export default function EnergyPageClient() {
                           justifyContent: 'space-between',
                           alignItems: 'center',
                           flexWrap: 'wrap',
-                          gap: '1rem',
-                          marginTop: '0.5rem',
+                          gap: '0.65rem',
+                          marginTop: '0.2rem',
                         }}
                       >
-                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                        <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
                           {item.tags.map((tag) => (
                             <span
                               key={tag}
                               style={{
-                                padding: '5px 14px',
+                                padding: '3px 10px',
                                 borderRadius: '100px',
                                 backgroundColor: 'rgba(255, 255, 255, 0.12)',
                                 backdropFilter: 'blur(8px)',
                                 border: '1px solid rgba(255, 255, 255, 0.18)',
-                                fontSize: '0.8rem',
+                                fontSize: '0.72rem',
                                 fontWeight: 500,
                                 color: '#ffffff',
                               }}
@@ -1223,16 +1231,17 @@ export default function EnergyPageClient() {
                           style={{
                             display: 'inline-flex',
                             alignItems: 'center',
-                            gap: '8px',
+                            gap: '6px',
                             backgroundColor: '#ffffff',
                             color: '#0f172a',
-                            padding: '10px 22px',
+                            padding: '8px 18px',
                             borderRadius: '100px',
-                            fontSize: '0.88rem',
+                            fontSize: '0.82rem',
                             fontWeight: 600,
                             textDecoration: 'none',
                             boxShadow: '0 4px 16px rgba(0, 0, 0, 0.25)',
                             transition: 'all 0.25s ease',
+                            flexShrink: 0,
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.backgroundColor = '#f59e0b';
@@ -1246,7 +1255,7 @@ export default function EnergyPageClient() {
                           }}
                         >
                           <span>Deploy with Zawr Energy</span>
-                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><line x1="7" y1="17" x2="17" y2="7" /><polyline points="7 7 17 7 17 17" /></svg>
                         </Link>
                       </div>
                     </div>
@@ -1376,9 +1385,30 @@ export default function EnergyPageClient() {
           transform: scale(1.04);
         }
 
+        .energy-tab-scroll {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        .energy-tab-scroll::-webkit-scrollbar {
+          display: none;
+        }
+
         @media (max-width: 900px) {
           .energy-bento-col-4 {
             grid-column: span 6 !important;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .energy-showcase-header {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 0.65rem !important;
+          }
+          .energy-stacked-stage {
+            top: 59% !important;
+            width: 94% !important;
+            height: clamp(380px, 62vh, 520px) !important;
           }
         }
 
@@ -1389,6 +1419,9 @@ export default function EnergyPageClient() {
           }
           .energy-bento-col-4 {
             grid-column: span 12 !important;
+          }
+          .energy-editorial-grid {
+            grid-template-columns: 1fr !important;
           }
         }
       ` }} />
