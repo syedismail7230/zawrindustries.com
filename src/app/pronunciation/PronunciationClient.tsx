@@ -25,7 +25,6 @@ export interface LanguagePronunciation {
   locale: string;
   speechText: string;
   dir?: 'ltr' | 'rtl';
-  description: string;
 }
 
 export const PRONUNCIATION_LANGUAGES: LanguagePronunciation[] = [
@@ -39,7 +38,6 @@ export const PRONUNCIATION_LANGUAGES: LanguagePronunciation[] = [
     locale: 'en-US',
     speechText: 'Zah-vahr',
     dir: 'ltr',
-    description: 'Two equal syllables: "ZAH" (rhymes with father) followed by "VAHR" (rhymes with star).',
   },
   {
     id: 'hi',
@@ -51,7 +49,6 @@ export const PRONUNCIATION_LANGUAGES: LanguagePronunciation[] = [
     locale: 'hi-IN',
     speechText: 'ज़ावर',
     dir: 'ltr',
-    description: 'स्पष्ट "ज़ा" और "वर" ध्वनि — जैसे ज़ावर इंडस्ट्रीज।',
   },
   {
     id: 'ar',
@@ -63,7 +60,6 @@ export const PRONUNCIATION_LANGUAGES: LanguagePronunciation[] = [
     locale: 'ar-SA',
     speechText: 'زَاوَرْ',
     dir: 'rtl',
-    description: 'نطق فصيح يبدأ بحرف الزاي المفتوح مع مد خفيف ثم الواو والراء الساكنة.',
   },
   {
     id: 'fr',
@@ -75,7 +71,6 @@ export const PRONUNCIATION_LANGUAGES: LanguagePronunciation[] = [
     locale: 'fr-FR',
     speechText: 'Za-var',
     dir: 'ltr',
-    description: 'Prononciation fluide en deux temps: "ZA" puis "VAR" avec un R doux.',
   },
   {
     id: 'de',
@@ -87,7 +82,6 @@ export const PRONUNCIATION_LANGUAGES: LanguagePronunciation[] = [
     locale: 'de-DE',
     speechText: 'Za-var',
     dir: 'ltr',
-    description: 'Klare phonetische Betonung auf ZA und VAR.',
   },
   {
     id: 'es',
@@ -99,7 +93,6 @@ export const PRONUNCIATION_LANGUAGES: LanguagePronunciation[] = [
     locale: 'es-ES',
     speechText: 'Za-var',
     dir: 'ltr',
-    description: 'Dos sílabas equilibradas: "ZA" y "VAR" con cadencia nítida.',
   },
   {
     id: 'zh',
@@ -111,7 +104,6 @@ export const PRONUNCIATION_LANGUAGES: LanguagePronunciation[] = [
     locale: 'zh-CN',
     speechText: '扎瓦尔',
     dir: 'ltr',
-    description: '标准音节发音：扎 (zhā) - 瓦尔 (wǎ ěr)。',
   },
 ];
 
@@ -124,37 +116,36 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     question: 'How do you pronounce ZAWR correctly?',
     answer:
-      'ZAWR is officially pronounced as "ZA-VAR" (phonetic IPA: /ˈzɑːvɑːr/). It consists of two distinct syllables: "ZAH" (rhyming with father or spa) and "VAHR" (rhyming with star or bazaar). The accent falls smoothly across both syllables with an authoritative, open cadence.',
+      'ZAWR is officially pronounced as "ZA-VAR" (phonetic IPA: /ˈzɑːvɑːr/). It consists of two distinct syllables: "ZAH" (rhyming with father) and "VAHR" (rhyming with star or bazaar). The accent is balanced with an authoritative, open vocal cadence.',
   },
   {
     question: 'Why is ZAWR spelled with a W but pronounced as ZA-VAR?',
     answer:
-      'The orthography of ZAWR reflects classical international etymology where the consonant "W" produces a resonant, sonorous "V" vocal transition ("ZA-VAR"). This delivers a memorable, global brand resonance that translates seamlessly across English, Hindi, Arabic, European, and Asian languages.',
+      'The orthography of ZAWR reflects classical international etymology where the consonant "W" produces a resonant "V" vocal transition ("ZA-VAR"). This provides a memorable acoustic resonance that translates effortlessly across English, Hindi, Arabic, European, and Asian languages.',
   },
   {
     question: 'Are "Zawar", "Zavar", "Zaur", and "Zaver" the same as Zawr Industries?',
     answer:
-      'Yes. Many users search for phonetic transliterations like "Zawar Industries", "Zavar", "Zaur", "Zaver Industries", or "Zohar". All of these phonetic spellings refer to Zawr Industries LLP (zawrindustries.com), the multi-sector technology, manufacturing, energy, and logistics enterprise.',
+      'Yes. Users searching for phonetic variations like "Zawar Industries", "Zavar", "Zaur", "Zaver Industries", or "Zohar" are directed to Zawr Industries LLP (zawrindustries.com), the multi-sector technology, manufacturing, energy, and logistics enterprise.',
   },
   {
     question: 'What are the most common mispronunciations of Zawr?',
     answer:
-      'The two most frequent mispronunciations are saying "Zore" (rhyming with door) or "Zow-er" (rhyming with sour/power). Both are incorrect. The correct and official pronunciation is always "ZA-VAR" (/ˈzɑːvɑːr/).',
+      'The two most frequent mispronunciations are "Zore" (rhyming with door) or "Zow-er" (rhyming with sour). Both are incorrect. The official pronunciation is "ZA-VAR" (/ˈzɑːvɑːr/).',
   },
   {
     question: 'What does the brand name ZAWR mean and represent?',
     answer:
-      'ZAWR represents industrial autonomy, architectural permanence, and technological momentum. It is the corporate identity of Zawr Industries LLP, uniting enterprise IT services, precision robotics manufacturing, clean energy microgrids, global freight logistics, sustainable real estate, and multi-brand franchise holdings.',
+      'ZAWR represents industrial autonomy, architectural permanence, and technological momentum across enterprise software, precision robotics manufacturing, clean energy microgrids, global freight logistics, sustainable real estate, and multi-brand franchise operations.',
   },
 ];
 
 export default function PronunciationClient() {
   const [selectedLangId, setSelectedLangId] = useState<string>('en');
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [playbackSpeed, setPlaybackSpeed] = useState<number>(1.0);
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const [isTransitioning, setIsTransitioning] = useState<boolean>(false);
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const mobileDropdownRef = useRef<HTMLDivElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
   const safetyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -250,9 +241,7 @@ export default function PronunciationClient() {
       }
 
       const now = ctx.currentTime;
-      const baseDuration = 1.35;
-      const speedMultiplier = playbackSpeed === 0.75 ? 1.35 : 1.0;
-      const duration = baseDuration * speedMultiplier;
+      const duration = 1.35;
 
       const masterGain = ctx.createGain();
       masterGain.gain.setValueAtTime(0, now);
@@ -265,7 +254,7 @@ export default function PronunciationClient() {
       const osc1 = ctx.createOscillator();
       osc1.type = 'sawtooth';
       osc1.frequency.setValueAtTime(128, now);
-      osc1.frequency.exponentialRampToValueAtTime(118, now + 0.5 * speedMultiplier);
+      osc1.frequency.exponentialRampToValueAtTime(118, now + 0.5);
 
       const filter1 = ctx.createBiquadFilter();
       filter1.type = 'bandpass';
@@ -275,13 +264,13 @@ export default function PronunciationClient() {
       // Syllable 2: "VAHR"
       const osc2 = ctx.createOscillator();
       osc2.type = 'sawtooth';
-      osc2.frequency.setValueAtTime(132, now + 0.55 * speedMultiplier);
+      osc2.frequency.setValueAtTime(132, now + 0.55);
       osc2.frequency.exponentialRampToValueAtTime(105, now + duration);
 
       const filter2 = ctx.createBiquadFilter();
       filter2.type = 'bandpass';
-      filter2.frequency.setValueAtTime(780, now + 0.55 * speedMultiplier);
-      filter2.Q.setValueAtTime(4.0, now + 0.55 * speedMultiplier);
+      filter2.frequency.setValueAtTime(780, now + 0.55);
+      filter2.Q.setValueAtTime(4.0, now + 0.55);
 
       osc1.connect(filter1);
       filter1.connect(masterGain);
@@ -290,9 +279,9 @@ export default function PronunciationClient() {
       filter2.connect(masterGain);
 
       osc1.start(now);
-      osc1.stop(now + 0.52 * speedMultiplier);
+      osc1.stop(now + 0.52);
 
-      osc2.start(now + 0.55 * speedMultiplier);
+      osc2.start(now + 0.55);
       osc2.stop(now + duration);
 
       setTimeout(() => {
@@ -301,7 +290,7 @@ export default function PronunciationClient() {
     } catch {
       setIsPlaying(false);
     }
-  }, [playbackSpeed]);
+  }, []);
 
   const playAudio = useCallback(
     (customLang?: LanguagePronunciation) => {
@@ -321,10 +310,9 @@ export default function PronunciationClient() {
 
       setIsPlaying(true);
 
-      const maxWait = playbackSpeed === 0.75 ? 3200 : 2200;
       safetyTimeoutRef.current = setTimeout(() => {
         setIsPlaying(false);
-      }, maxWait);
+      }, 2200);
 
       if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
         try {
@@ -362,7 +350,7 @@ export default function PronunciationClient() {
 
           const baseRate =
             targetLang.id === 'hi' || targetLang.id === 'zh' ? 0.82 : 0.88;
-          utterance.rate = playbackSpeed === 0.75 ? baseRate * 0.78 : baseRate;
+          utterance.rate = baseRate;
           utterance.pitch = 0.95;
 
           utterance.onend = () => {
@@ -385,7 +373,7 @@ export default function PronunciationClient() {
         playWebAudioFallback();
       }
     },
-    [isPlaying, currentLang, playbackSpeed, playWebAudioFallback]
+    [isPlaying, currentLang, playWebAudioFallback]
   );
 
   return (
@@ -395,13 +383,13 @@ export default function PronunciationClient() {
         minHeight: '100vh',
         backgroundColor: '#ffffff',
         color: '#0f172a',
-        padding: 'clamp(6.5rem, 12vh, 8.5rem) 1.5rem clamp(4rem, 8vh, 6rem) 1.5rem',
+        padding: 'clamp(6.5rem, 12vh, 9.5rem) 1.5rem clamp(4rem, 8vh, 6rem) 1.5rem',
         boxSizing: 'border-box',
         position: 'relative',
       }}
     >
       {/* ─────────────────────────────────────────────────────────────
-          1. GOOGLE PRONUNCIATION STUDIO HERO (Interactive Audio Stage)
+          1. MINIMALIST PRONUNCIATION HERO (Iconic Wordmark & Audio)
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
@@ -414,13 +402,10 @@ export default function PronunciationClient() {
           textAlign: 'center',
         }}
       >
-        {/* Top Google Search Badge */}
+        {/* Top Minimal Eyebrow */}
         <div
           className="pronunciation-top-eyebrow"
           style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '8px',
             fontSize: 'clamp(0.72rem, 1.2vw, 0.82rem)',
             fontWeight: 600,
             letterSpacing: '0.36em',
@@ -430,10 +415,10 @@ export default function PronunciationClient() {
             userSelect: 'none',
           }}
         >
-          <span>OFFICIAL PRONUNCIATION GUIDE</span>
+          PRONUNCIATION
         </div>
 
-        {/* Primary Brand Wordmark in Website Poppins Bold */}
+        {/* Primary Brand Wordmark in Clean Poppins Bold */}
         <h1
           className={`pronunciation-wordmark ${poppins.className}`}
           style={{
@@ -499,14 +484,13 @@ export default function PronunciationClient() {
           </div>
         </div>
 
-        {/* Audio Control Row (Play Button + Speed Control) */}
+        {/* Audio Control (Iconic Circular Button + Minimalist HEAR IT Label) */}
         <div
           style={{
-            display: 'flex',
-            flexDirection: 'column',
+            display: 'inline-flex',
             alignItems: 'center',
-            gap: '14px',
-            marginBottom: 'clamp(2rem, 4vh, 3rem)',
+            justifyContent: 'center',
+            marginBottom: 'clamp(2.5rem, 5vh, 3.75rem)',
           }}
         >
           <div
@@ -538,8 +522,8 @@ export default function PronunciationClient() {
             <div
               className={`pronunciation-play-circle ${isPlaying ? 'is-playing' : ''}`}
               style={{
-                width: '60px',
-                height: '60px',
+                width: '56px',
+                height: '56px',
                 borderRadius: '50%',
                 border: '1.5px solid #000000',
                 backgroundColor: isPlaying ? '#000000' : 'transparent',
@@ -549,7 +533,7 @@ export default function PronunciationClient() {
                 justifyContent: 'center',
                 position: 'relative',
                 transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                boxShadow: isPlaying ? '0 0 0 8px rgba(0, 0, 0, 0.06)' : '0 4px 14px rgba(0, 0, 0, 0.06)',
+                boxShadow: isPlaying ? '0 0 0 6px rgba(0, 0, 0, 0.06)' : 'none',
               }}
             >
               {isPlaying && (
@@ -566,12 +550,12 @@ export default function PronunciationClient() {
               )}
 
               {isPlaying ? (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                   <rect x="6" y="5" width="4" height="14" rx="1" />
                   <rect x="14" y="5" width="4" height="14" rx="1" />
                 </svg>
               ) : (
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: '3px' }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: '3px' }}>
                   <polygon points="6 4 20 12 6 20 6 4" />
                 </svg>
               )}
@@ -581,66 +565,15 @@ export default function PronunciationClient() {
             <span
               className={poppins.className}
               style={{
-                fontSize: '0.85rem',
+                fontSize: '0.8rem',
                 fontWeight: 600,
                 letterSpacing: '0.22em',
                 textTransform: 'uppercase',
                 color: '#000000',
               }}
             >
-              {isPlaying ? 'PLAYING AUDIO...' : 'HEAR PRONUNCIATION'}
+              {isPlaying ? 'PLAYING...' : 'HEAR IT'}
             </span>
-          </div>
-
-          {/* Speed Toggle */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '4px 8px',
-              borderRadius: '100px',
-              backgroundColor: '#f8fafc',
-              border: '1px solid #e2e8f0',
-              fontSize: '0.76rem',
-              color: '#64748b',
-            }}
-          >
-            <span>Speed:</span>
-            <button
-              type="button"
-              onClick={() => setPlaybackSpeed(1.0)}
-              style={{
-                background: playbackSpeed === 1.0 ? '#000000' : 'none',
-                color: playbackSpeed === 1.0 ? '#ffffff' : '#475569',
-                border: 'none',
-                padding: '3px 9px',
-                borderRadius: '100px',
-                fontSize: '0.74rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              Normal (1.0x)
-            </button>
-            <button
-              type="button"
-              onClick={() => setPlaybackSpeed(0.75)}
-              style={{
-                background: playbackSpeed === 0.75 ? '#000000' : 'none',
-                color: playbackSpeed === 0.75 ? '#ffffff' : '#475569',
-                border: 'none',
-                padding: '3px 9px',
-                borderRadius: '100px',
-                fontSize: '0.74rem',
-                fontWeight: 600,
-                cursor: 'pointer',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              Slow (0.75x)
-            </button>
           </div>
         </div>
 
@@ -648,9 +581,9 @@ export default function PronunciationClient() {
         <div
           style={{
             width: '1px',
-            height: '24px',
+            height: '28px',
             backgroundColor: '#cbd5e1',
-            margin: '0 auto 1.25rem auto',
+            margin: '0 auto clamp(1.25rem, 2.5vh, 1.75rem) auto',
           }}
         />
 
@@ -663,14 +596,14 @@ export default function PronunciationClient() {
             letterSpacing: '0.28em',
             textTransform: 'uppercase',
             color: '#64748b',
-            marginBottom: 'clamp(1.75rem, 3.5vh, 2.5rem)',
+            marginBottom: 'clamp(2rem, 4vh, 3rem)',
             userSelect: 'none',
           }}
         >
           SAME NAME. A GLOBAL CONVERSATION.
         </div>
 
-        {/* Multilingual Selector: Desktop Horizontal Bar */}
+        {/* Multilingual Selector: Desktop Minimalist Line Bar */}
         <div
           className="pronunciation-desktop-langs"
           style={{
@@ -680,9 +613,8 @@ export default function PronunciationClient() {
             justifyContent: 'center',
             alignItems: 'stretch',
             borderTop: '1px solid #f1f5f9',
-            borderBottom: '1px solid #f1f5f9',
-            padding: '1.25rem 0',
-            marginBottom: 'clamp(3.5rem, 7vh, 5.5rem)',
+            paddingTop: '1.75rem',
+            marginBottom: 'clamp(4.5rem, 9vh, 6.5rem)',
           }}
         >
           {PRONUNCIATION_LANGUAGES.map((lang, index) => {
@@ -704,7 +636,7 @@ export default function PronunciationClient() {
                   background: 'none',
                   border: 'none',
                   borderRight: isLast ? 'none' : '1px solid #e2e8f0',
-                  padding: '0.65rem 0.8rem',
+                  padding: '0.75rem 0.9rem',
                   cursor: 'pointer',
                   position: 'relative',
                   transition: 'opacity 0.2s ease, transform 0.2s ease',
@@ -714,7 +646,7 @@ export default function PronunciationClient() {
                 <div
                   className={poppins.className}
                   style={{
-                    fontSize: '0.96rem',
+                    fontSize: '0.98rem',
                     fontWeight: isSelected ? 700 : 500,
                     color: isSelected ? '#000000' : '#475569',
                     marginBottom: '4px',
@@ -724,7 +656,7 @@ export default function PronunciationClient() {
                 </div>
                 <div
                   style={{
-                    width: '20px',
+                    width: '22px',
                     height: '2px',
                     backgroundColor: isSelected ? '#000000' : 'transparent',
                     marginBottom: '5px',
@@ -734,7 +666,7 @@ export default function PronunciationClient() {
                 <div
                   className={poppins.className}
                   style={{
-                    fontSize: '0.82rem',
+                    fontSize: '0.84rem',
                     fontWeight: isSelected ? 600 : 400,
                     color: isSelected ? '#0f172a' : '#64748b',
                   }}
@@ -747,14 +679,14 @@ export default function PronunciationClient() {
           })}
         </div>
 
-        {/* Multilingual Selector: Mobile Minimalist Dropdown */}
+        {/* Multilingual Selector: Mobile Dropdown */}
         <div
           ref={mobileDropdownRef}
           className="pronunciation-mobile-dropdown-wrapper"
           style={{
             position: 'relative',
             display: 'none',
-            marginBottom: '3rem',
+            marginBottom: '4rem',
             width: '100%',
             maxWidth: '300px',
           }}
@@ -862,352 +794,281 @@ export default function PronunciationClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          2. GOOGLE DICTIONARY & PHONETIC ONEBOX (Rich Search Engine Result)
+          2. MINIMALIST PHONETIC SPECIFICATION (No Clunky Boxes)
       ───────────────────────────────────────────────────────────── */}
       <section
         className="pronunciation-ipa-guide"
         style={{
           width: '100%',
-          maxWidth: '1080px',
+          maxWidth: '1000px',
           margin: '0 auto clamp(4rem, 8vh, 6rem) auto',
         }}
       >
+        <div style={{ textAlign: 'center', marginBottom: 'clamp(2rem, 4vh, 3rem)' }}>
+          <span
+            style={{
+              fontSize: '0.74rem',
+              fontWeight: 600,
+              letterSpacing: '0.24em',
+              textTransform: 'uppercase',
+              color: '#64748b',
+            }}
+          >
+            PHONETIC SPECIFICATION
+          </span>
+          <h2
+            style={{
+              fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)',
+              fontWeight: 400,
+              letterSpacing: '-0.03em',
+              color: '#000000',
+              margin: '0.4rem 0 0 0',
+            }}
+          >
+            Anatomy of the Name
+          </h2>
+        </div>
+
+        {/* 3 Pure Typographic Columns with Subtle Dividers */}
         <div
           style={{
-            backgroundColor: '#f8fafc',
-            border: '1px solid #e2e8f0',
-            borderRadius: '24px',
-            padding: 'clamp(2rem, 4vw, 3.5rem)',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)',
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+            gap: 'clamp(1.5rem, 3vw, 3rem)',
+            borderTop: '1px solid #f1f5f9',
+            borderBottom: '1px solid #f1f5f9',
+            padding: '2.5rem 0',
+            marginBottom: 'clamp(2.5rem, 5vh, 3.5rem)',
           }}
         >
-          {/* Header */}
-          <div style={{ textAlign: 'left', marginBottom: '2rem' }}>
-            <span
-              style={{
-                fontSize: '0.78rem',
-                fontWeight: 600,
-                letterSpacing: '0.2em',
-                textTransform: 'uppercase',
-                color: '#64748b',
-              }}
-            >
-              DICTIONARY PHONETIC SPECIFICATION
+          {/* Col 1: IPA */}
+          <div style={{ textAlign: 'center', padding: '0 1rem' }}>
+            <span style={{ fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8' }}>
+              IPA NOTATION
             </span>
-            <h2
-              style={{
-                fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)',
-                fontWeight: 500,
-                letterSpacing: '-0.02em',
-                color: '#0f172a',
-                margin: '0.5rem 0 0 0',
-              }}
+            <div
+              className={poppins.className}
+              style={{ fontSize: 'clamp(1.7rem, 2.5vw, 2.1rem)', fontWeight: 600, color: '#000000', margin: '0.6rem 0 0.4rem 0' }}
             >
-              Phonetic Anatomy of ZAWR
-            </h2>
+              /ˈzɑː.vɑːr/
+            </div>
+            <p style={{ fontSize: '0.85rem', color: '#64748b', lineHeight: 1.6, margin: 0 }}>
+              International Phonetic Alphabet standard.
+            </p>
           </div>
 
-          {/* 3 Metric Cards */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-              gap: '1.5rem',
-              marginBottom: '2.5rem',
-            }}
-          >
-            {/* Card 1: IPA */}
+          {/* Col 2: Syllable Breakdown */}
+          <div style={{ textAlign: 'center', padding: '0 1rem' }}>
+            <span style={{ fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8' }}>
+              SYLLABLE CADENCE
+            </span>
             <div
-              style={{
-                backgroundColor: '#ffffff',
-                border: '1px solid #e2e8f0',
-                borderRadius: '16px',
-                padding: '1.5rem',
-                textAlign: 'left',
-              }}
+              className={poppins.className}
+              style={{ fontSize: 'clamp(1.7rem, 2.5vw, 2.1rem)', fontWeight: 600, color: '#000000', margin: '0.6rem 0 0.4rem 0' }}
             >
-              <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 500, marginBottom: '6px' }}>
-                IPA TRANSCRIPTION
-              </div>
-              <div
-                className={poppins.className}
-                style={{ fontSize: '1.8rem', fontWeight: 600, color: '#000000', marginBottom: '6px' }}
-              >
-                /ˈzɑː.vɑːr/
-              </div>
-              <div style={{ fontSize: '0.85rem', color: '#475569', lineHeight: 1.5 }}>
-                Standard International Phonetic Alphabet representation for international speech models.
-              </div>
+              ZAH · VAHR
             </div>
-
-            {/* Card 2: Syllable Stress */}
-            <div
-              style={{
-                backgroundColor: '#ffffff',
-                border: '1px solid #e2e8f0',
-                borderRadius: '16px',
-                padding: '1.5rem',
-                textAlign: 'left',
-              }}
-            >
-              <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 500, marginBottom: '6px' }}>
-                SYLLABLE BREAKDOWN
-              </div>
-              <div
-                className={poppins.className}
-                style={{ fontSize: '1.8rem', fontWeight: 600, color: '#000000', marginBottom: '6px' }}
-              >
-                ZAH · VAHR
-              </div>
-              <div style={{ fontSize: '0.85rem', color: '#475569', lineHeight: 1.5 }}>
-                Two equal, resonant syllables with primary vocal stress balanced across both parts.
-              </div>
-            </div>
-
-            {/* Card 3: Rhyme Reference */}
-            <div
-              style={{
-                backgroundColor: '#ffffff',
-                border: '1px solid #e2e8f0',
-                borderRadius: '16px',
-                padding: '1.5rem',
-                textAlign: 'left',
-              }}
-            >
-              <div style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 500, marginBottom: '6px' }}>
-                RHYME ANCHORS
-              </div>
-              <div
-                className={poppins.className}
-                style={{ fontSize: '1.8rem', fontWeight: 600, color: '#000000', marginBottom: '6px' }}
-              >
-                Bazaar, Star
-              </div>
-              <div style={{ fontSize: '0.85rem', color: '#475569', lineHeight: 1.5 }}>
-                The second syllable &quot;VAR&quot; rhymes with &quot;bazaar&quot;, &quot;avatar&quot;, or &quot;star&quot;.
-              </div>
-            </div>
+            <p style={{ fontSize: '0.85rem', color: '#64748b', lineHeight: 1.6, margin: 0 }}>
+              Two balanced, resonant syllables with equal weight.
+            </p>
           </div>
 
-          {/* Mouth & Tongue Articulation Guide */}
-          <div
-            style={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #e2e8f0',
-              borderRadius: '16px',
-              padding: '1.75rem',
-              textAlign: 'left',
-            }}
-          >
-            <h3
-              style={{
-                fontSize: '1.15rem',
-                fontWeight: 600,
-                color: '#0f172a',
-                margin: '0 0 1rem 0',
-              }}
-            >
-              How to Speak &quot;ZAWR&quot; (Acoustic Articulation Guide)
-            </h3>
+          {/* Col 3: Rhyme Anchors */}
+          <div style={{ textAlign: 'center', padding: '0 1rem' }}>
+            <span style={{ fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8' }}>
+              RHYMING ANCHORS
+            </span>
             <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                gap: '1.25rem',
-              }}
+              className={poppins.className}
+              style={{ fontSize: 'clamp(1.7rem, 2.5vw, 2.1rem)', fontWeight: 600, color: '#000000', margin: '0.6rem 0 0.4rem 0' }}
             >
-              <div>
-                <span style={{ fontWeight: 700, color: '#000000' }}>1. Initial &quot;Z&quot;</span>
-                <p style={{ margin: '4px 0 0 0', fontSize: '0.86rem', color: '#475569', lineHeight: 1.5 }}>
-                  Voiced alveolar fricative: Place the tongue behind upper teeth and voice a soft, vibrating &quot;z&quot;.
-                </p>
-              </div>
-              <div>
-                <span style={{ fontWeight: 700, color: '#000000' }}>2. Open &quot;AH&quot;</span>
-                <p style={{ margin: '4px 0 0 0', fontSize: '0.86rem', color: '#475569', lineHeight: 1.5 }}>
-                  Open back unrounded vowel: Drop jaw slightly for a clear &quot;ah&quot; as in <em>father</em> or <em>calm</em>.
-                </p>
-              </div>
-              <div>
-                <span style={{ fontWeight: 700, color: '#000000' }}>3. Resonant &quot;V&quot;</span>
-                <p style={{ margin: '4px 0 0 0', fontSize: '0.86rem', color: '#475569', lineHeight: 1.5 }}>
-                  Voiced labiodental: Lightly touch top teeth to lower lip, vocalizing the &quot;v&quot; transition.
-                </p>
-              </div>
-              <div>
-                <span style={{ fontWeight: 700, color: '#000000' }}>4. Final &quot;AHR&quot;</span>
-                <p style={{ margin: '4px 0 0 0', fontSize: '0.86rem', color: '#475569', lineHeight: 1.5 }}>
-                  Alveolar resonant: Complete with an open &quot;ahr&quot; cadence as in <em>star</em> or <em>radar</em>.
-                </p>
-              </div>
+              Bazaar, Star
             </div>
+            <p style={{ fontSize: '0.85rem', color: '#64748b', lineHeight: 1.6, margin: 0 }}>
+              Ending in an open, sonorous vocal resonance.
+            </p>
+          </div>
+        </div>
+
+        {/* Minimalist Speech Acoustics Strip */}
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+            gap: '1.5rem',
+            textAlign: 'left',
+          }}
+        >
+          <div>
+            <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0f172a', marginBottom: '2px' }}>1. Initial &quot;Z&quot;</div>
+            <p style={{ margin: 0, fontSize: '0.82rem', color: '#64748b', lineHeight: 1.5 }}>
+              Voiced alveolar fricative: gentle vibration behind upper teeth.
+            </p>
+          </div>
+          <div>
+            <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0f172a', marginBottom: '2px' }}>2. Open &quot;AH&quot;</div>
+            <p style={{ margin: 0, fontSize: '0.82rem', color: '#64748b', lineHeight: 1.5 }}>
+              Open back unrounded: deep, clear &quot;ah&quot; as in <em>father</em>.
+            </p>
+          </div>
+          <div>
+            <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0f172a', marginBottom: '2px' }}>3. Resonant &quot;V&quot;</div>
+            <p style={{ margin: 0, fontSize: '0.82rem', color: '#64748b', lineHeight: 1.5 }}>
+              Voiced labiodental: soft contact with lower lip.
+            </p>
+          </div>
+          <div>
+            <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0f172a', marginBottom: '2px' }}>4. Final &quot;AHR&quot;</div>
+            <p style={{ margin: 0, fontSize: '0.82rem', color: '#64748b', lineHeight: 1.5 }}>
+              Alveolar resonant: open release as in <em>bazaar</em>.
+            </p>
           </div>
         </div>
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          3. COMMON SEARCH MISSPELLINGS & PHONETIC TYPING RESOLVER
+          3. MINIMALIST SEARCH MISSPELLINGS & PHONETIC TYPINGS RESOLVER
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
           width: '100%',
-          maxWidth: '1080px',
+          maxWidth: '1000px',
           margin: '0 auto clamp(4rem, 8vh, 6rem) auto',
         }}
       >
         <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
           <span
             style={{
-              fontSize: '0.78rem',
+              fontSize: '0.74rem',
               fontWeight: 600,
-              letterSpacing: '0.2em',
+              letterSpacing: '0.24em',
               textTransform: 'uppercase',
               color: '#64748b',
             }}
           >
-            SEARCH ENGINE INTENT CLARIFICATION
+            SEARCH INTENT REFERENCE
           </span>
           <h2
             style={{
               fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)',
-              fontWeight: 500,
-              letterSpacing: '-0.02em',
-              color: '#0f172a',
-              margin: '0.5rem 0 0.75rem 0',
+              fontWeight: 400,
+              letterSpacing: '-0.03em',
+              color: '#000000',
+              margin: '0.4rem 0 0.5rem 0',
             }}
           >
-            Common Misspellings &amp; Search Queries
+            Phonetic Transliterations &amp; Queries
           </h2>
           <p
             style={{
-              fontSize: '0.95rem',
+              fontSize: '0.92rem',
               color: '#64748b',
-              maxWidth: '680px',
+              maxWidth: '620px',
               margin: '0 auto',
               lineHeight: 1.6,
             }}
           >
-            If you entered any of the following phonetic variations into Google or voice search, you have reached the official home of <strong>Zawr Industries LLP</strong>.
+            If you entered any of these common phonetic variations, you have reached <strong>Zawr Industries LLP</strong>.
           </p>
         </div>
 
+        {/* Minimalist 2-Column Split */}
         <div
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: '1.5rem',
+            gap: 'clamp(1.5rem, 3vw, 3rem)',
           }}
         >
-          {/* Card: Common Phonetic Search Queries */}
+          {/* Column 1: Recognized Search Queries */}
           <div
             style={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #e2e8f0',
-              borderRadius: '20px',
-              padding: '2rem',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.03)',
+              borderTop: '1px solid #000000',
+              paddingTop: '1.25rem',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.25rem' }}>
-              <div
-                style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  backgroundColor: '#f1f5f9',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  fontSize: '1rem',
-                }}
-              >
-                🔍
-              </div>
-              <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 600, color: '#0f172a' }}>
-                Phonetic Search Variations
-              </h3>
+            <div style={{ fontSize: '0.76rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#64748b', marginBottom: '1rem' }}>
+              Recognized Search Queries
             </div>
-            <p style={{ fontSize: '0.88rem', color: '#64748b', lineHeight: 1.6, marginBottom: '1rem' }}>
-              People searching for these phonetic terms are seeking <strong>Zawr Industries</strong>:
-            </p>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               {[
-                { typed: 'Zawar Industries', match: 'Zawr Industries (Official Name)' },
-                { typed: 'Zavar / Zavar Industries', match: 'Zawr (Official Pronunciation: ZA-VAR)' },
-                { typed: 'Zaur / Zaur Industries', match: 'Zawr Industries' },
-                { typed: 'Zaver / Zaver Industries', match: 'Zawr Industries' },
-                { typed: 'Zohar / Zohar Industries', match: 'Zawr Industries' },
+                { query: 'Zawar Industries', resolution: 'Zawr Industries (Official Spelling)' },
+                { query: 'Zavar / Zavar Industries', resolution: 'Zawr (Pronounced ZA-VAR)' },
+                { query: 'Zaur / Zaur Industries', resolution: 'Zawr Industries' },
+                { query: 'Zaver / Zaver Industries', resolution: 'Zawr Industries' },
+                { query: 'Zohar / Zohar Industries', resolution: 'Zawr Industries' },
               ].map((item, idx) => (
-                <li
+                <div
                   key={idx}
                   style={{
                     display: 'flex',
-                    alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '8px 12px',
-                    borderRadius: '8px',
-                    backgroundColor: '#f8fafc',
-                    fontSize: '0.85rem',
+                    alignItems: 'center',
+                    padding: '8px 0',
+                    borderBottom: '1px solid #f1f5f9',
+                    fontSize: '0.86rem',
                   }}
                 >
-                  <span style={{ color: '#475569', fontFamily: 'monospace', fontWeight: 600 }}>&ldquo;{item.typed}&rdquo;</span>
-                  <span style={{ color: '#000000', fontWeight: 500 }}>➔ {item.match}</span>
-                </li>
+                  <span style={{ color: '#0f172a', fontWeight: 500 }}>&ldquo;{item.query}&rdquo;</span>
+                  <span style={{ color: '#64748b' }}>➔ {item.resolution}</span>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
 
-          {/* Card: Mispronunciations to Avoid */}
+          {/* Column 2: Phonetic Distinctions */}
           <div
             style={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #e2e8f0',
-              borderRadius: '20px',
-              padding: '2rem',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.03)',
+              borderTop: '1px solid #000000',
+              paddingTop: '1.25rem',
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.25rem' }}>
+            <div style={{ fontSize: '0.76rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#64748b', marginBottom: '1rem' }}>
+              Phonetic Distinctions
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
               <div
                 style={{
-                  width: '32px',
-                  height: '32px',
-                  borderRadius: '50%',
-                  backgroundColor: '#fef2f2',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#dc2626',
-                  fontWeight: 700,
+                  padding: '10px 0',
+                  borderBottom: '1px solid #f1f5f9',
+                  fontSize: '0.86rem',
                 }}
               >
-                ✕
+                <div style={{ fontWeight: 600, color: '#475569', marginBottom: '2px' }}>
+                  Avoid: &quot;Zore&quot; (rhymes with door)
+                </div>
+                <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                  The &apos;W&apos; does not create a monosyllabic &apos;or&apos; sound.
+                </div>
               </div>
-              <h3 style={{ margin: 0, fontSize: '1.15rem', fontWeight: 600, color: '#0f172a' }}>
-                Mispronunciations to Avoid
-              </h3>
-            </div>
-            <p style={{ fontSize: '0.88rem', color: '#64748b', lineHeight: 1.6, marginBottom: '1rem' }}>
-              Common phonetic mistakes made by first-time readers:
-            </p>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              <div style={{ padding: '10px 14px', borderRadius: '10px', backgroundColor: '#fef2f2', border: '1px solid #fee2e2' }}>
-                <span style={{ fontWeight: 700, color: '#dc2626' }}>❌ &quot;Zore&quot; (Rhymes with door)</span>
-                <p style={{ margin: '2px 0 0 0', fontSize: '0.82rem', color: '#7f1d1d' }}>
-                  Incorrect. The letter &apos;W&apos; does not blend into an &apos;or&apos; sound.
-                </p>
+
+              <div
+                style={{
+                  padding: '10px 0',
+                  borderBottom: '1px solid #f1f5f9',
+                  fontSize: '0.86rem',
+                }}
+              >
+                <div style={{ fontWeight: 600, color: '#475569', marginBottom: '2px' }}>
+                  Avoid: &quot;Zow-er&quot; (rhymes with sour)
+                </div>
+                <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                  The vowel is an open &quot;ah&quot; rather than a diphthong &quot;ow&quot;.
+                </div>
               </div>
-              <div style={{ padding: '10px 14px', borderRadius: '10px', backgroundColor: '#fef2f2', border: '1px solid #fee2e2' }}>
-                <span style={{ fontWeight: 700, color: '#dc2626' }}>❌ &quot;Zow-er&quot; (Rhymes with sour)</span>
-                <p style={{ margin: '2px 0 0 0', fontSize: '0.82rem', color: '#7f1d1d' }}>
-                  Incorrect. The vocalization is two distinct, open syllables: <strong>ZA-VAR</strong>.
-                </p>
-              </div>
-              <div style={{ padding: '10px 14px', borderRadius: '10px', backgroundColor: '#f0fdf4', border: '1px solid #dcfce7' }}>
-                <span style={{ fontWeight: 700, color: '#16a34a' }}>✅ &quot;ZA-VAR&quot; (/ˈzɑːvɑːr/)</span>
-                <p style={{ margin: '2px 0 0 0', fontSize: '0.82rem', color: '#14532d' }}>
-                  Official and accurate across all global enterprise communication.
-                </p>
+
+              <div
+                style={{
+                  padding: '10px 0',
+                  fontSize: '0.86rem',
+                }}
+              >
+                <div style={{ fontWeight: 600, color: '#000000', marginBottom: '2px' }}>
+                  Correct: &quot;ZA-VAR&quot; (/ˈzɑːvɑːr/)
+                </div>
+                <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                  The standardized pronunciation across all global communication.
+                </div>
               </div>
             </div>
           </div>
@@ -1215,145 +1076,135 @@ export default function PronunciationClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          4. GLOBAL PHONETIC MATRIX (All 7 Languages with Audio)
+          4. MINIMALIST GLOBAL TRANSLITERATION TABLE
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
           width: '100%',
-          maxWidth: '1080px',
+          maxWidth: '1000px',
+          margin: '0 auto clamp(4rem, 8vh, 6rem) auto',
+        }}
+      >
+        <div style={{ textAlign: 'left', marginBottom: '1.5rem' }}>
+          <span
+            style={{
+              fontSize: '0.74rem',
+              fontWeight: 600,
+              letterSpacing: '0.24em',
+              textTransform: 'uppercase',
+              color: '#64748b',
+            }}
+          >
+            MULTILINGUAL REFERENCE
+          </span>
+          <h2
+            style={{
+              fontSize: 'clamp(1.6rem, 3vw, 2.2rem)',
+              fontWeight: 400,
+              letterSpacing: '-0.03em',
+              color: '#000000',
+              margin: '0.35rem 0 0 0',
+            }}
+          >
+            International Scripts
+          </h2>
+        </div>
+
+        <div style={{ overflowX: 'auto', borderTop: '1px solid #000000' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+            <thead>
+              <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
+                <th style={{ padding: '12px 14px', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Language</th>
+                <th style={{ padding: '12px 14px', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Native Script</th>
+                <th style={{ padding: '12px 14px', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Phonetic</th>
+                <th style={{ padding: '12px 14px', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em' }}>IPA</th>
+                <th style={{ padding: '12px 14px', fontSize: '0.75rem', fontWeight: 600, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.1em', textAlign: 'right' }}>Audio</th>
+              </tr>
+            </thead>
+            <tbody>
+              {PRONUNCIATION_LANGUAGES.map((lang) => (
+                <tr
+                  key={lang.id}
+                  style={{
+                    borderBottom: '1px solid #f1f5f9',
+                    transition: 'background-color 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#fafafa')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                >
+                  <td style={{ padding: '14px', fontWeight: 500, color: '#0f172a', fontSize: '0.9rem' }}>
+                    {lang.name}
+                  </td>
+                  <td style={{ padding: '14px', color: '#000000', fontWeight: 500, fontSize: '0.96rem' }} dir={lang.dir || 'ltr'}>
+                    {lang.nativeName}
+                  </td>
+                  <td style={{ padding: '14px', fontWeight: 500, color: '#0f172a', fontSize: '0.88rem' }}>
+                    {lang.phonetic}
+                  </td>
+                  <td style={{ padding: '14px', color: '#64748b', fontSize: '0.84rem' }}>
+                    {lang.ipa}
+                  </td>
+                  <td style={{ padding: '14px', textAlign: 'right' }}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedLangId(lang.id);
+                        playAudio(lang);
+                      }}
+                      style={{
+                        padding: '5px 12px',
+                        borderRadius: '100px',
+                        border: '1px solid #cbd5e1',
+                        backgroundColor: '#ffffff',
+                        color: '#0f172a',
+                        fontSize: '0.74rem',
+                        fontWeight: 500,
+                        cursor: 'pointer',
+                        display: 'inline-flex',
+                        alignItems: 'center',
+                        gap: '5px',
+                        transition: 'all 0.2s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.borderColor = '#000000';
+                        e.currentTarget.style.backgroundColor = '#000000';
+                        e.currentTarget.style.color = '#ffffff';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.borderColor = '#cbd5e1';
+                        e.currentTarget.style.backgroundColor = '#ffffff';
+                        e.currentTarget.style.color = '#0f172a';
+                      }}
+                    >
+                      <svg width="9" height="9" viewBox="0 0 24 24" fill="currentColor">
+                        <polygon points="6 4 20 12 6 20 6 4" />
+                      </svg>
+                      <span>Listen</span>
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* ─────────────────────────────────────────────────────────────
+          5. MINIMALIST FAQ SECTION (Clean Hairline Accordions)
+      ───────────────────────────────────────────────────────────── */}
+      <section
+        style={{
+          width: '100%',
+          maxWidth: '1000px',
           margin: '0 auto clamp(4rem, 8vh, 6rem) auto',
         }}
       >
         <div style={{ textAlign: 'left', marginBottom: '1.75rem' }}>
           <span
             style={{
-              fontSize: '0.78rem',
+              fontSize: '0.74rem',
               fontWeight: 600,
-              letterSpacing: '0.2em',
-              textTransform: 'uppercase',
-              color: '#64748b',
-            }}
-          >
-            INTERNATIONAL PHONETIC REFERENCE
-          </span>
-          <h2
-            style={{
-              fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)',
-              fontWeight: 500,
-              letterSpacing: '-0.02em',
-              color: '#0f172a',
-              margin: '0.5rem 0 0 0',
-            }}
-          >
-            Global Transliteration Guide
-          </h2>
-        </div>
-
-        <div
-          style={{
-            backgroundColor: '#ffffff',
-            border: '1px solid #e2e8f0',
-            borderRadius: '20px',
-            overflow: 'hidden',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.02)',
-          }}
-        >
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-              <thead>
-                <tr style={{ backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' }}>
-                  <th style={{ padding: '14px 18px', fontSize: '0.8rem', fontWeight: 600, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Language</th>
-                  <th style={{ padding: '14px 18px', fontSize: '0.8rem', fontWeight: 600, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Native Script</th>
-                  <th style={{ padding: '14px 18px', fontSize: '0.8rem', fontWeight: 600, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Phonetic Respell</th>
-                  <th style={{ padding: '14px 18px', fontSize: '0.8rem', fontWeight: 600, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em' }}>IPA</th>
-                  <th style={{ padding: '14px 18px', fontSize: '0.8rem', fontWeight: 600, color: '#475569', textTransform: 'uppercase', letterSpacing: '0.08em', textAlign: 'right' }}>Audio</th>
-                </tr>
-              </thead>
-              <tbody>
-                {PRONUNCIATION_LANGUAGES.map((lang, idx) => (
-                  <tr
-                    key={lang.id}
-                    style={{
-                      borderBottom: idx === PRONUNCIATION_LANGUAGES.length - 1 ? 'none' : '1px solid #f1f5f9',
-                      transition: 'background-color 0.15s ease',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#f8fafc')}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
-                  >
-                    <td style={{ padding: '16px 18px', fontWeight: 600, color: '#0f172a', fontSize: '0.92rem' }}>
-                      {lang.name}
-                    </td>
-                    <td style={{ padding: '16px 18px', color: '#000000', fontWeight: 500, fontSize: '1rem' }} dir={lang.dir || 'ltr'}>
-                      {lang.nativeName}
-                    </td>
-                    <td style={{ padding: '16px 18px', fontFamily: 'monospace', fontWeight: 600, color: '#0f172a', fontSize: '0.9rem' }}>
-                      {lang.phonetic}
-                    </td>
-                    <td style={{ padding: '16px 18px', color: '#64748b', fontSize: '0.88rem' }}>
-                      {lang.ipa}
-                    </td>
-                    <td style={{ padding: '16px 18px', textAlign: 'right' }}>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setSelectedLangId(lang.id);
-                          playAudio(lang);
-                        }}
-                        style={{
-                          padding: '6px 14px',
-                          borderRadius: '100px',
-                          border: '1px solid #e2e8f0',
-                          backgroundColor: '#ffffff',
-                          color: '#0f172a',
-                          fontSize: '0.78rem',
-                          fontWeight: 600,
-                          cursor: 'pointer',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          transition: 'all 0.2s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = '#000000';
-                          e.currentTarget.style.backgroundColor = '#000000';
-                          e.currentTarget.style.color = '#ffffff';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = '#e2e8f0';
-                          e.currentTarget.style.backgroundColor = '#ffffff';
-                          e.currentTarget.style.color = '#0f172a';
-                        }}
-                      >
-                        <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
-                          <polygon points="6 4 20 12 6 20 6 4" />
-                        </svg>
-                        <span>Listen</span>
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────
-          5. SEARCH ENGINE FAQ ACCORDION (Matches Google FAQ Schema)
-      ───────────────────────────────────────────────────────────── */}
-      <section
-        style={{
-          width: '100%',
-          maxWidth: '1080px',
-          margin: '0 auto clamp(4rem, 8vh, 6rem) auto',
-        }}
-      >
-        <div style={{ textAlign: 'left', marginBottom: '2rem' }}>
-          <span
-            style={{
-              fontSize: '0.78rem',
-              fontWeight: 600,
-              letterSpacing: '0.2em',
+              letterSpacing: '0.24em',
               textTransform: 'uppercase',
               color: '#64748b',
             }}
@@ -1362,31 +1213,25 @@ export default function PronunciationClient() {
           </span>
           <h2
             style={{
-              fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)',
-              fontWeight: 500,
-              letterSpacing: '-0.02em',
-              color: '#0f172a',
-              margin: '0.5rem 0 0 0',
+              fontSize: 'clamp(1.6rem, 3vw, 2.2rem)',
+              fontWeight: 400,
+              letterSpacing: '-0.03em',
+              color: '#000000',
+              margin: '0.35rem 0 0 0',
             }}
           >
-            Everything About the Name ZAWR
+            Questions &amp; Answers
           </h2>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+        <div style={{ borderTop: '1px solid #000000' }}>
           {FAQ_ITEMS.map((faq, index) => {
             const isOpen = openFaqIndex === index;
             return (
               <div
                 key={index}
                 style={{
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #e2e8f0',
-                  borderRadius: '16px',
-                  overflow: 'hidden',
-                  transition: 'border-color 0.2s ease, box-shadow 0.2s ease',
-                  boxShadow: isOpen ? '0 4px 18px rgba(0,0,0,0.04)' : 'none',
-                  borderColor: isOpen ? '#cbd5e1' : '#e2e8f0',
+                  borderBottom: '1px solid #e2e8f0',
                 }}
               >
                 <button
@@ -1398,14 +1243,14 @@ export default function PronunciationClient() {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    padding: '1.25rem 1.5rem',
+                    padding: '1.25rem 0',
                     background: 'none',
                     border: 'none',
                     cursor: 'pointer',
                     textAlign: 'left',
                     color: '#0f172a',
-                    fontSize: '1rem',
-                    fontWeight: 600,
+                    fontSize: '0.98rem',
+                    fontWeight: 500,
                   }}
                 >
                   <span>{faq.question}</span>
@@ -1414,30 +1259,25 @@ export default function PronunciationClient() {
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      width: '28px',
-                      height: '28px',
-                      borderRadius: '50%',
-                      backgroundColor: '#f8fafc',
+                      fontSize: '1.2rem',
+                      fontWeight: 300,
+                      color: '#64748b',
                       marginLeft: '1rem',
-                      transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)',
-                      transition: 'transform 0.25s ease',
+                      transform: isOpen ? 'rotate(45deg)' : 'rotate(0deg)',
+                      transition: 'transform 0.2s ease',
                     }}
                   >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                      <polyline points="6 9 12 15 18 9" />
-                    </svg>
+                    +
                   </span>
                 </button>
                 {isOpen && (
                   <div
                     className="pronunciation-faq-answer"
                     style={{
-                      padding: '0 1.5rem 1.35rem 1.5rem',
-                      fontSize: '0.92rem',
+                      padding: '0 0 1.25rem 0',
+                      fontSize: '0.9rem',
                       color: '#475569',
                       lineHeight: 1.7,
-                      borderTop: '1px solid #f1f5f9',
-                      paddingTop: '1rem',
                     }}
                   >
                     {faq.answer}
@@ -1450,50 +1290,50 @@ export default function PronunciationClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          6. EXPLORE ZAWR INDUSTRIES (Brand Directory)
+          6. BRAND DIRECTORY NAVIGATION (Minimalist)
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
           width: '100%',
-          maxWidth: '1080px',
+          maxWidth: '1000px',
           margin: '0 auto',
           textAlign: 'center',
           borderTop: '1px solid #f1f5f9',
-          paddingTop: '4rem',
+          paddingTop: '3.5rem',
         }}
       >
         <span
           style={{
-            fontSize: '0.78rem',
+            fontSize: '0.74rem',
             fontWeight: 600,
-            letterSpacing: '0.2em',
+            letterSpacing: '0.24em',
             textTransform: 'uppercase',
             color: '#64748b',
           }}
         >
-          DISCOVER OUR OPERATING SECTORS
+          EXPLORE OUR ENTERPRISE
         </span>
         <h2
           style={{
-            fontSize: 'clamp(1.8rem, 3.5vw, 2.5rem)',
+            fontSize: 'clamp(1.6rem, 3vw, 2.2rem)',
             fontWeight: 400,
-            letterSpacing: '-0.02em',
-            color: '#0f172a',
-            margin: '0.5rem 0 1.25rem 0',
+            letterSpacing: '-0.03em',
+            color: '#000000',
+            margin: '0.35rem 0 1rem 0',
           }}
         >
-          Explore Zawr Industries
+          Zawr Industries Ecosystem
         </h2>
         <p
           style={{
-            fontSize: '0.95rem',
+            fontSize: '0.9rem',
             color: '#64748b',
-            maxWidth: '600px',
-            margin: '0 auto 2.5rem auto',
+            maxWidth: '560px',
+            margin: '0 auto 2rem auto',
             lineHeight: 1.6,
           }}
         >
-          Discover how Zawr Industries accelerates technology, manufacturing, energy, freight, and multi-brand franchise ecosystems worldwide.
+          Learn more about our technology platforms, advanced manufacturing, energy, logistics, and multi-brand franchise divisions.
         </p>
 
         <div
@@ -1501,7 +1341,7 @@ export default function PronunciationClient() {
             display: 'flex',
             flexWrap: 'wrap',
             justifyContent: 'center',
-            gap: '12px',
+            gap: '10px',
           }}
         >
           {[
@@ -1509,21 +1349,21 @@ export default function PronunciationClient() {
             { label: 'Manufacturing', href: '/industries/manufacturing' },
             { label: 'Logistics and Transport', href: '/industries/transport-and-logistics' },
             { label: 'Real Estate', href: '/industries/estate' },
-            { label: 'Energy & Microgrids', href: '/industries/energy' },
-            { label: 'Holding Franchises', href: '/industries/holding' },
-            { label: 'About Us', href: '/about' },
+            { label: 'Energy', href: '/industries/energy' },
+            { label: 'Holding', href: '/industries/holding' },
+            { label: 'About', href: '/about' },
             { label: 'Contact', href: '/contact' },
           ].map((link, idx) => (
             <Link
               key={idx}
               href={link.href}
               style={{
-                padding: '10px 22px',
+                padding: '8px 18px',
                 borderRadius: '100px',
                 border: '1px solid #e2e8f0',
                 backgroundColor: '#ffffff',
                 color: '#0f172a',
-                fontSize: '0.88rem',
+                fontSize: '0.84rem',
                 fontWeight: 500,
                 textDecoration: 'none',
                 transition: 'all 0.2s ease',
