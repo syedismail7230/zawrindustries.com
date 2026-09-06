@@ -384,7 +384,7 @@ export default function PronunciationClient() {
         minHeight: '100vh',
         backgroundColor: '#ffffff',
         color: '#0f172a',
-        padding: 'clamp(6.5rem, 12vh, 9.5rem) 1.5rem clamp(4rem, 8vh, 6rem) 1.5rem',
+        padding: 'clamp(5.5rem, 10vh, 9rem) clamp(1rem, 4vw, 2rem) clamp(3.5rem, 7vh, 6rem) clamp(1rem, 4vw, 2rem)',
         boxSizing: 'border-box',
         position: 'relative',
       }}
@@ -407,12 +407,12 @@ export default function PronunciationClient() {
         <div
           className="pronunciation-top-eyebrow"
           style={{
-            fontSize: 'clamp(0.72rem, 1.2vw, 0.82rem)',
+            fontSize: 'clamp(0.7rem, 1.2vw, 0.82rem)',
             fontWeight: 600,
             letterSpacing: '0.36em',
             textTransform: 'uppercase',
             color: '#475569',
-            marginBottom: 'clamp(1.25rem, 2.5vh, 2rem)',
+            marginBottom: 'clamp(1rem, 2vh, 1.75rem)',
             userSelect: 'none',
           }}
         >
@@ -423,13 +423,13 @@ export default function PronunciationClient() {
         <h1
           className={`pronunciation-wordmark ${poppins.className}`}
           style={{
-            fontSize: 'clamp(4.2rem, 11.5vw, 8.8rem)',
-            lineHeight: 0.96,
+            fontSize: 'clamp(3.8rem, 15vw, 8.8rem)',
+            lineHeight: 0.98,
             fontWeight: 700,
             letterSpacing: '0.02em',
             color: '#000000',
             margin: 0,
-            marginBottom: 'clamp(1.75rem, 4vh, 2.75rem)',
+            marginBottom: 'clamp(1.5rem, 3.5vh, 2.5rem)',
             userSelect: 'none',
           }}
         >
@@ -835,58 +835,58 @@ export default function PronunciationClient() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-            gap: 'clamp(1.5rem, 3vw, 3rem)',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+            gap: 'clamp(1.25rem, 2.5vw, 2.5rem)',
             borderTop: '1px solid #f1f5f9',
             borderBottom: '1px solid #f1f5f9',
-            padding: '2.5rem 0',
-            marginBottom: 'clamp(2.5rem, 5vh, 3.5rem)',
+            padding: 'clamp(1.75rem, 3.5vh, 2.5rem) 0',
+            marginBottom: 'clamp(2rem, 4vh, 3.5rem)',
           }}
         >
           {/* Col 1: IPA */}
-          <div style={{ textAlign: 'center', padding: '0 1rem' }}>
+          <div style={{ textAlign: 'center', padding: '0 0.5rem' }}>
             <span style={{ fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8' }}>
               IPA NOTATION
             </span>
             <div
               className={poppins.className}
-              style={{ fontSize: 'clamp(1.7rem, 2.5vw, 2.1rem)', fontWeight: 600, color: '#000000', margin: '0.6rem 0 0.4rem 0' }}
+              style={{ fontSize: 'clamp(1.6rem, 4vw, 2.1rem)', fontWeight: 600, color: '#000000', margin: '0.5rem 0 0.3rem 0' }}
             >
               /ˈzɑː.vɑːr/
             </div>
-            <p style={{ fontSize: '0.85rem', color: '#64748b', lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: '0.84rem', color: '#64748b', lineHeight: 1.5, margin: 0 }}>
               International Phonetic Alphabet standard.
             </p>
           </div>
 
           {/* Col 2: Syllable Breakdown */}
-          <div style={{ textAlign: 'center', padding: '0 1rem' }}>
+          <div style={{ textAlign: 'center', padding: '0 0.5rem' }}>
             <span style={{ fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8' }}>
               SYLLABLE CADENCE
             </span>
             <div
               className={poppins.className}
-              style={{ fontSize: 'clamp(1.7rem, 2.5vw, 2.1rem)', fontWeight: 600, color: '#000000', margin: '0.6rem 0 0.4rem 0' }}
+              style={{ fontSize: 'clamp(1.6rem, 4vw, 2.1rem)', fontWeight: 600, color: '#000000', margin: '0.5rem 0 0.3rem 0' }}
             >
               ZAH · VAHR
             </div>
-            <p style={{ fontSize: '0.85rem', color: '#64748b', lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: '0.84rem', color: '#64748b', lineHeight: 1.5, margin: 0 }}>
               Two balanced, resonant syllables with equal weight.
             </p>
           </div>
 
           {/* Col 3: Rhyme Anchors */}
-          <div style={{ textAlign: 'center', padding: '0 1rem' }}>
+          <div style={{ textAlign: 'center', padding: '0 0.5rem' }}>
             <span style={{ fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8' }}>
               RHYMING ANCHORS
             </span>
             <div
               className={poppins.className}
-              style={{ fontSize: 'clamp(1.7rem, 2.5vw, 2.1rem)', fontWeight: 600, color: '#000000', margin: '0.6rem 0 0.4rem 0' }}
+              style={{ fontSize: 'clamp(1.6rem, 4vw, 2.1rem)', fontWeight: 600, color: '#000000', margin: '0.5rem 0 0.3rem 0' }}
             >
               Bazaar, Star
             </div>
-            <p style={{ fontSize: '0.85rem', color: '#64748b', lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: '0.84rem', color: '#64748b', lineHeight: 1.5, margin: 0 }}>
               Ending in an open, sonorous vocal resonance.
             </p>
           </div>
@@ -896,8 +896,8 @@ export default function PronunciationClient() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-            gap: '1.5rem',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
+            gap: 'clamp(1rem, 2.5vw, 1.75rem)',
             textAlign: 'left',
           }}
         >
@@ -963,7 +963,8 @@ export default function PronunciationClient() {
           </h2>
         </div>
 
-        <div style={{ overflowX: 'auto', borderTop: '1px solid #000000' }}>
+        {/* Desktop Table View (>= 769px) */}
+        <div className="pronunciation-desktop-table" style={{ borderTop: '1px solid #000000' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
@@ -1006,7 +1007,7 @@ export default function PronunciationClient() {
                         playAudio(lang);
                       }}
                       style={{
-                        padding: '5px 12px',
+                        padding: '6px 14px',
                         borderRadius: '100px',
                         border: '1px solid #cbd5e1',
                         backgroundColor: '#ffffff',
@@ -1016,7 +1017,7 @@ export default function PronunciationClient() {
                         cursor: 'pointer',
                         display: 'inline-flex',
                         alignItems: 'center',
-                        gap: '5px',
+                        gap: '6px',
                         transition: 'all 0.2s ease',
                       }}
                       onMouseEnter={(e) => {
@@ -1040,6 +1041,94 @@ export default function PronunciationClient() {
               ))}
             </tbody>
           </table>
+        </div>
+
+        {/* Mobile Script Cards View (<= 768px) - 100% Responsive, Zero Horizontal Scroll */}
+        <div className="pronunciation-mobile-script-list">
+          {PRONUNCIATION_LANGUAGES.map((lang) => {
+            const isCurrentlySelected = selectedLangId === lang.id;
+            return (
+              <div
+                key={lang.id}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '14px 4px',
+                  borderBottom: '1px solid #f1f5f9',
+                  gap: '12px',
+                }}
+              >
+                {/* Language Details */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '3px', flex: 1, minWidth: 0 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px', flexWrap: 'wrap' }}>
+                    <span style={{ fontSize: '0.94rem', fontWeight: 600, color: '#0f172a' }}>
+                      {lang.name}
+                    </span>
+                    <span
+                      style={{ fontSize: '0.9rem', fontWeight: 500, color: '#64748b' }}
+                      dir={lang.dir || 'ltr'}
+                    >
+                      • {lang.nativeName}
+                    </span>
+                  </div>
+
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginTop: '2px' }}>
+                    <span
+                      className={poppins.className}
+                      style={{
+                        fontSize: '0.82rem',
+                        fontWeight: 600,
+                        color: isCurrentlySelected ? '#000000' : '#334155',
+                        backgroundColor: isCurrentlySelected ? '#f1f5f9' : '#f8fafc',
+                        padding: '2px 8px',
+                        borderRadius: '4px',
+                        border: isCurrentlySelected ? '1px solid #cbd5e1' : '1px solid #e2e8f0',
+                      }}
+                      dir={lang.dir || 'ltr'}
+                    >
+                      {lang.phonetic}
+                    </span>
+                    <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                      {lang.ipa}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Mobile Audio Trigger Button */}
+                <button
+                  type="button"
+                  suppressHydrationWarning
+                  onClick={() => {
+                    setSelectedLangId(lang.id);
+                    playAudio(lang);
+                  }}
+                  aria-label={`Listen to ${lang.name} pronunciation`}
+                  style={{
+                    flexShrink: 0,
+                    padding: '8px 14px',
+                    borderRadius: '999px',
+                    border: isCurrentlySelected && isPlaying ? '1px solid #000000' : '1px solid #cbd5e1',
+                    backgroundColor: isCurrentlySelected && isPlaying ? '#000000' : '#ffffff',
+                    color: isCurrentlySelected && isPlaying ? '#ffffff' : '#0f172a',
+                    fontSize: '0.78rem',
+                    fontWeight: 600,
+                    cursor: 'pointer',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    transition: 'all 0.2s ease',
+                    boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
+                  }}
+                >
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor">
+                    <polygon points="6 4 20 12 6 20 6 4" />
+                  </svg>
+                  <span>{isCurrentlySelected && isPlaying ? 'Playing' : 'Listen'}</span>
+                </button>
+              </div>
+            );
+          })}
         </div>
       </section>
 
@@ -1256,12 +1345,28 @@ export default function PronunciationClient() {
           }
         }
 
+        .pronunciation-desktop-table {
+          display: block;
+        }
+
+        .pronunciation-mobile-script-list {
+          display: none;
+        }
+
         @media (max-width: 768px) {
           .pronunciation-desktop-langs {
             display: none !important;
           }
           .pronunciation-mobile-dropdown-wrapper {
             display: block !important;
+          }
+          .pronunciation-desktop-table {
+            display: none !important;
+          }
+          .pronunciation-mobile-script-list {
+            display: flex !important;
+            flex-direction: column;
+            border-top: 1px solid #000000;
           }
         }
 
