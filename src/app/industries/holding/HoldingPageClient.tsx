@@ -1389,85 +1389,94 @@ export default function HoldingPageClient() {
               __html: `
               .holding-benefits-triptych {
                 display: grid;
-                grid-template-columns: minmax(280px, 460px) minmax(380px, 1fr) minmax(280px, 460px);
+                grid-template-columns: minmax(320px, 520px) minmax(360px, 1fr) minmax(320px, 520px);
                 gap: clamp(1rem, 2vw, 3rem);
                 align-items: center;
                 justify-content: center;
-                max-width: 1680px;
+                max-width: 1760px;
                 margin: 0 auto;
               }
               .statue-col {
                 display: flex;
                 justify-content: center;
                 align-items: flex-start;
-                height: clamp(540px, 62vh, 720px);
+                height: clamp(620px, 72vh, 840px);
                 overflow: hidden;
                 user-select: none;
                 position: relative;
               }
               .statue-col-img {
                 width: 100%;
-                max-width: 480px;
+                min-width: 520px;
+                max-width: none;
                 height: auto;
-                transform: scale(1.65) translateY(12%);
+                transform: scale(2.15) translateY(16%);
                 transform-origin: top center;
-                filter: drop-shadow(0 25px 40px rgba(15, 23, 42, 0.08));
+                filter: drop-shadow(0 30px 45px rgba(15, 23, 42, 0.08));
                 transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
               }
               .statue-col:hover .statue-col-img {
-                transform: scale(1.68) translateY(11%);
+                transform: scale(2.18) translateY(15%);
               }
               .barrel-roll-stage {
                 perspective: 1200px;
                 perspective-origin: 50% 50%;
                 transform-style: preserve-3d;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                min-height: 520px;
-                padding: 2rem 0;
-                user-select: none;
+                height: 560px;
+                min-height: 560px;
+                max-height: 560px;
+                width: 100%;
+                max-width: 680px;
+                margin: 0 auto;
                 position: relative;
+                overflow: visible;
+                user-select: none;
                 cursor: grab;
               }
               .barrel-roll-stage:active {
                 cursor: grabbing;
               }
               .barrel-item {
+                position: absolute;
+                top: 50%;
+                left: 0;
+                right: 0;
+                margin: 0 auto;
+                width: 100%;
+                max-width: 620px;
                 cursor: pointer;
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                text-align: center;
                 transform-style: preserve-3d;
                 will-change: transform, opacity, filter;
-                transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
-                            opacity 0.4s ease,
-                            filter 0.4s ease;
+                transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                            opacity 0.5s ease,
+                            filter 0.5s ease;
                 padding: 0.5rem 1.25rem;
-                width: 100%;
-                max-width: 620px;
                 background: transparent;
                 border: none;
                 outline: none;
               }
               .barrel-item-title {
-                font-size: clamp(1.4rem, 2.2vw, 2.1rem);
+                font-size: clamp(1.35rem, 2.1vw, 2rem);
                 font-weight: 400;
                 color: #94a3b8;
                 letter-spacing: -0.02em;
-                transition: color 0.3s ease, font-size 0.3s ease;
+                transition: color 0.35s ease, font-size 0.35s ease;
                 line-height: 1.25;
+                white-space: nowrap;
               }
               .barrel-item:hover .barrel-item-title {
                 color: #475569;
               }
               .barrel-item.active .barrel-item-title {
-                font-size: clamp(1.8rem, 2.8vw, 2.65rem);
+                font-size: clamp(1.85rem, 2.9vw, 2.75rem);
                 font-weight: 700;
                 color: #0f172a;
                 letter-spacing: -0.03em;
+                white-space: normal;
               }
               .barrel-item-detail {
                 margin-top: 0.95rem;
@@ -1545,12 +1554,10 @@ export default function HoldingPageClient() {
                 if (offset > Math.floor(N / 2)) offset -= N;
                 if (offset < -Math.floor(N / 2)) offset += N;
 
-                // 3D Cylindrical Coordinates
-                const rotateX = offset * -28;
-                const translateY = offset * (isActive ? 0 : offset > 0 ? 24 : -24);
-                const translateZ = (Math.cos((offset * Math.PI) / 3.8) - 1) * 65;
-                const scale = Math.max(0.72, 1 - Math.abs(offset) * 0.09);
-                const opacity = isActive ? 1 : Math.max(0.18, 0.58 - Math.abs(offset) * 0.2);
+                // 3D Cylindrical Geometry
+                const angleDeg = offset * -34;
+                const scale = isActive ? 1 : Math.max(0.72, 1 - Math.abs(offset) * 0.1);
+                const opacity = isActive ? 1 : Math.max(0.18, 0.6 - Math.abs(offset) * 0.22);
                 const blur = isActive ? 0 : Math.min(1.2, Math.abs(offset) * 0.5);
 
                 return (
@@ -1558,9 +1565,10 @@ export default function HoldingPageClient() {
                     key={benefit.id}
                     className={`barrel-item ${isActive ? 'active' : ''}`}
                     style={{
-                      transform: `perspective(1100px) rotateX(${rotateX}deg) translateY(${translateY}px) translateZ(${translateZ}px) scale(${scale})`,
+                      transform: `translateY(-50%) rotateX(${angleDeg}deg) translateZ(220px) scale(${scale})`,
                       opacity,
                       filter: blur > 0 ? `blur(${blur}px)` : 'none',
+                      zIndex: isActive ? 10 : 5 - Math.abs(offset),
                     }}
                     onMouseEnter={() => setActiveBenefit(idx)}
                     onClick={() => setActiveBenefit(idx)}
