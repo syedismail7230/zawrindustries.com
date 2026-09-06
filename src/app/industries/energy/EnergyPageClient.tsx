@@ -110,6 +110,19 @@ export default function EnergyPageClient() {
     Math.floor(progress * (PROJECTS_DATA.length - 1) + 0.45)
   );
 
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  useEffect(() => {
+    const activeTabEl = tabRefs.current[activeCardIndex];
+    if (activeTabEl) {
+      activeTabEl.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center',
+      });
+    }
+  }, [activeCardIndex]);
+
   const jumpToProject = (idx: number) => {
     const spacer = projectsSpacerRef.current;
     if (!spacer) return;
@@ -1022,8 +1035,10 @@ export default function EnergyPageClient() {
                 gap: '8px',
                 overflowX: 'auto',
                 whiteSpace: 'nowrap',
+                width: '100%',
                 maxWidth: '100%',
-                paddingBottom: '4px',
+                padding: '4px 1rem 6px 2px',
+                boxSizing: 'border-box',
                 WebkitOverflowScrolling: 'touch',
               }}
             >
@@ -1032,10 +1047,11 @@ export default function EnergyPageClient() {
                 return (
                   <button
                     key={proj.id}
+                    ref={(el) => { tabRefs.current[idx] = el; }}
                     type="button"
                     onClick={() => jumpToProject(idx)}
                     style={{
-                      padding: '7px 16px',
+                      padding: '8px 18px',
                       fontSize: '0.82rem',
                       fontWeight: isSelected ? 600 : 400,
                       borderRadius: '100px',
@@ -1046,7 +1062,7 @@ export default function EnergyPageClient() {
                       cursor: 'pointer',
                       flexShrink: 0,
                       transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                      transform: isSelected ? 'scale(1.03)' : 'scale(1)',
+                      transform: isSelected ? 'scale(1.02)' : 'scale(1)',
                       boxShadow: isSelected ? '0 4px 14px rgba(15, 23, 42, 0.15)' : 'none',
                     }}
                   >
