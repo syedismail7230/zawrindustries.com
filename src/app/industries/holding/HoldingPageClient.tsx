@@ -542,6 +542,13 @@ const PARTNER_BENEFITS = [
   },
 ];
 
+const FAQ_OPEN_IMAGES = [
+  '/assets/h-faq1.png',
+  '/assets/h-faq2.png',
+  '/assets/h-faq3.png',
+  '/assets/h-faq4.png',
+];
+
 const FAQ_ITEMS = [
   {
     volume: 'Volume I',
@@ -573,7 +580,7 @@ export default function HoldingPageClient() {
   // Folder Modal State
   const [selectedVertical, setSelectedVertical] = useState<OperatingVertical | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [activeFaq, setActiveFaq] = useState<number | null>(0);
+  const [activeFaq, setActiveFaq] = useState<number>(0);
   const [hoveredBook, setHoveredBook] = useState<number | null>(null);
   const [activeBenefit, setActiveBenefit] = useState<number>(2);
 
@@ -1754,7 +1761,7 @@ export default function HoldingPageClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          7. FREQUENTLY ASKED QUESTIONS (Classical Books)
+          7. FREQUENTLY ASKED QUESTIONS (Interactive Classical Codex)
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
@@ -1762,9 +1769,10 @@ export default function HoldingPageClient() {
           backgroundColor: '#ffffff',
           borderTop: '1px solid #e2e8f0',
           borderBottom: '1px solid #e2e8f0',
+          overflow: 'hidden',
         }}
       >
-        <div style={{ maxWidth: '860px', margin: '0 auto', textAlign: 'center' }}>
+        <div style={{ maxWidth: '980px', margin: '0 auto', textAlign: 'center' }}>
           {/* Section Header */}
           <h2
             style={{
@@ -1778,153 +1786,175 @@ export default function HoldingPageClient() {
             Frequently Asked Questions
           </h2>
 
-          {/* Interactive Books Display (h-faq.png) */}
-          <div
-            style={{
-              position: 'relative',
-              width: '100%',
-              maxWidth: '540px',
-              margin: '0 auto',
-              userSelect: 'none',
+          <style
+            dangerouslySetInnerHTML={{
+              __html: `
+              .faq-books-stand {
+                position: relative;
+                width: 100%;
+                max-width: 480px;
+                margin: 0 auto;
+                user-select: none;
+                z-index: 1;
+              }
+              .faq-standing-img {
+                width: 100%;
+                height: auto;
+                display: block;
+                filter: drop-shadow(0 15px 25px rgba(15, 23, 42, 0.08));
+              }
+              .faq-book-spine-btn {
+                position: absolute;
+                cursor: pointer;
+                border-radius: 8px;
+                border: none;
+                outline: none;
+                transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+                background: transparent;
+                z-index: 5;
+              }
+              .faq-book-spine-btn:hover {
+                background: rgba(245, 158, 11, 0.16);
+                box-shadow: 0 0 25px rgba(245, 158, 11, 0.35);
+                transform: translateY(-2px);
+              }
+              .faq-book-spine-btn.active {
+                background: rgba(245, 158, 11, 0.22);
+                box-shadow: 0 0 30px rgba(245, 158, 11, 0.45);
+              }
+              .faq-open-book-wrap {
+                position: relative;
+                width: 100%;
+                max-width: 680px;
+                margin: -35px auto 0;
+                z-index: 2;
+                user-select: none;
+                cursor: pointer;
+                display: grid;
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr;
+                align-items: center;
+                justify-items: center;
+              }
+              .faq-open-book-layer {
+                grid-column: 1 / -1;
+                grid-row: 1 / -1;
+                width: 100%;
+                height: auto;
+                display: block;
+                filter: drop-shadow(0 25px 45px rgba(15, 23, 42, 0.12));
+                opacity: 0;
+                transform: scale(0.985) translateY(6px);
+                pointer-events: none;
+                transition: opacity 0.5s cubic-bezier(0.25, 1, 0.5, 1),
+                            transform 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+                will-change: opacity, transform;
+              }
+              .faq-open-book-layer.active {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+                pointer-events: auto;
+                z-index: 3;
+              }
+              @media (max-width: 640px) {
+                .faq-books-stand {
+                  max-width: 340px;
+                }
+                .faq-open-book-wrap {
+                  margin-top: -20px;
+                }
+              }
+            `,
             }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src="/assets/h-faq.png"
-              alt="Frequently Asked Questions — Zawr Holding"
-              style={{
-                width: '100%',
-                height: 'auto',
-                display: 'block',
-                filter: 'drop-shadow(0 20px 35px rgba(15, 23, 42, 0.08))',
-              }}
-              loading="lazy"
-              decoding="async"
-            />
+          />
 
-            {/* Hotspot 1: FAQ 1 */}
-            <button
-              type="button"
-              aria-label="FAQ 1"
-              style={{
-                position: 'absolute',
-                left: '8.5%',
-                top: '4%',
-                width: '17%',
-                height: '92%',
-                cursor: 'pointer',
-                background: activeFaq === 0 ? 'rgba(245, 158, 11, 0.15)' : 'transparent',
-                boxShadow: activeFaq === 0 ? '0 0 25px rgba(245, 158, 11, 0.3)' : 'none',
-                border: 'none',
-                borderRadius: '6px',
-                outline: 'none',
-                transition: 'all 0.25s ease',
-              }}
-              onClick={() => setActiveFaq(0)}
-            />
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            {/* Standing Books Shelf (h-faq.png) */}
+            <div className="faq-books-stand">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/assets/h-faq.png"
+                alt="Frequently Asked Questions — Standing Volumes"
+                className="faq-standing-img"
+                loading="lazy"
+                decoding="async"
+              />
 
-            {/* Hotspot 2: FAQ 2 */}
-            <button
-              type="button"
-              aria-label="FAQ 2"
-              style={{
-                position: 'absolute',
-                left: '26.5%',
-                top: '6%',
-                width: '17%',
-                height: '90%',
-                cursor: 'pointer',
-                background: activeFaq === 1 ? 'rgba(245, 158, 11, 0.15)' : 'transparent',
-                boxShadow: activeFaq === 1 ? '0 0 25px rgba(245, 158, 11, 0.3)' : 'none',
-                border: 'none',
-                borderRadius: '6px',
-                outline: 'none',
-                transition: 'all 0.25s ease',
-              }}
-              onClick={() => setActiveFaq(1)}
-            />
-
-            {/* Hotspot 3: FAQ 3 */}
-            <button
-              type="button"
-              aria-label="FAQ 3"
-              style={{
-                position: 'absolute',
-                left: '45%',
-                top: '11%',
-                width: '25%',
-                height: '86%',
-                cursor: 'pointer',
-                background: activeFaq === 2 ? 'rgba(245, 158, 11, 0.15)' : 'transparent',
-                boxShadow: activeFaq === 2 ? '0 0 25px rgba(245, 158, 11, 0.3)' : 'none',
-                border: 'none',
-                borderRadius: '6px',
-                outline: 'none',
-                transition: 'all 0.25s ease',
-              }}
-              onClick={() => setActiveFaq(2)}
-            />
-
-            {/* Hotspot 4: FAQ 4 */}
-            <button
-              type="button"
-              aria-label="FAQ 4"
-              style={{
-                position: 'absolute',
-                left: '71.5%',
-                top: '11%',
-                width: '18.5%',
-                height: '88%',
-                cursor: 'pointer',
-                background: activeFaq === 3 ? 'rgba(245, 158, 11, 0.15)' : 'transparent',
-                boxShadow: activeFaq === 3 ? '0 0 25px rgba(245, 158, 11, 0.3)' : 'none',
-                border: 'none',
-                borderRadius: '6px',
-                outline: 'none',
-                transition: 'all 0.25s ease',
-              }}
-              onClick={() => setActiveFaq(3)}
-            />
-          </div>
-
-          {/* Clean Active Reading Box */}
-          {activeFaq !== null && (
-            <div
-              style={{
-                marginTop: '2.5rem',
-                maxWidth: '680px',
-                margin: '2.5rem auto 0',
-                textAlign: 'center',
-                padding: '1.75rem 2rem',
-                background: '#f8fafc',
-                borderRadius: '16px',
-                border: '1px solid #e2e8f0',
-              }}
-            >
-              <h3
+              {/* Hotspot 1: FAQ 1 */}
+              <button
+                type="button"
+                aria-label="Open FAQ 1"
+                className={`faq-book-spine-btn ${activeFaq === 0 ? 'active' : ''}`}
                 style={{
-                  fontSize: '1.18rem',
-                  fontWeight: 400,
-                  color: '#0f172a',
-                  margin: '0 0 0.75rem 0',
-                  letterSpacing: '-0.02em',
+                  left: '8.5%',
+                  top: '4%',
+                  width: '17%',
+                  height: '92%',
                 }}
-              >
-                {FAQ_ITEMS[activeFaq].q}
-              </h3>
-              <p
+                onClick={() => setActiveFaq(0)}
+              />
+
+              {/* Hotspot 2: FAQ 2 */}
+              <button
+                type="button"
+                aria-label="Open FAQ 2"
+                className={`faq-book-spine-btn ${activeFaq === 1 ? 'active' : ''}`}
                 style={{
-                  fontSize: '0.96rem',
-                  color: '#64748b',
-                  lineHeight: 1.7,
-                  margin: 0,
-                  fontWeight: 300,
+                  left: '26.5%',
+                  top: '6%',
+                  width: '17%',
+                  height: '90%',
                 }}
-              >
-                {FAQ_ITEMS[activeFaq].a}
-              </p>
+                onClick={() => setActiveFaq(1)}
+              />
+
+              {/* Hotspot 3: FAQ 3 */}
+              <button
+                type="button"
+                aria-label="Open FAQ 3"
+                className={`faq-book-spine-btn ${activeFaq === 2 ? 'active' : ''}`}
+                style={{
+                  left: '45%',
+                  top: '11%',
+                  width: '25%',
+                  height: '86%',
+                }}
+                onClick={() => setActiveFaq(2)}
+              />
+
+              {/* Hotspot 4: FAQ 4 */}
+              <button
+                type="button"
+                aria-label="Open FAQ 4"
+                className={`faq-book-spine-btn ${activeFaq === 3 ? 'active' : ''}`}
+                style={{
+                  left: '71.5%',
+                  top: '11%',
+                  width: '18.5%',
+                  height: '88%',
+                }}
+                onClick={() => setActiveFaq(3)}
+              />
             </div>
-          )}
+
+            {/* Smooth Layered Open Book Display (h-faq1.png ... h-faq4.png) */}
+            <div
+              className="faq-open-book-wrap"
+              onClick={() => setActiveFaq((prev) => (prev + 1) % 4)}
+              title="Click to turn to the next volume"
+            >
+              {FAQ_OPEN_IMAGES.map((imgSrc, idx) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={idx}
+                  src={imgSrc}
+                  alt={`Frequently Asked Questions Volume ${idx + 1}`}
+                  className={`faq-open-book-layer ${activeFaq === idx ? 'active' : ''}`}
+                  draggable={false}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
