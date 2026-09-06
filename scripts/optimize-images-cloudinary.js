@@ -23,13 +23,13 @@ const EXTENSIONS = ['.tsx', '.ts', '.jsx', '.js'];
 // For background/hero images: f_auto,q_auto:good,w_1600,c_limit,dpr_auto
 
 const SMALL_ASSET_KEYWORDS = [
-  'logo', 'icon', 'panda', 'portrait', 'firmai-logo', 'zawr-logo',
+  'logo', 'icon', 'portrait', 'firmai-logo', 'zawr-logo',
   'edu-icon', 'emp-icon', 'chart-icon', 'avatar'
 ];
 
 const HERO_ASSET_KEYWORDS = [
   'hero', 'bg', 'banner', 'cover', 'reconstruction', 'zawr-industries',
-  'investors-hero', 'pitch-deck', 'it-services-hero', 'dashboard'
+  'investors-hero', 'pitch-deck', 'it-services-hero', 'dashboard', 'panda'
 ];
 
 let totalFiles = 0, totalUpdated = 0, totalUrlsFixed = 0;

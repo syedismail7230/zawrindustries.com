@@ -99,13 +99,15 @@ export default function Footer() {
         }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_400,c_limit/v1783710527/zawr/assets/panda.png"
+            src="https://res.cloudinary.com/murfclni/image/upload/f_png,q_auto:best/v1783710527/zawr/assets/panda.png"
             alt="Panda peeking over Zawr Industries"
             className="panda-img"
             style={{
               display: 'block',
             }}
-           loading="lazy" decoding="async" />
+            loading="lazy"
+            decoding="async"
+          />
         </div>
       )}
 
