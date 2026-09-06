@@ -124,9 +124,9 @@ const FAQ_ITEMS: FaqItem[] = [
       'The orthography of ZAWR reflects classical international etymology where the consonant "W" produces a resonant "V" vocal transition ("ZA-VAR"). This provides a memorable acoustic resonance that translates effortlessly across English, Hindi, Arabic, European, and Asian languages.',
   },
   {
-    question: 'Are "Zawar", "Zavar", "Zaur", and "Zaver" the same as Zawr Industries?',
+    question: 'How do the syllables in ZAWR transition?',
     answer:
-      'Yes. Users searching for phonetic variations like "Zawar Industries", "Zavar", "Zaur", "Zaver Industries", or "Zohar" are directed to Zawr Industries LLP (zawrindustries.com), the multi-sector technology, manufacturing, energy, and logistics enterprise.',
+      'The brand name transitions smoothly in two syllables: "ZAH" followed by "VAHR" (/ˈzɑːvɑːr/). The letter "W" is vocalized as a resonant "V" sound, providing acoustic clarity and effortless pronunciation across all languages.',
   },
   {
     question: 'What are the most common mispronunciations of Zawr?',
@@ -929,156 +929,7 @@ export default function PronunciationClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          3. MINIMALIST SEARCH MISSPELLINGS & PHONETIC TYPINGS RESOLVER
-      ───────────────────────────────────────────────────────────── */}
-      <section
-        style={{
-          width: '100%',
-          maxWidth: '1000px',
-          margin: '0 auto clamp(4rem, 8vh, 6rem) auto',
-        }}
-      >
-        <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
-          <span
-            style={{
-              fontSize: '0.74rem',
-              fontWeight: 600,
-              letterSpacing: '0.24em',
-              textTransform: 'uppercase',
-              color: '#64748b',
-            }}
-          >
-            SEARCH INTENT REFERENCE
-          </span>
-          <h2
-            style={{
-              fontSize: 'clamp(1.8rem, 3.5vw, 2.6rem)',
-              fontWeight: 400,
-              letterSpacing: '-0.03em',
-              color: '#000000',
-              margin: '0.4rem 0 0.5rem 0',
-            }}
-          >
-            Phonetic Transliterations &amp; Queries
-          </h2>
-          <p
-            style={{
-              fontSize: '0.92rem',
-              color: '#64748b',
-              maxWidth: '620px',
-              margin: '0 auto',
-              lineHeight: 1.6,
-            }}
-          >
-            If you entered any of these common phonetic variations, you have reached <strong>Zawr Industries LLP</strong>.
-          </p>
-        </div>
-
-        {/* Minimalist 2-Column Split */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-            gap: 'clamp(1.5rem, 3vw, 3rem)',
-          }}
-        >
-          {/* Column 1: Recognized Search Queries */}
-          <div
-            style={{
-              borderTop: '1px solid #000000',
-              paddingTop: '1.25rem',
-            }}
-          >
-            <div style={{ fontSize: '0.76rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#64748b', marginBottom: '1rem' }}>
-              Recognized Search Queries
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {[
-                { query: 'Zawar Industries', resolution: 'Zawr Industries (Official Spelling)' },
-                { query: 'Zavar / Zavar Industries', resolution: 'Zawr (Pronounced ZA-VAR)' },
-                { query: 'Zaur / Zaur Industries', resolution: 'Zawr Industries' },
-                { query: 'Zaver / Zaver Industries', resolution: 'Zawr Industries' },
-                { query: 'Zohar / Zohar Industries', resolution: 'Zawr Industries' },
-              ].map((item, idx) => (
-                <div
-                  key={idx}
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    padding: '8px 0',
-                    borderBottom: '1px solid #f1f5f9',
-                    fontSize: '0.86rem',
-                  }}
-                >
-                  <span style={{ color: '#0f172a', fontWeight: 500 }}>&ldquo;{item.query}&rdquo;</span>
-                  <span style={{ color: '#64748b' }}>➔ {item.resolution}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Column 2: Phonetic Distinctions */}
-          <div
-            style={{
-              borderTop: '1px solid #000000',
-              paddingTop: '1.25rem',
-            }}
-          >
-            <div style={{ fontSize: '0.76rem', fontWeight: 600, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#64748b', marginBottom: '1rem' }}>
-              Phonetic Distinctions
-            </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <div
-                style={{
-                  padding: '10px 0',
-                  borderBottom: '1px solid #f1f5f9',
-                  fontSize: '0.86rem',
-                }}
-              >
-                <div style={{ fontWeight: 600, color: '#475569', marginBottom: '2px' }}>
-                  Avoid: &quot;Zore&quot; (rhymes with door)
-                </div>
-                <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                  The &apos;W&apos; does not create a monosyllabic &apos;or&apos; sound.
-                </div>
-              </div>
-
-              <div
-                style={{
-                  padding: '10px 0',
-                  borderBottom: '1px solid #f1f5f9',
-                  fontSize: '0.86rem',
-                }}
-              >
-                <div style={{ fontWeight: 600, color: '#475569', marginBottom: '2px' }}>
-                  Avoid: &quot;Zow-er&quot; (rhymes with sour)
-                </div>
-                <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
-                  The vowel is an open &quot;ah&quot; rather than a diphthong &quot;ow&quot;.
-                </div>
-              </div>
-
-              <div
-                style={{
-                  padding: '10px 0',
-                  fontSize: '0.86rem',
-                }}
-              >
-                <div style={{ fontWeight: 600, color: '#000000', marginBottom: '2px' }}>
-                  Correct: &quot;ZA-VAR&quot; (/ˈzɑːvɑːr/)
-                </div>
-                <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
-                  The standardized pronunciation across all global communication.
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────
-          4. MINIMALIST GLOBAL TRANSLITERATION TABLE
+          3. MINIMALIST GLOBAL TRANSLITERATION TABLE
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
@@ -1193,7 +1044,7 @@ export default function PronunciationClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          5. MINIMALIST FAQ SECTION (Clean Hairline Accordions)
+          4. MINIMALIST FAQ SECTION (Clean Hairline Accordions)
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
@@ -1294,7 +1145,7 @@ export default function PronunciationClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          6. BRAND DIRECTORY NAVIGATION (Minimalist)
+          5. BRAND DIRECTORY NAVIGATION (Minimalist)
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
