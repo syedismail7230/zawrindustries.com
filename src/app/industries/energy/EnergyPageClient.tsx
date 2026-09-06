@@ -1136,85 +1136,21 @@ export default function EnergyPageClient() {
                     }}
                   />
 
-                  {/* Multi-Stop Cinematic Gradient Overlay */}
+                  {/* Bottom Gradient & Text Overlay (Matching Homepage Our Process Section) */}
                   <div
                     style={{
                       position: 'absolute',
                       inset: 0,
-                      background: 'linear-gradient(to top, rgba(5, 8, 18, 0.95) 0%, rgba(5, 8, 18, 0.72) 42%, rgba(5, 8, 18, 0.22) 72%, rgba(5, 8, 18, 0.45) 100%)',
+                      background: 'linear-gradient(to top, rgba(5, 8, 18, 0.92) 0%, rgba(5, 8, 18, 0.55) 45%, rgba(0, 0, 0, 0) 85%)',
                       display: 'flex',
                       flexDirection: 'column',
-                      justifyContent: 'space-between',
-                      padding: 'clamp(1.75rem, 3.5vw, 3rem)',
+                      justifyContent: 'flex-end',
+                      padding: 'clamp(2rem, 4vw, 3.25rem)',
                       boxSizing: 'border-box',
                       zIndex: 2,
                     }}
                   >
-                    {/* Top Header Row Inside Card */}
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        flexWrap: 'wrap',
-                        gap: '12px',
-                        zIndex: 3,
-                      }}
-                    >
-                      <div
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          padding: '6px 16px',
-                          borderRadius: '100px',
-                          backgroundColor: 'rgba(0, 0, 0, 0.6)',
-                          backdropFilter: 'blur(12px)',
-                          border: '1px solid rgba(255, 255, 255, 0.18)',
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontSize: '0.82rem',
-                            fontWeight: 700,
-                            color: '#f59e0b',
-                            textTransform: 'uppercase',
-                            letterSpacing: '0.08em',
-                          }}
-                        >
-                          {item.category}
-                        </span>
-                        <span style={{ color: 'rgba(255, 255, 255, 0.4)' }}>·</span>
-                        <span style={{ fontSize: '0.82rem', color: 'rgba(255, 255, 255, 0.9)', fontWeight: 500 }}>{item.year}</span>
-                      </div>
-
-                      <div
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          padding: '6px 16px',
-                          borderRadius: '100px',
-                          backgroundColor: 'rgba(245, 158, 11, 0.2)',
-                          backdropFilter: 'blur(12px)',
-                          border: '1px solid rgba(245, 158, 11, 0.45)',
-                        }}
-                      >
-                        <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#f59e0b', display: 'inline-block' }} />
-                        <span
-                          style={{
-                            fontSize: '0.8rem',
-                            fontWeight: 600,
-                            color: '#ffffff',
-                            letterSpacing: '0.03em',
-                          }}
-                        >
-                          {item.metrics}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* Bottom Content Area Inside Card */}
+                    {/* Content Area Inside Card */}
                     <div
                       style={{
                         display: 'flex',
