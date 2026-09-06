@@ -71,7 +71,7 @@ export default function EnergyPageClient() {
       }}
     >
       {/* ─────────────────────────────────────────────────────────────
-          1. HERO SECTION (Massive "New Energy" + Scenic Alpine Wind)
+          1. HERO SECTION (Layered: Background -> "Energy" Text -> Turbine WebM Video)
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
@@ -79,44 +79,91 @@ export default function EnergyPageClient() {
           height: '100vh',
           minHeight: '100vh',
           width: '100%',
+          overflow: 'hidden',
           display: 'flex',
-          flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          padding: '0 1.5rem',
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.45)), url("/assets/energy-hero-bg.png")',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center 40%',
-          backgroundRepeat: 'no-repeat',
-          color: '#ffffff',
-          textAlign: 'center',
+          backgroundColor: '#111827',
         }}
       >
+        {/* Layer 1: Scenic Mountain Background Image */}
         <div
           style={{
-            maxWidth: '1200px',
+            position: 'absolute',
+            top: 0,
+            left: 0,
             width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            height: '100%',
+            backgroundImage: 'url("/assets/energy-hero-bg.png")',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            zIndex: 1,
+          }}
+        />
+
+        {/* Layer 2: Giant Display Text "Energy" (Sandwiched Behind Turbine) */}
+        <div
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
             zIndex: 2,
+            width: '100%',
+            textAlign: 'center',
+            pointerEvents: 'none',
+            userSelect: 'none',
+            padding: '0 1rem',
           }}
         >
-          {/* Massive Display Title */}
           <h1
             style={{
-              fontSize: 'clamp(3.5rem, 11vw, 9.5rem)',
-              fontWeight: 500,
+              fontSize: 'clamp(4.5rem, 15vw, 13.5rem)',
+              fontWeight: 700,
               letterSpacing: '-0.04em',
-              lineHeight: 0.95,
+              lineHeight: 1,
               margin: 0,
               color: '#ffffff',
-              textShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
-              maxWidth: '1100px',
+              textShadow: '0 4px 28px rgba(0, 0, 0, 0.18)',
+              fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
             }}
           >
-            New Energy
+            Energy
           </h1>
+        </div>
+
+        {/* Layer 3: Turbine Video (In Front of Text) */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            pointerEvents: 'none',
+            zIndex: 3,
+            mixBlendMode: 'screen',
+          }}
+        >
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              objectPosition: 'center',
+            }}
+          >
+            <source src="/assets/turbine-alpha.webm" type="video/webm" />
+            <source src="/assets/turbine.mp4" type="video/mp4" />
+          </video>
         </div>
       </section>
 
