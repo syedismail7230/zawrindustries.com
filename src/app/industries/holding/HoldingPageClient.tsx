@@ -1652,74 +1652,7 @@ export default function HoldingPageClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          6. FULL-WIDTH EDGE-TO-EDGE BANNER SECTION (Estate signature style)
-      ───────────────────────────────────────────────────────────── */}
-      <section
-        style={{
-          width: '100%',
-          backgroundColor: '#ffffff',
-          padding: '0',
-          overflow: 'hidden',
-        }}
-      >
-        <div style={{ width: '100%', maxWidth: '100%', position: 'relative', overflow: 'hidden' }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/assets/holding/holding-hospitality.jpg"
-            alt="Zawr Holding - Scaling Global Brands Across Commercial Corridors"
-            style={{
-              width: '100%',
-              height: 'auto',
-              minHeight: '380px',
-              maxHeight: '85vh',
-              objectFit: 'cover',
-              display: 'block',
-            }}
-          />
-
-          {/* Soft Dark Gradient Scrim overlay */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: '60%',
-              background: 'linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.35) 60%, rgba(0, 0, 0, 0) 100%)',
-              pointerEvents: 'none',
-            }}
-          />
-
-          {/* Bottom Left Text Overlay */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: 'clamp(1.5rem, 5vw, 4rem)',
-              left: 'clamp(1.25rem, 4vw, 4vw)',
-              right: '1.25rem',
-              maxWidth: '680px',
-              color: '#ffffff',
-              zIndex: 10,
-            }}
-          >
-            <h3
-              style={{
-                fontSize: 'clamp(1.4rem, 4vw, 2.75rem)',
-                fontWeight: 300,
-                letterSpacing: '-0.025em',
-                lineHeight: 1.2,
-                margin: 0,
-                color: '#ffffff',
-              }}
-            >
-              Empowering World-Class Brands to Scale Across Leading Corridors
-            </h3>
-          </div>
-        </div>
-      </section>
-
-      {/* ─────────────────────────────────────────────────────────────
-          7. FREQUENTLY ASKED QUESTIONS
+          6. FREQUENTLY ASKED QUESTIONS
       ───────────────────────────────────────────────────────────── */}
       <section
         style={{
