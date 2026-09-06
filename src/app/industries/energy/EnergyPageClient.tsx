@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 
 interface ProjectItem {
@@ -68,18 +68,57 @@ const PROJECTS_DATA: ProjectItem[] = [
 ];
 
 export default function EnergyPageClient() {
-  const [activeProjectIndex, setActiveProjectIndex] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const activeProject = PROJECTS_DATA[activeProjectIndex];
+  const projectsSpacerRef = useRef<HTMLDivElement>(null);
+  const [pinState, setPinState] = useState<'before' | 'pinned' | 'after'>('before');
+  const [progress, setProgress] = useState(0);
 
-  // Auto-advance project showcase every 4.5s with pause on hover
   useEffect(() => {
-    if (isPaused) return;
-    const interval = setInterval(() => {
-      setActiveProjectIndex((prev) => (prev + 1) % PROJECTS_DATA.length);
-    }, 4500);
-    return () => clearInterval(interval);
-  }, [isPaused]);
+    const onScroll = () => {
+      const spacer = projectsSpacerRef.current;
+      if (!spacer) return;
+
+      const scrollY = window.scrollY;
+      const vh = window.innerHeight;
+      const top = spacer.offsetTop;
+      const height = spacer.offsetHeight;
+
+      const pinStart = top;
+      const pinEnd = top + height - vh;
+
+      if (scrollY <= pinStart) {
+        setPinState('before');
+        setProgress(0);
+      } else if (scrollY >= pinEnd) {
+        setPinState('after');
+        setProgress(1);
+      } else {
+        setPinState('pinned');
+        setProgress((scrollY - pinStart) / (pinEnd - pinStart));
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  const numTransitions = PROJECTS_DATA.length - 1;
+  const sliceSize = 1 / numTransitions;
+
+  const activeCardIndex = Math.min(
+    PROJECTS_DATA.length - 1,
+    Math.floor(progress * (PROJECTS_DATA.length - 1) + 0.45)
+  );
+
+  const jumpToProject = (idx: number) => {
+    const spacer = projectsSpacerRef.current;
+    if (!spacer) return;
+    const top = spacer.offsetTop;
+    const height = spacer.offsetHeight;
+    const vh = window.innerHeight;
+    const targetScroll = top + (idx / numTransitions) * (height - vh);
+    window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+  };
 
   return (
     <div
@@ -909,100 +948,45 @@ export default function EnergyPageClient() {
       </section>
 
       {/* ─────────────────────────────────────────────────────────────
-          6. CLEAN ENERGY PROJECTS SHOWCASE (Animated Interactive Tabs)
+          6. CLEAN ENERGY PROJECTS SHOWCASE (Scroll-Pinned Stacking Cards Animation)
       ───────────────────────────────────────────────────────────── */}
       <section
         id="energy-projects"
+        ref={projectsSpacerRef}
         style={{
-          padding: 'clamp(4rem, 8vh, 7rem) 1.5rem',
-          maxWidth: '1240px',
-          margin: '0 auto',
-          borderTop: '1px solid #f1f5f9',
+          position: 'relative',
+          height: `${(PROJECTS_DATA.length - 1) * 110 + 50}vh`,
+          backgroundColor: '#ffffff',
         }}
       >
-        {/* Header */}
         <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-end',
-            flexWrap: 'wrap',
-            gap: '1.5rem',
-            marginBottom: '3.5rem',
-          }}
+          style={
+            pinState === 'pinned'
+              ? { position: 'fixed', top: 0, left: 0, right: 0, height: '100vh', zIndex: 10, backgroundColor: '#ffffff', overflow: 'hidden' }
+              : pinState === 'after'
+              ? { position: 'absolute', bottom: 0, left: 0, right: 0, height: '100vh', zIndex: 1, backgroundColor: '#ffffff', overflow: 'hidden' }
+              : { position: 'absolute', top: 0, left: 0, right: 0, height: '100vh', zIndex: 1, backgroundColor: '#ffffff', overflow: 'hidden' }
+          }
         >
-          <div>
-            <h2
-              style={{
-                fontSize: 'clamp(2rem, 4vw, 3.2rem)',
-                fontWeight: 400,
-                letterSpacing: '-0.03em',
-                color: '#0f172a',
-                margin: 0,
-              }}
-            >
-              Clean Energy Across Industries
-            </h2>
-          </div>
-
+          {/* Top Header & Interactive Category Navigation Tabs */}
           <div
             style={{
+              position: 'absolute',
+              top: 'clamp(1.5rem, 3.5vh, 3rem)',
+              left: 0,
+              right: 0,
+              maxWidth: '1240px',
+              margin: '0 auto',
+              padding: '0 1.5rem',
               display: 'flex',
-              gap: '8px',
+              justifyContent: 'space-between',
+              alignItems: 'flex-end',
               flexWrap: 'wrap',
+              gap: '1rem',
+              zIndex: 20,
             }}
           >
-            {PROJECTS_DATA.map((proj, idx) => {
-              const isSelected = idx === activeProjectIndex;
-              return (
-                <button
-                  key={proj.id}
-                  type="button"
-                  onClick={() => setActiveProjectIndex(idx)}
-                  style={{
-                    padding: '8px 18px',
-                    fontSize: '0.84rem',
-                    fontWeight: isSelected ? 600 : 400,
-                    borderRadius: '100px',
-                    border: '1px solid',
-                    borderColor: isSelected ? '#0f172a' : '#e2e8f0',
-                    backgroundColor: isSelected ? '#0f172a' : '#ffffff',
-                    color: isSelected ? '#ffffff' : '#64748b',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
-                    transform: isSelected ? 'scale(1.03)' : 'scale(1)',
-                    boxShadow: isSelected ? '0 4px 14px rgba(15, 23, 42, 0.15)' : 'none',
-                  }}
-                >
-                  {proj.category}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Active Project Highlight Card with smooth keyframe animation and pause on hover */}
-        <div
-          key={activeProject.id}
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-            gap: 'clamp(2.5rem, 5vw, 4.5rem)',
-            alignItems: 'center',
-            backgroundColor: '#ffffff',
-            borderRadius: '32px',
-            padding: 'clamp(1.5rem, 3vw, 2.75rem)',
-            border: '1px solid #f1f5f9',
-            boxShadow: '0 20px 45px rgba(0, 0, 0, 0.05)',
-            animation: 'energyProjectFadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-          }}
-          className="energy-project-split"
-        >
-          {/* Left Column: Project Copy */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div>
               <span
                 style={{
                   fontSize: '0.82rem',
@@ -1010,168 +994,287 @@ export default function EnergyPageClient() {
                   color: '#f59e0b',
                   textTransform: 'uppercase',
                   letterSpacing: '0.08em',
+                  display: 'block',
+                  marginBottom: '0.2rem',
                 }}
               >
-                {activeProject.category}
+                Industry Solutions
               </span>
-              <span style={{ color: '#cbd5e1' }}>·</span>
-              <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>{activeProject.year}</span>
-            </div>
-
-            <h3
-              style={{
-                fontSize: 'clamp(1.75rem, 3.2vw, 2.6rem)',
-                fontWeight: 400,
-                letterSpacing: '-0.03em',
-                color: '#0f172a',
-                lineHeight: 1.2,
-                margin: 0,
-              }}
-            >
-              {activeProject.title}
-            </h3>
-
-            <p
-              style={{
-                fontSize: '1rem',
-                color: '#475569',
-                lineHeight: 1.75,
-                margin: 0,
-              }}
-            >
-              {activeProject.description}
-            </p>
-
-            <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginTop: '0.5rem' }}>
-              {activeProject.tags.map((tag) => (
-                <span
-                  key={tag}
-                  style={{
-                    padding: '4px 12px',
-                    borderRadius: '100px',
-                    backgroundColor: '#f1f5f9',
-                    fontSize: '0.78rem',
-                    fontWeight: 500,
-                    color: '#475569',
-                    transition: 'all 0.2s ease',
-                  }}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-
-            <div style={{ marginTop: '1.5rem' }}>
-              <Link
-                href="/contact/client-relations"
+              <h2
                 style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  fontSize: '0.95rem',
-                  fontWeight: 600,
+                  fontSize: 'clamp(1.75rem, 3.2vw, 2.6rem)',
+                  fontWeight: 400,
+                  letterSpacing: '-0.03em',
                   color: '#0f172a',
-                  textDecoration: 'none',
-                  borderBottom: '1px solid #0f172a',
-                  paddingBottom: '2px',
-                  transition: 'all 0.2s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#f59e0b';
-                  e.currentTarget.style.borderBottomColor = '#f59e0b';
-                  e.currentTarget.style.paddingLeft = '4px';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#0f172a';
-                  e.currentTarget.style.borderBottomColor = '#0f172a';
-                  e.currentTarget.style.paddingLeft = '0px';
+                  margin: 0,
                 }}
               >
-                <span>Deploy with Zawr Energy</span>
-                <span>→</span>
-              </Link>
+                Clean Energy Across Industries
+              </h2>
             </div>
-          </div>
 
-          {/* Right Column: Project Image with Smooth Hover Animation */}
-          <div
-            style={{
-              position: 'relative',
-              borderRadius: '24px',
-              overflow: 'hidden',
-              aspectRatio: '16 / 10',
-              boxShadow: '0 16px 36px rgba(0, 0, 0, 0.08)',
-              backgroundColor: '#f1f5f9',
-            }}
-          >
-            <img
-              src={activeProject.image}
-              alt={activeProject.title}
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
-              }}
-              className="energy-zoom-hover"
-            />
-
-            {/* Floating Top-Right Badges */}
+            {/* Interactive Category Tabs */}
             <div
               style={{
-                position: 'absolute',
-                top: '16px',
-                right: '16px',
                 display: 'flex',
                 gap: '8px',
+                flexWrap: 'wrap',
               }}
             >
-              <span
-                style={{
-                  padding: '6px 14px',
-                  borderRadius: '100px',
-                  backgroundColor: 'rgba(0, 0, 0, 0.65)',
-                  backdropFilter: 'blur(8px)',
-                  color: '#ffffff',
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
-                  letterSpacing: '0.04em',
-                }}
-              >
-                {activeProject.metrics}
-              </span>
+              {PROJECTS_DATA.map((proj, idx) => {
+                const isSelected = idx === activeCardIndex;
+                return (
+                  <button
+                    key={proj.id}
+                    type="button"
+                    onClick={() => jumpToProject(idx)}
+                    style={{
+                      padding: '7px 16px',
+                      fontSize: '0.82rem',
+                      fontWeight: isSelected ? 600 : 400,
+                      borderRadius: '100px',
+                      border: '1px solid',
+                      borderColor: isSelected ? '#0f172a' : '#e2e8f0',
+                      backgroundColor: isSelected ? '#0f172a' : '#ffffff',
+                      color: isSelected ? '#ffffff' : '#64748b',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+                      transform: isSelected ? 'scale(1.04)' : 'scale(1)',
+                      boxShadow: isSelected ? '0 4px 14px rgba(15, 23, 42, 0.15)' : 'none',
+                    }}
+                  >
+                    {proj.category}
+                  </button>
+                );
+              })}
             </div>
           </div>
-        </div>
 
-        {/* Carousel indicator dots with active expanding pill */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            gap: '8px',
-            marginTop: '2rem',
-          }}
-        >
-          {PROJECTS_DATA.map((_, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => setActiveProjectIndex(idx)}
-              aria-label={`Go to slide ${idx + 1}`}
-              style={{
-                width: idx === activeProjectIndex ? '28px' : '8px',
-                height: '8px',
-                borderRadius: '100px',
-                backgroundColor: idx === activeProjectIndex ? '#0f172a' : '#cbd5e1',
-                border: 'none',
-                cursor: 'pointer',
-                transition: 'all 0.35s cubic-bezier(0.16, 1, 0.3, 1)',
-                padding: 0,
-              }}
-            />
-          ))}
+          {/* Stacked Full-Card Stage (Centered in Viewport) */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '56%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: '90%',
+              maxWidth: '1180px',
+              height: 'clamp(420px, 58vh, 560px)',
+              zIndex: 10,
+            }}
+          >
+            {PROJECTS_DATA.map((item, index) => {
+              let translateY = 0;
+              let opacity = 1;
+
+              if (index === 0) {
+                translateY = 0;
+                opacity = 1;
+              } else {
+                const cardStart = (index - 1) * sliceSize;
+                const cardEnd = index * sliceSize;
+
+                if (progress <= cardStart) {
+                  translateY = 100;
+                  opacity = 0;
+                } else if (progress >= cardEnd) {
+                  translateY = 0;
+                  opacity = 1;
+                } else {
+                  const cardProgress = (progress - cardStart) / sliceSize;
+                  translateY = (1 - cardProgress) * 100;
+                  opacity = cardProgress > 0.02 ? 1 : 0;
+                }
+              }
+
+              // Stacking depth effects from cards landed above
+              let effectiveCardsOnTop = 0;
+              for (let k = index + 1; k < PROJECTS_DATA.length; k++) {
+                const kStart = (k - 1) * sliceSize;
+                const kEnd = k * sliceSize;
+                if (progress >= kEnd) {
+                  effectiveCardsOnTop += 1;
+                } else if (progress > kStart) {
+                  effectiveCardsOnTop += (progress - kStart) / sliceSize;
+                }
+              }
+
+              const scale = Math.max(0.88, 1 - effectiveCardsOnTop * 0.035);
+              const stackShift = -effectiveCardsOnTop * 16;
+
+              return (
+                <div
+                  key={item.id}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    borderRadius: '32px',
+                    overflow: 'hidden',
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #e2e8f0',
+                    zIndex: index + 1,
+                    opacity,
+                    transform: `translateY(calc(${translateY}% + ${stackShift}px)) scale(${scale})`,
+                    transformOrigin: 'center bottom',
+                    willChange: 'transform, opacity',
+                    transition: 'transform 0.6s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.3s ease',
+                    boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.12)',
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                    gap: 'clamp(2rem, 4vw, 3.5rem)',
+                    alignItems: 'center',
+                    padding: 'clamp(1.75rem, 3.5vw, 3rem)',
+                    boxSizing: 'border-box',
+                  }}
+                  className="energy-stacked-card"
+                >
+                  {/* Left Column: Project Details */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', zIndex: 2 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <span
+                        style={{
+                          fontSize: '0.82rem',
+                          fontWeight: 600,
+                          color: '#f59e0b',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.08em',
+                        }}
+                      >
+                        {item.category}
+                      </span>
+                      <span style={{ color: '#cbd5e1' }}>·</span>
+                      <span style={{ fontSize: '0.82rem', color: '#94a3b8' }}>{item.year}</span>
+                    </div>
+
+                    <h3
+                      style={{
+                        fontSize: 'clamp(1.6rem, 2.8vw, 2.4rem)',
+                        fontWeight: 400,
+                        letterSpacing: '-0.03em',
+                        color: '#0f172a',
+                        lineHeight: 1.2,
+                        margin: 0,
+                      }}
+                    >
+                      {item.title}
+                    </h3>
+
+                    <p
+                      style={{
+                        fontSize: 'clamp(0.92rem, 1.3vw, 1.05rem)',
+                        color: '#475569',
+                        lineHeight: 1.7,
+                        margin: 0,
+                      }}
+                    >
+                      {item.description}
+                    </p>
+
+                    <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                      {item.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          style={{
+                            padding: '4px 12px',
+                            borderRadius: '100px',
+                            backgroundColor: '#f1f5f9',
+                            fontSize: '0.78rem',
+                            fontWeight: 500,
+                            color: '#475569',
+                          }}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div style={{ marginTop: '0.5rem' }}>
+                      <Link
+                        href="/contact/client-relations"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          fontSize: '0.95rem',
+                          fontWeight: 600,
+                          color: '#0f172a',
+                          textDecoration: 'none',
+                          borderBottom: '1px solid #0f172a',
+                          paddingBottom: '2px',
+                          transition: 'all 0.2s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.color = '#f59e0b';
+                          e.currentTarget.style.borderBottomColor = '#f59e0b';
+                          e.currentTarget.style.paddingLeft = '4px';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.color = '#0f172a';
+                          e.currentTarget.style.borderBottomColor = '#0f172a';
+                          e.currentTarget.style.paddingLeft = '0px';
+                        }}
+                      >
+                        <span>Deploy with Zawr Energy</span>
+                        <span>→</span>
+                      </Link>
+                    </div>
+                  </div>
+
+                  {/* Right Column: Project Image */}
+                  <div
+                    style={{
+                      position: 'relative',
+                      borderRadius: '24px',
+                      overflow: 'hidden',
+                      height: '100%',
+                      maxHeight: '400px',
+                      aspectRatio: '16 / 10',
+                      backgroundColor: '#f1f5f9',
+                      boxShadow: '0 12px 30px rgba(0, 0, 0, 0.08)',
+                    }}
+                  >
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block',
+                      }}
+                    />
+
+                    {/* Floating Top-Right Metric Badge */}
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '16px',
+                        right: '16px',
+                        display: 'flex',
+                        gap: '8px',
+                        zIndex: 3,
+                      }}
+                    >
+                      <span
+                        style={{
+                          padding: '6px 14px',
+                          borderRadius: '100px',
+                          backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                          backdropFilter: 'blur(8px)',
+                          color: '#ffffff',
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          letterSpacing: '0.04em',
+                        }}
+                      >
+                        {item.metrics}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </section>
 
