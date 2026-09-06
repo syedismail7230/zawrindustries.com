@@ -116,7 +116,7 @@ const FAQ_ITEMS: FaqItem[] = [
   {
     question: 'How do you pronounce ZAWR correctly?',
     answer:
-      'ZAWR is officially pronounced as "ZA-VAR" (phonetic IPA: /ˈzɑːvɑːr/). It consists of two distinct syllables: "ZAH" (rhyming with father) and "VAHR" (rhyming with star or bazaar). The accent is balanced with an authoritative, open vocal cadence.',
+      'ZAWR is officially pronounced as "ZA-VAR" (phonetic IPA: /ˈzɑːvɑːr/). It consists of two distinct syllables: "ZAH" (with a clear open vowel) and "VAHR" (with a resonant vocal transition). The accent is balanced with an authoritative, open cadence.',
   },
   {
     question: 'Why is ZAWR spelled with a W but pronounced as ZA-VAR?',
@@ -875,19 +875,19 @@ export default function PronunciationClient() {
             </p>
           </div>
 
-          {/* Col 3: Rhyme Anchors */}
+          {/* Col 3: Vocal Accent / Cadence */}
           <div style={{ textAlign: 'center', padding: '0 0.5rem' }}>
             <span style={{ fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#94a3b8' }}>
-              RHYMING ANCHORS
+              VOCAL ACCENT
             </span>
             <div
               className={poppins.className}
               style={{ fontSize: 'clamp(1.6rem, 4vw, 2.1rem)', fontWeight: 600, color: '#000000', margin: '0.5rem 0 0.3rem 0' }}
             >
-              Bazaar, Star
+              Equal Cadence
             </div>
             <p style={{ fontSize: '0.84rem', color: '#64748b', lineHeight: 1.5, margin: 0 }}>
-              Ending in an open, sonorous vocal resonance.
+              Balanced emphasis across both syllables without pitch drop.
             </p>
           </div>
         </div>
@@ -922,7 +922,7 @@ export default function PronunciationClient() {
           <div>
             <div style={{ fontSize: '0.82rem', fontWeight: 700, color: '#0f172a', marginBottom: '2px' }}>4. Final &quot;AHR&quot;</div>
             <p style={{ margin: 0, fontSize: '0.82rem', color: '#64748b', lineHeight: 1.5 }}>
-              Alveolar resonant: open release as in <em>bazaar</em>.
+              Alveolar resonant: open vocal release with clear projection.
             </p>
           </div>
         </div>

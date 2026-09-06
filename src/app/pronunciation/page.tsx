@@ -131,7 +131,7 @@ export default function PronunciationPage() {
             name: 'How do you pronounce ZAWR?',
             acceptedAnswer: {
               '@type': 'Answer',
-              text: 'ZAWR is officially pronounced as "ZA-VAR" (phonetically: /ˈzɑːvɑːr/). The first syllable is "ZAH" (rhyming with father), and the second syllable is "VAHR" (rhyming with star or bazaar).',
+              text: 'ZAWR is officially pronounced as "ZA-VAR" (phonetically: /ˈzɑːvɑːr/). It consists of two distinct syllables: "ZAH" (with a clear open vowel) and "VAHR" (with a resonant vocal transition). The accent is balanced with an authoritative, open cadence.',
             },
           },
           {
