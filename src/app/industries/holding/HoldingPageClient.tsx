@@ -2284,30 +2284,6 @@ export default function HoldingPageClient() {
         }}
       >
         <div style={{ maxWidth: '880px', margin: '0 auto', position: 'relative', zIndex: 2 }}>
-          {/* Classical Overline Ornament */}
-          <div
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '12px',
-              marginBottom: '1.25rem',
-            }}
-          >
-            <span style={{ width: '28px', height: '1px', backgroundColor: '#e2e8f0' }} />
-            <span
-              style={{
-                fontSize: '0.78rem',
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                color: '#d97706',
-              }}
-            >
-              Institutional Partnership
-            </span>
-            <span style={{ width: '28px', height: '1px', backgroundColor: '#e2e8f0' }} />
-          </div>
-
           {/* Main Title */}
           <h2
             style={{
@@ -2344,7 +2320,6 @@ export default function HoldingPageClient() {
               gap: '1rem',
               justifyContent: 'center',
               alignItems: 'center',
-              marginBottom: '2.5rem',
             }}
           >
             <Link
@@ -2417,30 +2392,6 @@ export default function HoldingPageClient() {
             >
               <span>Client Relations</span>
             </Link>
-          </div>
-
-          {/* Institutional Assurance Strip */}
-          <div
-            style={{
-              display: 'inline-flex',
-              flexWrap: 'wrap',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '12px 18px',
-              fontSize: '0.82rem',
-              color: '#64748b',
-              fontWeight: 400,
-              padding: '8px 18px',
-              borderRadius: '100px',
-              backgroundColor: '#f8fafc',
-              border: '1px solid #e2e8f0',
-            }}
-          >
-            <span>Turnkey 45–60D Rollout</span>
-            <span style={{ color: '#d97706' }}>•</span>
-            <span>Tier-1 Concourse Sites</span>
-            <span style={{ color: '#d97706' }}>•</span>
-            <span>Institutional Capital Scale</span>
           </div>
         </div>
       </section>
