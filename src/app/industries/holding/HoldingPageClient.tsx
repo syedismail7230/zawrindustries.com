@@ -302,7 +302,7 @@ export default function HoldingPageClient() {
           position: 'relative',
           width: '100%',
           height: '100vh',
-          backgroundImage: 'url("/assets/holding/holding-flagship.jpg")',
+          backgroundImage: 'url("/assets/holding-hero.png")',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           display: 'flex',

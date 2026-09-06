@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: '/assets/holding/holding-flagship.jpg',
+        url: '/assets/holding-hero.png',
         width: 1920,
         height: 1080,
         alt: 'Zawr Holding — Multi-Brand Franchise Operations',
