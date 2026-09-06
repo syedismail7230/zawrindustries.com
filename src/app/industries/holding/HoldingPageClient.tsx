@@ -392,7 +392,7 @@ export default function HoldingPageClient() {
                 margin: 0,
               }}
             >
-              Franchise Portfolio
+              Franchise Ecosystem
             </h2>
           </div>
 
