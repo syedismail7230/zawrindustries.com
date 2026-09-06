@@ -98,16 +98,19 @@ export default function Footer() {
           backgroundColor: '#000000',
         }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="https://res.cloudinary.com/murfclni/image/upload/f_png,q_auto:best/v1783710527/zawr/assets/panda.png"
-            alt="Panda peeking over Zawr Industries"
-            className="panda-img"
-            style={{
-              display: 'block',
-            }}
-            loading="lazy"
-            decoding="async"
-          />
+          <picture>
+            <source srcSet="/assets/panda.webp" type="image/webp" />
+            <img
+              src="/assets/panda.png"
+              alt="Panda peeking over Zawr Industries"
+              className="panda-img"
+              style={{
+                display: 'block',
+              }}
+              loading="lazy"
+              decoding="async"
+            />
+          </picture>
         </div>
       )}
 
