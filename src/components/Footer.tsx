@@ -216,7 +216,7 @@ export default function Footer() {
           <ul className="footer-links">
             <li><Link href="/industries/it-service">IT Services</Link></li>
             <li><Link href="/industries/manufacturing">Manufacturing</Link></li>
-            <li><Link href="/industries/transport-and-logistics">Logistics and Transport</Link></li>
+            <li><Link href="/industries/transport-and-logistics">Logistics & Transport</Link></li>
             <li><Link href="/industries/estate">Estate</Link></li>
             <li><Link href="/industries/energy">Energy</Link></li>
             <li><Link href="/industries/holding">Holding</Link></li>

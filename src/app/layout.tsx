@@ -271,6 +271,24 @@ export default function RootLayout({
                           "url": "https://zawrindustries.com/industries/estate",
                           "description": "Commercial Infrastructure, Smart Real Estate Development, Strategic Asset Growth"
                         }
+                      },
+                      {
+                        "@type": "Offer",
+                        "itemOffered": {
+                          "@type": "Service",
+                          "name": "Clean Energy Transition & EV Forecourt Infrastructure",
+                          "url": "https://zawrindustries.com/industries/energy",
+                          "description": "EV Charging Forecourts, Utility Solar, Microgrid BESS Storage Systems"
+                        }
+                      },
+                      {
+                        "@type": "Offer",
+                        "itemOffered": {
+                          "@type": "Service",
+                          "name": "Holding Company & Multi-Brand Franchise Operations",
+                          "url": "https://zawrindustries.com/industries/holding",
+                          "description": "Multi-Unit Enterprise Management, Centralized Shared Supply Chains, Retail Telemetry"
+                        }
                       }
                     ]
                   }
@@ -337,7 +355,7 @@ export default function RootLayout({
                     {
                       "@type": "WebPage",
                       "@id": "https://zawrindustries.com/industries/transport-and-logistics#webpage",
-                      "name": "Logistics and Transport",
+                      "name": "Logistics & Transport",
                       "url": "https://zawrindustries.com/industries/transport-and-logistics",
                       "description": "Supply Chain Logistics, Fleet Telematics, AGV Warehousing & Multi-Modal Freight"
                     },
@@ -350,10 +368,24 @@ export default function RootLayout({
                     },
                     {
                       "@type": "WebPage",
+                      "@id": "https://zawrindustries.com/industries/energy#webpage",
+                      "name": "Energy",
+                      "url": "https://zawrindustries.com/industries/energy",
+                      "description": "Clean Energy Infrastructure, EV Forecourt Charging & Industrial Microgrids"
+                    },
+                    {
+                      "@type": "WebPage",
+                      "@id": "https://zawrindustries.com/industries/holding#webpage",
+                      "name": "Holding",
+                      "url": "https://zawrindustries.com/industries/holding",
+                      "description": "Multi-Brand Franchise Operations, Global Capital Alliances & Turnkey Deployment"
+                    },
+                    {
+                      "@type": "WebPage",
                       "@id": "https://zawrindustries.com/contact#webpage",
                       "name": "Contact Us",
                       "url": "https://zawrindustries.com/contact",
-                      "description": "Executive Public Relations, Client Relations Desk & Global Inquiries"
+                      "description": "Corporate Public Relations, Client Relations Desk & Global Inquiries"
                     }
                   ]
                 },
@@ -377,7 +409,7 @@ export default function RootLayout({
                     {
                       "@type": "SiteNavigationElement",
                       "position": 3,
-                      "name": "Logistics and Transport",
+                      "name": "Logistics & Transport",
                       "url": "https://zawrindustries.com/industries/transport-and-logistics"
                     },
                     {
@@ -389,8 +421,14 @@ export default function RootLayout({
                     {
                       "@type": "SiteNavigationElement",
                       "position": 5,
-                      "name": "Contact Us",
-                      "url": "https://zawrindustries.com/contact"
+                      "name": "Energy",
+                      "url": "https://zawrindustries.com/industries/energy"
+                    },
+                    {
+                      "@type": "SiteNavigationElement",
+                      "position": 6,
+                      "name": "Holding",
+                      "url": "https://zawrindustries.com/industries/holding"
                     }
                   ]
                 },

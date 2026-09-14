@@ -39,7 +39,7 @@ const INDUSTRIES_DATA: IndustryItem[] = [
   },
   {
     id: 'logistics',
-    title: 'Logistics and Transport',
+    title: 'Logistics & Transport',
     eyebrow: 'GLOBAL MULTIMODAL FREIGHT',
     image: '/assets/logistics-44.png',
     href: '/industries/transport-and-logistics',

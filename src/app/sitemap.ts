@@ -76,16 +76,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/investors/subsidiaries',
     '/investors/shareholders-info',
     '/investors/resource-centre',
-    '/investors/notice-of-forfeiture',
     '/privacy-policy',
     '/legal-disclaimer',
     '/notices',
     '/fraud-alert',
     '/sitemap',
-    '/legal/privacy-policy',
     '/legal/terms',
     '/legal/cookie-policy',
-    '/legal/disclaimer',
     '/legal/refund-policy',
   ].map((route) => {
     let priority = 0.7;
@@ -95,19 +92,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority = 1.0;
       changeFrequency = 'daily';
     } else if (['/industries/it-service', '/industries/manufacturing', '/industries/transport-and-logistics', '/industries/estate', '/industries/energy', '/industries/holding'].includes(route)) {
-      priority = 0.98;
+      priority = 0.99;
       changeFrequency = 'daily';
-    } else if (['/contact'].includes(route)) {
-      priority = 0.95;
-      changeFrequency = 'daily';
+    } else if (['/about', '/platforms', '/careers', '/investors', '/newsroom', '/contact'].includes(route)) {
+      priority = 0.8;
+      changeFrequency = 'weekly';
     } else if (['/pronunciation'].includes(route)) {
-      priority = 0.9;
-      changeFrequency = 'weekly';
-    } else if (['/about', '/platforms', '/investors', '/careers', '/newsroom'].includes(route)) {
-      priority = 0.75;
-      changeFrequency = 'weekly';
-    } else if (['/sustainability/empowerment', '/newsroom/media-kit', '/fraud-alert', '/notices', '/contact/public-relations'].includes(route)) {
-      priority = 0.2;
+      priority = 0.7;
+      changeFrequency = 'monthly';
+    } else if (['/sustainability/empowerment', '/sustainability/health', '/sustainability/education', '/sustainability/environment', '/newsroom/media-kit', '/fraud-alert', '/notices', '/contact/public-relations', '/contact/sponsorship', '/contact/partner', '/contact/client-relations'].includes(route)) {
+      priority = 0.25;
       changeFrequency = 'monthly';
     }
     
