@@ -4,6 +4,7 @@ export type UserPermission =
   | '*'
   | 'analytics'
   | 'api-monitoring'
+  | 'email-hub'
   | 'mail-credentials'
   | 'email-routing'
   | 'jobs'

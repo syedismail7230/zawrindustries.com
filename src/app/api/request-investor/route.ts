@@ -4,12 +4,20 @@ import { generateInvestorConfirmationEmail } from '@/lib/emailTemplates';
 import { logEmailDispatch } from '@/lib/analytics-tracker';
 import { evaluateSpamScore } from '@/lib/bot-protection';
 
+import { resolveFormRoute } from '@/lib/email-router';
+import { sendMailWithPoolFailover } from '@/lib/smtp-pool';
+
 export async function GET() {
   return NextResponse.json({ status: 'healthy', service: 'request-investor', timestamp: new Date().toISOString() });
 }
 
 export async function POST(req: Request) {
   try {
+    const route = resolveFormRoute('request-investor');
+    const destination = route.destinationEmail || 'investors@zawrindustries.com';
+    const cc = route.cc && route.cc.length > 0 ? route.cc : undefined;
+    const bcc = route.bcc && route.bcc.length > 0 ? route.bcc : undefined;
+
     const body = await req.json();
     const { name, email, organization, investmentSize, inquiry, honeypot, website_url_hp } = body;
 
@@ -38,38 +46,31 @@ export async function POST(req: Request) {
       );
     }
 
-    if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.GMAIL_USER,
-          pass: process.env.GMAIL_APP_PASSWORD,
-        },
-      });
+    // 1. Internal Notification to Investors Team
+    const hrMailOptions = {
+      replyTo: email,
+      to: destination,
+      cc: cc && cc.length > 0 ? cc.join(', ') : undefined,
+      bcc: bcc && bcc.length > 0 ? bcc.join(', ') : undefined,
+      subject: (route.subjectPrefix ? `[${route.subjectPrefix}] ` : '') + `[Investor Inquiry] ${name} — ${organization || 'Private Investor'} (${investmentSize || 'General'})`,
+      text: `New Investor Inquiry received via Zawr Website:\n\nName: ${name}\nEmail: ${email}\nOrganization: ${organization || 'N/A'}\nInvestment Size: ${investmentSize || 'N/A'}\n\nInquiry Details:\n${inquiry}`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; padding: 24px; border: 1px solid #eee; border-radius: 10px;">
+          <h2 style="color: #000; margin-top: 0;">New Investor Relations Inquiry</h2>
+          <p><strong>Name:</strong> ${name}</p>
+          <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
+          <p><strong>Organization / Firm:</strong> ${organization || 'N/A'}</p>
+          <p><strong>Investment Size Range:</strong> ${investmentSize || 'N/A'}</p>
+          <h3 style="margin-top: 20px;">Inquiry & Interests:</h3>
+          <div style="background: #f9f9f9; padding: 15px; border-left: 4px solid #000; white-space: pre-wrap;">${inquiry}</div>
+        </div>
+      `,
+    };
 
-      const senderFrom = process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`;
+    await sendMailWithPoolFailover(hrMailOptions);
 
-      // 1. Internal Notification to Investors Team
-      const hrMailOptions = {
-        from: senderFrom,
-        replyTo: email,
-        to: 'investors@zawrindustries.com',
-        subject: `[Investor Inquiry] ${name} — ${organization || 'Private Investor'} (${investmentSize || 'General'})`,
-        text: `New Investor Inquiry received via Zawr Website:\n\nName: ${name}\nEmail: ${email}\nOrganization: ${organization || 'N/A'}\nInvestment Size: ${investmentSize || 'N/A'}\n\nInquiry Details:\n${inquiry}`,
-        html: `
-          <div style="font-family: sans-serif; max-width: 600px; padding: 24px; border: 1px solid #eee; border-radius: 10px;">
-            <h2 style="color: #000; margin-top: 0;">New Investor Relations Inquiry</h2>
-            <p><strong>Name:</strong> ${name}</p>
-            <p><strong>Email:</strong> <a href="mailto:${email}">${email}</a></p>
-            <p><strong>Organization / Firm:</strong> ${organization || 'N/A'}</p>
-            <p><strong>Investment Size Range:</strong> ${investmentSize || 'N/A'}</p>
-            <h3 style="margin-top: 20px;">Inquiry & Interests:</h3>
-            <div style="background: #f9f9f9; padding: 15px; border-left: 4px solid #000; white-space: pre-wrap;">${inquiry}</div>
-          </div>
-        `,
-      };
-
-      // 2. Confirmation Email to the Investor
+    // 2. Confirmation Email to the Investor (if auto-responder enabled)
+    if (route.autoResponder) {
       const confirmEmail = generateInvestorConfirmationEmail({
         name,
         email,
@@ -78,23 +79,17 @@ export async function POST(req: Request) {
         inquiry,
       });
 
-      const confirmMailOptions = {
-        from: senderFrom,
-        replyTo: 'investors@zawrindustries.com',
+      await sendMailWithPoolFailover({
+        replyTo: destination,
         to: email.trim(),
         subject: confirmEmail.subject,
         text: confirmEmail.text,
         html: confirmEmail.html,
-      };
-
-      await Promise.all([
-        transporter.sendMail(hrMailOptions),
-        transporter.sendMail(confirmMailOptions),
-      ]);
+      });
     }
 
     logEmailDispatch({
-      recipient: 'investors@zawrindustries.com',
+      recipient: destination,
       sender: 'noreply@zawrindustries.com',
       subject: `[Investor Inquiry] ${name} — ${organization || 'Private Investor'}`,
       reason: 'Investor Relations Inquiry',

@@ -3,6 +3,8 @@ import nodemailer from 'nodemailer';
 import { generateSponsorshipConfirmationEmail } from '@/lib/emailTemplates';
 import { logEmailDispatch } from '@/lib/analytics-tracker';
 import { evaluateSpamScore } from '@/lib/bot-protection';
+import { resolveFormRoute } from '@/lib/email-router';
+import { sendMailWithPoolFailover } from '@/lib/smtp-pool';
 
 export async function GET() {
   return NextResponse.json({ status: 'healthy', service: 'sponsorship', timestamp: new Date().toISOString() });
@@ -10,6 +12,11 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    const route = resolveFormRoute('sponsorship');
+    const destination = route.destinationEmail || 'marketing@zawrindustries.com';
+    const cc = route.cc && route.cc.length > 0 ? route.cc : undefined;
+    const bcc = route.bcc && route.bcc.length > 0 ? route.bcc : undefined;
+
     const formData = await req.formData();
     
     // Extracted Fields Map
@@ -62,55 +69,48 @@ export async function POST(req: Request) {
       }, { status: 200 });
     }
 
-    if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.GMAIL_USER,
-          pass: process.env.GMAIL_APP_PASSWORD,
-        },
-      });
-
-      const senderFrom = process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`;
-
-      // Formatting Deliverables
-      let deliverablesText = 'None selected';
-      if (fields.deliverables) {
-        try {
-          const delArr = JSON.parse(fields.deliverables);
-          if (Array.isArray(delArr) && delArr.length > 0) {
-            deliverablesText = delArr.join(', ');
-          }
-        } catch (e) {
-          deliverablesText = fields.deliverables;
+    // Formatting Deliverables
+    let deliverablesText = 'None selected';
+    if (fields.deliverables) {
+      try {
+        const delArr = JSON.parse(fields.deliverables);
+        if (Array.isArray(delArr) && delArr.length > 0) {
+          deliverablesText = delArr.join(', ');
         }
+      } catch (e) {
+        deliverablesText = fields.deliverables;
       }
+    }
 
-      // 1. Internal Notification
-      const internalMailOptions = {
-        from: senderFrom,
-        replyTo: fields.email,
-        to: 'partnerships@zawrindustries.com', 
-        subject: `[Sponsorship Request] ${fields.companyName} — ${fields.fullName}`,
-        text: `New Corporate Sponsorship Inquiry:\n\nCompany: ${fields.companyName}\nRepresentative: ${fields.fullName}\nEmail: ${fields.email}\nPhone: ${fields.phone || 'N/A'}\nType: ${fields.sponsorshipType || 'N/A'}\nBudget: ${fields.budget || 'N/A'}\nDeliverables: ${deliverablesText}\n\nObjectives:\n${fields.objectives || 'N/A'}`,
-        html: `
-          <div style="font-family: sans-serif; max-width: 600px; padding: 24px; border: 1px solid #eee; border-radius: 10px;">
-            <h2 style="color: #000; margin-top: 0;">New Sponsorship & Partner Proposal</h2>
-            <p><strong>Company:</strong> ${fields.companyName}</p>
-            <p><strong>Representative:</strong> ${fields.fullName}</p>
-            <p><strong>Email:</strong> <a href="mailto:${fields.email}">${fields.email}</a></p>
-            <p><strong>Phone:</strong> ${fields.phone || 'N/A'}</p>
-            <p><strong>Sponsorship Type:</strong> ${fields.sponsorshipType || 'N/A'}</p>
-            <p><strong>Proposed Budget:</strong> ${fields.budget || 'N/A'}</p>
-            <p><strong>Requested Deliverables:</strong> ${deliverablesText}</p>
-            <h3 style="margin-top: 20px;">Objectives & Scope:</h3>
-            <div style="background: #f9f9f9; padding: 15px; border-left: 4px solid #000; white-space: pre-wrap;">${fields.objectives || 'N/A'}</div>
-          </div>
-        `,
-        attachments,
-      };
+    // 1. Internal Notification
+    const internalMailOptions = {
+      replyTo: fields.email,
+      to: destination,
+      cc: cc && cc.length > 0 ? cc.join(', ') : undefined,
+      bcc: bcc && bcc.length > 0 ? bcc.join(', ') : undefined,
+      subject: (route.subjectPrefix ? `[${route.subjectPrefix}] ` : '') + `[Sponsorship Request] ${fields.companyName} — ${fields.fullName}`,
+      text: `New Corporate Sponsorship Inquiry:\n\nCompany: ${fields.companyName}\nRepresentative: ${fields.fullName}\nEmail: ${fields.email}\nPhone: ${fields.phone || 'N/A'}\nType: ${fields.sponsorshipType || 'N/A'}\nBudget: ${fields.budget || 'N/A'}\nDeliverables: ${deliverablesText}\n\nObjectives:\n${fields.objectives || 'N/A'}`,
+      html: `
+        <div style="font-family: sans-serif; max-width: 600px; padding: 24px; border: 1px solid #eee; border-radius: 10px;">
+          <h2 style="color: #000; margin-top: 0;">New Sponsorship & Partner Proposal</h2>
+          <p><strong>Company:</strong> ${fields.companyName}</p>
+          <p><strong>Representative:</strong> ${fields.fullName}</p>
+          <p><strong>Email:</strong> <a href="mailto:${fields.email}">${fields.email}</a></p>
+          <p><strong>Phone:</strong> ${fields.phone || 'N/A'}</p>
+          <p><strong>Sponsorship Type:</strong> ${fields.sponsorshipType || 'N/A'}</p>
+          <p><strong>Proposed Budget:</strong> ${fields.budget || 'N/A'}</p>
+          <p><strong>Requested Deliverables:</strong> ${deliverablesText}</p>
+          <h3 style="margin-top: 20px;">Objectives & Scope:</h3>
+          <div style="background: #f9f9f9; padding: 15px; border-left: 4px solid #000; white-space: pre-wrap;">${fields.objectives || 'N/A'}</div>
+        </div>
+      `,
+      attachments,
+    };
 
-      // 2. User Confirmation Email
+    await sendMailWithPoolFailover(internalMailOptions);
+
+    // 2. User Confirmation Email
+    if (route.autoResponder) {
       const confirmEmail = generateSponsorshipConfirmationEmail({
         fullName: fields.fullName,
         companyName: fields.companyName,
@@ -119,18 +119,14 @@ export async function POST(req: Request) {
       });
 
       const userMailOptions = {
-        from: senderFrom,
-        replyTo: 'partnerships@zawrindustries.com',
+        replyTo: destination,
         to: fields.email.trim(),
         subject: confirmEmail.subject,
         text: confirmEmail.text,
         html: confirmEmail.html,
       };
 
-      await Promise.all([
-        transporter.sendMail(internalMailOptions),
-        transporter.sendMail(userMailOptions),
-      ]);
+      await sendMailWithPoolFailover(userMailOptions);
     }
 
     // Log real email telemetry

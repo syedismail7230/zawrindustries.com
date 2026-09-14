@@ -648,34 +648,153 @@ export function generateDailyReportEmailHtml(data: DailyReportSummary): string {
   `.trim();
 }
 
-export async function sendDailyReportToWebmaster(manualTriggeredBy?: string): Promise<{ success: boolean; messageId?: string; error?: string }> {
+const reportConfigPath = path.join(process.cwd(), 'public', 'data', 'webmaster-report-config.json');
+
+export interface WebmasterReportRecipient {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  type: 'to' | 'cc' | 'bcc';
+  enabled: boolean;
+}
+
+export interface WebmasterReportConfig {
+  enabled: boolean;
+  frequency: 'daily' | 'weekdays' | 'weekly';
+  dispatchTime: string;
+  timezone: string;
+  subjectPrefix?: string;
+  recipients: WebmasterReportRecipient[];
+  sections: {
+    trafficPerformance: boolean;
+    formSubmissions: boolean;
+    emailDispatchStats: boolean;
+    antiSpamShield: boolean;
+    smtpDiagnostics: boolean;
+    recentDispatchesLog: boolean;
+  };
+  lastDispatchedAt?: string | null;
+  history?: Array<{
+    timestamp: string;
+    recipientsCount: number;
+    recipients: string[];
+    triggeredBy: string;
+    messageId?: string;
+  }>;
+}
+
+export function getWebmasterReportConfig(): WebmasterReportConfig {
   try {
+    if (fs.existsSync(reportConfigPath)) {
+      const content = fs.readFileSync(reportConfigPath, 'utf8');
+      const parsed = JSON.parse(content);
+      if (parsed && Array.isArray(parsed.recipients)) return parsed;
+    }
+  } catch (err) {
+    console.error('Error reading webmaster-report-config.json:', err);
+  }
+
+  return {
+    enabled: true,
+    frequency: 'daily',
+    dispatchTime: '05:30',
+    timezone: 'Asia/Kolkata',
+    subjectPrefix: '[ZAWR EXECUTIVE]',
+    recipients: [
+      {
+        id: 'rec-1',
+        email: 'webmaster@zawrindustries.com',
+        name: 'Webmaster Operations Desk',
+        role: 'System Administrator',
+        type: 'to',
+        enabled: true
+      },
+      {
+        id: 'rec-2',
+        email: 'syedismail@zawrindustries.com',
+        name: 'Syed Ismail',
+        role: 'Executive Lead',
+        type: 'to',
+        enabled: true
+      }
+    ],
+    sections: {
+      trafficPerformance: true,
+      formSubmissions: true,
+      emailDispatchStats: true,
+      antiSpamShield: true,
+      smtpDiagnostics: true,
+      recentDispatchesLog: true
+    },
+    lastDispatchedAt: null,
+    history: []
+  };
+}
+
+export function saveWebmasterReportConfig(config: WebmasterReportConfig): boolean {
+  try {
+    const dir = path.dirname(reportConfigPath);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(reportConfigPath, JSON.stringify(config, null, 2), 'utf8');
+    return true;
+  } catch (err) {
+    console.error('Error saving webmaster-report-config.json:', err);
+    return false;
+  }
+}
+
+export async function sendDailyReportToWebmaster(manualTriggeredBy?: string, customRecipient?: string): Promise<{ success: boolean; messageId?: string; recipientsCount?: number; recipients?: string[]; error?: string }> {
+  try {
+    const config = getWebmasterReportConfig();
     const reportData = await generateDailyReportData();
     const htmlContent = generateDailyReportEmailHtml(reportData);
 
-    const recipient = process.env.WEBMASTER_REPORT_EMAIL || 'webmaster@zawrindustries.com';
     const senderFrom = process.env.GMAIL_FROM || `"Zawr Webmaster System" <noreply@zawrindustries.com>`;
+    const prefix = config.subjectPrefix || '[ZAWR EXECUTIVE]';
+    const subject = `${prefix} Daily Webmaster Performance & Operations Report — ${reportData.dateStr}`;
 
-    const subject = `[ZAWR EXECUTIVE] Daily Webmaster Performance & Operations Report — ${reportData.dateStr}`;
+    // Compute Recipient Lists
+    let toList: string[] = [];
+    let ccList: string[] = [];
+    let bccList: string[] = [];
+
+    if (customRecipient && customRecipient.includes('@')) {
+      toList = [customRecipient.trim()];
+    } else {
+      toList = config.recipients.filter(r => r.enabled && r.type === 'to').map(r => r.email.trim());
+      ccList = config.recipients.filter(r => r.enabled && r.type === 'cc').map(r => r.email.trim());
+      bccList = config.recipients.filter(r => r.enabled && r.type === 'bcc').map(r => r.email.trim());
+
+      if (toList.length === 0) {
+        toList = [process.env.WEBMASTER_REPORT_EMAIL || 'webmaster@zawrindustries.com'];
+      }
+    }
+
+    const allRecipients = [...toList, ...ccList, ...bccList];
 
     if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
       console.warn('GMAIL_USER or GMAIL_APP_PASSWORD not configured. Logging mock report dispatch.');
       
-      logEmailDispatch({
-        recipient,
-        sender: 'system@zawrindustries.com',
-        subject,
-        reason: 'Daily Executive Webmaster Report',
-        status: 'Delivered',
-        statusCode: 200,
-        server: 'local.mock.relay',
-        ip: '127.0.0.1',
-        region: 'India / System Scheduler'
+      allRecipients.forEach(rec => {
+        logEmailDispatch({
+          recipient: rec,
+          sender: 'system@zawrindustries.com',
+          subject,
+          reason: 'Daily Executive Webmaster Report',
+          status: 'Delivered',
+          statusCode: 200,
+          server: 'local.mock.relay',
+          ip: '127.0.0.1',
+          region: 'India / System Scheduler'
+        });
       });
 
       return {
         success: true,
-        messageId: `mock-report-${Date.now()}`
+        messageId: `mock-report-${Date.now()}`,
+        recipientsCount: allRecipients.length,
+        recipients: allRecipients
       };
     }
 
@@ -689,8 +808,9 @@ export async function sendDailyReportToWebmaster(manualTriggeredBy?: string): Pr
 
     const mailOptions = {
       from: senderFrom,
-      to: recipient,
-      cc: process.env.WEBMASTER_DEFAULT_ADMIN_EMAIL || undefined,
+      to: toList.join(', '),
+      cc: ccList.length > 0 ? ccList.join(', ') : undefined,
+      bcc: bccList.length > 0 ? bccList.join(', ') : undefined,
       subject,
       html: htmlContent,
       text: `Zawr Industries Daily Webmaster Report (${reportData.dateStr})\n\nPageviews: ${reportData.performance.totalPageViews24h}\nUnique Visitors: ${reportData.performance.uniqueVisitors24h}\nEmails Dispatched: ${reportData.emailsSummary.totalDispatched24h}\nApplications Received: ${reportData.applicationsSummary.totalApplications24h}\n\nPlease view this email in an HTML-compatible client to see full tables and logs.`
@@ -698,21 +818,39 @@ export async function sendDailyReportToWebmaster(manualTriggeredBy?: string): Pr
 
     const info = await transporter.sendMail(mailOptions);
 
-    logEmailDispatch({
-      recipient,
-      sender: 'system@zawrindustries.com',
-      subject,
-      reason: manualTriggeredBy ? `Manual Trigger (${manualTriggeredBy})` : 'Automated Daily Webmaster Cron',
-      status: 'Delivered',
-      statusCode: 200,
-      server: 'smtp.gmail.com (TLS 1.3)',
-      ip: '127.0.0.1',
-      region: 'India / Cron Server'
+    // Log telemetry for each recipient
+    allRecipients.forEach(rec => {
+      logEmailDispatch({
+        recipient: rec,
+        sender: 'system@zawrindustries.com',
+        subject,
+        reason: manualTriggeredBy ? `Manual Trigger (${manualTriggeredBy})` : 'Automated Daily Webmaster Cron',
+        status: 'Delivered',
+        statusCode: 200,
+        server: 'smtp.gmail.com (TLS 1.3)',
+        ip: '127.0.0.1',
+        region: 'India / Cron Server'
+      });
     });
+
+    // Update dispatch timestamp and history in config
+    config.lastDispatchedAt = new Date().toISOString();
+    if (!config.history) config.history = [];
+    config.history.unshift({
+      timestamp: new Date().toISOString(),
+      recipientsCount: allRecipients.length,
+      recipients: allRecipients,
+      triggeredBy: manualTriggeredBy || 'Automated Scheduler',
+      messageId: info.messageId
+    });
+    if (config.history.length > 50) config.history = config.history.slice(0, 50);
+    saveWebmasterReportConfig(config);
 
     return {
       success: true,
-      messageId: info.messageId
+      messageId: info.messageId,
+      recipientsCount: allRecipients.length,
+      recipients: allRecipients
     };
 
   } catch (error: any) {

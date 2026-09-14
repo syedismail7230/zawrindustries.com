@@ -3,8 +3,9 @@ import nodemailer from 'nodemailer';
 import { supabase } from '@/lib/supabase';
 import { generateNewsletterConfirmationEmail } from '@/lib/emailTemplates';
 import { logEmailDispatch } from '@/lib/analytics-tracker';
-
 import { evaluateSpamScore } from '@/lib/bot-protection';
+import { resolveFormRoute } from '@/lib/email-router';
+import { sendMailWithPoolFailover } from '@/lib/smtp-pool';
 
 export async function GET() {
   return NextResponse.json({ status: 'healthy', service: 'newsletter', timestamp: new Date().toISOString() });
@@ -68,43 +69,28 @@ export async function POST(req: Request) {
       console.warn('Database logging error for newsletter:', dbErr);
     }
 
-    // Send confirmation email to subscriber via Nodemailer
-    if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.GMAIL_USER,
-          pass: process.env.GMAIL_APP_PASSWORD,
-        },
-      });
+    // 1. Confirmation Email to Subscriber
+    const confirmEmail = generateNewsletterConfirmationEmail({ email: cleanEmail });
 
-      const senderFrom = process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`;
+    const subscriberMailOptions = {
+      replyTo: 'media@zawrindustries.com',
+      to: cleanEmail,
+      subject: confirmEmail.subject,
+      text: confirmEmail.text,
+      html: confirmEmail.html,
+    };
 
-      // 1. Confirmation Email to Subscriber
-      const confirmEmail = generateNewsletterConfirmationEmail({ email: cleanEmail });
+    // 2. Internal alert to Newsroom Team
+    const internalMailOptions = {
+      to: 'media@zawrindustries.com',
+      subject: `[New Newsletter Subscriber] ${cleanEmail}`,
+      text: `New subscriber registered for Zawr News Alerts:\n\nEmail: ${cleanEmail}\nTimestamp: ${new Date().toISOString()}`,
+    };
 
-      const subscriberMailOptions = {
-        from: senderFrom,
-        replyTo: 'media@zawrindustries.com',
-        to: cleanEmail,
-        subject: confirmEmail.subject,
-        text: confirmEmail.text,
-        html: confirmEmail.html,
-      };
-
-      // 2. Internal alert to Newsroom Team
-      const internalMailOptions = {
-        from: senderFrom,
-        to: 'media@zawrindustries.com',
-        subject: `[New Newsletter Subscriber] ${cleanEmail}`,
-        text: `New subscriber registered for Zawr News Alerts:\n\nEmail: ${cleanEmail}\nTimestamp: ${new Date().toISOString()}`,
-      };
-
-      await Promise.all([
-        transporter.sendMail(subscriberMailOptions),
-        transporter.sendMail(internalMailOptions).catch(() => {}),
-      ]);
-    }
+    await Promise.all([
+      sendMailWithPoolFailover(subscriberMailOptions),
+      sendMailWithPoolFailover(internalMailOptions).catch(() => {}),
+    ]);
 
     // Log real email telemetry
     logEmailDispatch({

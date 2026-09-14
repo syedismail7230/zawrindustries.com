@@ -7,12 +7,20 @@ import {
 import { logEmailDispatch } from '@/lib/analytics-tracker';
 import { evaluateSpamScore } from '@/lib/bot-protection';
 
+import { resolveFormRoute } from '@/lib/email-router';
+import { sendMailWithPoolFailover } from '@/lib/smtp-pool';
+
 export async function GET() {
   return NextResponse.json({ status: 'healthy', service: 'apply-freelance', timestamp: new Date().toISOString() });
 }
 
 export async function POST(req: Request) {
   try {
+    const route = resolveFormRoute('apply-freelance');
+    const destination = route.destinationEmail || 'careers@zawrindustries.com';
+    const cc = route.cc && route.cc.length > 0 ? route.cc : undefined;
+    const bcc = route.bcc && route.bcc.length > 0 ? route.bcc : undefined;
+
     const formData = await req.formData();
     
     const fullName = formData.get('fullName') as string;
@@ -82,40 +90,32 @@ export async function POST(req: Request) {
       });
     }
 
-    // Setup Nodemailer transporter using Gmail SMTP if credentials exist
-    if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.GMAIL_USER,
-          pass: process.env.GMAIL_APP_PASSWORD,
-        },
-      });
+    // 1. Prepare HR Notification Email
+    const hrTemplate = generateHRFreelanceNotificationEmail({
+      fullName,
+      email,
+      phone,
+      skill,
+      portfolio,
+      coverLetter,
+      hasResume: attachments.length > 0,
+    });
 
-      const senderFrom = process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`;
+    const hrMailOptions = {
+      replyTo: email,
+      to: destination,
+      cc: cc && cc.length > 0 ? cc.join(', ') : undefined,
+      bcc: bcc && bcc.length > 0 ? bcc.join(', ') : undefined,
+      subject: (route.subjectPrefix ? `[${route.subjectPrefix}] ` : '') + hrTemplate.subject,
+      text: hrTemplate.text,
+      html: hrTemplate.html,
+      attachments,
+    };
 
-      // 1. Prepare HR Notification Email
-      const hrTemplate = generateHRFreelanceNotificationEmail({
-        fullName,
-        email,
-        phone,
-        skill,
-        portfolio,
-        coverLetter,
-        hasResume: attachments.length > 0,
-      });
+    await sendMailWithPoolFailover(hrMailOptions);
 
-      const hrMailOptions = {
-        from: senderFrom,
-        replyTo: email,
-        to: 'hr@zawrindustries.com',
-        subject: hrTemplate.subject,
-        text: hrTemplate.text,
-        html: hrTemplate.html,
-        attachments,
-      };
-
-      // 2. Prepare Applicant Confirmation Email
+    // 2. Prepare Applicant Confirmation Email (if auto-responder enabled)
+    if (route.autoResponder) {
       const applicantTemplate = generateFreelanceApplicantConfirmationEmail({
         fullName,
         email,
@@ -125,25 +125,18 @@ export async function POST(req: Request) {
         hasResume: attachments.length > 0,
       });
 
-      const applicantMailOptions = {
-        from: senderFrom,
-        replyTo: 'hr@zawrindustries.com',
+      await sendMailWithPoolFailover({
+        replyTo: destination,
         to: email.trim(),
         subject: applicantTemplate.subject,
         text: applicantTemplate.text,
         html: applicantTemplate.html,
-      };
-
-      // Send both emails concurrently
-      await Promise.all([
-        transporter.sendMail(hrMailOptions),
-        transporter.sendMail(applicantMailOptions),
-      ]);
+      });
     }
 
     // Log real email telemetry
     logEmailDispatch({
-      recipient: 'hr@zawrindustries.com',
+      recipient: destination,
       sender: 'noreply@zawrindustries.com',
       subject: `New Freelance Network Application: ${skill} (${fullName})`,
       reason: 'Freelance Network Submission',

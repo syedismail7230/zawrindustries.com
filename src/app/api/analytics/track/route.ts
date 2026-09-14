@@ -45,18 +45,38 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { path: pagePath, referrer, device, timezone, latencyMs } = body;
 
-    // Extract real client IP & headers
+    // Extract real client IP prioritizing Cloudflare header
+    const cfIp = req.headers.get('cf-connecting-ip');
     const forwarded = req.headers.get('x-forwarded-for');
     const realIp = req.headers.get('x-real-ip');
-    const ip = forwarded ? forwarded.split(',')[0].trim() : (realIp || '127.0.0.1');
+    const ip = cfIp ? cfIp.trim() : (forwarded ? forwarded.split(',')[0].trim() : (realIp || '127.0.0.1'));
     const userAgent = req.headers.get('user-agent') || 'Browser Client';
     
-    // Country / city identification
-    const headerCountry = req.headers.get('x-vercel-ip-country') || req.headers.get('cf-ipcountry');
-    const location = parseLocationFromTimezone(timezone || '');
+    // Country / city identification via Cloudflare edge headers & timezone fallback
+    const cfCountryCode = req.headers.get('cf-ipcountry') || req.headers.get('x-vercel-ip-country');
+    const cfCity = req.headers.get('cf-ipcity') || req.headers.get('x-vercel-ip-city');
+    
+    const COUNTRY_CODE_MAP: Record<string, string> = {
+      'US': 'United States',
+      'NL': 'Netherlands',
+      'HK': 'Hong Kong',
+      'TW': 'Taiwan',
+      'IN': 'India',
+      'AE': 'United Arab Emirates',
+      'GB': 'United Kingdom',
+      'SG': 'Singapore',
+      'DE': 'Germany',
+      'CA': 'Canada',
+      'SA': 'Saudi Arabia',
+      'AU': 'Australia',
+      'JP': 'Japan',
+      'FR': 'France',
+      'CH': 'Switzerland'
+    };
 
-    const finalCountry = headerCountry || location.country;
-    const finalCity = location.city;
+    const location = parseLocationFromTimezone(timezone || '');
+    const finalCountry = (cfCountryCode && COUNTRY_CODE_MAP[cfCountryCode.toUpperCase()]) || cfCountryCode || location.country;
+    const finalCity = cfCity ? decodeURIComponent(cfCity) : location.city;
 
     // Check for suspicious probe paths
     const suspiciousTokens = ['wp-admin', 'wp-login', '.env', 'phpmyadmin', 'eval-stdin', 'xmlrpc.php', 'cgi-bin'];

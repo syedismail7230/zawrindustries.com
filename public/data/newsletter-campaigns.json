@@ -1,0 +1,38 @@
+{
+  "campaigns": [
+    {
+      "id": "camp-001",
+      "title": "Zawr Strategic Dispatch — Vol. XII",
+      "subject": "Zawr Strategic Dispatch: Q3 Global Industrial Scale & Maritime Automation",
+      "preheader": "Executive insights into our next-gen robotics deployment and supply chain operations.",
+      "edition": "Edition #12 • September 2026",
+      "bannerTag": "EXECUTIVE DISPATCH",
+      "headline": "Scaling Autonomous Infrastructure Across High-Growth Markets",
+      "intro": "As we enter the final stretch of 2026, Zawr Industries continues to accelerate capital deployment into mission-critical engineering, maritime freight autonomy, and enterprise AI ecosystems.",
+      "stats": [
+        { "value": "99.98%", "label": "Fleet Uptime" },
+        { "value": "14", "label": "Active Global Hubs" },
+        { "value": "+42%", "label": "YoY Throughput" }
+      ],
+      "stories": [
+        {
+          "tag": "LOGISTICS & PORTS",
+          "title": "Deep-Water Terminal Automation in Southeast Asia",
+          "excerpt": "Our automated maritime container handling system completed over 100,000 incident-free lifts across trial hubs in Q3.",
+          "link": "https://zawrindustries.com/industries/transport-and-logistics"
+        },
+        {
+          "tag": "ROBOTICS & AGV",
+          "title": "Next-Gen Heavy-Duty Autonomous Mobile Robots (AMRs)",
+          "excerpt": "Engineered for 24/7 subterranean warehouse duty with sub-millimeter positioning precision and ultra-low power consumption.",
+          "link": "https://zawrindustries.com/industries/it-service"
+        }
+      ],
+      "ctaText": "Explore Interactive Investor Portal",
+      "ctaUrl": "https://zawrindustries.com/investor-relations",
+      "sentAt": "2026-09-12T14:30:00.000Z",
+      "recipientCount": 12,
+      "status": "Sent"
+    }
+  ]
+}

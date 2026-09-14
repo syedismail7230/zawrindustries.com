@@ -1,0 +1,48 @@
+{
+  "strategy": "sequential",
+  "autoFailover": true,
+  "gateways": [
+    {
+      "id": "gw-primary-google",
+      "name": "Primary Google Enterprise Relay",
+      "host": "smtp.gmail.com",
+      "port": 465,
+      "secure": true,
+      "user": "zawrindustries.mails@gmail.com",
+      "pass": "ibpd wsxa wufo modk",
+      "senderName": "Zawr Industries",
+      "senderEmail": "noreply@zawrindustries.com",
+      "dailyLimit": 500,
+      "sentToday": 0,
+      "lastResetDate": "2026-09-14",
+      "priority": 1,
+      "enabled": true,
+      "status": "degraded",
+      "lastLatencyMs": 1095,
+      "lastTestedAt": "2026-09-14T04:18:19.223Z",
+      "createdAt": "2026-09-14T03:49:36.347Z",
+      "lastError": "Data command failed: 550-5.4.5 Daily user sending limit exceeded. For more information on Gmail\n550-5.4.5 sending limits go to\n550 5.4.5  https://support.google.com/a/answer/166852 5a478bee46e88-33bdbd8766fsm873864eec.22 - gsmtp"
+    },
+    {
+      "id": "gw-secondary-backup",
+      "name": "Secondary Mail Relay (Failover)",
+      "host": "smtp.gmail.com",
+      "port": 465,
+      "secure": true,
+      "user": "zawrorganization@gmail.com",
+      "pass": "mszr twjr ewun gkyn",
+      "senderName": "Zawr Industries",
+      "senderEmail": "noreply@zawrindustries.com",
+      "dailyLimit": 500,
+      "sentToday": 24,
+      "lastResetDate": "2026-09-14",
+      "priority": 2,
+      "enabled": true,
+      "status": "online",
+      "lastLatencyMs": 2878,
+      "lastTestedAt": "2026-09-14T04:50:11.251Z",
+      "createdAt": "2026-09-14T03:49:50.633Z"
+    }
+  ],
+  "updatedAt": "2026-09-14T04:27:37.588Z"
+}

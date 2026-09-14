@@ -1003,7 +1003,7 @@ export default function CareersPage() {
                 </div>
                 <h3 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#ffffff', marginBottom: '0.75rem' }}>Application Submitted!</h3>
                 <p style={{ fontSize: '0.95rem', color: '#9ca3af', lineHeight: 1.6, marginBottom: '2rem' }}>
-                  Your freelance application has been sent directly to <strong>hr@zawrindustries.com</strong>. Our HR team will review your profile and reach out for suitable project opportunities.
+                  Your freelance application has been submitted successfully. Our talent team will review your profile and reach out for suitable project opportunities.
                 </p>
                 <button
                   onClick={() => setIsFreelanceModalOpen(false)}

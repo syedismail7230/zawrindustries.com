@@ -1,0 +1,43 @@
+{
+  "enabled": true,
+  "frequency": "daily",
+  "dispatchTime": "05:30",
+  "timezone": "Asia/Kolkata",
+  "subjectPrefix": "[ZAWR EXECUTIVE]",
+  "recipients": [
+    {
+      "id": "rec-1",
+      "email": "webmaster@zawrindustries.com",
+      "name": "Webmaster Operations Desk",
+      "role": "System Administrator",
+      "type": "to",
+      "enabled": true
+    },
+    {
+      "id": "rec-2",
+      "email": "syedismail@zawrindustries.com",
+      "name": "Syed Ismail",
+      "role": "Executive Lead",
+      "type": "to",
+      "enabled": true
+    },
+    {
+      "id": "rec-1789357316802",
+      "email": "md@zawrindustries.com",
+      "name": "Mohammed Ahmed",
+      "role": "Executive",
+      "type": "to",
+      "enabled": true
+    }
+  ],
+  "sections": {
+    "trafficPerformance": true,
+    "formSubmissions": true,
+    "emailDispatchStats": true,
+    "antiSpamShield": true,
+    "smtpDiagnostics": true,
+    "recentDispatchesLog": true
+  },
+  "lastDispatchedAt": null,
+  "history": []
+}

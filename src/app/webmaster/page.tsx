@@ -7,6 +7,8 @@ import RichTextEditor from '@/components/RichTextEditor';
 import LiveSitePreview from '@/components/LiveSitePreview';
 import AnalyticsDashboard from '@/components/AnalyticsDashboard';
 import ApiMonitoringDashboard from '@/components/ApiMonitoringDashboard';
+import EmailRoutingHub from '@/components/EmailRoutingHub';
+import NewsletterStudio from '@/components/NewsletterStudio';
 
 export default function WebmasterDashboardPage() {
   return (
@@ -73,10 +75,9 @@ function WebmasterDashboard() {
   const ALL_NAV_ITEMS = [
     { id: 'analytics', label: 'Analytics' },
     { id: 'api-monitoring', label: 'API Monitoring' },
-    { id: 'mail-credentials', label: 'Mail Settings' },
-    { id: 'email-routing', label: 'Email Routing' },
+    { id: 'email-hub', label: 'Email & Routing Hub' },
     { id: 'jobs', label: 'Manage Jobs' },
-    { id: 'newsletters', label: 'Newsletters' },
+    { id: 'newsletters', label: 'Newsletter Studio & Dispatch' },
     { id: 'pitch-deck', label: 'Pitch Deck' },
     { id: 'financial-reports', label: 'Financial Reports' },
     { id: 'events', label: 'Manage Events' },
@@ -392,6 +393,17 @@ function WebmasterDashboard() {
   const [editingBlog, setEditingBlog] = useState<any>(null);
   const [customBlogFile, setCustomBlogFile] = useState<File | null>(null);
   const [customAuthorFile, setCustomAuthorFile] = useState<File | null>(null);
+
+  const fetchSubscribers = async () => {
+    try {
+      const { data, error } = await supabase.from('newsletters').select('*').order('created_at', { ascending: false });
+      if (!error && data) {
+        setSubscribers(data);
+      }
+    } catch {
+      // ignore
+    }
+  };
 
   // Fetch Data from Supabase
   useEffect(() => {
@@ -1114,6 +1126,7 @@ function WebmasterDashboard() {
                     autoFocus
                     disabled={isVerifying}
                     autoComplete="current-password"
+                    suppressHydrationWarning
                   />
                 </div>
 
@@ -1157,6 +1170,7 @@ function WebmasterDashboard() {
                       required
                       disabled={isVerifying}
                       autoComplete="new-password"
+                      suppressHydrationWarning
                     />
                   </div>
                   <button
@@ -1219,6 +1233,7 @@ function WebmasterDashboard() {
                       autoFocus
                       required
                       disabled={isVerifying}
+                      suppressHydrationWarning
                     />
                   </div>
 
@@ -1296,63 +1311,10 @@ function WebmasterDashboard() {
       case 'api-monitoring':
         return <ApiMonitoringDashboard theme={theme} />;
       
-      case 'mail-credentials':
-        return (
-          <div>
-            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '2rem', letterSpacing: '-0.02em' }}>Mail Server (Nodemailer)</h2>
-            <div style={{ maxWidth: '600px', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>SMTP Server</label>
-                <input type="text" defaultValue="smtp.gmail.com" disabled style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.muted, borderRadius: '4px' }} />
-              </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>System Email User (.env)</label>
-                <input type="email" defaultValue="noreply@zawrindustries.com" disabled style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.muted, borderRadius: '4px' }} />
-              </div>
-              <div>
-                <label style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem', color: theme.muted }}>App Password (.env)</label>
-                <input type="password" defaultValue="****************" disabled style={{ width: '100%', padding: '0.75rem', backgroundColor: theme.inputBg, border: `1px solid ${theme.border}`, color: theme.muted, borderRadius: '4px' }} />
-              </div>
-              <p style={{ fontSize: '0.875rem', color: theme.muted }}>These values are securely loaded from your <code>.env.local</code> file and managed directly on your server/hosting platform.</p>
-            </div>
-          </div>
-        );
-
+      case 'email-hub':
       case 'email-routing':
-        return (
-          <div>
-            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '2rem', letterSpacing: '-0.02em' }}>Live Email Routing</h2>
-            <div className="wm-table-wrapper" style={{ border: `1px solid ${theme.border}`, borderRadius: '8px', overflow: 'hidden' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                <thead>
-                  <tr style={{ borderBottom: `1px solid ${theme.border}`, backgroundColor: theme.inputBg }}>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Source / Form</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Destination Address</th>
-                    <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {routes.map((route) => (
-                    <tr key={route.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
-                      <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>{route.source}</td>
-                      <td style={{ padding: '1rem' }}>
-                        <input 
-                          type="text" 
-                          value={route.destination} 
-                          onChange={(e) => setRoutes(routes.map(r => r.id === route.id ? { ...r, destination: e.target.value } : r))}
-                          style={{ width: '100%', minWidth: '180px', padding: '0.5rem', backgroundColor: 'transparent', border: 'none', color: theme.fg, borderBottom: `1px dashed ${theme.border}`, outline: 'none' }} 
-                        />
-                      </td>
-                      <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>
-                        <button onClick={() => handleUpdateRoute(route.id, route.destination)} style={{ padding: '0.25rem 0.75rem', backgroundColor: 'transparent', color: theme.fg, border: `1px solid ${theme.border}`, borderRadius: '4px', cursor: 'pointer', fontSize: '0.75rem' }}>Sync</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        );
+      case 'mail-credentials':
+        return <EmailRoutingHub theme={theme} />;
 
       case 'jobs':
         return (
@@ -1642,40 +1604,11 @@ function WebmasterDashboard() {
 
       case 'newsletters':
         return (
-          <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', marginBottom: '2rem' }}>
-              <h2 style={{ fontSize: '2rem', fontWeight: 600, letterSpacing: '-0.02em', margin: 0 }}>Newsletter Subscribers</h2>
-              <button style={{ padding: '0.5rem 1.5rem', backgroundColor: theme.fg, color: theme.bg, border: 'none', fontWeight: 600, borderRadius: '4px', cursor: 'pointer' }}>Export CSV</button>
-            </div>
-            {errorMsg && <div style={{ padding: '1rem', backgroundColor: isDarkMode ? '#3f0000' : '#fee2e2', color: isDarkMode ? '#ffaaaa' : '#dc2626', border: isDarkMode ? '1px solid #7f1d1d' : '1px solid #fca5a5', borderRadius: '8px', marginBottom: '2rem' }}>{errorMsg}</div>}
-            
-            {loading ? <div style={{ color: theme.muted }}>Loading from Supabase...</div> : (
-              <div className="wm-table-wrapper" style={{ border: `1px solid ${theme.border}`, borderRadius: '8px', overflow: 'hidden' }}>
-                <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-                  <thead>
-                    <tr style={{ borderBottom: `1px solid ${theme.border}`, backgroundColor: theme.inputBg }}>
-                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Email Address</th>
-                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date Subscribed</th>
-                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Status</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {subscribers.length === 0 ? (
-                      <tr><td colSpan={3} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No subscribers found.</td></tr>
-                    ) : subscribers.map((sub) => (
-                      <tr key={sub.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
-                        <td style={{ padding: '1rem' }}>{sub.email}</td>
-                        <td style={{ padding: '1rem', color: theme.muted }}>{new Date(sub.created_at).toLocaleDateString()}</td>
-                        <td style={{ padding: '1rem' }}>
-                          <span style={{ color: sub.status === 'Active' ? '#ffffff' : theme.muted }}>{sub.status || 'Active'}</span>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            )}
-          </div>
+          <NewsletterStudio
+            theme={theme}
+            subscribers={subscribers}
+            onRefreshSubscribers={fetchSubscribers}
+          />
         );
       case 'pitch-deck':
         return (
@@ -4154,7 +4087,7 @@ function WebmasterDashboard() {
                       </button>
                       <button
                         type="button"
-                        onClick={() => setNewUserPermissions(['jobs', 'email-routing'])}
+                        onClick={() => setNewUserPermissions(['jobs', 'email-hub'])}
                         style={{ padding: '0.4rem 0.85rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '6px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
                       >
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
@@ -4170,7 +4103,7 @@ function WebmasterDashboard() {
                       </button>
                       <button
                         type="button"
-                        onClick={() => setNewUserPermissions(['analytics', 'api-monitoring', 'mail-credentials'])}
+                        onClick={() => setNewUserPermissions(['analytics', 'api-monitoring', 'email-hub'])}
                         style={{ padding: '0.4rem 0.85rem', backgroundColor: theme.bg, border: `1px solid ${theme.border}`, color: theme.fg, borderRadius: '6px', fontSize: '0.78rem', fontWeight: 600, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '0.4rem' }}
                       >
                         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
@@ -4189,10 +4122,9 @@ function WebmasterDashboard() {
                       {[
                         { id: 'analytics', label: 'Realtime Analytics', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> },
                         { id: 'api-monitoring', label: 'API Health Probes', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg> },
-                        { id: 'mail-credentials', label: 'Mail Settings', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> },
-                        { id: 'email-routing', label: 'Email Routing', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> },
+                        { id: 'email-hub', label: 'Email & Routing Hub', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> },
                         { id: 'jobs', label: 'Careers & Jobs', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> },
-                        { id: 'newsletters', label: 'Newsletters', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/></svg> },
+                        { id: 'newsletters', label: 'Newsletter Studio & Dispatch', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8z"/></svg> },
                         { id: 'pitch-deck', label: 'Pitch Deck', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> },
                         { id: 'financial-reports', label: 'Financial Reports', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg> },
                         { id: 'events', label: 'Corporate Events', icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> },
@@ -4228,7 +4160,7 @@ function WebmasterDashboard() {
                                 if (newUserPermissions.includes('*')) {
                                   if (!e.target.checked) {
                                     setNewUserPermissions([
-                                      'analytics', 'api-monitoring', 'mail-credentials', 'email-routing',
+                                      'analytics', 'api-monitoring', 'email-hub',
                                       'jobs', 'newsletters', 'pitch-deck', 'financial-reports',
                                       'events', 'notices', 'notifications', 'press-releases', 'blogs', 'user-management'
                                     ].filter(id => id !== mod.id));
@@ -4706,6 +4638,13 @@ function WebmasterDashboard() {
   const navItems = ALL_NAV_ITEMS.filter((item: { id: string; label: string }) => {
     if (!currentUser) return true;
     if (currentUser.permissions.includes('*')) return true;
+    if (item.id === 'email-hub') {
+      return (
+        currentUser.permissions.includes('email-hub') ||
+        currentUser.permissions.includes('email-routing') ||
+        currentUser.permissions.includes('mail-credentials')
+      );
+    }
     return currentUser.permissions.includes(item.id);
   });
 
@@ -5167,13 +5106,24 @@ function WebmasterDashboard() {
         </div>
 
         {/* Main Workspace Area (Split into Editor & Realtime Live Site Preview) */}
-        <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative', width: '100%' }}>
+        <div style={{ flex: 1, display: 'flex', overflow: 'hidden', position: 'relative', width: '100%', height: '100%' }}>
           
           {/* Left/Middle: Editor Form Column */}
-          <div className="wm-workspace-col" style={{ flex: showLivePreview ? '1 1 55%' : '1 1 100%', overflowY: 'auto', transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+          <div
+            className="wm-workspace-col"
+            style={{
+              flex: showLivePreview ? '1 1 55%' : '1 1 100%',
+              overflowY: ['email-hub', 'email-routing', 'mail-credentials', 'newsletters'].includes(activeTab) ? 'hidden' : 'auto',
+              padding: ['email-hub', 'email-routing', 'mail-credentials', 'newsletters'].includes(activeTab) ? '1.25rem 1.5rem' : undefined,
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+            }}
+          >
             
             {/* Top Workspace Header with Toggle Button */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: ['email-hub', 'email-routing', 'mail-credentials', 'newsletters'].includes(activeTab) ? '0.5rem' : '1.5rem', flexShrink: 0 }}>
               <button
                 type="button"
                 onClick={() => setShowLivePreview(!showLivePreview)}
@@ -5181,12 +5131,12 @@ function WebmasterDashboard() {
                   display: 'inline-flex',
                   alignItems: 'center',
                   gap: '0.5rem',
-                  padding: '0.4rem 0.85rem',
+                  padding: '0.35rem 0.8rem',
                   backgroundColor: showLivePreview ? theme.inputBg : theme.fg,
                   color: showLivePreview ? theme.fg : theme.bg,
                   border: `1px solid ${theme.border}`,
                   borderRadius: '6px',
-                  fontSize: '0.8rem',
+                  fontSize: '0.78rem',
                   fontWeight: 600,
                   cursor: 'pointer',
                   transition: 'all 0.2s',
@@ -5197,11 +5147,11 @@ function WebmasterDashboard() {
                 ) : (
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
                 )}
-                {showLivePreview ? 'Hide Live Browser Mirror' : 'Show Live Browser Mirror'}
+                {showLivePreview ? 'Hide Live Mirror' : 'Show Live Mirror'}
               </button>
             </div>
 
-            <div style={{ maxWidth: showLivePreview ? '920px' : '100%', width: '100%', transition: 'max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
+            <div style={{ maxWidth: showLivePreview ? '920px' : '100%', width: '100%', flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', transition: 'max-width 0.3s cubic-bezier(0.16, 1, 0.3, 1)' }}>
               {renderContent()}
             </div>
           </div>
@@ -5479,7 +5429,7 @@ function WebmasterDashboard() {
                       </span>
                     </div>
                     <div style={{ fontSize: '0.72rem', color: theme.muted, marginTop: '0.25rem', lineHeight: 1.4 }}>
-                      Dispatches full 24h website performance, email communication logs, applications breakdown, action items, and critical alerts directly to <strong style={{ color: theme.fg }}>webmaster@zawrindustries.com</strong>.
+                      Dispatches 24h performance, communication logs, applications breakdown, and security alerts to all configured executive recipients.
                     </div>
                   </div>
                 </div>
@@ -5500,7 +5450,7 @@ function WebmasterDashboard() {
                       cursor: 'pointer'
                     }}
                   >
-                    Preview Today's Report
+                    Preview Today&apos;s Report
                   </button>
                   <button
                     type="button"
@@ -5522,6 +5472,32 @@ function WebmasterDashboard() {
                     {sendingDailyReport ? 'Dispatching...' : 'Send Report Now'}
                   </button>
                 </div>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowSettingsModal(false);
+                    setActiveTab('email-hub');
+                  }}
+                  style={{
+                    width: '100%',
+                    marginTop: '0.6rem',
+                    padding: '0.5rem 0.75rem',
+                    backgroundColor: 'transparent',
+                    color: theme.fg,
+                    border: `1px dashed ${theme.border}`,
+                    borderRadius: '6px',
+                    fontSize: '0.74rem',
+                    fontWeight: 700,
+                    cursor: 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '0.4rem'
+                  }}
+                >
+                  ⚙️ Manage Distribution List &amp; Schedule in Email Hub
+                </button>
               </div>
 
               {/* Actions */}

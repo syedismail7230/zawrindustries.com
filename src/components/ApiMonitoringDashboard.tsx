@@ -36,9 +36,19 @@ export interface MonitoredService {
   samplePayload?: Record<string, any>;
 }
 
-// 19 Real Internal Endpoints & 4 Cloud Infrastructure Services (100% Real Live Probes)
+// 20 Real Internal Endpoints & 5 Cloud Infrastructure Services (100% Real Live Probes)
 const ALL_SERVICES: MonitoredService[] = [
-  // 4 Core Cloud Infrastructure
+  // 5 Core Cloud Infrastructure
+  {
+    id: 'infra-cloudflare',
+    name: 'Cloudflare Edge & Global DNS',
+    route: '/api/analytics/cloudflare',
+    method: 'GET',
+    category: 'Infrastructure',
+    type: 'Anycast DNS & GraphQL Analytics',
+    description: 'Cloudflare Edge CDN, DDoS mitigation, and GraphQL edge telemetry stream.',
+    isInfrastructure: true
+  },
   {
     id: 'infra-supabase',
     name: 'Supabase PostgreSQL Database',
@@ -80,7 +90,15 @@ const ALL_SERVICES: MonitoredService[] = [
     isInfrastructure: true
   },
 
-  // 19 Real Microservices
+  // 20 Real Microservices
+  {
+    id: 'ep-cloudflare-analytics',
+    name: 'Cloudflare Edge Analytics API',
+    route: '/api/analytics/cloudflare',
+    method: 'GET',
+    category: 'Core Telemetry',
+    description: 'Queries Cloudflare GraphQL API for live edge requests, attacks blocked, and unique visitor metrics.'
+  },
   {
     id: 'ep-analytics',
     name: 'Realtime Telemetry Ingestion',

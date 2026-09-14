@@ -678,7 +678,7 @@ export default function MediaKitPage() {
               <form onSubmit={handleSubmit} style={{ padding: '2.5rem' }}>
                 
                 <p style={{ fontSize: '0.9rem', color: '#6b7280', lineHeight: 1.5, marginBottom: '2rem' }}>
-                  Please fill out the corporate authorization form below to submit a formal request for <strong>{selectedBrand.name}</strong> digital media kit resources. Authorized assets will be dispatched to your address by <a href="mailto:media@zawrindustries.com" style={{ color: '#b45309', fontWeight: 600, textDecoration: 'none' }}>media@zawrindustries.com</a>.
+                  Please fill out the corporate authorization form below to submit a formal request for <strong>{selectedBrand.name}</strong> digital media kit resources. Authorized assets will be dispatched to your email address upon verification.
                 </p>
 
                 {/* Checklist of Resources */}
@@ -854,7 +854,7 @@ export default function MediaKitPage() {
                 
                 <h3 style={{ fontSize: '1.5rem', fontWeight: 600, marginBottom: '0.75rem', color: '#111111' }}>Asset Request Submitted</h3>
                 <p style={{ fontSize: '0.95rem', color: '#6b7280', lineHeight: 1.6, maxWidth: '440px', margin: '0 auto 2.5rem' }}>
-                  Thank you! Your authorized assets request has been logged successfully. The Zawr Corporate Public Relations team will process your verification and reach out to you from <strong style={{ color: '#111' }}>media@zawrindustries.com</strong>.
+                  Thank you! Your authorized assets request has been logged successfully. The Zawr Corporate Public Relations team will process your verification and reach out to you with access credentials.
                 </p>
 
                 <button 

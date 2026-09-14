@@ -4,12 +4,20 @@ import { generatePartnerConfirmationEmail } from '@/lib/emailTemplates';
 import { logEmailDispatch } from '@/lib/analytics-tracker';
 import { evaluateSpamScore } from '@/lib/bot-protection';
 
+import { resolveFormRoute } from '@/lib/email-router';
+import { sendMailWithPoolFailover } from '@/lib/smtp-pool';
+
 export async function GET() {
   return NextResponse.json({ status: 'healthy', service: 'request-partner', timestamp: new Date().toISOString() });
 }
 
 export async function POST(request: Request) {
   try {
+    const route = resolveFormRoute('request-partner');
+    const destination = route.destinationEmail || 'partnerships@zawrindustries.com';
+    const cc = route.cc && route.cc.length > 0 ? route.cc : undefined;
+    const bcc = route.bcc && route.bcc.length > 0 ? route.bcc : undefined;
+
     const body = await request.json();
     let { firstName, lastName, email, phone, company, partnershipType, message, honeypot, website_url_hp } = body;
     const payload = body.payload;
@@ -177,20 +185,12 @@ Collaboration Goals: ${r.collaborationGoals}`;
       );
     }
 
-    // Configure the transporter with Gmail SMTP
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.GMAIL_USER, 
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
-    });
-
     const mailOptions = {
-      from: process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`,
-      replyTo: email || 'partnership@zawrindustries.com',
-      to: 'partnership@zawrindustries.com', 
-      subject: `🤝 New Strategic Partnership Inquiry: ${company}`,
+      replyTo: email || destination,
+      to: destination,
+      cc: cc && cc.length > 0 ? cc.join(', ') : undefined,
+      bcc: bcc && bcc.length > 0 ? bcc.join(', ') : undefined,
+      subject: (route.subjectPrefix ? `[${route.subjectPrefix}] ` : '') + `🤝 New Strategic Partnership Inquiry: ${company}`,
       text: `You have received a new Strategic Partnership Inquiry.\n\nName: ${firstName} ${lastName}\nEmail: ${email}\nPhone: ${phone || 'Not provided'}\nCompany: ${company}\nPartnership Type: ${partnershipType}\n\nProposal Details:\n${message}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #eee; border-radius: 10px;">
@@ -213,44 +213,29 @@ Collaboration Goals: ${r.collaborationGoals}`;
       `,
     };
 
-    // Try sending email, fallback to console log during development if credentials aren't set
-    let mailSuccess = false;
-    try {
-      if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
-        // Confirmation email to partner
-        const confirmEmail = generatePartnerConfirmationEmail({
-          fullName: `${firstName} ${lastName}`.trim(),
-          email,
-          company: company || 'Enterprise Partner',
-          partnerType: partnershipType,
-        });
+    // 1. Send Internal Notification
+    await sendMailWithPoolFailover(mailOptions);
 
-        const userMailOptions = {
-          from: process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`,
-          replyTo: 'partnerships@zawrindustries.com',
-          to: email.trim(),
-          subject: confirmEmail.subject,
-          text: confirmEmail.text,
-          html: confirmEmail.html,
-        };
+    // 2. Send Partner Confirmation Email
+    if (route.autoResponder) {
+      const confirmEmail = generatePartnerConfirmationEmail({
+        fullName: `${firstName} ${lastName}`.trim(),
+        email,
+        company: company || 'Enterprise Partner',
+        partnerType: partnershipType,
+      });
 
-        await Promise.all([
-          transporter.sendMail(mailOptions),
-          transporter.sendMail(userMailOptions),
-        ]);
-        mailSuccess = true;
-      } else {
-        console.warn('Gmail Environment keys missing! Simulating email output:');
-        console.log('--- SIMULATED EMAIL TO PARTNERSHIP ---');
-        console.log(`Subject: ${mailOptions.subject}`);
-        console.log(`Body:\n${mailOptions.text}`);
-        console.log('---------------------------------------');
-        mailSuccess = true;
-      }
-    } catch (mailError) {
-      console.error('Nodemailer error sending email:', mailError);
-      mailSuccess = true;
+      const userMailOptions = {
+        replyTo: destination,
+        to: email.trim(),
+        subject: confirmEmail.subject,
+        text: confirmEmail.text,
+        html: confirmEmail.html,
+      };
+
+      await sendMailWithPoolFailover(userMailOptions);
     }
+    const mailSuccess = true;
 
     if (mailSuccess) {
       // Log real email telemetry

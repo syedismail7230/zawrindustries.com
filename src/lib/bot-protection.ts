@@ -108,8 +108,8 @@ export function evaluateSpamScore(params: SpamCheckParams): SpamCheckResult {
     };
   }
 
-  // 2. IP Rate Limiter (Max 3 submissions per 5 minutes per IP)
-  if (params.ip) {
+  // 2. IP Rate Limiter (Max 10 submissions per 5 minutes per IP, localhost exempt)
+  if (params.ip && params.ip !== '127.0.0.1' && params.ip !== '::1' && params.ip !== 'localhost' && !params.ip.includes('127.0.0.1')) {
     const now = Date.now();
     const record = ipSubmissionsMap.get(params.ip) || { timestamps: [], blockedUntil: 0 };
 

@@ -742,7 +742,7 @@ export default function EventsPage() {
                     RSVP Requested!
                   </h3>
                   <p style={{ fontSize: '0.95rem', color: '#a1a1aa', lineHeight: 1.6, marginBottom: '2rem' }}>
-                    Your booking request has been sent successfully to <strong>events@zawrindustries.com</strong>. We will review details and mail your confirmation ticket shortly.
+                    Your booking request has been received successfully. Our events coordination team will review your registration and issue your confirmation pass shortly.
                   </p>
                   <button
                     onClick={() => {

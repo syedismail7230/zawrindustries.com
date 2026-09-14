@@ -1,8 +1,10 @@
 import fs from 'fs';
 import path from 'path';
+import os from 'os';
 import { supabase } from '@/lib/supabase';
 
 const telemetryFilePath = path.join(process.cwd(), 'public', 'data', 'analytics-telemetry.json');
+const tmpTelemetryFilePath = path.join(os.tmpdir(), 'analytics-telemetry.json');
 
 export interface EmailLogEntry {
   id: string;
@@ -101,7 +103,9 @@ function formatCleanTime(d: Date): string {
   return `${h}:${m}`;
 }
 
-// Empty real-time store (ZERO mock/simulated entries)
+// In-memory runtime cache
+let inMemoryStore: RawTelemetryStore | null = null;
+
 function getInitialStore(): RawTelemetryStore {
   return {
     requests: [],
@@ -111,44 +115,91 @@ function getInitialStore(): RawTelemetryStore {
 }
 
 function readStore(): RawTelemetryStore {
+  if (inMemoryStore && (inMemoryStore.requests.length > 0 || inMemoryStore.emails.length > 0)) {
+    return inMemoryStore;
+  }
+
+  let fileContent = '';
   try {
     if (fs.existsSync(telemetryFilePath)) {
-      const content = fs.readFileSync(telemetryFilePath, 'utf8');
-      const parsed = JSON.parse(content);
-      return {
+      fileContent = fs.readFileSync(telemetryFilePath, 'utf8');
+    } else if (fs.existsSync(tmpTelemetryFilePath)) {
+      fileContent = fs.readFileSync(tmpTelemetryFilePath, 'utf8');
+    }
+  } catch (e) {
+    // Read fallback
+    if (fs.existsSync(tmpTelemetryFilePath)) {
+      try {
+        fileContent = fs.readFileSync(tmpTelemetryFilePath, 'utf8');
+      } catch (_) {}
+    }
+  }
+
+  if (fileContent) {
+    try {
+      const parsed = JSON.parse(fileContent);
+      inMemoryStore = {
         requests: Array.isArray(parsed.requests) ? parsed.requests : [],
         emails: Array.isArray(parsed.emails) ? parsed.emails : [],
         security: Array.isArray(parsed.security) ? parsed.security : []
       };
-    }
-  } catch (e) {
-    console.error('Error reading telemetry store:', e);
+      return inMemoryStore;
+    } catch (_) {}
   }
+
   const init = getInitialStore();
+  inMemoryStore = init;
   writeStore(init);
   return init;
 }
 
 function writeStore(store: RawTelemetryStore) {
+  inMemoryStore = store;
+  const jsonStr = JSON.stringify(store, null, 2);
+
+  // 1. Try writing to public/data
   try {
     const dir = path.dirname(telemetryFilePath);
     if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(telemetryFilePath, JSON.stringify(store, null, 2), 'utf8');
-  } catch (e) {
-    console.error('Error writing telemetry store:', e);
+    fs.writeFileSync(telemetryFilePath, jsonStr, 'utf8');
+  } catch (_) {
+    // Read-only filesystem in serverless edge
   }
+
+  // 2. Always write to /tmp
+  try {
+    fs.writeFileSync(tmpTelemetryFilePath, jsonStr, 'utf8');
+  } catch (_) {}
 }
 
 const PAGE_TITLE_MAP: Record<string, string> = {
-  '/': 'Zawr Industries Homepage',
-  '/careers': 'Zawr Careers & Job Portal',
-  '/about': 'About Zawr Industries & Leadership',
-  '/investors': 'Investor Relations & Governance',
-  '/newsroom/press-release': 'Newsroom & Press Releases',
-  '/industries/it-service': 'Enterprise IT & Cloud Engineering',
-  '/industries/manufacturing': 'Precision Robotics & Automation',
-  '/industries/estate': 'Industrial Real Estate & Logistics',
-  '/webmaster': 'Webmaster Management Console'
+  '/': 'Zawr Industries — Global Homepage',
+  '/careers': 'Careers & Job Opportunities',
+  '/careers/apply': 'Job Application Portal',
+  '/careers/freelance': 'Freelance Engineering Network',
+  '/about': 'Corporate Profile & Leadership',
+  '/investors': 'Investor Relations & Financials',
+  '/contact': 'Corporate Headquarters & Contact',
+  '/contact/sponsorship': 'Brand Sponsorship Proposals',
+  '/contact/client-relations': 'Client Relations & Support',
+  '/contact/partnerships': 'Strategic Alliance & Partner Proposals',
+  '/newsroom': 'Zawr Global Newsroom & Press',
+  '/newsroom/press-release': 'Official Press Releases',
+  '/newsroom/events': 'Corporate Summits & Global Events',
+  '/newsroom/media-kit': 'Brand Assets & Media Resources',
+  '/newsroom/notifications': 'Investor & Regulatory Notices',
+  '/newsroom/notices': 'Public Notices & Announcements',
+  '/sustainability': 'ESG & Sustainability Mission',
+  '/sustainability/environment': 'Environmental Decarbonization & Clean Energy',
+  '/sustainability/empowerment': 'Social Empowerment & Governance',
+  '/industries/it-service': 'IT Services & Cloud Engineering',
+  '/industries/manufacturing': 'Precision Robotics & Advanced Manufacturing',
+  '/industries/estate': 'Commercial Real Estate & Infrastructure',
+  '/industries/energy': 'Clean Energy & Power Logistics',
+  '/industries/fmcg': 'Consumer Goods & Retail Supply',
+  '/industries/holding': 'Investment Holding & Diversification',
+  '/pronunciation': 'Name Pronunciation & Brand Identity',
+  '/webmaster': 'Webmaster Command Center'
 };
 
 const FLAG_MAP: Record<string, { code: string; flag: string }> = {
@@ -158,7 +209,19 @@ const FLAG_MAP: Record<string, { code: string; flag: string }> = {
   'United Kingdom': { code: 'GB', flag: '🇬🇧' },
   'Singapore': { code: 'SG', flag: '🇸🇬' },
   'Germany': { code: 'DE', flag: '🇩🇪' },
-  'Canada': { code: 'CA', flag: '🇨🇦' }
+  'Canada': { code: 'CA', flag: '🇨🇦' },
+  'Saudi Arabia': { code: 'SA', flag: '🇸🇦' },
+  'Australia': { code: 'AU', flag: '🇦🇺' },
+  'Japan': { code: 'JP', flag: '🇯🇵' },
+  'France': { code: 'FR', flag: '🇫🇷' },
+  'Netherlands': { code: 'NL', flag: '🇳🇱' },
+  'Switzerland': { code: 'CH', flag: '🇨🇭' },
+  'Qatar': { code: 'QA', flag: '🇶🇦' },
+  'Bahrain': { code: 'BH', flag: '🇧🇭' },
+  'Kuwait': { code: 'KW', flag: '🇰🇼' },
+  'Oman': { code: 'OM', flag: '🇴🇲' },
+  'Local Host': { code: 'LOC', flag: '🌐' },
+  'Local Machine': { code: 'LOC', flag: '🌐' }
 };
 
 export function getTelemetryData(timeRange: '24h' | '7d' | '30d' = '24h'): AnalyticsData {
@@ -222,7 +285,8 @@ export function getTelemetryData(timeRange: '24h' | '7d' | '30d' = '24h'): Analy
   const geo: GeoDemographic[] = Object.keys(countryCounts).map(country => {
     const data = countryCounts[country];
     const visitorsCount = data.visitors.size;
-    const pct = totalVisits > 0 ? Number(((visitorsCount / totalVisits) * 100).toFixed(1)) : 100;
+    const totalCountryHits = Object.values(data.cities).reduce((sum, c) => sum + c, 0);
+    const pct = totalVisits > 0 ? Number(((totalCountryHits / totalVisits) * 100).toFixed(1)) : 100;
     const topCities = Object.entries(data.cities)
       .map(([city, count]) => ({ city, count }))
       .sort((a, b) => b.count - a.count);

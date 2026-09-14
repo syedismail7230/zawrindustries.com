@@ -7,12 +7,20 @@ import {
 import { logEmailDispatch } from '@/lib/analytics-tracker';
 import { evaluateSpamScore } from '@/lib/bot-protection';
 
+import { resolveFormRoute } from '@/lib/email-router';
+import { sendMailWithPoolFailover } from '@/lib/smtp-pool';
+
 export async function GET() {
   return NextResponse.json({ status: 'healthy', service: 'apply-job', timestamp: new Date().toISOString() });
 }
 
 export async function POST(req: Request) {
   try {
+    const route = resolveFormRoute('apply-job');
+    const destination = route.destinationEmail || 'hr@zawrindustries.com';
+    const cc = route.cc && route.cc.length > 0 ? route.cc : undefined;
+    const bcc = route.bcc && route.bcc.length > 0 ? route.bcc : undefined;
+
     const formData = await req.formData();
     
     const firstName = formData.get('firstName') as string;
@@ -75,46 +83,38 @@ export async function POST(req: Request) {
     const arrayBuffer = await resumeFile.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Setup Nodemailer transporter
-    if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.GMAIL_USER,
-          pass: process.env.GMAIL_APP_PASSWORD,
+    // 1. Prepare HR Notification Email
+    const hrTemplate = generateHRJobNotificationEmail({
+      firstName,
+      lastName,
+      jobTitle,
+      email,
+      phone,
+      portfolio,
+      coverLetter,
+    });
+
+    const hrMailOptions = {
+      replyTo: email,
+      to: destination,
+      cc: cc && cc.length > 0 ? cc.join(', ') : undefined,
+      bcc: bcc && bcc.length > 0 ? bcc.join(', ') : undefined,
+      subject: (route.subjectPrefix ? `[${route.subjectPrefix}] ` : '') + hrTemplate.subject,
+      text: hrTemplate.text,
+      html: hrTemplate.html,
+      attachments: [
+        {
+          filename: resumeFile.name,
+          content: buffer,
+          contentType: resumeFile.type,
         },
-      });
+      ],
+    };
 
-      const senderFrom = process.env.GMAIL_FROM || `"Zawr Industries" <noreply@zawrindustries.com>`;
+    await sendMailWithPoolFailover(hrMailOptions);
 
-      // 1. Prepare HR Notification Email
-      const hrTemplate = generateHRJobNotificationEmail({
-        firstName,
-        lastName,
-        jobTitle,
-        email,
-        phone,
-        portfolio,
-        coverLetter,
-      });
-
-      const hrMailOptions = {
-        from: senderFrom,
-        replyTo: email,
-        to: 'hr@zawrindustries.com',
-        subject: hrTemplate.subject,
-        text: hrTemplate.text,
-        html: hrTemplate.html,
-        attachments: [
-          {
-            filename: resumeFile.name,
-            content: buffer,
-            contentType: resumeFile.type,
-          },
-        ],
-      };
-
-      // 2. Prepare Candidate Confirmation Email
+    // 2. Prepare Candidate Confirmation Email (if auto-responder enabled)
+    if (route.autoResponder) {
       const candidateTemplate = generateCandidateJobConfirmationEmail({
         firstName,
         lastName,
@@ -123,25 +123,18 @@ export async function POST(req: Request) {
         phone,
       });
 
-      const candidateMailOptions = {
-        from: senderFrom,
-        replyTo: 'hr@zawrindustries.com',
+      await sendMailWithPoolFailover({
+        replyTo: destination,
         to: email.trim(),
         subject: candidateTemplate.subject,
         text: candidateTemplate.text,
         html: candidateTemplate.html,
-      };
-
-      // Send both emails concurrently
-      await Promise.all([
-        transporter.sendMail(hrMailOptions),
-        transporter.sendMail(candidateMailOptions),
-      ]);
+      });
     }
 
     // Log real email telemetry
     logEmailDispatch({
-      recipient: 'careers@zawrindustries.com',
+      recipient: destination,
       sender: 'noreply@zawrindustries.com',
       subject: `New Job Application: ${jobTitle} (${firstName} ${lastName || ''})`,
       reason: 'Career Job Portal Application',
