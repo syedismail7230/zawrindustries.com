@@ -1,5 +1,10 @@
 import { NextResponse } from 'next/server';
 import { createSessionToken } from '@/lib/webmaster-security';
+import { 
+  sendAdminPortalAccessAlert, 
+  extractClientIp, 
+  extractLocationFromHeaders 
+} from '@/lib/webmaster-access-alert';
 
 // Secure server-side environment variable fallbacks
 const ACCESS_KEY = process.env.NEXT_PUBLIC_WEBMASTER_ACCESS_KEY || 'GDkehiuih873276##@';
@@ -77,10 +82,28 @@ export async function POST(request: Request) {
       // Verify the answer (case-insensitive and trimmed)
       const cleanUserAnswer = (answer || '').trim().toLowerCase();
       if (cleanUserAnswer === questionItem.answer) {
+        const clientIp = extractClientIp(request.headers);
+        const location = extractLocationFromHeaders(request.headers);
+        const userAgent = request.headers.get('user-agent') || 'Unknown Device';
+
+        const adminEmail = process.env.WEBMASTER_DEFAULT_ADMIN_EMAIL || 'admin@zawrindustries.com';
+
+        // Dispatch immediate security alert to admin email
+        sendAdminPortalAccessAlert({
+          userName: 'Super Administrator',
+          userEmail: adminEmail,
+          userRole: 'Super Administrator',
+          accessMethod: 'Master Access Key & Security Question Challenge',
+          ip: clientIp,
+          userAgent,
+          location,
+          isFreshLogin: true
+        }).catch((err: any) => console.error('[SECURITY ALERT ERROR]', err));
+
         const token = createSessionToken({
           id: 'usr-master-001',
           name: 'Super Administrator',
-          email: process.env.WEBMASTER_DEFAULT_ADMIN_EMAIL || 'admin@zawrindustries.com',
+          email: adminEmail,
           loginKey: 'master',
           role: 'Super Administrator',
           permissions: ['*'],
@@ -96,7 +119,7 @@ export async function POST(request: Request) {
           user: {
             id: 'usr-master-001',
             name: 'Super Administrator',
-            email: process.env.WEBMASTER_DEFAULT_ADMIN_EMAIL || 'admin@zawrindustries.com',
+            email: adminEmail,
             role: 'Super Administrator',
             permissions: ['*']
           }

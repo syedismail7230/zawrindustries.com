@@ -151,6 +151,29 @@ function WebmasterDashboard() {
     setIsVerifying(false);
   };
 
+  const triggerPortalAccessTelemetry = (userObj?: any, accessMethod?: string, isFresh: boolean = false) => {
+    try {
+      const screenRes = typeof window !== 'undefined' ? `${window.screen.width}x${window.screen.height} (${window.devicePixelRatio || 1}x DPR)` : 'Standard';
+      const tz = Intl?.DateTimeFormat ? Intl.DateTimeFormat().resolvedOptions().timeZone : 'Asia/Kolkata';
+      const activeToken = sessionStorage.getItem('webmaster_session_token');
+
+      fetch('/api/webmaster/track-access', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sessionToken: activeToken,
+          userName: userObj?.name,
+          userEmail: userObj?.email,
+          userRole: userObj?.role,
+          accessMethod: accessMethod || 'Webmaster Console Session Established',
+          screenResolution: screenRes,
+          timezone: tz,
+          isFreshLogin: isFresh
+        })
+      }).catch(() => {});
+    } catch (err) {}
+  };
+
   // Check and restore session on client mount
   useEffect(() => {
     const restoreSession = async () => {
@@ -194,6 +217,7 @@ function WebmasterDashboard() {
             setAuthorized(true);
             setIsAuthenticated(true);
             setStageChecked(true);
+            triggerPortalAccessTelemetry(data.user, 'Active Session Restored');
             return;
           } else {
             sessionStorage.removeItem('webmaster_session_token');
@@ -206,16 +230,18 @@ function WebmasterDashboard() {
         }
 
         if (sessionStorage.getItem('webmaster_logged_in') === 'true') {
-          setCurrentUser({
+          const masterUser = {
             id: 'usr-master',
             name: 'Super Administrator',
             email: 'admin@zawrindustries.com',
             role: 'Super Administrator',
             permissions: ['*']
-          });
+          };
+          setCurrentUser(masterUser);
           setAuthorized(true);
           setIsAuthenticated(true);
           setStageChecked(true);
+          triggerPortalAccessTelemetry(masterUser, 'Master Session Restored');
           return;
         }
         
@@ -895,6 +921,7 @@ function WebmasterDashboard() {
           setCurrentUser(data.user);
           setIsAuthenticated(true);
           setAuthorized(true);
+          triggerPortalAccessTelemetry(data.user, 'Assigned Employee RBAC Authentication', true);
           
           // Switch to first allowed tab if analytics is restricted
           if (!data.user.permissions.includes('*') && !data.user.permissions.includes('analytics')) {
@@ -948,15 +975,17 @@ function WebmasterDashboard() {
               sessionStorage.setItem('webmaster_master_key', accessKey);
             }
           } catch (err) {}
-          setCurrentUser(data.user || {
+          const verifiedMasterUser = data.user || {
             id: 'usr-master',
             name: 'Super Administrator',
             email: 'admin@zawrindustries.com',
             role: 'Super Administrator',
             permissions: ['*']
-          });
+          };
+          setCurrentUser(verifiedMasterUser);
           setIsAuthenticated(true);
           setAuthorized(true);
+          triggerPortalAccessTelemetry(verifiedMasterUser, 'Master Security Challenge Login', true);
         } else {
           alert(data.error || 'Incorrect answer');
         }

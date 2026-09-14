@@ -17,6 +17,11 @@ import {
 } from '@/lib/webmaster-security';
 import { supabase } from '@/lib/supabase';
 import { sendCriticalAlertToWebmaster } from '@/lib/webmaster-report';
+import { 
+  sendAdminPortalAccessAlert, 
+  extractClientIp, 
+  extractLocationFromHeaders 
+} from '@/lib/webmaster-access-alert';
 
 import os from 'os';
 
@@ -280,6 +285,21 @@ export async function POST(request: Request) {
       clearRateLimit(rateLimitKey);
       user.lastLogin = new Date().toISOString();
       saveUsersToFile(users);
+
+      const location = extractLocationFromHeaders(request.headers);
+      const userAgent = request.headers.get('user-agent') || 'Unknown Device';
+
+      // Dispatch immediate security alert to admin email
+      sendAdminPortalAccessAlert({
+        userName: user.name,
+        userEmail: user.email,
+        userRole: user.role,
+        accessMethod: authKey ? 'Assigned Unique Auth Link & Password' : 'Staff Email & Password Authentication',
+        ip: clientIp,
+        userAgent,
+        location,
+        isFreshLogin: true
+      }).catch((err: any) => console.error('[STAFF SECURITY ALERT ERROR]', err));
 
       const safeUser = sanitizeUser(user);
       const token = createSessionToken(safeUser, 8); // 8-hour session
