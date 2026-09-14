@@ -1,5 +1,6 @@
 import nodemailer from 'nodemailer';
 import { logSecurityEvent, logEmailDispatch } from '@/lib/analytics-tracker';
+import { sendMailWithPoolFailover } from '@/lib/smtp-pool';
 
 interface PortalAccessDetails {
   userName: string;
@@ -167,19 +168,7 @@ export async function sendAdminPortalAccessAlert(details: PortalAccessDetails): 
       details: `User "${userName}" (${userEmail}, Role: ${userRole}) accessed Webmaster Console via ${accessMethod}. Device: ${device} (${os} / ${browser}). IP: ${ip}.`
     });
 
-    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-      console.warn('[SECURITY] GMAIL credentials missing in environment. Portal access logged locally.');
-      return { success: true };
-    }
-
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
-    });
-
+    // Build HTML template
     const html = `
 <!DOCTYPE html>
 <html lang="en">
@@ -355,8 +344,7 @@ export async function sendAdminPortalAccessAlert(details: PortalAccessDetails): 
 </html>
     `.trim();
 
-    await transporter.sendMail({
-      from: senderFrom,
+    await sendMailWithPoolFailover({
       to: recipient,
       subject,
       html,

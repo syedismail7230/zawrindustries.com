@@ -2,6 +2,7 @@ import nodemailer from 'nodemailer';
 import fs from 'fs';
 import path from 'path';
 import { logEmailDispatch, logSecurityEvent, EmailLogEntry, WebRequestEntry, SecurityEventEntry } from '@/lib/analytics-tracker';
+import { sendMailWithPoolFailover } from '@/lib/smtp-pool';
 
 const telemetryFilePath = path.join(process.cwd(), 'public', 'data', 'analytics-telemetry.json');
 
@@ -744,7 +745,11 @@ export function saveWebmasterReportConfig(config: WebmasterReportConfig): boolea
   }
 }
 
-export async function sendDailyReportToWebmaster(manualTriggeredBy?: string, customRecipient?: string): Promise<{ success: boolean; messageId?: string; recipientsCount?: number; recipients?: string[]; error?: string }> {
+export async function sendDailyReportToWebmaster(
+  manualTriggeredBy?: string,
+  customRecipient?: string,
+  dryRun?: boolean
+): Promise<{ success: boolean; messageId?: string; recipientsCount?: number; recipients?: string[]; error?: string; simulated?: boolean }> {
   try {
     const config = getWebmasterReportConfig();
     const reportData = await generateDailyReportData();
@@ -773,50 +778,51 @@ export async function sendDailyReportToWebmaster(manualTriggeredBy?: string, cus
 
     const allRecipients = [...toList, ...ccList, ...bccList];
 
-    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-      console.warn('GMAIL_USER or GMAIL_APP_PASSWORD not configured. Logging mock report dispatch.');
-      
+    // Simulated / Dry Run Mode or Missing Credentials
+    if (dryRun || !process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
       allRecipients.forEach(rec => {
         logEmailDispatch({
           recipient: rec,
           sender: 'system@zawrindustries.com',
           subject,
-          reason: 'Daily Executive Webmaster Report',
+          reason: dryRun ? `Simulated Test Dispatch (${manualTriggeredBy || 'Manual'})` : 'Daily Executive Webmaster Report',
           status: 'Delivered',
           statusCode: 200,
-          server: 'local.mock.relay',
+          server: dryRun ? 'simulated.dry-run.relay' : 'local.mock.relay',
           ip: '127.0.0.1',
           region: 'India / System Scheduler'
         });
       });
 
+      config.lastDispatchedAt = new Date().toISOString();
+      if (!config.history) config.history = [];
+      config.history.unshift({
+        timestamp: new Date().toISOString(),
+        recipientsCount: allRecipients.length,
+        recipients: allRecipients,
+        triggeredBy: `${manualTriggeredBy || 'Manual'}${dryRun ? ' (Simulated)' : ''}`,
+        messageId: `simulated-report-${Date.now()}`
+      });
+      if (config.history.length > 50) config.history = config.history.slice(0, 50);
+      saveWebmasterReportConfig(config);
+
       return {
         success: true,
-        messageId: `mock-report-${Date.now()}`,
+        simulated: true,
+        messageId: `simulated-report-${Date.now()}`,
         recipientsCount: allRecipients.length,
         recipients: allRecipients
       };
     }
 
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
-    });
-
-    const mailOptions = {
-      from: senderFrom,
+    const { info, gateway, from } = await sendMailWithPoolFailover({
       to: toList.join(', '),
       cc: ccList.length > 0 ? ccList.join(', ') : undefined,
       bcc: bccList.length > 0 ? bccList.join(', ') : undefined,
       subject,
       html: htmlContent,
       text: `Zawr Industries Daily Webmaster Report (${reportData.dateStr})\n\nPageviews: ${reportData.performance.totalPageViews24h}\nUnique Visitors: ${reportData.performance.uniqueVisitors24h}\nEmails Dispatched: ${reportData.emailsSummary.totalDispatched24h}\nApplications Received: ${reportData.applicationsSummary.totalApplications24h}\n\nPlease view this email in an HTML-compatible client to see full tables and logs.`
-    };
-
-    const info = await transporter.sendMail(mailOptions);
+    });
 
     // Log telemetry for each recipient
     allRecipients.forEach(rec => {
@@ -901,19 +907,7 @@ export async function sendCriticalAlertToWebmaster({
       details
     });
 
-    if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
-      console.warn('GMAIL credentials missing. Logging critical security event locally.');
-      return { success: true };
-    }
-
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.GMAIL_USER,
-        pass: process.env.GMAIL_APP_PASSWORD,
-      },
-    });
-
+    // Prepare alert email
     const html = `
 <!DOCTYPE html>
 <html lang="en">
@@ -1044,8 +1038,7 @@ export async function sendCriticalAlertToWebmaster({
 </html>
     `.trim();
 
-    await transporter.sendMail({
-      from: senderFrom,
+    await sendMailWithPoolFailover({
       to: recipient,
       subject,
       html,

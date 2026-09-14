@@ -257,7 +257,7 @@ export function resolveFormRoute(formIdOrPath: string): {
   };
 }
 
-import { resolvePoolTransporter, recordGatewayDispatch, getSmtpPoolConfig, testGatewayHandshake } from './smtp-pool';
+import { resolvePoolTransporter, sendMailWithPoolFailover, recordGatewayDispatch, getSmtpPoolConfig, testGatewayHandshake, SmtpGatewayConfig } from './smtp-pool';
 
 /**
  * Creates Nodemailer Transporter using the dynamic Multi-SMTP pool
@@ -327,13 +327,14 @@ export async function testDispatchRoute(
   const routes = getEmailRoutes();
   const route = routes.find(r => r.id === routeId) || routes[0];
   const targetRecipient = recipientEmail || route.destinationEmail;
-
-  const { transporter, gateway, from } = resolvePoolTransporter();
-  const sender = from;
-
   const subject = `${route.subjectPrefix || '[NODE-ROUTER-TEST]'} Live Routing Test Beacon (${new Date().toLocaleTimeString()})`;
 
-  const html = `
+  try {
+    const { info, gateway, from } = await sendMailWithPoolFailover({
+      to: targetRecipient,
+      cc: route.cc && route.cc.length > 0 ? route.cc.join(', ') : undefined,
+      subject,
+      html: `
     <div style="font-family: system-ui, -apple-system, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; background-color: #090d15; color: #ffffff; border-radius: 12px; border: 1px solid #1e293b;">
       <div style="border-bottom: 1px solid #334155; padding-bottom: 16px; margin-bottom: 20px;">
         <h2 style="color: #38bdf8; margin: 0 0 6px 0; font-size: 20px;">⚡ Zawr Industries Mail Node Test</h2>
@@ -343,33 +344,22 @@ export async function testDispatchRoute(
       <div style="background-color: #111827; padding: 16px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #1f2937;">
         <p style="margin: 0 0 8px 0; font-size: 14px;"><strong>Form Origin:</strong> <span style="color: #60a5fa;">${route.formName} (${route.formPath})</span></p>
         <p style="margin: 0 0 8px 0; font-size: 14px;"><strong>Destination Node:</strong> <span style="color: #4ade80;">${targetRecipient}</span></p>
-        <p style="margin: 0 0 8px 0; font-size: 14px;"><strong>SMTP Relay Used:</strong> <span style="color: #fbbf24;">${gateway.name} (${gateway.host}:${gateway.port})</span></p>
-        <p style="margin: 0 0 8px 0; font-size: 14px;"><strong>Gateway Daily Quota:</strong> <span style="color: #38bdf8;">${gateway.sentToday + 1} / ${gateway.dailyLimit} today</span></p>
-        <p style="margin: 0; font-size: 14px;"><strong>Auto-Responder Status:</strong> <span style="color: ${route.autoResponder ? '#4ade80' : '#94a3b8'};">${route.autoResponder ? 'Enabled' : 'Disabled'}</span></p>
+        <p style="margin: 0 0 8px 0; font-size: 14px;"><strong>Auto-Responder Status:</strong> <span style="color: ${route.autoResponder ? '#4ade80' : '#94a3b8'};">${route.autoResponder ? 'Enabled' : 'Disabled'}</span></p>
       </div>
 
       <p style="color: #cbd5e1; font-size: 13px; line-height: 1.5; margin: 0;">
         This test confirms that messages submitted on your public platform via <strong>${route.formName}</strong> are dynamically mapped and routed to <strong>${targetRecipient}</strong> with zero latency bottlenecks.
       </p>
     </div>
-  `;
-
-  try {
-    const info = await transporter.sendMail({
-      from: sender,
-      to: targetRecipient,
-      cc: route.cc && route.cc.length > 0 ? route.cc.join(', ') : undefined,
-      subject,
-      html
+  `
     });
 
     const latencyMs = Math.round(performance.now() - t0);
-    recordGatewayDispatch(gateway.id, true, latencyMs);
 
     // Log to active telemetry feed
     logEmailDispatch({
       recipient: targetRecipient,
-      sender: sender,
+      sender: from,
       subject,
       reason: `Node Route Test: ${route.formName}`,
       status: 'Delivered',
@@ -383,15 +373,14 @@ export async function testDispatchRoute(
       success: true,
       latencyMs,
       messageId: info.messageId,
-      details: `Delivered to ${targetRecipient} in ${latencyMs}ms via ${gateway.name} [Quota: ${gateway.sentToday + 1}/${gateway.dailyLimit}]`
+      details: `Delivered to ${targetRecipient} in ${latencyMs}ms via ${gateway.name} (${gateway.user}) [Quota: ${gateway.sentToday}/${gateway.dailyLimit}]`
     };
   } catch (error: any) {
     const latencyMs = Math.round(performance.now() - t0);
-    recordGatewayDispatch(gateway.id, false, latencyMs, error.message);
     return {
       success: false,
       latencyMs,
-      details: `Delivery failed via ${gateway.name}: ${error.message}`
+      details: `Delivery failed across cluster: ${error.message}`
     };
   }
 }

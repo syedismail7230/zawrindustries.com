@@ -38,6 +38,18 @@
     "smtpDiagnostics": true,
     "recentDispatchesLog": true
   },
-  "lastDispatchedAt": null,
-  "history": []
+  "lastDispatchedAt": "2026-09-14T05:37:25.130Z",
+  "history": [
+    {
+      "timestamp": "2026-09-14T05:37:25.130Z",
+      "recipientsCount": 3,
+      "recipients": [
+        "webmaster@zawrindustries.com",
+        "syedismail@zawrindustries.com",
+        "md@zawrindustries.com"
+      ],
+      "triggeredBy": "Webmaster Executive Panel (Manual)",
+      "messageId": "<14253637-966d-9e1c-2c8e-b80bbdabd190@zawrindustries.com>"
+    }
+  ]
 }

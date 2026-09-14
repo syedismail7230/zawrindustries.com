@@ -1,9 +1,8 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import nodemailer from 'nodemailer';
 import { logEmailDispatch } from '@/lib/analytics-tracker';
-import { resolvePoolTransporter, recordGatewayDispatch } from '@/lib/smtp-pool';
+import { sendMailWithPoolFailover, recordGatewayDispatch } from '@/lib/smtp-pool';
 
 const templatesFilePath = path.join(process.cwd(), 'public', 'data', 'email-templates.json');
 
@@ -247,27 +246,23 @@ export async function PUT(req: Request) {
 </html>
     `;
 
-    // Dispatch real email via SMTP Pool
-    const { transporter, gateway, from: senderFrom } = resolvePoolTransporter();
-
-    const info = await transporter.sendMail({
-      from: senderFrom,
+    // Dispatch real email via SMTP Pool Failover Cluster
+    const { info, gateway, from: senderFrom } = await sendMailWithPoolFailover({
       to: targetEmail,
       subject: `[LIVE TEMPLATE TEST] ${renderedSubject}`,
       html: renderedHtml
     });
 
     const latencyMs = Math.round(performance.now() - t0);
-    recordGatewayDispatch(gateway.id, true, latencyMs);
 
     logEmailDispatch({
       recipient: targetEmail,
-      sender: 'noreply@zawrindustries.com',
+      sender: senderFrom,
       subject: `[LIVE TEMPLATE TEST] ${renderedSubject}`,
       reason: `Template Studio Test: ${tpl.name}`,
       status: 'Delivered',
       statusCode: 200,
-      server: 'smtp.gmail.com (TLS 1.3)',
+      server: `${gateway.host} (${gateway.name})`,
       ip: '127.0.0.1 (Webmaster Studio)',
       region: 'Webmaster Template Studio'
     });
@@ -276,10 +271,15 @@ export async function PUT(req: Request) {
       success: true,
       latencyMs,
       messageId: info.messageId,
-      details: `Template preview email successfully delivered to ${targetEmail} in ${latencyMs}ms (Message ID: ${info.messageId})`
+      gatewayName: gateway.name,
+      gatewayUser: gateway.user,
+      details: `Template preview email successfully delivered to ${targetEmail} via ${gateway.name} (${gateway.user}) in ${latencyMs}ms (Message ID: ${info.messageId})`
     });
   } catch (error: any) {
-    console.error('Error dispatching template test:', error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    console.error('Failed to dispatch template test email:', error);
+    return NextResponse.json(
+      { error: error.message || 'Failed to dispatch test email' },
+      { status: 500 }
+    );
   }
 }

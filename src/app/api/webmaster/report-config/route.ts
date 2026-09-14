@@ -47,15 +47,17 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   try {
     const body = await req.json();
-    const { triggeredBy, customRecipient } = body;
+    const { triggeredBy, customRecipient, dryRun } = body;
 
     const result = await sendDailyReportToWebmaster(
       triggeredBy || 'Webmaster Executive Panel',
-      customRecipient
+      customRecipient,
+      dryRun
     );
 
     return NextResponse.json({
       success: result.success,
+      simulated: result.simulated,
       messageId: result.messageId,
       recipientsCount: result.recipientsCount,
       recipients: result.recipients,

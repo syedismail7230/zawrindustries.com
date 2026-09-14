@@ -1083,7 +1083,7 @@ export default function EmailRoutingHub({ theme }: EmailRoutingHubProps) {
     }).catch(() => {});
   };
 
-  const handleTriggerReport = async (customEmail?: string) => {
+  const handleTriggerReport = async (customEmail?: string, dryRun?: boolean) => {
     try {
       setDispatchingReport(true);
       setReportDispatchResult(null);
@@ -1092,16 +1092,19 @@ export default function EmailRoutingHub({ theme }: EmailRoutingHubProps) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           triggeredBy: 'Webmaster Executive Panel (Manual)',
-          customRecipient: customEmail
+          customRecipient: customEmail,
+          dryRun: !!dryRun
         })
       });
       const data = await res.json();
       if (res.ok && data.success) {
         setReportDispatchResult({
           success: true,
-          details: customEmail
-            ? `✓ Report delivered successfully to ${customEmail}`
-            : `✓ Report delivered successfully to ${data.recipientsCount || 1} recipient(s)`
+          details: data.simulated
+            ? `✓ Simulated report compiled and logged successfully (${data.recipientsCount || 1} recipient${(data.recipientsCount || 1) > 1 ? 's' : ''} simulated)`
+            : (customEmail
+              ? `✓ Report delivered successfully to ${customEmail}`
+              : `✓ Report delivered successfully to ${data.recipientsCount || 1} recipient(s)`)
         });
         const refreshed = await fetch('/api/webmaster/report-config');
         if (refreshed.ok) {
@@ -3217,7 +3220,7 @@ export default function EmailRoutingHub({ theme }: EmailRoutingHubProps) {
           flexDirection: 'column',
           gap: '1.25rem',
           overflowY: 'auto',
-          padding: '0.25rem 0.5rem 2rem 0.25rem',
+          padding: '0.25rem 0.5rem 5rem 0.25rem',
           flex: 1,
           minHeight: 0,
           width: '100%',
@@ -3637,15 +3640,44 @@ export default function EmailRoutingHub({ theme }: EmailRoutingHubProps) {
 
                 {reportDispatchResult && (
                   <div style={{
-                    padding: '0.65rem 0.85rem',
+                    padding: '0.75rem 1rem',
                     borderRadius: '8px',
-                    backgroundColor: reportDispatchResult.success ? (isDark ? '#052e16' : '#dcfce7') : 'rgba(239,68,68,0.1)',
-                    border: `1px solid ${reportDispatchResult.success ? (isDark ? '#166534' : '#bbf7d0') : '#ef4444'}`,
-                    color: reportDispatchResult.success ? (isDark ? '#4ade80' : '#166534') : '#ef4444',
-                    fontSize: '0.75rem',
-                    fontWeight: 600
+                    backgroundColor: reportDispatchResult.success
+                      ? (isDark ? 'rgba(34, 197, 94, 0.1)' : '#f0fdf4')
+                      : (isDark ? 'rgba(239, 68, 68, 0.1)' : '#fef2f2'),
+                    border: `1px solid ${reportDispatchResult.success
+                      ? (isDark ? 'rgba(34, 197, 94, 0.3)' : '#bbf7d0')
+                      : (isDark ? 'rgba(239, 68, 68, 0.3)' : '#fecaca')}`,
+                    color: reportDispatchResult.success
+                      ? (isDark ? '#4ade80' : '#15803d')
+                      : (isDark ? '#f87171' : '#b91c1c'),
+                    fontSize: '0.76rem',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '0.4rem'
                   }}>
-                    {reportDispatchResult.details}
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', fontWeight: 700 }}>
+                      {reportDispatchResult.success ? (
+                        <>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <polyline points="20 6 9 17 4 12"/>
+                          </svg>
+                          Dispatch Completed
+                        </>
+                      ) : (
+                        <>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                          </svg>
+                          SMTP Server Response
+                        </>
+                      )}
+                    </div>
+                    <div style={{ margin: 0, lineHeight: 1.45, opacity: 0.95, wordBreak: 'break-word', fontFamily: 'monospace', fontSize: '0.72rem' }}>
+                      {reportDispatchResult.details}
+                    </div>
                   </div>
                 )}
 
@@ -3693,10 +3725,27 @@ export default function EmailRoutingHub({ theme }: EmailRoutingHubProps) {
                   </button>
                 </div>
 
-                <div style={{ paddingTop: '0.5rem', borderTop: `1px solid ${theme.border}` }}>
-                  <label style={{ display: 'block', fontSize: '0.72rem', color: theme.muted, marginBottom: '0.3rem' }}>
-                    Send Single Test Report to Custom Email:
-                  </label>
+                <div style={{ paddingTop: '0.6rem', borderTop: `1px solid ${theme.border}`, display: 'flex', flexDirection: 'column', gap: '0.4rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <label style={{ fontSize: '0.72rem', color: theme.muted, fontWeight: 600 }}>
+                      Send Single Test Report to Custom Email:
+                    </label>
+                    <button
+                      onClick={() => handleTriggerReport(customTestReportEmail || 'simulated@zawrindustries.com', true)}
+                      disabled={dispatchingReport}
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        color: theme.muted,
+                        fontSize: '0.68rem',
+                        textDecoration: 'underline',
+                        cursor: 'pointer',
+                        padding: 0
+                      }}
+                    >
+                      Test dry run without quota
+                    </button>
+                  </div>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <input
                       type="email"
@@ -3705,7 +3754,7 @@ export default function EmailRoutingHub({ theme }: EmailRoutingHubProps) {
                       placeholder="e.g. syedismail@zawrindustries.com"
                       style={{
                         flex: 1,
-                        padding: '0.45rem 0.75rem',
+                        padding: '0.5rem 0.75rem',
                         backgroundColor: isDark ? '#18181b' : '#ffffff',
                         border: `1px solid ${theme.border}`,
                         borderRadius: '6px',
@@ -3717,7 +3766,7 @@ export default function EmailRoutingHub({ theme }: EmailRoutingHubProps) {
                       onClick={() => handleTriggerReport(customTestReportEmail)}
                       disabled={dispatchingReport || !customTestReportEmail.includes('@')}
                       style={{
-                        padding: '0.45rem 0.85rem',
+                        padding: '0.5rem 0.9rem',
                         backgroundColor: isDark ? '#27272a' : '#f4f4f5',
                         color: theme.fg,
                         border: `1px solid ${theme.border}`,
