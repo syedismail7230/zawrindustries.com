@@ -248,11 +248,12 @@ export async function POST(request: Request) {
         isMatch = verifyPassword(password.trim(), user.passwordHash, user.salt);
       }
 
-      // SuperAdmin master key fallback verification
+      // SuperAdmin master key fallback verification (env-driven only)
       if (!isMatch && user.role === 'Super Administrator') {
-        const masterPass = process.env.WEBMASTER_DEFAULT_ADMIN_PASS || 'ZawrAdmin#2026';
-        const masterKey = process.env.NEXT_PUBLIC_WEBMASTER_ACCESS_KEY || process.env.WEBMASTER_ACCESS_KEY || 'GDkehiuih873276##@';
-        if (password === masterPass || password.trim() === masterPass || password === masterKey || password.trim() === masterKey || password === 'GDkehiuih873276##@') {
+        const masterPass = process.env.WEBMASTER_DEFAULT_ADMIN_PASS;
+        const masterKey = process.env.WEBMASTER_ACCESS_KEY || process.env.NEXT_PUBLIC_WEBMASTER_ACCESS_KEY;
+        if ((masterPass && (password === masterPass || password.trim() === masterPass)) ||
+            (masterKey && (password === masterKey || password.trim() === masterKey))) {
           isMatch = true;
         }
       }
@@ -317,10 +318,10 @@ export async function POST(request: Request) {
     // ── All subsequent actions require SuperAdmin or user-management authorization ──
     const authHeader = request.headers.get('authorization') || '';
     const callerToken = body.sessionToken || (authHeader.startsWith('Bearer ') ? authHeader.substring(7) : null);
-    const serverMasterKey = process.env.NEXT_PUBLIC_WEBMASTER_ACCESS_KEY || process.env.WEBMASTER_ACCESS_KEY || 'GDkehiuih873276##@';
+    const serverMasterKey = process.env.WEBMASTER_ACCESS_KEY || process.env.NEXT_PUBLIC_WEBMASTER_ACCESS_KEY;
     
     let isSuperAdmin = false;
-    if (body.masterKey && (body.masterKey === serverMasterKey || body.masterKey === 'GDkehiuih873276##@')) {
+    if (serverMasterKey && body.masterKey && body.masterKey === serverMasterKey) {
       isSuperAdmin = true;
     } else if (callerToken) {
       const callerPayload = verifySessionToken(callerToken);

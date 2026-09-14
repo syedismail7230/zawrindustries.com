@@ -57,7 +57,10 @@ export default function SponsorshipPage() {
     trademarkUsageApproval: false,
     contentApprovalAgreement: false,
     antiBriberyDeclaration: false,
-    cancellationPolicyAcceptance: false
+    cancellationPolicyAcceptance: false,
+
+    // Security Honeypot
+    website_url_hp: '',
   });
 
   const [files, setFiles] = useState<{ [key: string]: File | null }>({
@@ -189,6 +192,19 @@ export default function SponsorshipPage() {
       {/* Main Form */}
       <div style={{ maxWidth: '64rem', margin: '0 auto', padding: '0 1.5rem' }}>
         <form onSubmit={handleSubmit}>
+          {/* Anti-Bot Security Honeypot (Hidden from human users, traps automated scrapers) */}
+          <div style={{ display: 'none', position: 'absolute', left: '-9999px', opacity: 0, height: 0, overflow: 'hidden' }} aria-hidden="true">
+            <label htmlFor="website_url_hp">Security Check (Leave Blank)</label>
+            <input
+              type="text"
+              id="website_url_hp"
+              name="website_url_hp"
+              value={formData.website_url_hp}
+              onChange={handleInputChange}
+              tabIndex={-1}
+              autoComplete="off"
+            />
+          </div>
 
           {/* 1. Company Information */}
           <div style={sectionStyle}>

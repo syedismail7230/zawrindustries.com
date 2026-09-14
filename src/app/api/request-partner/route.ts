@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { generatePartnerConfirmationEmail } from '@/lib/emailTemplates';
 import { logEmailDispatch } from '@/lib/analytics-tracker';
+import { evaluateSpamScore } from '@/lib/bot-protection';
 
 export async function GET() {
   return NextResponse.json({ status: 'healthy', service: 'request-partner', timestamp: new Date().toISOString() });
@@ -10,8 +11,27 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    let { firstName, lastName, email, phone, company, partnershipType, message } = body;
+    let { firstName, lastName, email, phone, company, partnershipType, message, honeypot, website_url_hp } = body;
     const payload = body.payload;
+
+    const forwarded = request.headers.get('x-forwarded-for');
+    const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
+
+    // Anti-Spam Evaluation
+    const spamCheck = evaluateSpamScore({
+      ip: clientIp,
+      fullName: `${firstName || ''} ${lastName || ''}`.trim(),
+      companyName: company || '',
+      email: email || '',
+      phone: phone || '',
+      message: message || '',
+      honeypot: honeypot || website_url_hp,
+    });
+
+    if (spamCheck.isSpam) {
+      console.warn(`[Anti-Spam Shield] Blocked partnership proposal bot from IP ${clientIp}: ${spamCheck.reason}`);
+      return NextResponse.json({ success: true, message: 'Partnership request sent successfully' }, { status: 200 });
+    }
 
     // Parse highly structured payloads if present (New Multi-step & Creator Forms)
     if (payload) {
@@ -234,9 +254,6 @@ Collaboration Goals: ${r.collaborationGoals}`;
 
     if (mailSuccess) {
       // Log real email telemetry
-      const forwarded = request.headers.get('x-forwarded-for');
-      const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
-
       logEmailDispatch({
         recipient: (email || 'partner@enterprise.com').trim(),
         sender: 'noreply@zawrindustries.com',

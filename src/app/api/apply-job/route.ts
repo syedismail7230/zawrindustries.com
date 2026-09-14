@@ -5,6 +5,7 @@ import {
   generateHRJobNotificationEmail,
 } from '@/lib/emailTemplates';
 import { logEmailDispatch } from '@/lib/analytics-tracker';
+import { evaluateSpamScore } from '@/lib/bot-protection';
 
 export async function GET() {
   return NextResponse.json({ status: 'healthy', service: 'apply-job', timestamp: new Date().toISOString() });
@@ -23,6 +24,25 @@ export async function POST(req: Request) {
     const jobId = formData.get('jobId') as string;
     const jobTitle = formData.get('jobTitle') as string;
     const resumeFile = formData.get('resume') as File | null;
+    const honeypot = (formData.get('honeypot') || formData.get('website_url_hp')) as string;
+
+    const forwarded = req.headers.get('x-forwarded-for');
+    const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
+
+    // Anti-Spam Evaluation
+    const spamCheck = evaluateSpamScore({
+      ip: clientIp,
+      fullName: `${firstName || ''} ${lastName || ''}`.trim(),
+      email: email || '',
+      phone: phone || '',
+      message: coverLetter || '',
+      honeypot: honeypot || '',
+    });
+
+    if (spamCheck.isSpam) {
+      console.warn(`[Anti-Spam Shield] Blocked job application bot from IP ${clientIp}: ${spamCheck.reason}`);
+      return NextResponse.json({ message: 'Application submitted successfully' }, { status: 200 });
+    }
 
     if (!firstName || !email || !resumeFile || !jobTitle || !coverLetter) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -120,9 +140,6 @@ export async function POST(req: Request) {
     }
 
     // Log real email telemetry
-    const forwarded = req.headers.get('x-forwarded-for');
-    const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
-    
     logEmailDispatch({
       recipient: 'careers@zawrindustries.com',
       sender: 'noreply@zawrindustries.com',

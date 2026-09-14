@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs/promises';
 import path from 'path';
+import { verifyWebmasterAuth } from '@/lib/webmaster-security';
 
 const dataFilePath = path.join(process.cwd(), 'public', 'data', 'notices.json');
 const noticesDir = path.join(process.cwd(), 'public', 'assets', 'notices');
@@ -18,6 +19,11 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();
+    const authCheck = await verifyWebmasterAuth(request, 'notices', formData);
+    if (!authCheck.authorized) {
+      return NextResponse.json({ error: authCheck.error || 'Unauthorized' }, { status: 401 });
+    }
+
     const action = formData.get('action') as string;
     
     // Read current data

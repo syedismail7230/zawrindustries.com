@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { generateRSVPConfirmationEmail } from '@/lib/emailTemplates';
 import { logEmailDispatch } from '@/lib/analytics-tracker';
+import { evaluateSpamScore } from '@/lib/bot-protection';
 
 export async function GET() {
   return NextResponse.json({ status: 'healthy', service: 'rsvp', timestamp: new Date().toISOString() });
@@ -10,7 +11,25 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { name, email, phone, company, designation, eventId, eventTitle } = body;
+    const { name, email, phone, company, designation, eventId, eventTitle, honeypot, website_url_hp } = body;
+
+    const forwarded = req.headers.get('x-forwarded-for');
+    const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
+
+    // Anti-Spam Evaluation
+    const spamCheck = evaluateSpamScore({
+      ip: clientIp,
+      fullName: name || '',
+      companyName: company || '',
+      email: email || '',
+      phone: phone || '',
+      honeypot: honeypot || website_url_hp,
+    });
+
+    if (spamCheck.isSpam) {
+      console.warn(`[Anti-Spam Shield] Blocked RSVP bot from IP ${clientIp}: ${spamCheck.reason}`);
+      return NextResponse.json({ success: true, message: 'RSVP booking request logged successfully' }, { status: 200 });
+    }
 
     if (!name || !email || !eventTitle) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -70,9 +89,6 @@ export async function POST(req: Request) {
         transporter.sendMail(userMailOptions),
       ]);
     }
-
-    const forwarded = req.headers.get('x-forwarded-for');
-    const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
 
     logEmailDispatch({
       recipient: 'events@zawrindustries.com',

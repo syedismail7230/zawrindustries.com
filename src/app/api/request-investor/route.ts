@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { generateInvestorConfirmationEmail } from '@/lib/emailTemplates';
 import { logEmailDispatch } from '@/lib/analytics-tracker';
+import { evaluateSpamScore } from '@/lib/bot-protection';
 
 export async function GET() {
   return NextResponse.json({ status: 'healthy', service: 'request-investor', timestamp: new Date().toISOString() });
@@ -9,7 +10,26 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
-    const { name, email, organization, investmentSize, inquiry } = await req.json();
+    const body = await req.json();
+    const { name, email, organization, investmentSize, inquiry, honeypot, website_url_hp } = body;
+
+    const forwarded = req.headers.get('x-forwarded-for');
+    const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
+
+    // Anti-Spam Evaluation
+    const spamCheck = evaluateSpamScore({
+      ip: clientIp,
+      fullName: name || '',
+      companyName: organization || '',
+      email: email || '',
+      message: inquiry || '',
+      honeypot: honeypot || website_url_hp,
+    });
+
+    if (spamCheck.isSpam) {
+      console.warn(`[Anti-Spam Shield] Blocked investor inquiry bot from IP ${clientIp}: ${spamCheck.reason}`);
+      return NextResponse.json({ success: true, message: 'Investor inquiry logged successfully' }, { status: 200 });
+    }
 
     if (!name || !email || !inquiry) {
       return NextResponse.json(
@@ -72,9 +92,6 @@ export async function POST(req: Request) {
         transporter.sendMail(confirmMailOptions),
       ]);
     }
-
-    const forwarded = req.headers.get('x-forwarded-for');
-    const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
 
     logEmailDispatch({
       recipient: 'investors@zawrindustries.com',

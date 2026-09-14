@@ -87,15 +87,24 @@ function WebmasterDashboard() {
     { id: 'user-management', label: 'User Management' },
   ];
 
+  const getAuthHeaders = () => {
+    const activeToken = sessionToken || (typeof window !== 'undefined' ? sessionStorage.getItem('webmaster_session_token') : null);
+    const activeKey = accessKey || (typeof window !== 'undefined' ? sessionStorage.getItem('webmaster_master_key') : '');
+    const headers: Record<string, string> = {};
+    if (activeToken) headers['Authorization'] = `Bearer ${activeToken}`;
+    if (activeKey) headers['x-master-key'] = activeKey;
+    return headers;
+  };
+
   const callUsersApi = async (reqBody: any) => {
     const activeToken = sessionToken || (typeof window !== 'undefined' ? sessionStorage.getItem('webmaster_session_token') : null);
-    const activeKey = accessKey || (typeof window !== 'undefined' ? sessionStorage.getItem('webmaster_master_key') : '') || 'GDkehiuih873276##@';
+    const activeKey = accessKey || (typeof window !== 'undefined' ? sessionStorage.getItem('webmaster_master_key') : '');
     
     return fetch('/api/webmaster/users', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...(activeToken ? { 'Authorization': `Bearer ${activeToken}` } : {})
+        ...getAuthHeaders()
       },
       body: JSON.stringify({
         ...reqBody,

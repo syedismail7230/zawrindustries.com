@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { generateMediaKitConfirmationEmail } from '@/lib/emailTemplates';
 import { logEmailDispatch } from '@/lib/analytics-tracker';
+import { evaluateSpamScore } from '@/lib/bot-protection';
 
 export async function GET() {
   return NextResponse.json({ status: 'healthy', service: 'request-media-kit', timestamp: new Date().toISOString() });
@@ -9,7 +10,26 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { companyName, name, email, organization, purpose, resources } = await request.json();
+    const body = await request.json();
+    const { companyName, name, email, organization, purpose, resources, honeypot, website_url_hp } = body;
+
+    const forwarded = request.headers.get('x-forwarded-for');
+    const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
+
+    // Anti-Spam Evaluation
+    const spamCheck = evaluateSpamScore({
+      ip: clientIp,
+      fullName: name || '',
+      companyName: companyName || organization || '',
+      email: email || '',
+      message: purpose || '',
+      honeypot: honeypot || website_url_hp,
+    });
+
+    if (spamCheck.isSpam) {
+      console.warn(`[Anti-Spam Shield] Blocked media kit bot from IP ${clientIp}: ${spamCheck.reason}`);
+      return NextResponse.json({ success: true, message: 'Resource request submitted successfully' }, { status: 200 });
+    }
 
     if (!companyName || !name || !email || !purpose) {
       return NextResponse.json(
@@ -76,9 +96,6 @@ export async function POST(request: Request) {
     }
 
     // Log real email telemetry
-    const forwarded = request.headers.get('x-forwarded-for');
-    const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
-
     logEmailDispatch({
       recipient: email.trim(),
       sender: 'noreply@zawrindustries.com',

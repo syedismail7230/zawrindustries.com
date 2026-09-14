@@ -185,3 +185,54 @@ export function verifySessionToken(token: string): SessionTokenPayload | null {
     return null;
   }
 }
+
+/**
+ * Universal authorization guard for Next.js API route handlers.
+ * Checks Session Token (JWT/HMAC) or Master Access Key from Headers, Body, or FormData.
+ */
+export async function verifyWebmasterAuth(
+  request: Request,
+  requiredPermission?: UserPermission,
+  formData?: FormData
+): Promise<{ authorized: boolean; error?: string; user?: any }> {
+  try {
+    const authHeader = request.headers.get('authorization') || '';
+    const masterKeyHeader = request.headers.get('x-master-key') || '';
+    
+    let token = authHeader.startsWith('Bearer ') ? authHeader.substring(7).trim() : '';
+    let masterKey = masterKeyHeader.trim();
+
+    if (!token && formData) {
+      token = (formData.get('sessionToken') || formData.get('token') || '') as string;
+    }
+    if (!masterKey && formData) {
+      masterKey = (formData.get('masterKey') || formData.get('accessKey') || '') as string;
+    }
+
+    const envMasterKey = process.env.WEBMASTER_ACCESS_KEY || process.env.NEXT_PUBLIC_WEBMASTER_ACCESS_KEY;
+
+    // Check Master Access Key first
+    if (envMasterKey && masterKey && masterKey === envMasterKey) {
+      return {
+        authorized: true,
+        user: { id: 'master', name: 'Super Administrator', role: 'Super Administrator', permissions: ['*'] }
+      };
+    }
+
+    // Check Session Token
+    if (token) {
+      const payload = verifySessionToken(token);
+      if (payload) {
+        if (!requiredPermission || payload.permissions.includes('*') || payload.permissions.includes(requiredPermission)) {
+          return { authorized: true, user: payload };
+        } else {
+          return { authorized: false, error: `Forbidden: Missing required permission "${requiredPermission}"` };
+        }
+      }
+    }
+
+    return { authorized: false, error: 'Unauthorized: Valid administrator credentials or active session required' };
+  } catch (err: any) {
+    return { authorized: false, error: err.message || 'Authentication error' };
+  }
+}

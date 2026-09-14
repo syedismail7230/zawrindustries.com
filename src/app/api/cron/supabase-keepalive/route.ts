@@ -12,7 +12,7 @@ export async function GET(req: Request) {
     if (cronSecret && authHeader !== `Bearer ${cronSecret}`) {
       const url = new URL(req.url);
       if (url.searchParams.get('key') !== cronSecret) {
-        // Allow public health check or require secret if present
+        return NextResponse.json({ error: 'Unauthorized cron request' }, { status: 401 });
       }
     }
 

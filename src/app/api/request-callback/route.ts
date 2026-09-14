@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { logEmailDispatch } from '@/lib/analytics-tracker';
+import { evaluateSpamScore } from '@/lib/bot-protection';
 
 export async function GET() {
   return NextResponse.json({ status: 'healthy', service: 'request-callback', timestamp: new Date().toISOString() });
@@ -8,13 +9,29 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const { clientId, priority } = await request.json();
+    const body = await request.json();
+    const { clientId, priority, honeypot, website_url_hp } = body;
 
     if (!clientId || !priority) {
       return NextResponse.json(
         { error: 'Client ID and Priority are required' },
         { status: 400 }
       );
+    }
+
+    const forwarded = request.headers.get('x-forwarded-for');
+    const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
+
+    // Anti-spam evaluation
+    const spamCheck = evaluateSpamScore({
+      ip: clientIp,
+      companyName: clientId,
+      honeypot: honeypot || website_url_hp,
+    });
+
+    if (spamCheck.isSpam) {
+      console.warn(`[Anti-Spam Shield] Blocked callback spam from IP ${clientIp}: ${spamCheck.reason}`);
+      return NextResponse.json({ success: true, message: 'Email sent successfully' }, { status: 200 });
     }
 
     // Configure the transporter with Gmail SMTP
@@ -47,9 +64,6 @@ export async function POST(request: Request) {
 
     // Send the email
     await transporter.sendMail(mailOptions);
-
-    const forwarded = request.headers.get('x-forwarded-for');
-    const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
 
     logEmailDispatch({
       recipient: 'client-relations@zawrindustries.com',

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { generateSponsorshipConfirmationEmail } from '@/lib/emailTemplates';
 import { logEmailDispatch } from '@/lib/analytics-tracker';
+import { evaluateSpamScore } from '@/lib/bot-protection';
 
 export async function GET() {
   return NextResponse.json({ status: 'healthy', service: 'sponsorship', timestamp: new Date().toISOString() });
@@ -35,6 +36,30 @@ export async function POST(req: Request) {
     // Required check
     if (!fields.companyName || !fields.fullName || !fields.email) {
       return NextResponse.json({ error: 'Missing core mandatory fields' }, { status: 400 });
+    }
+
+    const forwarded = req.headers.get('x-forwarded-for');
+    const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
+
+    // ── Advanced Anti-Spam & Bot Protection Shield ──
+    const spamCheck = evaluateSpamScore({
+      ip: clientIp,
+      companyName: fields.companyName,
+      fullName: fields.fullName,
+      email: fields.email,
+      phone: fields.phone,
+      objectives: fields.objectives,
+      honeypot: fields.honeypot || fields.website_url_hp || fields._hp_company,
+      deliverables: fields.deliverables,
+    });
+
+    if (spamCheck.isSpam) {
+      console.warn(`[Anti-Spam Shield] Neutralized automated bot submission from ${clientIp} (${fields.email}) | Reason: ${spamCheck.reason}`);
+      // Return 200 OK fake success so bot does not retry with alternate payloads
+      return NextResponse.json({
+        success: true,
+        message: 'Sponsorship application processed successfully'
+      }, { status: 200 });
     }
 
     if (process.env.GMAIL_USER && process.env.GMAIL_APP_PASSWORD) {
@@ -109,9 +134,6 @@ export async function POST(req: Request) {
     }
 
     // Log real email telemetry
-    const forwarded = req.headers.get('x-forwarded-for');
-    const clientIp = forwarded ? forwarded.split(',')[0].trim() : '127.0.0.1';
-
     logEmailDispatch({
       recipient: fields.email.trim(),
       sender: 'noreply@zawrindustries.com',
