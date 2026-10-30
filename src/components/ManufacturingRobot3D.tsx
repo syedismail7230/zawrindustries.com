@@ -18,16 +18,16 @@ export default function ManufacturingRobot3D() {
     // 1. Scene Setup
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup — Centered on Base (X = 0), Straight Stance, Increased Size
+    // 2. Camera Setup — Dead-center on Base (X = 0), Calibrated to Clear Header Text
     const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-    const targetLookAt = new THREE.Vector3(0, 0.25, 0);
+    const targetLookAt = new THREE.Vector3(0, 0.20, 0);
     const baseDistance = 4.4;
 
     const updateCameraFraming = (w: number, h: number) => {
       const aspect = w / h;
       camera.aspect = aspect;
       if (aspect < 1.0) {
-        // Mobile / narrow viewports: smoothly back up to keep full arm in view without horizontal crop
+        // Mobile / narrow viewports: smoothly back up to prevent horizontal crop
         const factor = Math.max(1.0, (1.25 / aspect) * 0.85);
         camera.position.set(0, 0.35, baseDistance * factor);
       } else {
@@ -73,7 +73,7 @@ export default function ManufacturingRobot3D() {
     scene.add(ambientLight);
 
     // Floor shadow receiver plane positioned directly under the base cylinder
-    const modelYOffset = -0.90;
+    const modelYOffset = -0.95;
     const shadowPlaneGeo = new THREE.PlaneGeometry(10, 10);
     const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.16 });
     const shadowPlane = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
@@ -94,15 +94,18 @@ export default function ManufacturingRobot3D() {
 
     let jointNodes: THREE.Object3D[] = [];
     let initialQuaternions: THREE.Quaternion[] = [];
-    const currentAngles = [0, 0, 0, 0, 0, 0];
-    const targetAngles = [0, 0, 0, 0, 0, 0];
-    const damping = 0.045; // Industrial mass inertia damping factor
+    // Front-facing on load: A1 starts at -90° so arm directly faces the user
+    const currentAngles = [-90.0, 0, 0, 0, 0, 0];
+    const targetAngles = [-90.0, 0, 0, 0, 0, 0];
+    const trackingDamping = 0.18; // Fast, snappy cursor tracking
+    const jointDamping = 0.14;    // Fast, responsive joint articulation
     let isLoaded = false;
 
-    // Model group centered dead-center at X = 0, Z = 0
+    // Model group: FIXED to the ground at X = 0, Z = 0, Y = modelYOffset
+    // The pedestal base is stationary and DOES NOT MOVE with the cursor
     const modelGroup = new THREE.Group();
     modelGroup.position.set(0, modelYOffset, 0);
-    modelGroup.rotation.y = -0.35; // Slight -20° front-angle in rest for 3D showroom perspective
+    modelGroup.rotation.y = 0; // Pure front-facing base pedestal
     scene.add(modelGroup);
 
     // 7. Load Comau N-220-27 GLB Model and Prime Kinematic Hierarchy
@@ -120,8 +123,8 @@ export default function ManufacturingRobot3D() {
           }
         });
 
-        // Set model scale for increased, prominent 3D presence
-        const scale = 1.05;
+        // Scale calibrated so top of arm stays comfortably below header text
+        const scale = 0.72;
         loadedModel.scale.set(scale, scale, scale);
 
         // Update world matrices before parenting
@@ -154,6 +157,14 @@ export default function ManufacturingRobot3D() {
         jointNodes = [l1, l2, l3, l4, l5, l6];
         initialQuaternions = jointNodes.map((node) => node.quaternion.clone());
 
+        // Prime initial front-facing pose on load immediately
+        const qInit = new THREE.Quaternion().setFromAxisAngle(
+          jointAxes[0],
+          THREE.MathUtils.degToRad(-90.0)
+        );
+        l1.quaternion.copy(initialQuaternions[0]).multiply(qInit);
+        loadedModel.updateMatrixWorld(true);
+
         modelGroup.add(loadedModel);
         isLoaded = true;
         setLoading(false);
@@ -165,31 +176,26 @@ export default function ManufacturingRobot3D() {
       }
     );
 
-    // 8. Normalized Cursor & Touch Tracking (Centered directly on the 3D Stage)
+    // 8. Viewport-Wide Cursor & Touch Tracking (Tracks anywhere on website)
     const mouse = { x: 0, y: 0 };
     const targetMouse = { x: 0, y: 0 };
 
     const handleMouseMove = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      targetMouse.x = Math.max(-1.2, Math.min(1.2, (e.clientX - centerX) / (rect.width / 2)));
-      targetMouse.y = Math.max(-1.2, Math.min(1.2, -(e.clientY - centerY) / (rect.height / 2)));
+      // Map entire window viewport to [-1.0, 1.0]
+      targetMouse.x = Math.max(-1.0, Math.min(1.0, (e.clientX / window.innerWidth) * 2 - 1));
+      targetMouse.y = Math.max(-1.0, Math.min(1.0, -(e.clientY / window.innerHeight) * 2 + 1));
     };
 
     const handleMouseLeave = () => {
+      // Gracefully return to center front-facing pose
       targetMouse.x = 0;
       targetMouse.y = 0;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (!containerRef.current || e.touches.length === 0) return;
-      const rect = containerRef.current.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      targetMouse.x = Math.max(-1.2, Math.min(1.2, (e.touches[0].clientX - centerX) / (rect.width / 2)));
-      targetMouse.y = Math.max(-1.2, Math.min(1.2, -(e.touches[0].clientY - centerY) / (rect.height / 2)));
+      if (e.touches.length === 0) return;
+      targetMouse.x = Math.max(-1.0, Math.min(1.0, (e.touches[0].clientX / window.innerWidth) * 2 - 1));
+      targetMouse.y = Math.max(-1.0, Math.min(1.0, -(e.touches[0].clientY / window.innerHeight) * 2 + 1));
     };
 
     const handleTouchEnd = () => {
@@ -209,30 +215,40 @@ export default function ManufacturingRobot3D() {
     const animate = () => {
       animId = requestAnimationFrame(animate);
 
-      // Smooth mouse coordinate lerping with mass inertia
-      mouse.x += (targetMouse.x - mouse.x) * damping;
-      mouse.y += (targetMouse.y - mouse.y) * damping;
+      // Fast, snappy mouse coordinate smoothing
+      mouse.x += (targetMouse.x - mouse.x) * trackingDamping;
+      mouse.y += (targetMouse.y - mouse.y) * trackingDamping;
 
-      // Base group turns smoothly around centered base cylinder to track cursor horizontally
-      modelGroup.rotation.y = -0.35 + mouse.x * 0.45;
-
+      // Note: modelGroup is FIXED to the ground (rotation.y = 0).
+      // All 6 kinematics joints (link_1 through link_6) actively move together!
       if (isLoaded && jointNodes.length === 6) {
         const timeSeconds = clock.getElapsedTime();
 
         // Rest / Breathing micro-oscillation when idle
         const breathing = Math.sin(timeSeconds * 1.5) * 1.2;
 
-        // Kinematic joint angles follow pointer naturally
-        targetAngles[0] = mouse.x * 25.0;                                      // A1 Base Carousel
-        targetAngles[1] = -mouse.y * 14.0 + breathing;                        // A2 Shoulder Pitch
-        targetAngles[2] = mouse.y * 18.0;                                     // A3 Elbow Pitch
-        targetAngles[3] = mouse.x * 12.0;                                     // A4 Forearm Roll
-        targetAngles[4] = -mouse.y * 22.0;                                    // A5 Wrist Pitch
-        targetAngles[5] = mouse.x * 20.0 + Math.sin(timeSeconds * 0.8) * 8.0; // A6 Flange Spin
+        // All 6 kinematics joints actively articulate to follow the cursor:
+        // A1 (Base Carousel Yaw): turns left/right to aim towards cursor X
+        targetAngles[0] = -90.0 + (mouse.x * 45.0);
 
-        // Interpolate current angles to target angles & apply delta quaternions
+        // A2 (Shoulder Pitch): reaches forward/upward based on cursor Y and lateral reach
+        targetAngles[1] = (-mouse.y * 18.0) + (Math.abs(mouse.x) * 4.0) + breathing;
+
+        // A3 (Elbow Pitch): coordinates with shoulder to lift/lower and reach
+        targetAngles[2] = (-mouse.y * 22.0) + (mouse.x * 12.0);
+
+        // A4 (Forearm Roll): rolls the arm tube displaying the embossed ZAWR titanium badge
+        targetAngles[3] = (mouse.x * 28.0) + (mouse.y * 12.0);
+
+        // A5 (Wrist Pitch): tilts the tool head up/down and left/right directly aiming at cursor
+        targetAngles[4] = (-mouse.y * 30.0) + (mouse.x * 16.0);
+
+        // A6 (Tool Flange Spin): spins the circular end effector with cursor tracking & idle oscillation
+        targetAngles[5] = (mouse.x * 40.0) + Math.sin(timeSeconds * 1.8) * 15.0;
+
+        // Fast, responsive joint interpolation & delta quaternion update
         for (let i = 0; i < 6; i++) {
-          currentAngles[i] += (targetAngles[i] - currentAngles[i]) * damping;
+          currentAngles[i] += (targetAngles[i] - currentAngles[i]) * jointDamping;
 
           const qDelta = new THREE.Quaternion().setFromAxisAngle(
             jointAxes[i],
