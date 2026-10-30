@@ -12,183 +12,244 @@ export default function ManufacturingRobot3D() {
   useEffect(() => {
     if (!containerRef.current) return;
     const container = containerRef.current;
-    const width = container.clientWidth;
-    const height = container.clientHeight;
+    let width = container.clientWidth || window.innerWidth;
+    let height = container.clientHeight || 600;
 
-    // 1. Scene Setup (Clean White Studio Environment)
+    // 1. Scene Setup
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup — same on all screen sizes (mirrors desktop look on mobile)
-    const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
-    camera.position.set(0, 0.35, 4.2);
-    camera.lookAt(0, 0.2, 0);
+    // 2. Camera Setup — 45° perspective overview focused near arm center of mass (0.6, 1.35, 0.0)
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+    const targetLookAt = new THREE.Vector3(0.6, 1.35, 0.0);
 
-    // 3. Renderer Setup with PMREM Environment Generator
+    const updateCameraFraming = (w: number, h: number) => {
+      const aspect = w / h;
+      camera.aspect = aspect;
+      if (aspect < 1.0) {
+        // Adjust distance for narrower mobile screens to prevent horizontal clipping
+        const factor = Math.max(1.0, (1.25 / aspect) * 0.85);
+        camera.position.set(4.2 * factor, 3.2 * factor, 4.2 * factor);
+      } else {
+        camera.position.set(4.2, 3.2, 4.2);
+      }
+      camera.lookAt(targetLookAt);
+      camera.updateProjectionMatrix();
+    };
+
+    updateCameraFraming(width, height);
+
+    // 3. Renderer Setup with ACES Filmic Tone Mapping and Soft Shadows
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = 1.15;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
 
-    // 4. Generate Studio Environment Map for Metallic Reflections
+    // 4. Generate Studio Environment Map for Titanium & Metallic Reflections
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
-    // 5. Studio Direct Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.8);
-    scene.add(ambientLight);
-
-    const keyLight = new THREE.DirectionalLight(0xffffff, 3.5);
-    keyLight.position.set(6, 10, 8);
+    // 5. Studio Direct Lighting (Key Sun, Cyan Rim, Warm Bounce, Ambient)
+    const keyLight = new THREE.DirectionalLight(0xfffaed, 2.8);
+    keyLight.position.set(6, 9, 5);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.set(2048, 2048);
+    keyLight.shadow.bias = -0.0005;
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0xffffff, 2.5);
-    fillLight.position.set(-6, 6, 6);
-    scene.add(fillLight);
-
-    const rimLight = new THREE.DirectionalLight(0xffffff, 3.0);
-    rimLight.position.set(0, 8, -8);
+    const rimLight = new THREE.DirectionalLight(0x00f2fe, 1.2);
+    rimLight.position.set(-6, 5, -6);
     scene.add(rimLight);
 
-    // 6. Load GLB Model — same Y offset on all screen sizes (desktop look preserved on mobile)
-    const modelYOffset = -1.45;
-    const modelGroup = new THREE.Group();
-    modelGroup.position.set(0, modelYOffset, 0);
-    scene.add(modelGroup);
+    const fillLight = new THREE.DirectionalLight(0xff7744, 0.6);
+    fillLight.position.set(0, 3, -6);
+    scene.add(fillLight);
 
+    const ambientLight = new THREE.HemisphereLight(0xffffff, 0x141824, 0.6);
+    scene.add(ambientLight);
+
+    // Floor shadow receiver plane for realistic contact shadow
+    const shadowPlaneGeo = new THREE.PlaneGeometry(12, 12);
+    const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.16 });
+    const shadowPlane = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
+    shadowPlane.rotation.x = -Math.PI / 2;
+    shadowPlane.position.set(0.6, 0, 0);
+    shadowPlane.receiveShadow = true;
+    scene.add(shadowPlane);
+
+    // 6. Kinematics State & Joint Definitions
+    const jointAxes = [
+      new THREE.Vector3(0, 0, 1), // A1: Base Carousel Yaw
+      new THREE.Vector3(0, 1, 0), // A2: Shoulder Pitch
+      new THREE.Vector3(0, 0, 1), // A3: Elbow Pitch
+      new THREE.Vector3(0, 0, 1), // A4: Forearm Roll
+      new THREE.Vector3(0, 0, 1), // A5: Wrist Pitch
+      new THREE.Vector3(0, 1, 0)  // A6: Tool Flange Spin
+    ];
+
+    let jointNodes: THREE.Object3D[] = [];
+    let initialQuaternions: THREE.Quaternion[] = [];
+    const currentAngles = [0, 0, 0, 0, 0, 0];
+    const targetAngles = [0, 0, 0, 0, 0, 0];
+    const damping = 0.045; // Industrial mass inertia damping factor
+    let isLoaded = false;
+    let robotModel: THREE.Group | null = null;
+
+    // 7. Load Comau N-220-27 GLB Model and Prime Kinematic Hierarchy
     const loader = new GLTFLoader();
     loader.load(
-      '/assets/robotic+arm+3d+model.glb?v=21',
+      '/assets/comau_n220_27.glb',
       (gltf) => {
-        const loadedModel = gltf.scene;
+        robotModel = gltf.scene;
 
-        // Force update world matrices to calculate accurate geometry bounds
-        loadedModel.updateMatrixWorld(true);
-
-        const totalBox = new THREE.Box3().setFromObject(loadedModel);
-        const totalSize = totalBox.getSize(new THREE.Vector3());
-        const maxDim = Math.max(totalSize.x, totalSize.y, totalSize.z);
-        const scale = 3.2 / maxDim;
-        loadedModel.scale.set(scale, scale, scale);
-
-        // Find base cylinder meshes (bottom 20% height of model)
-        const cutoffY = totalBox.min.y + totalSize.y * 0.20;
-        const baseBox = new THREE.Box3();
-
-        loadedModel.traverse((child) => {
+        // Enable shadows
+        robotModel.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
-            const mesh = child as THREE.Mesh;
-            mesh.geometry.computeBoundingBox();
-            if (mesh.geometry.boundingBox) {
-              const meshWorldBox = mesh.geometry.boundingBox.clone().applyMatrix4(mesh.matrixWorld);
-              if (meshWorldBox.min.y <= cutoffY) {
-                baseBox.union(meshWorldBox);
-              }
-            }
+            child.castShadow = true;
+            child.receiveShadow = true;
           }
         });
 
-        // Fallback to total center if baseBox is empty
-        const baseCenter = baseBox.isEmpty() 
-          ? totalBox.getCenter(new THREE.Vector3()) 
-          : baseBox.getCenter(new THREE.Vector3());
+        // Update world matrices before parenting
+        robotModel.updateMatrixWorld(true);
 
-        // Center dead-center on the BASE CYLINDER at x = 0, z = 0
-        loadedModel.position.set(
-          -baseCenter.x * scale, 
-          -totalBox.min.y * scale, 
-          -baseCenter.z * scale
-        );
+        // Retrieve joint nodes
+        const l1 = robotModel.getObjectByName('link_1');
+        const l2 = robotModel.getObjectByName('link_2');
+        const l3 = robotModel.getObjectByName('link_3');
+        const l4 = robotModel.getObjectByName('link_4');
+        const l5 = robotModel.getObjectByName('link_5');
+        const l6 = robotModel.getObjectByName('link_6');
 
-        // Preserve intact materials & prevent pitch black silhouetting
-        loadedModel.traverse((child) => {
-          if ((child as THREE.Mesh).isMesh) {
-            const mesh = child as THREE.Mesh;
+        if (!l1 || !l2 || !l3 || !l4 || !l5 || !l6) {
+          console.error('[Robot3D] Missing link nodes in GLTF hierarchy');
+          setLoading(false);
+          return;
+        }
 
-            if (mesh.material) {
-              const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-              materials.forEach((mat) => {
-                if (mat instanceof THREE.MeshStandardMaterial || mat instanceof THREE.MeshPhysicalMaterial) {
-                  if (mat.color.r < 0.05 && mat.color.g < 0.05 && mat.color.b < 0.05) {
-                    mat.color.setHex(0x2d323c); // Dark metallic charcoal
-                  }
-                  mat.roughness = 0.3;
-                  mat.metalness = 0.8;
-                  mat.envMapIntensity = 1.8;
-                }
-              });
-            }
-          }
-        });
+        // Re-parent into forward kinematic parent-child chain
+        l1.attach(l2);
+        l2.attach(l3);
+        l3.attach(l4);
+        l4.attach(l5);
+        l5.attach(l6);
 
-        modelGroup.add(loadedModel);
+        robotModel.updateMatrixWorld(true);
+
+        // Cache rest quaternions immediately for delta joint rotations
+        jointNodes = [l1, l2, l3, l4, l5, l6];
+        initialQuaternions = jointNodes.map((node) => node.quaternion.clone());
+
+        scene.add(robotModel);
+        isLoaded = true;
         setLoading(false);
       },
       undefined,
       (err) => {
-        console.error('[GLB Load Error]', err);
+        console.error('[Robot3D] Error loading Comau GLB:', err);
         setLoading(false);
       }
     );
 
-    // 7. Mouse & Touch Cursor Tracking (ONLY Mouse X drives horizontal Y-rotation around base center)
-    const mouse = new THREE.Vector2(0, 0);
-    const targetMouse = new THREE.Vector2(0, 0);
+    // 8. Normalized Cursor & Touch Tracking [-1, 1]
+    const mouse = { x: 0, y: 0 };
+    const targetMouse = { x: 0, y: 0 };
 
     const handleMouseMove = (e: MouseEvent) => {
-      const rect = container.getBoundingClientRect();
-      targetMouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      targetMouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+      targetMouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+    };
+
+    const handleMouseLeave = () => {
+      targetMouse.x = 0;
       targetMouse.y = 0;
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length !== 1) return;
-      const rect = container.getBoundingClientRect();
-      targetMouse.x = ((e.touches[0].clientX - rect.left) / rect.width) * 2 - 1;
+      if (e.touches.length > 0) {
+        targetMouse.x = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
+        targetMouse.y = -(e.touches[0].clientY / window.innerHeight) * 2 + 1;
+      }
+    };
+
+    const handleTouchEnd = () => {
+      targetMouse.x = 0;
       targetMouse.y = 0;
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
-    container.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('mousemove', handleMouseMove, { passive: true });
+    window.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('touchmove', handleTouchMove, { passive: true });
+    window.addEventListener('touchend', handleTouchEnd);
 
-    // 8. Render Loop (Model pivots around dead-centered base cylinder lowered at y = -1.45)
+    // 9. Animation & Kinematics Loop
     let animId: number;
+    const clock = new THREE.Clock();
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
 
-      mouse.lerp(targetMouse, 0.25);
+      if (isLoaded && robotModel && jointNodes.length === 6) {
+        const timeSeconds = clock.getElapsedTime();
 
-      // Base cylinder is centered at modelYOffset
-      modelGroup.position.set(0, modelYOffset, 0);
-      modelGroup.rotation.y = mouse.x * 0.45;
-      modelGroup.rotation.x = 0;
-      modelGroup.rotation.z = 0;
+        // Smooth mouse coordinate lerping with mass inertia
+        mouse.x += (targetMouse.x - mouse.x) * damping;
+        mouse.y += (targetMouse.y - mouse.y) * damping;
+
+        // Rest / Breathing micro-oscillation when idle
+        const breathing = Math.sin(timeSeconds * 1.5) * 1.2;
+
+        // Compute target joint angles based on cursor
+        targetAngles[0] = mouse.x * 55.0;                                       // A1 Base Yaw
+        targetAngles[1] = -mouse.y * 18.0 + breathing;                         // A2 Shoulder Pitch
+        targetAngles[2] = mouse.y * 24.0;                                      // A3 Elbow Pitch
+        targetAngles[3] = mouse.x * 15.0;                                      // A4 Forearm Roll
+        targetAngles[4] = -mouse.y * 32.0;                                     // A5 Wrist Pitch
+        targetAngles[5] = mouse.x * 25.0 + Math.sin(timeSeconds * 0.8) * 8.0;  // A6 Flange Spin
+
+        // Interpolate current angles to target angles & apply delta quaternions
+        for (let i = 0; i < 6; i++) {
+          currentAngles[i] += (targetAngles[i] - currentAngles[i]) * damping;
+
+          const qDelta = new THREE.Quaternion().setFromAxisAngle(
+            jointAxes[i],
+            THREE.MathUtils.degToRad(currentAngles[i])
+          );
+          jointNodes[i].quaternion.copy(initialQuaternions[i]).multiply(qDelta);
+        }
+
+        robotModel.updateMatrixWorld(true);
+      }
 
       renderer.render(scene, camera);
     };
 
     animate();
 
-    // 9. Resize Listener
+    // 10. Resize Listener
     const handleResize = () => {
       if (!containerRef.current) return;
       const w = containerRef.current.clientWidth;
       const h = containerRef.current.clientHeight;
-      camera.aspect = w / h;
-      camera.updateProjectionMatrix();
+      updateCameraFraming(w, h);
       renderer.setSize(w, h);
     };
 
     window.addEventListener('resize', handleResize);
 
+    // Cleanup
     return () => {
       cancelAnimationFrame(animId);
       pmremGenerator.dispose();
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('mousemove', handleMouseMove);
-      container.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd);
+
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
@@ -197,7 +258,7 @@ export default function ManufacturingRobot3D() {
   }, []);
 
   return (
-    <div 
+    <div
       ref={containerRef}
       style={{
         width: '100%',
@@ -209,30 +270,40 @@ export default function ManufacturingRobot3D() {
     >
       {/* Loading Overlay */}
       {loading && (
-        <div style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          backgroundColor: 'transparent',
-          zIndex: 40,
-          color: '#000000',
-        }}>
-          <div style={{
-            width: '40px',
-            height: '40px',
-            border: '3px solid #e2e8f0',
-            borderTop: '3px solid #000000',
-            borderRadius: '50%',
-            animation: 'spin 0.8s linear infinite',
-            marginBottom: '0.8rem',
-          }}></div>
-          <span style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em' }}>
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: 'transparent',
+            zIndex: 40,
+            color: '#000000',
+          }}
+        >
+          <div
+            style={{
+              width: '40px',
+              height: '40px',
+              border: '3px solid #e2e8f0',
+              borderTop: '3px solid #000000',
+              borderRadius: '50%',
+              animation: 'spin 0.8s linear infinite',
+              marginBottom: '0.8rem',
+            }}
+          />
+          <span
+            style={{
+              fontSize: '0.8rem',
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+            }}
+          >
             LOADING 3D ROBOT...
           </span>
         </div>
