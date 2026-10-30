@@ -18,22 +18,20 @@ export default function ManufacturingRobot3D() {
     // 1. Scene Setup
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup — Front View on Opening, Level Straight Stance & Increased Size
-    // Target is centered on the robot arm's center of mass (X: ~0.72, Y: ~1.18)
-    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 1000);
-    const targetLookAt = new THREE.Vector3(0.72, 1.18, 0.0);
-    const baseDistance = 4.05; // Positions the robot prominently (~85% stage height)
+    // 2. Camera Setup — Centered on Base (X = 0), Straight Stance, Increased Size
+    const camera = new THREE.PerspectiveCamera(36, width / height, 0.1, 1000);
+    const targetLookAt = new THREE.Vector3(0, 0.25, 0);
+    const baseDistance = 4.4;
 
     const updateCameraFraming = (w: number, h: number) => {
       const aspect = w / h;
       camera.aspect = aspect;
       if (aspect < 1.0) {
-        // Smoothly back up on portrait/mobile screens to keep full arm in view without horizontal crop
+        // Mobile / narrow viewports: smoothly back up to keep full arm in view without horizontal crop
         const factor = Math.max(1.0, (1.25 / aspect) * 0.85);
-        camera.position.set(0.72, 1.25, baseDistance * factor);
+        camera.position.set(0, 0.35, baseDistance * factor);
       } else {
-        // Clean front-on view: camera X matches target X, Y is near eye level for a straight, level posture
-        camera.position.set(0.72, 1.25, baseDistance);
+        camera.position.set(0, 0.35, baseDistance);
       }
       camera.lookAt(targetLookAt);
       camera.updateProjectionMatrix();
@@ -46,7 +44,7 @@ export default function ManufacturingRobot3D() {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.18;
+    renderer.toneMappingExposure = 1.2;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
@@ -55,15 +53,15 @@ export default function ManufacturingRobot3D() {
     const pmremGenerator = new THREE.PMREMGenerator(renderer);
     scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
-    // 5. Studio Direct Lighting (Key Sun, Cyan Rim, Warm Bounce, Ambient)
-    const keyLight = new THREE.DirectionalLight(0xfffaed, 2.6);
+    // 5. Studio Direct Lighting
+    const keyLight = new THREE.DirectionalLight(0xfffaed, 2.8);
     keyLight.position.set(4, 8, 6);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.set(2048, 2048);
     keyLight.shadow.bias = -0.0005;
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x00f2fe, 1.3);
+    const rimLight = new THREE.DirectionalLight(0x00f2fe, 1.4);
     rimLight.position.set(-5, 4, -4);
     scene.add(rimLight);
 
@@ -74,12 +72,13 @@ export default function ManufacturingRobot3D() {
     const ambientLight = new THREE.HemisphereLight(0xffffff, 0x181c24, 0.65);
     scene.add(ambientLight);
 
-    // Floor shadow receiver plane for realistic contact shadow under the base
+    // Floor shadow receiver plane positioned directly under the base cylinder
+    const modelYOffset = -0.90;
     const shadowPlaneGeo = new THREE.PlaneGeometry(10, 10);
-    const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.15 });
+    const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.16 });
     const shadowPlane = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
     shadowPlane.rotation.x = -Math.PI / 2;
-    shadowPlane.position.set(0, 0, 0);
+    shadowPlane.position.set(0, modelYOffset, 0);
     shadowPlane.receiveShadow = true;
     scene.add(shadowPlane);
 
@@ -90,7 +89,7 @@ export default function ManufacturingRobot3D() {
       new THREE.Vector3(0, 0, 1), // A3: Elbow Pitch
       new THREE.Vector3(0, 0, 1), // A4: Forearm Roll
       new THREE.Vector3(0, 0, 1), // A5: Wrist Pitch
-      new THREE.Vector3(0, 1, 0)  // A6: Tool Flange Spin
+      new THREE.Vector3(0, 1, 0), // A6: Tool Flange Spin
     ];
 
     let jointNodes: THREE.Object3D[] = [];
@@ -99,33 +98,42 @@ export default function ManufacturingRobot3D() {
     const targetAngles = [0, 0, 0, 0, 0, 0];
     const damping = 0.045; // Industrial mass inertia damping factor
     let isLoaded = false;
-    let robotModel: THREE.Group | null = null;
+
+    // Model group centered dead-center at X = 0, Z = 0
+    const modelGroup = new THREE.Group();
+    modelGroup.position.set(0, modelYOffset, 0);
+    modelGroup.rotation.y = -0.35; // Slight -20° front-angle in rest for 3D showroom perspective
+    scene.add(modelGroup);
 
     // 7. Load Comau N-220-27 GLB Model and Prime Kinematic Hierarchy
     const loader = new GLTFLoader();
     loader.load(
       '/assets/comau_n220_27.glb',
       (gltf) => {
-        robotModel = gltf.scene;
+        const loadedModel = gltf.scene;
 
         // Enable shadows
-        robotModel.traverse((child) => {
+        loadedModel.traverse((child) => {
           if ((child as THREE.Mesh).isMesh) {
             child.castShadow = true;
             child.receiveShadow = true;
           }
         });
 
+        // Set model scale for increased, prominent 3D presence
+        const scale = 1.05;
+        loadedModel.scale.set(scale, scale, scale);
+
         // Update world matrices before parenting
-        robotModel.updateMatrixWorld(true);
+        loadedModel.updateMatrixWorld(true);
 
         // Retrieve joint nodes
-        const l1 = robotModel.getObjectByName('link_1');
-        const l2 = robotModel.getObjectByName('link_2');
-        const l3 = robotModel.getObjectByName('link_3');
-        const l4 = robotModel.getObjectByName('link_4');
-        const l5 = robotModel.getObjectByName('link_5');
-        const l6 = robotModel.getObjectByName('link_6');
+        const l1 = loadedModel.getObjectByName('link_1');
+        const l2 = loadedModel.getObjectByName('link_2');
+        const l3 = loadedModel.getObjectByName('link_3');
+        const l4 = loadedModel.getObjectByName('link_4');
+        const l5 = loadedModel.getObjectByName('link_5');
+        const l6 = loadedModel.getObjectByName('link_6');
 
         if (!l1 || !l2 || !l3 || !l4 || !l5 || !l6) {
           console.error('[Robot3D] Missing link nodes in GLTF hierarchy');
@@ -140,13 +148,13 @@ export default function ManufacturingRobot3D() {
         l4.attach(l5);
         l5.attach(l6);
 
-        robotModel.updateMatrixWorld(true);
+        loadedModel.updateMatrixWorld(true);
 
         // Cache rest quaternions immediately for delta joint rotations
         jointNodes = [l1, l2, l3, l4, l5, l6];
         initialQuaternions = jointNodes.map((node) => node.quaternion.clone());
 
-        scene.add(robotModel);
+        modelGroup.add(loadedModel);
         isLoaded = true;
         setLoading(false);
       },
@@ -157,13 +165,17 @@ export default function ManufacturingRobot3D() {
       }
     );
 
-    // 8. Normalized Cursor & Touch Tracking [-1, 1]
+    // 8. Normalized Cursor & Touch Tracking (Centered directly on the 3D Stage)
     const mouse = { x: 0, y: 0 };
     const targetMouse = { x: 0, y: 0 };
 
     const handleMouseMove = (e: MouseEvent) => {
-      targetMouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-      targetMouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      if (!containerRef.current) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      targetMouse.x = Math.max(-1.2, Math.min(1.2, (e.clientX - centerX) / (rect.width / 2)));
+      targetMouse.y = Math.max(-1.2, Math.min(1.2, -(e.clientY - centerY) / (rect.height / 2)));
     };
 
     const handleMouseLeave = () => {
@@ -172,10 +184,12 @@ export default function ManufacturingRobot3D() {
     };
 
     const handleTouchMove = (e: TouchEvent) => {
-      if (e.touches.length > 0) {
-        targetMouse.x = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
-        targetMouse.y = -(e.touches[0].clientY / window.innerHeight) * 2 + 1;
-      }
+      if (!containerRef.current || e.touches.length === 0) return;
+      const rect = containerRef.current.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      targetMouse.x = Math.max(-1.2, Math.min(1.2, (e.touches[0].clientX - centerX) / (rect.width / 2)));
+      targetMouse.y = Math.max(-1.2, Math.min(1.2, -(e.touches[0].clientY - centerY) / (rect.height / 2)));
     };
 
     const handleTouchEnd = () => {
@@ -195,23 +209,26 @@ export default function ManufacturingRobot3D() {
     const animate = () => {
       animId = requestAnimationFrame(animate);
 
-      if (isLoaded && robotModel && jointNodes.length === 6) {
-        const timeSeconds = clock.getElapsedTime();
+      // Smooth mouse coordinate lerping with mass inertia
+      mouse.x += (targetMouse.x - mouse.x) * damping;
+      mouse.y += (targetMouse.y - mouse.y) * damping;
 
-        // Smooth mouse coordinate lerping with mass inertia
-        mouse.x += (targetMouse.x - mouse.x) * damping;
-        mouse.y += (targetMouse.y - mouse.y) * damping;
+      // Base group turns smoothly around centered base cylinder to track cursor horizontally
+      modelGroup.rotation.y = -0.35 + mouse.x * 0.45;
+
+      if (isLoaded && jointNodes.length === 6) {
+        const timeSeconds = clock.getElapsedTime();
 
         // Rest / Breathing micro-oscillation when idle
         const breathing = Math.sin(timeSeconds * 1.5) * 1.2;
 
-        // Compute target joint angles based on cursor
-        targetAngles[0] = mouse.x * 55.0;                                       // A1 Base Yaw
-        targetAngles[1] = -mouse.y * 18.0 + breathing;                         // A2 Shoulder Pitch
-        targetAngles[2] = mouse.y * 24.0;                                      // A3 Elbow Pitch
-        targetAngles[3] = mouse.x * 15.0;                                      // A4 Forearm Roll
-        targetAngles[4] = -mouse.y * 32.0;                                     // A5 Wrist Pitch
-        targetAngles[5] = mouse.x * 25.0 + Math.sin(timeSeconds * 0.8) * 8.0;  // A6 Flange Spin
+        // Kinematic joint angles follow pointer naturally
+        targetAngles[0] = mouse.x * 25.0;                                      // A1 Base Carousel
+        targetAngles[1] = -mouse.y * 14.0 + breathing;                        // A2 Shoulder Pitch
+        targetAngles[2] = mouse.y * 18.0;                                     // A3 Elbow Pitch
+        targetAngles[3] = mouse.x * 12.0;                                     // A4 Forearm Roll
+        targetAngles[4] = -mouse.y * 22.0;                                    // A5 Wrist Pitch
+        targetAngles[5] = mouse.x * 20.0 + Math.sin(timeSeconds * 0.8) * 8.0; // A6 Flange Spin
 
         // Interpolate current angles to target angles & apply delta quaternions
         for (let i = 0; i < 6; i++) {
@@ -224,7 +241,7 @@ export default function ManufacturingRobot3D() {
           jointNodes[i].quaternion.copy(initialQuaternions[i]).multiply(qDelta);
         }
 
-        robotModel.updateMatrixWorld(true);
+        modelGroup.updateMatrixWorld(true);
       }
 
       renderer.render(scene, camera);
