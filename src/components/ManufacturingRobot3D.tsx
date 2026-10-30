@@ -18,19 +18,22 @@ export default function ManufacturingRobot3D() {
     // 1. Scene Setup
     const scene = new THREE.Scene();
 
-    // 2. Camera Setup — 45° perspective overview focused near arm center of mass (0.6, 1.35, 0.0)
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    const targetLookAt = new THREE.Vector3(0.6, 1.35, 0.0);
+    // 2. Camera Setup — Front View on Opening, Level Straight Stance & Increased Size
+    // Target is centered on the robot arm's center of mass (X: ~0.72, Y: ~1.18)
+    const camera = new THREE.PerspectiveCamera(38, width / height, 0.1, 1000);
+    const targetLookAt = new THREE.Vector3(0.72, 1.18, 0.0);
+    const baseDistance = 4.05; // Positions the robot prominently (~85% stage height)
 
     const updateCameraFraming = (w: number, h: number) => {
       const aspect = w / h;
       camera.aspect = aspect;
       if (aspect < 1.0) {
-        // Adjust distance for narrower mobile screens to prevent horizontal clipping
+        // Smoothly back up on portrait/mobile screens to keep full arm in view without horizontal crop
         const factor = Math.max(1.0, (1.25 / aspect) * 0.85);
-        camera.position.set(4.2 * factor, 3.2 * factor, 4.2 * factor);
+        camera.position.set(0.72, 1.25, baseDistance * factor);
       } else {
-        camera.position.set(4.2, 3.2, 4.2);
+        // Clean front-on view: camera X matches target X, Y is near eye level for a straight, level posture
+        camera.position.set(0.72, 1.25, baseDistance);
       }
       camera.lookAt(targetLookAt);
       camera.updateProjectionMatrix();
@@ -43,7 +46,7 @@ export default function ManufacturingRobot3D() {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
+    renderer.toneMappingExposure = 1.18;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
@@ -53,30 +56,30 @@ export default function ManufacturingRobot3D() {
     scene.environment = pmremGenerator.fromScene(new RoomEnvironment(), 0.04).texture;
 
     // 5. Studio Direct Lighting (Key Sun, Cyan Rim, Warm Bounce, Ambient)
-    const keyLight = new THREE.DirectionalLight(0xfffaed, 2.8);
-    keyLight.position.set(6, 9, 5);
+    const keyLight = new THREE.DirectionalLight(0xfffaed, 2.6);
+    keyLight.position.set(4, 8, 6);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.set(2048, 2048);
     keyLight.shadow.bias = -0.0005;
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x00f2fe, 1.2);
-    rimLight.position.set(-6, 5, -6);
+    const rimLight = new THREE.DirectionalLight(0x00f2fe, 1.3);
+    rimLight.position.set(-5, 4, -4);
     scene.add(rimLight);
 
-    const fillLight = new THREE.DirectionalLight(0xff7744, 0.6);
-    fillLight.position.set(0, 3, -6);
+    const fillLight = new THREE.DirectionalLight(0xff8844, 0.7);
+    fillLight.position.set(0, 2, 4);
     scene.add(fillLight);
 
-    const ambientLight = new THREE.HemisphereLight(0xffffff, 0x141824, 0.6);
+    const ambientLight = new THREE.HemisphereLight(0xffffff, 0x181c24, 0.65);
     scene.add(ambientLight);
 
-    // Floor shadow receiver plane for realistic contact shadow
-    const shadowPlaneGeo = new THREE.PlaneGeometry(12, 12);
-    const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.16 });
+    // Floor shadow receiver plane for realistic contact shadow under the base
+    const shadowPlaneGeo = new THREE.PlaneGeometry(10, 10);
+    const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.15 });
     const shadowPlane = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
     shadowPlane.rotation.x = -Math.PI / 2;
-    shadowPlane.position.set(0.6, 0, 0);
+    shadowPlane.position.set(0, 0, 0);
     shadowPlane.receiveShadow = true;
     scene.add(shadowPlane);
 
