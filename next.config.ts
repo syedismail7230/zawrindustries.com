@@ -9,6 +9,19 @@ const nextConfig: NextConfig = {
   },
 
 
+  // Exclude heavy media, 3D models, and raw assets from serverless function bundles
+  outputFileTracingExcludes: {
+    '*': [
+      './public/assets/**/*',
+      './public/Blog-assets/**/*',
+      './Blog-assets/**/*',
+      './blog-assets/**/*',
+      './**/*.glb',
+      './**/*.gif',
+      './**/*.mp4',
+    ],
+  },
+
   // Strict URL canonicalization: enforce non-trailing slash across all pages
   trailingSlash: false,
 

@@ -55,58 +55,21 @@ export interface BlogSection {
   body: string;
 }
 
+const STATIC_BLOG_ASSETS = [
+  '/Blog-assets/Blog%20(1).png',
+  '/Blog-assets/Blog%20(2).png',
+  '/Blog-assets/Blog%20(3).png',
+  '/Blog-assets/Blog%20(4).png',
+  '/Blog-assets/Blog%20(5).png',
+];
+
 /**
- * Retrieves a random image from the "Blog assets" folder.
- * Synchronizes any files from root "Blog-assets" / "Blog assets" into "public/Blog-assets" so Next.js and CDN can serve them.
+ * Retrieves a random image from the "Blog assets" collection.
+ * Static URL mapping avoids serverless runtime file-trace overhead.
  */
 export function getRandomBlogAssetImage(): string {
-  try {
-    const rootCandidates = [
-      path.join(/*turbopackIgnore: true*/ process.cwd(), 'Blog-assets'),
-      path.join(/*turbopackIgnore: true*/ process.cwd(), 'Blog assets'),
-      path.join(/*turbopackIgnore: true*/ process.cwd(), 'blog-assets'),
-    ];
-
-    const publicDestDir = path.join(/*turbopackIgnore: true*/ process.cwd(), 'public', 'Blog-assets');
-    if (!fsSync.existsSync(publicDestDir)) {
-      fsSync.mkdirSync(publicDestDir, { recursive: true });
-    }
-
-    // Sync any image files from root candidates to public/Blog-assets
-    for (const dir of rootCandidates) {
-      if (fsSync.existsSync(dir)) {
-        const files = fsSync.readdirSync(dir);
-        for (const file of files) {
-          if (/\.(png|jpe?g|webp|avif|svg)$/i.test(file)) {
-            const srcPath = path.join(dir, file);
-            const destPath = path.join(publicDestDir, file);
-            if (!fsSync.existsSync(destPath)) {
-              try {
-                fsSync.copyFileSync(srcPath, destPath);
-              } catch (copyErr) {
-                console.warn(`Failed to sync blog asset ${file}:`, copyErr);
-              }
-            }
-          }
-        }
-      }
-    }
-
-    // Read all available images in public/Blog-assets
-    if (fsSync.existsSync(publicDestDir)) {
-      const publicFiles = fsSync.readdirSync(publicDestDir).filter((f) => /\.(png|jpe?g|webp|avif|svg)$/i.test(f));
-      if (publicFiles.length > 0) {
-        const randomIndex = Math.floor(Math.random() * publicFiles.length);
-        const selectedFile = publicFiles[randomIndex];
-        return `/Blog-assets/${encodeURIComponent(selectedFile)}`;
-      }
-    }
-  } catch (err) {
-    console.error('Error selecting random blog asset image:', err);
-  }
-
-  // Fallback to high-res corporate asset
-  return 'https://res.cloudinary.com/murfclni/image/upload/v1783710408/zawr/assets/application-development-hero.png';
+  const randomIndex = Math.floor(Math.random() * STATIC_BLOG_ASSETS.length);
+  return STATIC_BLOG_ASSETS[randomIndex];
 }
 
 export interface GeneratedBlog {
