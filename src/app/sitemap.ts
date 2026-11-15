@@ -71,7 +71,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/investors',
     '/investors/financial-report',
     '/investors/interest',
-    '/privacy-policy',
+    '/legal/privacy-policy',
     '/legal-disclaimer',
     '/notices',
     '/fraud-alert',
@@ -114,16 +114,28 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const fs = require('fs');
     const path = require('path');
 
-    // 1. Appending blogs
+    // Helper to parse dates safely
+    const parseSafeDate = (dateVal: any): Date => {
+      if (!dateVal) return new Date();
+      if (typeof dateVal === 'string') {
+        const cleanStr = dateVal.replace(/(\d+)(st|nd|rd|th)/, '$1');
+        const parsed = new Date(cleanStr);
+        return isNaN(parsed.getTime()) ? new Date() : parsed;
+      }
+      return new Date(dateVal);
+    };
+
+    // 1. Appending blogs (Published only, with authoritative lastmod and high priority)
     const blogsPath = path.join(process.cwd(), 'public/data/blogs.json');
     if (fs.existsSync(blogsPath)) {
       const fileData = fs.readFileSync(blogsPath, 'utf8');
       const blogs = JSON.parse(fileData);
-      dynamicRoutes = [...dynamicRoutes, ...blogs.map((b: any) => ({
+      const publishedBlogs = blogs.filter((b: any) => b.status !== 'draft' && b.status !== 'held' && b.status !== 'pending_approval');
+      dynamicRoutes = [...dynamicRoutes, ...publishedBlogs.map((b: any) => ({
         url: `${baseUrl}/about/blog/${b.slug}`,
-        lastModified: new Date(),
+        lastModified: parseSafeDate(b.createdAt || b.date),
         changeFrequency: 'weekly' as const,
-        priority: 0.7,
+        priority: 0.85,
       }))];
     }
 

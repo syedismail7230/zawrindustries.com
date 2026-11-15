@@ -136,128 +136,316 @@ export default function AboutBlog() {
           </Link>
         </div>
 
-        {/* Real Blogs Grid */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(12, 1fr)',
-            gap: '2rem',
-          }}
-          className="blogs-grid-container"
-        >
-          {blogs.map((blog) => (
-            <div
-              key={blog.id || blog.slug}
-              style={{
-                gridColumn: 'span 4',
-                backgroundColor: '#ffffff',
-                borderRadius: '16px',
-                border: '1px solid #e2e8f0',
-                overflow: 'hidden',
-                display: 'flex',
-                flexDirection: 'column',
-                transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-              }}
-              className="blog-card"
-            >
-              {/* Blog Image */}
-              {blog.image && (
-                <div style={{ width: '100%', aspectRatio: '16 / 10', overflow: 'hidden', backgroundColor: '#f1f5f9' }}>
-                  <Link href={`/about/blog/${blog.slug}`}>
-                    <img
-                      src={blog.image}
-                      alt={blog.title}
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        display: 'block',
-                        transition: 'transform 0.5s ease',
-                      }}
-                      className="blog-card-img"
-                    />
-                  </Link>
-                </div>
-              )}
+        {/* Bento Magazine Blogs Layout (1 Featured Left + 2 Stacked Right) */}
+        {blogs.length > 0 && (
+          <div className="bento-blog-layout">
+            {/* Left Column: Featured Blog */}
+            {blogs[0] && (
+              <div
+                key={blogs[0].id || blogs[0].slug}
+                className="blog-card bento-featured-card"
+              >
+                {blogs[0].image && (
+                  <div className="bento-featured-img-wrap">
+                    <Link href={`/about/blog/${blogs[0].slug}`}>
+                      <img
+                        src={blogs[0].image}
+                        alt={blogs[0].title}
+                        className="blog-card-img"
+                      />
+                    </Link>
+                  </div>
+                )}
 
-              <div className="blog-card-body" style={{ padding: '1.75rem', display: 'flex', flexDirection: 'column', flexGrow: 1, gap: '0.75rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.78rem', color: '#64748b', fontWeight: 500 }}>
-                  <span style={{ textTransform: 'uppercase', color: '#64748b', letterSpacing: '0.06em', fontWeight: 600 }}>
-                    {blog.category}
-                  </span>
-                  <span>{blog.readTime}</span>
-                </div>
+                <div className="blog-card-body bento-featured-body">
+                  <div className="bento-meta-row">
+                    <span className="bento-category-tag">
+                      {blogs[0].category}
+                    </span>
+                    <span className="bento-readtime">{blogs[0].readTime}</span>
+                  </div>
 
-                <h3 style={{ fontSize: '1.15rem', fontWeight: 500, color: '#0f172a', margin: 0, lineHeight: 1.35 }}>
-                  <Link href={`/about/blog/${blog.slug}`} style={{ color: 'inherit', textDecoration: 'none' }}>
-                    {blog.title}
-                  </Link>
-                </h3>
+                  <h3 className="bento-featured-title">
+                    <Link href={`/about/blog/${blogs[0].slug}`}>
+                      {blogs[0].title}
+                    </Link>
+                  </h3>
 
-                <p style={{ fontSize: '0.88rem', color: '#64748b', lineHeight: 1.6, margin: 0, fontWeight: 400, flexGrow: 1 }}>
-                  {blog.summary}
-                </p>
+                  <p className="bento-featured-summary">
+                    {blogs[0].summary}
+                  </p>
 
-                <div style={{ paddingTop: '0.5rem' }}>
-                  <Link
-                    href={`/about/blog/${blog.slug}`}
-                    style={{
-                      fontSize: '0.85rem',
-                      fontWeight: 600,
-                      color: '#0f172a',
-                      textDecoration: 'none',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '0.35rem',
-                    }}
-                  >
-                    Read Article
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="5" y1="12" x2="19" y2="12" />
-                      <polyline points="12 5 19 12 12 19" />
-                    </svg>
-                  </Link>
+                  <div className="bento-card-action">
+                    <Link
+                      href={`/about/blog/${blogs[0].slug}`}
+                      className="bento-read-btn"
+                    >
+                      Read Full Article
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12" />
+                        <polyline points="12 5 19 12 12 19" />
+                      </svg>
+                    </Link>
+                  </div>
                 </div>
               </div>
+            )}
+
+            {/* Right Column: 2 Stacked Blogs */}
+            <div className="bento-side-col">
+              {blogs.slice(1, 3).map((blog) => (
+                <div
+                  key={blog.id || blog.slug}
+                  className="blog-card bento-side-card"
+                >
+                  {blog.image && (
+                    <div className="bento-side-img-wrap">
+                      <Link href={`/about/blog/${blog.slug}`} style={{ display: 'block', height: '100%' }}>
+                        <img
+                          src={blog.image}
+                          alt={blog.title}
+                          className="blog-card-img"
+                        />
+                      </Link>
+                    </div>
+                  )}
+
+                  <div className="blog-card-body bento-side-body">
+                    <div className="bento-meta-row">
+                      <span className="bento-category-tag">
+                        {blog.category}
+                      </span>
+                      <span className="bento-readtime">{blog.readTime}</span>
+                    </div>
+
+                    <h3 className="bento-side-title">
+                      <Link href={`/about/blog/${blog.slug}`}>
+                        {blog.title}
+                      </Link>
+                    </h3>
+
+                    <p className="bento-side-summary">
+                      {blog.summary}
+                    </p>
+
+                    <div className="bento-card-action">
+                      <Link
+                        href={`/about/blog/${blog.slug}`}
+                        className="bento-read-btn"
+                      >
+                        Read Article
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="5" y1="12" x2="19" y2="12" />
+                          <polyline points="12 5 19 12 12 19" />
+                        </svg>
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        )}
       </div>
 
       <style>{`
+        .bento-blog-layout {
+          display: grid;
+          grid-template-columns: 1.08fr 1fr;
+          gap: 1.5rem;
+          align-items: stretch;
+        }
+
+        .blog-card {
+          background-color: #ffffff;
+          border-radius: 16px;
+          border: 1px solid #e2e8f0;
+          overflow: hidden;
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
         .blog-card:hover {
           transform: translateY(-4px);
-          box-shadow: 0 12px 24px rgba(15, 23, 42, 0.06);
+          box-shadow: 0 16px 32px rgba(15, 23, 42, 0.08);
         }
+
         .blog-card:hover .blog-card-img {
           transform: scale(1.04);
         }
-        @media (max-width: 840px) {
-          .blogs-grid-container {
-            display: flex !important;
-            flex-direction: row !important;
-            overflow-x: auto !important;
-            scroll-snap-type: x mandatory !important;
-            -webkit-overflow-scrolling: touch !important;
-            gap: 1.15rem !important;
-            margin: 0 -1.5rem !important;
-            padding: 0.25rem 1.5rem 1.5rem 1.5rem !important;
-            scrollbar-width: none !important;
+
+        .blog-card-img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          display: block;
+          transition: transform 0.5s ease;
+        }
+
+        /* Featured Left Card */
+        .bento-featured-card {
+          display: flex;
+          flex-direction: column;
+          height: 100%;
+        }
+
+        .bento-featured-img-wrap {
+          width: 100%;
+          height: 240px;
+          overflow: hidden;
+          background-color: #f1f5f9;
+          flex-shrink: 0;
+        }
+
+        .bento-featured-body {
+          padding: 1.75rem;
+          display: flex;
+          flex-direction: column;
+          flex-grow: 1;
+        }
+
+        .bento-meta-row {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-size: 0.75rem;
+          color: #64748b;
+          font-weight: 500;
+          margin-bottom: 0.65rem;
+        }
+
+        .bento-category-tag {
+          text-transform: uppercase;
+          color: #047857;
+          background-color: #ecfdf5;
+          padding: 0.2rem 0.55rem;
+          border-radius: 4px;
+          letter-spacing: 0.05em;
+          font-weight: 600;
+          font-size: 0.72rem;
+        }
+
+        .bento-readtime {
+          color: #64748b;
+          font-size: 0.75rem;
+        }
+
+        .bento-featured-title {
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: #0f172a;
+          margin: 0 0 0.75rem 0;
+          line-height: 1.35;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .bento-featured-title a,
+        .bento-side-title a {
+          color: inherit;
+          text-decoration: none;
+        }
+
+        .bento-featured-summary {
+          font-size: 0.88rem;
+          color: #64748b;
+          line-height: 1.6;
+          margin: 0;
+          font-weight: 400;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        /* Right Stacked Column */
+        .bento-side-col {
+          display: flex;
+          flex-direction: column;
+          gap: 1.5rem;
+          height: 100%;
+        }
+
+        .bento-side-card {
+          display: flex;
+          flex-direction: row;
+          flex: 1;
+          min-height: 0;
+        }
+
+        .bento-side-img-wrap {
+          width: 200px;
+          min-width: 170px;
+          overflow: hidden;
+          background-color: #f1f5f9;
+          flex-shrink: 0;
+        }
+
+        .bento-side-body {
+          padding: 1.25rem 1.4rem;
+          display: flex;
+          flex-direction: column;
+          flex-grow: 1;
+          min-width: 0;
+        }
+
+        .bento-side-title {
+          font-size: 1rem;
+          font-weight: 600;
+          color: #0f172a;
+          margin: 0 0 0.45rem 0;
+          line-height: 1.35;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .bento-side-summary {
+          font-size: 0.82rem;
+          color: #64748b;
+          line-height: 1.5;
+          margin: 0;
+          font-weight: 400;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .bento-card-action {
+          margin-top: auto;
+          padding-top: 0.75rem;
+        }
+
+        .bento-read-btn {
+          font-size: 0.84rem;
+          font-weight: 600;
+          color: #0f172a;
+          text-decoration: none;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          transition: gap 0.2s ease, color 0.2s ease;
+        }
+
+        .bento-read-btn:hover {
+          color: #047857;
+          gap: 0.55rem;
+        }
+
+        @media (max-width: 900px) {
+          .bento-blog-layout {
+            grid-template-columns: 1fr !important;
+            gap: 1.5rem !important;
           }
-          .blogs-grid-container::-webkit-scrollbar {
-            display: none !important;
+          .bento-side-card {
+            flex-direction: column !important;
           }
-          .blog-card {
-            flex: 0 0 76% !important;
-            max-width: 300px !important;
-            min-width: 260px !important;
-            scroll-snap-align: start !important;
-            grid-column: auto !important;
-            box-sizing: border-box !important;
-          }
-          .blog-card-body {
-            padding: 1.15rem 1rem !important;
-            gap: 0.5rem !important;
+          .bento-side-img-wrap {
+            width: 100% !important;
+            height: 180px !important;
           }
         }
       `}</style>

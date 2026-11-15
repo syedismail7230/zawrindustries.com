@@ -294,7 +294,8 @@ export default function Footer() {
       {/* Footer Bottom Meta Links */}
       <div className="footer-meta">
         <div className="meta-left">
-          <Link href="/privacy-policy">Privacy Policy</Link>
+          <Link href="/legal/privacy-policy">Privacy Policy</Link>
+          <Link href="/legal/terms">Terms of Service</Link>
           <Link href="/legal-disclaimer">Legal Disclaimer</Link>
           <Link href="/notices">Notices</Link>
         </div>

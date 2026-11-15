@@ -21,6 +21,10 @@ export interface Blog {
   image: string;
   readTime: string;
   sections: Section[];
+  helpfulness?: {
+    yes: number;
+    no: number;
+  };
 }
 
 interface BlogClientProps {
@@ -42,23 +46,79 @@ export default function BlogClient({
   const [fontSizeMultiplier, setFontSizeMultiplier] = useState(1);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [feedback, setFeedback] = useState<'yes' | 'no' | null>(null);
+  const [feedbackRecorded, setFeedbackRecorded] = useState(false);
+  const [isSubmittingFeedback, setIsSubmittingFeedback] = useState(false);
+  const [helpfulnessCounts, setHelpfulnessCounts] = useState<{ yes: number; no: number }>(
+    blog.helpfulness || { yes: 0, no: 0 }
+  );
 
   // Newsletter State
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterStatus, setNewsletterStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [newsletterMsg, setNewsletterMsg] = useState('');
 
-  // Check bookmark status on mount
+  // Check bookmark and feedback status on mount
   useEffect(() => {
     try {
       const saved = JSON.parse(localStorage.getItem('zawr_saved_articles') || '[]');
       if (saved.includes(blog.slug)) {
         setIsBookmarked(true);
       }
+      const savedFeedback = localStorage.getItem(`zawr_blog_feedback_${blog.slug}`);
+      if (savedFeedback === 'yes' || savedFeedback === 'no') {
+        setFeedback(savedFeedback);
+      }
     } catch {
       // ignore
     }
   }, [blog.slug]);
+
+  const handleFeedbackVote = async (type: 'yes' | 'no') => {
+    if (isSubmittingFeedback) return;
+    const prev = feedback;
+    if (prev === type) return;
+
+    setFeedback(type);
+    try {
+      localStorage.setItem(`zawr_blog_feedback_${blog.slug}`, type);
+    } catch {
+      // ignore
+    }
+
+    setHelpfulnessCounts((prevCounts) => {
+      const next = { ...prevCounts };
+      if (prev === 'yes' || prev === 'no') {
+        next[prev] = Math.max(0, next[prev] - 1);
+      }
+      next[type] = (next[type] || 0) + 1;
+      return next;
+    });
+
+    try {
+      setIsSubmittingFeedback(true);
+      const res = await fetch('/api/blogs/feedback', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          slug: blog.slug,
+          vote: type,
+          previousVote: prev
+        })
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.helpfulness) {
+          setHelpfulnessCounts(data.helpfulness);
+        }
+        setFeedbackRecorded(true);
+        setTimeout(() => setFeedbackRecorded(false), 3500);
+      }
+    } catch (err) {
+      console.error('Failed to submit feedback:', err);
+    } finally {
+      setIsSubmittingFeedback(false);
+    }
+  };
 
   const toggleBookmark = () => {
     try {
@@ -480,37 +540,73 @@ export default function BlogClient({
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 1.25rem 1.75rem;
-          background-color: #fcfcfc;
-          border: 1px solid #f0f0f0;
-          border-radius: 16px;
+          padding: 1.15rem 1.6rem;
+          background-color: #fafafa;
+          border: 1px solid #e5e7eb;
+          border-radius: 14px;
           margin-bottom: 3.5rem;
+          transition: border-color 0.2s ease;
         }
         .feedback-prompt {
           font-size: 0.92rem;
           font-weight: 500;
-          color: #1f2937;
+          color: #111827;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.75rem;
+          flex-wrap: wrap;
+        }
+        .feedback-thankyou {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.35rem;
+          font-size: 0.78rem;
+          font-weight: 600;
+          color: #059669;
+          background: #ecfdf5;
+          border: 1px solid #a7f3d0;
+          padding: 0.2rem 0.55rem;
+          border-radius: 9999px;
         }
         .feedback-actions {
-          display: flex;
-          gap: 0.5rem;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.6rem;
         }
         .feedback-btn {
-          padding: 0.4rem 0.9rem;
+          display: inline-flex;
+          align-items: center;
+          gap: 0.45rem;
+          padding: 0.45rem 1rem;
           border-radius: 9999px;
           border: 1px solid #e5e7eb;
           background-color: #ffffff;
-          font-size: 0.85rem;
+          font-size: 0.84rem;
+          font-weight: 500;
+          color: #374151;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .feedback-btn:hover {
-          border-color: #000000;
+        .feedback-btn:hover:not(:disabled) {
+          border-color: #111827;
+          color: #111827;
+          background-color: #f9fafb;
         }
         .feedback-btn.active {
-          background-color: #000000;
+          background-color: #111827;
           color: #ffffff;
-          border-color: #000000;
+          border-color: #111827;
+        }
+        .feedback-btn:disabled {
+          opacity: 0.6;
+          cursor: default;
+        }
+        .feedback-btn svg {
+          flex-shrink: 0;
+          transition: transform 0.2s ease;
+        }
+        .feedback-btn:hover:not(:disabled) svg {
+          transform: scale(1.12);
         }
 
         /* Author Credentials Footer Box */
@@ -924,19 +1020,45 @@ export default function BlogClient({
 
             {/* Interactive Reader Feedback */}
             <div className="feedback-box">
-              <span className="feedback-prompt">Was this insight helpful?</span>
+              <div className="feedback-prompt">
+                <span>Was this insight helpful?</span>
+                {feedbackRecorded && (
+                  <span className="feedback-thankyou">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    Thank you for your feedback!
+                  </span>
+                )}
+              </div>
               <div className="feedback-actions">
                 <button
+                  type="button"
                   className={`feedback-btn ${feedback === 'yes' ? 'active' : ''}`}
-                  onClick={() => setFeedback('yes')}
+                  onClick={() => handleFeedbackVote('yes')}
+                  disabled={isSubmittingFeedback}
+                  aria-label="Yes, valuable insight"
                 >
-                  👍 Yes, valuable
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill={feedback === 'yes' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M7 10v12"/>
+                    <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h3"/>
+                    <path d="M7 10V4.5A2.5 2.5 0 0 1 9.5 2h.5a2 2 0 0 1 2 2v6"/>
+                  </svg>
+                  <span>Yes, valuable</span>
                 </button>
                 <button
+                  type="button"
                   className={`feedback-btn ${feedback === 'no' ? 'active' : ''}`}
-                  onClick={() => setFeedback('no')}
+                  onClick={() => handleFeedbackVote('no')}
+                  disabled={isSubmittingFeedback}
+                  aria-label="Not really helpful"
                 >
-                  👎 Not really
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill={feedback === 'no' ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M17 14V2"/>
+                    <path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3"/>
+                    <path d="M17 14v5.5a2.5 2.5 0 0 1-2.5 2.5h-.5a2 2 0 0 1-2-2v-6"/>
+                  </svg>
+                  <span>Not really</span>
                 </button>
               </div>
             </div>

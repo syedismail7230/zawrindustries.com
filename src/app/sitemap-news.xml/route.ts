@@ -50,16 +50,17 @@ export async function GET() {
     console.error('Error reading notifications for sitemap:', e);
   }
 
-  // 3. Fetch articles from blogs.json (Blogs)
+  // 3. Fetch articles from blogs.json (Published Blogs only)
   try {
     const filePath = path.join(process.cwd(), 'public/data/blogs.json');
     if (fs.existsSync(filePath)) {
       const fileData = fs.readFileSync(filePath, 'utf8');
       const blogs = JSON.parse(fileData);
-      articles = [...articles, ...blogs.map((b: any) => ({
+      const publishedBlogs = blogs.filter((b: any) => b.status !== 'draft' && b.status !== 'held' && b.status !== 'pending_approval');
+      articles = [...articles, ...publishedBlogs.map((b: any) => ({
         url: `${baseUrl}/about/blog/${b.slug}`,
         title: b.title,
-        dateParsed: parseCleanDate(b.date),
+        dateParsed: parseCleanDate(b.createdAt || b.date),
         dateRaw: b.date,
         source: 'Blog'
       }))];

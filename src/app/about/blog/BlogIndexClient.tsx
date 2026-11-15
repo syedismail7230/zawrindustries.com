@@ -605,10 +605,15 @@ export default function BlogIndexClient() {
           line-height: 1.6;
           margin: 0;
         }
-        .newsletter-form {
+        .blog-banner-form {
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
+          background: transparent !important;
+          border: none !important;
+          padding: 0 !important;
+          box-shadow: none !important;
+          width: 100%;
         }
         .newsletter-input-group {
           display: flex;
@@ -907,7 +912,7 @@ export default function BlogIndexClient() {
             </p>
           </div>
 
-          <form className="newsletter-form" onSubmit={handleNewsletterSubmit}>
+          <form className="blog-banner-form" onSubmit={handleNewsletterSubmit}>
             <div className="newsletter-input-group">
               <input
                 type="email"

@@ -153,6 +153,26 @@ const nextConfig: NextConfig = {
         destination: '/industries/it-service',
         permanent: true,
       },
+      {
+        source: '/privacy-policy',
+        destination: '/legal/privacy-policy',
+        permanent: true,
+      },
+      {
+        source: '/terms',
+        destination: '/legal/terms',
+        permanent: true,
+      },
+      {
+        source: '/terms-of-service',
+        destination: '/legal/terms',
+        permanent: true,
+      },
+      {
+        source: '/terms-and-conditions',
+        destination: '/legal/terms',
+        permanent: true,
+      },
     ];
   },
 };

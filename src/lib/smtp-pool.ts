@@ -56,7 +56,7 @@ function getDefaultEnvGateway(): SmtpGatewayConfig {
     secure: true,
     user,
     pass,
-    senderName: 'Zawr Industries System',
+    senderName: 'Zawr Industries',
     senderEmail: 'noreply@zawrindustries.com',
     dailyLimit: 500,
     sentToday: 0,
@@ -300,7 +300,17 @@ export async function sendMailWithPoolFailover(mailOptions: nodemailer.SendMailO
     const fallback = getDefaultEnvGateway();
     const transporter = createNodemailerTransporter(fallback);
     const from = `"${fallback.senderName}" <${fallback.senderEmail}>`;
-    const info = await transporter.sendMail({ ...mailOptions, from: mailOptions.from || from });
+    const replyTo = mailOptions.replyTo || `"${fallback.senderName}" <noreply@zawrindustries.com>`;
+    const info = await transporter.sendMail({
+      ...mailOptions,
+      from: mailOptions.from || from,
+      replyTo,
+      headers: {
+        'List-Unsubscribe': '<https://zawrindustries.com/unsubscribe>, <mailto:noreply@zawrindustries.com?subject=unsubscribe>',
+        'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+        ...(mailOptions.headers || {})
+      }
+    });
     return { info, gateway: fallback, from };
   }
 
@@ -318,11 +328,26 @@ export async function sendMailWithPoolFailover(mailOptions: nodemailer.SendMailO
     try {
       const t0 = performance.now();
       const transporter = createNodemailerTransporter(gw);
-      const from = `"${gw.senderName || 'Zawr Industries'}" <${gw.senderEmail || gw.user}>`;
+      
+      // Sender address strictly set to corporate domain
+      const senderAddress = gw.senderEmail || 'noreply@zawrindustries.com';
+      const from = `"${gw.senderName || 'Zawr Industries'}" <${senderAddress}>`;
+      const replyTo = mailOptions.replyTo || `"${gw.senderName || 'Zawr Industries'}" <noreply@zawrindustries.com>`;
+
+      // Deliverability Headers
+      const antiSpamHeaders = {
+        'List-Unsubscribe': '<https://zawrindustries.com/unsubscribe>, <mailto:noreply@zawrindustries.com?subject=unsubscribe>',
+        'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+        'X-Entity-Ref-ID': `zawr-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`,
+        'X-Auto-Response-Suppress': 'OOF, AutoReply',
+        ...(mailOptions.headers || {})
+      };
 
       const info = await transporter.sendMail({
         ...mailOptions,
-        from: mailOptions.from || from
+        from: mailOptions.from || from,
+        replyTo,
+        headers: antiSpamHeaders,
       });
 
       const latencyMs = Math.round(performance.now() - t0);

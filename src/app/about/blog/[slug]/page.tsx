@@ -42,34 +42,65 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       ? (blog.image.startsWith('http') ? blog.image : `https://zawrindustries.com${blog.image}`) 
       : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png';
 
-    const cleanTitle = blog.title.length > 50 ? `${blog.title.slice(0, 48)}...` : blog.title;
+    const seoTitle = blog.title.includes('Zawr') ? blog.title : `${blog.title} | Zawr Industries Insights`;
+    const metaDescription = blog.summary && blog.summary.length > 0
+      ? (blog.summary.length > 158 ? `${blog.summary.slice(0, 155)}...` : blog.summary)
+      : 'Strategic industrial research, enterprise engineering benchmarks, and technology leadership insights from Zawr Industries.';
+
+    const keywordList = [
+      blog.category,
+      'Zawr Industries',
+      'Enterprise Technology',
+      'B2B Architecture',
+      'Industrial Intelligence',
+      ...blog.title.split(/\s+/).filter((w: string) => w.length > 4)
+    ];
 
     return {
-      title: cleanTitle,
-      description: blog.summary,
+      title: seoTitle,
+      description: metaDescription,
+      keywords: keywordList,
       alternates: {
         canonical: `https://zawrindustries.com/about/blog/${slug}`,
       },
+      robots: {
+        index: true,
+        follow: true,
+        googleBot: {
+          index: true,
+          follow: true,
+          'max-video-preview': -1,
+          'max-image-preview': 'large',
+          'max-snippet': -1,
+        },
+      },
       openGraph: {
-        title: blog.title,
-        description: blog.summary,
+        title: seoTitle,
+        description: metaDescription,
         url: `https://zawrindustries.com/about/blog/${slug}`,
         siteName: 'Zawr Industries',
+        locale: 'en_US',
         images: [
           {
             url: fullImageUrl,
+            width: 1200,
+            height: 630,
             alt: blog.title,
           }
         ],
         type: 'article',
-        publishedTime: getSafeIsoDate(blog.date),
-        authors: [blog.author],
+        publishedTime: getSafeIsoDate(blog.createdAt || blog.date),
+        modifiedTime: getSafeIsoDate(blog.createdAt || blog.date),
+        authors: [blog.author || 'Zawr Research & Editorial Desk'],
+        section: blog.category,
+        tags: keywordList,
       },
       twitter: {
         card: 'summary_large_image',
-        title: blog.title,
-        description: blog.summary,
+        title: seoTitle,
+        description: metaDescription,
         images: [fullImageUrl],
+        creator: '@zawrindustries',
       }
     };
   } catch (e) {
@@ -111,6 +142,40 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
     notFound();
   }
 
+  // Compute article stats for Schema.org
+  const allText = (blog.sections || []).map((s: any) => `${s.title} ${s.body}`).join(' ');
+  const wordCount = allText.split(/\s+/).length + (blog.summary ? blog.summary.split(/\s+/).length : 0);
+  const minutes = parseInt(blog.readTime?.replace(/\D/g, '') || '6', 10);
+  const timeRequired = `PT${minutes}M`;
+
+  // Check for FAQ sections to generate Schema.org FAQPage Rich Snippet
+  const faqSection = blog.sections?.find((s: any) => 
+    s.title?.toLowerCase().includes('faq') || 
+    s.title?.toLowerCase().includes('frequently asked questions')
+  );
+
+  const faqEntities: any[] = [];
+  if (faqSection && faqSection.body) {
+    const qaBlocks = faqSection.body.split(/\n\s*\n/).filter(Boolean);
+    for (const block of qaBlocks) {
+      const match = block.match(/(?:Q:|\*\*Q:|\d+\.\s*|\*\*Question:\*\*\s*)([^\n?]+\?)\s*(?:A:|\*\*A:|\n|\*\*Answer:\*\*\s*)([\s\S]+)/i);
+      if (match) {
+        faqEntities.push({
+          '@type': 'Question',
+          'name': match[1].trim(),
+          'acceptedAnswer': {
+            '@type': 'Answer',
+            'text': match[2].trim(),
+          },
+        });
+      }
+    }
+  }
+
+  const fullImageUrl = blog.image 
+    ? (blog.image.startsWith('http') ? blog.image : `https://zawrindustries.com${blog.image}`) 
+    : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png';
+
   return (
     <>
       <BlogClient
@@ -120,30 +185,56 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         nextBlog={nextBlog}
       />
 
-      {/* Schema.org BlogPosting markup for AI & Search Engines */}
+      {/* Schema.org TechArticle / BlogPosting markup with E-E-A-T and Speakable */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
-            '@type': 'BlogPosting',
+            '@type': ['TechArticle', 'BlogPosting'],
+            '@id': `https://zawrindustries.com/about/blog/${slug}#article`,
+            'isPartOf': {
+              '@type': 'CollectionPage',
+              '@id': 'https://zawrindustries.com/about/blog',
+              'name': 'Corporate Blog & Insights'
+            },
             'headline': blog.title,
-            'image': [
-              blog.image ? (blog.image.startsWith('http') ? blog.image : `https://zawrindustries.com${blog.image}`) : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png'
+            'image': [fullImageUrl],
+            'datePublished': getSafeIsoDate(blog.createdAt || blog.date),
+            'dateModified': getSafeIsoDate(blog.createdAt || blog.date),
+            'author': [
+              {
+                '@type': 'Person',
+                'name': blog.author || 'Zawr Research & Editorial Desk',
+                'url': 'https://zawrindustries.com/about/board',
+                'worksFor': {
+                  '@type': 'Organization',
+                  'name': 'Zawr Industries'
+                }
+              }
             ],
-            'datePublished': getSafeIsoDate(blog.date),
-            'dateModified': getSafeIsoDate(blog.date),
-            'author': [{
-              '@type': 'Person',
-              'name': blog.author || 'Zawr Industries Editorial'
-            }],
             'publisher': {
               '@type': 'Organization',
               'name': 'Zawr Industries',
+              'url': 'https://zawrindustries.com',
               'logo': {
                 '@type': 'ImageObject',
                 'url': 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png'
               }
+            },
+            'mainEntityOfPage': {
+              '@type': 'WebPage',
+              '@id': `https://zawrindustries.com/about/blog/${slug}`
+            },
+            'inLanguage': 'en-US',
+            'isAccessibleForFree': 'True',
+            'articleSection': blog.category,
+            'keywords': `${blog.category}, Zawr Industries, Enterprise Technology, Industrial Architecture, B2B Engineering`,
+            'wordCount': wordCount,
+            'timeRequired': timeRequired,
+            'speakable': {
+              '@type': 'SpeakableSpecification',
+              'cssSelector': ['h1', '.article-body', '.blog-summary']
             },
             'description': blog.summary || ''
           })
@@ -167,7 +258,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               {
                 '@type': 'ListItem',
                 'position': 2,
-                'name': 'Blog',
+                'name': 'Blog & Insights',
                 'item': 'https://zawrindustries.com/about/blog'
               },
               {
@@ -180,6 +271,20 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           })
         }}
       />
+
+      {/* Schema.org FAQPage markup for Google Featured Rich Snippets */}
+      {faqEntities.length > 0 && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'FAQPage',
+              'mainEntity': faqEntities
+            })
+          }}
+        />
+      )}
 
       {/* Google News Reader Revenue Manager Snippet */}
       <Script

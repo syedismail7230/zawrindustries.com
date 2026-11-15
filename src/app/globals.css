@@ -579,6 +579,8 @@ button, input {
 
 .newsletter-form {
   display: flex;
+  flex-direction: row;
+  align-items: stretch;
   background-color: var(--bg-light);
   border-radius: 4px;
   overflow: hidden;
@@ -589,25 +591,51 @@ button, input {
 
 .newsletter-form input {
   flex: 1;
+  min-width: 0;
   padding: 0.8rem 1rem;
   border: none;
   background: transparent;
   outline: none;
   color: var(--text-dark);
+  font-size: 0.9rem;
 }
 
 .newsletter-form button {
   background-color: var(--text-dark);
   color: var(--bg-white);
   border: none;
-  padding: 0 1.5rem;
+  padding: 0.8rem 1.5rem;
   font-weight: 600;
+  font-size: 0.875rem;
+  white-space: nowrap;
   cursor: pointer;
   transition: var(--transition);
 }
 
 .newsletter-form button:hover {
   background-color: var(--text-light);
+}
+
+@media (max-width: 480px) {
+  .newsletter-form {
+    flex-direction: column;
+    background-color: transparent;
+    border: none;
+    overflow: visible;
+    gap: 0.5rem;
+  }
+  .newsletter-form input {
+    background-color: var(--bg-light);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    padding: 0.8rem 1rem;
+    width: 100%;
+  }
+  .newsletter-form button {
+    border-radius: 4px;
+    padding: 0.8rem 1.5rem;
+    width: 100%;
+  }
 }
 
 .social-links {

@@ -158,12 +158,11 @@ const sitemapData: SitemapSection[] = [
   },
   {
     title: 'Legal, Compliance & Policies',
-    count: 8,
+    count: 7,
     description: 'Key legal declarations, privacy regulations, cookie usage, and refund policies.',
     links: [
-      { label: 'Privacy Policy (General)', href: '/privacy-policy', description: 'User data protection protocols, database safety, and privacy controls.' },
-      { label: 'Privacy Policy (Legal Framework)', href: '/legal/privacy-policy', description: 'Detailed legal clauses on corporate data transfer and regional safety laws.' },
-      { label: 'Terms & Conditions', href: '/legal/terms', description: 'Binding user terms of service for all platforms and websites.' },
+      { label: 'Privacy Policy', href: '/legal/privacy-policy', description: 'User data protection protocols, corporate data governance, and regulatory safety compliance.' },
+      { label: 'Terms of Service', href: '/legal/terms', description: 'Binding user terms of service for all platforms and websites.' },
       { label: 'Cookie Policy', href: '/legal/cookie-policy', description: 'Detailed summary of tracking tools, analytics cookies, and consent controls.' },
       { label: 'Legal Disclaimer (General)', href: '/legal-disclaimer', description: 'General declarations of liabilities, warranties, and information boundaries.' },
       { label: 'Legal Disclaimer (Corporate)', href: '/legal/disclaimer', description: 'Explicit legal and financial limitations, advice disclaimers, and local compliance.' },

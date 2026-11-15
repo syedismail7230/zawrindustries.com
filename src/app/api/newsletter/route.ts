@@ -69,28 +69,38 @@ export async function POST(req: Request) {
       console.warn('Database logging error for newsletter:', dbErr);
     }
 
-    // 1. Confirmation Email to Subscriber
-    const confirmEmail = generateNewsletterConfirmationEmail({ email: cleanEmail });
+    // Resolve dynamically configured route from Email & Routing Engine
+    const route = resolveFormRoute('newsletter');
+    const destination = route.destinationEmail || 'newsletter@zawrindustries.com';
+    const cc = route.cc && route.cc.length > 0 ? route.cc : undefined;
 
-    const subscriberMailOptions = {
-      replyTo: 'media@zawrindustries.com',
-      to: cleanEmail,
-      subject: confirmEmail.subject,
-      text: confirmEmail.text,
-      html: confirmEmail.html,
-    };
+    // 1. Confirmation Email to Subscriber (if autoResponder active)
+    let sendTasks: Promise<any>[] = [];
 
-    // 2. Internal alert to Newsroom Team
-    const internalMailOptions = {
-      to: 'media@zawrindustries.com',
-      subject: `[New Newsletter Subscriber] ${cleanEmail}`,
-      text: `New subscriber registered for Zawr News Alerts:\n\nEmail: ${cleanEmail}\nTimestamp: ${new Date().toISOString()}`,
-    };
+    if (route.autoResponder) {
+      const confirmEmail = generateNewsletterConfirmationEmail({ email: cleanEmail });
+      sendTasks.push(
+        sendMailWithPoolFailover({
+          replyTo: destination,
+          to: cleanEmail,
+          subject: confirmEmail.subject,
+          text: confirmEmail.text,
+          html: confirmEmail.html,
+        })
+      );
+    }
 
-    await Promise.all([
-      sendMailWithPoolFailover(subscriberMailOptions),
-      sendMailWithPoolFailover(internalMailOptions).catch(() => {}),
-    ]);
+    // 2. Internal alert to Destination Mailbox (from Routing Engine)
+    sendTasks.push(
+      sendMailWithPoolFailover({
+        to: destination,
+        cc: cc ? cc.join(', ') : undefined,
+        subject: `${route.subjectPrefix || '[NEWSLETTER-OPTIN]'} New Subscriber: ${cleanEmail}`,
+        text: `New subscriber registered for Zawr Strategic Dispatch & News Alerts:\n\nEmail: ${cleanEmail}\nIP Address: ${clientIp}\nTimestamp: ${new Date().toISOString()}`,
+      }).catch((e) => console.warn('Internal newsletter notification notice:', e))
+    );
+
+    await Promise.all(sendTasks);
 
     // Log real email telemetry
     logEmailDispatch({

@@ -100,7 +100,8 @@ export async function POST(request: Request) {
         summary,
         image: imageUrl,
         readTime,
-        sections
+        sections,
+        helpfulness: { yes: 0, no: 0 }
       };
 
       if (action === 'add') {
@@ -113,7 +114,8 @@ export async function POST(request: Request) {
             ...blogs[index],
             ...blogData,
             image: imageUrl || blogs[index].image,
-            authorImage: authorImageUrl || blogs[index].authorImage
+            authorImage: authorImageUrl || blogs[index].authorImage,
+            helpfulness: blogs[index].helpfulness || { yes: 0, no: 0 }
           };
         }
       }

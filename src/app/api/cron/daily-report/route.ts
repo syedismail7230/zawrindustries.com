@@ -26,6 +26,10 @@ export async function GET(req: Request) {
       recipient: summary.recipient,
       totalPageViews: summary.performance.totalPageViews24h,
       emailsDispatched: summary.emailsSummary.totalDispatched24h,
+      newsletterDispatched24h: summary.newsletterSummary.totalSent24h,
+      newsletterDispatchedAllTime: summary.newsletterSummary.totalSentAllTime,
+      activeSubscribersCount: summary.newsletterSummary.activeSubscribersCount,
+      publishingCadence: summary.newsletterSummary.scheduledCadence,
       applicationsCount: summary.applicationsSummary.totalApplications24h,
       messageId: result.messageId,
       error: result.error

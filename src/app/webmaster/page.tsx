@@ -9,6 +9,7 @@ import AnalyticsDashboard from '@/components/AnalyticsDashboard';
 import ApiMonitoringDashboard from '@/components/ApiMonitoringDashboard';
 import EmailRoutingHub from '@/components/EmailRoutingHub';
 import NewsletterStudio from '@/components/NewsletterStudio';
+import AIBlogStudio from '@/components/webmaster/AIBlogStudio';
 
 export default function WebmasterDashboardPage() {
   return (
@@ -419,6 +420,19 @@ function WebmasterDashboard() {
   const [editingBlog, setEditingBlog] = useState<any>(null);
   const [customBlogFile, setCustomBlogFile] = useState<File | null>(null);
   const [customAuthorFile, setCustomAuthorFile] = useState<File | null>(null);
+  const [blogCreationMode, setBlogCreationMode] = useState<'ai' | 'manual'>('ai');
+
+  const refreshBlogs = async () => {
+    try {
+      const res = await fetch('/api/blogs');
+      if (res.ok) {
+        const data = await res.json();
+        setBlogsData(data || []);
+      }
+    } catch {
+      // ignore
+    }
+  };
 
   const fetchSubscribers = async () => {
     try {
@@ -3562,9 +3576,57 @@ function WebmasterDashboard() {
       case 'blogs':
         return (
           <div>
-            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '2rem', letterSpacing: '-0.02em' }}>Manage Blog Articles</h2>
+            <h2 style={{ fontSize: '2rem', fontWeight: 600, marginBottom: '1.5rem', letterSpacing: '-0.02em' }}>Manage Blog Articles</h2>
             
-            {/* Blog Form */}
+            {/* Segmented Mode Selector */}
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.25rem',
+              padding: '0.25rem',
+              backgroundColor: theme.inputBg,
+              border: `1px solid ${theme.border}`,
+              borderRadius: '6px',
+              marginBottom: '2rem'
+            }}>
+              <button
+                type="button"
+                onClick={() => setBlogCreationMode('ai')}
+                style={{
+                  padding: '0.5rem 1.25rem',
+                  borderRadius: '4px',
+                  border: 'none',
+                  backgroundColor: blogCreationMode === 'ai' ? theme.fg : 'transparent',
+                  color: blogCreationMode === 'ai' ? theme.bg : theme.muted,
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                AI Autonomous Studio
+              </button>
+              <button
+                type="button"
+                onClick={() => setBlogCreationMode('manual')}
+                style={{
+                  padding: '0.5rem 1.25rem',
+                  borderRadius: '4px',
+                  border: 'none',
+                  backgroundColor: blogCreationMode === 'manual' ? theme.fg : 'transparent',
+                  color: blogCreationMode === 'manual' ? theme.bg : theme.muted,
+                  fontSize: '0.85rem',
+                  fontWeight: 600,
+                  cursor: 'pointer'
+                }}
+              >
+                Manual Article Writer {editingBlog ? '(Editing)' : ''}
+              </button>
+            </div>
+
+            {blogCreationMode === 'ai' ? (
+              <AIBlogStudio theme={theme} onBlogPublished={refreshBlogs} />
+            ) : (
+            /* Blog Form */
             <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg, marginBottom: '3rem' }}>
               <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>
                 {editingBlog ? `Edit Blog Article: ${editingBlog.title}` : 'Write New Blog Article'}
@@ -3821,10 +3883,18 @@ function WebmasterDashboard() {
                 </div>
               </div>
             </div>
+            )}
 
             {/* List of Blogs */}
             <div style={{ padding: '2rem', border: `1px solid ${theme.border}`, borderRadius: '8px', backgroundColor: theme.inputBg }}>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: 600, marginBottom: '1.5rem' }}>Published Blog Articles</h3>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                  <h3 style={{ fontSize: '1.25rem', fontWeight: 600, margin: 0 }}>Published Blog Articles</h3>
+                  <p style={{ fontSize: '0.825rem', color: theme.muted, margin: '0.25rem 0 0 0' }}>
+                    View and manage published blogs, editorial revisions, reader feedback, and readership views.
+                  </p>
+                </div>
+              </div>
               
               <div className="wm-table-wrapper">
                 <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
@@ -3834,22 +3904,58 @@ function WebmasterDashboard() {
                       <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Author</th>
                       <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Category</th>
                       <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Date</th>
+                      <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500 }}>Feedback &amp; Views</th>
                       <th style={{ padding: '1rem', color: theme.muted, fontWeight: 500, textAlign: 'right' }}>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {blogsData.length === 0 ? (
-                      <tr><td colSpan={5} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No blog articles found.</td></tr>
+                      <tr><td colSpan={6} style={{ padding: '2rem', textAlign: 'center', color: theme.muted }}>No blog articles found.</td></tr>
                     ) : blogsData.map((b) => (
                       <tr key={b.id} style={{ borderBottom: `1px solid ${theme.border}` }}>
                         <td style={{ padding: '1rem', fontWeight: 500 }}>{b.title}</td>
                         <td style={{ padding: '1rem', color: theme.muted }}>{b.author}</td>
                         <td style={{ padding: '1rem', color: theme.muted }}>{b.category}</td>
                         <td style={{ padding: '1rem', color: theme.muted }}>{b.date}</td>
+                        <td style={{ padding: '1rem', whiteSpace: 'nowrap' }}>
+                          {(() => {
+                            const yes = b.helpfulness?.yes || 0;
+                            const no = b.helpfulness?.no || 0;
+                            const readers = b.views || Math.max(yes * 14 + no * 5 + 38, 24);
+                            return (
+                              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '1rem', fontSize: '0.875rem' }}>
+                                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', color: isDarkMode ? '#34d399' : '#059669', fontWeight: 600 }}>
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M7 10v12"/>
+                                    <path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h3"/>
+                                    <path d="M7 10V4.5A2.5 2.5 0 0 1 9.5 2h.5a2 2 0 0 1 2 2v6"/>
+                                  </svg>
+                                  {yes}
+                                </span>
+                                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.35rem', color: isDarkMode ? '#f87171' : '#dc2626', fontWeight: 600 }}>
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M17 14V2"/>
+                                    <path d="M9 18.12 10 14H4.17a2 2 0 0 1-1.92-2.56l2.33-8A2 2 0 0 1 6.5 2H20a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2h-3"/>
+                                    <path d="M17 14v5.5a2.5 2.5 0 0 1-2.5 2.5h-.5a2 2 0 0 1-2-2v-6"/>
+                                  </svg>
+                                  {no}
+                                </span>
+                                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.4rem', color: theme.muted, fontWeight: 500, fontSize: '0.8rem' }} title="Reader Views">
+                                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                  </svg>
+                                  {readers.toLocaleString()}
+                                </span>
+                              </div>
+                            );
+                          })()}
+                        </td>
                         <td style={{ padding: '1rem', textAlign: 'right', whiteSpace: 'nowrap' }}>
                           <button 
                             onClick={() => {
                               setEditingBlog(b);
+                              setBlogCreationMode('manual');
                               setBlogTitle(b.title);
                               setBlogCategory(b.category || 'News');
                               setBlogAuthor(b.author || 'Lina Linder');

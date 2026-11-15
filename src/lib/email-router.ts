@@ -227,14 +227,43 @@ export function resolveFormRoute(formIdOrPath: string): {
   subjectPrefix: string;
 } {
   const routes = getEmailRoutes();
-  const cleanKey = formIdOrPath.toLowerCase().replace('/', '').trim();
+  const rawKey = formIdOrPath.toLowerCase().trim();
+  const normalizedKey = rawKey.replace(/^(\/api\/|\/)/, '').replace(/[\/\-_]/g, '');
 
-  const matched = routes.find(
-    r =>
-      r.formId.toLowerCase() === cleanKey ||
-      r.formPath.toLowerCase().includes(cleanKey) ||
-      cleanKey.includes(r.formId.toLowerCase())
-  );
+  // Alias dictionary for canonical form mapping across endpoints & visual node graph
+  const ALIAS_MAP: Record<string, string[]> = {
+    'careers': ['applyjob', 'job', 'jobs', 'careers', 'career', 'recruitment'],
+    'freelance': ['applyfreelance', 'freelance', 'contractor', 'consultant'],
+    'callback': ['requestcallback', 'callback', 'call'],
+    'investor': ['requestinvestor', 'investor', 'investors', 'pitchdeck', 'capital'],
+    'media-kit': ['requestmediakit', 'mediakit', 'presskit', 'assets'],
+    'pr': ['requestpr', 'pr', 'pressrelease', 'pressinquiry', 'journalist'],
+    'partner': ['requestpartner', 'partner', 'partners', 'partnership', 'alliances'],
+    'rsvp': ['rsvp', 'event', 'events', 'summit'],
+    'sponsorship': ['sponsorship', 'grant', 'sponsor'],
+    'newsletter': ['newsletter', 'subscribe', 'blognewsletter', 'dispatch'],
+    'contact': ['contact', 'general', 'inquiry', 'support']
+  };
+
+  const matched = routes.find(r => {
+    if (r.status === 'paused') return false;
+    const rId = r.id.toLowerCase();
+    const rFormId = r.formId.toLowerCase().replace(/[\/\-_]/g, '');
+    const rPath = r.formPath.toLowerCase().replace(/[\/\-_]/g, '');
+
+    if (rFormId === normalizedKey || rPath === normalizedKey || rId.includes(normalizedKey)) {
+      return true;
+    }
+
+    // Check canonical alias map
+    for (const [canonical, aliases] of Object.entries(ALIAS_MAP)) {
+      if (aliases.includes(normalizedKey) && (r.formId.toLowerCase() === canonical || r.id.toLowerCase().includes(canonical))) {
+        return true;
+      }
+    }
+
+    return false;
+  });
 
   if (matched && matched.status === 'active') {
     return {

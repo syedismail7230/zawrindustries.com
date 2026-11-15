@@ -737,7 +737,7 @@ function UnsubscribeContent() {
           </div>
           <div style={{ marginTop: '0.5rem' }}>
             <Link
-              href="/privacy-policy"
+              href="/legal/privacy-policy"
               style={{ color: '#666666', textDecoration: 'underline', marginRight: '0.75rem' }}
             >
               Privacy Policy

@@ -49,6 +49,7 @@ export default function robots(): MetadataRoute.Robots {
     ],
     sitemap: [
       'https://zawrindustries.com/sitemap.xml',
+      'https://zawrindustries.com/sitemap-news.xml',
     ],
     host: 'https://zawrindustries.com',
   };

@@ -34,6 +34,7 @@
     "trafficPerformance": true,
     "formSubmissions": true,
     "emailDispatchStats": true,
+    "newsletterOperations": true,
     "antiSpamShield": true,
     "smtpDiagnostics": true,
     "recentDispatchesLog": true
