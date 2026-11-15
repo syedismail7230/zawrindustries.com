@@ -90,8 +90,6 @@ export default function SustainabilityEnvironmentPage() {
         overflowX: 'hidden',
       }}
     >
-      <title>Environmental Sustainability | Zawr Industries</title>
-      <meta name="description" content="Discover Zawr Industries' commitments to environmental sustainability, clean energy, ecological equilibrium, and carbon-neutral initiatives." />
       {/* ── IMAGE SECTION ────────────────────────────────────────────── */}
       {/* Single position:relative wrapper — image sets the height, text sits on top */}
       <div style={{ position: 'relative', width: '100%' }}>

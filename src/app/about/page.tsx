@@ -107,7 +107,6 @@ export default function AboutPage() {
       />
 
       <main style={{ backgroundColor: '#ffffff', minHeight: '100vh' }}>
-        <h1 className="sr-only">About Zawr Industries — Corporate Overview & Governance</h1>
         {/* Master Hero Banner */}
         <AboutHero />
 

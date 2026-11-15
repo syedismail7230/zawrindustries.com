@@ -31,8 +31,6 @@ export default function NotificationsPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', color: '#000000', paddingTop: '8rem', paddingBottom: '6rem', fontFamily: 'Inter, system-ui, sans-serif' }}>
-      <title>Corporate Notifications | Zawr Industries</title>
-      <meta name="description" content="Official corporate notifications, operational updates, and announcements from Zawr Industries." />
       <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '0 2rem' }}>
 
         {/* Header */}

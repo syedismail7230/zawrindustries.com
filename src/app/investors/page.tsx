@@ -118,8 +118,6 @@ export default function InvestorsPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', fontFamily: 'sans-serif' }}>
-      <title>Investor Relations & Governance | Zawr Industries</title>
-      <meta name="description" content="Investor relations, audited financial reports, shareholder governance, and corporate disclosures for Zawr Industries LLP." />
       <BreadcrumbJsonLd
         items={[
           { name: 'Home', item: '/' },

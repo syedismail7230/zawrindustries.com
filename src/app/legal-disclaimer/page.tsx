@@ -6,8 +6,6 @@ import Link from 'next/link';
 export default function LegalDisclaimerPage() {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', paddingTop: '8rem', paddingBottom: '6rem', fontFamily: 'Inter, sans-serif' }}>
-      <title>Legal Disclaimer | Zawr Industries</title>
-      <meta name="description" content="Official Legal Disclaimer and Terms of Information for Zawr Industries LLP." />
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 2rem' }}>
 
         {/* Breadcrumb */}

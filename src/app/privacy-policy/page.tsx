@@ -6,8 +6,6 @@ import Link from 'next/link';
 export default function PrivacyPolicyPage() {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', paddingTop: '8rem', paddingBottom: '6rem', fontFamily: 'Inter, sans-serif' }}>
-      <title>Privacy Policy | Zawr Industries</title>
-      <meta name="description" content="Official Privacy Policy and Data Protection standards of Zawr Industries LLP." />
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 2rem' }}>
 
         {/* Breadcrumb */}

@@ -198,8 +198,6 @@ function FinancialReportContent() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: theme.bg, color: theme.fg, fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-      <title>Financial Reports & Filings | Zawr Industries</title>
-      <meta name="description" content="Official repository of financial reports, quarterly filings, audit balance statements, and investor disclosures for Zawr Industries LLP." />
       
       {/* Immersive Fullscreen PDF Viewer Modal Overlay */}
       {activePdfUrl && (

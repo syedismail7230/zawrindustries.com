@@ -31,8 +31,6 @@ export default function NoticesPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#ffffff', color: '#000000', paddingTop: '8rem', paddingBottom: '6rem', fontFamily: 'Inter, system-ui, sans-serif' }}>
-      <title>Public & Regulatory Notices | Zawr Industries</title>
-      <meta name="description" content="Public notices, statutory disclosures, and regulatory notifications from Zawr Industries LLP." />
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '0 2rem' }}>
 
         {/* Header */}
