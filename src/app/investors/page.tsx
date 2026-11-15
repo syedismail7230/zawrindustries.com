@@ -118,6 +118,8 @@ export default function InvestorsPage() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', fontFamily: 'sans-serif' }}>
+      <title>Investor Relations & Governance | Zawr Industries</title>
+      <meta name="description" content="Investor relations, audited financial reports, shareholder governance, and corporate disclosures for Zawr Industries LLP." />
       <BreadcrumbJsonLd
         items={[
           { name: 'Home', item: '/' },
@@ -875,9 +877,7 @@ export default function InvestorsPage() {
 
               {/* Node 1: Firm AI (Inner Orbit, Left at 160 degrees) */}
               <a 
-                href="https://www.firm.expert/" 
-                target="_blank" 
-                rel="noopener noreferrer"
+                href="/industries/it-service/ai-data-analytics" 
                 onMouseEnter={() => setHoveredOrbit(1)}
                 onMouseLeave={() => setHoveredOrbit(null)}
               >

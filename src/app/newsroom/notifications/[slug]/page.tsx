@@ -41,8 +41,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     const fullImageUrl = 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710544/zawr/assets/public-relations-hero.png';
 
+    const cleanTitle = notification.title.length > 50 ? `${notification.title.slice(0, 48)}...` : notification.title;
+
     return {
-      title: `${notification.title} | Zawr Industries Corporate Notification`,
+      title: cleanTitle,
       description: notification.summary,
       alternates: {
         canonical: `https://zawrindustries.com/newsroom/notifications/${slug}`,

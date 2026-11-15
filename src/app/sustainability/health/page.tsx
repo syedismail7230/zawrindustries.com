@@ -12,6 +12,8 @@ const playfair = Playfair_Display({
 export default function SustainabilityHealthPage() {
   return (
     <div style={{ backgroundColor: '#ffffff', color: '#111111', fontFamily: 'Inter, sans-serif' }}>
+      <title>Health & Community Wellbeing | Zawr Industries</title>
+      <meta name="description" content="Prioritizing workforce wellness, preventative healthcare technology, and community vitality across Zawr Industries." />
 
       {/* ── HERO IMAGE — curved corners, below header ─────────────────── */}
       <div style={{ padding: 'clamp(8rem, 11vw, 9.5rem) 1.5rem 0', backgroundColor: '#ffffff' }}>

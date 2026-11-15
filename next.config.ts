@@ -123,6 +123,36 @@ const nextConfig: NextConfig = {
         destination: '/newsroom/press-release/:slug*',
         permanent: true,
       },
+      {
+        source: '/investors/shares',
+        destination: '/investors',
+        permanent: true,
+      },
+      {
+        source: '/investors/subsidiaries',
+        destination: '/investors#subsidiaries-associates',
+        permanent: true,
+      },
+      {
+        source: '/investors/shareholders-info',
+        destination: '/contact/client-relations',
+        permanent: true,
+      },
+      {
+        source: '/investors/resource-centre',
+        destination: '/investors#events-presentations',
+        permanent: true,
+      },
+      {
+        source: '/investors/notice-of-forfeiture',
+        destination: '/notices',
+        permanent: true,
+      },
+      {
+        source: '/platforms',
+        destination: '/industries/it-service',
+        permanent: true,
+      },
     ];
   },
 };

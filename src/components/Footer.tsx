@@ -227,7 +227,7 @@ export default function Footer() {
         <div className="footer-col">
           <h4>Platforms</h4>
           <ul className="footer-links">
-            <li><a href="https://www.firm.expert/" target="_blank" rel="noopener noreferrer">Firm AI</a></li>
+            <li><Link href="/industries/it-service/ai-data-analytics">Firm AI</Link></li>
             <li><a href="https://sketchstudio.dev/" target="_blank" rel="noopener noreferrer">Sketch Studio</a></li>
             <li><a href="https://ai.zawrindustries.com/" target="_blank" rel="noopener noreferrer">Zawr AI</a></li>
             <li><a href="https://crm.zawrindustries.com/" target="_blank" rel="noopener noreferrer">Quick Dial</a></li>
@@ -267,13 +267,13 @@ export default function Footer() {
         <div className="footer-col">
           <h4>Investors</h4>
           <ul className="footer-links">
+            <li><Link href="/investors">Investor Overview</Link></li>
             <li><Link href="/investors/financial-report">Financial Reporting</Link></li>
-            <li><Link href="/investors/shares">Shares</Link></li>
+            <li><Link href="/investors/interest">Investor Relations Desk</Link></li>
+            <li><Link href="/investors#subsidiaries-associates">Subsidiaries & Associates</Link></li>
             <li><Link href="/investors#events-presentations">Events & Presentations</Link></li>
-            <li><Link href="/investors/subsidiaries">Subsidiaries & Associates</Link></li>
-            <li><Link href="/investors/shareholders-info">Shareholders' Information</Link></li>
-            <li><Link href="/investors/resource-centre">Resource Center</Link></li>
-            <li><Link href="/investors/notice-of-forfeiture">Notice Of Forfeiture</Link></li>
+            <li><Link href="/contact/client-relations">Shareholder Inquiries</Link></li>
+            <li><Link href="/notices">Regulatory Notices</Link></li>
           </ul>
         </div>
 
@@ -281,11 +281,11 @@ export default function Footer() {
         <div className="footer-col">
           <h4>Quick Links</h4>
           <ul className="footer-links">
-            <li><a href="https://www.firm.expert/" target="_blank" rel="noopener noreferrer">Firm AI</a></li>
-            <li><a href="https://sketchstudio.dev/" target="_blank" rel="noopener noreferrer">Sketch Studio</a></li>
-            <li><a href="https://ai.zawrindustries.com/" target="_blank" rel="noopener noreferrer">Zawr AI</a></li>
-            <li><a href="https://crm.zawrindustries.com/" target="_blank" rel="noopener noreferrer">Quick Dial</a></li>
-            <li><a href="https://velocityos.in/" target="_blank" rel="noopener noreferrer">VelocityOS</a></li>
+            <li><Link href="/about">About Us</Link></li>
+            <li><Link href="/industries/it-service">IT & Software</Link></li>
+            <li><Link href="/careers">Careers</Link></li>
+            <li><Link href="/newsroom">Newsroom</Link></li>
+            <li><Link href="/contact">Contact</Link></li>
             <li><Link href="/sitemap">Sitemap</Link></li>
           </ul>
         </div>

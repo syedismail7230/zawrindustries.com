@@ -42,8 +42,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       ? (blog.image.startsWith('http') ? blog.image : `https://zawrindustries.com${blog.image}`) 
       : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png';
 
+    const cleanTitle = blog.title.length > 50 ? `${blog.title.slice(0, 48)}...` : blog.title;
+
     return {
-      title: `${blog.title} | Zawr Industries Blog`,
+      title: cleanTitle,
       description: blog.summary,
       alternates: {
         canonical: `https://zawrindustries.com/about/blog/${slug}`,

@@ -198,6 +198,8 @@ function FinancialReportContent() {
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: theme.bg, color: theme.fg, fontFamily: 'system-ui, -apple-system, sans-serif' }}>
+      <title>Financial Reports & Filings | Zawr Industries</title>
+      <meta name="description" content="Official repository of financial reports, quarterly filings, audit balance statements, and investor disclosures for Zawr Industries LLP." />
       
       {/* Immersive Fullscreen PDF Viewer Modal Overlay */}
       {activePdfUrl && (
@@ -237,9 +239,9 @@ function FinancialReportContent() {
               </svg>
               Close Document
             </button>
-            <h2 style={{ fontSize: '1.25rem', fontWeight: 600, letterSpacing: '-0.02em', margin: 0, color: '#fff' }}>
+            <div role="heading" aria-level={2} style={{ fontSize: '1.25rem', fontWeight: 600, letterSpacing: '-0.02em', margin: 0, color: '#fff' }}>
               {activePdfTitle || 'Financial Document'}
-            </h2>
+            </div>
             <div style={{ width: '100px' }}></div>
           </div>
 

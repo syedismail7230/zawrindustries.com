@@ -294,8 +294,10 @@ export default function EventsPage() {
         </div>
 
         {/* SECTION HEADER */}
+        <title>Corporate Events & Summits | Zawr Industries</title>
+        <meta name="description" content="Official events, summits, keynotes, and executive forums hosted by Zawr Industries." />
         <div style={{ textAlign: 'center', marginBottom: '5rem' }}>
-          <h2 style={{ fontSize: '2.8rem', fontWeight: 400, letterSpacing: '-0.03em', color: '#ffffff' }}>Events</h2>
+          <h1 style={{ fontSize: '2.8rem', fontWeight: 400, letterSpacing: '-0.03em', color: '#ffffff' }}>Events</h1>
         </div>
 
         {/* MAIN INTERACTIVE CONTENT */}

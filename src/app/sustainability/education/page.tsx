@@ -11,6 +11,8 @@ const schoolbell = Schoolbell({
 export default function SustainabilityEducationPage() {
   return (
     <div className={schoolbell.className} style={{ backgroundColor: '#ffffff', color: '#111111' }}>
+      <title>Educational Initiatives | Zawr Industries</title>
+      <meta name="description" content="Building futures through curiosity, learning capabilities, and educational programs at Zawr Industries." />
 
       {/* ── HERO — text left, image right ─────────────────────────────── */}
       <div style={{

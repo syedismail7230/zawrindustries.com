@@ -294,6 +294,8 @@ export default function CareersPage() {
 
   return (
     <div suppressHydrationWarning style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', paddingTop: '8rem', overflow: 'hidden', fontFamily: 'sans-serif' }}>
+      <title>Careers & Opportunities | Zawr Industries</title>
+      <meta name="description" content="Explore open roles, engineering careers, internships, and freelance opportunities at Zawr Industries." />
       <BreadcrumbJsonLd
         items={[
           { name: 'Home', item: '/' },

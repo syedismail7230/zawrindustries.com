@@ -69,6 +69,7 @@ export default function RealEstatePage() {
 
   return (
     <div style={{ backgroundColor: '#ffffff', color: '#111111', minHeight: '100vh', overflowX: 'clip' }}>
+      <h1 className="sr-only">Real Estate & Infrastructure Development — Zawr Estate</h1>
       <BreadcrumbJsonLd
         items={[
           { name: 'Home', item: '/' },

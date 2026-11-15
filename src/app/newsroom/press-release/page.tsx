@@ -67,6 +67,8 @@ export default function PressReleasesPage() {
 
   return (
     <div suppressHydrationWarning style={{ minHeight: '100vh', backgroundColor: '#ffffff', color: '#000000', paddingTop: '8rem', paddingBottom: '6rem', fontFamily: 'Inter, system-ui, sans-serif' }}>
+      <title>Press Releases | Zawr Industries</title>
+      <meta name="description" content="Official press releases, media statements, product launches, and strategic announcements from Zawr Industries." />
       <style dangerouslySetInnerHTML={{ __html: `
         .press-card {
           transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);

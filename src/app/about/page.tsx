@@ -14,7 +14,7 @@ import AboutInnovation from '@/components/about/AboutInnovation';
 import AboutCodeOfConduct from '@/components/about/AboutCodeOfConduct';
 
 export const metadata: Metadata = {
-  title: 'About Zawr Industries LLP — Corporate Profile & 11 Governance Pillars',
+  title: 'About Us & Corporate Governance',
   description: 'Explore Zawr Industries LLP corporate history, Board of Directors, awards, global impact, technology blog, core values, vision, mission, CSR, innovation, and code of conduct.',
   keywords: [
     'Zawr Industries LLP',
@@ -107,6 +107,7 @@ export default function AboutPage() {
       />
 
       <main style={{ backgroundColor: '#ffffff', minHeight: '100vh' }}>
+        <h1 className="sr-only">About Zawr Industries — Corporate Overview & Governance</h1>
         {/* Master Hero Banner */}
         <AboutHero />
 

@@ -8,7 +8,7 @@ import HomeNewsroomSection from '@/components/HomeNewsroomSection';
 import AboutBlog from '@/components/about/AboutBlog';
 
 export const metadata: Metadata = {
-  title: 'Zawr Industries — Technology, Manufacturing & Logistics Conglomerate | Bangalore',
+  title: 'Zawr Industries — Multi-Sector Technology & Operations',
   description: "Zawr Industries LLP is a multi-sector industrial conglomerate delivering IT services, AI platforms, logistics, manufacturing, and real estate solutions across India, UAE, USA, and international markets.",
   keywords: [
     'Zawr Industries LLP',

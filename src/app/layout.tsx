@@ -10,7 +10,10 @@ import ClientAnalyticsTracker from '@/components/ClientAnalyticsTracker';
 const inter = Inter({ subsets: ['latin'], display: 'swap' });
 
 export const metadata: Metadata = {
-  title: 'Zawr Industries — Multi-Sector Technology, Manufacturing & Logistics Conglomerate',
+  title: {
+    default: 'Zawr Industries — Multi-Sector Technology & Operations',
+    template: '%s | Zawr Industries',
+  },
   description: 'Zawr Industries LLP is a leading multi-sector conglomerate delivering IT services, AI platforms, logistics automation, precision manufacturing, and real estate solutions across India, UAE, USA, and global markets.',
   metadataBase: new URL('https://zawrindustries.com'),
   alternates: {
@@ -49,7 +52,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: 'Zawr Industries — Multi-Sector Technology, Manufacturing & Logistics Conglomerate',
+    title: 'Zawr Industries — Technology, Manufacturing & Logistics',
     description: 'Empowering global enterprises with AI engineering, scalable software platforms, automated logistics, and sustainable industrial solutions.',
     url: 'https://zawrindustries.com',
     siteName: 'Zawr Industries LLP',
@@ -132,7 +135,7 @@ export default function RootLayout({
                     "@type": "Place",
                     "name": "Bengaluru, Karnataka, India"
                   },
-                  "founders": [
+                  "founder": [
                     {
                       "@type": "Person",
                       "name": "Mohammed Ahmed",
@@ -193,15 +196,21 @@ export default function RootLayout({
                     "itemListElement": [
                       {
                         "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/InStock",
                         "itemOffered": {
                           "@type": "SoftwareApplication",
                           "name": "Firm AI",
-                          "url": "https://www.firm.expert/",
+                          "url": "https://zawrindustries.com/industries/it-service/ai-data-analytics",
                           "description": "Enterprise Decision Intelligence & AI Automation Engine"
                         }
                       },
                       {
                         "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/InStock",
                         "itemOffered": {
                           "@type": "SoftwareApplication",
                           "name": "VelocityOS",
@@ -211,6 +220,9 @@ export default function RootLayout({
                       },
                       {
                         "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/InStock",
                         "itemOffered": {
                           "@type": "SoftwareApplication",
                           "name": "Sketch Studio",
@@ -220,6 +232,9 @@ export default function RootLayout({
                       },
                       {
                         "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/InStock",
                         "itemOffered": {
                           "@type": "SoftwareApplication",
                           "name": "Zawr AI",
@@ -229,6 +244,9 @@ export default function RootLayout({
                       },
                       {
                         "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/InStock",
                         "itemOffered": {
                           "@type": "SoftwareApplication",
                           "name": "Quick Dial",
@@ -238,6 +256,9 @@ export default function RootLayout({
                       },
                       {
                         "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/InStock",
                         "itemOffered": {
                           "@type": "Service",
                           "name": "IT & Software Engineering Services",
@@ -247,6 +268,9 @@ export default function RootLayout({
                       },
                       {
                         "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/InStock",
                         "itemOffered": {
                           "@type": "Service",
                           "name": "Transport & Logistics Automation",
@@ -256,6 +280,9 @@ export default function RootLayout({
                       },
                       {
                         "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/InStock",
                         "itemOffered": {
                           "@type": "Service",
                           "name": "Precision Manufacturing & Industrial Robotics",
@@ -265,6 +292,9 @@ export default function RootLayout({
                       },
                       {
                         "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/InStock",
                         "itemOffered": {
                           "@type": "Service",
                           "name": "Real Estate Development & Asset Management",
@@ -274,6 +304,9 @@ export default function RootLayout({
                       },
                       {
                         "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/InStock",
                         "itemOffered": {
                           "@type": "Service",
                           "name": "Clean Energy Transition & EV Forecourt Infrastructure",
@@ -283,6 +316,9 @@ export default function RootLayout({
                       },
                       {
                         "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD",
+                        "availability": "https://schema.org/InStock",
                         "itemOffered": {
                           "@type": "Service",
                           "name": "Holding Company & Multi-Brand Franchise Operations",
@@ -298,6 +334,7 @@ export default function RootLayout({
                   "@id": "https://zawrindustries.com/#localbusiness",
                   "name": "Zawr Industries LLP — Global Headquarters",
                   "url": "https://zawrindustries.com",
+                  "image": "https://res.cloudinary.com/murfclni/image/upload/f_avif,q_auto:eco,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png",
                   "telephone": "+91-9880464078",
                   "email": "info@zawrindustries.com",
                   "priceRange": "$$$$",

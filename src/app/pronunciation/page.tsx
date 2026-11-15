@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import PronunciationClient from './PronunciationClient';
 
 export const metadata: Metadata = {
-  title: 'How to Pronounce ZAWR (ZA-VAR) — Official Brand Pronunciation & Phonetic Guide | Zawr Industries',
+  title: 'Brand Pronunciation & Phonetic Guide',
   description:
     'The official pronunciation of ZAWR is "ZA-VAR" (/zɑːvɑːr/). Explore our audio guide in 7 languages, phonetic breakdown, IPA spelling, and syllable acoustics for Zawr Industries.',
   keywords: [

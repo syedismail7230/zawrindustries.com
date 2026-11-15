@@ -6,6 +6,8 @@ import Link from 'next/link';
 export default function EqualOpportunityPage() {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', paddingTop: '8rem', paddingBottom: '6rem', fontFamily: 'Inter, sans-serif' }}>
+      <title>Equal Opportunity Policy | Zawr Industries</title>
+      <meta name="description" content="Zawr Industries LLP Equal Opportunity and Workplace Inclusivity Policy." />
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '0 2rem' }}>
         
         {/* Breadcrumb Navigation */}

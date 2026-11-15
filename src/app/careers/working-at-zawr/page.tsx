@@ -6,6 +6,8 @@ import Link from 'next/link';
 export default function WorkingAtZawrPage() {
   return (
     <div style={{ minHeight: '100vh', backgroundColor: '#000000', color: '#ffffff', fontFamily: 'Inter, sans-serif' }}>
+      <title>Working at Zawr | Zawr Industries</title>
+      <meta name="description" content="Discover life, culture, work principles, and employee innovation at Zawr Industries." />
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');`}</style>
       
       {/* Immersive Mockup Full-Bleed Hero Banner */}

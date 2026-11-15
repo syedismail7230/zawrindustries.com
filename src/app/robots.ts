@@ -6,7 +6,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: '*',
         allow: '/',
-        disallow: ['/api/', '/_next/', '/private/'],
+        disallow: ['/api/', '/private/'],
       },
       {
         // Traditional Search Engine Crawlers
@@ -22,7 +22,7 @@ export default function robots(): MetadataRoute.Robots {
           'LinkedInBot',
         ],
         allow: '/',
-        disallow: ['/api/', '/_next/', '/private/'],
+        disallow: ['/api/', '/private/'],
       },
       {
         // Generative Engine & AI LLM Crawlers (GEO / AEO)
@@ -44,7 +44,7 @@ export default function robots(): MetadataRoute.Robots {
           'Diffbot'
         ],
         allow: '/',
-        disallow: ['/api/', '/_next/', '/private/'],
+        disallow: ['/api/', '/private/'],
       },
     ],
     sitemap: [

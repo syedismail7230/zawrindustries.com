@@ -90,6 +90,8 @@ export default function SustainabilityEnvironmentPage() {
         overflowX: 'hidden',
       }}
     >
+      <title>Environmental Sustainability | Zawr Industries</title>
+      <meta name="description" content="Discover Zawr Industries' commitments to environmental sustainability, clean energy, ecological equilibrium, and carbon-neutral initiatives." />
       {/* ── IMAGE SECTION ────────────────────────────────────────────── */}
       {/* Single position:relative wrapper — image sets the height, text sits on top */}
       <div style={{ position: 'relative', width: '100%' }}>
@@ -187,19 +189,35 @@ export default function SustainabilityEnvironmentPage() {
                 textAlign: sec.alignment === 'right' ? 'right' : 'left',
               }}
             >
-              <h2
-                style={{
-                  fontSize: 'clamp(2rem, 4vw, 3.4rem)',
-                  fontWeight: 300,
-                  color: '#ffffff',
-                  letterSpacing: '-0.02em',
-                  margin: 0,
-                  lineHeight: 1.1,
-                  textShadow: '0 3px 18px rgba(0,0,0,0.85)',
-                }}
-              >
-                {sec.text}
-              </h2>
+              {sec.id === 1 ? (
+                <h1
+                  style={{
+                    fontSize: 'clamp(2rem, 4vw, 3.4rem)',
+                    fontWeight: 300,
+                    color: '#ffffff',
+                    letterSpacing: '-0.02em',
+                    margin: 0,
+                    lineHeight: 1.1,
+                    textShadow: '0 3px 18px rgba(0,0,0,0.85)',
+                  }}
+                >
+                  {sec.text}
+                </h1>
+              ) : (
+                <h2
+                  style={{
+                    fontSize: 'clamp(2rem, 4vw, 3.4rem)',
+                    fontWeight: 300,
+                    color: '#ffffff',
+                    letterSpacing: '-0.02em',
+                    margin: 0,
+                    lineHeight: 1.1,
+                    textShadow: '0 3px 18px rgba(0,0,0,0.85)',
+                  }}
+                >
+                  {sec.text}
+                </h2>
+              )}
               <p
                 style={{
                   fontSize: 'clamp(0.8rem, 1.2vw, 1rem)',

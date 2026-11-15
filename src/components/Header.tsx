@@ -130,8 +130,8 @@ export default function Header() {
 
     // Smart navigation dictionary
     const routes: Record<string, string> = {
-      'firm': 'https://www.firm.expert/',
-      'firm ai': 'https://www.firm.expert/',
+      'firm': '/industries/it-service/ai-data-analytics',
+      'firm ai': '/industries/it-service/ai-data-analytics',
       'sketch': 'https://sketchstudio.dev/',
       'sketch studio': 'https://sketchstudio.dev/',
       'zawr ai': 'https://ai.zawrindustries.com/',
@@ -264,7 +264,7 @@ export default function Header() {
             </span>
           </div>
           <div className={`dropdown ${activeMobileSubmenu === 'platforms' ? 'mobile-submenu-open' : ''}`}>
-            <a href="https://www.firm.expert/" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>Firm AI</a>
+            <Link href="/industries/it-service/ai-data-analytics" onClick={closeMobileMenu}>Firm AI</Link>
             <a href="https://sketchstudio.dev/" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>Sketch Studio</a>
             <a href="https://ai.zawrindustries.com/" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>Zawr AI</a>
             <a href="https://crm.zawrindustries.com/" target="_blank" rel="noopener noreferrer" onClick={closeMobileMenu}>Quick Dial</a>

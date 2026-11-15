@@ -43,8 +43,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       ? (release.banner.startsWith('http') ? release.banner : `https://zawrindustries.com${release.banner}`) 
       : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710544/zawr/assets/public-relations-hero.png';
 
+    const cleanTitle = release.title.length > 50 ? `${release.title.slice(0, 48)}...` : release.title;
+
     return {
-      title: `${release.title} | Zawr Industries Press Release`,
+      title: cleanTitle,
       description: release.summary,
       alternates: {
         canonical: `https://zawrindustries.com/newsroom/press-release/${slug}`,

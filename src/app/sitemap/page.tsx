@@ -86,7 +86,7 @@ const sitemapData: SitemapSection[] = [
     count: 5,
     description: 'Access our custom proprietary enterprise software engines and online portals.',
     links: [
-      { label: 'Firm AI Platform', href: 'https://www.firm.expert/', description: 'High-accuracy AI auditing, compliance audits, and business intelligence.', isExternal: true },
+      { label: 'Firm AI Platform', href: '/industries/it-service/ai-data-analytics', description: 'High-accuracy AI auditing, compliance audits, and business intelligence.' },
       { label: 'Sketch Studio Portal', href: 'https://sketchstudio.dev/', description: 'Interactive real-time graphic tools, design libraries, and creative boards.', isExternal: true },
       { label: 'Zawr AI Hub', href: 'https://ai.zawrindustries.com/', description: 'Universal generative AI applications and specialized machine learning pipelines.', isExternal: true },
       { label: 'Quick Dial CRM', href: 'https://crm.zawrindustries.com/', description: 'Sales workflow automation, calling systems, and client database panels.', isExternal: true },
@@ -111,12 +111,11 @@ const sitemapData: SitemapSection[] = [
     links: [
       { label: 'Investors Center', href: '/investors', description: 'Consolidated corporate disclosures, investor resources, and shareholder relations.' },
       { label: 'Financial Reporting', href: '/investors/financial-report', description: 'Quarterly financial reports, audit filings, and corporate balances.' },
-      { label: 'Shares & Equity', href: '/investors/shares', description: 'Capital structuring tables, share details, and stock classifications.' },
-      { label: 'Subsidiaries & Associates', href: '/investors/subsidiaries', description: 'Detailed visual roadmap and list of wholly-owned subsidiaries globally.' },
-      { label: 'Shareholders Information', href: '/investors/shareholders-info', description: 'Shareholder voting protocols, notifications, and dynamic feedback forms.' },
-      { label: 'Resource Centre', href: '/investors/resource-centre', description: 'Official corporate pitch decks, investor slideshows, and documents download.' },
-      { label: 'Notice of Forfeiture', href: '/investors/notice-of-forfeiture', description: 'Crucial shareholder notifications and regulatory compliance declarations.' },
       { label: 'Investment Interests Gateway', href: '/investors/interest', description: 'Registration form for institutional investors and strategic fund inquiries.' },
+      { label: 'Subsidiaries & Associates', href: '/investors#subsidiaries-associates', description: 'Detailed visual roadmap and list of wholly-owned subsidiaries globally.' },
+      { label: 'Shareholder Inquiries', href: '/contact/client-relations', description: 'Dedicated communication desk for shareholder questions and investor feedback.' },
+      { label: 'Events & Presentations', href: '/investors#events-presentations', description: 'Official corporate pitch decks, investor slideshows, and documents download.' },
+      { label: 'Regulatory Notices', href: '/notices', description: 'Crucial shareholder notifications and regulatory compliance declarations.' },
     ],
   },
   {
