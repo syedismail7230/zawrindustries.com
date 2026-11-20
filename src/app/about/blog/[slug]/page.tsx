@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     if (!blog) return {};
 
     const fullImageUrl = blog.image 
-      ? (blog.image.startsWith('http') ? blog.image : `https://zawrindustries.com${blog.image}`) 
+      ? (blog.image.startsWith('http') ? blog.image : `https://www.zawrindustries.com${blog.image}`) 
       : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png';
 
     const seoTitle = blog.title.includes('Zawr') ? blog.title : `${blog.title} | Zawr Industries Insights`;
@@ -58,7 +58,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       description: metaDescription,
       keywords: keywordList,
       alternates: {
-        canonical: `https://zawrindustries.com/about/blog/${slug}`,
+        canonical: `https://www.zawrindustries.com/about/blog/${slug}`,
       },
       robots: {
         index: true,
@@ -74,7 +74,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       openGraph: {
         title: seoTitle,
         description: metaDescription,
-        url: `https://zawrindustries.com/about/blog/${slug}`,
+        url: `https://www.zawrindustries.com/about/blog/${slug}`,
         siteName: 'Zawr Industries',
         locale: 'en_US',
         images: [
@@ -165,7 +165,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
   }
 
   const fullImageUrl = blog.image 
-    ? (blog.image.startsWith('http') ? blog.image : `https://zawrindustries.com${blog.image}`) 
+    ? (blog.image.startsWith('http') ? blog.image : `https://www.zawrindustries.com${blog.image}`) 
     : 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_1600,c_limit,dpr_auto/v1783710569/zawr/assets/zawr-industries.png';
 
   return (
@@ -184,10 +184,10 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': ['TechArticle', 'BlogPosting'],
-            '@id': `https://zawrindustries.com/about/blog/${slug}#article`,
+            '@id': `https://www.zawrindustries.com/about/blog/${slug}#article`,
             'isPartOf': {
               '@type': 'CollectionPage',
-              '@id': 'https://zawrindustries.com/about/blog',
+              '@id': 'https://www.zawrindustries.com/about/blog',
               'name': 'Corporate Blog & Insights'
             },
             'headline': blog.title,
@@ -198,7 +198,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
               {
                 '@type': 'Person',
                 'name': blog.author || 'Zawr Research & Editorial Desk',
-                'url': 'https://zawrindustries.com/about/board',
+                'url': 'https://www.zawrindustries.com/about/board',
                 'worksFor': {
                   '@type': 'Organization',
                   'name': 'Zawr Industries'
@@ -208,7 +208,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             'publisher': {
               '@type': 'Organization',
               'name': 'Zawr Industries',
-              'url': 'https://zawrindustries.com',
+              'url': 'https://www.zawrindustries.com',
               'logo': {
                 '@type': 'ImageObject',
                 'url': 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png'
@@ -216,7 +216,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
             },
             'mainEntityOfPage': {
               '@type': 'WebPage',
-              '@id': `https://zawrindustries.com/about/blog/${slug}`
+              '@id': `https://www.zawrindustries.com/about/blog/${slug}`
             },
             'inLanguage': 'en-US',
             'isAccessibleForFree': 'True',
@@ -245,19 +245,19 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
                 '@type': 'ListItem',
                 'position': 1,
                 'name': 'Home',
-                'item': 'https://zawrindustries.com'
+                'item': 'https://www.zawrindustries.com'
               },
               {
                 '@type': 'ListItem',
                 'position': 2,
                 'name': 'Blog & Insights',
-                'item': 'https://zawrindustries.com/about/blog'
+                'item': 'https://www.zawrindustries.com/about/blog'
               },
               {
                 '@type': 'ListItem',
                 'position': 3,
                 'name': blog.title,
-                'item': `https://zawrindustries.com/about/blog/${slug}`
+                'item': `https://www.zawrindustries.com/about/blog/${slug}`
               }
             ]
           })

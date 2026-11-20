@@ -55,7 +55,7 @@ export async function GET(request: Request) {
 
       // Auto-ping Search Engines
       try {
-        notifySearchEngines(`https://zawrindustries.com/about/blog/${blog.slug}`, blog.slug).catch(console.error);
+        notifySearchEngines(`https://www.zawrindustries.com/about/blog/${blog.slug}`, blog.slug).catch(console.error);
       } catch (err) {
         console.error('Error pinging search engines:', err);
       }
@@ -65,7 +65,7 @@ export async function GET(request: Request) {
           'Approved & Published with Default Banner',
           `"${blog.title}" is now LIVE on the website, submitted to search engines for indexing, and queued to active subscribers.`,
           '#10b981',
-          `https://zawrindustries.com/about/blog/${blog.slug}`
+          `https://www.zawrindustries.com/about/blog/${blog.slug}`
         ),
         { headers: { 'Content-Type': 'text/html' } }
       );
@@ -88,7 +88,7 @@ export async function GET(request: Request) {
 
       // Auto-ping Search Engines
       try {
-        notifySearchEngines(`https://zawrindustries.com/about/blog/${blog.slug}`, blog.slug).catch(console.error);
+        notifySearchEngines(`https://www.zawrindustries.com/about/blog/${blog.slug}`, blog.slug).catch(console.error);
       } catch (err) {
         console.error('Error pinging search engines:', err);
       }
@@ -98,7 +98,7 @@ export async function GET(request: Request) {
           'Approved & Published',
           `"${blog.title}" has been published to /about/blog, submitted to search engines, and queued for newsletter dispatch.`,
           '#10b981',
-          `https://zawrindustries.com/about/blog/${blog.slug}`
+          `https://www.zawrindustries.com/about/blog/${blog.slug}`
         ),
         { headers: { 'Content-Type': 'text/html' } }
       );
@@ -200,7 +200,7 @@ export async function POST(request: Request) {
 
       // Auto-ping Search Engines
       try {
-        notifySearchEngines(`https://zawrindustries.com/about/blog/${blog.slug}`, blog.slug).catch(console.error);
+        notifySearchEngines(`https://www.zawrindustries.com/about/blog/${blog.slug}`, blog.slug).catch(console.error);
       } catch (err) {
         console.error('Error pinging search engines:', err);
       }
@@ -263,7 +263,7 @@ export async function POST(request: Request) {
 
       // Auto-ping Search Engines
       try {
-        notifySearchEngines(`https://zawrindustries.com/about/blog/${blogs[blogIndex].slug}`, blogs[blogIndex].slug).catch(console.error);
+        notifySearchEngines(`https://www.zawrindustries.com/about/blog/${blogs[blogIndex].slug}`, blogs[blogIndex].slug).catch(console.error);
       } catch (err) {
         console.error('Error pinging search engines:', err);
       }

@@ -485,7 +485,7 @@ export async function saveBlogs(blogs: GeneratedBlog[]): Promise<void> {
  */
 export async function broadcastBlogNewsletter(blog: GeneratedBlog, testRecipientEmail?: string) {
   const brandName = 'ZAWR INDUSTRIES';
-  const blogUrl = `https://zawrindustries.com/about/blog/${blog.slug}`;
+  const blogUrl = `https://www.zawrindustries.com/about/blog/${blog.slug}`;
   const subject = blog.title;
 
   // If test recipient is provided, send to that single email only
@@ -614,7 +614,7 @@ export async function runAutonomousBlogPipeline(options?: {
 
     // Auto-ping Search Engines (IndexNow, Bing, Google) for instant indexing
     try {
-      const liveBlogUrl = `https://zawrindustries.com/about/blog/${verifiedDraft.slug}`;
+      const liveBlogUrl = `https://www.zawrindustries.com/about/blog/${verifiedDraft.slug}`;
       notifySearchEngines(liveBlogUrl, verifiedDraft.slug).catch((pingErr) => {
         console.error('Search engine auto-indexing ping error:', pingErr);
       });
@@ -637,7 +637,7 @@ export async function runAutonomousBlogPipeline(options?: {
       to: webmasterRecipient,
       subject: `[APPROVAL REQUIRED] AI Blog Draft: "${verifiedDraft.title}"`,
       html: emailHtml,
-      text: `AI BLOG PENDING APPROVAL\n\nTitle: ${verifiedDraft.title}\nCategory: ${verifiedDraft.category}\nSensitivity Reason: ${sensitivityReason}\n\nApprove or review at: https://zawrindustries.com/webmaster?tab=blogs&draftId=${verifiedDraft.id}`,
+      text: `AI BLOG PENDING APPROVAL\n\nTitle: ${verifiedDraft.title}\nCategory: ${verifiedDraft.category}\nSensitivity Reason: ${sensitivityReason}\n\nApprove or review at: https://www.zawrindustries.com/webmaster?tab=blogs&draftId=${verifiedDraft.id}`,
     });
 
     logEmailDispatch({

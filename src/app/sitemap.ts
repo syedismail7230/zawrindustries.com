@@ -2,7 +2,7 @@ import { MetadataRoute } from 'next';
 import { getExistingBlogs } from '@/lib/ai-blog-engine';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://zawrindustries.com';
+  const baseUrl = 'https://www.zawrindustries.com';
   
   // Base routes that always exist
   const routes = [

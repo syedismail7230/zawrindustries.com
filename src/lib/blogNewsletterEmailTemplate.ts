@@ -20,7 +20,7 @@ export function generateBlogNewsletterEmailHTML(params: {
   blog: BlogNewsletterPayload;
   subscriberEmail?: string;
 }): string {
-  const blogUrl = `https://zawrindustries.com/about/blog/${params.blog.slug}`;
+  const blogUrl = `https://www.zawrindustries.com/about/blog/${params.blog.slug}`;
   const author = params.blog.author || 'Zawr Editorial & Research Desk';
   const date = params.blog.date || new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   const category = (params.blog.category || 'INSIGHTS & ANALYSIS').toUpperCase();

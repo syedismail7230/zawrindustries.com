@@ -8,7 +8,7 @@
  */
 
 export const INDEXNOW_KEY = '8f4b2c1e9a7d3b5e8c1a2b3c4d5e6f7a';
-export const SITE_HOST = 'zawrindustries.com';
+export const SITE_HOST = 'www.zawrindustries.com';
 export const BASE_URL = `https://${SITE_HOST}`;
 
 export interface IndexingResult {

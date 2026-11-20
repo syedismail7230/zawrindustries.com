@@ -4,7 +4,7 @@ import path from 'path';
 import { getExistingBlogs } from '@/lib/ai-blog-engine';
 
 export async function GET() {
-  const baseUrl = 'https://zawrindustries.com';
+  const baseUrl = 'https://www.zawrindustries.com';
   let articles: any[] = [];
 
   // Helper to parse date containing ordinals like "27th May"

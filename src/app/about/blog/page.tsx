@@ -8,14 +8,14 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: 'Corporate Blog & Insights | Zawr Industries',
   description: 'Explore the latest insights, enterprise technology trends, AI innovation, supply chain automation, and industrial perspectives from Zawr Industries leaders.',
-  metadataBase: new URL('https://zawrindustries.com'),
+  metadataBase: new URL('https://www.zawrindustries.com'),
   alternates: {
-    canonical: 'https://zawrindustries.com/about/blog',
+    canonical: 'https://www.zawrindustries.com/about/blog',
   },
   openGraph: {
     title: 'Corporate Blog & Insights | Zawr Industries',
     description: 'Explore the latest insights, enterprise technology trends, AI innovation, supply chain automation, and industrial perspectives from Zawr Industries leaders.',
-    url: 'https://zawrindustries.com/about/blog',
+    url: 'https://www.zawrindustries.com/about/blog',
     siteName: 'Zawr Industries',
     type: 'website',
     images: [
@@ -60,20 +60,20 @@ export default async function BlogPage() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Blog',
-            '@id': 'https://zawrindustries.com/about/blog#blog',
+            '@id': 'https://www.zawrindustries.com/about/blog#blog',
             'name': 'Zawr Industries Corporate Blog & Insights',
-            'url': 'https://zawrindustries.com/about/blog',
+            'url': 'https://www.zawrindustries.com/about/blog',
             'description': 'Explore the latest insights, enterprise technology trends, AI innovation, supply chain automation, and industrial perspectives from Zawr Industries leaders.',
             'publisher': {
               '@type': 'Organization',
               'name': 'Zawr Industries',
-              'url': 'https://zawrindustries.com',
+              'url': 'https://www.zawrindustries.com',
               'logo': 'https://res.cloudinary.com/murfclni/image/upload/f_auto,q_auto:good,w_400,c_limit/v1783710570/zawr/assets/zawr-logo.png'
             },
             'blogPost': publishedBlogs.map((b: any) => ({
               '@type': 'BlogPosting',
               'headline': b.title,
-              'url': `https://zawrindustries.com/about/blog/${b.slug}`,
+              'url': `https://www.zawrindustries.com/about/blog/${b.slug}`,
               'datePublished': b.createdAt || b.date,
               'description': b.summary
             }))

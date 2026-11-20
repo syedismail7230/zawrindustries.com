@@ -15,9 +15,9 @@ export const metadata: Metadata = {
     template: '%s | Zawr Industries',
   },
   description: 'Zawr Industries LLP is a leading multi-sector conglomerate delivering IT services, AI platforms, logistics automation, precision manufacturing, and real estate solutions across India, UAE, USA, and global markets.',
-  metadataBase: new URL('https://zawrindustries.com'),
+  metadataBase: new URL('https://www.zawrindustries.com'),
   alternates: {
-    canonical: 'https://zawrindustries.com',
+    canonical: 'https://www.zawrindustries.com',
   },
   keywords: [
     'Zawr Industries LLP',

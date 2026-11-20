@@ -73,7 +73,7 @@ async function runUnitAndIntegrationSuite() {
   // 3. UNIT TEST: Search Indexing Key Verification
   try {
     const { INDEXNOW_KEY, SITE_HOST } = await import('../src/lib/search-indexing.ts');
-    const valid = INDEXNOW_KEY === '8f4b2c1e9a7d3b5e8c1a2b3c4d5e6f7a' && SITE_HOST === 'zawrindustries.com';
+    const valid = INDEXNOW_KEY === '8f4b2c1e9a7d3b5e8c1a2b3c4d5e6f7a' && SITE_HOST === 'www.zawrindustries.com';
     recordTest('UT-03: Search Indexing Configuration Constants', valid, `Key: ${INDEXNOW_KEY.slice(0, 8)}... | Host: ${SITE_HOST}`);
   } catch (err) {
     recordTest('UT-03: Search Indexing Configuration Constants', false, err.message);
