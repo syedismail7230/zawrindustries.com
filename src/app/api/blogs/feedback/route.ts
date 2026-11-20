@@ -1,8 +1,5 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
-
-const dataFilePath = path.join(process.cwd(), 'public', 'data', 'blogs.json');
+import { getExistingBlogs, saveBlogs } from '@/lib/ai-blog-engine';
 
 export const dynamic = 'force-dynamic';
 
@@ -11,8 +8,7 @@ export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
     const slug = searchParams.get('slug');
 
-    const data = await fs.readFile(dataFilePath, 'utf-8');
-    const blogs = JSON.parse(data);
+    const blogs = await getExistingBlogs();
 
     if (slug) {
       const blog = blogs.find((b: any) => b.slug === slug || b.id === slug);
@@ -71,8 +67,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Invalid parameters: slug and vote (yes|no) required' }, { status: 400 });
     }
 
-    const data = await fs.readFile(dataFilePath, 'utf-8');
-    const blogs = JSON.parse(data);
+    const blogs = await getExistingBlogs();
 
     const index = blogs.findIndex((b: any) => b.slug === slug || b.id === slug);
     if (index === -1) {
@@ -82,19 +77,22 @@ export async function POST(req: Request) {
     const blog = blogs[index];
     blog.helpfulness = blog.helpfulness || { yes: 0, no: 0 };
 
+    const voteKey = vote as 'yes' | 'no';
+    const prevKey = previousVote as 'yes' | 'no';
+
     // If changing vote from previous
-    if (previousVote === 'yes' || previousVote === 'no') {
-      if (previousVote !== vote) {
-        blog.helpfulness[previousVote] = Math.max(0, (blog.helpfulness[previousVote] || 0) - 1);
-        blog.helpfulness[vote] = (blog.helpfulness[vote] || 0) + 1;
+    if (prevKey === 'yes' || prevKey === 'no') {
+      if (prevKey !== voteKey) {
+        blog.helpfulness[prevKey] = Math.max(0, (blog.helpfulness[prevKey] || 0) - 1);
+        blog.helpfulness[voteKey] = (blog.helpfulness[voteKey] || 0) + 1;
       }
     } else {
       // New vote
-      blog.helpfulness[vote] = (blog.helpfulness[vote] || 0) + 1;
+      blog.helpfulness[voteKey] = (blog.helpfulness[voteKey] || 0) + 1;
     }
 
     blogs[index] = blog;
-    await fs.writeFile(dataFilePath, JSON.stringify(blogs, null, 2), 'utf-8');
+    await saveBlogs(blogs);
 
     return NextResponse.json({
       success: true,

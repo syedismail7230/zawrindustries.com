@@ -355,28 +355,129 @@ RETURN STRICTLY A JSON OBJECT:
 }
 
 /**
- * Helper to read current blogs from JSON
+ * Helper to map Supabase database row to GeneratedBlog
  */
-export async function getExistingBlogs(): Promise<GeneratedBlog[]> {
-  try {
-    if (!fsSync.existsSync(BLOGS_FILE_PATH)) return [];
-    const data = await fs.readFile(BLOGS_FILE_PATH, 'utf-8');
-    return JSON.parse(data);
-  } catch (err) {
-    console.error('Error reading blogs.json:', err);
-    return [];
-  }
+function mapRowToBlog(row: any): GeneratedBlog {
+  return {
+    id: row.id,
+    slug: row.slug,
+    title: row.title,
+    author: row.author || 'Zawr Research & Editorial Desk',
+    authorImage: row.author_image || 'https://res.cloudinary.com/murfclni/image/upload/v1783710409/zawr/assets/authors/lina.png',
+    date: row.date,
+    category: row.category || 'Enterprise Technology',
+    summary: row.summary || '',
+    image: row.image || '',
+    readTime: row.read_time || '5 min read',
+    sections: Array.isArray(row.sections) ? row.sections : [],
+    status: row.status || 'published',
+    sensitive: Boolean(row.sensitive),
+    sensitivityReason: row.sensitivity_reason || undefined,
+    factCheckLayer1Passed: row.fact_check_layer1_passed !== false,
+    factCheckLayer2Passed: row.fact_check_layer2_passed !== false,
+    factCheckReport: row.fact_check_report || undefined,
+    approvalToken: row.approval_token || undefined,
+    createdAt: row.created_at || new Date().toISOString(),
+    helpfulness: row.helpfulness || { yes: 0, no: 0 },
+  };
 }
 
 /**
- * Helper to save blogs to JSON
+ * Helper to map GeneratedBlog to Supabase database row
+ */
+function mapBlogToRow(blog: GeneratedBlog) {
+  return {
+    id: blog.id,
+    slug: blog.slug,
+    title: blog.title,
+    author: blog.author,
+    author_image: blog.authorImage,
+    date: blog.date,
+    category: blog.category,
+    summary: blog.summary,
+    image: blog.image,
+    read_time: blog.readTime,
+    sections: blog.sections,
+    status: blog.status,
+    sensitive: blog.sensitive,
+    sensitivity_reason: blog.sensitivityReason || null,
+    fact_check_layer1_passed: blog.factCheckLayer1Passed,
+    fact_check_layer2_passed: blog.factCheckLayer2Passed,
+    fact_check_report: blog.factCheckReport || null,
+    approval_token: blog.approvalToken || null,
+    created_at: blog.createdAt,
+    helpfulness: blog.helpfulness || { yes: 0, no: 0 },
+  };
+}
+
+/**
+ * Helper to read current blogs from Supabase with JSON fallback
+ */
+export async function getExistingBlogs(): Promise<GeneratedBlog[]> {
+  // 1. Try fetching from Supabase database
+  try {
+    if (supabase) {
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!error && data && data.length > 0) {
+        return data.map(mapRowToBlog);
+      }
+    }
+  } catch (err) {
+    console.warn('Supabase fetch failed, falling back to blogs.json:', err);
+  }
+
+  // 2. Fallback to local blogs.json if Supabase is empty or unreachable
+  try {
+    if (fsSync.existsSync(BLOGS_FILE_PATH)) {
+      const data = await fs.readFile(BLOGS_FILE_PATH, 'utf-8');
+      return JSON.parse(data);
+    }
+  } catch (err) {
+    console.error('Error reading blogs.json:', err);
+  }
+
+  return [];
+}
+
+/**
+ * Helper to save blogs to Supabase with safe local dev fallback
  */
 export async function saveBlogs(blogs: GeneratedBlog[]): Promise<void> {
-  const dir = path.dirname(BLOGS_FILE_PATH);
-  if (!fsSync.existsSync(dir)) {
-    await fs.mkdir(dir, { recursive: true });
+  // 1. Persist to Supabase database (works in Vercel Serverless Production!)
+  try {
+    if (supabase && blogs.length > 0) {
+      const rows = blogs.map(mapBlogToRow);
+      const { error } = await supabase
+        .from('blogs')
+        .upsert(rows, { onConflict: 'slug' });
+
+      if (error) {
+        console.error('Error upserting blogs to Supabase:', error);
+      } else {
+        console.log(`Successfully persisted ${rows.length} blogs to Supabase.`);
+      }
+    }
+  } catch (err) {
+    console.error('Failed to save blogs to Supabase:', err);
   }
-  await fs.writeFile(BLOGS_FILE_PATH, JSON.stringify(blogs, null, 2), 'utf-8');
+
+  // 2. In local dev environment, also attempt to update public/data/blogs.json safely
+  try {
+    if (process.env.NODE_ENV !== 'production') {
+      const dir = path.dirname(BLOGS_FILE_PATH);
+      if (!fsSync.existsSync(dir)) {
+        await fs.mkdir(dir, { recursive: true });
+      }
+      await fs.writeFile(BLOGS_FILE_PATH, JSON.stringify(blogs, null, 2), 'utf-8');
+    }
+  } catch (err) {
+    // Read-only filesystem warning in serverless environment - ignore safely
+    console.warn('Note: Local blogs.json not written (filesystem may be read-only):', err);
+  }
 }
 
 /**

@@ -1,15 +1,15 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs/promises';
-import path from 'path';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 import { verifyWebmasterAuth } from '@/lib/webmaster-security';
+import { getExistingBlogs, saveBlogs } from '@/lib/ai-blog-engine';
+import { supabase } from '@/lib/supabase';
 
-const dataFilePath = path.join(process.cwd(), 'public', 'data', 'blogs.json');
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const data = await fs.readFile(dataFilePath, 'utf-8');
-    return NextResponse.json(JSON.parse(data));
+    const blogs = await getExistingBlogs();
+    return NextResponse.json(blogs);
   } catch (error) {
     console.error('Error reading blogs:', error);
     return NextResponse.json([]);
@@ -26,19 +26,22 @@ export async function POST(request: Request) {
 
     const action = formData.get('action') as string;
 
-    // Read current data
-    let blogs = [];
-    try {
-      const data = await fs.readFile(dataFilePath, 'utf-8');
-      blogs = JSON.parse(data);
-    } catch (e) {
-      blogs = [];
-    }
+    // Read current data from Supabase / JSON
+    let blogs = await getExistingBlogs();
 
     if (action === 'delete') {
       const id = formData.get('id') as string;
       blogs = blogs.filter((b: any) => b.id !== id);
-      await fs.writeFile(dataFilePath, JSON.stringify(blogs, null, 2));
+      await saveBlogs(blogs);
+
+      if (supabase) {
+        try {
+          await supabase.from('blogs').delete().eq('id', id);
+        } catch (e) {
+          console.error('Error deleting blog from Supabase:', e);
+        }
+      }
+
       return NextResponse.json({ success: true, blogs });
     }
 
@@ -89,7 +92,7 @@ export async function POST(request: Request) {
         }
       }
 
-      const blogData = {
+      const blogData: any = {
         id,
         slug,
         title,
@@ -101,6 +104,11 @@ export async function POST(request: Request) {
         image: imageUrl,
         readTime,
         sections,
+        status: 'published',
+        sensitive: false,
+        factCheckLayer1Passed: true,
+        factCheckLayer2Passed: true,
+        createdAt: new Date().toISOString(),
         helpfulness: { yes: 0, no: 0 }
       };
 
@@ -123,7 +131,7 @@ export async function POST(request: Request) {
       // Sort: newest first (newly created blogs at the top)
       blogs.sort((a: any, b: any) => b.id.localeCompare(a.id));
 
-      await fs.writeFile(dataFilePath, JSON.stringify(blogs, null, 2));
+      await saveBlogs(blogs);
       return NextResponse.json({ success: true, blogs });
     }
 

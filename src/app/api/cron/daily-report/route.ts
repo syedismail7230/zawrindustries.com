@@ -17,12 +17,33 @@ export async function GET(req: Request) {
       }
     }
 
+    // 1. Weekly Blog Autonomous Dispatch Check (Mon, Wed, Fri)
+    let aiBlogExecution: any = null;
+    const dayOfWeek = new Date().getUTCDay(); // 1 = Monday, 3 = Wednesday, 5 = Friday
+    const isBlogScheduledDay = dayOfWeek === 1 || dayOfWeek === 3 || dayOfWeek === 5;
+
+    if (isBlogScheduledDay && process.env.GEMINI_API_KEY) {
+      try {
+        console.log('[Daily Cron] Scheduled AI Blog cadence active today. Executing pipeline...');
+        const { runAutonomousBlogPipeline } = await import('@/lib/ai-blog-engine');
+        aiBlogExecution = await runAutonomousBlogPipeline();
+      } catch (blogErr: any) {
+        console.error('[Daily Cron] AI Blog pipeline execution error:', blogErr.message);
+        aiBlogExecution = { error: blogErr.message };
+      }
+    }
+
     const result = await sendDailyReportToWebmaster('Automated Cron Service');
     const summary = await generateDailyReportData();
 
     return NextResponse.json({
       success: result.success,
       timestamp: new Date().toISOString(),
+      aiBlogExecution: aiBlogExecution ? {
+        actionTaken: aiBlogExecution.actionTaken,
+        title: aiBlogExecution.blog?.title,
+        error: aiBlogExecution.error
+      } : 'Not scheduled for today',
       recipient: summary.recipient,
       totalPageViews: summary.performance.totalPageViews24h,
       emailsDispatched: summary.emailsSummary.totalDispatched24h,

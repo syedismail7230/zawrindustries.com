@@ -1,10 +1,11 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import Script from 'next/script';
-import fs from 'fs';
-import path from 'path';
 import { Metadata } from 'next';
 import BlogClient from './BlogClient';
+import { getExistingBlogs } from '@/lib/ai-blog-engine';
+
+export const revalidate = 60;
 
 const getSafeIsoDate = (dateStr: string): string => {
   try {
@@ -19,9 +20,7 @@ const getSafeIsoDate = (dateStr: string): string => {
 
 export async function generateStaticParams() {
   try {
-    const blogsPath = path.join(process.cwd(), 'public/data/blogs.json');
-    if (!fs.existsSync(blogsPath)) return [];
-    const blogs = JSON.parse(fs.readFileSync(blogsPath, 'utf8'));
+    const blogs = await getExistingBlogs();
     return blogs.map((b: any) => ({ slug: b.slug }));
   } catch (e) {
     console.error('Error generating static params for blogs:', e);
@@ -32,9 +31,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   try {
-    const blogsPath = path.join(process.cwd(), 'public/data/blogs.json');
-    if (!fs.existsSync(blogsPath)) return {};
-    const blogs = JSON.parse(fs.readFileSync(blogsPath, 'utf8'));
+    const blogs = await getExistingBlogs();
     const blog = blogs.find((b: any) => b.slug === slug);
     if (!blog) return {};
 
@@ -112,18 +109,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 export default async function BlogDetailPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   
-  const blogsPath = path.join(process.cwd(), 'public/data/blogs.json');
-  if (!fs.existsSync(blogsPath)) {
-    notFound();
-  }
-  
   let blog: any = null;
   let relatedBlogs: any[] = [];
   let prevBlog: any = null;
   let nextBlog: any = null;
 
   try {
-    const blogs = JSON.parse(fs.readFileSync(blogsPath, 'utf8'));
+    const blogs = await getExistingBlogs();
     const idx = blogs.findIndex((b: any) => b.slug === slug);
     if (idx !== -1) {
       blog = blogs[idx];
@@ -135,7 +127,7 @@ export default async function BlogDetailPage({ params }: { params: Promise<{ slu
         .slice(0, 3);
     }
   } catch (e) {
-    console.error('Error parsing blogs JSON:', e);
+    console.error('Error fetching blogs for detail page:', e);
   }
 
   if (!blog) {
