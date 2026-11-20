@@ -567,6 +567,32 @@ export async function broadcastBlogNewsletter(blog: GeneratedBlog, testRecipient
 }
 
 /**
+ * Retrieve active webmaster recipients for editorial approval
+ */
+export function getWebmasterEditorialRecipients(): string[] {
+  if (process.env.WEBMASTER_ALERT_EMAIL) {
+    return process.env.WEBMASTER_ALERT_EMAIL.split(',').map((e) => e.trim()).filter(Boolean);
+  }
+  try {
+    const configPath = path.join(process.cwd(), 'public', 'data', 'webmaster-report-config.json');
+    if (fsSync.existsSync(configPath)) {
+      const cfg = JSON.parse(fsSync.readFileSync(configPath, 'utf8'));
+      if (Array.isArray(cfg?.recipients)) {
+        const enabled = cfg.recipients.filter((r: any) => r.enabled).map((r: any) => r.email);
+        if (enabled.length > 0) return enabled;
+      }
+    }
+  } catch (e) {
+    // ignore
+  }
+  return [
+    'webmaster@zawrindustries.com',
+    'syedismail@zawrindustries.com',
+    'md@zawrindustries.com'
+  ];
+}
+
+/**
  * MASTER PIPELINE EXECUTION
  */
 export async function runAutonomousBlogPipeline(options?: {
@@ -635,27 +661,29 @@ export async function runAutonomousBlogPipeline(options?: {
     const updatedBlogs = [verifiedDraft, ...currentBlogs.filter((b) => b.id !== verifiedDraft.id)];
     await saveBlogs(updatedBlogs);
 
-    // Send Webmaster Approval Email with 4 action options
-    const webmasterRecipient = process.env.WEBMASTER_ALERT_EMAIL || process.env.GMAIL_USER || 'zawrindustries.mails@gmail.com';
+    // Send Webmaster Approval Email to official webmaster distribution list
+    const webmasterRecipients = getWebmasterEditorialRecipients();
     const emailHtml = generateBlogApprovalEmailHTML(verifiedDraft);
 
     const res = await sendMailWithPoolFailover({
-      to: webmasterRecipient,
+      to: webmasterRecipients.join(', '),
       subject: `[APPROVAL REQUIRED] AI Blog Draft: "${verifiedDraft.title}"`,
       html: emailHtml,
       text: `AI BLOG PENDING APPROVAL\n\nTitle: ${verifiedDraft.title}\nCategory: ${verifiedDraft.category}\nSensitivity Reason: ${sensitivityReason}\n\nApprove or review at: https://www.zawrindustries.com/webmaster?tab=blogs&draftId=${verifiedDraft.id}`,
     });
 
-    logEmailDispatch({
-      recipient: webmasterRecipient,
-      sender: res.from || 'Zawr Industries <noreply@zawrindustries.com>',
-      subject: `[APPROVAL REQUIRED] AI Blog Draft: "${verifiedDraft.title}"`,
-      reason: 'Blog Editorial Approval Request',
-      status: 'Delivered',
-      statusCode: 200,
-      server: res.gateway?.host || 'smtp.gmail.com (TLS 1.3)',
-      ip: '127.0.0.1',
-      region: 'Internal Editorial'
+    webmasterRecipients.forEach((rec) => {
+      logEmailDispatch({
+        recipient: rec,
+        sender: res.from || 'Zawr Industries <noreply@zawrindustries.com>',
+        subject: `[APPROVAL REQUIRED] AI Blog Draft: "${verifiedDraft.title}"`,
+        reason: 'Blog Editorial Approval Request',
+        status: 'Delivered',
+        statusCode: 200,
+        server: res.gateway?.host || 'smtp.gmail.com (TLS 1.3)',
+        ip: '127.0.0.1',
+        region: 'Internal Editorial'
+      });
     });
 
     return { blog: verifiedDraft, actionTaken: 'sent_for_approval' };
