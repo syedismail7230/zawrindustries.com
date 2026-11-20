@@ -34,6 +34,8 @@ interface BlogClientProps {
   nextBlog?: Blog | null;
 }
 
+const formatSectionTitle = (t: string) => (t || '').replace(/^\[+|\s*\]+$/g, '').replace(/^#+\s*/, '').trim();
+
 export default function BlogClient({
   blog,
   relatedBlogs = [],
@@ -974,7 +976,7 @@ export default function BlogClient({
                       }}
                     >
                       <span className="toc-dot" />
-                      <span>{sect.title}</span>
+                      <span>{formatSectionTitle(sect.title)}</span>
                     </div>
                   ))}
                 </div>
@@ -1002,7 +1004,7 @@ export default function BlogClient({
             {/* Render Sections with Rich Text & Formatting Support */}
             {blog.sections && blog.sections.map((sect, i) => (
               <div key={i} id={`section-${i}`} className="reading-section">
-                <h2>{sect.title}</h2>
+                <h2>{formatSectionTitle(sect.title)}</h2>
                 <FormattedContent content={sect.body} className="reading-paragraph" />
               </div>
             ))}

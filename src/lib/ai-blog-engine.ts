@@ -63,6 +63,14 @@ const STATIC_BLOG_ASSETS = [
   '/Blog-assets/Blog%20(5).png',
 ];
 
+export function cleanSectionTitle(title: string = ''): string {
+  if (!title) return '';
+  return title
+    .replace(/^\[+|\s*\]+$/g, '')
+    .replace(/^#+\s*/, '')
+    .trim();
+}
+
 /**
  * Retrieves a random image from the "Blog assets" collection.
  * Static URL mapping avoids serverless runtime file-trace overhead.
@@ -198,12 +206,14 @@ MANDATORY EDITORIAL & SEO RULES:
      **Q: What is [strategic question]?**
      A: [Clear 2-sentence direct answer].
      (This directly powers Google FAQ rich expandable search cards).
-4. STRUCTURE:
+4. ZERO SQUARE BRACKETS IN TITLES:
+   Section titles must NEVER be enclosed in square brackets [ or ] or markdown hashes. Output clean plain text titles (e.g. "Strategic Context & Key Takeaways", NOT "[Strategic Context & Key Takeaways]").
+5. STRUCTURE:
    - Provide an SEO-optimized Title (strictly under 60 characters).
    - Provide a clean URL slug (kebab-case).
    - Provide a 120-150 word executive summary.
    - Provide reading time (e.g., "5 min read" or "6 min read").
-   - Provide 5 detailed, structured sections including the FAQ section. Each section must have a clear "title" and an extensive, analytical "body" (at least 2-3 substantial paragraphs per section) explaining architectures, real-world operational challenges, and strategic solutions.
+   - Provide 5 detailed, structured sections including the FAQ section. Each section must have a clear "title" (WITHOUT square brackets) and an extensive, analytical "body" (at least 2-3 substantial paragraphs per section) explaining architectures, real-world operational challenges, and strategic solutions.
 
 RETURN STRICTLY A JSON OBJECT matching this exact schema:
 {
@@ -255,7 +265,10 @@ RETURN STRICTLY A JSON OBJECT matching this exact schema:
     summary: parsed.summary,
     image: getRandomBlogAssetImage(),
     readTime: parsed.readTime || '5 min read',
-    sections: parsed.sections || [],
+    sections: (parsed.sections || []).map((s: any) => ({
+      title: cleanSectionTitle(s.title),
+      body: s.body || '',
+    })),
     status: 'draft',
     sensitive: false,
     factCheckLayer1Passed: false,
@@ -314,11 +327,12 @@ CURRENT DRAFT:
 Title: ${draft.title}
 Summary: ${draft.summary}
 Sections:
-${draft.sections.map((s, i) => `[${s.title}]\n${s.body}`).join('\n\n')}
+${draft.sections.map((s, i) => `Section ${i + 1}: ${cleanSectionTitle(s.title)}\n${s.body}`).join('\n\n')}
 
 TASKS:
 1. AUTO-CORRECT: If Layer 1 reported any corrections or factual inaccuracies, rewrite and polish the sections so they are 100% verified and factual. Maintain the subtle, professional mention of Zawr Industries without fake commitments.
-2. SENSITIVITY CLASSIFICATION:
+2. TITLES: Section titles must be clean plain text without any square brackets [ or ] or markdown symbols.
+3. SENSITIVITY CLASSIFICATION:
    Determine if this article touches on SENSITIVE topics:
    - SENSITIVE: Legal disputes, unannounced earnings/securities claims, government sanctions, political controversies, speculative investor returns, or unverified regulatory compliance statements.
    - NON-SENSITIVE / SAFE: Standard technological education, engineering frameworks, industry best practices, operational AI workflows, logistics automation, green energy infrastructure.
@@ -330,7 +344,7 @@ RETURN STRICTLY A JSON OBJECT:
   "correctedTitle": "${draft.title}",
   "correctedSummary": "Refined executive summary...",
   "correctedSections": [
-    { "title": "Section Title", "body": "Fact-checked, refined body..." }
+    { "title": "Section Title Without Brackets", "body": "Fact-checked, refined body..." }
   ]
 }
 `.trim();
@@ -341,7 +355,10 @@ RETURN STRICTLY A JSON OBJECT:
   draft.title = result.correctedTitle || draft.title;
   draft.summary = result.correctedSummary || draft.summary;
   if (result.correctedSections && result.correctedSections.length > 0) {
-    draft.sections = result.correctedSections;
+    draft.sections = result.correctedSections.map((s: any) => ({
+      title: cleanSectionTitle(s.title),
+      body: s.body || '',
+    }));
   }
   draft.factCheckLayer1Passed = layer1Report.passed || true;
   draft.factCheckLayer2Passed = true;

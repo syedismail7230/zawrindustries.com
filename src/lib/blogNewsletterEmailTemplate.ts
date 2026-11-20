@@ -33,7 +33,7 @@ export function generateBlogNewsletterEmailHTML(params: {
       return `
         <div style="margin-bottom: 24px; padding-bottom: 20px; ${idx < 2 ? 'border-bottom: 1px solid #f5f5f5;' : ''}">
           <h2 style="font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 600; color: #000000; margin: 0 0 8px 0; line-height: 1.4;">
-            ${sect.title}
+            ${(sect.title || '').replace(/^\[+|\s*\]+$/g, '').trim()}
           </h2>
           <p style="font-family: 'Poppins', sans-serif; font-size: 14.5px; line-height: 1.65; color: #555555; margin: 0;">
             ${excerpt}
