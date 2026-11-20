@@ -18,7 +18,7 @@ export interface BlogEmailPayload {
 }
 
 export function generateBlogApprovalEmailHTML(blog: BlogEmailPayload): string {
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://zawrindustries.com';
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://www.zawrindustries.com';
   const token = blog.approvalToken || 'token';
 
   const uploadApproveUrl = `${baseUrl}/webmaster?tab=blogs&draftId=${blog.id}&action=upload`;
@@ -177,7 +177,7 @@ export function generateBlogApprovalEmailHTML(blog: BlogEmailPayload): string {
                 &copy; ${new Date().getFullYear()} Zawr Industries. All rights reserved.
               </p>
               <p style="margin: 0; font-size: 12px; color: #aaaaaa;">
-                Bengaluru, India &middot; <a href="https://zawrindustries.com" style="color: #000000; text-decoration: underline;">zawrindustries.com</a> &middot; <a href="mailto:info@zawrindustries.com" style="color: #000000; text-decoration: underline;">info@zawrindustries.com</a>
+                Bengaluru, India &middot; <a href="https://www.zawrindustries.com" style="color: #000000; text-decoration: underline;">zawrindustries.com</a> &middot; <a href="mailto:info@zawrindustries.com" style="color: #000000; text-decoration: underline;">info@zawrindustries.com</a>
               </p>
             </td>
           </tr>

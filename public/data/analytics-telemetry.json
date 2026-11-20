@@ -3903,6 +3903,19 @@
   ],
   "emails": [
     {
+      "id": "em-620378",
+      "timestamp": "2026-11-20T03:50:20.378Z",
+      "recipient": "zawrindustries.mails@gmail.com",
+      "sender": "\"Zawr Industries\" <noreply@zawrindustries.com>",
+      "subject": "[APPROVAL REQUIRED] AI Blog Draft: \"Autonomous Robotic Logistics Architecture 2026\"",
+      "reason": "Blog Editorial Approval Request",
+      "status": "Delivered",
+      "statusCode": 200,
+      "server": "smtp.gmail.com",
+      "ip": "127.0.0.1",
+      "region": "Internal Editorial"
+    },
+    {
       "id": "em-397970",
       "timestamp": "2026-11-15T05:26:37.971Z",
       "recipient": "webmaster@zawrindustries.com",

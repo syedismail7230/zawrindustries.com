@@ -152,11 +152,13 @@ export async function POST(request: Request) {
       const topic = body.topic || '';
       const category = body.category || '';
       const forceApprove = Boolean(body.forceApprove);
+      const requireApproval = Boolean(body.requireApproval);
 
       const result = await runAutonomousBlogPipeline({
         customTopic: topic,
         targetCategory: category,
         forceApprove,
+        requireApproval,
       });
 
       return NextResponse.json({

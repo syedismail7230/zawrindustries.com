@@ -573,6 +573,7 @@ export async function runAutonomousBlogPipeline(options?: {
   customTopic?: string;
   targetCategory?: string;
   forceApprove?: boolean;
+  requireApproval?: boolean;
 }): Promise<{ blog: GeneratedBlog; actionTaken: 'auto_published' | 'sent_for_approval' | 'draft_saved' }> {
   // 1. Topic Selection
   const { industry, topic } = getIndustryTopic(options?.customTopic, options?.targetCategory);
@@ -596,7 +597,9 @@ export async function runAutonomousBlogPipeline(options?: {
   const currentBlogs = await getExistingBlogs();
 
   // 5. Routing Logic
-  if (!isSensitive || options?.forceApprove) {
+  const requiresApproval = options?.requireApproval || (isSensitive && !options?.forceApprove);
+
+  if (!requiresApproval) {
     // AUTO APPROVE
     if (!verifiedDraft.image || verifiedDraft.image.includes('application-development-hero.png')) {
       verifiedDraft.image = getRandomBlogAssetImage();
@@ -624,7 +627,10 @@ export async function runAutonomousBlogPipeline(options?: {
 
     return { blog: verifiedDraft, actionTaken: 'auto_published' };
   } else {
-    // SENSITIVE -> PENDING APPROVAL
+    // SENSITIVE OR MANUAL VERIFICATION REQUIRED -> PENDING APPROVAL
+    if (!verifiedDraft.image || verifiedDraft.image.includes('application-development-hero.png')) {
+      verifiedDraft.image = getRandomBlogAssetImage();
+    }
     verifiedDraft.status = 'pending_approval';
     const updatedBlogs = [verifiedDraft, ...currentBlogs.filter((b) => b.id !== verifiedDraft.id)];
     await saveBlogs(updatedBlogs);
