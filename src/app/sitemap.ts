@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
+import { getExistingBlogs } from '@/lib/ai-blog-engine';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://zawrindustries.com';
   
   // Base routes that always exist
@@ -125,18 +126,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
       return new Date(dateVal);
     };
 
-    // 1. Appending blogs (Published only, with authoritative lastmod and high priority)
-    const blogsPath = path.join(process.cwd(), 'public/data/blogs.json');
-    if (fs.existsSync(blogsPath)) {
-      const fileData = fs.readFileSync(blogsPath, 'utf8');
-      const blogs = JSON.parse(fileData);
-      const publishedBlogs = blogs.filter((b: any) => b.status !== 'draft' && b.status !== 'held' && b.status !== 'pending_approval');
+    // 1. Appending blogs from Supabase/JSON (Published only, with authoritative lastmod and high priority)
+    try {
+      const allBlogs = await getExistingBlogs();
+      const publishedBlogs = allBlogs.filter((b: any) => b.status !== 'draft' && b.status !== 'held' && b.status !== 'pending_approval');
       dynamicRoutes = [...dynamicRoutes, ...publishedBlogs.map((b: any) => ({
         url: `${baseUrl}/about/blog/${b.slug}`,
         lastModified: parseSafeDate(b.createdAt || b.date),
         changeFrequency: 'weekly' as const,
         priority: 0.85,
       }))];
+    } catch (blogErr) {
+      console.error('Error fetching blogs for sitemap:', blogErr);
     }
 
     // 2. Appending press releases

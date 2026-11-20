@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
+import { getExistingBlogs } from '@/lib/ai-blog-engine';
 
 export async function GET() {
   const baseUrl = 'https://zawrindustries.com';
@@ -50,21 +51,17 @@ export async function GET() {
     console.error('Error reading notifications for sitemap:', e);
   }
 
-  // 3. Fetch articles from blogs.json (Published Blogs only)
+  // 3. Fetch articles from Supabase/blogs.json (Published Blogs only)
   try {
-    const filePath = path.join(process.cwd(), 'public/data/blogs.json');
-    if (fs.existsSync(filePath)) {
-      const fileData = fs.readFileSync(filePath, 'utf8');
-      const blogs = JSON.parse(fileData);
-      const publishedBlogs = blogs.filter((b: any) => b.status !== 'draft' && b.status !== 'held' && b.status !== 'pending_approval');
-      articles = [...articles, ...publishedBlogs.map((b: any) => ({
-        url: `${baseUrl}/about/blog/${b.slug}`,
-        title: b.title,
-        dateParsed: parseCleanDate(b.createdAt || b.date),
-        dateRaw: b.date,
-        source: 'Blog'
-      }))];
-    }
+    const allBlogs = await getExistingBlogs();
+    const publishedBlogs = allBlogs.filter((b: any) => b.status !== 'draft' && b.status !== 'held' && b.status !== 'pending_approval');
+    articles = [...articles, ...publishedBlogs.map((b: any) => ({
+      url: `${baseUrl}/about/blog/${b.slug}`,
+      title: b.title,
+      dateParsed: parseCleanDate(b.createdAt || b.date),
+      dateRaw: b.date,
+      source: 'Blog'
+    }))];
   } catch (e) {
     console.error('Error reading blogs for news sitemap:', e);
   }

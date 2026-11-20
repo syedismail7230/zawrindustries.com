@@ -22,9 +22,13 @@ interface Blog {
   sections: Section[];
 }
 
-export default function BlogIndexClient() {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [loading, setLoading] = useState(true);
+interface BlogIndexClientProps {
+  initialBlogs?: Blog[];
+}
+
+export default function BlogIndexClient({ initialBlogs = [] }: BlogIndexClientProps) {
+  const [blogs, setBlogs] = useState<Blog[]>(initialBlogs);
+  const [loading, setLoading] = useState(initialBlogs.length === 0);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [sortBy, setSortBy] = useState<'latest' | 'oldest' | 'readingTime'>('latest');
@@ -35,12 +39,15 @@ export default function BlogIndexClient() {
   const [newsletterMsg, setNewsletterMsg] = useState('');
 
   useEffect(() => {
+    // Refresh blogs in background if initial was empty or to fetch real-time updates
     const fetchBlogs = async () => {
       try {
         const res = await fetch('/api/blogs');
         if (res.ok) {
           const data = await res.json();
-          setBlogs(data);
+          if (data && data.length > 0) {
+            setBlogs(data);
+          }
         }
       } catch (e) {
         console.error('Error fetching blogs:', e);
@@ -48,8 +55,10 @@ export default function BlogIndexClient() {
         setLoading(false);
       }
     };
-    fetchBlogs();
-  }, []);
+    if (initialBlogs.length === 0) {
+      fetchBlogs();
+    }
+  }, [initialBlogs.length]);
 
   // Compute Categories with Article Counts
   const categories = useMemo(() => {
