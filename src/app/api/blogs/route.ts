@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       const summary = formData.get('summary') as string || '';
       const readTime = formData.get('readTime') as string || '5 min read';
       const sectionsJson = formData.get('sections') as string || '[]';
-      
+
       let id = formData.get('id') as string;
       if (action === 'add') {
         id = `BLOG-${Date.now()}`;

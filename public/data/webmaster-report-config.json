@@ -39,8 +39,19 @@
     "smtpDiagnostics": true,
     "recentDispatchesLog": true
   },
-  "lastDispatchedAt": "2026-09-14T05:37:25.130Z",
+  "lastDispatchedAt": "2026-11-21T05:12:01.437Z",
   "history": [
+    {
+      "timestamp": "2026-11-21T05:12:01.437Z",
+      "recipientsCount": 3,
+      "recipients": [
+        "webmaster@zawrindustries.com",
+        "syedismail@zawrindustries.com",
+        "md@zawrindustries.com"
+      ],
+      "triggeredBy": "Manual Test Verification",
+      "messageId": "<1eab8aa9-60bd-2a29-f8e3-764ad4fe91bf@zawrindustries.com>"
+    },
     {
       "timestamp": "2026-09-14T05:37:25.130Z",
       "recipientsCount": 3,

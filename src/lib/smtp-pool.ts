@@ -200,11 +200,6 @@ export function createNodemailerTransporter(gw: SmtpGatewayConfig): nodemailer.T
     host: gw.host,
     port: gw.port,
     secure: gw.secure || gw.port === 465,
-    pool: true,
-    maxConnections: 3,
-    maxMessages: 100,
-    rateDelta: 1000,
-    rateLimit: 5,
     auth: {
       user: gw.user,
       pass: gw.pass.replace(/\s+/g, '')
